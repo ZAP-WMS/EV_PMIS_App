@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "787886302853",
+    "project_id": "tp-zap-solz",
+    "storage_bucket": "tp-zap-solz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787886302853:android:5793705f1a08ce3ac26bec",
+        "android_client_info": {
+          "package_name": "com.example.ev_pmis_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787886302853-b2gsitf3k977sjb93gjd40ursrldeu73.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc9VZLY3UbeKlUO_Vn1IsIlIrcFku5VGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787886302853-b2gsitf3k977sjb93gjd40ursrldeu73.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
