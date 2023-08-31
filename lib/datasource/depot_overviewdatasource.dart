@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../model/home/overview/depot_overview.dart';
+import '../model/depot_overview.dart';
 import '../style.dart';
 
 class DepotOverviewDatasource extends DataGridSource {
@@ -83,7 +83,7 @@ class DepotOverviewDatasource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: (dataGridCell.columnName == 'Add')
               ? ElevatedButton(
                   onPressed: () {
@@ -136,7 +136,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                 showDialog(
                                     context: mainContext,
                                     builder: (context) => AlertDialog(
-                                          insetPadding: EdgeInsets.all(10),
+                                          insetPadding: EdgeInsets.all(8),
                                           buttonPadding: EdgeInsets.all(15),
                                           title: const Text(
                                             'All Date',
@@ -423,84 +423,84 @@ class DepotOverviewDatasource extends DataGridSource {
 
   void updateDataGrid({required RowColumnIndex rowColumnIndex}) {
     notifyDataSourceListeners(rowColumnIndex: rowColumnIndex);
+  }
 
-    @override
-    void onCellSubmit(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
-        GridColumn column) {
-      final dynamic oldValue = dataGridRow
-              .getCells()
-              .firstWhereOrNull((DataGridCell dataGridCell) =>
-                  dataGridCell.columnName == column.columnName)
-              ?.value ??
-          '';
+  @override
+  void onCellSubmit(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
+      GridColumn column) {
+    final dynamic oldValue = dataGridRow
+            .getCells()
+            .firstWhereOrNull((DataGridCell dataGridCell) =>
+                dataGridCell.columnName == column.columnName)
+            ?.value ??
+        '';
 
-      final int dataRowIndex = dataGridRows.indexOf(dataGridRow);
+    final int dataRowIndex = dataGridRows.indexOf(dataGridRow);
 
-      if (newCellValue == null || oldValue == newCellValue) {
-        return;
-      }
-      if (column.columnName == 'srNo') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<dynamic>(columnName: 'srNo', value: newCellValue);
-        _depotOverview[dataRowIndex].srNo = newCellValue;
-      } else if (column.columnName == 'Date') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(columnName: 'Date', value: newCellValue);
-        _depotOverview[dataRowIndex].date = newCellValue.toString();
-      } else if (column.columnName == 'RiskDescription') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(
-                columnName: 'RiskDescription', value: newCellValue);
-        _depotOverview[dataRowIndex].riskDescription = newCellValue;
-      } else if (column.columnName == 'TypeRisk') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(columnName: 'TypeRisk', value: newCellValue);
-        _depotOverview[dataRowIndex].typeRisk = newCellValue;
-      } else if (column.columnName == 'impactRisk') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(columnName: 'impactRisk', value: newCellValue);
-        _depotOverview[dataRowIndex].impactRisk = newCellValue;
-      } else if (column.columnName == 'Owner') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(columnName: 'Owner', value: newCellValue);
-        _depotOverview[dataRowIndex].owner = newCellValue;
-      } else if (column.columnName == 'MigratingRisk') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(
-                columnName: 'MigratingRisk', value: newCellValue);
-        _depotOverview[dataRowIndex].migrateAction = newCellValue;
-      } else if (column.columnName == 'ContigentAction') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(
-                columnName: 'ContigentAction', value: newCellValue);
-        _depotOverview[dataRowIndex].contigentAction = newCellValue;
-      } else if (column.columnName == 'ProgressionAction') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(
-                columnName: 'ProgressionAction', value: newCellValue);
-        _depotOverview[dataRowIndex].progressAction = newCellValue;
-      } else if (column.columnName == 'Reason') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(columnName: 'Reason', value: newCellValue);
-        _depotOverview[dataRowIndex].reason = newCellValue;
-      } else if (column.columnName == 'TargetDate') {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<String>(columnName: 'TargetDate', value: newCellValue);
-        _depotOverview[dataRowIndex].targetDate = newCellValue;
-      } else {
-        dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-            DataGridCell<dynamic>(columnName: 'Status', value: newCellValue);
-        _depotOverview[dataRowIndex].status = newCellValue;
-      }
-      // Future storeData() async {
-      //   await FirebaseFirestore.instance.collection('A1').add({
-      //     'Weightage':
-      //         dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-      //             DataGridCell<int>(
-      //                 columnName: 'Weightage', value: newCellValue as int),
-      //   });
-      // }
+    if (newCellValue == null || oldValue == newCellValue) {
+      return;
     }
+    if (column.columnName == 'srNo') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<dynamic>(columnName: 'srNo', value: newCellValue);
+      _depotOverview[dataRowIndex].srNo = newCellValue;
+    } else if (column.columnName == 'Date') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'Date', value: newCellValue);
+      _depotOverview[dataRowIndex].date = newCellValue.toString();
+    } else if (column.columnName == 'RiskDescription') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(
+              columnName: 'RiskDescription', value: newCellValue);
+      _depotOverview[dataRowIndex].riskDescription = newCellValue;
+    } else if (column.columnName == 'TypeRisk') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'TypeRisk', value: newCellValue);
+      _depotOverview[dataRowIndex].typeRisk = newCellValue;
+    } else if (column.columnName == 'impactRisk') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'impactRisk', value: newCellValue);
+      _depotOverview[dataRowIndex].impactRisk = newCellValue;
+    } else if (column.columnName == 'Owner') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'Owner', value: newCellValue);
+      _depotOverview[dataRowIndex].owner = newCellValue;
+    } else if (column.columnName == 'MigratingRisk') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(
+              columnName: 'MigratingRisk', value: newCellValue);
+      _depotOverview[dataRowIndex].migrateAction = newCellValue;
+    } else if (column.columnName == 'ContigentAction') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(
+              columnName: 'ContigentAction', value: newCellValue);
+      _depotOverview[dataRowIndex].contigentAction = newCellValue;
+    } else if (column.columnName == 'ProgressionAction') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(
+              columnName: 'ProgressionAction', value: newCellValue);
+      _depotOverview[dataRowIndex].progressAction = newCellValue;
+    } else if (column.columnName == 'Reason') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'Reason', value: newCellValue);
+      _depotOverview[dataRowIndex].reason = newCellValue;
+    } else if (column.columnName == 'TargetDate') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'TargetDate', value: newCellValue);
+      _depotOverview[dataRowIndex].targetDate = newCellValue;
+    } else {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<dynamic>(columnName: 'Status', value: newCellValue);
+      _depotOverview[dataRowIndex].status = newCellValue;
+    }
+    // Future storeData() async {
+    //   await FirebaseFirestore.instance.collection('A1').add({
+    //     'Weightage':
+    //         dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+    //             DataGridCell<int>(
+    //                 columnName: 'Weightage', value: newCellValue as int),
+    //   });
+    // }
 
     @override
     bool canSubmitCell(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,

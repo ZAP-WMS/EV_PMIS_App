@@ -3,6 +3,7 @@ import 'package:ev_pmis_app/authentication/login_register.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/homepage/home_page.dart';
+import 'package:ev_pmis_app/screen/materialprocurement/material_vendor.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overview.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overviewtable.dart';
 import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
@@ -36,7 +37,14 @@ class RouteGenerator {
                 ));
       case '/overview-table':
         return MaterialPageRoute(
-            builder: (context) => OverviewTable(cityName: args.toString()));
+            builder: (context) => OverviewTable(depoName: args.toString()));
+
+      case '/material-page':
+        return MaterialPageRoute(
+            builder: (context) => MaterialProcurement(
+                  depoName: args.toString(),
+                  cityName: args.toString(),
+                ));
     }
   }
 }

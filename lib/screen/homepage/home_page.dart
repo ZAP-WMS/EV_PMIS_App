@@ -1,4 +1,4 @@
-import 'package:ev_pmis_app/model/home/menu_item.dart';
+import 'package:ev_pmis_app/model/menu_item.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
 import 'package:ev_pmis_app/screen/citiespage/depot.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';

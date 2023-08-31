@@ -20,7 +20,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Text(title),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 20),
+      ),
       backgroundColor: blue,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),

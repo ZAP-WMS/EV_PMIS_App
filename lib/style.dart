@@ -30,7 +30,11 @@ TextStyle subtitleWhite = GoogleFonts.ibmPlexSans(
     fontWeight: FontWeight.w400,
     letterSpacing: 0.15,
     color: blue);
+
 TextStyle tableheader = const TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 14,
 );
+
+TextStyle tableheaderwhitecolor =
+    TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: white);
