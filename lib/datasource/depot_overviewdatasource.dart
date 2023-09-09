@@ -117,7 +117,7 @@ class DepotOverviewDatasource extends DataGridSource {
                     // buildDataGridRows();
                     // notifyListeners();
                   },
-                  child: Text('Add'))
+                  child: Text('Add', style: TextStyle(fontSize: 12)))
               : (dataGridCell.columnName == 'Delete')
                   ? IconButton(
                       onPressed: () {
@@ -199,9 +199,15 @@ class DepotOverviewDatasource extends DataGridSource {
                                               )),
                                         ));
                               },
-                              icon: const Icon(Icons.calendar_today),
+                              icon: const Icon(
+                                Icons.calendar_today,
+                                size: 20,
+                              ),
                             ),
-                            Text(dataGridCell.value.toString()),
+                            Text(
+                              dataGridCell.value.toString(),
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         )
                       : (dataGridCell.columnName == 'TargetDate')
@@ -277,9 +283,11 @@ class DepotOverviewDatasource extends DataGridSource {
                                                   )),
                                             ));
                                   },
-                                  icon: const Icon(Icons.calendar_today),
+                                  icon: const Icon(Icons.calendar_today,
+                                      size: 20),
                                 ),
-                                Text(dataGridCell.value.toString()),
+                                Text(dataGridCell.value.toString(),
+                                    style: const TextStyle(fontSize: 12)),
                               ],
                             )
                           : dataGridCell.columnName == 'TypeRisk'
@@ -319,7 +327,8 @@ class DepotOverviewDatasource extends DataGridSource {
                                           (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: Text(value),
+                                      child: Text(value,
+                                          style: TextStyle(fontSize: 12)),
                                     );
                                   }).toList())
                               : dataGridCell.columnName == 'impactRisk'
@@ -362,7 +371,8 @@ class DepotOverviewDatasource extends DataGridSource {
                                               (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
-                                          child: Text(value),
+                                          child: Text(value,
+                                              style: TextStyle(fontSize: 12)),
                                         );
                                       }).toList())
                                   : dataGridCell.columnName == 'Status'
@@ -413,6 +423,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                           }).toList())
                                       : Text(
                                           dataGridCell.value.toString(),
+                                          style: TextStyle(fontSize: 12),
                                         ));
     }).toList());
   }
@@ -547,6 +558,7 @@ class DepotOverviewDatasource extends DataGridSource {
       padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
+        style: TextStyle(fontSize: 12),
         textInputAction: TextInputAction.next,
         autofocus: true,
         controller: editingController..text = displayText,

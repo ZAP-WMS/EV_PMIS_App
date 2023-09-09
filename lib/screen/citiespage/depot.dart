@@ -88,7 +88,7 @@ class _DepotPageState extends State<DepotPage> {
         softWrap: true,
         textAlign: TextAlign.center,
         style:
-            TextStyle(color: blue, fontWeight: FontWeight.bold, fontSize: 12),
+            TextStyle(color: blue, fontWeight: FontWeight.bold, fontSize: 11),
       ),
     ]);
   }

@@ -7,60 +7,79 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   String title;
   final double height;
   bool isSync = false;
+  bool isCentered = true;
   final void Function()? store;
   CustomAppBar({
     super.key,
     required this.title,
     required this.height,
     required this.isSync,
+    required this.isCentered,
     this.store,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      centerTitle: true,
+      centerTitle: isCentered ? true : false,
       title: Text(
         title,
-        style: TextStyle(fontSize: 20),
+        style: const TextStyle(
+          fontSize: 16,
+        ),
       ),
       backgroundColor: blue,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
       actions: [
         isSync
-            ? Padding(
-                padding: const EdgeInsets.only(
-                    right: 10, top: 3, bottom: 3, left: 10),
-                child: Container(
-                  height: 25,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.blue),
-                  child: TextButton(
-                      onPressed: () {
-                        store!();
-                      },
-                      child: Text(
-                        'Sync Data',
-                        style: TextStyle(color: white, fontSize: 15),
-                      )),
+            ? Container(
+                padding: EdgeInsets.only(bottom: 2),
+                height: 30,
+                width: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              )
+                child: ListTile(
+                  onTap: () => store!(),
+                  title: Icon(
+                    Icons.cloud_sync_sharp,
+                    color: white,
+                    size: 20,
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Text(
+                      'Sync',
+                      style: TextStyle(color: white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+                //  TextButton(
+                //     onPressed: () {
+                //       store!();
+                //     },
+                //     child: Text(
+                //       'Sync',
+                //       style: TextStyle(color: white, fontSize: 15),
+                //     )),
+                )
             : Container(),
-        Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: IconButton(
-              onPressed: () {
-                onWillPop(context);
-              },
-              icon: const Padding(
-                padding: const EdgeInsets.only(bottom: 25),
-                child: Icon(
-                  Icons.logout_rounded,
-                ),
-              ),
-            ))
+
+        // Padding(
+        //     padding: const EdgeInsets.all(6.0),
+        //     child: IconButton(
+        //       onPressed: () {
+        //         onWillPop(context);
+        //       },
+        //       icon: const Padding(
+        //         padding: const EdgeInsets.only(bottom: 25),
+        //         child: Icon(
+        //           Icons.logout_rounded,
+        //         ),
+        //       ),
+        //     ))
       ],
     );
   }

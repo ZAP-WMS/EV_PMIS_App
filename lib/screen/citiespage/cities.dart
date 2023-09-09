@@ -97,8 +97,6 @@ class _CitiesPageState extends State<CitiesPage> {
       // tempBool.add(false);
       isActive.add(false);
     }
-
-
   }
 
   Widget citieslist(String image, String text, bool active) {
@@ -128,13 +126,9 @@ class _CitiesPageState extends State<CitiesPage> {
               selectionColor: white,
               style: active
                   ? TextStyle(
-                      color: white,
-                      fontWeight: FontWeight.bold,
-                    )
+                      color: white, fontWeight: FontWeight.bold, fontSize: 12)
                   : TextStyle(
-                      color: blue,
-                      fontWeight: FontWeight.bold,
-                    )),
+                      color: blue, fontWeight: FontWeight.bold, fontSize: 12)),
         ),
       ],
     );

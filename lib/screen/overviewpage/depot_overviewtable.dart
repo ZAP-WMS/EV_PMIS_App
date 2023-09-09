@@ -91,7 +91,7 @@ class _OverviewTableState extends State<OverviewTable> {
                         child: Text(
                           'Brief Overview of ${widget.depoName} E-Bus Depot',
                           style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: white),
                         )),
@@ -139,7 +139,7 @@ class _OverviewTableState extends State<OverviewTable> {
                             ),
                             GridColumn(
                               columnName: 'Date',
-                              width: 140,
+                              width: 130,
                               allowEditing: false,
                               label: Container(
                                 alignment: Alignment.center,
@@ -194,11 +194,10 @@ class _OverviewTableState extends State<OverviewTable> {
                                 children: [
                                   Container(
                                     alignment: Alignment.center,
-                                    child: const Text('Owner',
+                                    child: Text('Owner',
+                                        textAlign: TextAlign.center,
                                         // overflow: TextOverflow.values.first,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16)),
+                                        style: tableheader),
                                   ),
                                   const Text('Person Who will manage the risk',
                                       // overflow: TextOverflow.values.first,
@@ -221,18 +220,13 @@ class _OverviewTableState extends State<OverviewTable> {
                                     alignment: Alignment.center,
                                     child: Text('Mitigation Action',
                                         // overflow: TextOverflow.values.first,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16)),
+                                        style: tableheader),
                                   ),
                                   Text(
                                       'Action to Mitigate the risk e.g reduce the likelihood',
                                       // overflow: TextOverflow.values.first,
                                       //  textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12))
+                                      style: tableheader),
                                 ],
                               ),
                             ),
@@ -248,17 +242,12 @@ class _OverviewTableState extends State<OverviewTable> {
                                     alignment: Alignment.center,
                                     child: Text('Contigent Action',
                                         // overflow: TextOverflow.values.first,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16)),
+                                        style: tableheader),
                                   ),
                                   Text('Action to be taken if the risk happens',
                                       // overflow: TextOverflow.values.first,
                                       //  textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12))
+                                      style: tableheader)
                                 ],
                               ),
                             ),
@@ -327,10 +316,7 @@ class _OverviewTableState extends State<OverviewTable> {
                                 alignment: Alignment.center,
                                 child: Text('Add Row',
                                     // overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    )
+                                    style: tableheader
                                     //   //  textAlign: TextAlign.center,
                                     ),
                               ),
@@ -347,10 +333,7 @@ class _OverviewTableState extends State<OverviewTable> {
                                 alignment: Alignment.center,
                                 child: Text('Delete Row',
                                     // overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    )
+                                    style: tableheader
                                     //   //  textAlign: TextAlign.center,
                                     ),
                               ),
@@ -358,6 +341,7 @@ class _OverviewTableState extends State<OverviewTable> {
                           ],
                         );
                       } else {
+                        alldata = '';
                         alldata = snapshot.data['data'] as List<dynamic>;
                         _employees.clear();
                         alldata.forEach((element) {
@@ -404,14 +388,16 @@ class _OverviewTableState extends State<OverviewTable> {
                                   ),
                                   GridColumn(
                                     columnName: 'Date',
-                                    width: 140,
+                                    width: 130,
                                     allowEditing: false,
                                     label: Container(
                                       alignment: Alignment.center,
-                                      child: Text('Risk On Date',
-                                          softWrap: true, // Allow text to wrap
-                                          overflow: TextOverflow.clip,
-                                          style: tableheader),
+                                      child: Text(
+                                        'Risk On Date',
+                                        softWrap: true, // Allow text to wrap
+                                        overflow: TextOverflow.clip,
+                                        style: tableheader,
+                                      ),
                                     ),
                                   ),
                                   GridColumn(
@@ -457,23 +443,18 @@ class _OverviewTableState extends State<OverviewTable> {
                                       children: [
                                         Container(
                                           alignment: Alignment.center,
-                                          child: const Text('Owner',
+                                          child: Text('Owner',
                                               softWrap:
                                                   true, // Allow text to wrap
                                               overflow: TextOverflow.clip,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16)),
+                                              style: tableheader),
                                         ),
-                                        const Text(
-                                            'Person Who will manage the risk',
+                                        Text('Person Who will manage the risk',
                                             softWrap:
                                                 true, // Allow text to wrap
                                             overflow: TextOverflow.clip,
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12))
+                                            textAlign: TextAlign.center,
+                                            style: tableheadersubtitle)
                                       ],
                                     ),
                                   ),
@@ -485,23 +466,18 @@ class _OverviewTableState extends State<OverviewTable> {
                                       children: [
                                         Container(
                                           alignment: Alignment.center,
-                                          child: const Text('Mitigation Action',
+                                          child: Text('Mitigation Action',
                                               softWrap:
                                                   true, // Allow text to wrap
                                               overflow: TextOverflow.clip,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16)),
+                                              style: tableheader),
                                         ),
-                                        const Text(
+                                        Text(
                                             'Action to Mitigate the risk e.g reduce the likelihood',
                                             softWrap:
                                                 true, // Allow text to wrap
                                             overflow: TextOverflow.clip,
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12))
+                                            style: tableheadersubtitle)
                                       ],
                                     ),
                                   ),
@@ -513,25 +489,21 @@ class _OverviewTableState extends State<OverviewTable> {
                                       children: [
                                         Container(
                                           alignment: Alignment.center,
-                                          child: const Text('Contigent Action',
+                                          child: Text('Contigent Action',
                                               softWrap:
                                                   true, // Allow text to wrap
                                               overflow: TextOverflow.clip,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16)),
+                                              style: tableheader),
                                         ),
-                                        const Text(
+                                        Text(
                                             'Action to be taken if the risk happens',
                                             softWrap:
                                                 true, // Allow text to wrap
                                             overflow: TextOverflow.clip,
+                                            textAlign: TextAlign.center,
 
                                             //  textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12))
+                                            style: tableheadersubtitle)
                                       ],
                                     ),
                                   ),
@@ -571,6 +543,7 @@ class _OverviewTableState extends State<OverviewTable> {
                                           'Target Completion Date Of Risk',
                                           softWrap: true, // Allow text to wrap
                                           overflow: TextOverflow.clip,
+                                          textAlign: TextAlign.center,
                                           style: tableheader),
                                     ),
                                   ),
@@ -658,6 +631,8 @@ class _OverviewTableState extends State<OverviewTable> {
 }
 
 void storeData(String depoName, BuildContext context) {
+  // _employeeDataSource = DepotOverviewDatasource(_employees, context);
+  // _dataGridController = DataGridController();
   Map<String, dynamic> table_data = Map();
   for (var i in _employeeDataSource.dataGridRows) {
     for (var data in i.getCells()) {
@@ -676,38 +651,39 @@ void storeData(String depoName, BuildContext context) {
       .doc(userId)
       .set({
     'data': tabledata2,
+  }).whenComplete(() {
+    tabledata2.clear();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: const Text('Data are synced'),
+      backgroundColor: blue,
+    ));
   });
 
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: const Text('Data are synced'),
-    backgroundColor: blue,
-  ));
+  // void storeData() {
+  //   Map<String, dynamic> table_data = Map();
+  //   for (var i in _employeeDataSource.dataGridRows) {
+  //     for (var data in i.getCells()) {
+  //       if (data.columnName != 'Add' || data.columnName != 'Delete') {
+  //         table_data[data.columnName] = data.value;
+  //       }
+  //     }
+  //     tabledata2.add(table_data);
+  //     table_data = {};
+  //   }
 
-  void storeData() {
-    Map<String, dynamic> table_data = Map();
-    for (var i in _employeeDataSource.dataGridRows) {
-      for (var data in i.getCells()) {
-        if (data.columnName != 'Add' || data.columnName != 'Delete') {
-          table_data[data.columnName] = data.value;
-        }
-      }
-      tabledata2.add(table_data);
-      table_data = {};
-    }
-
-    FirebaseFirestore.instance
-        .collection('OverviewCollectionTable')
-        .doc(depoName)
-        .collection("OverviewTabledData")
-        .doc(userId)
-        .set({
-      'data': tabledata2,
-    }).whenComplete(() {
-      tabledata2.clear();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Data are synced'),
-        backgroundColor: blue,
-      ));
-    });
-  }
+  //   FirebaseFirestore.instance
+  //       .collection('OverviewCollectionTable')
+  //       .doc(depoName)
+  //       .collection("OverviewTabledData")
+  //       .doc(userId)
+  //       .set({
+  //     'data': tabledata2,
+  //   }).whenComplete(() {
+  //     tabledata2.clear();
+  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //       content: const Text('Data are synced'),
+  //       backgroundColor: blue,
+  //     ));
+  //   });
+  // }
 }

@@ -1,30 +1,23 @@
-import 'package:ev_pmis_app/screen/overviewpage/image_page.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../../FirebaseApi/firebase_api.dart';
 import '../../components/Loading_page.dart';
 import '../../style.dart';
+import 'image_page.dart';
 
 class ViewAllPdf extends StatefulWidget {
-  String? title;
-  String? subtitle;
-  String? cityName;
-  String? depoName;
-  dynamic userId;
-  String? fldrName;
-  String? date;
-  int? srNo;
-  dynamic docId;
+  String title;
+  String cityName;
+  String depoName;
+  String? userId;
+  String docId;
   ViewAllPdf(
       {super.key,
       required this.title,
-      this.subtitle,
       required this.cityName,
       required this.depoName,
-      required this.userId,
-      this.fldrName,
-      this.date,
-      this.srNo,
-      this.docId});
+      this.userId,
+      required this.docId});
 
   @override
   State<ViewAllPdf> createState() => _ViewAllPdfState();
@@ -32,15 +25,38 @@ class ViewAllPdf extends StatefulWidget {
 
 class _ViewAllPdfState extends State<ViewAllPdf> {
   late Future<List<FirebaseFile>> futureFiles;
-  List<String> pdfFiles = [];
+  List<dynamic> drawingId = [];
+  List<dynamic> drawingRef = [];
+  bool _isload = true;
 
   @override
   void initState() {
-    futureFiles = widget.title == 'QualityChecklist'
-        ? FirebaseApi.listAll(
-            '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}')
-        : FirebaseApi.listAll(
-            '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}');
+    futureFiles = FirebaseApi.listAll(
+        '${widget.title}/${widget.cityName}/${widget.depoName}/null/${widget.docId}');
+
+    getrefdata().whenComplete(() {
+      for (int i = 0; i < drawingRef.length; i++) {
+        for (int j = 0; j < drawingId.length; j++) {
+          print('before ' + drawingId[j]);
+          print(
+              'after  ${widget.title}/${widget.cityName}/${widget.depoName}/${drawingRef[i]}/${widget.docId}');
+
+          if (drawingId[j] ==
+              '${widget.title}/${widget.cityName}/${widget.depoName}/${drawingRef[i]}/${widget.docId}') {
+            // futureFiles = FirebaseApi.listAll(
+            //     '${widget.title}/${widget.cityName}/${widget.depoName}/RM7292/${widget.docId}');
+            futureFiles = FirebaseApi.listAll(drawingId[j]);
+          }
+        }
+      }
+
+      // futureFiles = data__[1];
+
+      setState(() {
+        _isload = false;
+      });
+    });
+
     super.initState();
   }
 
@@ -49,52 +65,54 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PDF List'),
+        title: Text('${widget.cityName} / ${widget.depoName} / View Files'),
         backgroundColor: blue,
       ),
-      body: FutureBuilder<List<FirebaseFile>>(
-        future: futureFiles,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: LoadingPage());
-            default:
-              if (snapshot.hasError) {
-                return const Center(child: Text('Some error occurred!'));
-              } else {
-                final files = snapshot.data!;
+      body: _isload
+          ? LoadingPage()
+          : FutureBuilder<List<FirebaseFile>>(
+              future: futureFiles,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const Center(child: CircularProgressIndicator());
+                  default:
+                    if (snapshot.hasError) {
+                      return const Center(child: Text('Some error occurred!'));
+                    } else {
+                      final files = snapshot.data!;
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildHeader(files.length),
-                    const SizedBox(height: 12),
-                    Expanded(
-                        child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 5),
-                      itemCount: files.length,
-                      itemBuilder: (context, index) {
-                        final file = files[index];
-                        return buildFile(context, file);
-                      },
-                    )
-                        //  ListView.builder(
-                        //   itemCount: files.length,
-                        //   itemBuilder: (context, index) {
-                        //     final file = files[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          buildHeader(files.length),
+                          const SizedBox(height: 12),
+                          Expanded(
+                              child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2),
+                            itemCount: files.length,
+                            itemBuilder: (context, index) {
+                              final file = files[index];
+                              return buildFile(context, file);
+                            },
+                          )
+                              //  ListView.builder(
+                              //   itemCount: files.length,
+                              //   itemBuilder: (context, index) {
+                              //     final file = files[index];
 
-                        //     return buildFile(context, file);
-                        //   },
-                        // ),
-                        ),
-                  ],
-                );
-              }
-          }
-        },
-      ),
+                              //     return buildFile(context, file);
+                              //   },
+                              // ),
+                              ),
+                        ],
+                      );
+                    }
+                }
+              },
+            ),
     );
   }
 
@@ -116,26 +134,14 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                       file.url,
                       fit: BoxFit.fill,
                     )
-                  : Image.asset('assets/pdf_logo.png')),
+                  : isPdf
+                      ? Image.asset('assets/pdf_logo.jpeg')
+                      : Image.asset('assets/excel.png')),
           //PdfThumbnail.fromFile(file.ref.fullPath, currentPage: 2)),
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => ImagePage(file: file)))
-              .then((value) {
-            setState(() {
-              futureFiles = widget.title == 'QualityChecklist'
-                  ? FirebaseApi.listAll(
-                      '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}')
-                  : FirebaseApi.listAll(
-                      '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}');
-            });
-          }),
+          onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ImagePage(file: file))),
         ),
-        Expanded(
-            child: Text(
-          file.name,
-          textAlign: TextAlign.center,
-        ))
+        Text(file.name)
       ],
     );
   }
@@ -159,4 +165,24 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
           ),
         ),
       );
+
+  Future getrefdata() async {
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child('${widget.title}/${widget.cityName}/${widget.depoName}');
+    final listResult = await storageRef.listAll();
+    print(listResult.prefixes[0]);
+    for (var prefix in listResult.prefixes) {
+      drawingRef.add(prefix.name);
+      // print(drawingRef);
+
+      final storageRef1 = FirebaseStorage.instance.ref().child(
+          '${widget.title}/${widget.cityName}/${widget.depoName}/${prefix.name}');
+      final listResult1 = await storageRef1.listAll();
+      for (var prefix in listResult1.prefixes) {
+        drawingId.add(prefix.fullPath);
+        print(drawingRef);
+      }
+    }
+  }
 }

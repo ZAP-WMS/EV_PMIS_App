@@ -34,6 +34,7 @@ class _GalleryPageState extends State<GalleryPage> {
     ];
     return Scaffold(
       appBar: CustomAppBar(
+        isCentered: true,
         title: 'Gallery',
         height: 55,
         isSync: false,

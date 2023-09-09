@@ -1,6 +1,5 @@
 import 'package:ev_pmis_app/style.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class LoadingPage extends StatelessWidget {
   LoadingPage({super.key});

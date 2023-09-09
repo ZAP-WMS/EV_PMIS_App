@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +13,11 @@ void main() async {
   // its used for status bar color
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: blue));
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft
+  ]);
 
 // here i have initialize my firebase
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +34,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CitiesProvider())
+        ChangeNotifierProvider(create: (context) => CitiesProvider()),
+        ChangeNotifierProvider(
+          create: (context) => SummaryProvider(),
+        )
       ],
       child: GetMaterialApp(
         initialRoute: '/splash-screen',
@@ -37,6 +46,7 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: RouteGenerator.generateRoute,
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
+
         theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: GoogleFonts.quicksand().fontFamily),

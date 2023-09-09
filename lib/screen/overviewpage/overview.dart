@@ -21,12 +21,12 @@ class _OverviewPageState extends State<OverviewPage> {
     '/depotOverview',
     '/depotOverview',
     '/material-page',
+    '/daily-report',
+    '/monthly-report',
+    '/detailed-page',
     '/depotOverview',
-    '/depotOverview',
-    '/depotOverview',
-    '/depotOverview',
-    '/depotOverview',
-    '/depotOverview',
+    '/safety-page',
+    '/quality-page',
     '/depotOverview',
     '/depotOverview',
     '/depotOverview',
@@ -73,6 +73,7 @@ class _OverviewPageState extends State<OverviewPage> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
+        isCentered: false,
         title: 'Overview Page',
         height: 55,
         isSync: false,
@@ -102,7 +103,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   Widget cards(String desc, String image, int index) {
     return Padding(
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(5.0),
       child: Card(
         elevation: 10,
         shadowColor: blue,
@@ -122,6 +123,7 @@ class _OverviewPageState extends State<OverviewPage> {
             const SizedBox(height: 10),
             Text(
               desc,
+              style: TextStyle(fontSize: 12),
               textAlign: TextAlign.center,
             )
           ],

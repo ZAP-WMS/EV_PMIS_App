@@ -88,7 +88,7 @@ class MaterialDatasource extends DataGridSource {
                           materialSite:
                               DateFormat().add_yMd().format(DateTime.now())));
                 },
-                child: Text('Add'))
+                child: const Text('Add'))
             : (dataGridCell.columnName == 'Delete')
                 ? IconButton(
                     onPressed: () async {
@@ -177,11 +177,15 @@ class MaterialDatasource extends DataGridSource {
                             },
                             icon: const Icon(Icons.calendar_today),
                           ),
-                          Text(dataGridCell.value.toString())
+                          Text(
+                            dataGridCell.value.toString(),
+                            style: const TextStyle(fontSize: 12),
+                          )
                         ],
                       )
                     : Text(
                         dataGridCell.value.toString(),
+                        style: const TextStyle(fontSize: 12),
                       ),
       );
     }).toList());

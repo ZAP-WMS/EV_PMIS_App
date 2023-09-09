@@ -29,6 +29,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      style: const TextStyle(fontSize: 13),
       decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 5, horizontal: 10),

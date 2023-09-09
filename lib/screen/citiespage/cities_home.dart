@@ -22,6 +22,7 @@ class _CitiesHomeState extends State<CitiesHome> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
+        isCentered: false,
         title: 'Cities',
         height: 55,
         isSync: false,

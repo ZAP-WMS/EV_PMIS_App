@@ -1,13 +1,8 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
-import '../../components/Loading_page.dart';
 
 bool _isLoading = false;
 
@@ -25,7 +20,7 @@ class ViewFile extends StatefulWidget {
 }
 
 class _ViewFileState extends State<ViewFile> {
-  // final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   String? path;
 
   // final pdfController = PdfController(
@@ -43,7 +38,7 @@ class _ViewFileState extends State<ViewFile> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = Center(child: LoadingPage());
+    Widget child = const Center(child: CircularProgressIndicator());
     if (_documentBytes != null) {
       child = SfPdfViewer.memory(
         _documentBytes!,

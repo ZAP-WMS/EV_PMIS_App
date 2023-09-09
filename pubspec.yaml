@@ -28,11 +28,11 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  apptive_grid_theme: ^1.2.0
   cloud_firestore: ^4.8.5
   cupertino_icons: ^1.0.2
   excel: ^2.1.0
   file_picker: null
-
   firebase_auth: ^4.8.0
   firebase_core: ^2.15.1
   firebase_storage: ^11.2.6
@@ -41,6 +41,7 @@ dependencies:
   get: ^4.6.5
   google_fonts: null
   google_nav_bar: ^5.0.6
+  image_picker: ^1.0.4
   intl: ^0.18.1
   lottie: ^2.3.2
   open_file: ^3.3.2

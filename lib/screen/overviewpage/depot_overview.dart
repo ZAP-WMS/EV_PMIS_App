@@ -98,6 +98,7 @@ class _DepotOverviewState extends State<DepotOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
+          isCentered: false,
           title: 'Depot Overview / ${widget.depoName}',
           height: 40,
           isSync: true,
@@ -198,7 +199,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         'Details of Survey Report',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                             color: black),
                                       ),
@@ -271,17 +272,17 @@ class _DepotOverviewState extends State<DepotOverview> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewAllPdf(
-                                                        title: '/BOQSurvey',
-                                                        cityName: cityName,
+                                                        title: 'BOQSurvey',
+                                                        cityName: cityName!,
                                                         depoName:
-                                                            widget.depoName,
+                                                            widget.depoName!,
                                                         userId: userId,
                                                         docId: 'survey')));
                                       },
                                       icon: Icon(
                                         Icons.folder,
                                         color: yellow,
-                                        size: 40,
+                                        size: 35,
                                       ))
                                 ],
                               ),
@@ -303,7 +304,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       'BOQ Electrical',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                           color: black),
                                     ),
@@ -375,18 +376,18 @@ class _DepotOverviewState extends State<DepotOverview> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewAllPdf(
-                                                        title: '/BOQSurvey',
+                                                        title: 'BOQElectrical',
                                                         cityName:
                                                             widget.cityName!,
                                                         depoName:
-                                                            'widget.depoName!',
-                                                        userId: 'userId',
-                                                        docId: 'survey')));
+                                                            widget.depoName!,
+                                                        userId: userId,
+                                                        docId: 'electrical')));
                                       },
                                       icon: Icon(
                                         Icons.folder,
                                         color: yellow,
-                                        size: 40,
+                                        size: 35,
                                       ))
                                 ],
                               ),
@@ -408,7 +409,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       'BOQ Civil',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                           color: black),
                                     ),
@@ -477,18 +478,18 @@ class _DepotOverviewState extends State<DepotOverview> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewAllPdf(
-                                                        title: '/BOQSurvey',
+                                                        title: 'BOQCivil',
                                                         cityName:
                                                             widget.cityName!,
                                                         depoName:
-                                                            'widget.depoName!',
-                                                        userId: 'userId',
-                                                        docId: 'survey')));
+                                                            widget.depoName!,
+                                                        userId: userId,
+                                                        docId: 'civil')));
                                       },
                                       icon: Icon(
                                         Icons.folder,
                                         color: yellow,
-                                        size: 40,
+                                        size: 35,
                                       ))
                                 ],
                               ),
