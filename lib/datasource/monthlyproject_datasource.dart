@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -384,11 +385,8 @@ class MonthlyDataSource extends DataGridSource {
               //         ],
               //       )
               //     :
-              Text(
-            dataGridCell.value.toString(),
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12),
-          ));
+              Text(dataGridCell.value.toString(),
+                  textAlign: TextAlign.center, style: tablefontsize));
     }).toList());
   }
 

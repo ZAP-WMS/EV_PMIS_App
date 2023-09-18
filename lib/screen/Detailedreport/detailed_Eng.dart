@@ -185,6 +185,50 @@ class _DetailedEngtState extends State<DetailedEng>
           tabScreen1(),
           tabScreen2(),
         ]),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: (() {
+            if (_selectedIndex == 0) {
+              DetailedProject.add(DetailedEngModel(
+                siNo: 1,
+                title: 'EV Layout',
+                number: 123456878,
+                preparationDate: DateFormat().add_yMd().format(DateTime.now()),
+                submissionDate: DateFormat().add_yMd().format(DateTime.now()),
+                approveDate: DateFormat().add_yMd().format(DateTime.now()),
+                releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+              ));
+              _detailedDataSource.buildDataGridRows();
+              _detailedDataSource.updateDatagridSource();
+            }
+            if (_selectedIndex == 1) {
+              DetailedProjectev.add(DetailedEngModel(
+                siNo: 1,
+                title: 'EV Layout',
+                number: 12345,
+                preparationDate: DateFormat().add_yMd().format(DateTime.now()),
+                submissionDate: DateFormat().add_yMd().format(DateTime.now()),
+                approveDate: DateFormat().add_yMd().format(DateTime.now()),
+                releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+              ));
+              _detailedEngSourceev.buildDataGridRowsEV();
+              _detailedEngSourceev.updateDatagridSource();
+            } else {
+              DetailedProjectshed.add(DetailedEngModel(
+                siNo: 1,
+                title: 'EV Layout',
+                number: 12345,
+                preparationDate: DateFormat().add_yMd().format(DateTime.now()),
+                submissionDate: DateFormat().add_yMd().format(DateTime.now()),
+                approveDate: DateFormat().add_yMd().format(DateTime.now()),
+                releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+              ));
+              _detailedEngSourceShed.buildDataGridRowsEV();
+              _detailedEngSourceShed.updateDatagridSource();
+            }
+          }),
+        ),
+
         // floatingActionButton: FloatingActionButton(
         //   child: Icon(Icons.add),
         //   onPressed: (() {
@@ -485,7 +529,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'PreparationDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -500,7 +544,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'SubmissionDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -515,7 +559,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ApproveDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -530,7 +574,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ReleaseDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -683,7 +727,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'PreparationDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -698,7 +742,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'SubmissionDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -713,7 +757,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ApproveDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -728,7 +772,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ReleaseDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,

@@ -21,7 +21,7 @@ import 'depot_overviewtable.dart';
 class DepotOverview extends StatefulWidget {
   String? cityName;
   String? depoName;
-  DepotOverview({super.key, required this.cityName, required this.depoName});
+  DepotOverview({super.key, required this.depoName});
 
   @override
   State<DepotOverview> createState() => _DepotOverviewState();
@@ -99,8 +99,8 @@ class _DepotOverviewState extends State<DepotOverview> {
     return Scaffold(
         appBar: CustomAppBar(
           isCentered: false,
-          title: 'Depot Overview / ${widget.depoName}',
-          height: 40,
+          title: '$cityName/Depot Overview/${widget.depoName}',
+          height: 50,
           isSync: true,
           store: () async {
             FirebaseFirestore.instance
@@ -377,8 +377,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                 builder: (context) =>
                                                     ViewAllPdf(
                                                         title: 'BOQElectrical',
-                                                        cityName:
-                                                            widget.cityName!,
+                                                        cityName: cityName!,
                                                         depoName:
                                                             widget.depoName!,
                                                         userId: userId,
@@ -479,8 +478,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                 builder: (context) =>
                                                     ViewAllPdf(
                                                         title: 'BOQCivil',
-                                                        cityName:
-                                                            widget.cityName!,
+                                                        cityName: cityName!,
                                                         depoName:
                                                             widget.depoName!,
                                                         userId: userId,
@@ -504,7 +502,7 @@ class _DepotOverviewState extends State<DepotOverview> {
             onPressed: () {
               Get.to(
                   () => OverviewTable(
-                        depoName: widget.cityName,
+                        depoName: widget.depoName,
                       ),
                   transition: Transition.rightToLeft);
             },

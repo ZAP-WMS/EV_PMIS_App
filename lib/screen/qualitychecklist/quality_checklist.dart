@@ -347,7 +347,7 @@ class _QualityChecklistState extends State<QualityChecklist> {
                 ),
               ),
             ),
-            body: TabBarView(children: [
+            body: const TabBarView(children: [
               // CivilQualityChecklist(
               //     cityName: widget.cityName, depoName: widget.depoName),
               // ElectricalQualityChecklist(

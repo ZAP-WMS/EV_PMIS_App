@@ -105,17 +105,6 @@ class DepotOverviewDatasource extends DataGridSource {
                         status: 'Close',
                       ),
                     );
-                    //  rows.insert(1 , dataGridRows.insert(index, element));
-                    // dataGridRows.insert(1, data);
-
-                    // _dailyproject.add(DailyProjectModel(
-                    //     siNo: 1,
-                    //     typeOfActivity: 'Electrical Infra',
-                    //     activityDetails: "Initial Survey of DEpot",
-                    //     progress: '',
-                    //     status: ''));
-                    // buildDataGridRows();
-                    // notifyListeners();
                   },
                   child: Text('Add', style: TextStyle(fontSize: 12)))
               : (dataGridCell.columnName == 'Delete')

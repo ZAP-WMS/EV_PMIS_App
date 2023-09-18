@@ -83,6 +83,7 @@ class _SafetyFieldState extends State<SafetyField> {
     // _fetchSafetyField();
     initializeController();
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+    _fetchUserData();
     getUserId().whenComplete(() {
       safetylisttable = getData();
       _safetyChecklistDataSource = SafetyChecklistDataSource(
@@ -136,18 +137,18 @@ class _SafetyFieldState extends State<SafetyField> {
                   .collection('date')
                   .doc(selectedDate)
                   .set({
-                'TPNo': tpController,
-                'Rev': revController,
-                'DepotLocation': locationContoller,
-                'Address': addressController,
-                'ContactNo': contactController,
-                'Latitude': latitudeController,
-                'State': stateController,
-                'ChargerType': chargerController,
-                'ConductedBy': conductedController,
-                'InstallationDate': date,
-                'EnegizationDate': date1,
-                'BoardingDate': date2,
+                'TPNo': tpController.text,
+                'Rev': revController.text,
+                'DepotLocation': locationContoller.text,
+                'Address': addressController.text,
+                'ContactNo': contactController.text,
+                'Latitude': latitudeController.text,
+                'State': stateController.text,
+                'ChargerType': chargerController.text,
+                'ConductedBy': conductedController.text,
+                'InstallationDate': date.toString(),
+                'EnegizationDate': date1.toString(),
+                'BoardingDate': date2.toString(),
               });
               FirebaseApi().nestedKeyEventsField(
                   'SafetyFieldData2', widget.depoName!, 'userId', userId!);
@@ -172,9 +173,246 @@ class _SafetyFieldState extends State<SafetyField> {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        safetyDateField('Installation Date', date),
-                        safetyDateField('Enegization Date', date1!),
-                        safetyDateField('on Boarding Date', date2!),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 35,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Installation date'),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: blue)),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title:
+                                                      const Text('Choose Date'),
+                                                  content: Container(
+                                                    height: 400,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SfDateRangePicker(
+                                                      view: DateRangePickerView
+                                                          .month,
+                                                      showTodayButton: false,
+                                                      onSelectionChanged:
+                                                          (DateRangePickerSelectionChangedArgs
+                                                              args) {
+                                                        if (args.value
+                                                            is PickerDateRange) {
+                                                          date = args
+                                                              .value.startDate;
+                                                          print(date);
+                                                        } else {
+                                                          // final List<PickerDateRange>
+                                                          //     selectedRanges =
+                                                          //     args.value;
+                                                        }
+                                                      },
+                                                      selectionMode:
+                                                          DateRangePickerSelectionMode
+                                                              .single,
+                                                      showActionButtons: true,
+                                                      onCancel: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      onSubmit: (value) {
+                                                        date = DateTime.parse(
+                                                            value.toString());
+                                                        setState(() {});
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  )),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.calendar_month,
+                                            size: 20,
+                                          )),
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(date),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 35,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Enegization date'),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: blue)),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title:
+                                                      const Text('Choose Date'),
+                                                  content: Container(
+                                                    height: 400,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SfDateRangePicker(
+                                                      view: DateRangePickerView
+                                                          .month,
+                                                      showTodayButton: false,
+                                                      onSelectionChanged:
+                                                          (DateRangePickerSelectionChangedArgs
+                                                              args) {
+                                                        if (args.value
+                                                            is PickerDateRange) {
+                                                          date1 = args
+                                                              .value.startDate;
+                                                          print(date);
+                                                        } else {
+                                                          // final List<PickerDateRange>
+                                                          //     selectedRanges =
+                                                          //     args.value;
+                                                        }
+                                                      },
+                                                      selectionMode:
+                                                          DateRangePickerSelectionMode
+                                                              .single,
+                                                      showActionButtons: true,
+                                                      onCancel: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      onSubmit: (value) {
+                                                        date1 = DateTime.parse(
+                                                            value.toString());
+                                                        setState(() {});
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  )),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.calendar_month,
+                                            size: 20,
+                                          )),
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(date1!),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 35,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('on Boarding date'),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: blue)),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title:
+                                                      const Text('Choose Date'),
+                                                  content: Container(
+                                                    height: 400,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SfDateRangePicker(
+                                                      view: DateRangePickerView
+                                                          .month,
+                                                      showTodayButton: false,
+                                                      onSelectionChanged:
+                                                          (DateRangePickerSelectionChangedArgs
+                                                              args) {
+                                                        if (args.value
+                                                            is PickerDateRange) {
+                                                          date2 = args
+                                                              .value.startDate;
+                                                          print(date2);
+                                                        } else {
+                                                          // final List<PickerDateRange>
+                                                          //     selectedRanges =
+                                                          //     args.value;
+                                                        }
+                                                      },
+                                                      selectionMode:
+                                                          DateRangePickerSelectionMode
+                                                              .single,
+                                                      showActionButtons: true,
+                                                      onCancel: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      onSubmit: (value) {
+                                                        date2 = DateTime.parse(
+                                                            value.toString());
+                                                        setState(() {});
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  )),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.calendar_month,
+                                            size: 20,
+                                          )),
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(date2!),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         safetyField(tpController, 'TPNo', 'TP No are Required'),
                         safetyField(revController, 'Rev: Date:29.11.2022',
                             'Rev are Required'),
@@ -694,7 +932,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         DateTime.parse(value.toString());
 
                                     Navigator.pop(context);
-                                    setState(() {});
                                   },
                                 ),
                               )),
@@ -715,5 +952,37 @@ class _SafetyFieldState extends State<SafetyField> {
         ),
       ),
     );
+  }
+
+  void _fetchUserData() async {
+    await FirebaseFirestore.instance
+        .collection('SafetyFieldData2')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection('date')
+        .doc(DateFormat.yMMMMd().format(DateTime.now()))
+        .get()
+
+        //  FirebaseFirestore.instance
+        //     .collection('SafetyFieldData2')
+        //     .doc('${widget.depoName}')
+        //     .collection(userId!)
+        //     .doc(DateFormat.yMMMMd().format(DateTime.now()))
+        //     .get()
+        .then((ds) {
+      setState(() {
+        // managername = ds.data()!['ManagerName'];
+        tpController.text = ds.data()!['TPNo'];
+        revController.text = ds.data()!['Rev'];
+        locationContoller.text = ds.data()!['DepotLocation'];
+        addressController.text = ds.data()!['Address'];
+        contactController.text = ds.data()!['ContactNo'];
+        latitudeController.text = ds.data()!['Latitude'];
+        stateController.text = ds.data()!['State'];
+        chargerController.text = ds.data()!['ChargerType'];
+        conductedController.text = ds.data()!['ConductedBy'];
+      });
+    });
   }
 }

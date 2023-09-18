@@ -38,6 +38,7 @@ dependencies:
   firebase_storage: ^11.2.6
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
   get: ^4.6.5
   google_fonts: null
   google_nav_bar: ^5.0.6
@@ -57,6 +58,11 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  image_path: "assets/applogo/logo.png"
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

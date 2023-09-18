@@ -1,9 +1,7 @@
-import 'package:ev_pmis_app/screen/materialprocurement/material_vendor.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
 
@@ -28,9 +26,8 @@ class _OverviewPageState extends State<OverviewPage> {
     '/safety-page',
     '/quality-page',
     '/depotOverview',
-    '/depotOverview',
-    '/depotOverview',
-    '/depotOverview',
+    // '/depotOverview',
+    '/closure-page',
     '/depotOverview',
   ];
   List imagedata = [
@@ -73,7 +70,7 @@ class _OverviewPageState extends State<OverviewPage> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
-        isCentered: false,
+        isCentered: true,
         title: 'Overview Page',
         height: 55,
         isSync: false,
@@ -123,7 +120,7 @@ class _OverviewPageState extends State<OverviewPage> {
             const SizedBox(height: 10),
             Text(
               desc,
-              style: TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12),
               textAlign: TextAlign.center,
             )
           ],

@@ -40,7 +40,9 @@ TextStyle tableheadersubtitle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: red);
 
 TextStyle tableheaderwhitecolor =
-    TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: white);
+    TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: white);
+
+TextStyle tablefontsize = TextStyle(fontSize: 12);
 
 EdgeInsets tablepadding =
     const EdgeInsets.symmetric(horizontal: 16, vertical: 16);

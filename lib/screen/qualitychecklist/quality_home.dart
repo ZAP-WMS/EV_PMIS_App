@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/civil/civil_field.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/electrical/electrical_field.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,8 @@ import '../../style.dart';
 import '../dailyreport/summary.dart';
 
 class QualityHome extends StatefulWidget {
-  const QualityHome({super.key});
+  String? depoName;
+  QualityHome({super.key, this.depoName});
 
   @override
   State<QualityHome> createState() => _QualityHomeState();
@@ -17,19 +20,59 @@ class QualityHome extends StatefulWidget {
 class _QualityHomeState extends State<QualityHome> {
   int? _selectedIndex = 0;
 
-  List<String> listdata = [
-    'Exc',
-    'B.F',
-    'Mass',
-    'D.W.G',
-    'F.C',
-    'F&T',
-    'G.I',
-    'I.F',
-    'Painting',
-    'Paving',
-    'WC&R',
-    'Proofing'
+  List<String> civilClnName = [
+    'Exc TABLE',
+    'BF TABLE',
+    'MASS TABLE',
+    'GLAZZING TABLE',
+    'CEILING TABLE',
+    'FLOORING TABLE',
+    'INSPECTION TABLE',
+    'IRONITE TABLE',
+    'PAINTING TABLE',
+    'PAVING TABLE',
+    'ROOFING TABLE',
+    'PROOFING TABLE'
+  ];
+
+  List<String> civillist = [
+    'Excavation Work',
+    'EARTH WORK - BACKFILLING',
+    'CHECKLIST FOR BRICK / BLOCK MASSONARY',
+    'CHECKLIST FOR BUILDING DOORS, WINDOWS, HARDWARE, GLAZING',
+    'CHECKLIST FOR FALSE CEILING',
+    'CHECKLIST FOR FLOORING & TILING',
+    'GROUTING INSPECTION',
+    'CHECKLIST FOR IRONITE/ IPS FLOORING ',
+    'CHECKLIST FOR PAINTING WORK',
+    'CHECKLIST FOR INTERLOCK PAVING WORK',
+    'CHECKLIST FOR WALL CLADDING & ROOFING',
+    'CHECKLIST FOR WATER PROOFING'
+  ];
+
+  List<String> eleClnName = [
+    'PSS TABLE',
+    'RMU TABLE',
+    'CT TABLE',
+    'CMU TABLE',
+    'ACDB TABLE',
+    'CI TABLE',
+    'CDI TABLE',
+    'MCCB TABLE',
+    'CHARGER TABLE',
+    'EARTH TABLE'
+  ];
+  List<String> electricallist = [
+    'CHECKLIST FOR INSTALLATION OF PSS',
+    'CHECKLIST FOR INSTALLATION OF RMU',
+    'COVENTIONAL TRANSFORMER',
+    'CTPT METERING UNIT',
+    'CHECKLIST FOR INSTALLATION OF ACDB',
+    'CHECKLIST FOR  CABLE INSTALLATION ',
+    'CHECKLIST FOR CABLE DRUM / ROLL INSPECTION',
+    'CHECKLIST FOR MCCB PANEL',
+    'CHECKLIST FOR CHARGER PANEL',
+    'CHECKLIST FOR INSTALLATION OF  EARTH PIT',
   ];
   @override
   Widget build(BuildContext context) {
@@ -41,7 +84,7 @@ class _QualityHomeState extends State<QualityHome> {
             appBar: AppBar(
               backgroundColor: blue,
               title: const Text('Quality Checklist'),
-              actions: [
+              actions: const [
                 // Row(
                 //   children: [
                 //     Padding(
@@ -154,31 +197,59 @@ class _QualityHomeState extends State<QualityHome> {
                 ),
               ),
             ),
+            drawer: const NavbarDrawer(),
             body: TabBarView(children: [
               ListView.builder(
-                itemCount: 10,
+                itemCount: civillist.length,
                 itemBuilder: (context, index) {
-                  return _selectedIndex == 0 ? tabbarlist(index) : Text('dfd');
+                  return GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CivilField(
+                              depoName: widget.depoName,
+                              title: civillist[index],
+                              fieldclnName: civilClnName[index],
+                              index: index,
+                            ),
+                          )),
+                      child: tabbarlist(civillist, index));
                 },
-              )
+              ),
+              ListView.builder(
+                  itemCount: electricallist.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ElectricalField(
+                                depoName: widget.depoName,
+                                title: electricallist[index],
+                                fielClnName: civilClnName[index],
+                                titleIndex: index,
+                              ),
+                            )),
+                        child: tabbarlist(electricallist, index));
+                  })
             ]),
           )),
     );
   }
 
-  Widget tabbarlist(int index) {
+  Widget tabbarlist(List<String> list, int index) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: blue,
         ),
         child: Text(
-          listdata[index],
+          list[index],
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 15, color: white),
+          style: TextStyle(fontSize: 13, color: white),
         ),
       ),
     );

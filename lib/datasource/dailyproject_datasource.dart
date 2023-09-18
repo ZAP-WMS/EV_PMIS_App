@@ -80,7 +80,10 @@ class DailyDataSource extends DataGridSource {
                               userId: userId),
                         ));
                   },
-                  child: const Text('View'))
+                  child: Text(
+                    'View',
+                    style: tablefontsize,
+                  ))
               : (dataGridCell.columnName == 'upload')
                   ? ElevatedButton(
                       onPressed: () {
@@ -96,7 +99,7 @@ class DailyDataSource extends DataGridSource {
                               ),
                             ));
                       },
-                      child: const Text('Upload'))
+                      child: Text('Upload', style: tablefontsize))
                   : (dataGridCell.columnName == 'Add')
                       ? ElevatedButton(
                           onPressed: () {
@@ -216,7 +219,7 @@ class DailyDataSource extends DataGridSource {
                           : Text(
                               dataGridCell.value.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 12),
+                              style: tablefontsize,
                             ));
     }).toList());
   }

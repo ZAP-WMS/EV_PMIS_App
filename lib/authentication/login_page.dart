@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
           _sharedPreferences
               .setString('employeeId', empIdController.text)
               .then((_) {
-            Navigator.pushNamed(context, '/gallery');
+            Navigator.pushReplacementNamed(context, '/gallery');
           });
         } else {
           // ignore: use_build_context_synchronously

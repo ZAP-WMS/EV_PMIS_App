@@ -62,30 +62,23 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
         backgroundColor: blue,
         title: Text(
           widget.text.toString(),
-          style: const TextStyle(overflow: TextOverflow.fade, fontSize: 16),
+          maxLines: 3,
+          style: const TextStyle(fontSize: 14),
         ),
         actions: [
           widget.haveCalender
               ? Container(
                   height: 25,
-                  width: 100,
+                  width: 80,
                   child: Column(
                     children: [
                       InkWell(
                           onTap: () {
                             widget.choosedate!();
                           },
-                          child: const Icon(Icons.calendar_today, size: 25)),
-                      // IconButton(
-                      //     onPressed: () {
-                      //       widget.choosedate!();
-                      //     },
-                      //     icon: const Icon(
-                      //       Icons.calendar_today,
-                      //       size: 16,
-                      //     )),
+                          child: const Icon(Icons.calendar_today, size: 20)),
                       Text(
-                        selectedDate!,
+                        showDate!,
                         style: TextStyle(color: white, fontSize: 10),
                       ),
                     ],
@@ -101,7 +94,10 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                     onTap: widget.onTap,
                     child: Column(
                       children: const [
-                        Icon(Icons.summarize_sharp),
+                        Icon(
+                          Icons.summarize_sharp,
+                          size: 20,
+                        ),
                         Text(
                           'Summary',
                           style: TextStyle(fontSize: 10),
@@ -118,7 +114,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                       width: 40,
                       child: Column(
                         children: const [
-                          Icon(Icons.sync),
+                          Icon(Icons.sync, size: 20),
                           Text(
                             'Sync',
                             style: TextStyle(fontSize: 10),

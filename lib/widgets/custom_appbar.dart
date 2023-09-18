@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 import '../authentication/login_register.dart';
@@ -24,9 +25,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: isCentered ? true : false,
       title: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
-        ),
+        maxLines: 2,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
       ),
       backgroundColor: blue,
       shape: const RoundedRectangleBorder(
