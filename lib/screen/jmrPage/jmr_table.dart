@@ -618,7 +618,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(5.0),
+                                padding:
+                                    const EdgeInsets.only(right: 5, bottom: 10),
                                 child: Visibility(
                                   visible: widget.showTable ? false : true,
                                   child: FloatingActionButton(
@@ -643,7 +644,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(5.0),
+                                padding:
+                                    const EdgeInsets.only(right: 5, bottom: 10),
                                 child: Visibility(
                                   visible: widget.showTable ? false : true,
                                   child: FloatingActionButton.extended(
@@ -664,8 +666,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
                         ],
                       ),
                     ),
-              //   Center(
-              // child: Image.asset(widget.img.toString()),
             ),
     );
   }

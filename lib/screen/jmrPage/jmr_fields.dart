@@ -141,85 +141,109 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                   },
                   height: 30,
                   isCentered: true,
-                  isSync: widget.showTable ? false : true,
+                  isSync: false,
                   title:
                       'JMR / ${widget.depoName} / ${widget.title.toString()}',
                 ),
                 preferredSize: const Size.fromHeight(50),
               ),
-              body: Column(
-                children: [
-                  HeaderValue(
-                      widget.showTable, 'Project', 'Project Name', projectName),
-                  HeaderValue(widget.showTable, 'Ref No', 'Ref No', refNo),
-                  HeaderValue(widget.showTable, 'LOI Ref Number',
-                      'LOI Ref Number', loiRefNum),
-                  HeaderValue(widget.showTable, 'Date', 'Date', date),
-                  HeaderValue(widget.showTable, 'Site Location',
-                      'Site Location', siteLocation),
-                  HeaderValue(widget.showTable, 'Note', 'Note', note),
-                  Container(
-                    height: 60,
-                    padding:
-                        const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
-                            'Working Dates :',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    HeaderValue(context, widget.showTable, 'Project',
+                        'Project Name', projectName),
+                    HeaderValue(
+                        context, widget.showTable, 'Ref No ', 'Ref No', refNo),
+                    HeaderValue(context, widget.showTable, 'LOI Ref\nNumber',
+                        'LOI Ref Number', loiRefNum),
+                    HeaderValue(context, widget.showTable, 'Date    ',
+                        'Enter Date', date),
+                    HeaderValue(context, widget.showTable, 'Site\nLocation',
+                        'Site Location', siteLocation),
+                    HeaderValue(
+                        context, widget.showTable, 'Note     ', 'Note', note),
+                    Container(
+                      height: 60,
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, top: 10),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text(
+                              'Working \nDates       ',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                            child: TextFormField(
-                          controller: startDate,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(), hintText: 'From'),
-                        )),
-                        const SizedBox(width: 10),
-                        Expanded(
-                            child: TextFormField(
-                                controller: endDate,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    hintText: 'To')))
-                      ],
+                          Expanded(
+                              child: TextFormField(
+                            controller: startDate,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                contentPadding:
+                                    EdgeInsets.only(left: 4, right: 4),
+                                hintText: 'From'),
+                          )),
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: TextFormField(
+                                  controller: endDate,
+                                  decoration: const InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.only(left: 4, right: 4),
+                                      border: OutlineInputBorder(),
+                                      hintText: 'To')))
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               //   Center(
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => JmrTablePage(
-                                date: date.text,
-                                endDate: endDate.text,
-                                note: note.text,
-                                projectName: projectName.text,
-                                refNo: refNo.text,
-                                loiRefNum: loiRefNum.text,
-                                startDate: startDate.text,
-                                siteLocation: siteLocation.text,
-                                dataFetchingIndex: widget.dataFetchingIndex,
-                                showTable: widget.showTable,
-                                title: widget.title,
-                                jmrTab: widget.jmrTab,
-                                cityName: widget.cityName,
-                                depoName: widget.depoName,
-                                jmrIndex: widget.jmrIndex,
-                                tabName: widget.tabName,
-                              )));
-                },
-                child: const Icon(
-                  Icons.arrow_right_alt,
-                  size: 30,
-                ),
-              ), // child: Image.asset(widget.img.toString()),
+              floatingActionButton: FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => JmrTablePage(
+                                  date: date.text,
+                                  endDate: endDate.text,
+                                  note: note.text,
+                                  projectName: projectName.text,
+                                  refNo: refNo.text,
+                                  loiRefNum: loiRefNum.text,
+                                  startDate: startDate.text,
+                                  siteLocation: siteLocation.text,
+                                  dataFetchingIndex: widget.dataFetchingIndex,
+                                  showTable: widget.showTable,
+                                  title: widget.title,
+                                  jmrTab: widget.jmrTab,
+                                  cityName: widget.cityName,
+                                  depoName: widget.depoName,
+                                  jmrIndex: widget.jmrIndex,
+                                  tabName: widget.tabName,
+                                )));
+                  },
+                  label: widget.showTable
+                      ? Row(
+                          children: const [
+                            Text(
+                              'Next',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        )
+                      : Row(
+                          children: const [
+                            Text(
+                              'Proceed To Sync',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Icon(Icons.arrow_forward),
+                          ],
+                        )), // child: Image.asset(widget.img.toString()),
             ),
     );
   }
@@ -244,19 +268,6 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
     } else {
       print('File is Empty');
     }
-    // final input = FileUploadInputElement()..accept = '.xlsx';
-    // input.click();
-
-    // await input.onChange.first;
-    // final files = input.files;
-
-    // if (files?.length == 1) {
-    //   final file = files?[0];
-    //   final reader = FileReader();
-
-    // reader.readAsArrayBuffer(file!);
-
-    // await reader.onLoadEnd.first;
 
     return data;
   }
@@ -551,35 +562,33 @@ List<JMRModel> getData() {
   ];
 }
 
-HeaderValue(bool isReadOnly, String title, String hintValue,
-    TextEditingController fieldData) {
+HeaderValue(BuildContext context, bool isReadOnly, String title,
+    String hintValue, TextEditingController fieldData) {
   return Container(
     padding: const EdgeInsets.only(
       left: 4,
       bottom: 4,
       top: 10,
-      right: 5,
+      right: 4,
     ),
-    width: 400,
-    height: 60,
+    width: MediaQuery.of(context).size.width,
+    height: 70,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            '$title : ',
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
-        Expanded(
+        SizedBox(
+          width: 300,
           child: TextFormField(
             readOnly: isReadOnly,
             controller: fieldData,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               hintText: hintValue,
-              contentPadding: const EdgeInsets.all(4),
+              contentPadding: const EdgeInsets.only(left: 4, right: 4),
             ),
             style: const TextStyle(fontSize: 16),
           ),
