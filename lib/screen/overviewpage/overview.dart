@@ -24,7 +24,7 @@ class _OverviewPageState extends State<OverviewPage> {
     '/daily-report',
     '/monthly-report',
     '/detailed-page',
-    '/depotOverview',
+    '/jmrPage',
     '/safety-page',
     '/quality-page',
     '/depotOverview',

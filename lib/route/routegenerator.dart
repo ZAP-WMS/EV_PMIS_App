@@ -15,6 +15,8 @@ import 'package:ev_pmis_app/screen/qualitychecklist/quality_home.dart';
 import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:flutter/material.dart';
 
+import '../screen/jmrPage/jmr.dart';
+
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     final args = settings.arguments;
@@ -67,6 +69,11 @@ class RouteGenerator {
 
       case '/quality-page':
         return MaterialPageRoute(builder: (context) => QualityHome());
+
+      case '/jmrPage':
+        return MaterialPageRoute(
+            builder: (context) =>
+                JmrPage(cityName: args.toString(), depoName: args.toString()));
     }
   }
 }

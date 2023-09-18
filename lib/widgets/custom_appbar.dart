@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: const TextStyle(
-          fontSize: 16,
+          fontSize: 12,
         ),
       ),
       backgroundColor: blue,
@@ -34,9 +34,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         isSync
             ? Container(
-                padding: EdgeInsets.only(bottom: 2),
+                padding: const EdgeInsets.only(bottom: 2),
                 height: 30,
-                width: 80,
+                width: 65,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                 ),
