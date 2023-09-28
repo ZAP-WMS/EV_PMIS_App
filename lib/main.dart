@@ -11,6 +11,12 @@ import 'package:provider/provider.dart';
 
 void main() async {
   // its used for status bar color
+
+// here i have initialize my firebase
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: blue));
   SystemChrome.setPreferredOrientations([
@@ -18,11 +24,6 @@ void main() async {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft
   ]);
-
-// here i have initialize my firebase
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
   runApp(const MyApp());
 }
 
@@ -40,13 +41,12 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: GetMaterialApp(
+        // initialRoute: '/jmrPage',
         initialRoute: '/splash-screen',
         // all the pages of routes are declared here
-
         onGenerateRoute: RouteGenerator.generateRoute,
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-
         theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: GoogleFonts.quicksand().fontFamily),

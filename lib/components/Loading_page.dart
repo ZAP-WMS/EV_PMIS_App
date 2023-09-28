@@ -23,6 +23,7 @@ class LoadingPage extends StatelessWidget {
         //   ],
         // )
         // Lottie.asset('animations/loading.json'),
+
         );
   }
 }

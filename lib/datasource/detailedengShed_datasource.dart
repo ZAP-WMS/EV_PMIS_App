@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../model/daily_projectModel.dart';
 import '../model/detailed_engModel.dart';
 import '../screen/overviewpage/view_AllFiles.dart';
@@ -16,18 +15,18 @@ class DetailedEngSourceShed extends DataGridSource {
   String depoName;
   String userId;
   BuildContext mainContext;
-  DetailedEngSourceShed(this._detailedengev, this.mainContext, this.cityName,
+  DetailedEngSourceShed(this._detailedengshed, this.mainContext, this.cityName,
       this.depoName, this.userId) {
-    buildDataGridRowsEV();
+    buildDataGridRowsShed();
   }
-  void buildDataGridRowsEV() {
-    dataGridRows = _detailedengev
+  void buildDataGridRowsShed() {
+    dataGridRows = _detailedengshed
         .map<DataGridRow>((dataGridRow) => dataGridRow.dataGridRow())
         .toList();
   }
 
   @override
-  List<DetailedEngModel> _detailedengev = [];
+  List<DetailedEngModel> _detailedengshed = [];
   // List<DetailedEngModel> _detailedeng = [];
 
   TextStyle textStyle = const TextStyle(
@@ -105,10 +104,15 @@ class DetailedEngSourceShed extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       void addRowAtIndex(int index, DetailedEngModel rowData) {
-        _detailedengev.insert(index, rowData);
-        buildDataGridRowsEV();
+        _detailedengshed.insert(index, rowData);
+        buildDataGridRowsShed();
         notifyListeners();
-        // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
+      }
+
+      void removeRowAtIndex(int index) {
+        _detailedengshed.removeAt(index);
+        buildDataGridRowsShed();
+        notifyListeners();
       }
       // Color getcolor() {
       //   if (dataGridCell.columnName == 'Title' &&
@@ -145,13 +149,15 @@ class DetailedEngSourceShed extends DataGridSource {
                             DateFormat().add_yMd().format(DateTime.now()),
                       ));
                 },
-                child: Text(
+                child: const Text(
                   'Add',
                   style: TextStyle(fontSize: 12),
                 ))
             : (dataGridCell.columnName == 'Delete')
                 ? IconButton(
                     onPressed: () {
+                      removeRowAtIndex(dataRowIndex);
+                      print(dataRowIndex);
                       dataGridRows.remove(row);
                       notifyListeners();
                     },
@@ -286,32 +292,44 @@ class DetailedEngSourceShed extends DataGridSource {
                                                     title:
                                                         const Text('All Date'),
                                                     content: Container(
-                                                        height: 400,
-                                                        width: 500,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.8,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
                                                         child:
                                                             SfDateRangePicker(
+                                                          selectionShape:
+                                                              DateRangePickerSelectionShape
+                                                                  .rectangle,
                                                           view:
                                                               DateRangePickerView
                                                                   .month,
-                                                          showTodayButton: true,
-                                                          onSelectionChanged:
-                                                              (DateRangePickerSelectionChangedArgs
-                                                                  args) {
-                                                            if (args.value
-                                                                is PickerDateRange) {
-                                                              rangeStartDate =
-                                                                  args.value
-                                                                      .startDate;
-                                                              rangeEndDate =
-                                                                  args.value
-                                                                      .endDate;
-                                                            } else {
-                                                              final List<
-                                                                      PickerDateRange>
-                                                                  selectedRanges =
-                                                                  args.value;
-                                                            }
-                                                          },
+                                                          showTodayButton:
+                                                              false,
+                                                          // onSelectionChanged:
+                                                          //     (DateRangePickerSelectionChangedArgs
+                                                          //         args) {
+                                                          //   if (args.value
+                                                          //       is PickerDateRange) {
+                                                          //     rangeStartDate =
+                                                          //         args.value
+                                                          //             .startDate;
+                                                          //     rangeEndDate =
+                                                          //         args.value
+                                                          //             .endDate;
+                                                          //   } else {
+                                                          //     final List<
+                                                          //             PickerDateRange>
+                                                          //         selectedRanges =
+                                                          //         args.value;
+                                                          //   }
+                                                          // },
                                                           selectionMode:
                                                               DateRangePickerSelectionMode
                                                                   .single,
@@ -351,7 +369,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                           'dd-MM-yyyy')
                                                                       .format(
                                                                           date!));
-                                                              _detailedengev[
+                                                              _detailedengshed[
                                                                       dataRowIndex]
                                                                   .preparationDate = DateFormat(
                                                                       'dd-MM-yyyy')
@@ -370,7 +388,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                       ),
                                       Text(
                                         dataGridCell.value.toString(),
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   )
@@ -388,33 +406,44 @@ class DetailedEngSourceShed extends DataGridSource {
                                                             title: const Text(
                                                                 'All Date'),
                                                             content: Container(
-                                                                height: 400,
-                                                                width: 500,
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.8,
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.8,
                                                                 child:
                                                                     SfDateRangePicker(
+                                                                  selectionShape:
+                                                                      DateRangePickerSelectionShape
+                                                                          .rectangle,
                                                                   view:
                                                                       DateRangePickerView
                                                                           .month,
                                                                   showTodayButton:
-                                                                      true,
-                                                                  onSelectionChanged:
-                                                                      (DateRangePickerSelectionChangedArgs
-                                                                          args) {
-                                                                    if (args.value
-                                                                        is PickerDateRange) {
-                                                                      rangeStartDate = args
-                                                                          .value
-                                                                          .startDate;
-                                                                      rangeEndDate = args
-                                                                          .value
-                                                                          .endDate;
-                                                                    } else {
-                                                                      final List<
-                                                                              PickerDateRange>
-                                                                          selectedRanges =
-                                                                          args.value;
-                                                                    }
-                                                                  },
+                                                                      false,
+                                                                  // onSelectionChanged:
+                                                                  //     (DateRangePickerSelectionChangedArgs
+                                                                  //         args) {
+                                                                  //   if (args.value
+                                                                  //       is PickerDateRange) {
+                                                                  //     rangeStartDate = args
+                                                                  //         .value
+                                                                  //         .startDate;
+                                                                  //     rangeEndDate = args
+                                                                  //         .value
+                                                                  //         .endDate;
+                                                                  //   } else {
+                                                                  //     final List<
+                                                                  //             PickerDateRange>
+                                                                  //         selectedRanges =
+                                                                  //         args.value;
+                                                                  //   }
+                                                                  // },
                                                                   selectionMode:
                                                                       DateRangePickerSelectionMode
                                                                           .single,
@@ -450,7 +479,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                               'SubmissionDate',
                                                                           value:
                                                                               DateFormat('dd-MM-yyyy').format(date!));
-                                                                      _detailedengev[
+                                                                      _detailedengshed[
                                                                               dataRowIndex]
                                                                           .submissionDate = DateFormat(
                                                                               'dd-MM-yyyy')
@@ -490,26 +519,28 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                     'All Date'),
                                                                 content:
                                                                     Container(
-                                                                        height:
-                                                                            400,
-                                                                        width:
-                                                                            500,
+                                                                        height: MediaQuery.of(context).size.height *
+                                                                            0.8,
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.8,
                                                                         child:
                                                                             SfDateRangePicker(
+                                                                          selectionShape:
+                                                                              DateRangePickerSelectionShape.rectangle,
                                                                           view:
                                                                               DateRangePickerView.month,
                                                                           showTodayButton:
-                                                                              true,
-                                                                          onSelectionChanged:
-                                                                              (DateRangePickerSelectionChangedArgs args) {
-                                                                            if (args.value
-                                                                                is PickerDateRange) {
-                                                                              rangeStartDate = args.value.startDate;
-                                                                              rangeEndDate = args.value.endDate;
-                                                                            } else {
-                                                                              final List<PickerDateRange> selectedRanges = args.value;
-                                                                            }
-                                                                          },
+                                                                              false,
+                                                                          // onSelectionChanged:
+                                                                          //     (DateRangePickerSelectionChangedArgs args) {
+                                                                          //   if (args.value
+                                                                          //       is PickerDateRange) {
+                                                                          //     rangeStartDate = args.value.startDate;
+                                                                          //     rangeEndDate = args.value.endDate;
+                                                                          //   } else {
+                                                                          //     final List<PickerDateRange> selectedRanges = args.value;
+                                                                          //   }
+                                                                          // },
                                                                           selectionMode:
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
@@ -530,7 +561,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                                 null) {
                                                                               final int dataRowIndex = dataGridRows.indexOf(row);
                                                                               dataGridRows[dataRowIndex].getCells()[7] = DataGridCell<String>(columnName: 'ApproveDate', value: DateFormat('dd-MM-yyyy').format(date!));
-                                                                              _detailedengev[dataRowIndex].approveDate = DateFormat('dd-MM-yyyy').format(date!);
+                                                                              _detailedengshed[dataRowIndex].approveDate = DateFormat('dd-MM-yyyy').format(date!);
                                                                               notifyListeners();
 
                                                                               Navigator.pop(context);
@@ -544,7 +575,8 @@ class DetailedEngSourceShed extends DataGridSource {
                                               ),
                                               Text(
                                                 dataGridCell.value.toString(),
-                                                style: TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
                                               ),
                                             ],
                                           )
@@ -563,23 +595,25 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                     title: const Text(
                                                                         'All Date'),
                                                                     content: Container(
-                                                                        height: 400,
-                                                                        width: 500,
+                                                                        height: MediaQuery.of(context).size.height * 0.8,
+                                                                        width: MediaQuery.of(context).size.width * 0.8,
                                                                         child: SfDateRangePicker(
+                                                                          selectionShape:
+                                                                              DateRangePickerSelectionShape.rectangle,
                                                                           view:
                                                                               DateRangePickerView.month,
                                                                           showTodayButton:
-                                                                              true,
-                                                                          onSelectionChanged:
-                                                                              (DateRangePickerSelectionChangedArgs args) {
-                                                                            if (args.value
-                                                                                is PickerDateRange) {
-                                                                              rangeStartDate = args.value.startDate;
-                                                                              rangeEndDate = args.value.endDate;
-                                                                            } else {
-                                                                              final List<PickerDateRange> selectedRanges = args.value;
-                                                                            }
-                                                                          },
+                                                                              false,
+                                                                          // onSelectionChanged:
+                                                                          //     (DateRangePickerSelectionChangedArgs args) {
+                                                                          //   if (args.value
+                                                                          //       is PickerDateRange) {
+                                                                          //     rangeStartDate = args.value.startDate;
+                                                                          //     rangeEndDate = args.value.endDate;
+                                                                          //   } else {
+                                                                          //     final List<PickerDateRange> selectedRanges = args.value;
+                                                                          //   }
+                                                                          // },
                                                                           selectionMode:
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
@@ -600,7 +634,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                                 null) {
                                                                               final int dataRowIndex = dataGridRows.indexOf(row);
                                                                               dataGridRows[dataRowIndex].getCells()[8] = DataGridCell<String>(columnName: 'ReleaseDate', value: DateFormat('dd-MM-yyyy').format(date!));
-                                                                              _detailedengev[dataRowIndex].releaseDate = DateFormat('dd-MM-yyyy').format(date!);
+                                                                              _detailedengshed[dataRowIndex].releaseDate = DateFormat('dd-MM-yyyy').format(date!);
                                                                               notifyListeners();
 
                                                                               Navigator.pop(context);
@@ -766,7 +800,8 @@ class DetailedEngSourceShed extends DataGridSource {
                                             : Text(
                                                 dataGridCell.value.toString(),
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
                                               ),
       );
     }).toList());
@@ -798,33 +833,33 @@ class DetailedEngSourceShed extends DataGridSource {
     if (column.columnName == 'SiNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(columnName: 'SiNo', value: newCellValue);
-      _detailedengev[dataRowIndex].siNo = newCellValue;
+      _detailedengshed[dataRowIndex].siNo = newCellValue;
     } else if (column.columnName == 'Number') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(columnName: 'Number', value: newCellValue);
-      _detailedengev[dataRowIndex].number = newCellValue;
+      _detailedengshed[dataRowIndex].number = newCellValue;
     } else if (column.columnName == 'Title') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(columnName: 'Title', value: newCellValue);
-      _detailedengev[dataRowIndex].title = newCellValue.toString();
+      _detailedengshed[dataRowIndex].title = newCellValue.toString();
     } else if (column.columnName == 'PreparationDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(
               columnName: 'PreparationDate', value: newCellValue as int);
-      _detailedengev[dataRowIndex].preparationDate = newCellValue;
+      _detailedengshed[dataRowIndex].preparationDate = newCellValue;
     } else if (column.columnName == 'SubmissionDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(
               columnName: 'SubmissioinDate', value: newCellValue);
-      _detailedengev[dataRowIndex].submissionDate = newCellValue;
+      _detailedengshed[dataRowIndex].submissionDate = newCellValue;
     } else if (column.columnName == 'ApproveDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(columnName: 'ApproveDate', value: newCellValue);
-      _detailedengev[dataRowIndex].approveDate = newCellValue;
+      _detailedengshed[dataRowIndex].approveDate = newCellValue;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(columnName: 'ReleaseDate', value: newCellValue);
-      _detailedengev[dataRowIndex].releaseDate = newCellValue;
+      _detailedengshed[dataRowIndex].releaseDate = newCellValue;
     }
   }
 

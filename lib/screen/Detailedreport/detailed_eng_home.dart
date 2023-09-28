@@ -4,7 +4,8 @@ import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
 class DetailedEngHome extends StatefulWidget {
-  const DetailedEngHome({super.key});
+  String? depoName;
+  DetailedEngHome({super.key, required this.depoName});
 
   @override
   State<DetailedEngHome> createState() => _DetailedEngHomeState();
@@ -32,7 +33,7 @@ class _DetailedEngHomeState extends State<DetailedEngHome> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        DetailedEng(cityName: '', depoName: ''),
+                        DetailedEng(depoName: widget.depoName),
                   )),
               child: card(
                 title[index],

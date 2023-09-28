@@ -45,7 +45,7 @@ class ImagePage extends StatelessWidget {
                   file.url,
                   height: MediaQuery.of(context).size.width,
                   width: MediaQuery.of(context).size.height,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               )
             : isPdf

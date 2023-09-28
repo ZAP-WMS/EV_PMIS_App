@@ -242,10 +242,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('Sr No',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -257,10 +254,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('ACTIVITY',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -287,10 +281,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('DOCUMENT REFERENCE',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -302,10 +293,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('OBSERVATION',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -318,10 +306,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('Upload',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -333,10 +318,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('View',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   // GridColumn(
@@ -500,10 +482,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('Sr No',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -515,10 +494,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('ACTIVITY',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -545,10 +521,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('DOCUMENT REFERENCE',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -560,10 +533,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('OBSERVATION',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -576,10 +546,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('Upload.',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   GridColumn(
@@ -591,10 +558,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
                       alignment: Alignment.center,
                       child: Text('View',
                           overflow: TextOverflow.values.first,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: white)),
+                          style: tableheaderwhitecolor),
                     ),
                   ),
                   // GridColumn(

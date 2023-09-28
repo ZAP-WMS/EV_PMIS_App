@@ -15,6 +15,7 @@ import '../../model/depot_overview.dart';
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../homepage/gallery.dart';
+import 'depot_overview.dart';
 
 late DepotOverviewDatasource _employeeDataSource;
 List<DepotOverviewModel> _employees = <DepotOverviewModel>[];
@@ -84,6 +85,7 @@ class _OverviewTableState extends State<OverviewTable> {
             height: 50,
             isSync: true,
             store: () {
+              //  overviewFieldstore(cityName!, widget.depoName!);
               storeData(widget.depoName!, context);
             },
             isCentered: false),
@@ -91,23 +93,24 @@ class _OverviewTableState extends State<OverviewTable> {
             ? LoadingPage()
             : Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        width: 500,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: blue),
-                        child: Text(
-                          'Brief Overview of ${widget.depoName} E-Bus Depot',
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: white),
-                        )),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Container(
+                  //       width: 500,
+                  //       alignment: Alignment.center,
+                  //       padding: const EdgeInsets.all(10),
+                  //       decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           color: blue),
+                  //       child: Text(
+                  //         'Brief Overview of ${widget.depoName} E-Bus Depot',
+                  //         style: TextStyle(
+                  //             fontSize: 12,
+                  //             fontWeight: FontWeight.bold,
+                  //             color: white),
+                  //       )),
+                  // ),
+
                   Expanded(
                       child: StreamBuilder(
                     stream: _stream,
@@ -718,32 +721,4 @@ void storeData(String depoName, BuildContext context) {
       backgroundColor: blue,
     ));
   });
-
-  // void storeData() {
-  //   Map<String, dynamic> table_data = Map();
-  //   for (var i in _employeeDataSource.dataGridRows) {
-  //     for (var data in i.getCells()) {
-  //       if (data.columnName != 'Add' || data.columnName != 'Delete') {
-  //         table_data[data.columnName] = data.value;
-  //       }
-  //     }
-  //     tabledata2.add(table_data);
-  //     table_data = {};
-  //   }
-
-  //   FirebaseFirestore.instance
-  //       .collection('OverviewCollectionTable')
-  //       .doc(depoName)
-  //       .collection("OverviewTabledData")
-  //       .doc(userId)
-  //       .set({
-  //     'data': tabledata2,
-  //   }).whenComplete(() {
-  //     tabledata2.clear();
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: const Text('Data are synced'),
-  //       backgroundColor: blue,
-  //     ));
-  //   });
-  // }
 }

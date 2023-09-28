@@ -62,12 +62,12 @@ class _MonthlyProjectState extends State<MonthlyProject> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavbarDrawer(),
+      drawer: const NavbarDrawer(),
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
               text:
-                  '  ${widget.cityName}/ ${widget.depoName} / Monthly Report / ${DateFormat('MMMM').format(DateTime.now())}',
+                  '${widget.depoName}/Monthly Report/${DateFormat('MMMM').format(DateTime.now())}',
 
               //  ${DateFormat.yMMMMd().format(DateTime.now())}',
               haveCalender: false,

@@ -32,12 +32,20 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
             //     color: Colors.white,
             //   ),
             // ],
-            accountName: Text(userId!),
-            accountEmail: const Text('test@gmail.com'),
+            accountName: Text(
+              userId!,
+              textAlign: TextAlign.center,
+            ),
+            accountEmail: const Text(''),
           ),
           ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
+              leading: Icon(
+                Icons.home,
+                color: blue,
+              ),
+              title: const Text(
+                'Home',
+              ),
               onTap: () {
                 // SystemChrome.setPreferredOrientations([
                 //   DeviceOrientation.portraitUp,
@@ -51,25 +59,28 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                   ),
                 );
               }),
+          // ListTile(
+          //     leading: const Icon(Icons.mood),
+          //     title: const Text('Mood'),
+          //     onTap: () {
+          //       // SystemChrome.setPreferredOrientations([
+          //       //   DeviceOrientation.portraitUp,
+          //       //   DeviceOrientation.portraitDown,
+          //       //   // DeviceOrientation.landscapeLeft,
+          //       // ]);
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (_) => const CitiesHome(),
+          //         ),
+          //       );
+          //     }),
           ListTile(
-              leading: const Icon(Icons.mood),
-              title: const Text('Mood'),
-              onTap: () {
-                // SystemChrome.setPreferredOrientations([
-                //   DeviceOrientation.portraitUp,
-                //   DeviceOrientation.portraitDown,
-                //   // DeviceOrientation.landscapeLeft,
-                // ]);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => CitiesHome(),
-                  ),
-                );
-              }),
-          ListTile(
-              leading: const Icon(Icons.note_add),
-              title: const Text('Note'),
+              leading: Icon(
+                Icons.note_add,
+                color: blue,
+              ),
+              title: const Text('Chat'),
               onTap: () {
                 // SystemChrome.setPreferredOrientations([
                 //   DeviceOrientation.portraitUp,
@@ -84,25 +95,28 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                 );
               }),
           const Divider(),
-          ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-                // SystemChrome.setPreferredOrientations([
-                //   DeviceOrientation.portraitUp,
-                //   DeviceOrientation.portraitDown,
-                //   // DeviceOrientation.landscapeLeft,
-                // ]);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => CitiesHome(),
-                  ),
-                );
-              }),
+          // ListTile(
+          //     leading: const Icon(Icons.settings),
+          //     title: const Text('Settings'),
+          //     onTap: () {
+          //       // SystemChrome.setPreferredOrientations([
+          //       //   DeviceOrientation.portraitUp,
+          //       //   DeviceOrientation.portraitDown,
+          //       //   // DeviceOrientation.landscapeLeft,
+          //       // ]);
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (_) => CitiesHome(),
+          //         ),
+          //       );
+          //     }),
           // const Divider(),
           ListTile(
-              leading: const Icon(Icons.logout_rounded),
+              leading: Icon(
+                Icons.logout_rounded,
+                color: blue,
+              ),
               title: const Text('Logout'),
               onTap: () {
                 // SystemChrome.setPreferredOrientations([

@@ -80,7 +80,8 @@ class _ViewSummaryState extends State<ViewSummary> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            ' ${widget.cityName} / ${widget.depoName} / ${widget.id} / View Summary',
+            '${widget.depoName}/${widget.id}/View Summary',
+            style: TextStyle(fontSize: 16),
           ),
           backgroundColor: blue,
         ),
@@ -99,7 +100,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                             children: [
                               Container(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                    const EdgeInsets.symmetric(horizontal: 3),
                                 // width: 200,
                                 height: 40,
                                 decoration: BoxDecoration(
@@ -950,11 +951,12 @@ class _ViewSummaryState extends State<ViewSummary> {
                         : Expanded(
                             child: StreamBuilder(
                               stream: FirebaseFirestore.instance
-                                  .collection('SafetyChecklistTable')
-                                  .doc(widget.depoName!)
-                                  .collection(widget.userId)
-                                  .doc(DateFormat.yMMMMd().format(startdate!))
-                                  .snapshots(),
+        .collection('SafetyChecklistTable2')
+        .doc(widget.depoName!)
+        .collection('userId')
+        .doc(userId)
+        .collection('date')
+        .doc(DateFormat.yMMMMd().format(startdate!)).snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -962,8 +964,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                 }
                                 if (!snapshot.hasData ||
                                     snapshot.data!.exists == false) {
-                                  return Text('data');
-                                  // const NodataAvailable();
+                                  return
+                                  const NodataAvailable();
                                 } else {
                                   alldata = '';
                                   alldata =

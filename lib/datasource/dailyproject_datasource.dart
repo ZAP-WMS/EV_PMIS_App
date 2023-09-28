@@ -63,6 +63,12 @@ class DailyDataSource extends DataGridSource {
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
       }
 
+      void removeRowAtIndex(int index) {
+        _dailyproject.removeAt(index);
+        buildDataGridRows();
+        notifyListeners();
+      }
+
       return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -119,15 +125,7 @@ class DailyDataSource extends DataGridSource {
                       : (dataGridCell.columnName == 'Delete')
                           ? IconButton(
                               onPressed: () async {
-                                // FirebaseFirestore.instance
-                                //     .collection('DailyProjectReport')
-                                //     .doc(depoName)
-                                //     .collection('Daily Data')
-                                //     .doc(DateFormat.yMMMMd().format(DateTime.now()))
-                                //     .update({
-                                //   'data': FieldValue.arrayRemove([0])
-                                // });
-
+                                removeRowAtIndex(dataRowIndex);
                                 dataGridRows.remove(row);
                                 notifyListeners();
                               },

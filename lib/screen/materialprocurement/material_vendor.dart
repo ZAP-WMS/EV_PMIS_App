@@ -4,19 +4,19 @@ import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/materialprocurement_datasource.dart';
 import '../../model/material_procurement.dart';
+import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/custom_appbar.dart';
 
 class MaterialProcurement extends StatefulWidget {
-  String? cityName;
   String? depoName;
-  MaterialProcurement(
-      {super.key, required this.cityName, required this.depoName});
+  MaterialProcurement({super.key, required this.depoName});
 
   @override
   State<MaterialProcurement> createState() => _MaterialProcurementState();
@@ -28,16 +28,18 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
   late MaterialDatasource _materialDatasource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];
-
   Stream? _stream;
   bool _isloading = true;
   dynamic alldata;
+  String? cityName;
 
   @override
   void initState() {
+    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+
     _materialprocurement = getmonthlyReport();
     _materialDatasource = MaterialDatasource(
-        _materialprocurement, context, widget.cityName, widget.depoName);
+        _materialprocurement, context, cityName, widget.depoName);
     _dataGridController = DataGridController();
 
     _stream = FirebaseFirestore.instance
@@ -60,7 +62,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
             // ignore: sort_child_properties_last
             child: CustomAppBar(
               isCentered: false,
-              title: 'Material Procurement',
+              title: '${widget.depoName}/Material Procurement',
               height: 50,
               isSync: true,
               store: () {
@@ -342,7 +344,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                           _materialDatasource = MaterialDatasource(
                               _materialprocurement,
                               context,
-                              widget.cityName,
+                              cityName,
                               widget.depoName);
                           _dataGridController = DataGridController();
                         });

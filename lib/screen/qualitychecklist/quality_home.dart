@@ -81,6 +81,7 @@ class _QualityHomeState extends State<QualityHome> {
           length: 2,
           child: Scaffold(
             // key: scaffoldKey,
+
             appBar: AppBar(
               backgroundColor: blue,
               title: const Text('Quality Checklist'),
@@ -226,7 +227,7 @@ class _QualityHomeState extends State<QualityHome> {
                               builder: (context) => ElectricalField(
                                 depoName: widget.depoName,
                                 title: electricallist[index],
-                                fielClnName: civilClnName[index],
+                                fielClnName: eleClnName[index],
                                 titleIndex: index,
                               ),
                             )),

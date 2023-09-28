@@ -17,18 +17,18 @@ class _OverviewPageState extends State<OverviewPage> {
   String? cityName;
   List<String> screens = [
     '/depotOverview',
-    '/depotOverview',
+    '/planning-page',
     '/material-page',
     '/daily-report',
     '/monthly-report',
     '/detailed-page',
-    '/depotOverview',
+    '/jmrPage',
     '/safety-page',
     '/quality-page',
     '/depotOverview',
     // '/depotOverview',
     '/closure-page',
-    '/depotOverview',
+    '/planning-page',
   ];
   List imagedata = [
     'assets/overview_image/overview.png',

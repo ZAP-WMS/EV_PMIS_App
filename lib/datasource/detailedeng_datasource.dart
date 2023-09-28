@@ -107,7 +107,12 @@ class DetailedEngSource extends DataGridSource {
         _detailedeng.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
-        // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
+      }
+
+      void removeRowAtIndex(int index) {
+        _detailedeng.removeAt(index);
+        buildDataGridRows();
+        notifyListeners();
       }
       // Color getcolor() {
       //   if (dataGridCell.columnName == 'Title' &&
@@ -151,6 +156,8 @@ class DetailedEngSource extends DataGridSource {
             : (dataGridCell.columnName == 'Delete')
                 ? IconButton(
                     onPressed: () {
+                      removeRowAtIndex(dataRowIndex);
+                      print(dataRowIndex);
                       dataGridRows.remove(row);
                       notifyListeners();
                     },
@@ -285,34 +292,53 @@ class DetailedEngSource extends DataGridSource {
                                           showDialog(
                                               context: mainContext,
                                               builder: (context) => AlertDialog(
-                                                    title:
-                                                        const Text('All Date'),
+                                                    insetPadding:
+                                                        EdgeInsets.all(0),
+                                                    title: const Text(
+                                                      'All Date',
+                                                      style: TextStyle(
+                                                          fontSize: 15),
+                                                    ),
                                                     content: Container(
-                                                        height: 400,
-                                                        width: 500,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.8,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
                                                         child:
                                                             SfDateRangePicker(
+                                                          headerHeight: 15,
+                                                          viewSpacing: 20,
+                                                          selectionShape:
+                                                              DateRangePickerSelectionShape
+                                                                  .rectangle,
                                                           view:
                                                               DateRangePickerView
                                                                   .month,
-                                                          showTodayButton: true,
+                                                          showTodayButton:
+                                                              false,
                                                           onSelectionChanged:
                                                               (DateRangePickerSelectionChangedArgs
                                                                   args) {
-                                                            if (args.value
-                                                                is PickerDateRange) {
-                                                              rangeStartDate =
-                                                                  args.value
-                                                                      .startDate;
-                                                              rangeEndDate =
-                                                                  args.value
-                                                                      .endDate;
-                                                            } else {
-                                                              final List<
-                                                                      PickerDateRange>
-                                                                  selectedRanges =
-                                                                  args.value;
-                                                            }
+                                                            // if (args.value
+                                                            //     is PickerDateRange) {
+                                                            //   rangeStartDate =
+                                                            //       args.value
+                                                            //           .startDate;
+                                                            //   rangeEndDate =
+                                                            //       args.value
+                                                            //           .endDate;
+                                                            // } else {
+                                                            //   final List<
+                                                            //           PickerDateRange>
+                                                            //       selectedRanges =
+                                                            //       args.value;
+                                                            // }
                                                           },
                                                           selectionMode:
                                                               DateRangePickerSelectionMode
@@ -372,7 +398,7 @@ class DetailedEngSource extends DataGridSource {
                                       ),
                                       Text(
                                         dataGridCell.value.toString(),
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   )
@@ -390,33 +416,44 @@ class DetailedEngSource extends DataGridSource {
                                                             title: const Text(
                                                                 'All Date'),
                                                             content: Container(
-                                                                height: 400,
-                                                                width: 500,
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.8,
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.8,
                                                                 child:
                                                                     SfDateRangePicker(
+                                                                  selectionShape:
+                                                                      DateRangePickerSelectionShape
+                                                                          .rectangle,
                                                                   view:
                                                                       DateRangePickerView
                                                                           .month,
                                                                   showTodayButton:
-                                                                      true,
-                                                                  onSelectionChanged:
-                                                                      (DateRangePickerSelectionChangedArgs
-                                                                          args) {
-                                                                    if (args.value
-                                                                        is PickerDateRange) {
-                                                                      rangeStartDate = args
-                                                                          .value
-                                                                          .startDate;
-                                                                      rangeEndDate = args
-                                                                          .value
-                                                                          .endDate;
-                                                                    } else {
-                                                                      final List<
-                                                                              PickerDateRange>
-                                                                          selectedRanges =
-                                                                          args.value;
-                                                                    }
-                                                                  },
+                                                                      false,
+                                                                  // onSelectionChanged:
+                                                                  //     (DateRangePickerSelectionChangedArgs
+                                                                  //         args) {
+                                                                  //   if (args.value
+                                                                  //       is PickerDateRange) {
+                                                                  //     rangeStartDate = args
+                                                                  //         .value
+                                                                  //         .startDate;
+                                                                  //     rangeEndDate = args
+                                                                  //         .value
+                                                                  //         .endDate;
+                                                                  //   } else {
+                                                                  //     final List<
+                                                                  //             PickerDateRange>
+                                                                  //         selectedRanges =
+                                                                  //         args.value;
+                                                                  //   }
+                                                                  // },
                                                                   selectionMode:
                                                                       DateRangePickerSelectionMode
                                                                           .single,
@@ -492,26 +529,28 @@ class DetailedEngSource extends DataGridSource {
                                                                     'All Date'),
                                                                 content:
                                                                     Container(
-                                                                        height:
-                                                                            400,
-                                                                        width:
-                                                                            500,
+                                                                        height: MediaQuery.of(context).size.height *
+                                                                            0.8,
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.8,
                                                                         child:
                                                                             SfDateRangePicker(
+                                                                          selectionShape:
+                                                                              DateRangePickerSelectionShape.rectangle,
                                                                           view:
                                                                               DateRangePickerView.month,
                                                                           showTodayButton:
-                                                                              true,
-                                                                          onSelectionChanged:
-                                                                              (DateRangePickerSelectionChangedArgs args) {
-                                                                            if (args.value
-                                                                                is PickerDateRange) {
-                                                                              rangeStartDate = args.value.startDate;
-                                                                              rangeEndDate = args.value.endDate;
-                                                                            } else {
-                                                                              final List<PickerDateRange> selectedRanges = args.value;
-                                                                            }
-                                                                          },
+                                                                              false,
+                                                                          // onSelectionChanged:
+                                                                          //     (DateRangePickerSelectionChangedArgs args) {
+                                                                          //   if (args.value
+                                                                          //       is PickerDateRange) {
+                                                                          //     rangeStartDate = args.value.startDate;
+                                                                          //     rangeEndDate = args.value.endDate;
+                                                                          //   } else {
+                                                                          //     final List<PickerDateRange> selectedRanges = args.value;
+                                                                          //   }
+                                                                          // },
                                                                           selectionMode:
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
@@ -565,23 +604,25 @@ class DetailedEngSource extends DataGridSource {
                                                                     title: const Text(
                                                                         'All Date'),
                                                                     content: Container(
-                                                                        height: 400,
-                                                                        width: 500,
+                                                                        height: MediaQuery.of(context).size.height * 0.8,
+                                                                        width: MediaQuery.of(context).size.width * 0.8,
                                                                         child: SfDateRangePicker(
+                                                                          selectionShape:
+                                                                              DateRangePickerSelectionShape.rectangle,
                                                                           view:
                                                                               DateRangePickerView.month,
                                                                           showTodayButton:
-                                                                              true,
-                                                                          onSelectionChanged:
-                                                                              (DateRangePickerSelectionChangedArgs args) {
-                                                                            if (args.value
-                                                                                is PickerDateRange) {
-                                                                              rangeStartDate = args.value.startDate;
-                                                                              rangeEndDate = args.value.endDate;
-                                                                            } else {
-                                                                              final List<PickerDateRange> selectedRanges = args.value;
-                                                                            }
-                                                                          },
+                                                                              false,
+                                                                          // onSelectionChanged:
+                                                                          //     (DateRangePickerSelectionChangedArgs args) {
+                                                                          //   if (args.value
+                                                                          //       is PickerDateRange) {
+                                                                          //     rangeStartDate = args.value.startDate;
+                                                                          //     rangeEndDate = args.value.endDate;
+                                                                          //   } else {
+                                                                          //     final List<PickerDateRange> selectedRanges = args.value;
+                                                                          //   }
+                                                                          // },
                                                                           selectionMode:
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
@@ -617,8 +658,8 @@ class DetailedEngSource extends DataGridSource {
                                                   Text(
                                                     dataGridCell.value
                                                         .toString(),
-                                                    style:
-                                                        TextStyle(fontSize: 12),
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
                                                   ),
                                                 ],
                                               )
@@ -772,7 +813,8 @@ class DetailedEngSource extends DataGridSource {
                                             : Text(
                                                 dataGridCell.value.toString(),
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
                                               ),
       );
     }).toList());

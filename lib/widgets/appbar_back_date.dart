@@ -29,7 +29,7 @@ class CustomAppBarBackDate extends StatefulWidget {
       this.text,
       this.haveSynced = false,
       this.haveSummary = false,
-      this.haveCalender = true,
+      this.haveCalender = false,
       this.store,
       this.onTap,
       this.choosedate,
@@ -67,79 +67,58 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
         ),
         actions: [
           widget.haveCalender
-              ? Container(
-                  height: 25,
-                  width: 80,
-                  child: Column(
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            widget.choosedate!();
-                          },
-                          child: const Icon(Icons.calendar_today, size: 20)),
-                      Text(
-                        showDate!,
-                        style: TextStyle(color: white, fontSize: 10),
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        widget.choosedate!();
+                      },
+                      child: Image.asset(
+                        'assets/appbar/calender.jpeg',
+                        height: 35,
+                        width: 35,
                       ),
-                    ],
-                  ),
-                )
-              : Container(),
-          widget.haveSummary
-              ? Container(
-                  padding: const EdgeInsets.only(left: 5, right: 2),
-                  height: 25,
-                  width: 55,
-                  child: InkWell(
-                    onTap: widget.onTap,
-                    child: Column(
-                      children: const [
-                        Icon(
-                          Icons.summarize_sharp,
-                          size: 20,
-                        ),
-                        Text(
-                          'Summary',
-                          style: TextStyle(fontSize: 10),
-                        )
-                      ],
                     ),
-                  ))
-              : Container(),
-          widget.haveSynced
-              ? InkWell(
-                  onTap: () => widget.store!(),
-                  child: Container(
-                      height: 25,
-                      width: 40,
-                      child: Column(
-                        children: const [
-                          Icon(Icons.sync, size: 20),
-                          Text(
-                            'Sync',
-                            style: TextStyle(fontSize: 10),
-                          )
-                        ],
-                      )
-                      //  ListTile(
-                      //   onTap: () => widget.store!(),
-                      //   title: Icon(
-                      //     Icons.sync_lock_rounded,
-                      //     color: white,
-                      //     size: 20,
-                      //   ),
-                      //   subtitle: Padding(
-                      //     padding: const EdgeInsets.only(bottom: 15, right: 0),
-                      //     child: Text(
-                      //       'Sync',
-                      //       style: TextStyle(color: white, fontSize: 10),
-                      //       textAlign: TextAlign.center,
-                      //     ),
-                      //   ),
-                      // ),
-                      ),
+                    // child: const Icon(Icons.calendar_today, size: 25)),
+                    Text(
+                      showDate!,
+                      style: TextStyle(color: white, fontSize: 10),
+                    ),
+                  ],
                 )
-              : Container()
+              : Container(),
+          Container(
+            padding: const EdgeInsets.only(bottom: 8, right: 5),
+            width: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                widget.haveSummary
+                    ? InkWell(
+                        onTap: widget.onTap,
+                        child: Image.asset(
+                          'assets/appbar/summary.jpeg',
+                          height: 35,
+                          width: 35,
+                        ),
+                      )
+                    : Container(),
+                widget.haveSynced
+                    ? InkWell(
+                        onTap: () {
+                          widget.store!();
+                        },
+                        child: Image.asset(
+                          'assets/appbar/sync.jpeg',
+                          height: 35,
+                          width: 35,
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
+          )
         ],
         bottom: widget.havebottom
             ? TabBar(

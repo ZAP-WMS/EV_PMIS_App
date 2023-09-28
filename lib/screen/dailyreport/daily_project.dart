@@ -79,11 +79,11 @@ class _DailyProjectState extends State<DailyProject> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
-              text: '${widget.cityName}/${widget.depoName}/Daily Report',
-
+              text: '${widget.depoName}/Daily Report',
               //  ${DateFormat.yMMMMd().format(DateTime.now())}',
               haveSynced: true,
               haveSummary: true,
+              haveCalender: true,
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -103,7 +103,7 @@ class _DailyProjectState extends State<DailyProject> {
               choosedate: () {
                 chooseDate(context);
               }),
-          preferredSize: const Size.fromHeight(50)),
+          preferredSize: const Size.fromHeight(80)),
       body: _isloading
           ? LoadingPage()
           : Column(children: [
@@ -630,9 +630,10 @@ class _DailyProjectState extends State<DailyProject> {
         builder: (context) => AlertDialog(
               title: const Text('All Date'),
               content: Container(
-                  height: 400,
-                  width: 500,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   child: SfDateRangePicker(
+                    selectionShape: DateRangePickerSelectionShape.rectangle,
                     view: DateRangePickerView.month,
                     showTodayButton: false,
                     onSelectionChanged:

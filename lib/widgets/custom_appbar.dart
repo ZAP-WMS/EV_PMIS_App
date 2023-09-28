@@ -33,38 +33,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
       actions: [
         isSync
-            ? Container(
-                padding: EdgeInsets.only(bottom: 2),
-                height: 30,
-                width: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+            ? InkWell(
+                onTap: () {
+                  store!();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/appbar/sync.jpeg',
+                    height: 25,
+                    width: 35,
+                  ),
                 ),
-                child: ListTile(
-                  onTap: () => store!(),
-                  title: Icon(
-                    Icons.cloud_sync_sharp,
-                    color: white,
-                    size: 20,
-                  ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Text(
-                      'Sync',
-                      style: TextStyle(color: white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-                //  TextButton(
-                //     onPressed: () {
-                //       store!();
-                //     },
-                //     child: Text(
-                //       'Sync',
-                //       style: TextStyle(color: white, fontSize: 15),
-                //     )),
-                )
+              )
             : Container(),
 
         // Padding(

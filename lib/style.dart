@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Color blue = Color.fromARGB(255, 9, 83, 161);
+Color blue = const Color.fromARGB(255, 9, 83, 161);
 Color lightblue = Colors.blue;
 Color white = Colors.white;
 Color black = Colors.black;

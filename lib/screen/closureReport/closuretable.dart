@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/closureReport/closurefield.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 import '../../components/Loading_page.dart';
 import '../../datasource/closereport_datasource.dart';
 import '../../model/closer_report.dart';
@@ -56,6 +56,7 @@ class _ClosureTableState extends State<ClosureTable> {
         isSync: true,
         isCentered: false,
         store: () {
+          closureField(widget.depoName);
           store();
         },
       ),
