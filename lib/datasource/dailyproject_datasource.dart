@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../screen/overviewpage/view_AllFiles.dart';
 import '../style.dart';
 import '../model/daily_projectModel.dart';
@@ -15,8 +14,8 @@ class DailyDataSource extends DataGridSource {
   String depoName;
   String userId;
   BuildContext mainContext;
-
   List data = [];
+
   DailyDataSource(this._dailyproject, this.mainContext, this.cityName,
       this.depoName, this.userId) {
     buildDataGridRows();

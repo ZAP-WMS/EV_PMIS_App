@@ -452,14 +452,13 @@ class _DepotOverviewState extends State<DepotOverview> {
                         ),
                       ]),
                   const SizedBox(height: 15),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: StreamBuilder(
-                      stream: _stream,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.exists == false) {
-                          return SfDataGridTheme(
+                  StreamBuilder(
+                    stream: _stream,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data.exists == false) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: SfDataGridTheme(
                             data: SfDataGridThemeData(headerColor: blue),
                             child: SfDataGrid(
                               source: _employeeDataSource,
@@ -698,19 +697,21 @@ class _DepotOverviewState extends State<DepotOverview> {
                                 ),
                               ],
                             ),
-                          );
-                        } else {
-                          alldata = '';
-                          alldata = snapshot.data['data'] as List<dynamic>;
-                          _employees.clear();
-                          alldata.forEach((element) {
-                            _employees
-                                .add(DepotOverviewModel.fromJson(element));
-                            _employeeDataSource =
-                                DepotOverviewDatasource(_employees, context);
-                            _dataGridController = DataGridController();
-                          });
-                          return SfDataGridTheme(
+                          ),
+                        );
+                      } else {
+                        alldata = '';
+                        alldata = snapshot.data['data'] as List<dynamic>;
+                        _employees.clear();
+                        alldata.forEach((element) {
+                          _employees.add(DepotOverviewModel.fromJson(element));
+                          _employeeDataSource =
+                              DepotOverviewDatasource(_employees, context);
+                          _dataGridController = DataGridController();
+                        });
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: SfDataGridTheme(
                             data: SfDataGridThemeData(headerColor: blue),
                             child: SfDataGrid(
                               source: _employeeDataSource,
@@ -944,10 +945,10 @@ class _DepotOverviewState extends State<DepotOverview> {
                                 ),
                               ],
                             ),
-                          );
-                        }
-                      },
-                    ),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ],
               ),

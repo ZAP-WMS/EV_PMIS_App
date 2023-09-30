@@ -15,7 +15,7 @@ import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
 import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:flutter/material.dart';
 import '../screen/closureReport/closurefield.dart';
-import '../screen/planning/planning_home.dart';
+import '../screen/planning/project_planning.dart';
 import '../screen/qualitychecklist/quality_home.dart';
 
 import '../screen/jmrPage/jmr.dart';
@@ -47,7 +47,10 @@ class RouteGenerator {
       //   return MaterialPageRoute(
       //       builder: (context) => OverviewTable(depoName: args.toString()));
       case '/planning-page':
-        return MaterialPageRoute(builder: (context) => PlanningPage());
+        return MaterialPageRoute(
+            builder: (context) => KeyEvents(
+                  depoName: args.toString(),
+                ));
       case '/material-page':
         return MaterialPageRoute(
             builder: (context) =>

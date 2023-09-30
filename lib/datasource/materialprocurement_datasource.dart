@@ -43,6 +43,19 @@ class MaterialDatasource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
+    void addRowAtIndex(int index, rowData) {
+      _material.insert(index, rowData);
+      buildDataGridRows();
+      notifyListeners();
+      // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
+    }
+
+    void removeRowAtIndex(int index) {
+      _material.removeAt(index);
+      buildDataGridRows();
+      notifyListeners();
+    }
+
     DateTime? rangeStartDate = DateTime.now();
     DateTime? rangeEndDate = DateTime.now();
     DateTime? date;
@@ -58,13 +71,6 @@ class MaterialDatasource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, rowData) {
-        _material.insert(index, rowData);
-        buildDataGridRows();
-        notifyListeners();
-        // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
-      }
-
       return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -92,15 +98,7 @@ class MaterialDatasource extends DataGridSource {
             : (dataGridCell.columnName == 'Delete')
                 ? IconButton(
                     onPressed: () async {
-                      // FirebaseFirestore.instance
-                      //     .collection('DailyProjectReport')
-                      //     .doc(depoName)
-                      //     .collection('Daily Data')
-                      //     .doc(DateFormat.yMMMMd().format(DateTime.now()))
-                      //     .update({
-                      //   'data': FieldValue.arrayRemove([0])
-                      // });
-
+                      removeRowAtIndex(dataRowIndex);
                       dataGridRows.remove(row);
                       notifyListeners();
                     },
@@ -338,7 +336,7 @@ class MaterialDatasource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),

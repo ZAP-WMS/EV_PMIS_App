@@ -236,7 +236,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                                             .rectangle,
                                                     view: DateRangePickerView
                                                         .month,
-                                                    showTodayButton: true,
+                                                    showTodayButton: false,
                                                     onSelectionChanged:
                                                         (DateRangePickerSelectionChangedArgs
                                                             args) {
@@ -515,21 +515,13 @@ class DepotOverviewDatasource extends DataGridSource {
           DataGridCell<dynamic>(columnName: 'Status', value: newCellValue);
       _depotOverview[dataRowIndex].status = newCellValue;
     }
-    // Future storeData() async {
-    //   await FirebaseFirestore.instance.collection('A1').add({
-    //     'Weightage':
-    //         dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-    //             DataGridCell<int>(
-    //                 columnName: 'Weightage', value: newCellValue as int),
-    //   });
-    // }
+  }
 
-    @override
-    bool canSubmitCell(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
-        GridColumn column) {
-      // Return false, to retain in edit mode.
-      return true; // or super.canSubmitCell(dataGridRow, rowColumnIndex, column);
-    }
+  @override
+  bool canSubmitCell(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
+      GridColumn column) {
+    // Return false, to retain in edit mode.
+    return true; // or super.canSubmitCell(dataGridRow, rowColumnIndex, column);
   }
 
   @override
