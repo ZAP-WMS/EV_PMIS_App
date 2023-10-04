@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -50,20 +51,20 @@ class _DetailedEngtState extends State<DetailedEng>
   void initState() {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    getmonthlyReport();
-    getmonthlyReportEv();
+    // getmonthlyReport();
+    // getmonthlyReportEv();
     getUserId().whenComplete(() {
-      DetailedProject = getmonthlyReport();
+      // DetailedProject = getmonthlyReport();
       _detailedDataSource = DetailedEngSource(DetailedProject, context,
           cityName.toString(), widget.depoName.toString(), userId);
       _dataGridController = DataGridController();
 
-      DetailedProjectev = getmonthlyReportEv();
+      // DetailedProjectev = getmonthlyReportEv();
       _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
           cityName!, widget.depoName.toString(), userId);
       _dataGridController = DataGridController();
 
-      DetailedProjectshed = getmonthlyReportEv();
+      // DetailedProjectshed = getmonthlyReportEv();
       _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
           context, cityName!, widget.depoName.toString(), userId);
       _dataGridController = DataGridController();
@@ -926,7 +927,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'PreparationDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -941,7 +942,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'SubmissionDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -956,7 +957,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ApproveDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -971,7 +972,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ReleaseDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,

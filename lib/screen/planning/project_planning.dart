@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/keyevents/Grid_DataTableA2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gantt_chart/gantt_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -8,6 +10,8 @@ import '../../components/Loading_page.dart';
 import '../../datasource/key_datasource.dart';
 import '../../model/employee.dart';
 import '../../widgets/custom_appbar.dart';
+import '../../widgets/navbar.dart';
+import '../homepage/gallery.dart';
 
 void main() {
   runApp(KeyEvents());
@@ -206,10 +210,24 @@ class _KeyEventsState extends State<KeyEvents> {
       totalscope9 = 0,
       totalscope10 = 0;
 
-  dynamic userId;
   bool _isloading = true;
   @override
   void initState() {
+    yourstream = FirebaseFirestore.instance
+        .collection('KeyEventsTable')
+        .doc(widget.depoName!)
+        .collection('KeyDataTable')
+        .doc(userId)
+        .collection('KeyAllEvents')
+        // .doc('${widget.depoName}')
+        .snapshots();
+
+    _isLoading = false;
+    setState(() {});
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeLeft,
+    ]);
     // getUserId().whenComplete(() {
     //   yourstream = FirebaseFirestore.instance
     //       .collection('KeyEventsTable')
@@ -227,63 +245,72 @@ class _KeyEventsState extends State<KeyEvents> {
     super.initState();
   }
 
-  List<Widget> menuwidget = [];
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    super.dispose();
+  }
+
+  // List<Widget> menuwidget = [];
 
   @override
   Widget build(BuildContext context) {
-    menuwidget = [
-      // ViewFile(),
-      // StatutoryAprovalA2(
-      //   userid: userId,
-      //   depoName: widget.depoName,
-      //   cityName: widget.cityName,
-      // ),
-      // StatutoryAprovalA3(
-      //   userid: userId,
-      //   depoName: widget.depoName,
-      //   cityName: widget.cityName,
-      // ),
-      // StatutoryAprovalA4(
-      //   userid: userId,
-      //   depoName: widget.depoName,
-      //   cityName: widget.cityName,
-      // ),
-      // StatutoryAproval(
-      //   userid: userId,
-      //   cityName: widget.cityName,
-      //   depoName: widget.depoName,
-      // ),
-      // // StatutoryAprovalA5(
-      // //   userid: userId,
-      // //   cityName: widget.cityName,
-      // //   depoName: widget.depoName,
-      // // ),
-      // StatutoryAprovalA6(
-      //   userid: userId,
-      //   cityName: widget.cityName,
-      //   depoName: widget.depoName,
-      // ),
-      // StatutoryAprovalA7(
-      //   userid: userId,
-      //   cityName: widget.cityName,
-      //   depoName: widget.depoName,
-      // ),
-      // StatutoryAprovalA8(
-      //   userid: userId,
-      //   cityName: widget.cityName,
-      //   depoName: widget.depoName,
-      // ),
-      // StatutoryAprovalA9(
-      //   userid: userId,
-      //   cityName: widget.cityName,
-      //   depoName: widget.depoName,
-      // ),
-      // StatutoryAprovalA10(
-      //   userid: userId,
-      //   cityName: widget.cityName,
-      //   depoName: widget.depoName,
-      // ),
-    ];
+    // menuwidget = [
+    //   ViewFile(),
+    //   StatutoryAprovalA2(
+    //     userid: userId,
+    //     depoName: widget.depoName,
+    //     cityName: widget.cityName,
+    //   ),
+    //   StatutoryAprovalA3(
+    //     userid: userId,
+    //     depoName: widget.depoName,
+    //     cityName: widget.cityName,
+    //   ),
+    //   StatutoryAprovalA4(
+    //     userid: userId,
+    //     depoName: widget.depoName,
+    //     cityName: widget.cityName,
+    //   ),
+    //   StatutoryAproval(
+    //     userid: userId,
+    //     cityName: widget.cityName,
+    //     depoName: widget.depoName,
+    //   ),
+    //   // StatutoryAprovalA5(
+    //   //   userid: userId,
+    //   //   cityName: widget.cityName,
+    //   //   depoName: widget.depoName,
+    //   // ),
+    //   StatutoryAprovalA6(
+    //     userid: userId,
+    //     cityName: widget.cityName,
+    //     depoName: widget.depoName,
+    //   ),
+    //   StatutoryAprovalA7(
+    //     userid: userId,
+    //     cityName: widget.cityName,
+    //     depoName: widget.depoName,
+    //   ),
+    //   StatutoryAprovalA8(
+    //     userid: userId,
+    //     cityName: widget.cityName,
+    //     depoName: widget.depoName,
+    //   ),
+    //   StatutoryAprovalA9(
+    //     userid: userId,
+    //     cityName: widget.cityName,
+    //     depoName: widget.depoName,
+    //   ),
+    //   StatutoryAprovalA10(
+    //     userid: userId,
+    //     cityName: widget.cityName,
+    //     depoName: widget.depoName,
+    //   ),
+    // ];
+
     return _isLoading
         ? LoadingPage()
         :
@@ -291,10 +318,11 @@ class _KeyEventsState extends State<KeyEvents> {
         //     scrollController: scrollController,
         //     myScaffold:
         Scaffold(
+            drawer: const NavbarDrawer(),
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
-                  title: 'tre',
+                  title: 'Project Planning/${widget.depoName}',
                   height: 50,
                   isSync: false,
                   isCentered: false,
@@ -720,9 +748,14 @@ class _KeyEventsState extends State<KeyEvents> {
                                           details.rowColumnIndex.rowIndex - 1];
 
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => menuwidget[
-                                          details.rowColumnIndex.rowIndex -
-                                              1]));
+                                      builder: (context) => StatutoryAprovalA2(
+                                            events: row.getCells().first.value,
+                                            depoName: widget.depoName,
+                                          )
+                                      // menuwidget[
+                                      //     details.rowColumnIndex.rowIndex -
+                                      //         1]
+                                      ));
                                 },
                                 allowEditing: true,
                                 frozenColumnsCount: 2,
@@ -969,36 +1002,39 @@ class _KeyEventsState extends State<KeyEvents> {
                               ),
                             ),
                             Container(
-                                width: 450,
-                                child: GanttChartView(
-                                    scrollController: scrollController,
-                                    scrollPhysics:
-                                        const BouncingScrollPhysics(),
-                                    maxDuration: null,
-                                    // const Duration(days: 30 * 2),
-                                    // optional, set to null for infinite horizontal scroll
-                                    startDate: DateTime(2023, 8, 1), //required
-                                    dayWidth: 40, //column width for each day
-                                    dayHeaderHeight: 35,
-                                    eventHeight: 25, //row height for events
+                                width: 400,
+                                child: SingleChildScrollView(
+                                  child: GanttChartView(
+                                      scrollController: scrollController,
+                                      scrollPhysics:
+                                          const BouncingScrollPhysics(),
+                                      maxDuration: null,
+                                      // const Duration(days: 30 * 2),
+                                      // optional, set to null for infinite horizontal scroll
+                                      startDate:
+                                          DateTime(2023, 8, 1), //required
+                                      dayWidth: 40, //column width for each day
+                                      dayHeaderHeight: 35,
+                                      eventHeight: 25, //row height for events
 
-                                    stickyAreaWidth: 80, //sticky area width
-                                    showStickyArea:
-                                        true, //show sticky area or not
-                                    showDays: true, //show days or not
-                                    startOfTheWeek: WeekDay
-                                        .monday, //custom start of the week
-                                    weekHeaderHeight: 30,
-                                    weekEnds: const {
-                                      // WeekDay.saturday,
-                                      // WeekDay.sunday
-                                    }, //custom weekends
-                                    isExtraHoliday: (context, day) {
-                                      //define custom holiday logic for each day
-                                      return DateUtils.isSameDay(
-                                          DateTime(2023, 7, 1), day);
-                                    },
-                                    events: ganttdata))
+                                      stickyAreaWidth: 80, //sticky area width
+                                      showStickyArea:
+                                          true, //show sticky area or not
+                                      showDays: true, //show days or not
+                                      startOfTheWeek: WeekDay
+                                          .monday, //custom start of the week
+                                      weekHeaderHeight: 30,
+                                      weekEnds: const {
+                                        // WeekDay.saturday,
+                                        // WeekDay.sunday
+                                      }, //custom weekends
+                                      isExtraHoliday: (context, day) {
+                                        //define custom holiday logic for each day
+                                        return DateUtils.isSameDay(
+                                            DateTime(2023, 7, 1), day);
+                                      },
+                                      events: ganttdata),
+                                ))
                           ]));
                     }
                   }
@@ -1019,8 +1055,13 @@ class _KeyEventsState extends State<KeyEvents> {
                                       details.rowColumnIndex.rowIndex - 1];
 
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => menuwidget[
-                                      details.rowColumnIndex.rowIndex - 1]));
+                                  builder: (context) => StatutoryAprovalA2(
+                                        events: row.getCells().first.value,
+                                        depoName: widget.depoName,
+                                      )
+                                  // menuwidget[
+                                  //     details.rowColumnIndex.rowIndex - 1]
+                                  ));
                             },
                             allowEditing: true,
                             frozenColumnsCount: 2,
@@ -1264,34 +1305,37 @@ class _KeyEventsState extends State<KeyEvents> {
                           ),
                         ),
                         Container(
-                            width: 350,
-                            child: GanttChartView(
-                                scrollController: scrollController,
-                                scrollPhysics: const BouncingScrollPhysics(),
-                                maxDuration: null,
-                                // const Duration(days: 30 * 2),
-                                // optional, set to null for infinite horizontal scroll
-                                startDate: DateTime(2023, 8, 1), //required
-                                dayWidth: 40, //column width for each day
-                                dayHeaderHeight: 35,
-                                eventHeight: 25, //row height for events
+                            width: 400,
+                            child: SingleChildScrollView(
+                              child: GanttChartView(
+                                  scrollController: scrollController,
+                                  scrollPhysics: const BouncingScrollPhysics(),
+                                  maxDuration: null,
+                                  // const Duration(days: 30 * 2),
+                                  // optional, set to null for infinite horizontal scroll
+                                  startDate: DateTime(2023, 8, 1), //required
+                                  dayWidth: 40, //column width for each day
+                                  dayHeaderHeight: 35,
+                                  eventHeight: 25, //row height for events
 
-                                stickyAreaWidth: 80, //sticky area width
-                                showStickyArea: true, //show sticky area or not
-                                showDays: true, //show days or not
-                                startOfTheWeek:
-                                    WeekDay.monday, //custom start of the week
-                                weekHeaderHeight: 30,
-                                weekEnds: const {
-                                  // WeekDay.saturday,
-                                  // WeekDay.sunday
-                                }, //custom weekends
-                                isExtraHoliday: (context, day) {
-                                  //define custom holiday logic for each day
-                                  return DateUtils.isSameDay(
-                                      DateTime(2023, 7, 1), day);
-                                },
-                                events: ganttdata))
+                                  stickyAreaWidth: 80, //sticky area width
+                                  showStickyArea:
+                                      true, //show sticky area or not
+                                  showDays: true, //show days or not
+                                  startOfTheWeek:
+                                      WeekDay.monday, //custom start of the week
+                                  weekHeaderHeight: 30,
+                                  weekEnds: const {
+                                    // WeekDay.saturday,
+                                    // WeekDay.sunday
+                                  }, //custom weekends
+                                  isExtraHoliday: (context, day) {
+                                    //define custom holiday logic for each day
+                                    return DateUtils.isSameDay(
+                                        DateTime(2023, 7, 1), day);
+                                  },
+                                  events: ganttdata),
+                            ))
                       ]));
                 }));
 

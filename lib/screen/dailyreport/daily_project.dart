@@ -47,13 +47,13 @@ class _DailyProjectState extends State<DailyProject> {
 
     // selectedDate = DateFormat.yMMMMd().format(DateTime.now());
 
-    dailyproject = getmonthlyReport();
+    // dailyproject = getmonthlyReport();
     // _dailyDataSource = DailyDataSource(
     //     dailyproject, context, widget.cityName!, widget.depoName!, userId);
     // _dataGridController = DataGridController();
 
     getmonthlyReport();
-    dailyproject = getmonthlyReport();
+    // dailyproject = getmonthlyReport();
     _dailyDataSource = DailyDataSource(
         dailyproject, context, widget.cityName!, widget.depoName!, userId!);
     _dataGridController = DataGridController();
@@ -115,7 +115,7 @@ class _DailyProjectState extends State<DailyProject> {
                     return LoadingPage();
                   } else if (!snapshot.hasData ||
                       snapshot.data.exists == false) {
-                    dailyproject = getmonthlyReport();
+                    // dailyproject = getmonthlyReport();
                     _dailyDataSource = DailyDataSource(dailyproject, context,
                         widget.cityName!, widget.depoName!, userId!);
                     _dataGridController = DataGridController();

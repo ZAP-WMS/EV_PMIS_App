@@ -64,7 +64,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
     initializeController();
-    _employees = getEmployeeData();
+    // _employees = getEmployeeData();
     // ignore: use_build_context_synchronously
     _employeeDataSource = DepotOverviewDatasource(_employees, context);
     _dataGridController = DataGridController();
