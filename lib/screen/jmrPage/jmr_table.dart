@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../components/Loading_page.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
@@ -146,6 +147,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
       child: _isLoading
           ? LoadingPage()
           : Scaffold(
+              drawer: const NavbarDrawer(),
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(

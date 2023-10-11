@@ -38,6 +38,8 @@ dependencies:
   firebase_storage: ^11.2.6
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+  gantt_chart: ^0.3.0
   get: ^4.6.5
   google_fonts: null
   google_nav_bar: ^5.0.6
@@ -58,6 +60,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  image_path: "assets/applogo/logo.png"
+  android: true
+  ios: true
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -74,6 +81,7 @@ flutter:
     - assets/keyevents/
     - assets/overview_image/
     - animations/loading_animation.gif
+    - assets/appbar/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

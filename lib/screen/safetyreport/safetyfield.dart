@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/screen/safetyreport/safetytable.dart';
+import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../FirebaseApi/firebase_api.dart';
@@ -10,18 +11,19 @@ import '../../authentication/authservice.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/safetychecklist_datasource.dart';
 import '../../model/safety_checklistModel.dart';
+import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/appbar_back_date.dart';
 import '../../widgets/custom_textfield.dart';
 import '../dailyreport/daily_project.dart';
 import '../dailyreport/summary.dart';
 import '../homepage/gallery.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class SafetyField extends StatefulWidget {
-  String? cityName;
   String? depoName;
 
-  SafetyField({super.key, required this.cityName, required this.depoName});
+  SafetyField({super.key, required this.depoName});
 
   @override
   State<SafetyField> createState() => _SafetyFieldState();
@@ -33,6 +35,7 @@ late DataGridController _dataGridController;
 List<dynamic> tabledata2 = [];
 Stream? _stream;
 dynamic alldata;
+String? cityName;
 
 bool _isloading = true;
 // ignore: prefer_typing_uninitialized_variables
@@ -81,12 +84,15 @@ class _SafetyFieldState extends State<SafetyField> {
   @override
   void initState() {
     // _fetchSafetyField();
+    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+
     initializeController();
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+    _fetchUserData();
     getUserId().whenComplete(() {
       safetylisttable = getData();
       _safetyChecklistDataSource = SafetyChecklistDataSource(
-          safetylisttable, widget.cityName!, 'widget.depoName!', userId);
+          safetylisttable, cityName!, 'widget.depoName!', userId);
       _dataGridController = DataGridController();
 
       _stream = FirebaseFirestore.instance
@@ -110,52 +116,29 @@ class _SafetyFieldState extends State<SafetyField> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(
-            text: '${widget.cityName} / ${widget.depoName} / SafetyChecklist ',
-            // / ${DateFormat.yMMMMd().format(DateTime.now() )}',
-            haveSummary: true,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewSummary(
-                    cityName: widget.cityName.toString(),
-                    depoName: widget.depoName.toString(),
-                    id: 'Safety Checklist Report',
-                    userId: userId,
-                  ),
-                )),
-            haveSynced: true,
-            choosedate: () {
-              chooseDate(context);
-            },
-            store: () {
-              FirebaseFirestore.instance
-                  .collection('SafetyFieldData2')
-                  .doc('${widget.depoName}')
-                  .collection('userId')
-                  .doc(userId)
-                  .collection('date')
-                  .doc(selectedDate)
-                  .set({
-                'TPNo': tpController,
-                'Rev': revController,
-                'DepotLocation': locationContoller,
-                'Address': addressController,
-                'ContactNo': contactController,
-                'Latitude': latitudeController,
-                'State': stateController,
-                'ChargerType': chargerController,
-                'ConductedBy': conductedController,
-                'InstallationDate': date,
-                'EnegizationDate': date1,
-                'BoardingDate': date2,
-              });
-              FirebaseApi().nestedKeyEventsField(
-                  'SafetyFieldData2', widget.depoName!, 'userId', userId!);
-              store();
-            }),
+          text: '${widget.depoName}/SafetyChecklist',
+          // / ${DateFormat.yMMMMd().format(DateTime.now() )}',
+          haveSummary: false,
+
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewSummary(
+                  cityName: cityName,
+                  depoName: widget.depoName.toString(),
+                  id: 'Safety Checklist Report',
+                  userId: userId,
+                ),
+              )),
+          haveSynced: false,
+          choosedate: () {
+            chooseDate(context);
+          },
+        ),
 
         preferredSize: const Size.fromHeight(50),
       ),
+      drawer: const NavbarDrawer(),
       body: _isloading
           ? LoadingPage()
           : StreamBuilder(
@@ -172,9 +155,246 @@ class _SafetyFieldState extends State<SafetyField> {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        safetyDateField('Installation Date', date),
-                        safetyDateField('Enegization Date', date1!),
-                        safetyDateField('on Boarding Date', date2!),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 35,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Installation date'),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: blue)),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title:
+                                                      const Text('Choose Date'),
+                                                  content: Container(
+                                                    height: 400,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SfDateRangePicker(
+                                                      view: DateRangePickerView
+                                                          .month,
+                                                      showTodayButton: false,
+                                                      onSelectionChanged:
+                                                          (DateRangePickerSelectionChangedArgs
+                                                              args) {
+                                                        if (args.value
+                                                            is PickerDateRange) {
+                                                          date = args
+                                                              .value.startDate;
+                                                          print(date);
+                                                        } else {
+                                                          // final List<PickerDateRange>
+                                                          //     selectedRanges =
+                                                          //     args.value;
+                                                        }
+                                                      },
+                                                      selectionMode:
+                                                          DateRangePickerSelectionMode
+                                                              .single,
+                                                      showActionButtons: true,
+                                                      onCancel: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      onSubmit: (value) {
+                                                        date = DateTime.parse(
+                                                            value.toString());
+                                                        setState(() {});
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  )),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.calendar_month,
+                                            size: 20,
+                                          )),
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(date),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 35,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Enegization date'),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: blue)),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title:
+                                                      const Text('Choose Date'),
+                                                  content: Container(
+                                                    height: 400,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SfDateRangePicker(
+                                                      view: DateRangePickerView
+                                                          .month,
+                                                      showTodayButton: false,
+                                                      onSelectionChanged:
+                                                          (DateRangePickerSelectionChangedArgs
+                                                              args) {
+                                                        if (args.value
+                                                            is PickerDateRange) {
+                                                          date1 = args
+                                                              .value.startDate;
+                                                          print(date);
+                                                        } else {
+                                                          // final List<PickerDateRange>
+                                                          //     selectedRanges =
+                                                          //     args.value;
+                                                        }
+                                                      },
+                                                      selectionMode:
+                                                          DateRangePickerSelectionMode
+                                                              .single,
+                                                      showActionButtons: true,
+                                                      onCancel: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      onSubmit: (value) {
+                                                        date1 = DateTime.parse(
+                                                            value.toString());
+                                                        setState(() {});
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  )),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.calendar_month,
+                                            size: 20,
+                                          )),
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(date1!),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 35,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('on Boarding date'),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: blue)),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title:
+                                                      const Text('Choose Date'),
+                                                  content: Container(
+                                                    height: 400,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: SfDateRangePicker(
+                                                      view: DateRangePickerView
+                                                          .month,
+                                                      showTodayButton: false,
+                                                      onSelectionChanged:
+                                                          (DateRangePickerSelectionChangedArgs
+                                                              args) {
+                                                        if (args.value
+                                                            is PickerDateRange) {
+                                                          date2 = args
+                                                              .value.startDate;
+                                                          print(date2);
+                                                        } else {
+                                                          // final List<PickerDateRange>
+                                                          //     selectedRanges =
+                                                          //     args.value;
+                                                        }
+                                                      },
+                                                      selectionMode:
+                                                          DateRangePickerSelectionMode
+                                                              .single,
+                                                      showActionButtons: true,
+                                                      onCancel: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      onSubmit: (value) {
+                                                        date2 = DateTime.parse(
+                                                            value.toString());
+                                                        setState(() {});
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  )),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.calendar_month,
+                                            size: 20,
+                                          )),
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(date2!),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         safetyField(tpController, 'TPNo', 'TP No are Required'),
                         safetyField(revController, 'Rev: Date:29.11.2022',
                             'Rev are Required'),
@@ -192,6 +412,258 @@ class _SafetyFieldState extends State<SafetyField> {
                             chargerController, 'Charger Type', 'Charger Type'),
                         safetyField(conductedController, 'Conducted By',
                             'conducted By are required'),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: StreamBuilder(
+                            stream: _stream,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return LoadingPage();
+                              }
+                              if (!snapshot.hasData ||
+                                  snapshot.data.exists == false) {
+                                return SfDataGridTheme(
+                                  data: SfDataGridThemeData(headerColor: blue),
+                                  child: SfDataGrid(
+                                    source: _safetyChecklistDataSource,
+                                    allowEditing: true,
+                                    frozenColumnsCount: 1,
+                                    gridLinesVisibility:
+                                        GridLinesVisibility.both,
+                                    headerGridLinesVisibility:
+                                        GridLinesVisibility.both,
+                                    selectionMode: SelectionMode.single,
+                                    navigationMode: GridNavigationMode.cell,
+                                    editingGestureType: EditingGestureType.tap,
+                                    onQueryRowHeight: (details) {
+                                      return details.getIntrinsicRowHeight(
+                                          details.rowIndex);
+                                    },
+                                    controller: _dataGridController,
+                                    columns: [
+                                      GridColumn(
+                                        columnName: 'srNo',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: false,
+                                        width: 80,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Sr No',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Details',
+                                        width: 550,
+                                        allowEditing: false,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Details of Enclosure ',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Status',
+                                        allowEditing: false,
+                                        width: 180,
+                                        label: Container(
+                                          padding: const EdgeInsets.all(8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                              'Status of Submission of information/ documents ',
+                                              textAlign: TextAlign.center,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Remark',
+                                        allowEditing: true,
+                                        width: 250,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Remarks',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Photo',
+                                        allowEditing: false,
+                                        width: 180,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Upload Photo',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'ViewPhoto',
+                                        allowEditing: false,
+                                        width: 180,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('View Photo',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                alldata = '';
+                                alldata =
+                                    snapshot.data['data'] as List<dynamic>;
+                                safetylisttable.clear();
+                                alldata.forEach((element) {
+                                  safetylisttable.add(
+                                      SafetyChecklistModel.fromJson(element));
+                                  _safetyChecklistDataSource =
+                                      SafetyChecklistDataSource(safetylisttable,
+                                          cityName!, widget.depoName!, userId);
+                                  _dataGridController = DataGridController();
+                                });
+                                return SizedBox(
+                                  height: MediaQuery.of(context).size.height,
+                                  child: SfDataGridTheme(
+                                    data:
+                                        SfDataGridThemeData(headerColor: blue),
+                                    child: SfDataGrid(
+                                      source: _safetyChecklistDataSource,
+                                      //key: key,
+                                      allowEditing: true,
+                                      frozenColumnsCount: 1,
+                                      gridLinesVisibility:
+                                          GridLinesVisibility.both,
+                                      headerGridLinesVisibility:
+                                          GridLinesVisibility.both,
+                                      selectionMode: SelectionMode.single,
+                                      navigationMode: GridNavigationMode.cell,
+                                      columnWidthMode: ColumnWidthMode.auto,
+                                      editingGestureType:
+                                          EditingGestureType.tap,
+                                      controller: _dataGridController,
+                                      onQueryRowHeight: (details) {
+                                        return details.getIntrinsicRowHeight(
+                                            details.rowIndex);
+                                      },
+
+                                      columns: [
+                                        GridColumn(
+                                          columnName: 'srNo',
+                                          autoFitPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 16),
+                                          allowEditing: false,
+                                          width: 80,
+                                          label: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            alignment: Alignment.center,
+                                            child: Text('Sr No',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: tableheaderwhitecolor),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          width: 550,
+                                          columnName: 'Details',
+                                          allowEditing: false,
+                                          label: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            alignment: Alignment.center,
+                                            child: Text('Details of Enclosure ',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: tableheaderwhitecolor),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          columnName: 'Status',
+                                          allowEditing: false,
+                                          width: 180,
+                                          label: Container(
+                                            padding: const EdgeInsets.all(8.0),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                                'Status of Submission of information/ documents ',
+                                                textAlign: TextAlign.center,
+                                                style: tableheaderwhitecolor),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          columnName: 'Remark',
+                                          allowEditing: true,
+                                          width: 150,
+                                          label: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            alignment: Alignment.center,
+                                            child: Text('Remarks',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: tableheaderwhitecolor),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          columnName: 'Photo',
+                                          allowEditing: false,
+                                          width: 180,
+                                          label: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            alignment: Alignment.center,
+                                            child: Text('Upload Photo',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: tableheaderwhitecolor),
+                                          ),
+                                        ),
+                                        GridColumn(
+                                          columnName: 'ViewPhoto',
+                                          allowEditing: false,
+                                          width: 180,
+                                          label: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            alignment: Alignment.center,
+                                            child: Text('View Photo',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: tableheaderwhitecolor),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -199,18 +671,18 @@ class _SafetyFieldState extends State<SafetyField> {
                   return LoadingPage();
                 }
               }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SafetyTable(
-                  depoName: widget.depoName,
-                ),
-              ));
-        },
-        child: const Text('Next'),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+      //     Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => SafetyTable(
+      //             depoName: widget.depoName,
+      //           ),
+      //         ));
+      //   },
+      //   label: const Text('Proceed to Sync'),
+      // ),
     );
   }
 
@@ -694,7 +1166,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         DateTime.parse(value.toString());
 
                                     Navigator.pop(context);
-                                    setState(() {});
                                   },
                                 ),
                               )),
@@ -716,4 +1187,55 @@ class _SafetyFieldState extends State<SafetyField> {
       ),
     );
   }
+
+  void _fetchUserData() async {
+    await FirebaseFirestore.instance
+        .collection('SafetyFieldData2')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection('date')
+        .doc(DateFormat.yMMMMd().format(DateTime.now()))
+        .get()
+        .then((ds) {
+      setState(() {
+        // managername = ds.data()!['ManagerName'];
+        tpController.text = ds.data()!['TPNo'];
+        revController.text = ds.data()!['Rev'];
+        locationContoller.text = ds.data()!['DepotLocation'];
+        addressController.text = ds.data()!['Address'];
+        contactController.text = ds.data()!['ContactNo'];
+        latitudeController.text = ds.data()!['Latitude'];
+        stateController.text = ds.data()!['State'];
+        chargerController.text = ds.data()!['ChargerType'];
+        conductedController.text = ds.data()!['ConductedBy'];
+      });
+    });
+  }
+}
+
+civilField(String depoName) {
+  FirebaseFirestore.instance
+      .collection('SafetyFieldData2')
+      .doc(depoName)
+      .collection('userId')
+      .doc(userId)
+      .collection('date')
+      .doc(selectedDate)
+      .set({
+    'TPNo': tpController.text,
+    'Rev': revController.text,
+    'DepotLocation': locationContoller.text,
+    'Address': addressController.text,
+    'ContactNo': contactController.text,
+    'Latitude': latitudeController.text,
+    'State': stateController.text,
+    'ChargerType': chargerController.text,
+    'ConductedBy': conductedController.text,
+    'InstallationDate': date.toString(),
+    'EnegizationDate': date1.toString(),
+    'BoardingDate': date2.toString(),
+  });
+  FirebaseApi()
+      .nestedKeyEventsField('SafetyFieldData2', depoName, 'userId', userId!);
 }

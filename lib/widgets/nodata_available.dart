@@ -47,14 +47,14 @@ class _NodataAvailableState extends State<NodataAvailable> {
             const SizedBox(height: 50),
             Center(
               child: Container(
-                padding: EdgeInsets.all(25),
+                padding: const EdgeInsets.all(25),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: blue)),
                 child: const Text(
                   '     No data available yet \n Please wait',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),
             )

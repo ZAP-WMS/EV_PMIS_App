@@ -19,6 +19,7 @@ import '../../widgets/navbar.dart';
 import '../homepage/gallery.dart';
 
 String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+String? showDate = DateFormat.yMMMd().format(DateTime.now());
 
 class DailyProject extends StatefulWidget {
   String? cityName;
@@ -46,13 +47,13 @@ class _DailyProjectState extends State<DailyProject> {
 
     // selectedDate = DateFormat.yMMMMd().format(DateTime.now());
 
-    dailyproject = getmonthlyReport();
+    // dailyproject = getmonthlyReport();
     // _dailyDataSource = DailyDataSource(
     //     dailyproject, context, widget.cityName!, widget.depoName!, userId);
     // _dataGridController = DataGridController();
 
     getmonthlyReport();
-    dailyproject = getmonthlyReport();
+    // dailyproject = getmonthlyReport();
     _dailyDataSource = DailyDataSource(
         dailyproject, context, widget.cityName!, widget.depoName!, userId!);
     _dataGridController = DataGridController();
@@ -78,11 +79,11 @@ class _DailyProjectState extends State<DailyProject> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
-              text: ' ${widget.cityName}/${widget.depoName}/ Daily Report',
-
+              text: '${widget.depoName}/Daily Report',
               //  ${DateFormat.yMMMMd().format(DateTime.now())}',
               haveSynced: true,
               haveSummary: true,
+              haveCalender: true,
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -102,7 +103,7 @@ class _DailyProjectState extends State<DailyProject> {
               choosedate: () {
                 chooseDate(context);
               }),
-          preferredSize: const Size.fromHeight(50)),
+          preferredSize: const Size.fromHeight(80)),
       body: _isloading
           ? LoadingPage()
           : Column(children: [
@@ -114,7 +115,7 @@ class _DailyProjectState extends State<DailyProject> {
                     return LoadingPage();
                   } else if (!snapshot.hasData ||
                       snapshot.data.exists == false) {
-                    dailyproject = getmonthlyReport();
+                    // dailyproject = getmonthlyReport();
                     _dailyDataSource = DailyDataSource(dailyproject, context,
                         widget.cityName!, widget.depoName!, userId!);
                     _dataGridController = DataGridController();
@@ -364,7 +365,7 @@ class _DailyProjectState extends State<DailyProject> {
                       _dataGridController = DataGridController();
                     });
                     return SfDataGridTheme(
-                      data: SfDataGridThemeData(headerColor: lightblue),
+                      data: SfDataGridThemeData(headerColor: blue),
                       child: SfDataGrid(
                           source: _dailyDataSource,
                           allowEditing: true,
@@ -540,21 +541,21 @@ class _DailyProjectState extends State<DailyProject> {
                 },
               ))
             ]),
-      // floatingActionButton: FloatingActionButton(
-      //     child: Icon(Icons.add),
-      //     onPressed: (() {
-      //       dailyproject.add(DailyProjectModel(
-      //           siNo: 1,
-      //           // date: DateFormat().add_yMd(storeData()).format(DateTime.now()),
-      //           // state: "Maharashtra",
-      //           // depotName: 'depotName',
-      //           typeOfActivity: 'Electrical Infra',
-      //           activityDetails: "Initial Survey of DEpot",
-      //           progress: '',
-      //           status: ''));
-      //       _dailyDataSource.buildDataGridRows();
-      //       _dailyDataSource.updateDatagridSource();
-      //     })),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: (() {
+            dailyproject.add(DailyProjectModel(
+                siNo: 1,
+                // date: DateFormat().add_yMd(storeData()).format(DateTime.now()),
+                // state: "Maharashtra",
+                // depotName: 'depotName',
+                typeOfActivity: 'Electrical Infra',
+                activityDetails: "Initial Survey of DEpot",
+                progress: '',
+                status: ''));
+            _dailyDataSource.buildDataGridRows();
+            _dailyDataSource.updateDatagridSource();
+          })),
     );
   }
 
@@ -629,9 +630,10 @@ class _DailyProjectState extends State<DailyProject> {
         builder: (context) => AlertDialog(
               title: const Text('All Date'),
               content: Container(
-                  height: 400,
-                  width: 500,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   child: SfDateRangePicker(
+                    selectionShape: DateRangePickerSelectionShape.rectangle,
                     view: DateRangePickerView.month,
                     showTodayButton: false,
                     onSelectionChanged:

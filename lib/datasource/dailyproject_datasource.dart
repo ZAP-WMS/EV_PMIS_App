@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../screen/overviewpage/view_AllFiles.dart';
 import '../style.dart';
 import '../model/daily_projectModel.dart';
@@ -15,8 +14,8 @@ class DailyDataSource extends DataGridSource {
   String depoName;
   String userId;
   BuildContext mainContext;
-
   List data = [];
+
   DailyDataSource(this._dailyproject, this.mainContext, this.cityName,
       this.depoName, this.userId) {
     buildDataGridRows();
@@ -63,6 +62,12 @@ class DailyDataSource extends DataGridSource {
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
       }
 
+      void removeRowAtIndex(int index) {
+        _dailyproject.removeAt(index);
+        buildDataGridRows();
+        notifyListeners();
+      }
+
       return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -80,7 +85,10 @@ class DailyDataSource extends DataGridSource {
                               userId: userId),
                         ));
                   },
-                  child: const Text('View'))
+                  child: Text(
+                    'View',
+                    style: tablefontsize,
+                  ))
               : (dataGridCell.columnName == 'upload')
                   ? ElevatedButton(
                       onPressed: () {
@@ -96,7 +104,7 @@ class DailyDataSource extends DataGridSource {
                               ),
                             ));
                       },
-                      child: const Text('Upload'))
+                      child: Text('Upload', style: tablefontsize))
                   : (dataGridCell.columnName == 'Add')
                       ? ElevatedButton(
                           onPressed: () {
@@ -116,15 +124,7 @@ class DailyDataSource extends DataGridSource {
                       : (dataGridCell.columnName == 'Delete')
                           ? IconButton(
                               onPressed: () async {
-                                // FirebaseFirestore.instance
-                                //     .collection('DailyProjectReport')
-                                //     .doc(depoName)
-                                //     .collection('Daily Data')
-                                //     .doc(DateFormat.yMMMMd().format(DateTime.now()))
-                                //     .update({
-                                //   'data': FieldValue.arrayRemove([0])
-                                // });
-
+                                removeRowAtIndex(dataRowIndex);
                                 dataGridRows.remove(row);
                                 notifyListeners();
                               },
@@ -216,7 +216,7 @@ class DailyDataSource extends DataGridSource {
                           : Text(
                               dataGridCell.value.toString(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 12),
+                              style: tablefontsize,
                             ));
     }).toList());
   }

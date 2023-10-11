@@ -39,7 +39,7 @@ dynamic empName,
 
 dynamic alldata;
 int? _selectedIndex = 0;
-dynamic userId;
+
 List<String> title = [
   'CHECKLIST FOR INSTALLATION OF PSS',
   'CHECKLIST FOR INSTALLATION OF RMU',
@@ -72,7 +72,7 @@ List<String> civil_title = [
 class _QualityChecklistState extends State<QualityChecklist> {
   @override
   void initState() {
-    getUserId().whenComplete(() {});
+    // getUserId().whenComplete(() {});
     super.initState();
   }
 
@@ -347,7 +347,7 @@ class _QualityChecklistState extends State<QualityChecklist> {
                 ),
               ),
             ),
-            body: TabBarView(children: [
+            body: const TabBarView(children: [
               // CivilQualityChecklist(
               //     cityName: widget.cityName, depoName: widget.depoName),
               // ElectricalQualityChecklist(
@@ -359,9 +359,9 @@ class _QualityChecklistState extends State<QualityChecklist> {
     );
   }
 
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-    });
-  }
+  // Future<void> getUserId() async {
+  //   await AuthService().getCurrentUserId().then((value) {
+  //     userId = value;
+  //   });
+  // }
 }

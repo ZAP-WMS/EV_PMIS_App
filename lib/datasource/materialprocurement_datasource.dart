@@ -43,6 +43,19 @@ class MaterialDatasource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
+    void addRowAtIndex(int index, rowData) {
+      _material.insert(index, rowData);
+      buildDataGridRows();
+      notifyListeners();
+      // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
+    }
+
+    void removeRowAtIndex(int index) {
+      _material.removeAt(index);
+      buildDataGridRows();
+      notifyListeners();
+    }
+
     DateTime? rangeStartDate = DateTime.now();
     DateTime? rangeEndDate = DateTime.now();
     DateTime? date;
@@ -58,13 +71,6 @@ class MaterialDatasource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, rowData) {
-        _material.insert(index, rowData);
-        buildDataGridRows();
-        notifyListeners();
-        // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
-      }
-
       return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -92,15 +98,7 @@ class MaterialDatasource extends DataGridSource {
             : (dataGridCell.columnName == 'Delete')
                 ? IconButton(
                     onPressed: () async {
-                      // FirebaseFirestore.instance
-                      //     .collection('DailyProjectReport')
-                      //     .doc(depoName)
-                      //     .collection('Daily Data')
-                      //     .doc(DateFormat.yMMMMd().format(DateTime.now()))
-                      //     .update({
-                      //   'data': FieldValue.arrayRemove([0])
-                      // });
-
+                      removeRowAtIndex(dataRowIndex);
                       dataGridRows.remove(row);
                       notifyListeners();
                     },
@@ -118,25 +116,34 @@ class MaterialDatasource extends DataGridSource {
                                   builder: (context) => AlertDialog(
                                         title: const Text('All Date'),
                                         content: Container(
-                                            height: 400,
-                                            width: 500,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.8,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.8,
                                             child: SfDateRangePicker(
                                               view: DateRangePickerView.month,
-                                              showTodayButton: true,
-                                              onSelectionChanged:
-                                                  (DateRangePickerSelectionChangedArgs
-                                                      args) {
-                                                if (args.value
-                                                    is PickerDateRange) {
-                                                  rangeStartDate =
-                                                      args.value.startDate;
-                                                  rangeEndDate =
-                                                      args.value.endDate;
-                                                } else {
-                                                  // final List<PickerDateRange>
-                                                  //     selectedRanges = args.value;
-                                                }
-                                              },
+                                              showTodayButton: false,
+                                              selectionShape:
+                                                  DateRangePickerSelectionShape
+                                                      .rectangle,
+                                              // onSelectionChanged:
+                                              //     (DateRangePickerSelectionChangedArgs
+                                              //         args) {
+                                              //   if (args.value
+                                              //       is PickerDateRange) {
+                                              //     rangeStartDate =
+                                              //         args.value.startDate;
+                                              //     rangeEndDate =
+                                              //         args.value.endDate;
+                                              //   } else {
+                                              //     // final List<PickerDateRange>
+                                              //     //     selectedRanges = args.value;
+                                              //   }
+                                              // },
                                               selectionMode:
                                                   DateRangePickerSelectionMode
                                                       .single,
@@ -329,7 +336,7 @@ class MaterialDatasource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),

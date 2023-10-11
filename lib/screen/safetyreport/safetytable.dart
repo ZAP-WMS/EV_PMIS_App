@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overviewtable.dart';
 import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +14,8 @@ import '../../model/safety_checklistModel.dart';
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-
-import '../qualitychecklist/quality_checklist.dart';
+import '../dailyreport/summary.dart';
+import '../homepage/gallery.dart';
 
 class SafetyTable extends StatefulWidget {
   String? cityName;
@@ -62,15 +62,39 @@ class _SafetyTableState extends State<SafetyTable> {
     return SafeArea(
       child: Scaffold(
         drawer: const NavbarDrawer(),
-        appBar: CustomAppBar(
-            isCentered: false,
-            title: '${widget.cityName}/SafetychecklistTable',
-            height: 50,
-            isSync: true,
-            store: () {
-              //  _showDialog(context);
-              store();
-            }),
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(50),
+            child: CustomAppBarBackDate(
+                text: '${widget.cityName}/SafetychecklistTable',
+                haveCalender: false,
+                haveSummary: true,
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewSummary(
+                        cityName: widget.cityName.toString(),
+                        depoName: widget.depoName.toString(),
+                        id: 'Safety Report',
+                        userId: userId,
+                      ),
+                    )),
+                haveSynced: true,
+                store: () {
+                  //  _showDialog(context);
+                  civilField(widget.depoName!);
+                  store();
+                })),
+        // CustomAppBar(
+        //     isCentered: false,
+        //     title: '${widget.cityName}/SafetychecklistTable',
+        //     height: 50,
+        //
+        //     isSync: true,
+        //     store: () {
+        //       //  _showDialog(context);
+        //       civilField(widget.depoName!);
+        //       store();
+        //     }),
         body: StreamBuilder(
           stream: _stream,
           builder: (context, snapshot) {
@@ -191,7 +215,7 @@ class _SafetyTableState extends State<SafetyTable> {
                   source: _safetyChecklistDataSource,
                   //key: key,
                   allowEditing: true,
-                  frozenColumnsCount: 2,
+                  frozenColumnsCount: 1,
                   gridLinesVisibility: GridLinesVisibility.both,
                   headerGridLinesVisibility: GridLinesVisibility.both,
                   selectionMode: SelectionMode.single,
@@ -632,7 +656,7 @@ class _SafetyTableState extends State<SafetyTable> {
       SetOptions(merge: true),
     ).whenComplete(() {
       FirebaseApi().nestedKeyEventsField(
-          'SafetyChecklistTable2', widget.depoName!, 'userId', userId);
+          'SafetyChecklistTable2', widget.depoName!, 'userId', userId!);
       tabledata2.clear();
       // Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -68,6 +68,12 @@ class DepotOverviewDatasource extends DataGridSource {
       // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
     }
 
+    void removeRowAtIndex(int index) {
+      _depotOverview.removeAt(index);
+      buildDataGridRows();
+      notifyListeners();
+    }
+
     DateTime? rangeStartDate = DateTime.now();
     DateTime? rangeEndDate = DateTime.now();
     DateTime? date;
@@ -105,22 +111,13 @@ class DepotOverviewDatasource extends DataGridSource {
                         status: 'Close',
                       ),
                     );
-                    //  rows.insert(1 , dataGridRows.insert(index, element));
-                    // dataGridRows.insert(1, data);
-
-                    // _dailyproject.add(DailyProjectModel(
-                    //     siNo: 1,
-                    //     typeOfActivity: 'Electrical Infra',
-                    //     activityDetails: "Initial Survey of DEpot",
-                    //     progress: '',
-                    //     status: ''));
-                    // buildDataGridRows();
-                    // notifyListeners();
                   },
                   child: Text('Add', style: TextStyle(fontSize: 12)))
               : (dataGridCell.columnName == 'Delete')
                   ? IconButton(
                       onPressed: () {
+                        removeRowAtIndex(dataRowIndex);
+                        print(dataRowIndex);
                         dataGridRows.remove(row);
                         notifyListeners();
                       },
@@ -144,12 +141,17 @@ class DepotOverviewDatasource extends DataGridSource {
                                           ),
                                           content: Container(
                                               height: MediaQuery.of(context)
-                                                  .size
-                                                  .height,
+                                                      .size
+                                                      .height *
+                                                  0.8,
                                               width: MediaQuery.of(context)
-                                                  .size
-                                                  .height,
+                                                      .size
+                                                      .width *
+                                                  0.8,
                                               child: SfDateRangePicker(
+                                                selectionShape:
+                                                    DateRangePickerSelectionShape
+                                                        .rectangle,
                                                 viewSpacing: 5,
                                                 headerHeight: 12,
                                                 view: DateRangePickerView.month,
@@ -220,12 +222,21 @@ class DepotOverviewDatasource extends DataGridSource {
                                         builder: (context) => AlertDialog(
                                               title: const Text('All Date'),
                                               content: Container(
-                                                  height: 400,
-                                                  width: 500,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.8,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.8,
                                                   child: SfDateRangePicker(
+                                                    selectionShape:
+                                                        DateRangePickerSelectionShape
+                                                            .rectangle,
                                                     view: DateRangePickerView
                                                         .month,
-                                                    showTodayButton: true,
+                                                    showTodayButton: false,
                                                     onSelectionChanged:
                                                         (DateRangePickerSelectionChangedArgs
                                                             args) {
@@ -504,21 +515,13 @@ class DepotOverviewDatasource extends DataGridSource {
           DataGridCell<dynamic>(columnName: 'Status', value: newCellValue);
       _depotOverview[dataRowIndex].status = newCellValue;
     }
-    // Future storeData() async {
-    //   await FirebaseFirestore.instance.collection('A1').add({
-    //     'Weightage':
-    //         dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-    //             DataGridCell<int>(
-    //                 columnName: 'Weightage', value: newCellValue as int),
-    //   });
-    // }
+  }
 
-    @override
-    bool canSubmitCell(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
-        GridColumn column) {
-      // Return false, to retain in edit mode.
-      return true; // or super.canSubmitCell(dataGridRow, rowColumnIndex, column);
-    }
+  @override
+  bool canSubmitCell(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
+      GridColumn column) {
+    // Return false, to retain in edit mode.
+    return true; // or super.canSubmitCell(dataGridRow, rowColumnIndex, column);
   }
 
   @override

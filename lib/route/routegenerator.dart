@@ -1,8 +1,9 @@
 import 'package:ev_pmis_app/Splash/splash_screen.dart';
 import 'package:ev_pmis_app/authentication/login_register.dart';
 import 'package:ev_pmis_app/screen/Detailedreport/detailed_Eng.dart';
-import 'package:ev_pmis_app/screen/Detailedreport/detailed_eng_home.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
+import 'package:ev_pmis_app/screen/closureReport/closuretable.dart';
+
 import 'package:ev_pmis_app/screen/dailyreport/daily_project.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/homepage/home_page.dart';
@@ -11,16 +12,17 @@ import 'package:ev_pmis_app/screen/monthlyreport/monthly_project.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overview.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overviewtable.dart';
 import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/quality_home.dart';
 import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:flutter/material.dart';
+import '../screen/closureReport/closurefield.dart';
+import '../screen/planning/project_planning.dart';
+import '../screen/qualitychecklist/quality_home.dart';
 
 import '../screen/jmrPage/jmr.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     final args = settings.arguments;
-    final args1 = settings.arguments;
 
     switch (settings.name) {
       case '/splash-screen':
@@ -35,21 +37,24 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const CitiesHome());
       case '/depotOverview':
         return MaterialPageRoute(
-            builder: (context) => DepotOverview(
-                cityName: args.toString(), depoName: args.toString()));
+            builder: (context) => DepotOverview(depoName: args.toString()));
       case '/overview page':
         return MaterialPageRoute(
             builder: (context) => OverviewPage(
-                  depoName: args1.toString(),
+                  depoName: args.toString(),
                 ));
-      case '/overview-table':
+      // case '/overview-table':
+      //   return MaterialPageRoute(
+      //       builder: (context) => OverviewTable(depoName: args.toString()));
+      case '/planning-page':
         return MaterialPageRoute(
-            builder: (context) => OverviewTable(depoName: args.toString()));
-
+            builder: (context) => KeyEvents(
+                  depoName: args.toString(),
+                ));
       case '/material-page':
         return MaterialPageRoute(
-            builder: (context) => MaterialProcurement(
-                depoName: args.toString(), cityName: args.toString()));
+            builder: (context) =>
+                MaterialProcurement(depoName: args.toString()));
 
       case '/daily-report':
         return MaterialPageRoute(
@@ -63,12 +68,29 @@ class RouteGenerator {
 
       case '/detailed-page':
         return MaterialPageRoute(
-          builder: (context) => DetailedEng(
-              cityName: args.toString(), depoName: args1.toString()),
+          builder: (context) => DetailedEng(depoName: args.toString()),
         );
 
+      case '/safety-page':
+        return MaterialPageRoute(
+            builder: (context) => SafetyField(depoName: args.toString()));
+
       case '/quality-page':
-        return MaterialPageRoute(builder: (context) => QualityHome());
+        return MaterialPageRoute(
+            builder: (context) => QualityHome(
+                  depoName: args.toString(),
+                ));
+
+      case '/closure-page':
+        return MaterialPageRoute(
+            builder: (context) => ClosureField(
+                  depoName: args.toString(),
+                ));
+      case '/closure-table':
+        return MaterialPageRoute(
+            builder: (context) => ClosureTable(
+                  depoName: args.toString(),
+                ));
 
       case '/jmrPage':
         return MaterialPageRoute(

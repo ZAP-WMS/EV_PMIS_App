@@ -171,7 +171,7 @@ class SafetyChecklistDataSource extends DataGridSource {
                             );
                           }).toList())
                       : Text(dataGridCell.value.toString(),
-                          style: TextStyle(fontSize: 12)));
+                          style: const TextStyle(fontSize: 12)));
     }).toList());
   }
 

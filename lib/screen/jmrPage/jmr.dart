@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -45,8 +46,9 @@ class _JmrPageState extends State<JmrPage>
       initialIndex: 0,
       child: SafeArea(
           child: Scaffold(
+        drawer: const NavbarDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.blue[900],
+          backgroundColor: blue,
           bottom: TabBar(
               labelColor: white,
               labelStyle: buttonWhite,

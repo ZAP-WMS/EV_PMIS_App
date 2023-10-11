@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ev_pmis_app">
    <application
-        android:label="ev_pmis_app"
+        android:label="EV-PMIS"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

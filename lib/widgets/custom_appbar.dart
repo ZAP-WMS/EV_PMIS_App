@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 import '../authentication/login_register.dart';
@@ -24,47 +25,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: isCentered ? true : false,
       title: Text(
         title,
-        style: const TextStyle(
-          fontSize: 12,
-        ),
+        maxLines: 2,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
       ),
       backgroundColor: blue,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
       actions: [
         isSync
-            ? Container(
-                padding: const EdgeInsets.only(bottom: 2),
-                height: 30,
-                width: 65,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+            ? InkWell(
+                onTap: () {
+                  store!();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/appbar/sync.jpeg',
+                    height: 25,
+                    width: 35,
+                  ),
                 ),
-                child: ListTile(
-                  onTap: () => store!(),
-                  title: Icon(
-                    Icons.cloud_sync_sharp,
-                    color: white,
-                    size: 20,
-                  ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Text(
-                      'Sync',
-                      style: TextStyle(color: white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-                //  TextButton(
-                //     onPressed: () {
-                //       store!();
-                //     },
-                //     child: Text(
-                //       'Sync',
-                //       style: TextStyle(color: white, fontSize: 15),
-                //     )),
-                )
+              )
             : Container(),
 
         // Padding(

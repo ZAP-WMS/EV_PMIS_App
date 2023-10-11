@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -11,14 +12,14 @@ import '../../components/Loading_page.dart';
 import '../../datasource/detailedengEV_datasource.dart';
 import '../../datasource/detailedengShed_datasource.dart';
 import '../../datasource/detailedeng_datasource.dart';
+import '../../date_format.dart';
 import '../../model/detailed_engModel.dart';
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
 
 class DetailedEng extends StatefulWidget {
-  String? cityName;
   String? depoName;
-  DetailedEng({super.key, required this.cityName, required this.depoName});
+  DetailedEng({super.key, required this.depoName});
 
   @override
   State<DetailedEng> createState() => _DetailedEngtState();
@@ -44,32 +45,28 @@ class _DetailedEngtState extends State<DetailedEng>
   var alldata;
   bool _isloading = true;
   dynamic userId;
+  String? cityName;
 
   @override
   void initState() {
-    widget.cityName = widget.cityName =
-        Provider.of<CitiesProvider>(context, listen: false).getName;
+    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    getmonthlyReport();
-    getmonthlyReportEv();
+    // getmonthlyReport();
+    // getmonthlyReportEv();
     getUserId().whenComplete(() {
-      DetailedProject = getmonthlyReport();
+      // DetailedProject = getmonthlyReport();
       _detailedDataSource = DetailedEngSource(DetailedProject, context,
-          widget.cityName.toString(), widget.depoName.toString(), userId);
+          cityName.toString(), widget.depoName.toString(), userId);
       _dataGridController = DataGridController();
 
-      DetailedProjectev = getmonthlyReportEv();
+      // DetailedProjectev = getmonthlyReportEv();
       _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
-          widget.cityName.toString(), widget.depoName.toString(), userId);
+          cityName!, widget.depoName.toString(), userId);
       _dataGridController = DataGridController();
 
-      DetailedProjectshed = getmonthlyReportEv();
-      _detailedEngSourceShed = DetailedEngSourceShed(
-          DetailedProjectshed,
-          context,
-          widget.cityName.toString(),
-          widget.depoName.toString(),
-          userId);
+      // DetailedProjectshed = getmonthlyReportEv();
+      _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
+          context, cityName!, widget.depoName.toString(), userId);
       _dataGridController = DataGridController();
       _controller = TabController(length: 3, vsync: this);
 
@@ -116,34 +113,20 @@ class _DetailedEngtState extends State<DetailedEng>
         appBar: AppBar(
             backgroundColor: blue,
             title: Text(
-              '${widget.cityName} / ${widget.depoName} / Detailed Engineering',
+              '${widget.depoName}/Detailed Engineering',
               style: const TextStyle(fontSize: 16),
             ),
             actions: [
               InkWell(
                 onTap: () => StoreData(),
-                child: Container(
-                    padding: const EdgeInsets.all(5),
-                    height: 25,
-                    width: 80,
-                    child: Column(
-                      children: const [
-                        Icon(Icons.sync),
-                        Text(
-                          'Sync',
-                          style: TextStyle(fontSize: 10),
-                        )
-                      ],
-                    )
-                    //  TextButton(
-                    //     onPressed: () {
-                    //       StoreData();
-                    //     },
-                    //     child: Text(
-                    //       'Sync Data',
-                    //       style: TextStyle(color: white, fontSize: 18),
-                    //     )),
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Image.asset(
+                    'assets/appbar/sync.jpeg',
+                    height: 35,
+                    width: 35,
+                  ),
+                ),
               ),
               // Padding(
               //     padding: const EdgeInsets.only(right: 140),
@@ -185,6 +168,51 @@ class _DetailedEngtState extends State<DetailedEng>
           tabScreen1(),
           tabScreen2(),
         ]),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: (() {
+            if (_selectedIndex == 0) {
+              DetailedProject.add(DetailedEngModel(
+                siNo: 1,
+                title: 'EV Layout',
+                number: 123456878,
+                preparationDate:
+                    DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                submissionDate: dmy,
+                approveDate: dmy,
+                releaseDate: dmy,
+              ));
+              _detailedDataSource.buildDataGridRows();
+              _detailedDataSource.updateDatagridSource();
+            }
+            if (_selectedIndex == 1) {
+              DetailedProjectev.add(DetailedEngModel(
+                siNo: 1,
+                title: 'EV Layout',
+                number: 12345,
+                preparationDate: dmy,
+                submissionDate: dmy,
+                approveDate: dmy,
+                releaseDate: dmy,
+              ));
+              _detailedEngSourceev.buildDataGridRowsEV();
+              _detailedEngSourceev.updateDatagridSource();
+            } else {
+              DetailedProjectshed.add(DetailedEngModel(
+                siNo: 1,
+                title: 'EV Layout',
+                number: 12345,
+                preparationDate: dmy,
+                submissionDate: dmy,
+                approveDate: dmy,
+                releaseDate: dmy,
+              ));
+              _detailedEngSourceShed.buildDataGridRowsShed();
+              _detailedEngSourceShed.updateDatagridSource();
+            }
+          }),
+        ),
+
         // floatingActionButton: FloatingActionButton(
         //   child: Icon(Icons.add),
         //   onPressed: (() {
@@ -192,10 +220,10 @@ class _DetailedEngtState extends State<DetailedEng>
         //       siNo: 1,
         //       title: 'EV Layout',
         //       number: 12345,
-        //       preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-        //       submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-        //       approveDate: DateFormat().add_yMd().format(DateTime.now()),
-        //       releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+        //       preparationDate: dmy,
+        //       submissionDate: dmy,
+        //       approveDate: dmy,
+        //       releaseDate: dmy,
         //     ));
         //     _detailedDataSource.buildDataGridRows();
         //     _detailedDataSource.updateDatagridSource();
@@ -299,10 +327,10 @@ class _DetailedEngtState extends State<DetailedEng>
         siNo: 2,
         title: '',
         number: null,
-        preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-        submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-        approveDate: DateFormat().add_yMd().format(DateTime.now()),
-        releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+        preparationDate: dmy,
+        submissionDate: dmy,
+        approveDate: dmy,
+        releaseDate: dmy,
       ),
     ];
   }
@@ -313,10 +341,10 @@ class _DetailedEngtState extends State<DetailedEng>
         siNo: 2,
         title: '',
         number: null,
-        preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-        submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-        approveDate: DateFormat().add_yMd().format(DateTime.now()),
-        releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+        preparationDate: dmy,
+        submissionDate: dmy,
+        approveDate: dmy,
+        releaseDate: dmy,
       ),
     ];
   }
@@ -336,10 +364,10 @@ class _DetailedEngtState extends State<DetailedEng>
         siNo: 1,
         title: '',
         number: null,
-        preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-        submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-        approveDate: DateFormat().add_yMd().format(DateTime.now()),
-        releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+        preparationDate: dmy,
+        submissionDate: dmy,
+        approveDate: dmy,
+        releaseDate: dmy,
       ),
       // DetailedEngModel(
       //   siNo: 3,
@@ -354,10 +382,10 @@ class _DetailedEngtState extends State<DetailedEng>
       //   siNo: 2,
       //   title: 'Electrical Work',
       //   number: 12345,
-      //   preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+      //   preparationDate: dmy,
+      //   submissionDate: dmy,
+      //   approveDate: dmy,
+      //   releaseDate: dmy,
       // ),
       // DetailedEngModel(
       //   siNo: 5,
@@ -372,10 +400,10 @@ class _DetailedEngtState extends State<DetailedEng>
       //   siNo: 3,
       //   title: 'Illumination Design',
       //   number: 12345,
-      //   preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+      //   preparationDate: dmy,
+      //   submissionDate: dmy,
+      //   approveDate: dmy,
+      //   releaseDate: dmy,
       // ),
     ];
   }
@@ -485,7 +513,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'PreparationDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -500,7 +528,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'SubmissionDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -515,7 +543,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ApproveDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -530,7 +558,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ReleaseDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -584,7 +612,7 @@ class _DetailedEngtState extends State<DetailedEng>
                         _detailedDataSource = DetailedEngSource(
                             DetailedProject,
                             context,
-                            widget.cityName.toString(),
+                            cityName!,
                             widget.depoName.toString(),
                             userId);
                         _dataGridController = DataGridController();
@@ -683,7 +711,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'PreparationDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -698,7 +726,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'SubmissionDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -713,7 +741,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ApproveDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -728,7 +756,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ReleaseDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -782,10 +810,10 @@ class _DetailedEngtState extends State<DetailedEng>
       //       siNo: 1,
       //       title: 'EV Layout',
       //       number: 12345,
-      //       preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //       submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //       approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //       releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+      //       preparationDate: dmy,
+      //       submissionDate: dmy,
+      //       approveDate: dmy,
+      //       releaseDate: dmy,
       //     ));
       //     _detailedDataSource.buildDataGridRows();
       //     _detailedDataSource.updateDatagridSource();
@@ -899,7 +927,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'PreparationDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -914,7 +942,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'SubmissionDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -929,7 +957,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ApproveDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -944,7 +972,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               columnName: 'ReleaseDate',
                               autoFitPadding: tablepadding,
                               allowEditing: false,
-                              width: 140,
+                              width: 150,
                               label: Container(
                                 padding: tablepadding,
                                 alignment: Alignment.center,
@@ -996,7 +1024,7 @@ class _DetailedEngtState extends State<DetailedEng>
                         _detailedEngSourceev = DetailedEngSourceEV(
                             DetailedProjectev,
                             context,
-                            widget.cityName.toString(),
+                            cityName!,
                             widget.depoName.toString(),
                             userId);
                         _dataGridController = DataGridController();
@@ -1195,10 +1223,10 @@ class _DetailedEngtState extends State<DetailedEng>
       //         siNo: 1,
       //         title: 'EV Layout',
       //         number: 123456878,
-      //         preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //         submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //         approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //         releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+      //         preparationDate: dmy,
+      //         submissionDate: dmy,
+      //         approveDate: dmy,
+      //         releaseDate: dmy,
       //       ));
       //       _detailedDataSource.buildDataGridRows();
       //       _detailedDataSource.updateDatagridSource();
@@ -1208,10 +1236,10 @@ class _DetailedEngtState extends State<DetailedEng>
       //         siNo: 1,
       //         title: 'EV Layout',
       //         number: 12345,
-      //         preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //         submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //         approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //         releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+      //         preparationDate: dmy,
+      //         submissionDate: dmy,
+      //         approveDate: dmy,
+      //         releaseDate: dmy,
       //       ));
       //       _detailedEngSourceev.buildDataGridRowsEV();
       //       _detailedEngSourceev.updateDatagridSource();
@@ -1423,7 +1451,7 @@ class _DetailedEngtState extends State<DetailedEng>
                         _detailedEngSourceShed = DetailedEngSourceShed(
                             DetailedProjectshed,
                             context,
-                            widget.cityName.toString(),
+                            cityName!,
                             widget.depoName.toString(),
                             userId);
                         _dataGridController = DataGridController();
@@ -1621,10 +1649,10 @@ class _DetailedEngtState extends State<DetailedEng>
       //       siNo: 1,
       //       title: 'EV Layout',
       //       number: 12345,
-      //       preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //       submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //       approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //       releaseDate: DateFormat().add_yMd().format(DateTime.now()),
+      //       preparationDate: dmy,
+      //       submissionDate: dmy,
+      //       approveDate: dmy,
+      //       releaseDate: dmy,
       //     ));
       //     _detailedEngSourceShed.buildDataGridRowsEV();
       //     _detailedEngSourceShed.updateDatagridSource();
