@@ -73,7 +73,7 @@ class KeyDataSourceKeyEvents extends DataGridSource {
         child: dataGridCell.columnName == 'Activity'
             ? Text(
                 dataGridCell.value.toString(),
-                style: TextStyle(color: white),
+                style: TextStyle(color: white, fontSize: 10),
               )
             // (dataGridCell.columnName == 'ActualStart' ||
             //         dataGridCell.columnName == 'ActualEnd')
@@ -362,10 +362,11 @@ class KeyDataSourceKeyEvents extends DataGridSource {
             : dataGridCell.columnName == 'Progress'
                 ? Text(
                     dataGridCell.value.toString() + '%',
-                    style: TextStyle(color: black),
+                    style: TextStyle(color: black, fontSize: 10),
                   )
                 : Text(
                     dataGridCell.value.toString(),
+                    style: const TextStyle(fontSize: 10),
                   ),
       );
     }).toList());

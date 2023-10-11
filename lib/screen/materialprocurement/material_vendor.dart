@@ -23,8 +23,7 @@ class MaterialProcurement extends StatefulWidget {
 }
 
 class _MaterialProcurementState extends State<MaterialProcurement> {
-  List<MaterialProcurementModel> _materialprocurement =
-      <MaterialProcurementModel>[];
+  List<MaterialProcurementModel> _materialprocurement = [];
   late MaterialDatasource _materialDatasource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];

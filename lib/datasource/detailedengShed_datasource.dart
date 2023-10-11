@@ -203,14 +203,17 @@ class DetailedEngSourceShed extends DataGridSource {
                                 );
                               } else {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => UploadDocument(
-                                      userId: userId,
-                                      title: 'DetailedEngShed',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      fldrName:
-                                          '${row.getCells()[4].value.toString()}'),
-                                ));
+                                    builder: (context) => UploadDocument(
+                                          pagetitle: 'DetailedEngShed',
+                                          cityName: cityName,
+                                          depoName: depoName,
+                                          userId: userId,
+                                          date: activitydata,
+                                          fldrName: row
+                                              .getCells()[0]
+                                              .value
+                                              .toString(),
+                                        )));
                               }
 
                               // showDialog(
@@ -242,13 +245,19 @@ class DetailedEngSourceShed extends DataGridSource {
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ViewAllPdf(
-                                          title: 'DetailedEngShed',
-                                          cityName: cityName,
-                                          depoName: depoName,
-                                          userId: userId,
-                                          docId:
-                                              '${row.getCells()[4].value.toString()}')
-                                      // UploadDocument(
+                                            title: 'DetailedEngShed',
+                                            cityName: cityName,
+                                            depoName: depoName,
+                                            userId: userId,
+                                            date: row
+                                                .getCells()[4]
+                                                .value
+                                                .toString(),
+                                            docId: row
+                                                .getCells()[0]
+                                                .value
+                                                .toString(),
+                                          ) // UploadDocument(
                                       //     title: 'DetailedEngRFC',
                                       //     cityName: cityName,
                                       //     depoName: depoName,

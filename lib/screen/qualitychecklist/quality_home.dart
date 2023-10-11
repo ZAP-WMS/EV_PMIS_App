@@ -21,18 +21,18 @@ class _QualityHomeState extends State<QualityHome> {
   int? _selectedIndex = 0;
 
   List<String> civilClnName = [
-    'Exc TABLE',
-    'BF TABLE',
-    'MASS TABLE',
-    'GLAZZING TABLE',
-    'CEILING TABLE',
-    'FLOORING TABLE',
-    'INSPECTION TABLE',
-    'IRONITE TABLE',
-    'PAINTING TABLE',
-    'PAVING TABLE',
-    'ROOFING TABLE',
-    'PROOFING TABLE'
+    'Exc',
+    'BackFilling',
+    'Massonary',
+    'Glazzing',
+    'Ceilling',
+    'Flooring',
+    'Inspection',
+    'Ironite',
+    'Painting',
+    'Paving',
+    'Roofing',
+    'Proofing'
   ];
 
   List<String> civillist = [
@@ -51,16 +51,16 @@ class _QualityHomeState extends State<QualityHome> {
   ];
 
   List<String> eleClnName = [
-    'PSS TABLE',
-    'RMU TABLE',
-    'CT TABLE',
-    'CMU TABLE',
-    'ACDB TABLE',
-    'CI TABLE',
-    'CDI TABLE',
-    'MCCB TABLE',
-    'CHARGER TABLE',
-    'EARTH TABLE'
+    'PSS',
+    'RMU',
+    'CT',
+    'CMU',
+    'ACDB',
+    'CI',
+    'CDI',
+    'MSP',
+    'CHARGER',
+    'EARTH PIT'
   ];
   List<String> electricallist = [
     'CHECKLIST FOR INSTALLATION OF PSS',

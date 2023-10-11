@@ -37,7 +37,7 @@ class _DepotPageState extends State<DepotPage> {
                     return LoadingPage();
                   }
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height,
+                    height: MediaQuery.of(context).size.height * 0.81,
                     child: GridView.builder(
                       itemCount: snapshot.data!.docs.length,
                       padding: const EdgeInsets.only(bottom: 10),

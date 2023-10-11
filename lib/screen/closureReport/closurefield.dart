@@ -16,13 +16,6 @@ import '../../widgets/activity_headings.dart';
 import '../../widgets/custom_textfield.dart';
 import '../homepage/gallery.dart';
 
-late TextEditingController depotController,
-    longitudeController,
-    latitudeController,
-    stateController,
-    busesController,
-    loaController;
-
 class ClosureField extends StatefulWidget {
   String? depoName;
   ClosureField({super.key, required this.depoName});
@@ -37,6 +30,12 @@ class _ClosureFieldState extends State<ClosureField> {
   late CloseReportDataSource _closeReportDataSource;
   late DataGridController _dataGridController;
   dynamic alldata;
+  late TextEditingController depotController,
+      longitudeController,
+      latitudeController,
+      stateController,
+      busesController,
+      loaController;
   void initializeController() {
     depotController = TextEditingController();
     longitudeController = TextEditingController();
@@ -426,20 +425,20 @@ class _ClosureFieldState extends State<ClosureField> {
   }
 }
 
-closureField(String depoName) {
-  FirebaseFirestore.instance
-      .collection('ClosureReport')
-      .doc(depoName)
-      .collection("ClosureData")
-      .doc(userId)
-      .set(
-    {
-      'DepotName': depotController.text,
-      'Longitude': loaController.text,
-      'Latitude': latitudeController.text,
-      'State': stateController.text,
-      'Buses': busesController.text,
-      'LaoNo': loaController.text,
-    },
-  );
-}
+// closureField(String depoName) {
+//   FirebaseFirestore.instance
+//       .collection('ClosureReport')
+//       .doc(depoName)
+//       .collection("ClosureData")
+//       .doc(userId)
+//       .set(
+//     {
+//       'DepotName': depotController.text,
+//       'Longitude': loaController.text,
+//       'Latitude': latitudeController.text,
+//       'State': stateController.text,
+//       'Buses': busesController.text,
+//       'LaoNo': loaController.text,
+//     },
+//   );
+// }

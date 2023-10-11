@@ -14,8 +14,9 @@ class SafetyChecklistDataSource extends DataGridSource {
   String cityName;
   String depoName;
   dynamic userId;
+  String selectedDate;
   SafetyChecklistDataSource(
-      this._checklistModel, this.cityName, this.depoName, this.userId) {
+      this._checklistModel, this.cityName, this.depoName, this.userId , this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -89,11 +90,12 @@ class SafetyChecklistDataSource extends DataGridSource {
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
+                              pagetitle: 'SafetyChecklist',
                               cityName: cityName,
                               depoName: depoName,
-                              title: 'SafetyChecklist',
                               fldrName: row.getCells()[0].value.toString(),
                               userId: userId,
+                              date: selectedDate,
                             ),
                           ));
                         },
@@ -115,8 +117,9 @@ class SafetyChecklistDataSource extends DataGridSource {
                                       cityName: cityName,
                                       depoName: depoName,
                                       userId: userId,
+                                      date: selectedDate,
                                       docId:
-                                          '${row.getCells()[0].value.toString()}')));
+                                          row.getCells()[0].value.toString())));
                               //     // ViewFile()
                               //     // UploadDocument(
                               //     //     title: 'SafetyChecklist',

@@ -1,12 +1,8 @@
-import 'dart:typed_data';
-
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 
 import '../../FirebaseApi/firebase_api.dart';
 import '../../components/Loading_page.dart';
-import '../../style.dart';
+import '../../widgets/custom_appbar.dart';
 import 'image_page.dart';
 
 class ViewAllPdf extends StatefulWidget {
@@ -19,17 +15,18 @@ class ViewAllPdf extends StatefulWidget {
   String? date;
   int? srNo;
   dynamic docId;
-  ViewAllPdf(
-      {super.key,
-      required this.title,
-      this.subtitle,
-      required this.cityName,
-      required this.depoName,
-      required this.userId,
-      this.fldrName,
-      this.date,
-      this.srNo,
-      this.docId});
+  ViewAllPdf({
+    super.key,
+    required this.title,
+    this.subtitle,
+    required this.cityName,
+    required this.depoName,
+    required this.userId,
+    this.fldrName,
+    this.date,
+    this.srNo,
+    this.docId,
+  });
 
   @override
   State<ViewAllPdf> createState() => _ViewAllPdfState();
@@ -44,8 +41,18 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
     futureFiles = widget.title == 'QualityChecklist'
         ? FirebaseApi.listAll(
             '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}')
-        : FirebaseApi.listAll(
-            '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}');
+        : widget.title == 'ClosureReport'
+            ? FirebaseApi.listAll(
+                '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
+            : widget.title == '/BOQSurvey' ||
+                    widget.title == '/BOQElectrical' ||
+                    widget.title == 'Key Events'
+                ? FirebaseApi.listAll(
+                    '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
+                : FirebaseApi.listAll(
+                    '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
+    print(
+        '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}');
     super.initState();
   }
 
@@ -53,16 +60,24 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('File List'),
-        backgroundColor: blue,
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: CustomAppBar(
+            title: 'File List',
+            height: 50,
+            isSync: false,
+            isCentered: true,
+          )),
+      //  AppBar(
+      //   title: const Text('File List'),
+      //   backgroundColor: blue,
+      // ),
       body: FutureBuilder<List<FirebaseFile>>(
         future: futureFiles,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return Center(child: LoadingPage());
+              return LoadingPage();
             default:
               if (snapshot.hasError) {
                 return const Center(child: Text('Some error occurred!'));
@@ -121,24 +136,12 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                       file.url,
                       fit: BoxFit.fill,
                     )
-                  : isPdf
-                      ? Image.asset('assets/pdf_logo.png')
-                      : Image.asset('assets/excel.png')),
+                  : Image.asset('assets/pdf_logo.png')),
           //PdfThumbnail.fromFile(file.ref.fullPath, currentPage: 2)),
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => ImagePage(file: file)))
-              .then((value) {
-            setState(() {
-              futureFiles = widget.title == 'QualityChecklist'
-                  ? FirebaseApi.listAll(
-                      '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}')
-                  : FirebaseApi.listAll(
-                      '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}');
-            });
-          }),
+          onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ImagePage(file: file))),
         ),
-        Expanded(child: Text(file.name))
+        Text(file.name)
       ],
     );
   }

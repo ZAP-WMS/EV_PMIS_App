@@ -13,11 +13,12 @@ class DailyDataSource extends DataGridSource {
   String cityName;
   String depoName;
   String userId;
+  String selectedDate;
   BuildContext mainContext;
   List data = [];
 
   DailyDataSource(this._dailyproject, this.mainContext, this.cityName,
-      this.depoName, this.userId) {
+      this.depoName, this.userId, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -52,6 +53,7 @@ class DailyDataSource extends DataGridSource {
     DateTime? date1;
     DateTime? endDate1;
     final int dataRowIndex = dataGridRows.indexOf(row);
+    String Pagetitle = 'Daily Report';
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
@@ -78,11 +80,13 @@ class DailyDataSource extends DataGridSource {
                         mainContext,
                         MaterialPageRoute(
                           builder: (context) => ViewAllPdf(
-                              title: 'Data Image',
-                              cityName: cityName,
-                              depoName: depoName,
-                              docId: row.getCells()[1].value.toString(),
-                              userId: userId),
+                            title: Pagetitle,
+                            cityName: cityName,
+                            depoName: depoName,
+                            userId: userId,
+                            date: row.getCells()[0].value.toString(),
+                            docId: row.getCells()[1].value.toString(),
+                          ),
                         ));
                   },
                   child: Text(
@@ -96,11 +100,17 @@ class DailyDataSource extends DataGridSource {
                             mainContext,
                             MaterialPageRoute(
                               builder: (context) => UploadDocument(
-                                title: 'Data Image',
-                                fldrName: row.getCells()[1].value.toString(),
-                                userId: userId,
+                                pagetitle: Pagetitle,
                                 cityName: cityName,
                                 depoName: depoName,
+                                userId: userId,
+                                date: selectedDate,
+                                fldrName: row.getCells()[1].value.toString(),
+                                // title: 'Data Image',
+                                // fldrName: row.getCells()[1].value.toString(),
+                                // userId: userId,
+                                // cityName: cityName,
+                                // depoName: depoName,
                               ),
                             ));
                       },

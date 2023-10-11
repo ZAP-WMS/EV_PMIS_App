@@ -54,8 +54,8 @@ class _DailyProjectState extends State<DailyProject> {
 
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
-    _dailyDataSource = DailyDataSource(
-        dailyproject, context, widget.cityName!, widget.depoName!, userId!);
+    _dailyDataSource = DailyDataSource(dailyproject, context, widget.cityName!,
+        widget.depoName!, userId!, selectedDate!);
     _dataGridController = DataGridController();
 
     _isloading = false;
@@ -116,8 +116,13 @@ class _DailyProjectState extends State<DailyProject> {
                   } else if (!snapshot.hasData ||
                       snapshot.data.exists == false) {
                     // dailyproject = getmonthlyReport();
-                    _dailyDataSource = DailyDataSource(dailyproject, context,
-                        widget.cityName!, widget.depoName!, userId!);
+                    _dailyDataSource = DailyDataSource(
+                        dailyproject,
+                        context,
+                        widget.cityName!,
+                        widget.depoName!,
+                        userId!,
+                        selectedDate!);
                     _dataGridController = DataGridController();
                     return SfDataGridTheme(
                       data: SfDataGridThemeData(headerColor: blue),
@@ -360,8 +365,13 @@ class _DailyProjectState extends State<DailyProject> {
                     dailyproject.clear();
                     alldata.forEach((element) {
                       dailyproject.add(DailyProjectModel.fromjson(element));
-                      _dailyDataSource = DailyDataSource(dailyproject, context,
-                          widget.cityName!, widget.depoName!, userId!);
+                      _dailyDataSource = DailyDataSource(
+                          dailyproject,
+                          context,
+                          widget.cityName!,
+                          widget.depoName!,
+                          userId!,
+                          selectedDate!);
                       _dataGridController = DataGridController();
                     });
                     return SfDataGridTheme(

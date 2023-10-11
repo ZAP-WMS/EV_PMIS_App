@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../model/closer_report.dart';
 import '../model/daily_projectModel.dart';
 import '../screen/overviewpage/view_AllFiles.dart';
@@ -60,7 +59,7 @@ class CloseReportDataSource extends DataGridSource {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UploadDocument(
-                            title: 'ClosureReport',
+                            pagetitle: 'ClosureReport',
                             cityName: cityName,
                             depoName: depoName,
                             fldrName: row.getCells()[0].value.toString(),
@@ -100,8 +99,7 @@ class CloseReportDataSource extends DataGridSource {
                                     cityName: cityName,
                                     depoName: depoName,
                                     userId: userId,
-                                    docId:
-                                        '${row.getCells()[0].value.toString()}')
+                                    docId: row.getCells()[0].value.toString())
                                 // UploadDocument(
                                 //     title: 'DetailedEngRFC',
                                 //     cityName: cityName,

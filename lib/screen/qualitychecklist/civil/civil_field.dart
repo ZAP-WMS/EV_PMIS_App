@@ -917,14 +917,14 @@ class _CivilFieldState extends State<CivilField> {
         .get()
         .then((ds) {
       setState(() {
-        projectController.text = ds.data()!['ProjectName'];
-        locationController.text = ds.data()!['Location'];
-        vendorController.text = ds.data()!['VendorName'];
-        drawingController.text = ds.data()!['Drawing No'];
-        dateController.text = ds.data()!['Date'];
-        componentController.text = ds.data()!['Component'];
-        gridController.text = ds.data()!['Grid'];
-        fillingController.text = ds.data()!['Filling'];
+        projectController.text = ds.data()!['projectName'];
+        locationController.text = ds.data()!['location'];
+        vendorController.text = ds.data()!['vendor'];
+        drawingController.text = ds.data()!['drawing'];
+        dateController.text = ds.data()!['date'];
+        componentController.text = ds.data()!['componentName'];
+        gridController.text = ds.data()!['grid'];
+        fillingController.text = ds.data()!['filling'];
       });
     });
   }
