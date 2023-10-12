@@ -175,7 +175,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProject.add(DetailedEngModel(
                 siNo: 1,
                 title: 'EV Layout',
-                number: 123456878,
+                number: null,
                 preparationDate:
                     DateFormat('dd-MM-yyyy').format(DateTime.now()),
                 submissionDate: dmy,
@@ -189,7 +189,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectev.add(DetailedEngModel(
                 siNo: 1,
                 title: 'EV Layout',
-                number: 12345,
+                number: null,
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,
@@ -201,7 +201,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectshed.add(DetailedEngModel(
                 siNo: 1,
                 title: 'EV Layout',
-                number: 12345,
+                number: null,
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,
