@@ -56,7 +56,7 @@ class _ClosureTableState extends State<ClosureTable> {
         isSync: true,
         isCentered: false,
         store: () {
-          closureField(widget.depoName);
+          // closureField(widget.depoName);
           store();
         },
       ),

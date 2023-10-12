@@ -160,7 +160,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'ActivityNo',
                                     autoFitPadding: tablepadding,
                                     allowEditing: false,
-                                    width: 120,
+                                    width: 80,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -348,12 +348,12 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'ActivityNo',
                                     autoFitPadding: tablepadding,
                                     allowEditing: false,
-                                    width: 120,
+                                    width: 70,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
-                                      child: Text(
-                                          'Activities SI. No as per Gant Chart',
+                                      child: Text("SI No.",
+                                          // 'Activities SI. No as per Gant Chart',
                                           overflow: TextOverflow.values.first,
                                           textAlign: TextAlign.center,
                                           style: tableheaderwhitecolor

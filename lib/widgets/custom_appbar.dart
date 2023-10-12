@@ -9,12 +9,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   bool isSync = false;
   bool isCentered = true;
+  bool haveupload;
   final void Function()? store;
   CustomAppBar({
     super.key,
     required this.title,
     required this.height,
     required this.isSync,
+    this.haveupload = false,
     required this.isCentered,
     this.store,
   });
@@ -46,7 +48,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               )
-            : Container(),
+            : haveupload
+                ? Container(
+                    padding: const EdgeInsets.all(5),
+                    height: 30,
+                    width: 130,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/material-excelpage');
+                        },
+                        child: Text(
+                          'Upload Material Sheet',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: white, fontSize: 12),
+                        )),
+                  )
+                : Container(),
 
         // Padding(
         //     padding: const EdgeInsets.all(6.0),

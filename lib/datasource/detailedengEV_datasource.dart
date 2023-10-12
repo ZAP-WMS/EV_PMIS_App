@@ -203,11 +203,14 @@ class DetailedEngSourceEV extends DataGridSource {
                               } else {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => UploadDocument(
-                                      userId: userId,
-                                      title: 'DetailedEngEV',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      fldrName: activitydata),
+                                    pagetitle: 'DetailedEngEV',
+                                    cityName: cityName,
+                                    depoName: depoName,
+                                    userId: userId,
+                                    date: activitydata,
+                                    fldrName:
+                                        row.getCells()[0].value.toString(),
+                                  ),
                                 ));
                               }
                               // showDialog(
@@ -246,9 +249,14 @@ class DetailedEngSourceEV extends DataGridSource {
                                           cityName: cityName,
                                           depoName: depoName,
                                           userId: userId,
-                                          docId:
-                                              '${row.getCells()[4].value.toString()}')
-                                      // UploadDocument(
+                                          date: row
+                                              .getCells()[4]
+                                              .value
+                                              .toString(),
+                                          docId: row
+                                              .getCells()[0]
+                                              .value
+                                              .toString()) // UploadDocument(
                                       //     title: 'DetailedEngRFC',
                                       //     cityName: cityName,
                                       //     depoName: depoName,

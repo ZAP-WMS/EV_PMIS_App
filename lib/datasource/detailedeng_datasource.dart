@@ -204,11 +204,14 @@ class DetailedEngSource extends DataGridSource {
                               } else {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => UploadDocument(
-                                      userId: userId,
-                                      title: 'DetailedEngRFC',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      fldrName: activitydata),
+                                    pagetitle: 'DetailedEngRFC',
+                                    cityName: cityName,
+                                    depoName: depoName,
+                                    userId: userId,
+                                    date: activitydata,
+                                    fldrName:
+                                        row.getCells()[0].value.toString(),
+                                  ),
                                 ));
                               }
 
@@ -244,12 +247,19 @@ class DetailedEngSource extends DataGridSource {
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ViewAllPdf(
-                                          title: 'DetailedEngRFC',
-                                          cityName: cityName,
-                                          depoName: depoName,
-                                          userId: userId,
-                                          docId:
-                                              '${row.getCells()[4].value.toString()}')
+                                            title: 'DetailedEngRFC',
+                                            cityName: cityName,
+                                            depoName: depoName,
+                                            userId: userId,
+                                            date: row
+                                                .getCells()[4]
+                                                .value
+                                                .toString(),
+                                            docId: row
+                                                .getCells()[0]
+                                                .value
+                                                .toString(),
+                                          )
                                       // ViewFile()
                                       // UploadDocument(
                                       //     title: 'DetailedEngRFC',

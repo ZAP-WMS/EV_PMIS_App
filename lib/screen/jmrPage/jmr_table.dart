@@ -407,7 +407,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                     JmrDataSource(jmrtable, deleteRow, context);
 
                                 _dataGridController = DataGridController();
-
+ 
                                 return SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.8,

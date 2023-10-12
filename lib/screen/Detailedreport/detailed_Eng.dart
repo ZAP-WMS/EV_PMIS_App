@@ -175,7 +175,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProject.add(DetailedEngModel(
                 siNo: 1,
                 title: 'EV Layout',
-                number: 123456878,
+                number: null,
                 preparationDate:
                     DateFormat('dd-MM-yyyy').format(DateTime.now()),
                 submissionDate: dmy,
@@ -189,7 +189,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectev.add(DetailedEngModel(
                 siNo: 1,
                 title: 'EV Layout',
-                number: 12345,
+                number: null,
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,
@@ -201,7 +201,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectshed.add(DetailedEngModel(
                 siNo: 1,
                 title: 'EV Layout',
-                number: 12345,
+                number: null,
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,
@@ -240,21 +240,21 @@ class _DetailedEngtState extends State<DetailedEng>
   }
 
   void StoreData() {
-    Map<String, dynamic> table_data = Map();
-    Map<String, dynamic> ev_table_data = Map();
-    Map<String, dynamic> shed_table_data = Map();
+    Map<String, dynamic> tableData = Map();
+    Map<String, dynamic> evTableData = Map();
+    Map<String, dynamic> shedTableData = Map();
 
     for (var i in _detailedDataSource.dataGridRows) {
       for (var data in i.getCells()) {
         if (data.columnName != 'button' ||
             data.columnName != 'ViewDrawing' ||
             data.columnName != "Delete") {
-          table_data[data.columnName] = data.value;
+          tableData[data.columnName] = data.value;
         }
       }
 
-      tabledata2.add(table_data);
-      table_data = {};
+      tabledata2.add(tableData);
+      tableData = {};
     }
 
     FirebaseFirestore.instance
@@ -271,12 +271,12 @@ class _DetailedEngtState extends State<DetailedEng>
           if (data.columnName != 'button' ||
               data.columnName != 'ViewDrawing' ||
               data.columnName != "Delete") {
-            ev_table_data[data.columnName] = data.value;
+            evTableData[data.columnName] = data.value;
           }
         }
 
-        ev_tabledatalist.add(ev_table_data);
-        ev_table_data = {};
+        ev_tabledatalist.add(evTableData);
+        evTableData = {};
       }
 
       FirebaseFirestore.instance
@@ -293,12 +293,12 @@ class _DetailedEngtState extends State<DetailedEng>
             if (data.columnName != 'button' ||
                 data.columnName != 'ViewDrawing' ||
                 data.columnName != "Delete") {
-              shed_table_data[data.columnName] = data.value;
+              shedTableData[data.columnName] = data.value;
             }
           }
 
-          shed_tabledatalist.add(shed_table_data);
-          shed_table_data = {};
+          shed_tabledatalist.add(shedTableData);
+          shedTableData = {};
         }
 
         FirebaseFirestore.instance

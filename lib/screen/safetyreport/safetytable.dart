@@ -43,7 +43,7 @@ class _SafetyTableState extends State<SafetyTable> {
 
     safetylisttable = getData();
     _safetyChecklistDataSource = SafetyChecklistDataSource(
-        safetylisttable, widget.cityName!, widget.depoName!, userId);
+        safetylisttable, widget.cityName!, widget.depoName!, userId , selectedDate!);
     _dataGridController = DataGridController();
 
     _stream = FirebaseFirestore.instance
@@ -81,7 +81,7 @@ class _SafetyTableState extends State<SafetyTable> {
                 haveSynced: true,
                 store: () {
                   //  _showDialog(context);
-                  civilField(widget.depoName!);
+                  // civilField(widget.depoName!);
                   store();
                 })),
         // CustomAppBar(
@@ -206,7 +206,7 @@ class _SafetyTableState extends State<SafetyTable> {
                     safetylisttable,
                     widget.cityName!,
                     widget.depoName!,
-                    userId);
+                    userId, selectedDate!);
                 _dataGridController = DataGridController();
               });
               return SfDataGridTheme(

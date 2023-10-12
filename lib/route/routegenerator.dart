@@ -8,6 +8,7 @@ import 'package:ev_pmis_app/screen/dailyreport/daily_project.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/homepage/home_page.dart';
 import 'package:ev_pmis_app/screen/materialprocurement/material_vendor.dart';
+import 'package:ev_pmis_app/screen/materialprocurement/upload_matrial.dart';
 import 'package:ev_pmis_app/screen/monthlyreport/monthly_project.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overview.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overviewtable.dart';
@@ -55,6 +56,10 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (context) =>
                 MaterialProcurement(depoName: args.toString()));
+
+      case '/material-excelpage':
+        return MaterialPageRoute(
+            builder: (context) => UploadMaterial(depoName: args.toString()));
 
       case '/daily-report':
         return MaterialPageRoute(

@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../style.dart';
 
 import 'custom_appbar.dart';
@@ -21,9 +19,11 @@ class UploadDocument extends StatefulWidget {
   String? fldrName;
   String? date;
   int? srNo;
+  String? pagetitle;
+
   UploadDocument({
     super.key,
-    required this.title,
+    this.title,
     this.subtitle,
     required this.cityName,
     required this.depoName,
@@ -31,6 +31,7 @@ class UploadDocument extends StatefulWidget {
     required this.fldrName,
     this.date,
     this.srNo,
+    this.pagetitle,
   });
 
   @override
@@ -43,13 +44,13 @@ class _UploadDocumentState extends State<UploadDocument> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(50),
             child: CustomAppBar(
-              isCentered: false,
-              title: '',
-              height: 50,
+              title: '${widget.cityName}/${widget.depoName}/Upload Checklist',
               isSync: false,
-            ),
-            preferredSize: const Size.fromHeight(50)),
+              isCentered: true,
+              height: 50,
+            )),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -73,8 +74,8 @@ class _UploadDocumentState extends State<UploadDocument> {
                           itemBuilder: (context, index) {
                             return Center(
                               child: Container(
-                                padding: EdgeInsets.all(5),
-                                margin: EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                     border: Border.all(color: blue),
                                     borderRadius: BorderRadius.circular(5)),
@@ -142,7 +143,9 @@ class _UploadDocumentState extends State<UploadDocument> {
                               String refname = (widget.title ==
                                       'QualityChecklist'
                                   ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/${result!.files.first.name}'
-                                  : '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/${result!.files.first.name}');
+                                  : widget.pagetitle == 'ClosureReport'
+                                      ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${result!.files.first.name}'
+                                      : '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/${result!.files.first.name}');
 
                               // String? fileName = result!.files.first.name;
 
@@ -167,6 +170,19 @@ class _UploadDocumentState extends State<UploadDocument> {
                           )),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  width: 250,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                          'Back to ${widget.title == 'QualityChecklist' ? 'Quality Checklist' : widget.pagetitle}')),
                 ),
               )
             ],

@@ -18,7 +18,7 @@ class CitiesPage extends StatefulWidget {
 class _CitiesPageState extends State<CitiesPage> {
   Stream? _stream;
   bool isloading = true;
-  List<bool> isActive = [];
+  List<bool> isActive = [true];
   @override
   void initState() {
     getCityBoolLen().whenComplete(() {

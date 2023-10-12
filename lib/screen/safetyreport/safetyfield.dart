@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/closureReport/closurefield.dart';
 import 'package:ev_pmis_app/screen/safetyreport/safetytable.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -67,11 +68,11 @@ late TextEditingController tpController,
 
 class _SafetyFieldState extends State<SafetyField> {
   void initializeController() {
-    tpController = TextEditingController();
-    revController = TextEditingController();
     installationController = TextEditingController();
     engizationController = TextEditingController();
     bordingController = TextEditingController();
+    tpController = TextEditingController();
+    revController = TextEditingController();
     locationContoller = TextEditingController();
     addressController = TextEditingController();
     contactController = TextEditingController();
@@ -91,8 +92,8 @@ class _SafetyFieldState extends State<SafetyField> {
     _fetchUserData();
     getUserId().whenComplete(() {
       safetylisttable = getData();
-      _safetyChecklistDataSource = SafetyChecklistDataSource(
-          safetylisttable, cityName!, 'widget.depoName!', userId);
+      _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,
+          cityName!, 'widget.depoName!', userId, selectedDate!);
       _dataGridController = DataGridController();
 
       _stream = FirebaseFirestore.instance
@@ -130,7 +131,34 @@ class _SafetyFieldState extends State<SafetyField> {
                   userId: userId,
                 ),
               )),
-          haveSynced: false,
+          haveSynced: true,
+          store: () {
+            FirebaseFirestore.instance
+                .collection('SafetyFieldData2')
+                .doc('${widget.depoName}')
+                .collection('userId')
+                .doc(userId)
+                .collection('date')
+                .doc(DateFormat.yMMMMd().format(DateTime.now()))
+                .set({
+              'TPNo': tpController.text,
+              'Rev': revController.text,
+              'DepotLocation': locationContoller.text,
+              'Address': addressController.text,
+              'ContactNo': contactController.text,
+              'Latitude': latitudeController.text,
+              'State': stateController.text,
+              'ChargerType': chargerController.text,
+              'DepotName': locationContoller.text,
+              'ConductedBy': conductedController.text,
+              'InstallationDate': installationController.text,
+              'EnegizationDate': engizationController.text,
+              'BoardingDate': bordingController.text,
+            });
+            store();
+            FirebaseApi().nestedKeyEventsField(
+                'SafetyFieldData2', widget.depoName!, 'userId', userId!);
+          },
           choosedate: () {
             chooseDate(context);
           },
@@ -540,8 +568,12 @@ class _SafetyFieldState extends State<SafetyField> {
                                   safetylisttable.add(
                                       SafetyChecklistModel.fromJson(element));
                                   _safetyChecklistDataSource =
-                                      SafetyChecklistDataSource(safetylisttable,
-                                          cityName!, widget.depoName!, userId);
+                                      SafetyChecklistDataSource(
+                                          safetylisttable,
+                                          cityName!,
+                                          widget.depoName!,
+                                          userId,
+                                          selectedDate!);
                                   _dataGridController = DataGridController();
                                 });
                                 return SizedBox(
@@ -1200,6 +1232,7 @@ class _SafetyFieldState extends State<SafetyField> {
         .then((ds) {
       setState(() {
         // managername = ds.data()!['ManagerName'];
+
         tpController.text = ds.data()!['TPNo'];
         revController.text = ds.data()!['Rev'];
         locationContoller.text = ds.data()!['DepotLocation'];
@@ -1214,28 +1247,28 @@ class _SafetyFieldState extends State<SafetyField> {
   }
 }
 
-civilField(String depoName) {
-  FirebaseFirestore.instance
-      .collection('SafetyFieldData2')
-      .doc(depoName)
-      .collection('userId')
-      .doc(userId)
-      .collection('date')
-      .doc(selectedDate)
-      .set({
-    'TPNo': tpController.text,
-    'Rev': revController.text,
-    'DepotLocation': locationContoller.text,
-    'Address': addressController.text,
-    'ContactNo': contactController.text,
-    'Latitude': latitudeController.text,
-    'State': stateController.text,
-    'ChargerType': chargerController.text,
-    'ConductedBy': conductedController.text,
-    'InstallationDate': date.toString(),
-    'EnegizationDate': date1.toString(),
-    'BoardingDate': date2.toString(),
-  });
-  FirebaseApi()
-      .nestedKeyEventsField('SafetyFieldData2', depoName, 'userId', userId!);
-}
+// civilField(String depoName) {
+//   FirebaseFirestore.instance
+//       .collection('SafetyFieldData2')
+//       .doc(depoName)
+//       .collection('userId')
+//       .doc(userId)
+//       .collection('date')
+//       .doc(selectedDate)
+//       .set({
+//     'TPNo': tpController.text,
+//     'Rev': revController.text,
+//     'DepotLocation': locationContoller.text,
+//     'Address': addressController.text,
+//     'ContactNo': contactController.text,
+//     'Latitude': latitudeController.text,
+//     'State': stateController.text,
+//     'ChargerType': chargerController.text,
+//     'ConductedBy': conductedController.text,
+//     'InstallationDate': date.toString(),
+//     'EnegizationDate': date1.toString(),
+//     'BoardingDate': date2.toString(),
+//   });
+//   FirebaseApi()
+//       .nestedKeyEventsField('SafetyFieldData2', depoName, 'userId', userId!);
+// }

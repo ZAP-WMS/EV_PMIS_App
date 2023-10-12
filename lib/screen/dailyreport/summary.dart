@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_project.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -513,7 +514,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                         context,
                                         widget.cityName!,
                                         widget.depoName!,
-                                        widget.userId);
+                                        widget.userId,
+                                        selectedDate!);
                                     _dataGridController = DataGridController();
 
                                     return SfDataGridTheme(
@@ -951,12 +953,13 @@ class _ViewSummaryState extends State<ViewSummary> {
                         : Expanded(
                             child: StreamBuilder(
                               stream: FirebaseFirestore.instance
-        .collection('SafetyChecklistTable2')
-        .doc(widget.depoName!)
-        .collection('userId')
-        .doc(userId)
-        .collection('date')
-        .doc(DateFormat.yMMMMd().format(startdate!)).snapshots(),
+                                  .collection('SafetyChecklistTable2')
+                                  .doc(widget.depoName!)
+                                  .collection('userId')
+                                  .doc(userId)
+                                  .collection('date')
+                                  .doc(DateFormat.yMMMMd().format(startdate!))
+                                  .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -964,8 +967,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                 }
                                 if (!snapshot.hasData ||
                                     snapshot.data!.exists == false) {
-                                  return
-                                  const NodataAvailable();
+                                  return const NodataAvailable();
                                 } else {
                                   alldata = '';
                                   alldata =
@@ -979,7 +981,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                             safetylisttable,
                                             widget.cityName!,
                                             widget.depoName!,
-                                            userId);
+                                            userId,
+                                            selectedDate!);
                                     _dataGridController = DataGridController();
                                   });
                                   return SfDataGridTheme(

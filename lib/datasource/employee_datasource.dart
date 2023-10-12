@@ -455,16 +455,26 @@ class EmployeeDataSource extends DataGridSource {
                           },
                           icon: const Icon(Icons.calendar_today),
                         ),
-                        Text(dataGridCell.value.toString()),
+                        Text(
+                          dataGridCell.value.toString(),
+                          style: const TextStyle(fontSize: 10),
+                        ),
                       ],
                     )
                   : (dataGridCell.columnName == 'BalancedQty')
-                      ? Text(balnceQtyValue.toString())
+                      ? Text(
+                          balnceQtyValue.toString(),
+                          style: const TextStyle(fontSize: 10),
+                        )
                       : (dataGridCell.columnName == 'Progress')
-                          ? Text(perc!.toStringAsFixed(2))
+                          ? Text(
+                              perc!.toStringAsFixed(2),
+                              style: TextStyle(fontSize: 10),
+                            )
                           : Text(
                               dataGridCell.value.toString(),
                               textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 10),
                             )
           //         :
 

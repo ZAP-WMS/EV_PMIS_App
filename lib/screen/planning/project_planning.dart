@@ -9,6 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/key_datasource.dart';
 import '../../model/employee.dart';
+import '../../style.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/navbar.dart';
 import '../homepage/gallery.dart';
@@ -781,9 +782,7 @@ class _KeyEventsState extends State<KeyEvents> {
                                       child: Text(
                                         'Sr No',
                                         overflow: TextOverflow.values.first,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
 
                                         //    textAlign: TextAlign.center,
                                       ),
@@ -792,7 +791,7 @@ class _KeyEventsState extends State<KeyEvents> {
                                   GridColumn(
                                     columnName: 'Activity',
                                     allowEditing: false,
-                                    width: 220,
+                                    width: 100,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
@@ -800,73 +799,68 @@ class _KeyEventsState extends State<KeyEvents> {
                                       child: Text(
                                         'Activity',
                                         overflow: TextOverflow.values.first,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'OriginalDuration',
                                     allowEditing: false,
+                                    width: 80,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Original Duration',
                                         overflow: TextOverflow.values.first,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'StartDate',
                                     allowEditing: false,
+                                    width: 85,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Start Date',
                                         overflow: TextOverflow.values.first,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'EndDate',
                                     allowEditing: false,
+                                    width: 85,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         'End Date',
                                         overflow: TextOverflow.values.first,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'ActualStart',
                                     allowEditing: false,
+                                    width: 85,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Actual Start',
                                         overflow: TextOverflow.values.first,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'ActualEnd',
                                     allowEditing: false,
+                                    width: 85,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
@@ -875,126 +869,63 @@ class _KeyEventsState extends State<KeyEvents> {
                                         textAlign: TextAlign.center,
                                         'Actual End',
                                         overflow: TextOverflow.values.first,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'ActualDuration',
                                     allowEditing: false,
+                                    width: 80,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Actual Duration',
                                         overflow: TextOverflow.values.first,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'Delay',
                                     allowEditing: false,
+                                    width: 80,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Delay',
                                         overflow: TextOverflow.values.first,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
-                                  // GridColumn(
-                                  //   columnName: 'Dependency',
-                                  //   allowEditing: false,
-                                  //   label: Container(
-                                  //     alignment: Alignment.center,
-                                  //     child: Text(
-                                  //       'Dependency',
-                                  //       overflow: TextOverflow.values.first,
-                                  //       style: const TextStyle(
-                                  //           fontWeight: FontWeight.bold,
-                                  //           fontSize: 16),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'QtyScope',
-                                  //   allowEditing: false,
-                                  //   label: Container(
-                                  //     alignment: Alignment.center,
-                                  //     child: Text(
-                                  //       'Oty as per scope',
-                                  //       overflow: TextOverflow.values.first,
-                                  //       style: const TextStyle(
-                                  //           fontWeight: FontWeight.bold,
-                                  //           fontSize: 16),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'QtyExecuted',
-                                  //   allowEditing: false,
-                                  //   label: Container(
-                                  //     alignment: Alignment.center,
-                                  //     child: Text(
-                                  //       'Qty executed',
-                                  //       overflow: TextOverflow.values.first,
-                                  //       style: const TextStyle(
-                                  //           fontWeight: FontWeight.bold,
-                                  //           fontSize: 16),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'BalancedQty',
-                                  //   allowEditing: false,
-                                  //   label: Container(
-                                  //     width: 150,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text(
-                                  //       'Balanced Qty',
-                                  //       overflow: TextOverflow.values.first,
-                                  //       style: const TextStyle(
-                                  //           fontWeight: FontWeight.bold,
-                                  //           fontSize: 16),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   GridColumn(
                                     columnName: 'Progress',
                                     allowEditing: false,
+                                    width: 80,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         '% of Progress',
                                         overflow: TextOverflow.values.first,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'Weightage',
                                     allowEditing: false,
+                                    width: 80,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Weightage',
                                         overflow: TextOverflow.values.first,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                        style: tableheader,
                                       ),
                                     ),
                                   ),
@@ -1002,7 +933,7 @@ class _KeyEventsState extends State<KeyEvents> {
                               ),
                             ),
                             Container(
-                                width: 400,
+                                width: 300,
                                 child: SingleChildScrollView(
                                   child: GanttChartView(
                                       scrollController: scrollController,
@@ -1017,7 +948,7 @@ class _KeyEventsState extends State<KeyEvents> {
                                       dayHeaderHeight: 35,
                                       eventHeight: 25, //row height for events
 
-                                      stickyAreaWidth: 80, //sticky area width
+                                      stickyAreaWidth: 50, //sticky area width
                                       showStickyArea:
                                           true, //show sticky area or not
                                       showDays: true, //show days or not
@@ -1086,10 +1017,7 @@ class _KeyEventsState extends State<KeyEvents> {
                                   child: Text(
                                     'Sr No',
                                     overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    style: tableheader,
 
                                     //    textAlign: TextAlign.center,
                                   ),
@@ -1098,7 +1026,7 @@ class _KeyEventsState extends State<KeyEvents> {
                               GridColumn(
                                 columnName: 'Activity',
                                 allowEditing: false,
-                                width: 220,
+                                width: 100,
                                 label: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16.0),
@@ -1106,198 +1034,133 @@ class _KeyEventsState extends State<KeyEvents> {
                                   child: Text(
                                     'Activity',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'OriginalDuration',
                                 allowEditing: false,
-                                width: 100,
+                                width: 80,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Original Duration',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'StartDate',
                                 allowEditing: false,
+                                width: 85,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Start Date',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'EndDate',
                                 allowEditing: false,
+                                width: 85,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'End Date',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'ActualStart',
                                 allowEditing: false,
-                                width: 150,
+                                width: 85,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Actual Start',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'ActualEnd',
                                 allowEditing: false,
-                                width: 150,
+                                width: 85,
                                 label: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16.0),
                                   alignment: Alignment.center,
                                   child: Text(
+                                    textAlign: TextAlign.center,
                                     'Actual End',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'ActualDuration',
                                 allowEditing: false,
+                                width: 80,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Actual Duration',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'Delay',
                                 allowEditing: false,
+                                width: 80,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Delay',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
-                              // GridColumn(
-                              //   columnName: 'Dependency',
-                              //   allowEditing: false,
-                              //   label: Container(
-                              //     alignment: Alignment.center,
-                              //     child: Text(
-                              //       'Dependency',
-                              //       overflow: TextOverflow.values.first,
-                              //       style: const TextStyle(
-                              //           fontWeight: FontWeight.bold,
-                              //           fontSize: 16),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GridColumn(
-                              //   columnName: 'QtyScope',
-                              //   allowEditing: false,
-                              //   label: Container(
-                              //     alignment: Alignment.center,
-                              //     child: Text(
-                              //       'Oty as per scope',
-                              //       overflow: TextOverflow.values.first,
-                              //       style: const TextStyle(
-                              //           fontWeight: FontWeight.bold,
-                              //           fontSize: 16),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GridColumn(
-                              //   columnName: 'QtyExecuted',
-                              //   allowEditing: false,
-                              //   label: Container(
-                              //     alignment: Alignment.center,
-                              //     child: Text(
-                              //       'Qty executed',
-                              //       overflow: TextOverflow.values.first,
-                              //       style: const TextStyle(
-                              //           fontWeight: FontWeight.bold,
-                              //           fontSize: 16),
-                              //     ),
-                              //   ),
-                              // ),
-                              // GridColumn(
-                              //   columnName: 'BalancedQty',
-                              //   allowEditing: false,
-                              //   label: Container(
-                              //     width: 150,
-                              //     alignment: Alignment.center,
-                              //     child: Text(
-                              //       'Balanced Qty',
-                              //       overflow: TextOverflow.values.first,
-                              //       style: const TextStyle(
-                              //           fontWeight: FontWeight.bold,
-                              //           fontSize: 16),
-                              //     ),
-                              //   ),
-                              // ),
                               GridColumn(
                                 columnName: 'Progress',
                                 allowEditing: false,
-                                width: 150,
+                                width: 80,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     '% of Progress',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'Weightage',
                                 allowEditing: false,
+                                width: 80,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Weightage',
                                     overflow: TextOverflow.values.first,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                    style: tableheader,
                                   ),
                                 ),
                               ),
@@ -1305,7 +1168,7 @@ class _KeyEventsState extends State<KeyEvents> {
                           ),
                         ),
                         Container(
-                            width: 400,
+                            width: 300,
                             child: SingleChildScrollView(
                               child: GanttChartView(
                                   scrollController: scrollController,
@@ -1318,7 +1181,7 @@ class _KeyEventsState extends State<KeyEvents> {
                                   dayHeaderHeight: 35,
                                   eventHeight: 25, //row height for events
 
-                                  stickyAreaWidth: 80, //sticky area width
+                                  stickyAreaWidth: 50, //sticky area width
                                   showStickyArea:
                                       true, //show sticky area or not
                                   showDays: true, //show days or not
