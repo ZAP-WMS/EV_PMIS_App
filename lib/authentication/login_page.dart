@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,9 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _id = "";
-  String _pass = "";
-  bool _isHidden = true;
+  bool isUser = false;
+  String role = "";
   late SharedPreferences _sharedPreferences;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final TextEditingController empIdController = TextEditingController();
@@ -136,10 +133,17 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-      QuerySnapshot snap = await FirebaseFirestore.instance
-          .collection('User')
-          .where('Employee Id', isEqualTo: empIdController.text)
-          .get();
+      await checkRole();
+
+      QuerySnapshot snap = isUser
+          ? await FirebaseFirestore.instance
+              .collection('User')
+              .where('Employee Id', isEqualTo: empIdController.text)
+              .get()
+          : await FirebaseFirestore.instance
+              .collection('Admin')
+              .where('Employee Id', isEqualTo: empIdController.text)
+              .get();
 
       try {
         if (passwordcontroller.text == snap.docs[0]['Password'] &&
@@ -148,7 +152,8 @@ class _LoginPageState extends State<LoginPage> {
           _sharedPreferences
               .setString('employeeId', empIdController.text)
               .then((_) {
-            Navigator.pushReplacementNamed(context, '/gallery');
+            Navigator.pushReplacementNamed(context, '/gallery',
+                arguments: role);
           });
         } else {
           // ignore: use_build_context_synchronously
@@ -174,6 +179,36 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(error)));
       }
+    }
+  }
+
+  Future<String> checkRole() async {
+    try {
+      QuerySnapshot checkAdmin = await FirebaseFirestore.instance
+          .collection('Admin')
+          .where('Employee Id', isEqualTo: empIdController.text)
+          .get();
+
+      if (checkAdmin.docs.isNotEmpty) {
+        role = 'admin';
+        isUser = false;
+      } else {
+        QuerySnapshot checkUser = await FirebaseFirestore.instance
+            .collection('User')
+            .where('Employee Id', isEqualTo: empIdController.text)
+            .get();
+
+        if (checkUser.docs.isNotEmpty) {
+          role = 'user';
+          isUser = true;
+        }
+      }
+      print(role);
+
+      return role;
+    } catch (e) {
+      print('Error Occured while checking role - $e');
+      return role;
     }
   }
 }

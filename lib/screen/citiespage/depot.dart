@@ -9,8 +9,9 @@ import '../../style.dart';
 import '../overviewpage/overview.dart';
 
 class DepotPage extends StatefulWidget {
+  String? role;
   String? cityName;
-  DepotPage({super.key, this.cityName});
+  DepotPage({super.key, this.cityName, this.role});
 
   @override
   State<DepotPage> createState() => _DepotPageState();
@@ -53,6 +54,7 @@ class _DepotPageState extends State<DepotPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => OverviewPage(
+                                  role: widget.role,
                                   depoName: snapshot.data!.docs[index]
                                       ['DepoName'],
                                 ),

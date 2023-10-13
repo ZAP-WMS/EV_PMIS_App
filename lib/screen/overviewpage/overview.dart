@@ -7,7 +7,8 @@ import '../../style.dart';
 
 class OverviewPage extends StatefulWidget {
   String? depoName;
-  OverviewPage({super.key, required this.depoName});
+  String? role;
+  OverviewPage({super.key, required this.depoName, this.role});
 
   @override
   State<OverviewPage> createState() => _OverviewPageState();
@@ -47,6 +48,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   void initState() {
+    print('Overview page - ${widget.role}');
     super.initState();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
@@ -90,7 +92,10 @@ class _OverviewPageState extends State<OverviewPage> {
                   Navigator.pushNamed(
                     context,
                     screens[index],
-                    arguments: widget.depoName,
+                    arguments: {
+                      'depoName': widget.depoName,
+                      'role': widget.role
+                    },
                   ),
               child: cards(desription[index], imagedata[index], index));
         }),

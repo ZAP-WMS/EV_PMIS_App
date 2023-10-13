@@ -12,7 +12,8 @@ import '../overviewpage/overview.dart';
 BuildContext? testContext;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  String? role;
+  HomePage({super.key, this.role});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,9 +22,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   List<Widget> menuwidget = [
-    const CitiesHome(),
-    const GalleryPage(),
-    const GalleryPage(),
+    CitiesHome(),
+    GalleryPage(),
+    GalleryPage(),
     // OverviewPage(),
   ];
 
@@ -88,8 +89,8 @@ class _HomePageState extends State<HomePage> {
     //     ];
 
     // bool _hideNavBar = false;
-    return const Scaffold(
-      body: CitiesHome(),
+    return Scaffold(
+      body: CitiesHome(role: widget.role),
     );
   }
 }

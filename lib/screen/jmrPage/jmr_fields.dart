@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../components/Loading_page.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
@@ -83,6 +82,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
 
   @override
   void initState() {
+    super.initState();
     getUserId().whenComplete(() {
       _stream = FirebaseFirestore.instance
           .collection('JMRCollection')
@@ -134,7 +134,6 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
       child: _isLoading
           ? LoadingPage()
           : Scaffold(
-              drawer: NavbarDrawer(),
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(
@@ -244,7 +243,6 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Icon(Icons.arrow_forward),
-                            // Icon(Icons.arrow_forward),
                           ],
                         )), // child: Image.asset(widget.img.toString()),
             ),
@@ -585,7 +583,6 @@ HeaderValue(BuildContext context, bool isReadOnly, String title,
         ),
         SizedBox(
           width: 300,
-          height: 280,
           child: TextFormField(
             readOnly: isReadOnly,
             controller: fieldData,

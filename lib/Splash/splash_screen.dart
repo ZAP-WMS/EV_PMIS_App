@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,7 +14,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class SplashScreenState extends State<SplashScreen> {
+  dynamic userId = '';
   bool user = false;
+  String role = '';
   late SharedPreferences sharedPreferences;
   @override
   void initState() {
@@ -24,8 +27,11 @@ class SplashScreenState extends State<SplashScreen> {
     Timer(
         const Duration(milliseconds: 2000),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                user ? const GalleryPage() : const LoginRegister())));
+            builder: (BuildContext context) => user
+                ? GalleryPage(
+                    role: role,
+                  )
+                : const LoginRegister())));
     // user ? const LoginRegister() : const HomePage())));
   }
 
@@ -64,8 +70,10 @@ class SplashScreenState extends State<SplashScreen> {
     try {
       if (sharedPreferences.getString('employeeId') != null) {
         setState(() {
+          userId = sharedPreferences.getString('employeeId');
           user = true;
         });
+        await checkRole(userId);
       }
     } catch (e) {
       user = false;
@@ -76,5 +84,33 @@ class SplashScreenState extends State<SplashScreen> {
     //         MaterialPageRoute(builder: (BuildContext context) => LoginRegister()
     //             // user ? const HomePage() : const LoginRegister()
     //             )));
+  }
+
+  Future<String> checkRole(String id) async {
+    try {
+      QuerySnapshot checkAdmin = await FirebaseFirestore.instance
+          .collection('Admin')
+          .where('Employee Id', isEqualTo: id)
+          .get();
+
+      if (checkAdmin.docs.isNotEmpty) {
+        role = 'admin';
+      } else {
+        QuerySnapshot checkUser = await FirebaseFirestore.instance
+            .collection('User')
+            .where('Employee Id', isEqualTo: id)
+            .get();
+
+        if (checkUser.docs.isNotEmpty) {
+          role = 'user';
+        }
+      }
+      print(role);
+
+      return role;
+    } catch (e) {
+      print('Error Occured while checking role - $e');
+      return role;
+    }
   }
 }

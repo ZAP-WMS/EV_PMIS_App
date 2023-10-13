@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 import '../../authentication/authservice.dart';
 
-String? userId;
+dynamic userId = '';
 
 class GalleryPage extends StatefulWidget {
-  const GalleryPage({super.key});
+  String? role;
+  GalleryPage({super.key, this.role});
 
   @override
   State<GalleryPage> createState() => _GalleryPageState();
@@ -92,7 +93,8 @@ class _GalleryPageState extends State<GalleryPage> {
                           backgroundColor: blue,
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/homepage');
+                          Navigator.pushNamed(context, '/homepage',
+                              arguments: widget.role);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
