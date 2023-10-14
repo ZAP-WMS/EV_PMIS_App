@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities.dart';
 import 'package:ev_pmis_app/screen/citiespage/depot.dart';
+import 'package:ev_pmis_app/widgets/internet_checker.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,12 @@ class CitiesHome extends StatefulWidget {
 }
 
 class _CitiesHomeState extends State<CitiesHome> {
+  @override
+  void initState() {
+    check_intereConnection();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     print('Cities Home page');

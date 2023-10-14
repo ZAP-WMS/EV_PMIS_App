@@ -21,6 +21,7 @@ class _DetailedEngHomeState extends State<DetailedEngHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        
           isCentered: false,
           title: 'Detailed Engineering',
           height: 40,

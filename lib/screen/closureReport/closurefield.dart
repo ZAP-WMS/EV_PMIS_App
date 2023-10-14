@@ -141,7 +141,7 @@ class _ClosureFieldState extends State<ClosureField> {
                                   columns: [
                                     GridColumn(
                                       columnName: 'srNo',
-                                      width: 80,
+                                      width: 60,
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
@@ -237,7 +237,7 @@ class _ClosureFieldState extends State<ClosureField> {
                                   columns: [
                                     GridColumn(
                                       columnName: 'srNo',
-                                      width: 80,
+                                      width: 60,
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),

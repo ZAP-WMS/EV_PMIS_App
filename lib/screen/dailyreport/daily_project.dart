@@ -660,6 +660,9 @@ class _DailyProjectState extends State<DailyProject> {
                     onSubmit: ((value) {
                       selectedDate = DateFormat.yMMMMd()
                           .format(DateTime.parse(value.toString()));
+
+                      showDate = selectedDate;
+                      print(showDate);
                       Navigator.pop(context);
                       setState(() {});
                     }),

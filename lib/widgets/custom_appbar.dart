@@ -1,8 +1,9 @@
+import 'package:ev_pmis_app/provider/internet_provider.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../authentication/login_register.dart';
+import 'connectivity_service.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   String title;
@@ -23,62 +24,65 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      centerTitle: isCentered ? true : false,
-      title: Text(
-        title,
-        maxLines: 2,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: blue,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
-      actions: [
-        isSync
-            ? InkWell(
-                onTap: () {
-                  store!();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    'assets/appbar/sync.jpeg',
-                    height: 25,
-                    width: 35,
-                  ),
-                ),
-              )
-            : haveupload
-                ? Container(
-                    padding: const EdgeInsets.all(5),
-                    height: 30,
-                    width: 130,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/material-excelpage');
-                        },
-                        child: Text(
-                          'Upload Material Sheet',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: white, fontSize: 12),
-                        )),
-                  )
-                : Container(),
 
-        // Padding(
-        //     padding: const EdgeInsets.all(6.0),
-        //     child: IconButton(
-        //       onPressed: () {
-        //         onWillPop(context);
-        //       },
-        //       icon: const Padding(
-        //         padding: const EdgeInsets.only(bottom: 25),
-        //         child: Icon(
-        //           Icons.logout_rounded,
-        //         ),
-        //       ),
-        //     ))
-      ],
+    
+    bool? status = false;
+    var connectivityProvider = Provider.of<ConnectivityProvider>(context);
+    print(status);
+    return Consumer<ConnectivityProvider>(
+      builder: (context, value, child) {
+        bool isConnected = connectivityProvider.isConnected;
+
+        return AppBar(
+          centerTitle: isCentered ? true : false,
+          title: Text(
+            title,
+            maxLines: 2,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: blue,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
+          actions: [
+            Icon(
+              isConnected ? Icons.wifi : Icons.signal_wifi_off,
+              color: isConnected ? Colors.white : Colors.red,
+            ),
+           
+            isSync
+                ? InkWell(
+                    onTap: () {
+                      store!();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        'assets/appbar/sync.jpeg',
+                        height: 25,
+                        width: 35,
+                      ),
+                    ),
+                  )
+                : haveupload
+                    ? Container(
+                        padding: const EdgeInsets.all(5),
+                        height: 30,
+                        width: 130,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, '/material-excelpage');
+                            },
+                            child: Text(
+                              'Upload Material Sheet',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: white, fontSize: 12),
+                            )),
+                      )
+                    : Container()
+          ],
+        );
+      },
     );
   }
 
@@ -162,3 +166,4 @@ Future<bool> onWillPop(BuildContext context) async {
           ));
   return a;
 }
+

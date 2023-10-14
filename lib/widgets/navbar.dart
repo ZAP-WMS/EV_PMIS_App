@@ -1,5 +1,6 @@
 import 'package:ev_pmis_app/authentication/login_register.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
+import 'package:ev_pmis_app/widgets/internet_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../screen/homepage/gallery.dart';
@@ -13,6 +14,11 @@ class NavbarDrawer extends StatefulWidget {
 }
 
 class _NavbarDrawerState extends State<NavbarDrawer> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(

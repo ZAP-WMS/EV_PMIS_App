@@ -476,7 +476,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                             const EdgeInsets.symmetric(
                                                 horizontal: 16),
                                         allowEditing: false,
-                                        width: 80,
+                                        width: 65,
                                         label: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0),
@@ -489,7 +489,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                       ),
                                       GridColumn(
                                         columnName: 'Details',
-                                        width: 550,
+                                        width: 300,
                                         allowEditing: false,
                                         label: Container(
                                           padding: const EdgeInsets.symmetric(
@@ -531,7 +531,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                       GridColumn(
                                         columnName: 'Photo',
                                         allowEditing: false,
-                                        width: 180,
+                                        width: 120,
                                         label: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0),
@@ -545,7 +545,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                       GridColumn(
                                         columnName: 'ViewPhoto',
                                         allowEditing: false,
-                                        width: 180,
+                                        width: 120,
                                         label: Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0),
@@ -601,95 +601,95 @@ class _SafetyFieldState extends State<SafetyField> {
                                             details.rowIndex);
                                       },
 
-                                      columns: [
-                                        GridColumn(
-                                          columnName: 'srNo',
-                                          autoFitPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 16),
-                                          allowEditing: false,
-                                          width: 80,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Sr No',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: tableheaderwhitecolor),
-                                          ),
+                                       columns: [
+                                      GridColumn(
+                                        columnName: 'srNo',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: false,
+                                        width: 65,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Sr No',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
                                         ),
-                                        GridColumn(
-                                          width: 550,
-                                          columnName: 'Details',
-                                          allowEditing: false,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Details of Enclosure ',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: tableheaderwhitecolor),
-                                          ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Details',
+                                        width: 300,
+                                        allowEditing: false,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Details of Enclosure ',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
                                         ),
-                                        GridColumn(
-                                          columnName: 'Status',
-                                          allowEditing: false,
-                                          width: 180,
-                                          label: Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                                'Status of Submission of information/ documents ',
-                                                textAlign: TextAlign.center,
-                                                style: tableheaderwhitecolor),
-                                          ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Status',
+                                        allowEditing: false,
+                                        width: 180,
+                                        label: Container(
+                                          padding: const EdgeInsets.all(8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                              'Status of Submission of information/ documents ',
+                                              textAlign: TextAlign.center,
+                                              style: tableheaderwhitecolor),
                                         ),
-                                        GridColumn(
-                                          columnName: 'Remark',
-                                          allowEditing: true,
-                                          width: 150,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Remarks',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: tableheaderwhitecolor),
-                                          ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Remark',
+                                        allowEditing: true,
+                                        width: 250,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Remarks',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
                                         ),
-                                        GridColumn(
-                                          columnName: 'Photo',
-                                          allowEditing: false,
-                                          width: 180,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Upload Photo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: tableheaderwhitecolor),
-                                          ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Photo',
+                                        allowEditing: false,
+                                        width: 120,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Upload Photo',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
                                         ),
-                                        GridColumn(
-                                          columnName: 'ViewPhoto',
-                                          allowEditing: false,
-                                          width: 180,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('View Photo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: tableheaderwhitecolor),
-                                          ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'ViewPhoto',
+                                        allowEditing: false,
+                                        width: 120,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('View Photo',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
+                                     ),
                                   ),
                                 );
                               }
