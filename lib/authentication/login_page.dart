@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -134,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       await checkRole();
+      await StoredDataPreferences.saveString('role', role);
 
       QuerySnapshot snap = isUser
           ? await FirebaseFirestore.instance
@@ -152,8 +154,7 @@ class _LoginPageState extends State<LoginPage> {
           _sharedPreferences
               .setString('employeeId', empIdController.text)
               .then((_) {
-            Navigator.pushReplacementNamed(context, '/gallery',
-                arguments: role);
+            Navigator.pushReplacementNamed(context, '/gallery');
           });
         } else {
           // ignore: use_build_context_synchronously

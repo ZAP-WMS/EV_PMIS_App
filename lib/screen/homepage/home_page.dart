@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   bool? _hideNavBar;
   @override
   void initState() {
+    print('HomePage - ${widget.role}');
     _controller = PersistentTabController();
     _hideNavBar = false;
     super.initState();

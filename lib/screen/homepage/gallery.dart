@@ -3,20 +3,22 @@ import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../authentication/authservice.dart';
+import '../../shared_preferences/shared_preferences.dart';
 
 dynamic userId = '';
 
 class GalleryPage extends StatefulWidget {
-  String? role;
-  GalleryPage({super.key, this.role});
+  const GalleryPage({super.key});
 
   @override
   State<GalleryPage> createState() => _GalleryPageState();
 }
 
 class _GalleryPageState extends State<GalleryPage> {
+  String role = '';
   @override
   void initState() {
+    getData();
     super.initState();
     getUserId();
   }
@@ -94,7 +96,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, '/homepage',
-                              arguments: widget.role);
+                              arguments: role);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,5 +128,9 @@ class _GalleryPageState extends State<GalleryPage> {
       userId = value;
       setState(() {});
     });
+  }
+
+  void getData() async {
+    role = await StoredDataPreferences.getSharedPreferences('role');
   }
 }

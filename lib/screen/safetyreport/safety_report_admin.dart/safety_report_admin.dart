@@ -1,41 +1,52 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:pdf/pdf.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:provider/provider.dart';
 import '../../../components/Loading_page.dart';
+import '../../../provider/cities_provider.dart';
 import '../../../widgets/admin_custom_appbar.dart';
 import '../../../widgets/nodata_available.dart';
 
 class SafetySummary extends StatefulWidget {
   final String? userId;
-  final String? cityName;
+
   final String? depoName;
-  SafetySummary(
-      {super.key, this.userId, this.cityName, required this.depoName});
+  SafetySummary({super.key, this.userId, required this.depoName});
 
   @override
   State<SafetySummary> createState() => _SafetySummaryState();
 }
 
 class _SafetySummaryState extends State<SafetySummary> {
+  final ReceivePort _port = ReceivePort();
+
   //Daily Project Row List for view summary
   List<List<dynamic>> rowList = [];
   bool enableLoading = false;
+  String cityName = '';
 
   Future<List<List<dynamic>>> fetchData() async {
     rowList.clear();
     await getRowsForFutureBuilder();
     return rowList;
   }
+
+  @override
+  void initState() {
+    super.initState();
+    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+  }
+
+  static void callback(String id, int status, int progress) {}
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +57,7 @@ class _SafetySummaryState extends State<SafetySummary> {
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,
-            cityName: widget.cityName,
+            cityName: cityName,
             text: '${widget.depoName} / Safety Summary',
             userId: widget.userId,
           ),
@@ -58,19 +69,6 @@ class _SafetySummaryState extends State<SafetySummary> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return LoadingPage();
-                  //  Center(
-                  //     child: Column(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: const [
-                  //     CircularProgressIndicator(),
-                  //     Text(
-                  //       'Collecting Data...',
-                  //       style: TextStyle(
-                  //         fontSize: 16,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ));
                 } else if (snapshot.hasError) {
                   return const Center(
                     child: Text('Error fetching data'),
@@ -80,15 +78,6 @@ class _SafetySummaryState extends State<SafetySummary> {
 
                   if (data.isEmpty) {
                     return const NodataAvailable();
-                    // const Center(
-                    //   child: Text(
-                    //     'No Data Available for Selected Depo',
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.bold,
-                    //       fontSize: 20,
-                    //     ),
-                    //   ),
-                    // );
                   }
 
                   return SingleChildScrollView(
@@ -148,13 +137,15 @@ class _SafetySummaryState extends State<SafetySummary> {
                                     DataCell(Text(rowData[2])),
                                     DataCell(ElevatedButton(
                                       onPressed: () {
-                                        _generatePDF(rowData[0], rowData[2], 1);
+                                        downloadPDF(rowData[0], rowData[2], 0);
+                                        // _generatePDF(rowData[0], rowData[2], 1);
                                       },
                                       child: const Text('View Report'),
                                     )),
                                     DataCell(ElevatedButton(
                                       onPressed: () {
-                                        _generatePDF(rowData[0], rowData[2], 2);
+                                        downloadPDF(rowData[0], rowData[2], 0);
+                                        // _generatePDF(rowData[0], rowData[2], 2);
                                       },
                                       child: const Text('Download'),
                                     )),
@@ -183,7 +174,6 @@ class _SafetySummaryState extends State<SafetySummary> {
         .get();
 
     List<dynamic> userIdList = querySnapshot.docs.map((e) => e.id).toList();
-    print(userIdList.length);
 
     for (int i = 0; i < userIdList.length; i++) {
       QuerySnapshot userEntryDate = await FirebaseFirestore.instance
@@ -202,12 +192,41 @@ class _SafetySummaryState extends State<SafetySummary> {
     }
   }
 
-  Future<void> _generatePDF(String user_id, String date, int decision) async {
+  Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+    if (await Permission.storage.request().isGranted) {
+      final documentDirectory =
+          (await DownloadsPath.downloadsDirectory())?.path;
+      final file = File('$documentDirectory/$fileName');
+      await file.writeAsBytes(pdfData);
+      return file;
+    }
+    return File('');
+  }
+
+  Future<void> downloadPDF(String user_id, String date, int decision) async {
+    if (await Permission.storage.request().isGranted) {
+      final pdfData = await _generatePDF(user_id, date, decision);
+      const fileName = 'SafetyReport.pdf';
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
+      print('File Created - ${savedPDFFile.path}');
+    }
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await FlutterLocalNotificationsPlugin()
+        .show(0, 'repeating title', 'repeating body', notificationDetails);
+  }
+
+  Future<Uint8List> _generatePDF(
+      String user_id, String date, int decision) async {
     setState(() {
       enableLoading = true;
     });
     final headerStyle =
-        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+        pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold);
 
     final fontData1 = await rootBundle.load('fonts/IBMPlexSans-Medium.ttf');
     final fontData2 = await rootBundle.load('fonts/IBMPlexSans-Bold.ttf');
@@ -241,17 +260,17 @@ class _SafetySummaryState extends State<SafetySummary> {
     Map<String, dynamic> safetyMapData =
         safetyFieldDocSanpshot.data() as Map<String, dynamic>;
 
-    Timestamp installationDate = safetyMapData['InstallationDate'];
-    DateTime date1 = installationDate.toDate();
-    Timestamp EnegizationDate = safetyMapData['EnegizationDate'];
-    DateTime date2 = EnegizationDate.toDate();
-    Timestamp BoardingDate = safetyMapData['BoardingDate'];
-    DateTime date3 = BoardingDate.toDate();
+    // Timestamp installationDate = safetyMapData['InstallationDate'];
+    // DateTime date1 = installationDate.toDate();
+    // Timestamp EnegizationDate = safetyMapData['EnegizationDate'];
+    // DateTime date2 = EnegizationDate.toDate();
+    // Timestamp BoardingDate = safetyMapData['BoardingDate'];
+    // DateTime date3 = BoardingDate.toDate();
 
     List<List<dynamic>> fieldData = [
-      ['Installation Date', '$date1'],
-      ['Enegization Date', '$date2'],
-      ['On Boarding Date', '$date3'],
+      ['Installation Date', ''],
+      ['Enegization Date', ''],
+      ['On Boarding Date', ''],
       ['TPNo : ', '${safetyMapData['TPNo']}'],
       ['Rev :', '${safetyMapData['Rev']}'],
       ['Bus Depot Location :', '${safetyMapData['DepotLocation']}'],
@@ -332,7 +351,8 @@ class _SafetySummaryState extends State<SafetySummary> {
 
       for (Map<String, dynamic> mapData in userData) {
         String images_Path =
-            'gs://tp-zap-solz.appspot.com/SafetyChecklist/${widget.cityName}/${widget.depoName}/$user_id/$date/${mapData['srNo']}';
+            'SafetyChecklist/$cityName/${widget.depoName}/$user_id/$date/${mapData['srNo']}';
+
         ListResult result =
             await FirebaseStorage.instance.ref().child(images_Path).listAll();
 
@@ -354,7 +374,7 @@ class _SafetySummaryState extends State<SafetySummary> {
               imageUrls.add(
                 pw.Container(
                     padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 60,
+                    width: 100,
                     height: 100,
                     child: pw.Center(
                       child: pw.Image(myImage),
@@ -383,24 +403,24 @@ class _SafetySummaryState extends State<SafetySummary> {
               padding: const pw.EdgeInsets.all(3.0),
               child: pw.Center(
                   child: pw.Text(mapData['srNo'].toString(),
-                      style: const pw.TextStyle(fontSize: 13)))),
+                      style: const pw.TextStyle(fontSize: 11)))),
           pw.Container(
               padding: const pw.EdgeInsets.all(5.0),
               child: pw.Center(
                   child: pw.Text(mapData['Details'],
                       style: const pw.TextStyle(
-                        fontSize: 13,
+                        fontSize: 11,
                       )))),
           pw.Container(
               padding: const pw.EdgeInsets.all(2.0),
               child: pw.Center(
                   child: pw.Text(mapData['Status'],
-                      style: const pw.TextStyle(fontSize: 13)))),
+                      style: const pw.TextStyle(fontSize: 11)))),
           pw.Container(
               padding: const pw.EdgeInsets.all(2.0),
               child: pw.Center(
                   child: pw.Text(mapData['Remark'].toString(),
-                      style: const pw.TextStyle(fontSize: 13)))),
+                      style: const pw.TextStyle(fontSize: 11)))),
         ]));
 
         if (imageUrls.isNotEmpty) {
@@ -441,8 +461,9 @@ class _SafetySummaryState extends State<SafetySummary> {
             base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
         pageFormat: const PdfPageFormat(1300, 900,
             marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
-        orientation: pw.PageOrientation.natural,
+        orientation: pw.PageOrientation.landscape,
         crossAxisAlignment: pw.CrossAxisAlignment.start,
+        // mainAxisAlignment: pw.MainAxisAlignment.start,
         header: (pw.Context context) {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
@@ -490,7 +511,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                         style:
                             pw.TextStyle(color: PdfColors.black, fontSize: 17)),
                     pw.TextSpan(
-                        text: '${widget.cityName} / ${widget.depoName}',
+                        text: '${cityName} / ${widget.depoName}',
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
@@ -509,8 +530,8 @@ class _SafetySummaryState extends State<SafetySummary> {
                       text: pw.TextSpan(children: [
                     const pw.TextSpan(
                         text: 'UserID : ',
-                        style: const pw.TextStyle(
-                            color: PdfColors.black, fontSize: 15)),
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
                     pw.TextSpan(
                         text: '$user_id',
                         style: const pw.TextStyle(
@@ -544,7 +565,7 @@ class _SafetySummaryState extends State<SafetySummary> {
             base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
         pageFormat: const PdfPageFormat(1300, 900,
             marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
-        orientation: pw.PageOrientation.natural,
+        orientation: pw.PageOrientation.landscape,
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         header: (pw.Context context) {
           return pw.Container(
@@ -586,12 +607,12 @@ class _SafetySummaryState extends State<SafetySummary> {
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
                   pw.Text(
-                    'Place:  ${widget.cityName}/${widget.depoName}',
-                    textScaleFactor: 1.1,
+                    'Place:  $cityName/${widget.depoName}',
+                    textScaleFactor: 1.3,
                   ),
                   pw.Text(
                     'Date:  $date ',
-                    textScaleFactor: 1.1,
+                    textScaleFactor: 1.3,
                   )
                 ]),
             pw.SizedBox(height: 20)
@@ -616,29 +637,12 @@ class _SafetySummaryState extends State<SafetySummary> {
       ),
     );
 
-    final List<int> pdfData = await pdf.save();
-    const String pdfPath = 'MonthlyData.pdf';
+    final Uint8List pdfData = await pdf.save();
 
-    // Save the PDF file to device storage
-    if (!kIsWeb) {
-      if (decision == 1) {
-        final dir = await getExternalStorageDirectory();
-        final file = File('${dir!.path}/MonthlyData.pdf');
-        await file.writeAsBytes(pdfData);
-      } else if (decision == 2) {}
-    } else {
-      print('No Data');
-    }
     setState(() {
       enableLoading = false;
     });
-    // // For mobile platforms
-    // final String dir = (await getApplicationDocumentsDirectory()).path;
-    // final String path = '$dir/$pdfPath';
-    // final File file = File(path);
-    // await file.writeAsBytes(pdfData);
-    //
-    // // Open the PDF file for preview or download
-    // OpenFile.open(file.path);
+
+    return pdfData;
   }
 }

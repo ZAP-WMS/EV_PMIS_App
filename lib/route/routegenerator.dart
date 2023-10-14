@@ -38,10 +38,7 @@ class RouteGenerator {
       case '/login-page':
         return MaterialPageRoute(builder: (context) => const LoginRegister());
       case '/gallery':
-        return MaterialPageRoute(
-            builder: (context) => GalleryPage(
-                  role: args.toString(),
-                ));
+        return MaterialPageRoute(builder: (context) => GalleryPage());
       case '/homepage':
         return MaterialPageRoute(
             builder: (context) => HomePage(
@@ -49,7 +46,10 @@ class RouteGenerator {
                 ));
 
       case '/cities-page':
-        return MaterialPageRoute(builder: (context) => CitiesHome());
+        return MaterialPageRoute(
+            builder: (context) => CitiesHome(
+                  role: args.toString(),
+                ));
 
       // case '/depotOverview':
       //   return MaterialPageRoute(
@@ -64,10 +64,12 @@ class RouteGenerator {
                 role: arguments['role']));
 
       case '/overview page':
+        Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (context) => OverviewPage(
-                  depoName: args.toString(),
-                  role: args.toString(),
+                  depoName: arguments['depoName'].toString(),
+                  role: arguments['role'].toString(),
                 ));
       // case '/overview-table':
       //   return MaterialPageRoute(

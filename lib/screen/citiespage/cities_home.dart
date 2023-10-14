@@ -16,7 +16,6 @@ class CitiesHome extends StatefulWidget {
 class _CitiesHomeState extends State<CitiesHome> {
   @override
   Widget build(BuildContext context) {
-    print('Cities Home page');
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(

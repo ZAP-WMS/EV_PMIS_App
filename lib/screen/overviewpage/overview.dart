@@ -3,6 +3,7 @@ import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/cities_provider.dart';
+import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
 
 class OverviewPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class OverviewPage extends StatefulWidget {
 
 class _OverviewPageState extends State<OverviewPage> {
   String? cityName;
+  String roles = '';
   List<String> screens = [
     '/depotOverview',
     '/planning-page',
@@ -49,6 +51,7 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   void initState() {
     print('Overview page - ${widget.role}');
+    getData();
     super.initState();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
@@ -132,5 +135,10 @@ class _OverviewPageState extends State<OverviewPage> {
         ),
       ),
     );
+  }
+
+  void getData() async {
+    roles = await StoredDataPreferences.getSharedPreferences('role');
+    print('Overview - $roles');
   }
 }

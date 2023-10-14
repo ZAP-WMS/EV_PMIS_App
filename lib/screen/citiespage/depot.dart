@@ -50,15 +50,20 @@ class _DepotPageState extends State<DepotPage> {
                               crossAxisCount: 2),
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => OverviewPage(
-                                  role: widget.role,
-                                  depoName: snapshot.data!.docs[index]
-                                      ['DepoName'],
-                                ),
-                              )),
+                          onTap: () => Navigator.pushNamed(
+                              context, '/overview page', arguments: {
+                            'depoName': snapshot.data!.docs[index]['DepoName'],
+                            'role': widget.role
+                          }),
+                          // onTap: () => Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => OverviewPage(
+                          //         role: widget.role,
+                          //         depoName: snapshot.data!.docs[index]
+                          //             ['DepoName'],
+                          //       ),
+                          //     )),
                           child: depolist(
                             snapshot.data!.docs[index]['DepoUrl'],
                             snapshot.data!.docs[index]['DepoName'],

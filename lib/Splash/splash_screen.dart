@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
+import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,11 +28,8 @@ class SplashScreenState extends State<SplashScreen> {
     Timer(
         const Duration(milliseconds: 2000),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => user
-                ? GalleryPage(
-                    role: role,
-                  )
-                : const LoginRegister())));
+            builder: (BuildContext context) =>
+                user ? GalleryPage() : const LoginRegister())));
     // user ? const LoginRegister() : const HomePage())));
   }
 
@@ -74,6 +72,7 @@ class SplashScreenState extends State<SplashScreen> {
           user = true;
         });
         await checkRole(userId);
+        StoredDataPreferences.saveString('role', role);
       }
     } catch (e) {
       user = false;
