@@ -1,17 +1,22 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/safetyreport/safety_report_admin.dart/safety_pdf_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import '../../../components/Loading_page.dart';
+import '../../../components/loading_pdf.dart';
 import '../../../provider/cities_provider.dart';
 import '../../../widgets/admin_custom_appbar.dart';
 import '../../../widgets/nodata_available.dart';
@@ -46,8 +51,6 @@ class _SafetySummaryState extends State<SafetySummary> {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
 
-  static void callback(String id, int status, int progress) {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +61,7 @@ class _SafetySummaryState extends State<SafetySummary> {
             toSafety: true,
             showDepoBar: true,
             cityName: cityName,
-            text: '${widget.depoName} / Safety Summary',
+            text: 'Safety Summary',
             userId: widget.userId,
           ),
           preferredSize: const Size.fromHeight(50)),
@@ -133,21 +136,56 @@ class _SafetySummaryState extends State<SafetySummary> {
                               (rowData) {
                                 return DataRow(
                                   cells: [
-                                    DataCell(Text(rowData[0])),
-                                    DataCell(Text(rowData[2])),
+                                    DataCell(Text(
+                                      rowData[0],
+                                      style: const TextStyle(fontSize: 12),
+                                    )),
+                                    DataCell(Text(rowData[2],
+                                        style: const TextStyle(fontSize: 12))),
                                     DataCell(ElevatedButton(
-                                      onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 0);
-                                        // _generatePDF(rowData[0], rowData[2], 1);
+                                      onPressed: () async {
+                                        _generatePDF(rowData[0], rowData[2], 1);
                                       },
                                       child: const Text('View Report'),
                                     )),
                                     DataCell(ElevatedButton(
                                       onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 0);
+                                        downloadPDF(rowData[0], rowData[2], 2)
+                                            .whenComplete(() {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return const AlertDialog(
+                                                  buttonPadding:
+                                                      EdgeInsets.only(
+                                                          left: 20,
+                                                          right: 20,
+                                                          top: 80,
+                                                          bottom: 80),
+                                                  actionsAlignment:
+                                                      MainAxisAlignment.center,
+                                                  actions: [
+                                                    Image(
+                                                        height: 20,
+                                                        width: 20,
+                                                        image: AssetImage(
+                                                            'assets/downloaded_logo.png')),
+                                                    Text(
+                                                      'Download Completed !',
+                                                      style: TextStyle(
+                                                          color: Colors.blue,
+                                                          fontSize: 15),
+                                                    ),
+                                                  ],
+                                                );
+                                              });
+                                        });
                                         // _generatePDF(rowData[0], rowData[2], 2);
                                       },
-                                      child: const Text('Download'),
+                                      child: const SizedBox(
+                                          height: 35,
+                                          width: 50,
+                                          child: Icon(Icons.download)),
                                     )),
                                   ],
                                 );
@@ -197,18 +235,55 @@ class _SafetySummaryState extends State<SafetySummary> {
       final documentDirectory =
           (await DownloadsPath.downloadsDirectory())?.path;
       final file = File('$documentDirectory/$fileName');
-      await file.writeAsBytes(pdfData);
-      return file;
+
+      int counter = 1;
+      String newFilePath = file.path;
+
+      if (await File(newFilePath).exists()) {
+        final baseName = fileName.split('.').first;
+        final extension = fileName.split('.').last;
+        newFilePath =
+            '$documentDirectory/$baseName-${counter.toString()}.$extension';
+        counter++;
+
+        await file.copy(newFilePath);
+        counter++;
+      } else {
+        await file.writeAsBytes(pdfData);
+        return file;
+      }
     }
     return File('');
   }
 
-  Future<void> downloadPDF(String user_id, String date, int decision) async {
+  Future<void> downloadPDF(String userId, String date, int decision) async {
     if (await Permission.storage.request().isGranted) {
-      final pdfData = await _generatePDF(user_id, date, decision);
+      final pr = ProgressDialog(context);
+      pr.style(
+          progressWidgetAlignment: Alignment.center,
+          message: 'Downloading file...',
+          borderRadius: 10.0,
+          backgroundColor: Colors.white,
+          progressWidget: const LoadingPdf(),
+          elevation: 10.0,
+          insetAnimCurve: Curves.easeInOut,
+          maxProgress: 100.0,
+          progressTextStyle: const TextStyle(
+              color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+          messageTextStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600));
+
+      pr.show();
+
+      final pdfData = await _generatePDF(userId, date, decision);
+
       const fileName = 'SafetyReport.pdf';
       final savedPDFFile = await savePDFToFile(pdfData, fileName);
-      print('File Created - ${savedPDFFile.path}');
+
+      await pr.hide();
+      // pd.close();
     }
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
@@ -217,14 +292,33 @@ class _SafetySummaryState extends State<SafetySummary> {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await FlutterLocalNotificationsPlugin()
-        .show(0, 'repeating title', 'repeating body', notificationDetails);
+        .show(0, 'Pdf Downloaded', 'Safety Report', notificationDetails);
   }
 
   Future<Uint8List> _generatePDF(
-      String user_id, String date, int decision) async {
-    setState(() {
-      enableLoading = true;
-    });
+      String userId, String date, int decision) async {
+    final pr = ProgressDialog(context);
+
+    if (decision == 1) {
+      pr.style(
+          progressWidgetAlignment: Alignment.center,
+          message: 'Preparing Pdf View..',
+          borderRadius: 10.0,
+          backgroundColor: Colors.white,
+          progressWidget: const LoadingPdf(),
+          elevation: 10.0,
+          insetAnimCurve: Curves.easeInOut,
+          maxProgress: 100.0,
+          progressTextStyle: const TextStyle(
+              color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+          messageTextStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600));
+
+      pr.show();
+    }
+
     final headerStyle =
         pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold);
 
@@ -240,37 +334,58 @@ class _SafetySummaryState extends State<SafetySummary> {
       (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
     );
 
-    final white_background = pw.MemoryImage(
-      (await rootBundle.load('assets/white_background2.jpeg'))
-          .buffer
-          .asUint8List(),
-    );
-
     //Getting safety Field Data from firestore
 
     DocumentSnapshot safetyFieldDocSanpshot = await FirebaseFirestore.instance
         .collection('SafetyFieldData2')
         .doc('${widget.depoName}')
         .collection('userId')
-        .doc(user_id)
+        .doc(userId)
         .collection('date')
         .doc(date)
         .get();
 
     Map<String, dynamic> safetyMapData =
         safetyFieldDocSanpshot.data() as Map<String, dynamic>;
+    print(safetyFieldDocSanpshot.data());
 
-    // Timestamp installationDate = safetyMapData['InstallationDate'];
-    // DateTime date1 = installationDate.toDate();
-    // Timestamp EnegizationDate = safetyMapData['EnegizationDate'];
-    // DateTime date2 = EnegizationDate.toDate();
-    // Timestamp BoardingDate = safetyMapData['BoardingDate'];
-    // DateTime date3 = BoardingDate.toDate();
+    bool isDate1Empty = false;
+    bool isDate2Empty = false;
+    bool isDate3Empty = false;
+    if (safetyMapData['InstallationDate'].toString().trim().isEmpty) {
+      isDate1Empty = true;
+    }
+    if (safetyMapData['EnegizationDate'].toString().trim().isEmpty) {
+      isDate2Empty = true;
+    }
+    if (safetyMapData['BoardingDate'].toString().trim().isEmpty) {
+      isDate3Empty = true;
+    }
+
+    dynamic installationDateToDateTime =
+        isDate1Empty ? "" : safetyMapData['InstallationDate'].toDate();
+    String date1 = isDate1Empty
+        ? ""
+        : "${installationDateToDateTime.day}-${installationDateToDateTime.month}-${installationDateToDateTime.year}";
+
+    dynamic EnegizationDateToDateTime =
+        isDate2Empty ? "" : safetyMapData['EnegizationDate'].toDate();
+
+    String date2 = isDate2Empty
+        ? ""
+        : "${EnegizationDateToDateTime.day}-${EnegizationDateToDateTime.month}-${EnegizationDateToDateTime.year}";
+
+    dynamic BoardingDateToDateTime =
+        isDate3Empty ? "" : safetyMapData['BoardingDate'].toDate();
+
+    String date3 = isDate3Empty
+        ? ""
+        : "${BoardingDateToDateTime.day}-${BoardingDateToDateTime.month}-${BoardingDateToDateTime.year}";
 
     List<List<dynamic>> fieldData = [
-      ['Installation Date', ''],
-      ['Enegization Date', ''],
-      ['On Boarding Date', ''],
+      ['Installation Date', date1],
+      ['Enegization Date', date2],
+      ['On Boarding Date', date3],
       ['TPNo : ', '${safetyMapData['TPNo']}'],
       ['Rev :', '${safetyMapData['Rev']}'],
       ['Bus Depot Location :', '${safetyMapData['DepotLocation']}'],
@@ -338,7 +453,7 @@ class _SafetySummaryState extends State<SafetySummary> {
         .collection('SafetyChecklistTable2')
         .doc('${widget.depoName}')
         .collection('userId')
-        .doc(user_id)
+        .doc(userId)
         .collection('date')
         .doc(date)
         .get();
@@ -347,14 +462,15 @@ class _SafetySummaryState extends State<SafetySummary> {
         documentSnapshot.data() as Map<String, dynamic>;
     if (docData.isNotEmpty) {
       userData.addAll(docData['data']);
+
       List<pw.Widget> imageUrls = [];
 
       for (Map<String, dynamic> mapData in userData) {
-        String images_Path =
-            'SafetyChecklist/$cityName/${widget.depoName}/$user_id/$date/${mapData['srNo']}';
+        String imagesPath =
+            'SafetyChecklist/$cityName/${widget.depoName}/$userId/$date/${mapData['srNo']}';
 
         ListResult result =
-            await FirebaseStorage.instance.ref().child(images_Path).listAll();
+            await FirebaseStorage.instance.ref().child(imagesPath).listAll();
 
         if (result.items.isNotEmpty) {
           for (var image in result.items) {
@@ -492,7 +608,7 @@ class _SafetySummaryState extends State<SafetySummary> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('UserID - $user_id',
+              child: pw.Text('UserID - $userId',
                   textScaleFactor: 1.5,
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
@@ -533,7 +649,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                         style:
                             pw.TextStyle(color: PdfColors.black, fontSize: 17)),
                     pw.TextSpan(
-                        text: '$user_id',
+                        text: '$userId',
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
@@ -595,7 +711,7 @@ class _SafetySummaryState extends State<SafetySummary> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('User ID - $user_id',
+              child: pw.Text('User ID - $userId',
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
                       .defaultTextStyle
@@ -637,11 +753,20 @@ class _SafetySummaryState extends State<SafetySummary> {
       ),
     );
 
+    if (decision == 1) {
+      pr.hide();
+    }
+
     final Uint8List pdfData = await pdf.save();
 
-    setState(() {
-      enableLoading = false;
-    });
+    if (decision == 1) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PdfViewScreen(
+                    pdfData: pdfData,
+                  )));
+    }
 
     return pdfData;
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LoadingPage extends StatelessWidget {
-  LoadingPage({super.key});
+class LoadingPdf extends StatelessWidget {
+  const LoadingPdf({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +11,6 @@ class LoadingPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('animations/loading_animation.gif'),
-            const SizedBox(height: 10),
-            const Text(
-              'Loading...',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            )
           ],
         )
         // Lottie.asset('animations/loading.json'),
