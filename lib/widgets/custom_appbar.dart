@@ -1,11 +1,9 @@
-import 'package:ev_pmis_app/provider/internet_provider.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../authentication/login_register.dart';
-import 'connectivity_service.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+import '../authentication/login_register.dart';
+
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   String title;
   final double height;
   bool isSync = false;
@@ -23,71 +21,71 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+
+  @override
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  @override
   Widget build(BuildContext context) {
+    return AppBar(
+      centerTitle: widget.isCentered ? true : false,
+      title: Text(
+        widget.title,
+        maxLines: 2,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: blue,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
+      actions: [
+        // isConnected ? Container() : const NoInterneet(),
+        // IconButton(
+        //     onPressed: () {
+        //       isConnected
+        //           ? showAlertDialog(context)
+        //           : Icons.signal_wifi_off;
+        //     },
+        //     icon: Icon(Icons.wifi)),
 
-    
-    bool? status = false;
-    var connectivityProvider = Provider.of<ConnectivityProvider>(context);
-    print(status);
-    return Consumer<ConnectivityProvider>(
-      builder: (context, value, child) {
-        bool isConnected = connectivityProvider.isConnected;
-
-        return AppBar(
-          centerTitle: isCentered ? true : false,
-          title: Text(
-            title,
-            maxLines: 2,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: blue,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
-          actions: [
-            Icon(
-              isConnected ? Icons.wifi : Icons.signal_wifi_off,
-              color: isConnected ? Colors.white : Colors.red,
-            ),
-           
-            isSync
-                ? InkWell(
-                    onTap: () {
-                      store!();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        'assets/appbar/sync.jpeg',
-                        height: 25,
-                        width: 35,
-                      ),
-                    ),
+        widget.isSync
+            ? InkWell(
+                onTap: () {
+                  widget.store!();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/appbar/sync.jpeg',
+                    height: 25,
+                    width: 35,
+                  ),
+                ),
+              )
+            : widget.haveupload
+                ? Container(
+                    padding: const EdgeInsets.all(5),
+                    height: 30,
+                    width: 130,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/material-excelpage');
+                        },
+                        child: Text(
+                          'Upload Material Sheet',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: white, fontSize: 12),
+                        )),
                   )
-                : haveupload
-                    ? Container(
-                        padding: const EdgeInsets.all(5),
-                        height: 30,
-                        width: 130,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, '/material-excelpage');
-                            },
-                            child: Text(
-                              'Upload Material Sheet',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: white, fontSize: 12),
-                            )),
-                      )
-                    : Container()
-          ],
-        );
-      },
+                : Container()
+      ],
     );
   }
 
-  @override
-  Size get preferredSize => Size.fromHeight(height);
+  Size get preferredSize => Size.fromHeight(widget.height);
 }
 
 Future<bool> onWillPop(BuildContext context) async {
@@ -167,3 +165,22 @@ Future<bool> onWillPop(BuildContext context) async {
   return a;
 }
 
+showAlertDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert Dialog Title'),
+        content: Text('This is the content of the alert dialog.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}

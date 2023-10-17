@@ -30,7 +30,6 @@ environment:
 dependencies:
   apptive_grid_theme: ^1.2.0
   cloud_firestore: ^4.8.5
-  connectivity: ^3.0.6
   connectivity_plus: ^5.0.0
   cupertino_icons: ^1.0.2
   excel: ^2.1.0

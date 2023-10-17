@@ -49,7 +49,6 @@ class _DetailedEngtState extends State<DetailedEng>
 
   @override
   void initState() {
-    Provider.of(context).
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
     // getmonthlyReport();

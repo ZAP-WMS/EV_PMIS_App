@@ -223,7 +223,7 @@ class _QualityChecklistState extends State<QualityChecklist> {
               backgroundColor: blue,
               title: widget.isHeader!
                   ? Text(
-                      '${widget.cityName} / ${widget.depoName} / Quality Checklist')
+                      '${widget.cityName}/${widget.depoName}/Quality Checklist')
                   : const Text(''),
               actions: [
                 widget.isHeader!
