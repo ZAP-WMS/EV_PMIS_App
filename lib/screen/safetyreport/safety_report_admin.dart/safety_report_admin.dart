@@ -2,12 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safety_report_admin.dart/safety_pdf_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,6 +13,7 @@ import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../components/Loading_page.dart';
 import '../../../components/loading_pdf.dart';
 import '../../../provider/cities_provider.dart';
@@ -90,9 +89,8 @@ class _SafetySummaryState extends State<SafetySummary> {
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: DataTable(
-                            columnSpacing: 30,
+                            columnSpacing: 40,
                             showBottomBorder: true,
-                            sortAscending: true,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.grey[600]!,
@@ -106,7 +104,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'User_ID',
+                                'UserID',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -120,7 +118,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                                         fontSize: 11,
                                       ))),
                               DataColumn(
-                                  label: Text('Monthly Report',
+                                  label: Text('Safety Report',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 11,
@@ -143,49 +141,21 @@ class _SafetySummaryState extends State<SafetySummary> {
                                     DataCell(Text(rowData[2],
                                         style: const TextStyle(fontSize: 12))),
                                     DataCell(ElevatedButton(
-                                      onPressed: () async {
-                                        _generatePDF(rowData[0], rowData[2], 1);
+                                      onPressed: () {
+                                        downloadPDF(rowData[0], rowData[2], 0);
+                                        // _generatePDF(rowData[0], rowData[2], 1);
                                       },
-                                      child: const Text('View Report'),
+                                      child: const Text(
+                                        'View Report',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
                                     )),
                                     DataCell(ElevatedButton(
                                       onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 2)
-                                            .whenComplete(() {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return const AlertDialog(
-                                                  buttonPadding:
-                                                      EdgeInsets.only(
-                                                          left: 20,
-                                                          right: 20,
-                                                          top: 80,
-                                                          bottom: 80),
-                                                  actionsAlignment:
-                                                      MainAxisAlignment.center,
-                                                  actions: [
-                                                    Image(
-                                                        height: 20,
-                                                        width: 20,
-                                                        image: AssetImage(
-                                                            'assets/downloaded_logo.png')),
-                                                    Text(
-                                                      'Download Completed !',
-                                                      style: TextStyle(
-                                                          color: Colors.blue,
-                                                          fontSize: 15),
-                                                    ),
-                                                  ],
-                                                );
-                                              });
-                                        });
+                                        downloadPDF(rowData[0], rowData[2], 0);
                                         // _generatePDF(rowData[0], rowData[2], 2);
                                       },
-                                      child: const SizedBox(
-                                          height: 35,
-                                          width: 50,
-                                          child: Icon(Icons.download)),
+                                      child: const Text('Download'),
                                     )),
                                   ],
                                 );
@@ -281,9 +251,7 @@ class _SafetySummaryState extends State<SafetySummary> {
 
       const fileName = 'SafetyReport.pdf';
       final savedPDFFile = await savePDFToFile(pdfData, fileName);
-
-      await pr.hide();
-      // pd.close();
+      print('File Created - ${savedPDFFile.path}');
     }
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
@@ -292,7 +260,7 @@ class _SafetySummaryState extends State<SafetySummary> {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await FlutterLocalNotificationsPlugin()
-        .show(0, 'Pdf Downloaded', 'Safety Report', notificationDetails);
+        .show(0, 'repeating title', 'repeating body', notificationDetails);
   }
 
   Future<Uint8List> _generatePDF(

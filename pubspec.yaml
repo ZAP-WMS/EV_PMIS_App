@@ -63,7 +63,7 @@ dependencies:
   lecle_downloads_path_provider:
   flutter_local_notifications:
   progress_dialog_null_safe:
-
+  
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
