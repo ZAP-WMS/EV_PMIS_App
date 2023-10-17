@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/safetyreport/safety_report_admin.dart/safety_pdf_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -142,8 +143,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                                         style: const TextStyle(fontSize: 12))),
                                     DataCell(ElevatedButton(
                                       onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 0);
-                                        // _generatePDF(rowData[0], rowData[2], 1);
+                                        _generatePDF(rowData[0], rowData[2], 1);
                                       },
                                       child: const Text(
                                         'View Report',
@@ -152,7 +152,35 @@ class _SafetySummaryState extends State<SafetySummary> {
                                     )),
                                     DataCell(ElevatedButton(
                                       onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 0);
+                                        downloadPDF(rowData[0], rowData[2], 0)
+                                            .whenComplete(() {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  actionsAlignment:
+                                                      MainAxisAlignment.center,
+                                                  actionsPadding:
+                                                      const EdgeInsets.only(
+                                                          top: 20, bottom: 20),
+                                                  actions: [
+                                                    const Image(
+                                                      image: AssetImage(
+                                                          'assets/downloaded_logo.png'),
+                                                      height: 40,
+                                                      width: 40,
+                                                    ),
+                                                    Text(
+                                                      'Pdf Downloaded',
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: Colors
+                                                              .blue[900]!),
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                        });
                                         // _generatePDF(rowData[0], rowData[2], 2);
                                       },
                                       child: const Text('Download'),
@@ -249,6 +277,8 @@ class _SafetySummaryState extends State<SafetySummary> {
 
       final pdfData = await _generatePDF(userId, date, decision);
 
+      await pr.hide();
+
       const fileName = 'SafetyReport.pdf';
       final savedPDFFile = await savePDFToFile(pdfData, fileName);
       print('File Created - ${savedPDFFile.path}');
@@ -260,7 +290,7 @@ class _SafetySummaryState extends State<SafetySummary> {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await FlutterLocalNotificationsPlugin()
-        .show(0, 'repeating title', 'repeating body', notificationDetails);
+        .show(0, 'Pdf Downloaded', 'Safety Report', notificationDetails);
   }
 
   Future<Uint8List> _generatePDF(
