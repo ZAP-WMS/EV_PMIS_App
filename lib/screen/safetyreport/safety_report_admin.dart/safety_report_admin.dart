@@ -1,16 +1,20 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/overviewpage/openpdf.dart';
+import 'package:ev_pmis_app/screen/safetyreport/safety_report_admin.dart/safety_pdf_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:open_file_plus/open_file_plus.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../components/Loading_page.dart';
 import '../../../provider/cities_provider.dart';
 import '../../../widgets/admin_custom_appbar.dart';
@@ -87,9 +91,8 @@ class _SafetySummaryState extends State<SafetySummary> {
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: DataTable(
-                            columnSpacing: 30,
+                            columnSpacing: 40,
                             showBottomBorder: true,
-                            sortAscending: true,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.grey[600]!,
@@ -103,7 +106,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                             columns: const [
                               DataColumn(
                                   label: Text(
-                                'User_ID',
+                                'UserID',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -117,7 +120,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                                         fontSize: 11,
                                       ))),
                               DataColumn(
-                                  label: Text('Monthly Report',
+                                  label: Text('Safety Report',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 11,
@@ -137,17 +140,23 @@ class _SafetySummaryState extends State<SafetySummary> {
                                     DataCell(Text(rowData[2])),
                                     DataCell(ElevatedButton(
                                       onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 0);
-                                        // _generatePDF(rowData[0], rowData[2], 1);
+                                        _generatePDF(rowData[0], rowData[2], 1);
                                       },
-                                      child: const Text('View Report'),
+                                      child: const Text(
+                                        'View Report',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
                                     )),
-                                    DataCell(ElevatedButton(
-                                      onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 0);
-                                        // _generatePDF(rowData[0], rowData[2], 2);
-                                      },
-                                      child: const Text('Download'),
+                                    DataCell(SizedBox(
+                                      height: 30,
+                                      width: 72,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          downloadPDF(
+                                              rowData[0], rowData[2], 2);
+                                        },
+                                        child: const Icon(Icons.download),
+                                      ),
                                     )),
                                   ],
                                 );
@@ -209,15 +218,17 @@ class _SafetySummaryState extends State<SafetySummary> {
       const fileName = 'SafetyReport.pdf';
       final savedPDFFile = await savePDFToFile(pdfData, fileName);
       print('File Created - ${savedPDFFile.path}');
+
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails('channel id', 'channel name',
+              channelDescription: 'description');
+      const NotificationDetails notificationDetails =
+          NotificationDetails(android: androidNotificationDetails);
+      await FlutterLocalNotificationsPlugin()
+          .show(0, 'Pdf Downloaded', 'Safety Report', notificationDetails);
+    } else {
+      print('Failed To Download Permission is required');
     }
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'repeating channel id', 'repeating channel name',
-            channelDescription: 'repeating description');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin()
-        .show(0, 'repeating title', 'repeating body', notificationDetails);
   }
 
   Future<Uint8List> _generatePDF(
@@ -238,12 +249,6 @@ class _SafetySummaryState extends State<SafetySummary> {
 
     final profileImage = pw.MemoryImage(
       (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
-    );
-
-    final white_background = pw.MemoryImage(
-      (await rootBundle.load('assets/white_background2.jpeg'))
-          .buffer
-          .asUint8List(),
     );
 
     //Getting safety Field Data from firestore
@@ -638,6 +643,15 @@ class _SafetySummaryState extends State<SafetySummary> {
     );
 
     final Uint8List pdfData = await pdf.save();
+
+    if (decision == 1) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PdfViewScreen(
+                    pdfData: pdfData,
+                  )));
+    }
 
     setState(() {
       enableLoading = false;
