@@ -414,7 +414,6 @@ class _ClosureFieldState extends State<ClosureField> {
       SetOptions(merge: true),
     ).whenComplete(() {
       tabledata2.clear();
-      // Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text('Data are synced'),
         backgroundColor: blue,

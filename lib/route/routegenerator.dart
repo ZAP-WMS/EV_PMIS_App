@@ -19,6 +19,7 @@ import 'package:ev_pmis_app/widgets/no_internet.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../feedback/chat.dart';
 import '../screen/closureReport/closurefield.dart';
 import '../screen/planning/project_planning.dart';
 import '../screen/qualitychecklist/quality_home.dart';
@@ -91,8 +92,11 @@ class RouteGenerator {
 
         case '/jmrPage':
           return JmrPage(cityName: args.toString(), depoName: args.toString());
+
+        case '/chatpage':
+          return ChatPage(depoName: args.toString());
       }
-      return NodataAvailable();
+      return const NodataAvailable();
     });
   }
 }
