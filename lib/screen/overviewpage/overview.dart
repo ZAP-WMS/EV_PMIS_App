@@ -3,11 +3,13 @@ import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/cities_provider.dart';
+import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
 
 class OverviewPage extends StatefulWidget {
   String? depoName;
-  OverviewPage({super.key, required this.depoName});
+  String? role;
+  OverviewPage({super.key, required this.depoName, this.role});
 
   @override
   State<OverviewPage> createState() => _OverviewPageState();
@@ -15,6 +17,7 @@ class OverviewPage extends StatefulWidget {
 
 class _OverviewPageState extends State<OverviewPage> {
   String? cityName;
+  String roles = '';
   List<String> screens = [
     '/depotOverview',
     '/planning-page',
@@ -47,8 +50,11 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   void initState() {
-    super.initState();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+    print('Overview page - ${widget.role}');
+    getData();
+
+    super.initState();
   }
 
   @override
@@ -87,11 +93,8 @@ class _OverviewPageState extends State<OverviewPage> {
                   //   builder: (context) => MaterialProcurement(
                   //       cityName: cityName, depoName: widget.depoName),
                   // )),
-                  Navigator.pushNamed(
-                    context,
-                    screens[index],
-                    arguments: widget.depoName,
-                  ),
+                  Navigator.pushNamed(context, screens[index],
+                      arguments: widget.depoName),
               child: cards(desription[index], imagedata[index], index));
         }),
       ),
@@ -127,5 +130,10 @@ class _OverviewPageState extends State<OverviewPage> {
         ),
       ),
     );
+  }
+
+  void getData() async {
+    roles = await StoredDataPreferences.getSharedPreferences('role');
+    print('Overview - $roles');
   }
 }

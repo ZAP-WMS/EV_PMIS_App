@@ -1,26 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
 import '../../authentication/authservice.dart';
 import '../../components/Loading_page.dart';
 import '../../style.dart';
 import 'jmr_fields.dart';
 
-class JmrPage extends StatefulWidget {
+class JmrUserPage extends StatefulWidget {
   String? cityName;
   String? depoName;
-  JmrPage({super.key, this.cityName, this.depoName});
+  JmrUserPage({super.key, this.cityName, this.depoName});
 
   @override
-  State<JmrPage> createState() => _JmrPageState();
+  State<JmrUserPage> createState() => _JmrUserPageState();
 }
 
-class _JmrPageState extends State<JmrPage>
-    with AutomaticKeepAliveClientMixin<JmrPage> {
+class _JmrUserPageState extends State<JmrUserPage> {
   List currentTabList = [];
   String selectedDepot = '';
   int _selectedIndex = 0;
@@ -28,6 +23,8 @@ class _JmrPageState extends State<JmrPage>
   List tabsForJmr = ['Civil', 'Electrical'];
 
   dynamic userId;
+  Widget selectedUI = Container();
+
   List<String> title = ['R1', 'R2', 'R3', 'R4', 'R5'];
 
   @override
@@ -46,9 +43,8 @@ class _JmrPageState extends State<JmrPage>
       initialIndex: 0,
       child: SafeArea(
           child: Scaffold(
-        drawer: const NavbarDrawer(),
         appBar: AppBar(
-          backgroundColor: blue,
+          backgroundColor: Colors.blue[900],
           bottom: TabBar(
               labelColor: white,
               labelStyle: buttonWhite,
@@ -83,7 +79,6 @@ class _JmrPageState extends State<JmrPage>
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                     Container(
-                      key: const PageStorageKey('page1'),
                       padding: const EdgeInsets.only(
                           left: 10.0, right: 10.0, top: 10.0),
                       child: GridView.builder(
@@ -95,13 +90,11 @@ class _JmrPageState extends State<JmrPage>
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10),
                           itemBuilder: (BuildContext context, int index) {
-                            print('Page1');
                             return cardlist(title[index], index, title[index],
                                 'Civil', currentTabList[index]);
                           }),
                     ),
                     Container(
-                      key: const PageStorageKey('page2'),
                       padding: const EdgeInsets.only(
                           left: 5.0, right: 5.0, top: 5.0),
                       child: GridView.builder(
@@ -113,7 +106,6 @@ class _JmrPageState extends State<JmrPage>
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10),
                           itemBuilder: (BuildContext context, int index) {
-                            print('page2');
                             return cardlist(title[index], index, title[index],
                                 'Electrical', currentTabList[index]);
                           }),
@@ -255,7 +247,7 @@ class _JmrPageState extends State<JmrPage>
                         style: const TextStyle(fontSize: 11),
                       ),
                       Container(
-                        padding: EdgeInsets.only(bottom: 5),
+                        padding: const EdgeInsets.only(bottom: 5),
                         height: 30,
                         width: 60,
                         child: ElevatedButton(
@@ -330,8 +322,4 @@ class _JmrPageState extends State<JmrPage>
       userId = value;
     });
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

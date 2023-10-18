@@ -64,7 +64,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const CitiesHome(),
+                    builder: (_) => CitiesHome(),
                   ),
                 );
               }),

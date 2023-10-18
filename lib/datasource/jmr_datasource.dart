@@ -12,8 +12,7 @@ import 'package:ev_pmis_app/style.dart';
 
 class JmrDataSource extends DataGridSource {
   Function deleteRow;
-  BuildContext mainContext;
-  JmrDataSource(this._JMRModels, this.deleteRow, this.mainContext) {
+  JmrDataSource(this._JMRModels, this.deleteRow) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
