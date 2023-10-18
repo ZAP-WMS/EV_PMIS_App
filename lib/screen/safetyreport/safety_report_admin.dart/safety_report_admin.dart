@@ -14,7 +14,6 @@ import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../components/Loading_page.dart';
 import '../../../components/loading_pdf.dart';
 import '../../../provider/cities_provider.dart';
@@ -125,7 +124,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                                         fontSize: 11,
                                       ))),
                               DataColumn(
-                                  label: Text('PDF Download',
+                                  label: Text('Download',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 11,
@@ -146,7 +145,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                                         _generatePDF(rowData[0], rowData[2], 1);
                                       },
                                       child: const Text(
-                                        'View Report',
+                                        'View',
                                         style: TextStyle(fontSize: 12),
                                       ),
                                     )),
