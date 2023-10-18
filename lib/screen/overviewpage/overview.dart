@@ -94,7 +94,7 @@ class _OverviewPageState extends State<OverviewPage> {
                   //       cityName: cityName, depoName: widget.depoName),
                   // )),
                   Navigator.pushNamed(context, screens[index],
-                      arguments: widget.depoName),
+                      arguments: {'depoName': widget.depoName, 'role': roles}),
               child: cards(desription[index], imagedata[index], index));
         }),
       ),

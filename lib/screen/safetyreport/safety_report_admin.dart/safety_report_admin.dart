@@ -47,6 +47,7 @@ class _SafetySummaryState extends State<SafetySummary> {
   @override
   void initState() {
     super.initState();
+    Permission.notification.request();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
 
@@ -54,16 +55,15 @@ class _SafetySummaryState extends State<SafetySummary> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          // ignore: sort_child_properties_last
+          preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,
             cityName: cityName,
-            text: 'Safety Summary',
+            text: 'Safety Report',
             userId: widget.userId,
-          ),
-          preferredSize: const Size.fromHeight(50)),
+          )),
       body: enableLoading
           ? LoadingPage()
           : FutureBuilder<List<List<dynamic>>>(
@@ -84,110 +84,117 @@ class _SafetySummaryState extends State<SafetySummary> {
 
                   return SingleChildScrollView(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
-                          child: DataTable(
-                            columnSpacing: 40,
-                            showBottomBorder: true,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey[600]!,
-                                width: 1.0,
-                              ),
-                            ),
-                            headingRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.blue[800]!),
-                            headingTextStyle:
-                                const TextStyle(color: Colors.white),
-                            columns: const [
-                              DataColumn(
-                                  label: Text(
-                                'UserID',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 11,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: DataTable(
+                              columnSpacing: 20,
+                              showBottomBorder: true,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey[600]!,
+                                  width: 1.0,
                                 ),
-                              )),
-                              DataColumn(
-                                  label: Text('Date',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 11,
-                                      ))),
-                              DataColumn(
-                                  label: Text('Safety Report',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 11,
-                                      ))),
-                              DataColumn(
-                                  label: Text('Download',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 11,
-                                      ))),
-                            ],
-                            rows: data.map(
-                              (rowData) {
-                                return DataRow(
-                                  cells: [
-                                    DataCell(Text(
-                                      rowData[0],
-                                      style: const TextStyle(fontSize: 12),
-                                    )),
-                                    DataCell(Text(rowData[2],
-                                        style: const TextStyle(fontSize: 12))),
-                                    DataCell(ElevatedButton(
-                                      onPressed: () {
-                                        _generatePDF(rowData[0], rowData[2], 1);
-                                      },
-                                      child: const Text(
-                                        'View',
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    )),
-                                    DataCell(ElevatedButton(
-                                      onPressed: () {
-                                        downloadPDF(rowData[0], rowData[2], 0)
-                                            .whenComplete(() {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  actionsAlignment:
-                                                      MainAxisAlignment.center,
-                                                  actionsPadding:
-                                                      const EdgeInsets.only(
-                                                          top: 20, bottom: 20),
-                                                  actions: [
-                                                    const Image(
-                                                      image: AssetImage(
-                                                          'assets/downloaded_logo.png'),
-                                                      height: 40,
-                                                      width: 40,
-                                                    ),
-                                                    Text(
-                                                      'Pdf Downloaded',
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors
-                                                              .blue[900]!),
-                                                    )
-                                                  ],
-                                                );
-                                              });
-                                        });
-                                        // _generatePDF(rowData[0], rowData[2], 2);
-                                      },
-                                      child: const Text('Download'),
-                                    )),
-                                  ],
-                                );
-                              },
-                            ).toList(),
+                              ),
+                              headingRowColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.blue[800]!),
+                              headingTextStyle:
+                                  const TextStyle(color: Colors.white),
+                              columns: const [
+                                DataColumn(
+                                    label: Text(
+                                  'UserID',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  ),
+                                )),
+                                DataColumn(
+                                    label: Text('Date',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11,
+                                        ))),
+                                DataColumn(
+                                    label: Text('Safety Report',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11,
+                                        ))),
+                                DataColumn(
+                                    label: Text('Pdf Download',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11,
+                                        ))),
+                              ],
+                              rows: data.map(
+                                (rowData) {
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(Text(
+                                        rowData[0],
+                                        style: const TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(rowData[2],
+                                          style:
+                                              const TextStyle(fontSize: 12))),
+                                      DataCell(ElevatedButton(
+                                        onPressed: () {
+                                          _generatePDF(
+                                              rowData[0], rowData[2], 1);
+                                        },
+                                        child: const Text(
+                                          'View',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                      )),
+                                      DataCell(ElevatedButton(
+                                        onPressed: () {
+                                          downloadPDF(rowData[0], rowData[2], 0)
+                                              .whenComplete(() {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    actionsAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    actionsPadding:
+                                                        const EdgeInsets.only(
+                                                            top: 20,
+                                                            bottom: 20),
+                                                    actions: [
+                                                      const Image(
+                                                        image: AssetImage(
+                                                            'assets/downloaded_logo.png'),
+                                                        height: 40,
+                                                        width: 40,
+                                                      ),
+                                                      Text(
+                                                        'Pdf Downloaded',
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            color: Colors
+                                                                .blue[900]!),
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+                                          });
+                                          // _generatePDF(rowData[0], rowData[2], 2);
+                                        },
+                                        child: const Icon(Icons.download),
+                                      )),
+                                    ],
+                                  );
+                                },
+                              ).toList(),
+                            ),
                           ),
                         ),
                       ],
