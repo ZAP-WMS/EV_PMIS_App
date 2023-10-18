@@ -11,6 +11,7 @@ import '../style.dart';
 
 class CustomAppBarBackDate extends StatefulWidget {
   String? text;
+  String? appbardate;
   // final IconData? icon;
   final bool haveCalender;
   final bool haveSynced;
@@ -27,6 +28,7 @@ class CustomAppBarBackDate extends StatefulWidget {
   CustomAppBarBackDate(
       {super.key,
       this.text,
+      this.appbardate,
       this.haveSynced = false,
       this.haveSummary = false,
       this.haveCalender = false,

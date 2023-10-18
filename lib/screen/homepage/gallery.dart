@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../authentication/authservice.dart';
 import '../../shared_preferences/shared_preferences.dart';
+import '../../widgets/internet_checker.dart';
 
 dynamic userId = '';
 
@@ -44,7 +47,7 @@ class _GalleryPageState extends State<GalleryPage> {
       ),
       body: WillPopScope(
         onWillPop: () {
-          return onWillPop(context);
+          return onWillPopCloseApp(context);
         },
         child: Stack(
           children: [
@@ -65,19 +68,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         imglist[index],
                         fit: BoxFit.fill,
                       ),
-                    )
-                    //  Container(
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(50),
-                    //   ),
-                    //   height: 140,
-                    //   width: 140,
-                    //   child: Image.asset(
-                    //     imglist[index],
-                    //     fit: BoxFit.fill,
-                    //   ),
-                    // ),
-                    );
+                    ));
               }),
             ),
             Positioned(
@@ -133,4 +124,76 @@ class _GalleryPageState extends State<GalleryPage> {
   void getData() async {
     role = await StoredDataPreferences.getSharedPreferences('role');
   }
+}
+
+Future<bool> onWillPopCloseApp(BuildContext context) async {
+  bool a = false;
+  await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            backgroundColor: white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
+            content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Close TATA POWER?",
+                    style: subtitleWhite,
+                  ),
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                          child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            //color: blue,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          //color: blue,
+                          child: Center(
+                              child: Text(
+                            "No",
+                            style: button.copyWith(color: blue),
+                          )),
+                        ),
+                      )),
+                      Expanded(
+                          child: InkWell(
+                        onTap: () {
+                          a = true;
+                          exit(0);
+                        },
+                        child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: blue,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          //color: blue,
+                          child: Center(
+                              child: Text(
+                            "Yes",
+                            style: button,
+                          )),
+                        ),
+                      ))
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ));
+  return a;
 }

@@ -311,7 +311,7 @@ class DetailedEngSource extends DataGridSource {
                                                     ),
                                                     content: Container(
                                                         height: MediaQuery.of(
-                                                                    context)
+                                                                       context)
                                                                 .size
                                                                 .height *
                                                             0.8,

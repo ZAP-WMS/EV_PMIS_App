@@ -141,7 +141,7 @@ class _ClosureFieldState extends State<ClosureField> {
                                   columns: [
                                     GridColumn(
                                       columnName: 'srNo',
-                                      width: 80,
+                                      width: 60,
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
@@ -237,7 +237,7 @@ class _ClosureFieldState extends State<ClosureField> {
                                   columns: [
                                     GridColumn(
                                       columnName: 'srNo',
-                                      width: 80,
+                                      width: 60,
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
@@ -395,7 +395,7 @@ class _ClosureFieldState extends State<ClosureField> {
     Map<String, dynamic> table_data = Map();
     for (var i in _closeReportDataSource.dataGridRows) {
       for (var data in i.getCells()) {
-        if (data.columnName != 'Photo' && data.columnName != 'ViewPhoto') {
+        if (data.columnName != 'Upload' && data.columnName != 'View') {
           table_data[data.columnName] = data.value;
         }
       }
@@ -409,14 +409,11 @@ class _ClosureFieldState extends State<ClosureField> {
         .doc(widget.depoName)
         .collection('Closure Report')
         .doc(userId)
-        // .collection(userId)
-        // .doc(DateFormat.yMMMMd().format(DateTime.now()))
         .set(
       {'data': tabledata2},
       SetOptions(merge: true),
     ).whenComplete(() {
       tabledata2.clear();
-      // Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text('Data are synced'),
         backgroundColor: blue,

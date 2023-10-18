@@ -627,9 +627,9 @@ class _CivilFieldState extends State<CivilField> {
     FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc(depoName)
-        .collection('Excavation TABLE DATA')
-        .doc('Excavation')
-        .collection(userId!)
+        .collection('userId')
+        .doc(userId)
+        .collection(widget.fieldclnName)
         .doc(currentDate)
         .set({
       'data': excavationtabledatalist,
@@ -650,9 +650,9 @@ class _CivilFieldState extends State<CivilField> {
       FirebaseFirestore.instance
           .collection('CivilQualityChecklist')
           .doc(depoName)
-          .collection('BackFilling TABLE DATA')
-          .doc('BackFilling')
-          .collection(userId!)
+          .collection('userId')
+          .doc(userId)
+          .collection(widget.fieldclnName)
           .doc(currentDate)
           .set({
         'data': backfillingtabledatalist,
@@ -674,9 +674,9 @@ class _CivilFieldState extends State<CivilField> {
         FirebaseFirestore.instance
             .collection('CivilQualityChecklist')
             .doc(depoName)
-            .collection('Massonary TABLE DATA')
-            .doc('Massonary')
-            .collection(userId!)
+            .collection('userId')
+            .doc(userId)
+            .collection(widget.fieldclnName)
             .doc(currentDate)
             .set({
           'data': backfillingtabledatalist,
@@ -697,9 +697,9 @@ class _CivilFieldState extends State<CivilField> {
           FirebaseFirestore.instance
               .collection('CivilQualityChecklist')
               .doc(depoName)
-              .collection('Glazzing TABLE DATA')
-              .doc('Glazzing')
-              .collection(userId!)
+              .collection('userId')
+              .doc(userId)
+              .collection(widget.fieldclnName)
               .doc(currentDate)
               .set({
             'data': doorstabledatalist,
@@ -719,9 +719,9 @@ class _CivilFieldState extends State<CivilField> {
             FirebaseFirestore.instance
                 .collection('CivilQualityChecklist')
                 .doc(depoName)
-                .collection('CEILLING TABLE DATA')
-                .doc('CEILLING DATA')
-                .collection(userId!)
+                .collection('userId')
+                .doc(userId)
+                .collection(widget.fieldclnName)
                 .doc(currentDate)
                 .set({
               'data': ceillingtabledatalist,
@@ -742,9 +742,9 @@ class _CivilFieldState extends State<CivilField> {
               FirebaseFirestore.instance
                   .collection('CivilQualityChecklist')
                   .doc(depoName)
-                  .collection('FLOORING TABLE DATA')
-                  .doc('FLOORING DATA')
-                  .collection(userId!)
+                  .collection('userId')
+                  .doc(userId)
+                  .collection(widget.fieldclnName)
                   .doc(currentDate)
                   .set({
                 'data': flooringtabledatalist,
@@ -765,9 +765,9 @@ class _CivilFieldState extends State<CivilField> {
                 FirebaseFirestore.instance
                     .collection('CivilQualityChecklist')
                     .doc(depoName)
-                    .collection('INSPECTION TABLE DATA')
-                    .doc('INSPECTION DATA')
-                    .collection(userId!)
+                    .collection('userId')
+                    .doc(userId)
+                    .collection(widget.fieldclnName)
                     .doc(currentDate)
                     .set({
                   'data': inspectiontabledatalist,
@@ -788,9 +788,9 @@ class _CivilFieldState extends State<CivilField> {
                   FirebaseFirestore.instance
                       .collection('CivilQualityChecklist')
                       .doc(depoName)
-                      .collection('FLOORING TABLE DATA')
-                      .doc('FLOORING DATA')
-                      .collection(userId!)
+                      .collection('userId')
+                      .doc(userId)
+                      .collection(widget.fieldclnName)
                       .doc(currentDate)
                       .set({
                     'data': flooringtabledatalist,
@@ -811,9 +811,9 @@ class _CivilFieldState extends State<CivilField> {
                     FirebaseFirestore.instance
                         .collection('CivilQualityChecklist')
                         .doc(depoName)
-                        .collection('PAINTING TABLE DATA')
-                        .doc('PAINTING DATA')
-                        .collection(userId!)
+                        .collection('userId')
+                        .doc(userId)
+                        .collection(widget.fieldclnName)
                         .doc(currentDate)
                         .set({
                       'data': paintingtabledatalist,
@@ -834,9 +834,9 @@ class _CivilFieldState extends State<CivilField> {
                       FirebaseFirestore.instance
                           .collection('CivilQualityChecklist')
                           .doc(depoName)
-                          .collection('PAVING TABLE DATA')
-                          .doc('PAVING DATA')
-                          .collection(userId!)
+                          .collection('userId')
+                          .doc(userId)
+                          .collection(widget.fieldclnName)
                           .doc(currentDate)
                           .set({
                         'data': pavingtabledatalist,
@@ -857,9 +857,9 @@ class _CivilFieldState extends State<CivilField> {
                         FirebaseFirestore.instance
                             .collection('CivilQualityChecklist')
                             .doc(depoName)
-                            .collection('ROOFING TABLE DATA')
-                            .doc('ROOFING DATA')
-                            .collection(userId!)
+                            .collection('userId')
+                            .doc(userId)
+                            .collection(widget.fieldclnName)
                             .doc(currentDate)
                             .set({
                           'data': roofingtabledatalist,
@@ -881,9 +881,9 @@ class _CivilFieldState extends State<CivilField> {
                           FirebaseFirestore.instance
                               .collection('CivilQualityChecklist')
                               .doc(depoName)
-                              .collection('PROOFING TABLE DATA')
-                              .doc('PROOFING DATA')
-                              .collection(userId!)
+                              .collection('userId')
+                              .doc(userId)
+                              .collection(widget.fieldclnName)
                               .doc(currentDate)
                               .set({
                             'data': proofingtabledatalist,

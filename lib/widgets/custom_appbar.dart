@@ -1,10 +1,9 @@
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 import '../authentication/login_register.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   String title;
   final double height;
   bool isSync = false;
@@ -22,11 +21,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+
+  @override
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  @override
   Widget build(BuildContext context) {
     return AppBar(
-      centerTitle: isCentered ? true : false,
+      centerTitle: widget.isCentered ? true : false,
       title: Text(
-        title,
+        widget.title,
         maxLines: 2,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
       ),
@@ -34,10 +42,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
       actions: [
-        isSync
+        // isConnected ? Container() : const NoInterneet(),
+        // IconButton(
+        //     onPressed: () {
+        //       isConnected
+        //           ? showAlertDialog(context)
+        //           : Icons.signal_wifi_off;
+        //     },
+        //     icon: Icon(Icons.wifi)),
+
+        widget.isSync
             ? InkWell(
                 onTap: () {
-                  store!();
+                  widget.store!();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -48,7 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               )
-            : haveupload
+            : widget.haveupload
                 ? Container(
                     padding: const EdgeInsets.all(5),
                     height: 30,
@@ -63,27 +80,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           style: TextStyle(color: white, fontSize: 12),
                         )),
                   )
-                : Container(),
-
-        // Padding(
-        //     padding: const EdgeInsets.all(6.0),
-        //     child: IconButton(
-        //       onPressed: () {
-        //         onWillPop(context);
-        //       },
-        //       icon: const Padding(
-        //         padding: const EdgeInsets.only(bottom: 25),
-        //         child: Icon(
-        //           Icons.logout_rounded,
-        //         ),
-        //       ),
-        //     ))
+                : Container()
       ],
     );
   }
 
-  @override
-  Size get preferredSize => Size.fromHeight(height);
+  Size get preferredSize => Size.fromHeight(widget.height);
 }
 
 Future<bool> onWillPop(BuildContext context) async {
@@ -161,4 +163,24 @@ Future<bool> onWillPop(BuildContext context) async {
             ),
           ));
   return a;
+}
+
+showAlertDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert Dialog Title'),
+        content: Text('This is the content of the alert dialog.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }
