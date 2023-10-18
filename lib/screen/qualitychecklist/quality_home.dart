@@ -84,7 +84,7 @@ class _QualityHomeState extends State<QualityHome> {
 
             appBar: AppBar(
               backgroundColor: blue,
-              title: const Text('Quality Checklist'),
+              title: Text('${widget.depoName}/Quality Checklist'),
               actions: const [
                 // Row(
                 //   children: [

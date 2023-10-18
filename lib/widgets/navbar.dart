@@ -5,6 +5,7 @@ import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/internet_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../screen/homepage/gallery.dart';
 import '../style.dart';
 
@@ -60,7 +61,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                 //   DeviceOrientation.portraitDown,
                 //   // DeviceOrientation.landscapeLeft,
                 // ]);
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (_) => CitiesHome(),
@@ -95,7 +96,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                 //   DeviceOrientation.portraitDown,
                 //   // DeviceOrientation.landscapeLeft,
                 // ]);
-                Navigator.pushNamed(context, '/chatpage');
+                Navigator.pushReplacementNamed(context, '/chatpage');
               }),
           const Divider(),
           // ListTile(
@@ -179,9 +180,12 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                         )),
                         Expanded(
                             child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             a = true;
-
+                            SharedPreferences preferences =
+                                await SharedPreferences.getInstance();
+                            await preferences.clear();
+                            // ignore: use_build_context_synchronously
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

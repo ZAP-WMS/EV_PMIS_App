@@ -50,10 +50,11 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   void initState() {
+    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     print('Overview page - ${widget.role}');
     getData();
+
     super.initState();
-    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
 
   @override
@@ -75,8 +76,8 @@ class _OverviewPageState extends State<OverviewPage> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
-        isCentered: true,
-        title: 'Overview Page',
+        isCentered: false,
+        title: '${widget.depoName}/Overview Page',
         height: 55,
         isSync: false,
       ),
@@ -92,14 +93,8 @@ class _OverviewPageState extends State<OverviewPage> {
                   //   builder: (context) => MaterialProcurement(
                   //       cityName: cityName, depoName: widget.depoName),
                   // )),
-                  Navigator.pushNamed(
-                    context,
-                    screens[index],
-                    arguments: {
-                      'depoName': widget.depoName,
-                      'role': widget.role
-                    },
-                  ),
+                  Navigator.pushNamed(context, screens[index],
+                      arguments: widget.depoName),
               child: cards(desription[index], imagedata[index], index));
         }),
       ),

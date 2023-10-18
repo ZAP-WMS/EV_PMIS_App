@@ -31,7 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../feedback/chat.dart';
 
-import '../screen/closureReport/closurefield.dart';
+import '../screen/planning/project_planning.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -39,7 +39,6 @@ class RouteGenerator {
     return MaterialPageRoute(builder: (context) {
       final isConnected =
           Provider.of<ConnectivityProvider>(context).isConnected;
-      print('status$isConnected');
       if (!isConnected) {
         return const NoInterneet();
       }
@@ -51,9 +50,9 @@ class RouteGenerator {
         case '/gallery':
           return const GalleryPage();
         case '/homepage':
-          return const HomePage();
+          return HomePage();
         case '/cities-page':
-          return const CitiesHome();
+          return CitiesHome();
         case '/depotOverview':
           return DepotOverview(depoName: args.toString());
         case '/overview page':
@@ -65,6 +64,8 @@ class RouteGenerator {
           return KeyEvents(depoName: args.toString());
         case '/material-page':
           return MaterialProcurement(depoName: args.toString());
-
+      }
+      return const NodataAvailable();
+    });
   }
 }

@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
+import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../shared_preferences/shared_preferences.dart';
 import '../style.dart';
 
 class LoginPage extends StatefulWidget {
@@ -97,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 200,
                     ),
                     Text("Project Management Information System",
-                        style: headlineBold),
+                        textAlign: TextAlign.center, style: headlineBold),
                   ],
                 )),
           ),
