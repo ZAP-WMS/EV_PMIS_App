@@ -37,7 +37,7 @@ class _CitiesPageState extends State<CitiesPage> {
   @override
   Widget build(BuildContext context) {
     return isloading
-        ? LoadingPage()
+        ? CircularProgressIndicator()
         : Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Container(
@@ -54,7 +54,7 @@ class _CitiesPageState extends State<CitiesPage> {
                 stream: _stream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return LoadingPage();
+                    return CircularProgressIndicator();
                   }
                   return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
@@ -108,8 +108,8 @@ class _CitiesPageState extends State<CitiesPage> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.elliptical(100, 100))),
             child: Container(
-                width: 70,
-                height: 70,
+                width: 50,
+                height: 50,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),

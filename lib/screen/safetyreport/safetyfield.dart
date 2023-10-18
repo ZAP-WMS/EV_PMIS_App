@@ -1249,16 +1249,17 @@ class _SafetyFieldState extends State<SafetyField> {
         .then((ds) {
       setState(() {
         // managername = ds.data()!['ManagerName'];
-
-        tpController.text = ds.data()!['TPNo'];
-        revController.text = ds.data()!['Rev'];
-        locationContoller.text = ds.data()!['DepotLocation'];
-        addressController.text = ds.data()!['Address'];
-        contactController.text = ds.data()!['ContactNo'];
-        latitudeController.text = ds.data()!['Latitude'];
-        stateController.text = ds.data()!['State'];
-        chargerController.text = ds.data()!['ChargerType'];
-        conductedController.text = ds.data()!['ConductedBy'];
+        if (ds.exists) {
+          tpController.text = ds.data()!['TPNo'];
+          revController.text = ds.data()!['Rev'];
+          locationContoller.text = ds.data()!['DepotLocation'];
+          addressController.text = ds.data()!['Address'];
+          contactController.text = ds.data()!['ContactNo'];
+          latitudeController.text = ds.data()!['Latitude'];
+          stateController.text = ds.data()!['State'];
+          chargerController.text = ds.data()!['ChargerType'];
+          conductedController.text = ds.data()!['ConductedBy'];
+        }
       });
     });
   }

@@ -1,7 +1,7 @@
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class CloserReportModel {
-  double? siNo;
+  dynamic siNo;
   String? content;
   // String? attachment;
 

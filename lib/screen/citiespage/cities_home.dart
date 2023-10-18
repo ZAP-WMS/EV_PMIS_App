@@ -17,7 +17,6 @@ class CitiesHome extends StatefulWidget {
 class _CitiesHomeState extends State<CitiesHome> {
   @override
   void initState() {
-    check_intereConnection();
     super.initState();
   }
 
