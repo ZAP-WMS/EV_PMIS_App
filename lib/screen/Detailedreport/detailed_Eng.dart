@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -118,7 +119,10 @@ class _DetailedEngtState extends State<DetailedEng>
             ),
             actions: [
               InkWell(
-                onTap: () => StoreData(),
+                onTap: () {
+                  _showDialog(context);
+                  StoreData();
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Image.asset(
@@ -239,6 +243,23 @@ class _DetailedEngtState extends State<DetailedEng>
     });
   }
 
+  void _showDialog(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        content: SizedBox(
+          height: 50,
+          width: 50,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: blue,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void StoreData() {
     Map<String, dynamic> tableData = Map();
     Map<String, dynamic> evTableData = Map();
@@ -266,6 +287,7 @@ class _DetailedEngtState extends State<DetailedEng>
       'data': tabledata2,
     }).whenComplete(() {
       tabledata2.clear();
+
       for (var i in _detailedEngSourceev.dataGridRows) {
         for (var data in i.getCells()) {
           if (data.columnName != 'button' ||
@@ -288,6 +310,7 @@ class _DetailedEngtState extends State<DetailedEng>
         'data': ev_tabledatalist,
       }).whenComplete(() {
         ev_tabledatalist.clear();
+
         for (var i in _detailedEngSourceShed.dataGridRows) {
           for (var data in i.getCells()) {
             if (data.columnName != 'button' ||
@@ -310,6 +333,7 @@ class _DetailedEngtState extends State<DetailedEng>
           'data': shed_tabledatalist,
         }).whenComplete(() {
           shed_tabledatalist.clear();
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('Data are synced'),
             backgroundColor: blue,

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -68,7 +69,7 @@ class _ClosureFieldState extends State<ClosureField> {
     return Scaffold(
         drawer: const NavbarDrawer(),
         appBar: CustomAppBar(
-          title: 'Closure Report/${widget.depoName}',
+          title: '${widget.depoName}/Closure Report',
           height: 50,
           isSync: true,
           store: () {
@@ -87,6 +88,7 @@ class _ClosureFieldState extends State<ClosureField> {
                 'LaoNo': loaController.text,
               },
             );
+            _showDialog(context);
             store();
           },
           isCentered: false,
@@ -414,12 +416,30 @@ class _ClosureFieldState extends State<ClosureField> {
       SetOptions(merge: true),
     ).whenComplete(() {
       tabledata2.clear();
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text('Data are synced'),
         backgroundColor: blue,
       ));
     });
   }
+}
+
+void _showDialog(BuildContext context) {
+  showCupertinoDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      content: SizedBox(
+        height: 50,
+        width: 50,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: blue,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 // closureField(String depoName) {

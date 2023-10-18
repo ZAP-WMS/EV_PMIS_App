@@ -47,7 +47,6 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   void initState() {
-    
     super.initState();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
@@ -71,8 +70,8 @@ class _OverviewPageState extends State<OverviewPage> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
-        isCentered: true,
-        title: 'Overview Page',
+        isCentered: false,
+        title: '${widget.depoName}/Overview Page',
         height: 55,
         isSync: false,
       ),

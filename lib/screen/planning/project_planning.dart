@@ -323,7 +323,7 @@ class _KeyEventsState extends State<KeyEvents> {
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
-                  title: 'Project Planning/${widget.depoName}',
+                  title: '${widget.depoName}/Project Planning',
                   height: 50,
                   isSync: false,
                   isCentered: false,

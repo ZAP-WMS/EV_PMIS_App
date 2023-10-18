@@ -3,6 +3,7 @@ import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/widgets/activity_headings.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -191,6 +192,7 @@ class _CivilFieldState extends State<CivilField> {
           height: 50,
           isSync: true,
           store: () async {
+            _showDialog(context);
             CivilstoreData(context, widget.depoName!, currentDate);
             await FirebaseFirestore.instance
                 .collection('CivilChecklistField')
@@ -213,7 +215,7 @@ class _CivilFieldState extends State<CivilField> {
           isCentered: false),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('CivilChecklistFiel')
+            .collection('CivilChecklistField')
             .doc('${widget.depoName}')
             .collection('userId')
             .doc(userId)
@@ -888,6 +890,7 @@ class _CivilFieldState extends State<CivilField> {
                               .set({
                             'data': proofingtabledatalist,
                           }).whenComplete(() {
+                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: const Text('Data are synced'),
                               backgroundColor: blue,
@@ -904,6 +907,23 @@ class _CivilFieldState extends State<CivilField> {
         });
       });
     });
+  }
+
+  void _showDialog(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        content: SizedBox(
+          height: 50,
+          width: 50,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: blue,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _fetchUserData() async {

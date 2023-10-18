@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -170,6 +171,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
           height: 50,
           isSync: true,
           store: () {
+            _showDialog(context);
             storeData(context, widget.depoName!, currentDate);
             FirebaseFirestore.instance
                 .collection('ElectricalChecklistField')
@@ -706,6 +708,23 @@ class _ElectricalFieldState extends State<ElectricalField> {
     );
   }
 
+  void _showDialog(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        content: SizedBox(
+          height: 50,
+          width: 50,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: blue,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   storeData(BuildContext context, String depoName, String currentDate) {
     Map<String, dynamic> pssTableData = Map();
     Map<String, dynamic> rmuTableData = Map();
@@ -949,6 +968,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                         'data': eptabledatalist,
                       }).whenComplete(() {
                         eptabledatalist.clear();
+                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Text('Data are synced'),
                           backgroundColor: blue,

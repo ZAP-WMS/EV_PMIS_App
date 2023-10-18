@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../authentication/authservice.dart';
 import '../../widgets/internet_checker.dart';
+import '../../widgets/navbar.dart';
 
 String? userId;
 
@@ -19,7 +20,6 @@ class GalleryPage extends StatefulWidget {
 class _GalleryPageState extends State<GalleryPage> {
   @override
   void initState() {
-   
     super.initState();
     getUserId();
   }
@@ -37,6 +37,7 @@ class _GalleryPageState extends State<GalleryPage> {
       'assets/gallery/Picture2.png',
     ];
     return Scaffold(
+      drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
         isCentered: true,
         title: 'Gallery',

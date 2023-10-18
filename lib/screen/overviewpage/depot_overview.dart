@@ -112,7 +112,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     return Scaffold(
         appBar: CustomAppBar(
           isCentered: true,
-          title: 'Depot Overview/${widget.depoName}',
+          title: '${widget.depoName}/Depot Overview',
           height: 50,
           isSync: false,
           store: () async {
@@ -127,8 +127,8 @@ class _DepotOverviewState extends State<DepotOverview> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-                height: 400,
-                width: 300,
+                height: 200,
+                width: 200,
                 child: Image.asset(
                   'assets/overview_image/depotOverview.webp',
                 )),
