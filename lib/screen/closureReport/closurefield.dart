@@ -58,7 +58,7 @@ class _ClosureFieldState extends State<ClosureField> {
     _stream = FirebaseFirestore.instance
         .collection('ClosureProjectReport')
         .doc(widget.depoName)
-        .collection('ClosureReport')
+        .collection('userId')
         .doc(userId)
         .snapshots();
     super.initState();
@@ -76,7 +76,7 @@ class _ClosureFieldState extends State<ClosureField> {
             FirebaseFirestore.instance
                 .collection('ClosureReport')
                 .doc('${widget.depoName}')
-                .collection("ClosureData")
+                .collection("userId")
                 .doc(userId)
                 .set(
               {
@@ -97,7 +97,7 @@ class _ClosureFieldState extends State<ClosureField> {
           stream: FirebaseFirestore.instance
               .collection('ClosureReport')
               .doc('${widget.depoName}')
-              .collection('ClosureData')
+              .collection('userId')
               .doc(currentDate)
               .snapshots(),
           builder: (context, snapshot) {
@@ -112,7 +112,7 @@ class _ClosureFieldState extends State<ClosureField> {
                   closureField(loaController, 'LOA No.'),
                   const SizedBox(height: 15),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.7,
                     child: StreamBuilder(
                       builder: (context, snapshot) {
                         return StreamBuilder(
@@ -344,18 +344,20 @@ class _ClosureFieldState extends State<ClosureField> {
     await FirebaseFirestore.instance
         .collection('ClosureReport')
         .doc(widget.depoName)
-        .collection("ClosureData")
+        .collection("userId")
         .doc(userId)
         .get()
         .then((ds) {
       setState(() {
-        // managername = ds.data()!['ManagerName'];
-        depotController.text = ds.data()!['DepotName'];
-        longitudeController.text = ds.data()!['Longitude'];
-        latitudeController.text = ds.data()!['Latitude'];
-        stateController.text = ds.data()!['State'];
-        busesController.text = ds.data()!['Buses'];
-        loaController.text = ds.data()!['LaoNo'];
+        if (ds.exists) {
+          // managername = ds.data()!['ManagerName'];
+          depotController.text = ds.data()!['DepotName'];
+          longitudeController.text = ds.data()!['Longitude'];
+          latitudeController.text = ds.data()!['Latitude'];
+          stateController.text = ds.data()!['State'];
+          busesController.text = ds.data()!['Buses'];
+          loaController.text = ds.data()!['LaoNo'];
+        }
       });
     });
   }
@@ -409,7 +411,7 @@ class _ClosureFieldState extends State<ClosureField> {
     FirebaseFirestore.instance
         .collection('ClosureReportTable')
         .doc(widget.depoName)
-        .collection('Closure Report')
+        .collection('userId')
         .doc(userId)
         .set(
       {'data': tabledata2},
