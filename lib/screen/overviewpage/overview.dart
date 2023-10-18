@@ -103,7 +103,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   Widget cards(String desc, String image, int index) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(5.0),   
       child: Card(
         elevation: 10,
         shadowColor: blue,
