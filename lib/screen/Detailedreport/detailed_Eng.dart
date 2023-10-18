@@ -606,6 +606,8 @@ class _DetailedEngtState extends State<DetailedEng>
                       alldata = '';
                       alldata = snapshot.data['data'] as List<dynamic>;
                       DetailedProject.clear();
+                      _detailedDataSource.buildDataGridRows();
+                      _detailedDataSource.updateDatagridSource();
                       alldata.forEach((element) {
                         DetailedProject.add(
                             DetailedEngModel.fromjsaon(element));
@@ -1018,6 +1020,8 @@ class _DetailedEngtState extends State<DetailedEng>
                       alldata = '';
                       alldata = snapshot.data['data'] as List<dynamic>;
                       DetailedProjectev.clear();
+                      _detailedEngSourceev.buildDataGridRowsEV();
+                      _detailedEngSourceev.updateDatagridSource();
                       alldata.forEach((element) {
                         DetailedProjectev.add(
                             DetailedEngModel.fromjsaon(element));
@@ -1445,6 +1449,8 @@ class _DetailedEngtState extends State<DetailedEng>
                       alldata = '';
                       alldata = snapshot.data['data'] as List<dynamic>;
                       DetailedProjectshed.clear();
+                      _detailedEngSourceShed.buildDataGridRowsShed();
+                      _detailedEngSourceShed.updateDatagridSource();
                       alldata.forEach((element) {
                         DetailedProjectshed.add(
                             DetailedEngModel.fromjsaon(element));

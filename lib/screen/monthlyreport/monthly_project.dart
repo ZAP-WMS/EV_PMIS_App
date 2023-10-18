@@ -348,7 +348,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'ActivityNo',
                                     autoFitPadding: tablepadding,
                                     allowEditing: false,
-                                    width: 70,
+                                    width: 65,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -365,7 +365,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'ActivityDetails',
                                     autoFitPadding: tablepadding,
                                     allowEditing: false,
-                                    width: 350,
+                                    width: 250,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -460,7 +460,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'Progress',
                                     autoFitPadding: tablepadding,
                                     allowEditing: true,
-                                    width: 250,
+                                    width: 150,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -475,7 +475,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'Status',
                                     autoFitPadding: tablepadding,
                                     allowEditing: true,
-                                    width: 250,
+                                    width: 150,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -490,7 +490,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'Action',
                                     autoFitPadding: tablepadding,
                                     allowEditing: true,
-                                    width: 250,
+                                    width:150,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,

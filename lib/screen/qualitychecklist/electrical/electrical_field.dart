@@ -734,9 +734,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
     FirebaseFirestore.instance
         .collection('ElectricalQualityChecklist')
         .doc(depoName)
-        .collection('PSS TABLE DATA')
-        .doc('PSS')
-        .collection(userId!)
+        .collection('userId')
+        .doc(userId)
+        .collection(widget.fielClnName!)
         .doc(currentDate)
         .set({
       'data': psstabledatalist,
@@ -757,9 +757,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
       FirebaseFirestore.instance
           .collection('ElectricalQualityChecklist')
           .doc(depoName)
-          .collection('RMU TABLE DATA')
-          .doc('RMU')
-          .collection(userId!)
+          .collection('userId')
+          .doc(userId)
+          .collection(widget.fielClnName!)
           .doc(currentDate)
           .set({
         'data': rmutabledatalist,
@@ -781,9 +781,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
         FirebaseFirestore.instance
             .collection('ElectricalQualityChecklist')
             .doc(depoName)
-            .collection('CONVENTIONAL TRANSFORMER TABLE DATA')
-            .doc('CONVENTIONAL TRANSFORMER')
-            .collection(userId!)
+            .collection('userId')
+            .doc(userId)
+            .collection(widget.fielClnName!)
             .doc(currentDate)
             .set({
           'data': cttabledatalist,
@@ -804,9 +804,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
           FirebaseFirestore.instance
               .collection('ElectricalQualityChecklist')
               .doc(depoName)
-              .collection('CTPT METERING UNIT TABLE DATA')
-              .doc('CTPT METERING UNIT')
-              .collection(userId!)
+              .collection('userId')
+              .doc(userId)
+              .collection(widget.fielClnName!)
               .doc(currentDate)
               .set({
             'data': cmutabledatalist,
@@ -826,9 +826,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
             FirebaseFirestore.instance
                 .collection('ElectricalQualityChecklist')
                 .doc(depoName)
-                .collection('ACDB TABLE DATA')
-                .doc('ACDB DATA')
-                .collection(userId!)
+                .collection('userId')
+                .doc(userId)
+                .collection(widget.fielClnName!)
                 .doc(currentDate)
                 .set({
               'data': acdbtabledatalist,
@@ -849,9 +849,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
               FirebaseFirestore.instance
                   .collection('ElectricalQualityChecklist')
                   .doc(depoName)
-                  .collection('CABLE INSTALLATION TABLE DATA')
-                  .doc('CABLE INSTALLATION')
-                  .collection(userId!)
+                  .collection('userId')
+                  .doc(userId)
+                  .collection(widget.fielClnName!)
                   .doc(currentDate)
                   .set({
                 'data': citabledatalist,
@@ -872,9 +872,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
                 FirebaseFirestore.instance
                     .collection('ElectricalQualityChecklist')
                     .doc(depoName)
-                    .collection('CDI TABLE DATA')
-                    .doc('CDI DATA')
-                    .collection(userId!)
+                    .collection('userId')
+                    .doc(userId)
+                    .collection(widget.fielClnName!)
                     .doc(currentDate)
                     .set({
                   'data': cditabledatalist,
@@ -895,9 +895,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
                   FirebaseFirestore.instance
                       .collection('ElectricalQualityChecklist')
                       .doc(depoName)
-                      .collection('MSP TABLE DATA')
-                      .doc('MSP DATA')
-                      .collection(userId!)
+                      .collection('userId')
+                      .doc(userId)
+                      .collection(widget.fielClnName!)
                       .doc(currentDate)
                       .set({
                     'data': msptabledatalist,
@@ -918,9 +918,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     FirebaseFirestore.instance
                         .collection('ElectricalQualityChecklist')
                         .doc(depoName)
-                        .collection('CHARGER TABLE DATA')
-                        .doc('CHARGER DATA')
-                        .collection(userId!)
+                        .collection('userId')
+                        .doc(userId)
+                        .collection(widget.fielClnName!)
                         .doc(currentDate)
                         .set({
                       'data': chargertabledatalist,
@@ -941,9 +941,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
                       FirebaseFirestore.instance
                           .collection('ElectricalQualityChecklist')
                           .doc(depoName)
-                          .collection('EARTH TABLE DATA')
-                          .doc('EARTH DATA')
-                          .collection(userId!)
+                          .collection('userId')
+                          .doc(userId)
+                          .collection(widget.fielClnName!)
                           .doc(currentDate)
                           .set({
                         'data': eptabledatalist,

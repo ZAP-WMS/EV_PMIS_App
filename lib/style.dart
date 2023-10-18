@@ -42,10 +42,10 @@ TextStyle tableheadersubtitle =
 TextStyle tableheaderwhitecolor =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: white);
 
-TextStyle tablefontsize = TextStyle(fontSize: 12);
+TextStyle tablefontsize = const TextStyle(fontSize: 12);
 
 EdgeInsets tablepadding =
-    const EdgeInsets.symmetric(horizontal: 16, vertical: 16);
+    const EdgeInsets.symmetric(horizontal: 5, vertical: 14);
 
 TextStyle normaltext = GoogleFonts.ibmPlexSans(
   fontWeight: FontWeight.w600,
