@@ -33,7 +33,7 @@ class Employee {
   int actualDuration;
   String? reasonDelay;
   int delay;
-  // String? dependency;
+  String? dependency;
   int unit;
   int scope;
   int qtyExecuted;

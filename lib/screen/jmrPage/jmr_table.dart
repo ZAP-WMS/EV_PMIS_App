@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../components/Loading_page.dart';
-import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/model/jmr.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -147,7 +145,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
       child: _isLoading
           ? LoadingPage()
           : Scaffold(
-              drawer: const NavbarDrawer(),
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(
@@ -178,7 +175,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                               if (!snapshot.hasData) {
                                 jmrtable = getData();
                                 _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow, context);
+                                    JmrDataSource(jmrtable, deleteRow);
                                 _dataGridController = DataGridController();
                                 return SizedBox(
                                   height:
@@ -404,10 +401,10 @@ class _JmrTablePageState extends State<JmrTablePage> {
                               } else if (snapshot.hasData) {
                                 jmrtable = convertListToJmrModel(data);
                                 _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow, context);
+                                    JmrDataSource(jmrtable, deleteRow);
 
                                 _dataGridController = DataGridController();
- 
+
                                 return SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.8,

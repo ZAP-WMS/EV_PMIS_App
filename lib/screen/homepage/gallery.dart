@@ -5,9 +5,10 @@ import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../authentication/authservice.dart';
+import '../../shared_preferences/shared_preferences.dart';
 import '../../widgets/internet_checker.dart';
 
-String? userId;
+dynamic userId = '';
 
 class GalleryPage extends StatefulWidget {
   const GalleryPage({super.key});
@@ -17,9 +18,10 @@ class GalleryPage extends StatefulWidget {
 }
 
 class _GalleryPageState extends State<GalleryPage> {
+  String role = '';
   @override
   void initState() {
-   
+    getData();
     super.initState();
     getUserId();
   }
@@ -84,7 +86,8 @@ class _GalleryPageState extends State<GalleryPage> {
                           backgroundColor: blue,
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/homepage');
+                          Navigator.pushNamed(context, '/homepage',
+                              arguments: role);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -116,6 +119,10 @@ class _GalleryPageState extends State<GalleryPage> {
       userId = value;
       setState(() {});
     });
+  }
+
+  void getData() async {
+    role = await StoredDataPreferences.getSharedPreferences('role');
   }
 }
 
