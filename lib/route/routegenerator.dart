@@ -8,30 +8,18 @@ import 'package:ev_pmis_app/action_screens/monthly_report_action.dart';
 import 'package:ev_pmis_app/action_screens/project_planning_action.dart';
 import 'package:ev_pmis_app/action_screens/quality_checklist_action.dart';
 import 'package:ev_pmis_app/action_screens/safety_checklist_action.dart';
+import 'package:ev_pmis_app/action_screens/testing_action.dart';
 import 'package:ev_pmis_app/authentication/login_register.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
-import 'package:ev_pmis_app/screen/Detailedreport/detailed_Eng.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/homepage/home_page.dart';
 import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
 import 'package:flutter/material.dart';
 import '../action_screens/jmr_action_screen.dart';
-
-import 'package:ev_pmis_app/screen/materialprocurement/material_vendor.dart';
-import 'package:ev_pmis_app/screen/materialprocurement/upload_matrial.dart';
-import 'package:ev_pmis_app/screen/monthlyreport/monthly_project.dart';
-import 'package:ev_pmis_app/screen/overviewpage/depot_overview.dart';
-import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
-import 'package:ev_pmis_app/screen/testingpage/testing_page.dart';
 import 'package:ev_pmis_app/widgets/no_internet.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../feedback/chat.dart';
-
-import '../screen/planning/project_planning.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -53,17 +41,95 @@ class RouteGenerator {
           return HomePage();
         case '/cities-page':
           return CitiesHome();
-        case '/depotOverview':
-          return DepotOverview(depoName: args.toString());
         case '/overview page':
-          return OverviewPage(depoName: args.toString());
-        // case '/overview-table':
-        //   return MaterialPageRoute(
-        //       builder: (context) => OverviewTable(depoName: args.toString()));
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return OverviewPage(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+
+//
+// Overview Pages Start from here...
+//
+
+        case '/depotOverview':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return DepotOverviewAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
         case '/planning-page':
-          return KeyEvents(depoName: args.toString());
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return ProjectPlanningAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
         case '/material-page':
-          return MaterialProcurement(depoName: args.toString());
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return MaterialProcurementAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/daily-report':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return DailyProjectAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/monthly-report':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return MonthlyReportAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/detailed-page':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return DetailEngineeringAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/jmrPage':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return JmrActionScreen(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/safety-page':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return SafetyChecklistAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/quality-page':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return QualityChecklistAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/testing-page':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return TestingAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+        case '/closure-page':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return ClosureReportAction(
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
       }
       return const NodataAvailable();
     });

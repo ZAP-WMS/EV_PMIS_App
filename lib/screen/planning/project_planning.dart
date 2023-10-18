@@ -934,6 +934,7 @@ class _KeyEventsState extends State<KeyEvents> {
                             ),
                             Container(
                                 width: 300,
+                                height: _employees.length * 75,
                                 child: SingleChildScrollView(
                                   child: GanttChartView(
                                       scrollController: scrollController,

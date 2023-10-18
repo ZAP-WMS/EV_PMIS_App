@@ -133,7 +133,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                 showDialog(
                                     context: mainContext,
                                     builder: (context) => AlertDialog(
-                                          insetPadding: EdgeInsets.all(8),
+                                          insetPadding: const EdgeInsets.all(8),
                                           buttonPadding: EdgeInsets.all(15),
                                           title: const Text(
                                             'All Date',
@@ -383,7 +383,8 @@ class DepotOverviewDatasource extends DataGridSource {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value,
-                                              style: TextStyle(fontSize: 12)),
+                                              style: const TextStyle(
+                                                  fontSize: 12)),
                                         );
                                       }).toList())
                                   : dataGridCell.columnName == 'Status'
@@ -562,7 +563,6 @@ class DepotOverviewDatasource extends DataGridSource {
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         style: const TextStyle(fontSize: 12),
-        textInputAction: TextInputAction.next,
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
