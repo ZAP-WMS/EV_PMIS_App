@@ -8,7 +8,6 @@ import 'package:ev_pmis_app/action_screens/monthly_report_action.dart';
 import 'package:ev_pmis_app/action_screens/project_planning_action.dart';
 import 'package:ev_pmis_app/action_screens/quality_checklist_action.dart';
 import 'package:ev_pmis_app/action_screens/safety_checklist_action.dart';
-import 'package:ev_pmis_app/action_screens/testing_action.dart';
 import 'package:ev_pmis_app/authentication/login_register.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
@@ -20,6 +19,9 @@ import '../action_screens/jmr_action_screen.dart';
 import 'package:ev_pmis_app/widgets/no_internet.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
 import 'package:provider/provider.dart';
+
+import '../screen/chatPage/feedback.dart';
+import '../screen/testingpage/testing_page.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -41,6 +43,10 @@ class RouteGenerator {
           return HomePage();
         case '/cities-page':
           return CitiesHome();
+        case '/testing-page':
+          return TestingPage();
+        case '/chat-page':
+          return FeedbackPage();
         case '/overview page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -48,11 +54,9 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
-
 //
 // Overview Pages Start from here...
 //
-
         case '/depotOverview':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -60,6 +64,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/planning-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -67,6 +72,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/material-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -74,6 +80,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/daily-report':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -81,6 +88,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/monthly-report':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -88,6 +96,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/detailed-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -95,6 +104,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/jmrPage':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -102,6 +112,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/safety-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -109,6 +120,7 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
         case '/quality-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -116,13 +128,13 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
-        case '/testing-page':
-          Map<String, dynamic> argument =
-              settings.arguments as Map<String, dynamic>;
-          return TestingAction(
-            depoName: argument['depoName'],
-            role: argument['role'],
-          );
+        // case '/testing-page':
+        //   Map<String, dynamic> argument =
+        //       settings.arguments as Map<String, dynamic>;
+        //   return TestingAction(
+        //     depoName: argument['depoName'],
+        //     role: argument['role'],
+        //   );
         case '/closure-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;

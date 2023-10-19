@@ -3,8 +3,7 @@ import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 class TestingPage extends StatefulWidget {
-  String depoName;
-  TestingPage({super.key, required this.depoName});
+  TestingPage({super.key});
 
   @override
   State<TestingPage> createState() => _TestingPageState();
@@ -16,7 +15,7 @@ class _TestingPageState extends State<TestingPage> {
     return Scaffold(
       drawer: NavbarDrawer(),
       appBar: CustomAppBar(
-          title: '${widget.depoName}/testing planning',
+          title: 'Testing planning',
           height: 50,
           isSync: false,
           isCentered: true),
