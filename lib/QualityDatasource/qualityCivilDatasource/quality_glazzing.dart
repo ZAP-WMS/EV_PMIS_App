@@ -482,7 +482,7 @@ class QualityGlazzingDataSource extends DataGridSource {
     if (newCellValue == null || oldValue == newCellValue) {
       return;
     }
-    if (column.columnName == 'srNo') {
+  if (column.columnName == 'srNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(columnName: 'srNo', value: newCellValue);
       _checklistModel[dataRowIndex].srNo = newCellValue as int;
@@ -495,9 +495,9 @@ class QualityGlazzingDataSource extends DataGridSource {
           DataGridCell<String>(
               columnName: 'responsibility', value: newCellValue);
       _checklistModel[dataRowIndex].responsibility = newCellValue.toString();
-    } else if (column.columnName == 'reference') {
+    } else if (column.columnName == 'Reference') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(columnName: 'reference', value: newCellValue);
+          DataGridCell<dynamic>(columnName: 'Reference', value: newCellValue);
       _checklistModel[dataRowIndex].reference = newCellValue;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =

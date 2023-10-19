@@ -109,9 +109,19 @@ class _CivilFieldState extends State<CivilField> {
   List<QualitychecklistModel> qualitylisttable11 = <QualitychecklistModel>[];
   List<QualitychecklistModel> qualitylisttable12 = <QualitychecklistModel>[];
   late DataGridController _dataGridController;
+
   @override
   void initState() {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+    _stream = FirebaseFirestore.instance
+        .collection('CivilQualityChecklist')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection(widget.fieldclnName)
+        .doc(currentDate)
+        .snapshots();
+
     initializeController();
     _fetchUserData();
     qualitylisttable1 = excavation_getData();
@@ -174,12 +184,6 @@ class _CivilFieldState extends State<CivilField> {
         qualitylisttable12, widget.depoName!, cityName!);
     _dataGridController = DataGridController();
 
-    _stream = FirebaseFirestore.instance
-        .collection('CivilQualityChecklistCollection')
-        .doc('${widget.depoName}')
-        .collection('userId!')
-        .doc('widget.currentDate')
-        .snapshots();
     super.initState();
   }
 
@@ -193,7 +197,37 @@ class _CivilFieldState extends State<CivilField> {
           isSync: true,
           store: () async {
             _showDialog(context);
-            CivilstoreData(context, widget.depoName!, currentDate);
+
+            CivilstoreData(
+                context,
+                widget.fieldclnName == 'Exc'
+                    ? _qualityExcavationDataSource
+                    : widget.fieldclnName == 'BackFilling'
+                        ? _qualityBackFillingDataSource
+                        : widget.fieldclnName == 'Massonary'
+                            ? _qualityMassonaryDataSource
+                            : widget.fieldclnName == 'Glazzing'
+                                ? _qualityGlazzingDataSource
+                                : widget.fieldclnName == 'Ceilling'
+                                    ? _qualityCeillingDataSource
+                                    : widget.fieldclnName == 'Flooring'
+                                        ? _qualityflooringDataSource
+                                        : widget.fieldclnName == 'Inspection'
+                                            ? _qualityInspectionDataSource
+                                            : widget.fieldclnName == 'Ironite'
+                                                ? _qualityIroniteflooringDataSource
+                                                : widget.fieldclnName ==
+                                                        'Painting'
+                                                    ? _qualityPaintingDataSource
+                                                    : widget.fieldclnName ==
+                                                            'Paving'
+                                                        ? _qualityPaintingDataSource
+                                                        : widget.fieldclnName ==
+                                                                'Roofing'
+                                                            ? _qualityRoofingDataSource
+                                                            : _qualityProofingDataSource,
+                widget.depoName!,
+                currentDate);
             await FirebaseFirestore.instance
                 .collection('CivilChecklistField')
                 .doc('${widget.depoName}')
@@ -246,28 +280,35 @@ class _CivilFieldState extends State<CivilField> {
                         return SfDataGridTheme(
                           data: SfDataGridThemeData(headerColor: blue),
                           child: SfDataGrid(
-                            source: widget.index == 0
+                            source: widget.fieldclnName == 'Exc'
                                 ? _qualityExcavationDataSource
-                                : widget.index == 1
+                                : widget.fieldclnName == 'BackFilling'
                                     ? _qualityBackFillingDataSource
-                                    : widget.index == 2
+                                    : widget.fieldclnName == 'Massonary'
                                         ? _qualityMassonaryDataSource
-                                        : widget.index == 3
+                                        : widget.fieldclnName == 'Glazzing'
                                             ? _qualityGlazzingDataSource
-                                            : widget.index == 4
+                                            : widget.fieldclnName == 'Ceilling'
                                                 ? _qualityCeillingDataSource
-                                                : widget.index == 5
+                                                : widget.fieldclnName ==
+                                                        'Flooring'
                                                     ? _qualityflooringDataSource
-                                                    : widget.index == 6
+                                                    : widget.fieldclnName ==
+                                                            'Inspection'
                                                         ? _qualityInspectionDataSource
-                                                        : widget.index == 7
+                                                        : widget.fieldclnName ==
+                                                                'Ironite'
                                                             ? _qualityIroniteflooringDataSource
-                                                            : widget.index == 8
+                                                            : widget.fieldclnName ==
+                                                                    'Painting'
                                                                 ? _qualityPaintingDataSource
-                                                                : widget.index ==
-                                                                        9
-                                                                    ? _qualityPavingDataSource
-                                                                    : _qualityInspectionDataSource,
+                                                                : widget.fieldclnName ==
+                                                                        'Paving'
+                                                                    ? _qualityPaintingDataSource
+                                                                    : widget.fieldclnName ==
+                                                                            'Roofing'
+                                                                        ? _qualityRoofingDataSource
+                                                                        : _qualityProofingDataSource,
 
                             allowEditing: true,
                             frozenColumnsCount: 1,
@@ -278,7 +319,10 @@ class _CivilFieldState extends State<CivilField> {
                             columnWidthMode: ColumnWidthMode.auto,
                             editingGestureType: EditingGestureType.tap,
                             controller: _dataGridController,
-
+                            onQueryRowHeight: (details) {
+                            return details
+                                .getIntrinsicRowHeight(details.rowIndex);
+                          },
                             // onQueryRowHeight: (dwidget.index!etails) {
                             //   return details.rowIndex == 0 ? 60.0 : 49.0;
                             // },
@@ -412,41 +456,90 @@ class _CivilFieldState extends State<CivilField> {
                         alldata.forEach((element) {
                           qualitylisttable1
                               .add(QualitychecklistModel.fromJson(element));
+                          widget.fieldclnName == 'Exc'
+                              ? _qualityExcavationDataSource =
+                                  QualityExcavationDataSource(qualitylisttable1,
+                                      widget.depoName!, cityName!)
+                              : widget.fieldclnName == 'BackFilling'
+                                  ? _qualityBackFillingDataSource =
+                                      QualityBackFillingDataSource(
+                                          qualitylisttable1,
+                                          widget.depoName!,
+                                          cityName!)
+                                  : widget.fieldclnName == 'Massonary'
+                                      ? _qualityMassonaryDataSource =
+                                          QualityMassonaryDataSource(
+                                              qualitylisttable1,
+                                              widget.depoName!,
+                                              cityName!)
+                                      : widget.fieldclnName == 'Glazzing'
+                                          ? _qualityGlazzingDataSource =
+                                              QualityGlazzingDataSource(
+                                                  qualitylisttable1,
+                                                  widget.depoName!,
+                                                  cityName!)
+                                          : widget.fieldclnName == 'Ceilling'
+                                              ? _qualityCeillingDataSource =
+                                                  QualityCeillingDataSource(
+                                                      qualitylisttable1,
+                                                      widget.depoName!,
+                                                      cityName!)
+                                              : widget.fieldclnName ==
+                                                      'Flooring'
+                                                  ? _qualityflooringDataSource =
+                                                      QualityflooringDataSource(
+                                                          qualitylisttable1,
+                                                          widget.depoName!,
+                                                          cityName!)
+                                                  : widget.fieldclnName == 'Inspection'
+                                                      ? _qualityInspectionDataSource = QualityInspectionDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                                                      : widget.fieldclnName == 'Ironite'
+                                                          ? _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                                                          : widget.fieldclnName == 'Painting'
+                                                              ? _qualityPaintingDataSource = QualityPaintingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                                                              : widget.fieldclnName == 'Paving'
+                                                                  ? _qualityPavingDataSource = QualityPavingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                                                                  : widget.fieldclnName == 'Roofing'
+                                                                      ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                                                                      : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
                         });
+                        _dataGridController = DataGridController();
                         return SfDataGridTheme(
                           data: SfDataGridThemeData(headerColor: blue),
                           child: SfDataGrid(
-                            source: widget.index == 0
+                            source: widget.fieldclnName == 'Exc'
                                 ? _qualityExcavationDataSource
-                                : widget.index == 1
+                                : widget.fieldclnName == 'BackFilling'
                                     ? _qualityBackFillingDataSource
-                                    : widget.index == 2
+                                    : widget.fieldclnName == 'Massonary'
                                         ? _qualityMassonaryDataSource
-                                        : widget.index == 3
+                                        : widget.fieldclnName == 'Glazzing'
                                             ? _qualityGlazzingDataSource
-                                            : widget.index == 4
+                                            : widget.fieldclnName == 'Ceilling'
                                                 ? _qualityCeillingDataSource
-                                                : widget.index == 5
+                                                : widget.fieldclnName ==
+                                                        'Flooring'
                                                     ? _qualityflooringDataSource
-                                                    : widget.index == 6
+                                                    : widget.fieldclnName ==
+                                                            'Inspection'
                                                         ? _qualityInspectionDataSource
-                                                        : widget.index == 7
+                                                        : widget.fieldclnName ==
+                                                                'Ironite'
                                                             ? _qualityIroniteflooringDataSource
-                                                            : widget.index == 8
+                                                            : widget.fieldclnName ==
+                                                                    'Painting'
                                                                 ? _qualityPaintingDataSource
-                                                                :
-                                                                // widget.index ==
-                                                                //         9
-                                                                //     ?
-                                                                _qualityPavingDataSource,
-                            // widget.index ==
-                            //         10
-                            //     ? _qualityRoofingDataSource
-                            //     : _qualityPROOFINGDataSource,
+                                                                : widget.fieldclnName ==
+                                                                        'Paving'
+                                                                    ? _qualityPaintingDataSource
+                                                                    : widget.fieldclnName ==
+                                                                            'Roofing'
+                                                                        ? _qualityRoofingDataSource
+                                                                        : _qualityProofingDataSource,
 
                             //key: key,
                             allowEditing: true,
-                            frozenColumnsCount: 2,
+                            frozenColumnsCount: 1,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
                             selectionMode: SelectionMode.single,
@@ -600,24 +693,23 @@ class _CivilFieldState extends State<CivilField> {
     );
   }
 
-  CivilstoreData(BuildContext context, String depoName, String currentDate) {
+  CivilstoreData(BuildContext context, dynamic datasource, String depoName,
+      String currentDate) {
     Map<String, dynamic> excavationTableData = Map();
-    Map<String, dynamic> backfillingTableData = Map();
-    Map<String, dynamic> massonaryTableData = Map();
-    Map<String, dynamic> doorsTableData = Map();
-    Map<String, dynamic> ceillingTableData = Map();
-    Map<String, dynamic> flooringTableData = Map();
-    Map<String, dynamic> inspectionTableData = Map();
-    Map<String, dynamic> paintingTableData = Map();
-    Map<String, dynamic> pavingTableData = Map();
-    Map<String, dynamic> roofingTableData = Map();
-    Map<String, dynamic> proofingTableData = Map();
+    // Map<String, dynamic> backfillingTableData = Map();
+    // Map<String, dynamic> massonaryTableData = Map();
+    // Map<String, dynamic> doorsTableData = Map();
+    // Map<String, dynamic> ceillingTableData = Map();
+    // Map<String, dynamic> flooringTableData = Map();
+    // Map<String, dynamic> inspectionTableData = Map();
+    // Map<String, dynamic> paintingTableData = Map();
+    // Map<String, dynamic> pavingTableData = Map();
+    // Map<String, dynamic> roofingTableData = Map();
+    // Map<String, dynamic> proofingTableData = Map();
 
-    for (var i in _qualityExcavationDataSource.dataGridRows) {
+    for (var i in datasource.dataGridRows) {
       for (var data in i.getCells()) {
-        if (data.columnName != 'button' ||
-            data.columnName == 'View' ||
-            data.columnName != 'Delete') {
+        if (data.columnName != 'Upload' && data.columnName != 'View') {
           excavationTableData[data.columnName] = data.value;
         }
       }
@@ -636,276 +728,12 @@ class _CivilFieldState extends State<CivilField> {
         .set({
       'data': excavationtabledatalist,
     }).whenComplete(() {
-      excavationTableData.clear();
-      for (var i in _qualityBackFillingDataSource.dataGridRows) {
-        for (var data in i.getCells()) {
-          if (data.columnName != 'button' ||
-              data.columnName == 'View' ||
-              data.columnName != 'Delete') {
-            backfillingTableData[data.columnName] = data.value;
-          }
-        }
-        backfillingtabledatalist.add(backfillingTableData);
-        backfillingTableData = {};
-      }
-
-      FirebaseFirestore.instance
-          .collection('CivilQualityChecklist')
-          .doc(depoName)
-          .collection('userId')
-          .doc(userId)
-          .collection(widget.fieldclnName)
-          .doc(currentDate)
-          .set({
-        'data': backfillingtabledatalist,
-      }).whenComplete(() {
-        backfillingTableData.clear();
-        for (var i in _qualityMassonaryDataSource.dataGridRows) {
-          for (var data in i.getCells()) {
-            if (data.columnName != 'button' ||
-                data.columnName == 'View' ||
-                data.columnName != 'Delete') {
-              massonaryTableData[data.columnName] = data.value;
-            }
-          }
-
-          massonarytabledatalist.add(massonaryTableData);
-          massonaryTableData = {};
-        }
-
-        FirebaseFirestore.instance
-            .collection('CivilQualityChecklist')
-            .doc(depoName)
-            .collection('userId')
-            .doc(userId)
-            .collection(widget.fieldclnName)
-            .doc(currentDate)
-            .set({
-          'data': backfillingtabledatalist,
-        }).whenComplete(() {
-          massonaryTableData.clear();
-          for (var i in _qualityGlazzingDataSource.dataGridRows) {
-            for (var data in i.getCells()) {
-              if (data.columnName != 'button' ||
-                  data.columnName == 'View' ||
-                  data.columnName != 'Delete') {
-                doorsTableData[data.columnName] = data.value;
-              }
-            }
-            doorstabledatalist.add(doorsTableData);
-            doorsTableData = {};
-          }
-
-          FirebaseFirestore.instance
-              .collection('CivilQualityChecklist')
-              .doc(depoName)
-              .collection('userId')
-              .doc(userId)
-              .collection(widget.fieldclnName)
-              .doc(currentDate)
-              .set({
-            'data': doorstabledatalist,
-          }).whenComplete(() {
-            doorsTableData.clear();
-            for (var i in _qualityCeillingDataSource.dataGridRows) {
-              for (var data in i.getCells()) {
-                if (data.columnName != 'button' ||
-                    data.columnName != 'Delete') {
-                  ceillingTableData[data.columnName] = data.value;
-                }
-              }
-              ceillingtabledatalist.add(ceillingTableData);
-              ceillingTableData = {};
-            }
-
-            FirebaseFirestore.instance
-                .collection('CivilQualityChecklist')
-                .doc(depoName)
-                .collection('userId')
-                .doc(userId)
-                .collection(widget.fieldclnName)
-                .doc(currentDate)
-                .set({
-              'data': ceillingtabledatalist,
-            }).whenComplete(() {
-              ceillingTableData.clear();
-              for (var i in _qualityflooringDataSource.dataGridRows) {
-                for (var data in i.getCells()) {
-                  if (data.columnName != 'button' ||
-                      data.columnName == 'View' ||
-                      data.columnName != 'Delete') {
-                    flooringTableData[data.columnName] = data.value;
-                  }
-                }
-                flooringtabledatalist.add(flooringTableData);
-                flooringTableData = {};
-              }
-
-              FirebaseFirestore.instance
-                  .collection('CivilQualityChecklist')
-                  .doc(depoName)
-                  .collection('userId')
-                  .doc(userId)
-                  .collection(widget.fieldclnName)
-                  .doc(currentDate)
-                  .set({
-                'data': flooringtabledatalist,
-              }).whenComplete(() {
-                flooringTableData.clear();
-                for (var i in _qualityInspectionDataSource.dataGridRows) {
-                  for (var data in i.getCells()) {
-                    if (data.columnName != 'button' ||
-                        data.columnName == 'View' ||
-                        data.columnName != 'Delete') {
-                      inspectionTableData[data.columnName] = data.value;
-                    }
-                  }
-                  inspectiontabledatalist.add(inspectionTableData);
-                  inspectionTableData = {};
-                }
-
-                FirebaseFirestore.instance
-                    .collection('CivilQualityChecklist')
-                    .doc(depoName)
-                    .collection('userId')
-                    .doc(userId)
-                    .collection(widget.fieldclnName)
-                    .doc(currentDate)
-                    .set({
-                  'data': inspectiontabledatalist,
-                }).whenComplete(() {
-                  inspectionTableData.clear();
-                  for (var i in _qualityflooringDataSource.dataGridRows) {
-                    for (var data in i.getCells()) {
-                      if (data.columnName != 'button' ||
-                          data.columnName == 'View' ||
-                          data.columnName != 'Delete') {
-                        flooringTableData[data.columnName] = data.value;
-                      }
-                    }
-                    flooringtabledatalist.add(flooringTableData);
-                    flooringTableData = {};
-                  }
-
-                  FirebaseFirestore.instance
-                      .collection('CivilQualityChecklist')
-                      .doc(depoName)
-                      .collection('userId')
-                      .doc(userId)
-                      .collection(widget.fieldclnName)
-                      .doc(currentDate)
-                      .set({
-                    'data': flooringtabledatalist,
-                  }).whenComplete(() {
-                    flooringTableData.clear();
-                    for (var i in _qualityPaintingDataSource.dataGridRows) {
-                      for (var data in i.getCells()) {
-                        if (data.columnName != 'button' ||
-                            data.columnName == 'View' ||
-                            data.columnName != 'Delete') {
-                          flooringTableData[data.columnName] = data.value;
-                        }
-                      }
-                      paintingtabledatalist.add(paintingTableData);
-                      paintingTableData = {};
-                    }
-
-                    FirebaseFirestore.instance
-                        .collection('CivilQualityChecklist')
-                        .doc(depoName)
-                        .collection('userId')
-                        .doc(userId)
-                        .collection(widget.fieldclnName)
-                        .doc(currentDate)
-                        .set({
-                      'data': paintingtabledatalist,
-                    }).whenComplete(() {
-                      paintingTableData.clear();
-                      for (var i in _qualityPavingDataSource.dataGridRows) {
-                        for (var data in i.getCells()) {
-                          if (data.columnName != 'button' ||
-                              data.columnName == 'View' ||
-                              data.columnName != 'Delete') {
-                            pavingTableData[data.columnName] = data.value;
-                          }
-                        }
-                        pavingtabledatalist.add(pavingTableData);
-                        pavingTableData = {};
-                      }
-
-                      FirebaseFirestore.instance
-                          .collection('CivilQualityChecklist')
-                          .doc(depoName)
-                          .collection('userId')
-                          .doc(userId)
-                          .collection(widget.fieldclnName)
-                          .doc(currentDate)
-                          .set({
-                        'data': pavingtabledatalist,
-                      }).whenComplete(() {
-                        pavingtabledatalist.clear();
-                        for (var i in _qualityRoofingDataSource.dataGridRows) {
-                          for (var data in i.getCells()) {
-                            if (data.columnName != 'button' ||
-                                data.columnName == 'View' ||
-                                data.columnName != 'Delete') {
-                              roofingTableData[data.columnName] = data.value;
-                            }
-                          }
-                          roofingtabledatalist.add(roofingTableData);
-                          roofingTableData = {};
-                        }
-
-                        FirebaseFirestore.instance
-                            .collection('CivilQualityChecklist')
-                            .doc(depoName)
-                            .collection('userId')
-                            .doc(userId)
-                            .collection(widget.fieldclnName)
-                            .doc(currentDate)
-                            .set({
-                          'data': roofingtabledatalist,
-                        }).whenComplete(() {
-                          roofingTableData.clear();
-                          for (var i
-                              in _qualityProofingDataSource.dataGridRows) {
-                            for (var data in i.getCells()) {
-                              if (data.columnName != 'button' ||
-                                  data.columnName == 'View' ||
-                                  data.columnName != 'Delete') {
-                                roofingTableData[data.columnName] = data.value;
-                              }
-                            }
-                            roofingtabledatalist.add(roofingTableData);
-                            roofingTableData = {};
-                          }
-
-                          FirebaseFirestore.instance
-                              .collection('CivilQualityChecklist')
-                              .doc(depoName)
-                              .collection('userId')
-                              .doc(userId)
-                              .collection(widget.fieldclnName)
-                              .doc(currentDate)
-                              .set({
-                            'data': proofingtabledatalist,
-                          }).whenComplete(() {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: const Text('Data are synced'),
-                              backgroundColor: blue,
-                            ));
-                          });
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
+      excavationtabledatalist.clear();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Data are synced'),
+        backgroundColor: blue,
+      ));
     });
   }
 

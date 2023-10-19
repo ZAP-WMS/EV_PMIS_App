@@ -24,7 +24,7 @@ class QualitychecklistModel {
       srNo: json['srNo'],
       checklist: json['checklist'],
       responsibility: json['responsibility'],
-      reference: json['reference'],
+      reference: json['Reference'],
       observation: json['observation'],
       // photoNo: json['photoNo']
     );
@@ -36,7 +36,7 @@ class QualitychecklistModel {
       DataGridCell<int>(columnName: 'srNo', value: srNo),
       DataGridCell<String>(columnName: 'checklist', value: checklist),
       DataGridCell<String>(columnName: 'responsibility', value: responsibility),
-      DataGridCell<dynamic>(columnName: 'reference', value: reference),
+      DataGridCell<dynamic>(columnName: 'Reference', value: reference),
       DataGridCell<String>(columnName: 'observation', value: observation),
       // DataGridCell<int>(columnName: 'photoNo', value: photoNo),
       const DataGridCell<Widget>(columnName: 'Upload', value: null),

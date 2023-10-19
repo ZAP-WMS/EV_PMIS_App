@@ -106,6 +106,14 @@ class _ElectricalFieldState extends State<ElectricalField> {
   @override
   void initState() {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+    _stream = FirebaseFirestore.instance
+        .collection('ElectricalQualityChecklist')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection(widget.fielClnName!)
+        .doc(currentDate)
+        .snapshots();
 
     initializeController();
     _fetchUserData();
@@ -172,7 +180,30 @@ class _ElectricalFieldState extends State<ElectricalField> {
           isSync: true,
           store: () {
             _showDialog(context);
-            storeData(context, widget.depoName!, currentDate);
+            storeData(
+                context,
+                widget.fielClnName == 'PSS'
+                    ? _qualityPSSDataSource
+                    : widget.fielClnName == 'RMU'
+                        ? _qualityrmuDataSource
+                        : widget.fielClnName == 'CT'
+                            ? _qualityctDataSource
+                            : widget.fielClnName == 'CMU'
+                                ? _qualitycmuDataSource
+                                : widget.fielClnName == 'ACDB'
+                                    ? _qualityacdDataSource
+                                    : widget.fielClnName == 'CI'
+                                        ? _qualitycmuDataSource
+                                        : widget.fielClnName == 'CDI'
+                                            ? _qualityCDIDataSource
+                                            : widget.fielClnName == 'MSP'
+                                                ? _qualityMSPDataSource
+                                                : widget.fielClnName ==
+                                                        'CHARGER'
+                                                    ? _qualityChargerDataSource
+                                                    : _qualityEPDataSource,
+                widget.depoName!,
+                currentDate);
             FirebaseFirestore.instance
                 .collection('ElectricalChecklistField')
                 .doc('${widget.depoName}')
@@ -252,24 +283,25 @@ class _ElectricalFieldState extends State<ElectricalField> {
                         SfDataGridTheme(
                       data: SfDataGridThemeData(headerColor: blue),
                       child: SfDataGrid(
-                        source: widget.titleIndex! == 0
+                        source: widget.fielClnName == 'PSS'
                             ? _qualityPSSDataSource
-                            : widget.titleIndex! == 1
+                            : widget.fielClnName == 'RMU'
                                 ? _qualityrmuDataSource
-                                : widget.titleIndex! == 2
+                                : widget.fielClnName == 'CT'
                                     ? _qualityctDataSource
-                                    : widget.titleIndex! == 3
+                                    : widget.fielClnName == 'CMU'
                                         ? _qualitycmuDataSource
-                                        : widget.titleIndex! == 4
+                                        : widget.fielClnName == 'ACDB'
                                             ? _qualityacdDataSource
-                                            : widget.titleIndex! == 5
-                                                ? _qualityCIDataSource
-                                                : widget.titleIndex! == 6
+                                            : widget.fielClnName == 'CI'
+                                                ? _qualitycmuDataSource
+                                                : widget.fielClnName == 'CDI'
                                                     ? _qualityCDIDataSource
-                                                    : widget.titleIndex! == 7
+                                                    : widget.fielClnName ==
+                                                            'MSP'
                                                         ? _qualityMSPDataSource
-                                                        : widget.titleIndex! ==
-                                                                8
+                                                        : widget.fielClnName ==
+                                                                'CHARGER'
                                                             ? _qualityChargerDataSource
                                                             : _qualityEPDataSource,
                         // widget.titleIndex! == 10
@@ -442,43 +474,43 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     alldata.forEach((element) {
                       qualitylisttable1
                           .add(QualitychecklistModel.fromJson(element));
-                      if (widget.titleIndex! == 0) {
+                      if (widget.fielClnName! == 'PSS') {
                         _qualityPSSDataSource = QualityPSSDataSource(
                             qualitylisttable1, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 1) {
+                      } else if (widget.fielClnName == 'RMU') {
                         _qualityrmuDataSource = QualityrmuDataSource(
                             qualitylisttable2, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 2) {
+                      } else if (widget.fielClnName == 'CT') {
                         _qualityctDataSource = QualityctDataSource(
                             qualitylisttable3, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 3) {
+                      } else if (widget.fielClnName == 'CMU') {
                         _qualitycmuDataSource = QualitycmuDataSource(
                             qualitylisttable4, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 4) {
+                      } else if (widget.fielClnName == 'ACDB') {
                         _qualityacdDataSource = QualityacdDataSource(
                             qualitylisttable5, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 5) {
+                      } else if (widget.fielClnName == 'CI') {
                         _qualityCIDataSource = QualityCIDataSource(
                             qualitylisttable6, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 6) {
+                      } else if (widget.fielClnName == 'CDI') {
                         _qualityCDIDataSource = QualityCDIDataSource(
                             qualitylisttable7, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 7) {
+                      } else if (widget.fielClnName == 'MSP') {
                         _qualityMSPDataSource = QualityMSPDataSource(
                             qualitylisttable8, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 8) {
+                      } else if (widget.fielClnName == 'CHARGER') {
                         _qualityChargerDataSource = QualityChargerDataSource(
                             qualitylisttable9, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
-                      } else if (widget.titleIndex! == 9) {
+                      } else if (widget.fielClnName == 'EARTH PIT') {
                         _qualityEPDataSource = QualityEPDataSource(
                             qualitylisttable10, cityName!, widget.depoName!);
                         _dataGridController = DataGridController();
@@ -499,24 +531,25 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     return SfDataGridTheme(
                       data: SfDataGridThemeData(headerColor: blue),
                       child: SfDataGrid(
-                        source: widget.titleIndex! == 0
+                        source: widget.fielClnName == 'PSS'
                             ? _qualityPSSDataSource
-                            : widget.titleIndex! == 1
+                            : widget.fielClnName == 'RMU'
                                 ? _qualityrmuDataSource
-                                : widget.titleIndex! == 2
+                                : widget.fielClnName == 'CT'
                                     ? _qualityctDataSource
-                                    : widget.titleIndex! == 3
+                                    : widget.fielClnName == 'CMU'
                                         ? _qualitycmuDataSource
-                                        : widget.titleIndex! == 4
+                                        : widget.fielClnName == 'ACDB'
                                             ? _qualityacdDataSource
-                                            : widget.titleIndex! == 5
-                                                ? _qualityCIDataSource
-                                                : widget.titleIndex! == 6
+                                            : widget.fielClnName == 'CI'
+                                                ? _qualitycmuDataSource
+                                                : widget.fielClnName == 'CDI'
                                                     ? _qualityCDIDataSource
-                                                    : widget.titleIndex! == 7
+                                                    : widget.fielClnName ==
+                                                            'MSP'
                                                         ? _qualityMSPDataSource
-                                                        : widget.titleIndex! ==
-                                                                8
+                                                        : widget.fielClnName ==
+                                                                'CHARGER'
                                                             ? _qualityChargerDataSource
                                                             : _qualityEPDataSource,
                         // : widget.titleIndex! ==
@@ -526,7 +559,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
                         //key: key,
                         allowEditing: true,
-                        frozenColumnsCount: 2,
+                        frozenColumnsCount: 1,
                         gridLinesVisibility: GridLinesVisibility.both,
                         headerGridLinesVisibility: GridLinesVisibility.both,
                         selectionMode: SelectionMode.single,
@@ -616,7 +649,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               alignment: Alignment.center,
-                              child: Text('Upload.',
+                              child: Text('Upload',
                                   overflow: TextOverflow.values.first,
                                   style: tableheaderwhitecolor),
                             ),
@@ -636,17 +669,19 @@ class _ElectricalFieldState extends State<ElectricalField> {
                           ),
                           // GridColumn(
                           //   columnName: 'Delete',
-                          //   autoFitPadding: const EdgeInsets.symmetric(
-                          //       horizontal: 16),
+                          //   autoFitPadding:
+                          //       const EdgeInsets.symmetric(
+                          //           horizontal: 16),
                           //   allowEditing: false,
-                          //   width: 120,
                           //   visible: true,
+                          //   width: 120,
                           //   label: Container(
                           //     padding: const EdgeInsets.symmetric(
                           //         horizontal: 8.0),
                           //     alignment: Alignment.center,
                           //     child: Text('Delete Row',
-                          //         overflow: TextOverflow.values.first,
+                          //         overflow:
+                          //             TextOverflow.values.first,
                           //         style: TextStyle(
                           //             fontWeight: FontWeight.bold,
                           //             fontSize: 16,
@@ -725,7 +760,8 @@ class _ElectricalFieldState extends State<ElectricalField> {
     );
   }
 
-  storeData(BuildContext context, String depoName, String currentDate) {
+  storeData(BuildContext context, dynamic datasource, String depoName,
+      String currentDate) {
     Map<String, dynamic> pssTableData = Map();
     Map<String, dynamic> rmuTableData = Map();
     Map<String, dynamic> ctTableData = Map();
@@ -737,11 +773,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
     Map<String, dynamic> chargerTableData = Map();
     Map<String, dynamic> epTableData = Map();
 
-    for (var i in _qualityPSSDataSource.dataGridRows) {
+    for (var i in datasource.dataGridRows) {
       for (var data in i.getCells()) {
-        if (data.columnName != 'button' ||
-            data.columnName == 'View' ||
-            data.columnName != 'Delete') {
+        if (data.columnName != 'Upload' && data.columnName != 'View') {
           pssTableData[data.columnName] = data.value;
         }
       }
@@ -761,227 +795,11 @@ class _ElectricalFieldState extends State<ElectricalField> {
       'data': psstabledatalist,
     }).whenComplete(() {
       psstabledatalist.clear();
-      for (var i in _qualityrmuDataSource.dataGridRows) {
-        for (var data in i.getCells()) {
-          if (data.columnName != 'button' ||
-              data.columnName == 'View' ||
-              data.columnName != 'Delete') {
-            rmuTableData[data.columnName] = data.value;
-          }
-        }
-        rmutabledatalist.add(rmuTableData);
-        rmuTableData = {};
-      }
-
-      FirebaseFirestore.instance
-          .collection('ElectricalQualityChecklist')
-          .doc(depoName)
-          .collection('userId')
-          .doc(userId)
-          .collection(widget.fielClnName!)
-          .doc(currentDate)
-          .set({
-        'data': rmutabledatalist,
-      }).whenComplete(() {
-        rmutabledatalist.clear();
-        for (var i in _qualityctDataSource.dataGridRows) {
-          for (var data in i.getCells()) {
-            if (data.columnName != 'button' ||
-                data.columnName == 'View' ||
-                data.columnName != 'Delete') {
-              ctTableData[data.columnName] = data.value;
-            }
-          }
-
-          cttabledatalist.add(ctTableData);
-          ctTableData = {};
-        }
-
-        FirebaseFirestore.instance
-            .collection('ElectricalQualityChecklist')
-            .doc(depoName)
-            .collection('userId')
-            .doc(userId)
-            .collection(widget.fielClnName!)
-            .doc(currentDate)
-            .set({
-          'data': cttabledatalist,
-        }).whenComplete(() {
-          cttabledatalist.clear();
-          for (var i in _qualitycmuDataSource.dataGridRows) {
-            for (var data in i.getCells()) {
-              if (data.columnName != 'button' ||
-                  data.columnName == 'View' ||
-                  data.columnName != 'Delete') {
-                cmuTableData[data.columnName] = data.value;
-              }
-            }
-            cmutabledatalist.add(cmuTableData);
-            cmuTableData = {};
-          }
-
-          FirebaseFirestore.instance
-              .collection('ElectricalQualityChecklist')
-              .doc(depoName)
-              .collection('userId')
-              .doc(userId)
-              .collection(widget.fielClnName!)
-              .doc(currentDate)
-              .set({
-            'data': cmutabledatalist,
-          }).whenComplete(() {
-            cmutabledatalist.clear();
-            for (var i in _qualityacdDataSource.dataGridRows) {
-              for (var data in i.getCells()) {
-                if (data.columnName != 'button' ||
-                    data.columnName != 'Delete') {
-                  acdbTableData[data.columnName] = data.value;
-                }
-              }
-              acdbtabledatalist.add(acdbTableData);
-              acdbTableData = {};
-            }
-
-            FirebaseFirestore.instance
-                .collection('ElectricalQualityChecklist')
-                .doc(depoName)
-                .collection('userId')
-                .doc(userId)
-                .collection(widget.fielClnName!)
-                .doc(currentDate)
-                .set({
-              'data': acdbtabledatalist,
-            }).whenComplete(() {
-              acdbtabledatalist.clear();
-              for (var i in _qualityCIDataSource.dataGridRows) {
-                for (var data in i.getCells()) {
-                  if (data.columnName != 'button' ||
-                      data.columnName == 'View' ||
-                      data.columnName != 'Delete') {
-                    ciTableData[data.columnName] = data.value;
-                  }
-                }
-                citabledatalist.add(ciTableData);
-                ciTableData = {};
-              }
-
-              FirebaseFirestore.instance
-                  .collection('ElectricalQualityChecklist')
-                  .doc(depoName)
-                  .collection('userId')
-                  .doc(userId)
-                  .collection(widget.fielClnName!)
-                  .doc(currentDate)
-                  .set({
-                'data': citabledatalist,
-              }).whenComplete(() {
-                citabledatalist.clear();
-                for (var i in _qualityCDIDataSource.dataGridRows) {
-                  for (var data in i.getCells()) {
-                    if (data.columnName != 'button' ||
-                        data.columnName == 'View' ||
-                        data.columnName != 'Delete') {
-                      cdiTableData[data.columnName] = data.value;
-                    }
-                  }
-                  cditabledatalist.add(cdiTableData);
-                  cdiTableData = {};
-                }
-
-                FirebaseFirestore.instance
-                    .collection('ElectricalQualityChecklist')
-                    .doc(depoName)
-                    .collection('userId')
-                    .doc(userId)
-                    .collection(widget.fielClnName!)
-                    .doc(currentDate)
-                    .set({
-                  'data': cditabledatalist,
-                }).whenComplete(() {
-                  cditabledatalist.clear();
-                  for (var i in _qualityMSPDataSource.dataGridRows) {
-                    for (var data in i.getCells()) {
-                      if (data.columnName != 'button' ||
-                          data.columnName == 'View' ||
-                          data.columnName != 'Delete') {
-                        mspTableData[data.columnName] = data.value;
-                      }
-                    }
-                    msptabledatalist.add(mspTableData);
-                    mspTableData = {};
-                  }
-
-                  FirebaseFirestore.instance
-                      .collection('ElectricalQualityChecklist')
-                      .doc(depoName)
-                      .collection('userId')
-                      .doc(userId)
-                      .collection(widget.fielClnName!)
-                      .doc(currentDate)
-                      .set({
-                    'data': msptabledatalist,
-                  }).whenComplete(() {
-                    msptabledatalist.clear();
-                    for (var i in _qualityChargerDataSource.dataGridRows) {
-                      for (var data in i.getCells()) {
-                        if (data.columnName != 'button' ||
-                            data.columnName == 'View' ||
-                            data.columnName != 'Delete') {
-                          chargerTableData[data.columnName] = data.value;
-                        }
-                      }
-                      chargertabledatalist.add(chargerTableData);
-                      chargerTableData = {};
-                    }
-
-                    FirebaseFirestore.instance
-                        .collection('ElectricalQualityChecklist')
-                        .doc(depoName)
-                        .collection('userId')
-                        .doc(userId)
-                        .collection(widget.fielClnName!)
-                        .doc(currentDate)
-                        .set({
-                      'data': chargertabledatalist,
-                    }).whenComplete(() {
-                      chargertabledatalist.clear();
-                      for (var i in _qualityEPDataSource.dataGridRows) {
-                        for (var data in i.getCells()) {
-                          if (data.columnName != 'button' ||
-                              data.columnName == 'View' ||
-                              data.columnName != 'Delete') {
-                            epTableData[data.columnName] = data.value;
-                          }
-                        }
-                        eptabledatalist.add(epTableData);
-                        epTableData = {};
-                      }
-
-                      FirebaseFirestore.instance
-                          .collection('ElectricalQualityChecklist')
-                          .doc(depoName)
-                          .collection('userId')
-                          .doc(userId)
-                          .collection(widget.fielClnName!)
-                          .doc(currentDate)
-                          .set({
-                        'data': eptabledatalist,
-                      }).whenComplete(() {
-                        eptabledatalist.clear();
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: const Text('Data are synced'),
-                          backgroundColor: blue,
-                        ));
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Data are synced'),
+        backgroundColor: blue,
+      ));
     });
   }
 
