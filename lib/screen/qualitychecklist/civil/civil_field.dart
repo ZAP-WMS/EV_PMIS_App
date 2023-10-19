@@ -320,9 +320,9 @@ class _CivilFieldState extends State<CivilField> {
                             editingGestureType: EditingGestureType.tap,
                             controller: _dataGridController,
                             onQueryRowHeight: (details) {
-                            return details
-                                .getIntrinsicRowHeight(details.rowIndex);
-                          },
+                              return details
+                                  .getIntrinsicRowHeight(details.rowIndex);
+                            },
                             // onQueryRowHeight: (dwidget.index!etails) {
                             //   return details.rowIndex == 0 ? 60.0 : 49.0;
                             // },
@@ -502,8 +502,8 @@ class _CivilFieldState extends State<CivilField> {
                                                                   : widget.fieldclnName == 'Roofing'
                                                                       ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
                                                                       : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
                         });
-                        _dataGridController = DataGridController();
                         return SfDataGridTheme(
                           data: SfDataGridThemeData(headerColor: blue),
                           child: SfDataGrid(
@@ -548,9 +548,6 @@ class _CivilFieldState extends State<CivilField> {
                             editingGestureType: EditingGestureType.tap,
                             controller: _dataGridController,
 
-                            // onQueryRowHeight: (details) {
-                            //   return details.rowIndex == 0 ? 60.0 : 49.0;
-                            // },
                             columns: [
                               GridColumn(
                                 columnName: 'srNo',

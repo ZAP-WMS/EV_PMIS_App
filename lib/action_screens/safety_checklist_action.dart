@@ -36,6 +36,7 @@ class _SafetyChecklistActionState extends State<SafetyChecklistAction> {
         break;
       case 'admin':
         selectedUi = SafetySummary(
+          cityName: widget.cityName,
           depoName: widget.depoName,
         );
     }
