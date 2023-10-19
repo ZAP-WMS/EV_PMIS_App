@@ -96,7 +96,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                 //   DeviceOrientation.portraitDown,
                 //   // DeviceOrientation.landscapeLeft,
                 // ]);
-                Navigator.pushReplacementNamed(context, '/chatpage');
+                Navigator.pushNamed(context, '/chat-page');
               }),
           const Divider(),
           // ListTile(

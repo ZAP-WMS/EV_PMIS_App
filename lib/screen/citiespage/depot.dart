@@ -33,38 +33,48 @@ class _DepotPageState extends State<DepotPage> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-                return GridView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  padding: const EdgeInsets.only(bottom: 15, top: 15),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 0.9,
-                      mainAxisSpacing: 5,
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () => Navigator.pushNamed(
-                          context, '/overview page', arguments: {
-                        'depoName': snapshot.data!.docs[index]['DepoName'],
-                        'role': widget.role
-                      }),
-                      // onTap: () => Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => OverviewPage(
-                      //         role: widget.role,
-                      //         depoName: snapshot.data!.docs[index]
-                      //             ['DepoName'],
-                      //       ),
-                      //     )),
-                      child: depolist(
-                        snapshot.data!.docs[index]['DepoUrl'],
-                        snapshot.data!.docs[index]['DepoName'],
+                return Column(
+                  children: [
+                    Expanded(
+                      child: GridView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        padding: const EdgeInsets.only(bottom: 15, top: 15),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 0.9,
+                                mainAxisSpacing: 5,
+                                crossAxisCount: 2),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () => Navigator.pushNamed(
+                                context, '/overview page', arguments: {
+                              'depoName': snapshot.data!.docs[index]
+                                  ['DepoName'],
+                              'role': widget.role
+                            }),
+                            // onTap: () => Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => OverviewPage(
+                            //         role: widget.role,
+                            //         depoName: snapshot.data!.docs[index]
+                            //             ['DepoName'],
+                            //       ),
+                            //     )),
+                            child: depolist(
+                              snapshot.data!.docs[index]['DepoUrl'],
+                              snapshot.data!.docs[index]['DepoName'],
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 );
               });
         },
