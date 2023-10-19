@@ -197,7 +197,6 @@ class _CivilFieldState extends State<CivilField> {
           isSync: true,
           store: () async {
             _showDialog(context);
-
             CivilstoreData(
                 context,
                 widget.fieldclnName == 'Exc'
@@ -320,9 +319,9 @@ class _CivilFieldState extends State<CivilField> {
                             editingGestureType: EditingGestureType.tap,
                             controller: _dataGridController,
                             onQueryRowHeight: (details) {
-                            return details
-                                .getIntrinsicRowHeight(details.rowIndex);
-                          },
+                              return details
+                                  .getIntrinsicRowHeight(details.rowIndex);
+                            },
                             // onQueryRowHeight: (dwidget.index!etails) {
                             //   return details.rowIndex == 0 ? 60.0 : 49.0;
                             // },
@@ -376,8 +375,8 @@ class _CivilFieldState extends State<CivilField> {
                                 allowEditing: true,
                                 width: 250,
                                 label: Container(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
                                   alignment: Alignment.center,
                                   child: Text("Owner’s Site Engineer",
                                       overflow: TextOverflow.values.first,
@@ -502,8 +501,9 @@ class _CivilFieldState extends State<CivilField> {
                                                                   : widget.fieldclnName == 'Roofing'
                                                                       ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
                                                                       : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
                         });
-                        _dataGridController = DataGridController();
+
                         return SfDataGridTheme(
                           data: SfDataGridThemeData(headerColor: blue),
                           child: SfDataGrid(
@@ -536,8 +536,6 @@ class _CivilFieldState extends State<CivilField> {
                                                                             'Roofing'
                                                                         ? _qualityRoofingDataSource
                                                                         : _qualityProofingDataSource,
-
-                            //key: key,
                             allowEditing: true,
                             frozenColumnsCount: 1,
                             gridLinesVisibility: GridLinesVisibility.both,
@@ -547,10 +545,10 @@ class _CivilFieldState extends State<CivilField> {
                             columnWidthMode: ColumnWidthMode.auto,
                             editingGestureType: EditingGestureType.tap,
                             controller: _dataGridController,
-
-                            // onQueryRowHeight: (details) {
-                            //   return details.rowIndex == 0 ? 60.0 : 49.0;
-                            // },
+                            onQueryRowHeight: (details) {
+                              return details
+                                  .getIntrinsicRowHeight(details.rowIndex);
+                            },
                             columns: [
                               GridColumn(
                                 columnName: 'srNo',
@@ -575,7 +573,8 @@ class _CivilFieldState extends State<CivilField> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   alignment: Alignment.center,
-                                  child: Text('ACTIVITY',
+                                  child: Text(
+                                      'Checks(Before Start of Backfill Activity)',
                                       overflow: TextOverflow.values.first,
                                       style: tableheaderwhitecolor),
                                 ),
@@ -587,7 +586,7 @@ class _CivilFieldState extends State<CivilField> {
                                 label: Container(
                                   padding: const EdgeInsets.all(8.0),
                                   alignment: Alignment.center,
-                                  child: Text('RESPONSIBILITY',
+                                  child: Text("Contractor’s Site Engineer",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -603,7 +602,7 @@ class _CivilFieldState extends State<CivilField> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   alignment: Alignment.center,
-                                  child: Text('DOCUMENT REFERENCE',
+                                  child: Text("Owner’s Site Engineer",
                                       overflow: TextOverflow.values.first,
                                       style: tableheaderwhitecolor),
                                 ),
@@ -616,7 +615,8 @@ class _CivilFieldState extends State<CivilField> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   alignment: Alignment.center,
-                                  child: Text('OBSERVATION',
+                                  child: Text(
+                                      "Observation Comments by  Owner’s Engineer",
                                       overflow: TextOverflow.values.first,
                                       style: tableheaderwhitecolor),
                                 ),
@@ -630,7 +630,7 @@ class _CivilFieldState extends State<CivilField> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   alignment: Alignment.center,
-                                  child: Text('Upload.',
+                                  child: Text('Upload',
                                       overflow: TextOverflow.values.first,
                                       style: tableheaderwhitecolor),
                                 ),
