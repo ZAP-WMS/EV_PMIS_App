@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safety_report_admin.dart/safety_pdf_view.dart';
+import 'package:ev_pmis_app/widgets/common_pdf_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,9 +22,10 @@ import '../../../widgets/nodata_available.dart';
 
 class SafetySummary extends StatefulWidget {
   final String? userId;
-
+  String? cityName;
   final String? depoName;
-  SafetySummary({super.key, this.userId, required this.depoName});
+  SafetySummary(
+      {super.key, this.userId, required this.depoName, required this.cityName});
 
   @override
   State<SafetySummary> createState() => _SafetySummaryState();
@@ -61,7 +62,7 @@ class _SafetySummaryState extends State<SafetySummary> {
             toSafety: true,
             showDepoBar: true,
             cityName: cityName,
-            text: 'Safety Report',
+            text: '${widget.cityName} / Safety Report',
             userId: widget.userId,
           )),
       body: enableLoading
@@ -126,7 +127,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                                           fontSize: 11,
                                         ))),
                                 DataColumn(
-                                    label: Text('Pdf Download',
+                                    label: Text('PDF Download',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 11,
@@ -642,7 +643,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                         style:
                             pw.TextStyle(color: PdfColors.black, fontSize: 17)),
                     pw.TextSpan(
-                        text: '$date',
+                        text: date,
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
@@ -653,7 +654,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                         style:
                             pw.TextStyle(color: PdfColors.black, fontSize: 17)),
                     pw.TextSpan(
-                        text: '$userId',
+                        text: userId,
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
@@ -726,14 +727,39 @@ class _SafetySummaryState extends State<SafetySummary> {
             pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
-                  pw.Text(
-                    'Place:  $cityName/${widget.depoName}',
-                    textScaleFactor: 1.3,
-                  ),
-                  pw.Text(
-                    'Date:  $date ',
-                    textScaleFactor: 1.3,
-                  )
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: date,
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'UserID : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 15)),
+                    pw.TextSpan(
+                        text: userId,
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
                 ]),
             pw.SizedBox(height: 20)
           ]),
@@ -769,6 +795,7 @@ class _SafetySummaryState extends State<SafetySummary> {
           MaterialPageRoute(
               builder: (context) => PdfViewScreen(
                     pdfData: pdfData,
+                    pageName: 'Safety Report',
                   )));
     }
 

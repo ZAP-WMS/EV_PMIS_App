@@ -154,34 +154,40 @@ class _JmrState extends State<Jmr> {
                                 return Container(
                                   padding: const EdgeInsets.only(
                                       left: 15.0, right: 10.0, bottom: 10.0),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: 35,
-                                          width: 40,
-                                          child: TextButton(
-                                              onPressed: () {},
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Colors.blue[900])),
-                                              child: Text(
-                                                title[index2],
-                                                style: const TextStyle(
-                                                    color: Colors.white),
-                                              )),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 35,
+                                        width: 40,
+                                        child: TextButton(
+                                            onPressed: () {},
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.blue[900])),
+                                            child: Text(
+                                              title[index2],
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            )),
+                                      ),
+                                      const SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.75,
+                                        child: SingleChildScrollView(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          scrollDirection: Axis.horizontal,
+                                          child: jmrTabList(
+                                              userList[index], index2, index),
                                         ),
-                                        const SizedBox(
-                                          width: 5.0,
-                                        ),
-                                        jmrTabList(
-                                            userList[index], index2, index),
-                                      ],
-                                    ),
+                                      )
+                                    ],
                                   ),
                                 );
                               })
@@ -209,8 +215,9 @@ class _JmrState extends State<Jmr> {
         children: [
           SizedBox(
             height: 30,
-            width: MediaQuery.of(context).size.width * 0.77,
+            width: MediaQuery.of(context).size.width * 0.72,
             child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               itemCount:
                   currentTabList[secondIndex], // Length from list of jmr items
