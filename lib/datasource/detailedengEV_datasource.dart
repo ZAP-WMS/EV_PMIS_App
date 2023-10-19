@@ -172,8 +172,9 @@ class DetailedEngSourceEV extends DataGridSource {
                                 ElevatedButton.styleFrom(backgroundColor: blue),
                             onPressed: () {
                               String activitydata =
-                                  row.getCells()[4].value.toString();
-                              if (activitydata == "null") {
+                                  row.getCells()[4].value.toString().trim();
+                              if (activitydata == "null" ||
+                                  activitydata.isEmpty) {
                                 showDialog(
                                   context: mainContext,
                                   builder: (context) {

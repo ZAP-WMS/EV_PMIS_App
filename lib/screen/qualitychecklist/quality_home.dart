@@ -74,6 +74,11 @@ class _QualityHomeState extends State<QualityHome> {
     'CHECKLIST FOR CHARGER PANEL',
     'CHECKLIST FOR INSTALLATION OF  EARTH PIT',
   ];
+
+  List<String> datasource = [
+    '_qualityExcavationDataSource',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

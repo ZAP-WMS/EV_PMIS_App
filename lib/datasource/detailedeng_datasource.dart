@@ -173,8 +173,9 @@ class DetailedEngSource extends DataGridSource {
                                 ElevatedButton.styleFrom(backgroundColor: blue),
                             onPressed: () {
                               String activitydata =
-                                  row.getCells()[4].value.toString();
-                              if (activitydata == "null") {
+                                  row.getCells()[4].value.toString().trim();
+                              if (activitydata == "null" ||
+                                  activitydata.isEmpty) {
                                 showDialog(
                                   context: mainContext,
                                   builder: (context) {
@@ -290,8 +291,7 @@ class DetailedEngSource extends DataGridSource {
                                   style: TextStyle(fontSize: 12),
                                 ));
                           })
-                        : dataGridCell.columnName == 'Number' &&
-                                dataGridCell.value == 0
+                        : dataGridCell.columnName == 'Number'
                             ? Text('')
                             : (dataGridCell.columnName == 'PreparationDate') &&
                                     dataGridCell.value != ''
@@ -303,7 +303,7 @@ class DetailedEngSource extends DataGridSource {
                                               context: mainContext,
                                               builder: (context) => AlertDialog(
                                                     insetPadding:
-                                                        EdgeInsets.all(0),
+                                                        const EdgeInsets.all(0),
                                                     title: const Text(
                                                       'All Date',
                                                       style: TextStyle(
@@ -311,7 +311,7 @@ class DetailedEngSource extends DataGridSource {
                                                     ),
                                                     content: Container(
                                                         height: MediaQuery.of(
-                                                                       context)
+                                                                    context)
                                                                 .size
                                                                 .height *
                                                             0.8,
@@ -938,13 +938,13 @@ class DetailedEngSource extends DataGridSource {
       padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
-        style: TextStyle(fontSize: 12),
+        style: const TextStyle(fontSize: 12),
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),

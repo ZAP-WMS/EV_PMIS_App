@@ -192,7 +192,7 @@ class _DetailedEngtState extends State<DetailedEng>
             if (_selectedIndex == 1) {
               DetailedProjectev.add(DetailedEngModel(
                 siNo: 1,
-                title: 'EV Layout',
+                title: '',
                 number: null,
                 preparationDate: dmy,
                 submissionDate: dmy,
@@ -204,7 +204,7 @@ class _DetailedEngtState extends State<DetailedEng>
             } else {
               DetailedProjectshed.add(DetailedEngModel(
                 siNo: 1,
-                title: 'EV Layout',
+                title: '',
                 number: null,
                 preparationDate: dmy,
                 submissionDate: dmy,
@@ -222,7 +222,7 @@ class _DetailedEngtState extends State<DetailedEng>
         //   onPressed: (() {
         //     DetailedProject.add(DetailedEngModel(
         //       siNo: 1,
-        //       title: 'EV Layout',
+        //       title: '',
         //       number: 12345,
         //       preparationDate: dmy,
         //       submissionDate: dmy,
@@ -835,7 +835,7 @@ class _DetailedEngtState extends State<DetailedEng>
       //   onPressed: (() {
       //     DetailedProject.add(DetailedEngModel(
       //       siNo: 1,
-      //       title: 'EV Layout',
+      //       title: '',
       //       number: 12345,
       //       preparationDate: dmy,
       //       submissionDate: dmy,
@@ -1251,7 +1251,7 @@ class _DetailedEngtState extends State<DetailedEng>
       //     if (_selectedIndex == 0) {
       //       DetailedProjectev.add(DetailedEngModel(
       //         siNo: 1,
-      //         title: 'EV Layout',
+      //         title: '',
       //         number: 123456878,
       //         preparationDate: dmy,
       //         submissionDate: dmy,
@@ -1264,7 +1264,7 @@ class _DetailedEngtState extends State<DetailedEng>
       //     if (_selectedIndex == 1) {
       //       DetailedProjectev.add(DetailedEngModel(
       //         siNo: 1,
-      //         title: 'EV Layout',
+      //         title: '',
       //         number: 12345,
       //         preparationDate: dmy,
       //         submissionDate: dmy,
