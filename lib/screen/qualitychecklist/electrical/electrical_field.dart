@@ -43,6 +43,9 @@ class ElectricalField extends StatefulWidget {
 }
 
 class _ElectricalFieldState extends State<ElectricalField> {
+  List<QualitychecklistModel> data = [];
+  bool checkTable = true;
+
   String? cityName;
   Stream? _stream;
   dynamic alldata;
@@ -117,10 +120,13 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
     initializeController();
     _fetchUserData();
-    qualitylisttable1 = getData();
-    _qualityPSSDataSource =
-        QualityPSSDataSource(qualitylisttable1, widget.depoName!, cityName!);
-    _dataGridController = DataGridController();
+
+    getTableData().whenComplete(() {
+      qualitylisttable1 = checkTable ? getData() : data;
+      _qualityPSSDataSource =
+          QualityPSSDataSource(qualitylisttable1, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    });
 
     qualitylisttable2 = rmu_getData();
     _qualityrmuDataSource =
@@ -212,14 +218,14 @@ class _ElectricalFieldState extends State<ElectricalField> {
                 .collection(widget.fielClnName!)
                 .doc(currentDate)
                 .set({
-              'EmployeeName': nameController.text,
-              'DocNo': docController.text,
-              'VendorName': vendorController.text,
-              'Date': dateController.text,
-              'Ola No': olaController.text,
-              'Panel No': panelController.text,
-              'Depot Name': depotController.text,
-              'Customer Name': customerController.text
+              'employeeName': nameController.text,
+              'docNo': docController.text,
+              'vendor': vendorController.text,
+              'date': dateController.text,
+              'olaNumber': olaController.text,
+              'panelNumber': panelController.text,
+              'depotName': depotController.text,
+              'customerName': customerController.text
             });
           },
           isCentered: false),
@@ -468,66 +474,67 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     //     ),
                     //   );
                   } else if (snapshot.hasData) {
-                    alldata = '';
-                    alldata = snapshot.data['data'] as List<dynamic>;
-                    qualitylisttable1.clear();
-                    alldata.forEach((element) {
-                      qualitylisttable1
-                          .add(QualitychecklistModel.fromJson(element));
-                      if (widget.fielClnName! == 'PSS') {
-                        _qualityPSSDataSource = QualityPSSDataSource(
-                            qualitylisttable1, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'RMU') {
-                        _qualityrmuDataSource = QualityrmuDataSource(
-                            qualitylisttable2, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'CT') {
-                        _qualityctDataSource = QualityctDataSource(
-                            qualitylisttable3, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'CMU') {
-                        _qualitycmuDataSource = QualitycmuDataSource(
-                            qualitylisttable4, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'ACDB') {
-                        _qualityacdDataSource = QualityacdDataSource(
-                            qualitylisttable5, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'CI') {
-                        _qualityCIDataSource = QualityCIDataSource(
-                            qualitylisttable6, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'CDI') {
-                        _qualityCDIDataSource = QualityCDIDataSource(
-                            qualitylisttable7, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'MSP') {
-                        _qualityMSPDataSource = QualityMSPDataSource(
-                            qualitylisttable8, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'CHARGER') {
-                        _qualityChargerDataSource = QualityChargerDataSource(
-                            qualitylisttable9, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      } else if (widget.fielClnName == 'EARTH PIT') {
-                        _qualityEPDataSource = QualityEPDataSource(
-                            qualitylisttable10, cityName!, widget.depoName!);
-                        _dataGridController = DataGridController();
-                      }
-                      //  else if (widget.titleIndex! == 10) {
-                      //   _qualityRoofingDataSource = QualityWCRDataSource(
-                      //       qualitylisttable1,
-                      //       widget.depoName!,
-                      //       cityName!);
-                      //   _dataGridController = DataGridController();
-                      // } else if (widget.titleIndex! == 11) {
-                      //   _qualityPROOFINGDataSource =
-                      //       QualityPROOFINGDataSource(qualitylisttable1,
-                      //           widget.depoName!, cityName!);
-                      //   _dataGridController = DataGridController();
-                      // }
-                    });
+                    // alldata = '';
+                    // alldata = snapshot.data['data'] as List<dynamic>;
+                    // qualitylisttable1.clear();
+                    // alldata.forEach((element) {
+                    //   qualitylisttable1
+                    //       .add(QualitychecklistModel.fromJson(element));
+                    //   if (widget.fielClnName! == 'PSS') {
+                    //     _qualityPSSDataSource = QualityPSSDataSource(
+                    //         qualitylisttable1, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'RMU') {
+                    //     _qualityrmuDataSource = QualityrmuDataSource(
+                    //         qualitylisttable2, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'CT') {
+                    //     _qualityctDataSource = QualityctDataSource(
+                    //         qualitylisttable3, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'CMU') {
+                    //     _qualitycmuDataSource = QualitycmuDataSource(
+                    //         qualitylisttable4, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'ACDB') {
+                    //     _qualityacdDataSource = QualityacdDataSource(
+                    //         qualitylisttable5, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'CI') {
+                    //     _qualityCIDataSource = QualityCIDataSource(
+                    //         qualitylisttable6, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'CDI') {
+                    //     _qualityCDIDataSource = QualityCDIDataSource(
+                    //         qualitylisttable7, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'MSP') {
+                    //     _qualityMSPDataSource = QualityMSPDataSource(
+                    //         qualitylisttable8, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'CHARGER') {
+                    //     _qualityChargerDataSource = QualityChargerDataSource(
+                    //         qualitylisttable9, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   } else if (widget.fielClnName == 'EARTH PIT') {
+                    //     _qualityEPDataSource = QualityEPDataSource(
+                    //         qualitylisttable10, cityName!, widget.depoName!);
+                    //     _dataGridController = DataGridController();
+                    //   }
+                    //   //  else if (widget.titleIndex! == 10) {
+                    //   //   _qualityRoofingDataSource = QualityWCRDataSource(
+                    //   //       qualitylisttable1,
+                    //   //       widget.depoName!,
+                    //   //       cityName!);
+                    //   //   _dataGridController = DataGridController();
+                    //   // } else if (widget.titleIndex! == 11) {
+                    //   //   _qualityPROOFINGDataSource =
+                    //   //       QualityPROOFINGDataSource(qualitylisttable1,
+                    //   //           widget.depoName!, cityName!);
+                    //   //   _dataGridController = DataGridController();
+                    //   // }
+                    // });
+
                     return SfDataGridTheme(
                       data: SfDataGridThemeData(headerColor: blue),
                       child: SfDataGrid(
@@ -814,15 +821,99 @@ class _ElectricalFieldState extends State<ElectricalField> {
         .get()
         .then((ds) {
       setState(() {
-        nameController.text = ds.data()!['EmployeeName'];
-        docController.text = ds.data()!['DocNo'];
-        vendorController.text = ds.data()!['VendorName'];
-        dateController.text = ds.data()!['Date'];
-        olaController.text = ds.data()!['ola No'];
-        panelController.text = ds.data()!['Panel No'];
-        depotController.text = ds.data()!['Depot Name'];
-        customerController.text = ds.data()!['Customer Name'];
+        if (ds.exists) {
+          nameController.text = ds.data()!['employeeName'];
+          docController.text = ds.data()!['docNo'];
+          vendorController.text = ds.data()!['vendor'];
+          dateController.text = ds.data()!['date'];
+          olaController.text = ds.data()!['olaNumber'];
+          panelController.text = ds.data()!['panelNumber'];
+          depotController.text = ds.data()!['depotName'];
+          customerController.text = ds.data()!['customerName'];
+        }
       });
     });
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('CivilQualityChecklist')
+        .doc(widget.depoName)
+        .collection('userId')
+        .doc(userId)
+        .collection(widget.fielClnName!)
+        .doc(currentDate)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      data = mapData.map((map) => QualitychecklistModel.fromJson(map)).toList();
+      checkTable = false;
+    }
+
+    List<String> eleClnName = [
+      'PSS',
+      'RMU',
+      'CT',
+      'CMU',
+      'ACDB',
+      'CI',
+      'CDI',
+      'MSP',
+      'CHARGER',
+      'EARTH PIT'
+    ];
+
+    if (widget.fielClnName == 'RMU') {
+      qualitylisttable2 = checkTable ? rmu_getData() : data;
+      _qualityrmuDataSource =
+          QualityrmuDataSource(qualitylisttable2, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'CT') {
+      qualitylisttable3 = checkTable ? ct_getData() : data;
+      _qualityctDataSource =
+          QualityctDataSource(qualitylisttable3, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'CMU') {
+      qualitylisttable4 = checkTable ? cmu_getData() : data;
+      _qualitycmuDataSource =
+          QualitycmuDataSource(qualitylisttable4, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'ACDB') {
+      qualitylisttable5 = checkTable ? acdb_getData() : data;
+      _qualityacdDataSource =
+          QualityacdDataSource(qualitylisttable5, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'CI') {
+      qualitylisttable6 = checkTable ? ci_getData() : data;
+      _qualityCIDataSource =
+          QualityCIDataSource(qualitylisttable6, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'CDI') {
+      qualitylisttable7 = checkTable ? cdi_getData() : data;
+      _qualityCDIDataSource =
+          QualityCDIDataSource(qualitylisttable7, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'MSP') {
+      qualitylisttable8 = checkTable ? msp_getData() : data;
+      _qualityMSPDataSource =
+          QualityMSPDataSource(qualitylisttable8, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'CHARGER') {
+      qualitylisttable9 = checkTable ? charger_getData() : data;
+      _qualityChargerDataSource = QualityChargerDataSource(
+          qualitylisttable9, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fielClnName == 'EARTH PIT') {
+      qualitylisttable10 = checkTable ? earth_pit_getData() : data;
+      _qualityEPDataSource =
+          QualityEPDataSource(qualitylisttable10, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    }
   }
 }

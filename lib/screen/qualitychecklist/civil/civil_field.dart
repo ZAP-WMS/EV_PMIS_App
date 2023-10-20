@@ -26,7 +26,6 @@ import '../../../provider/cities_provider.dart';
 import '../../../style.dart';
 import '../../../widgets/custom_textfield.dart';
 import '../../../widgets/quality_list.dart';
-import '../../safetyreport/safetyfield.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
 class CivilField extends StatefulWidget {
@@ -97,7 +96,6 @@ class _CivilFieldState extends State<CivilField> {
   late QualityPavingDataSource _qualityPavingDataSource;
   late QualityRoofingDataSource _qualityRoofingDataSource;
   late QualityProofingDataSource _qualityProofingDataSource;
-  bool isLoading = true;
 
   List<QualitychecklistModel> qualitylisttable1 = <QualitychecklistModel>[];
   List<QualitychecklistModel> qualitylisttable2 = <QualitychecklistModel>[];
@@ -246,14 +244,14 @@ class _CivilFieldState extends State<CivilField> {
                 .collection(widget.fieldclnName)
                 .doc(currentDate)
                 .set({
-              'ProjectName': projectController.text,
-              'Location': locationController.text,
-              'VendorName': vendorController.text,
-              'Drawing No': drawingController.text,
-              'Date': dateController.text,
-              'Component': componentController.text,
-              'Grid': gridController.text,
-              'Filling': fillingController.text
+              'projectName': projectController.text,
+              'location': locationController.text,
+              'vendor': vendorController.text,
+              'drawing': drawingController.text,
+              'date': dateController.text,
+              'componentName': componentController.text,
+              'grid': gridController.text,
+              'filling': fillingController.text
             });
           },
           isCentered: false),
@@ -778,14 +776,14 @@ class _CivilFieldState extends State<CivilField> {
         .then((ds) {
       setState(() {
         if (ds.exists) {
-          projectController.text = ds.data()!['ProjectName'];
-          locationController.text = ds.data()!['Location'];
-          vendorController.text = ds.data()!['VendorName'];
-          drawingController.text = ds.data()!['Drawing No'];
-          dateController.text = ds.data()!['Date'];
-          componentController.text = ds.data()!['Component'];
-          gridController.text = ds.data()!['Grid'];
-          fillingController.text = ds.data()!['Filling'];
+          projectController.text = ds.data()!['projectName'];
+          locationController.text = ds.data()!['location'];
+          vendorController.text = ds.data()!['vendor'];
+          drawingController.text = ds.data()!['drawing'];
+          dateController.text = ds.data()!['date'];
+          componentController.text = ds.data()!['componentName'];
+          gridController.text = ds.data()!['grid'];
+          fillingController.text = ds.data()!['filling'];
         }
       });
     });
