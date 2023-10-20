@@ -481,7 +481,6 @@ class QualityExcavationDataSource extends DataGridSource {
     if (newCellValue == null || oldValue == newCellValue) {
       return;
     }
-
     if (column.columnName == 'srNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(columnName: 'srNo', value: newCellValue);
