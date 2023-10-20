@@ -269,16 +269,16 @@ class _CivilFieldState extends State<CivilField> {
                 safetyField(fillingController, 'Type of Filling'),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.8,
-                  child: StreamBuilder(
-                    stream: _stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return LoadingPage();
-                      }
-                      if (!snapshot.hasData || snapshot.data.exists == false) {
-                        return SfDataGridTheme(
+                  child:  SfDataGridTheme(
                           data: SfDataGridThemeData(headerColor: blue),
-                          child: SfDataGrid(
+                    child: StreamBuilder(
+                      stream: _stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return LoadingPage();
+                        }
+                        if (!snapshot.hasData || snapshot.data.exists == false) {
+                          return SfDataGrid(
                             source: widget.fieldclnName == 'Exc'
                                 ? _qualityExcavationDataSource
                                 : widget.fieldclnName == 'BackFilling'
@@ -308,7 +308,7 @@ class _CivilFieldState extends State<CivilField> {
                                                                             'Roofing'
                                                                         ? _qualityRoofingDataSource
                                                                         : _qualityProofingDataSource,
-
+                  
                             allowEditing: true,
                             frozenColumnsCount: 1,
                             gridLinesVisibility: GridLinesVisibility.both,
@@ -425,7 +425,7 @@ class _CivilFieldState extends State<CivilField> {
                                 ),
                               ),
                             ],
-
+                  
                             // stackedHeaderRows: [
                             //   StackedHeaderRow(cells: [
                             //     StackedHeaderCell(
@@ -433,80 +433,89 @@ class _CivilFieldState extends State<CivilField> {
                             //         child: Container(child: Text('Project')))
                             //   ])
                             // ],
-                          ),
-                        );
-                        // : Center(
-                        //     child: Container(
-                        //       padding: EdgeInsets.all(25),
-                        //       decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(20),
-                        //           border: Border.all(color: blue)),
-                        //       child: const Text(
-                        //         '     No data available yet \n Please wait for admin process',
-                        //         style: TextStyle(
-                        //             fontSize: 30, fontWeight: FontWeight.bold),
-                        //       ),
-                        //     ),
-                        //   );
-                      } else if (snapshot.hasData) {
-                        alldata = '';
-                        alldata = snapshot.data['data'] as List<dynamic>;
-                        qualitylisttable1.clear();
-                        alldata.forEach((element) {
-                          qualitylisttable1
-                              .add(QualitychecklistModel.fromJson(element));
-                          widget.fieldclnName == 'Exc'
-                              ? _qualityExcavationDataSource =
-                                  QualityExcavationDataSource(qualitylisttable1,
-                                      widget.depoName!, cityName!)
-                              : widget.fieldclnName == 'BackFilling'
-                                  ? _qualityBackFillingDataSource =
-                                      QualityBackFillingDataSource(
-                                          qualitylisttable1,
-                                          widget.depoName!,
-                                          cityName!)
-                                  : widget.fieldclnName == 'Massonary'
-                                      ? _qualityMassonaryDataSource =
-                                          QualityMassonaryDataSource(
-                                              qualitylisttable1,
-                                              widget.depoName!,
-                                              cityName!)
-                                      : widget.fieldclnName == 'Glazzing'
-                                          ? _qualityGlazzingDataSource =
-                                              QualityGlazzingDataSource(
-                                                  qualitylisttable1,
-                                                  widget.depoName!,
-                                                  cityName!)
-                                          : widget.fieldclnName == 'Ceilling'
-                                              ? _qualityCeillingDataSource =
-                                                  QualityCeillingDataSource(
-                                                      qualitylisttable1,
-                                                      widget.depoName!,
-                                                      cityName!)
-                                              : widget.fieldclnName ==
-                                                      'Flooring'
-                                                  ? _qualityflooringDataSource =
-                                                      QualityflooringDataSource(
-                                                          qualitylisttable1,
-                                                          widget.depoName!,
-                                                          cityName!)
-                                                  : widget.fieldclnName == 'Inspection'
-                                                      ? _qualityInspectionDataSource = QualityInspectionDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                      : widget.fieldclnName == 'Ironite'
-                                                          ? _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                          : widget.fieldclnName == 'Painting'
-                                                              ? _qualityPaintingDataSource = QualityPaintingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                              : widget.fieldclnName == 'Paving'
-                                                                  ? _qualityPavingDataSource = QualityPavingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                                  : widget.fieldclnName == 'Roofing'
-                                                                      ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                                      : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-                        });
-                        _dataGridController = DataGridController();
-                        return SfDataGridTheme(
-                          data: SfDataGridThemeData(headerColor: blue),
-                          child: SfDataGrid(
+                          );
+                        } else if (snapshot.hasData) {
+                          alldata = '';
+                          alldata = snapshot.data['data'] as List<dynamic>;
+                          qualitylisttable1.clear();
+                          alldata.forEach((element) {
+                            qualitylisttable1
+                                .add(QualitychecklistModel.fromJson(element));
+                            _qualityExcavationDataSource =
+                                QualityExcavationDataSource(qualitylisttable1,
+                                    widget.depoName!, cityName!);
+                            _dataGridController = DataGridController();
+                          });
+                          // alldata = '';
+                          // alldata = snapshot.data['data'];
+                          // qualitylisttable1.clear();
+                          // alldata.foreach((element) {
+                          //   qualitylisttable1
+                          //       .add(QualitychecklistModel.fromJson(element));
+                          //   _qualityExcavationDataSource =
+                          //       QualityExcavationDataSource(qualitylisttable1,
+                          //           widget.depoName!, cityName!);
+                          //   _dataGridController = DataGridController();
+                          // });
+                          // alldata = '';
+                          // alldata = snapshot.data['data'] as List<dynamic>;
+                          // qualitylisttable1.clear();
+                          // alldata.forEach((element) {
+                          //   qualitylisttable1
+                          //       .add(QualitychecklistModel.fromJson(element));
+                          //   _qualityExcavationDataSource =
+                          //       QualityExcavationDataSource(qualitylisttable1,
+                          //           widget.depoName!, cityName!);
+                          //   _dataGridController = DataGridController();
+                          // widget.fieldclnName == 'Exc'
+                          //     ? _qualityExcavationDataSource =
+                          //         QualityExcavationDataSource(qualitylisttable1,
+                          //             widget.depoName!, cityName!)
+                          //     : widget.fieldclnName == 'BackFilling'
+                          //         ? _qualityBackFillingDataSource =
+                          //             QualityBackFillingDataSource(
+                          //                 qualitylisttable1,
+                          //                 widget.depoName!,
+                          //                 cityName!)
+                          //         : widget.fieldclnName == 'Massonary'
+                          //             ? _qualityMassonaryDataSource =
+                          //                 QualityMassonaryDataSource(
+                          //                     qualitylisttable1,
+                          //                     widget.depoName!,
+                          //                     cityName!)
+                          //             : widget.fieldclnName == 'Glazzing'
+                          //                 ? _qualityGlazzingDataSource =
+                          //                     QualityGlazzingDataSource(
+                          //                         qualitylisttable1,
+                          //                         widget.depoName!,
+                          //                         cityName!)
+                          //                 : widget.fieldclnName == 'Ceilling'
+                          //                     ? _qualityCeillingDataSource =
+                          //                         QualityCeillingDataSource(
+                          //                             qualitylisttable1,
+                          //                             widget.depoName!,
+                          //                             cityName!)
+                          //                     : widget.fieldclnName ==
+                          //                             'Flooring'
+                          //                         ? _qualityflooringDataSource =
+                          //                             QualityflooringDataSource(
+                          //                                 qualitylisttable1,
+                          //                                 widget.depoName!,
+                          //                                 cityName!)
+                          //                         : widget.fieldclnName == 'Inspection'
+                          //                             ? _qualityInspectionDataSource = QualityInspectionDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                          //                             : widget.fieldclnName == 'Ironite'
+                          //                                 ? _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                          //                                 : widget.fieldclnName == 'Painting'
+                          //                                     ? _qualityPaintingDataSource = QualityPaintingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                          //                                     : widget.fieldclnName == 'Paving'
+                          //                                         ? _qualityPavingDataSource = QualityPavingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                          //                                         : widget.fieldclnName == 'Roofing'
+                          //                                             ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                          //                                             : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
+                          //  });
+                  
+                          return SfDataGrid(
                             source: widget.fieldclnName == 'Exc'
                                 ? _qualityExcavationDataSource
                                 : widget.fieldclnName == 'BackFilling'
@@ -545,7 +554,7 @@ class _CivilFieldState extends State<CivilField> {
                             columnWidthMode: ColumnWidthMode.auto,
                             editingGestureType: EditingGestureType.tap,
                             controller: _dataGridController,
-
+                  
                             // onQueryRowHeight: (details) {
                             //   return details.rowIndex == 0 ? 60.0 : 49.0;
                             // },
@@ -557,8 +566,8 @@ class _CivilFieldState extends State<CivilField> {
                                     const EdgeInsets.symmetric(horizontal: 16),
                                 allowEditing: false,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
                                   alignment: Alignment.center,
                                   child: Text('Sr No',
                                       overflow: TextOverflow.values.first,
@@ -570,8 +579,8 @@ class _CivilFieldState extends State<CivilField> {
                                 columnName: 'checklist',
                                 allowEditing: false,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
                                   alignment: Alignment.center,
                                   child: Text(
                                       'Checks(Before Start of Backfill Activity)',
@@ -599,8 +608,8 @@ class _CivilFieldState extends State<CivilField> {
                                 allowEditing: true,
                                 width: 250,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
                                   alignment: Alignment.center,
                                   child: Text("Owner’s Site Engineer",
                                       overflow: TextOverflow.values.first,
@@ -612,8 +621,8 @@ class _CivilFieldState extends State<CivilField> {
                                 allowEditing: true,
                                 width: 200,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
                                   alignment: Alignment.center,
                                   child: Text(
                                       "Observation Comments by  Owner’s Engineer",
@@ -627,8 +636,8 @@ class _CivilFieldState extends State<CivilField> {
                                 visible: true,
                                 width: 150,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
                                   alignment: Alignment.center,
                                   child: Text('Upload',
                                       overflow: TextOverflow.values.first,
@@ -640,8 +649,8 @@ class _CivilFieldState extends State<CivilField> {
                                 allowEditing: true,
                                 width: 150,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
                                   alignment: Alignment.center,
                                   child: Text('View',
                                       overflow: TextOverflow.values.first,
@@ -649,13 +658,13 @@ class _CivilFieldState extends State<CivilField> {
                                 ),
                               ),
                             ],
-                          ),
-                        );
-                      } else {
-                        // here w3e have to put Nodata page
-                        return LoadingPage();
-                      }
-                    },
+                          );
+                        } else {
+                          // here w3e have to put Nodata page
+                          return LoadingPage();
+                        }
+                      },
+                    ),
                   ),
                 ),
               ],
