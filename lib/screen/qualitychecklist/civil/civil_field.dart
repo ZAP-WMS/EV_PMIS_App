@@ -765,7 +765,7 @@ class _CivilFieldState extends State<CivilField> {
   }
 
   void _fetchUserData() async {
-    await FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('CivilChecklistField')
         .doc(widget.depoName)
         .collection("userId")
@@ -775,16 +775,14 @@ class _CivilFieldState extends State<CivilField> {
         .get()
         .then((ds) {
       setState(() {
-        if (ds.exists) {
-          projectController.text = ds.data()!['projectName'];
-          locationController.text = ds.data()!['location'];
-          vendorController.text = ds.data()!['vendor'];
-          drawingController.text = ds.data()!['drawing'];
-          dateController.text = ds.data()!['date'];
-          componentController.text = ds.data()!['componentName'];
-          gridController.text = ds.data()!['grid'];
-          fillingController.text = ds.data()!['filling'];
-        }
+        projectController.text = ds.data()!['projectName'] ?? '';
+        locationController.text = ds.data()!['location'] ?? '';
+        vendorController.text = ds.data()!['vendor'] ?? '';
+        drawingController.text = ds.data()!['drawing'] ?? '';
+        dateController.text = ds.data()!['date'] ?? '';
+        componentController.text = ds.data()!['componentName'] ?? '';
+        gridController.text = ds.data()!['grid'] ?? '';
+        fillingController.text = ds.data()!['filling'] ?? '';
       });
     });
   }
