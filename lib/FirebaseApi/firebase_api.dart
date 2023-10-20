@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class FirebaseApi extends ChangeNotifier {
   static Future<List<String>> _getDownloadLinks(List<Reference> refs) =>
@@ -28,9 +30,8 @@ class FirebaseApi extends ChangeNotifier {
   }
 
   static Future downloadFile(Reference ref) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/${ref.name}');
-
+    final dir = (await DownloadsPath.downloadsDirectory())?.path;
+    final file = File('$dir/${ref.name}');
     await ref.writeToFile(file);
   }
 

@@ -87,6 +87,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             backgroundColor: blue,
             title: Text(
               widget.text.toString(),
+              style: const TextStyle(fontSize: 14),
             ),
             actions: [
               widget.toMainOverview

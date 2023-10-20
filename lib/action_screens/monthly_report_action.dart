@@ -1,6 +1,7 @@
-import 'package:ev_pmis_app/screen/materialprocurement/material_vendor.dart';
 import 'package:ev_pmis_app/screen/monthlyreport/monthly_project.dart';
 import 'package:flutter/material.dart';
+
+import '../screen/monthlyreport/monthly_admin/monthly_report_admin.dart';
 
 class MonthlyReportAction extends StatefulWidget {
   String? role;
@@ -33,7 +34,8 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
         selectedUi = MonthlyProject(depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = MonthlyProject(
+        selectedUi = MonthlySummary(
+          cityName: widget.cityName,
           depoName: widget.depoName,
         );
     }

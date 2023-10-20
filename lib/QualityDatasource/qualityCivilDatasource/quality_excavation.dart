@@ -493,7 +493,7 @@ class QualityExcavationDataSource extends DataGridSource {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(
               columnName: 'responsibility', value: newCellValue);
-      _checklistModel[dataRowIndex].responsibility = newCellValue.toString();
+      _checklistModel[dataRowIndex].responsibility = newCellValue;
     } else if (column.columnName == 'Reference') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(columnName: 'Reference', value: newCellValue);
@@ -527,7 +527,7 @@ class QualityExcavationDataSource extends DataGridSource {
     // The new cell value must be reset.
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
-    newCellValue = null;
+    newCellValue = 'null';
 
     final bool isNumericType = column.columnName == 'srNo' ||
         column.columnName == 'Rate' ||
@@ -553,7 +553,7 @@ class QualityExcavationDataSource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
@@ -570,15 +570,12 @@ class QualityExcavationDataSource extends DataGridSource {
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {
-              newCellValue = value;
+              newCellValue = value.toString();
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {
-          /// Call [CellSubmit] callback to fire the canSubmitCell and
-          /// onCellSubmit to commit the new value in single place.
+          // newCellValue = value;
           submitCell();
         },
       ),

@@ -93,8 +93,11 @@ class _OverviewPageState extends State<OverviewPage> {
                   //   builder: (context) => MaterialProcurement(
                   //       cityName: cityName, depoName: widget.depoName),
                   // )),
-                  Navigator.pushNamed(context, screens[index],
-                      arguments: {'depoName': widget.depoName, 'role': roles}),
+                  Navigator.pushNamed(context, screens[index], arguments: {
+                    'depoName': widget.depoName,
+                    'role': roles,
+                    'cityName': cityName
+                  }),
               child: cards(desription[index], imagedata[index], index));
         }),
       ),
@@ -103,7 +106,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   Widget cards(String desc, String image, int index) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),   
+      padding: const EdgeInsets.all(5.0),
       child: Card(
         elevation: 10,
         shadowColor: blue,

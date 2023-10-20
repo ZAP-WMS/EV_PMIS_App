@@ -93,6 +93,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MonthlyReportAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -118,6 +119,7 @@ class RouteGenerator {
               settings.arguments as Map<String, dynamic>;
           return SafetyChecklistAction(
             depoName: argument['depoName'],
+            cityName: argument['cityName'],
             role: argument['role'],
           );
 

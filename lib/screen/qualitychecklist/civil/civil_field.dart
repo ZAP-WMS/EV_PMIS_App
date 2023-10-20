@@ -503,7 +503,7 @@ class _CivilFieldState extends State<CivilField> {
                                                                       : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
                           _dataGridController = DataGridController();
                         });
-
+                        _dataGridController = DataGridController();
                         return SfDataGridTheme(
                           data: SfDataGridThemeData(headerColor: blue),
                           child: SfDataGrid(
@@ -545,10 +545,10 @@ class _CivilFieldState extends State<CivilField> {
                             columnWidthMode: ColumnWidthMode.auto,
                             editingGestureType: EditingGestureType.tap,
                             controller: _dataGridController,
-                            onQueryRowHeight: (details) {
-                              return details
-                                  .getIntrinsicRowHeight(details.rowIndex);
-                            },
+
+                            // onQueryRowHeight: (details) {
+                            //   return details.rowIndex == 0 ? 60.0 : 49.0;
+                            // },
                             columns: [
                               GridColumn(
                                 columnName: 'srNo',
