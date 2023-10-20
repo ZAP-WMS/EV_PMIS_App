@@ -821,16 +821,14 @@ class _ElectricalFieldState extends State<ElectricalField> {
         .get()
         .then((ds) {
       setState(() {
-        if (ds.exists) {
-          nameController.text = ds.data()!['employeeName'];
-          docController.text = ds.data()!['docNo'];
-          vendorController.text = ds.data()!['vendor'];
-          dateController.text = ds.data()!['date'];
-          olaController.text = ds.data()!['olaNumber'];
-          panelController.text = ds.data()!['panelNumber'];
-          depotController.text = ds.data()!['depotName'];
-          customerController.text = ds.data()!['customerName'];
-        }
+        nameController.text = ds.data()!['employeeName'] ?? '';
+        docController.text = ds.data()!['docNo'] ?? '';
+        vendorController.text = ds.data()!['vendor'] ?? '';
+        dateController.text = ds.data()!['date'] ?? '';
+        olaController.text = ds.data()!['olaNumber'] ?? '';
+        panelController.text = ds.data()!['panelNumber'] ?? '';
+        depotController.text = ds.data()!['depotName'] ?? '';
+        customerController.text = ds.data()!['customerName'] ?? '';
       });
     });
   }
