@@ -313,7 +313,7 @@ class _UploadMaterialState extends State<UploadMaterial> {
               _materialprocurement.clear();
               alldata.forEach((element) {
                 _materialprocurement
-                    .add(MaterialProcurementModel.fromjsaon(element));
+                    .add(MaterialProcurementModel.fromjson(element));
                 _materialDatasource = MaterialDatasource(
                     _materialprocurement, context, cityName, widget.depoName);
                 _dataGridController = DataGridController();

@@ -24,32 +24,37 @@ class MaterialProcurement extends StatefulWidget {
 
 class _MaterialProcurementState extends State<MaterialProcurement> {
   List<MaterialProcurementModel> _materialprocurement = [];
+  List<MaterialProcurementModel> data = [];
   late MaterialDatasource _materialDatasource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];
   Stream? _stream;
-  bool _isloading = true;
+  bool checkTable = true;
+  bool isLoading = true;
   dynamic alldata;
   String? cityName;
 
   @override
   void initState() {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-
-    // _materialprocurement = getmonthlyReport();
     _materialDatasource = MaterialDatasource(
         _materialprocurement, context, cityName, widget.depoName);
     _dataGridController = DataGridController();
 
-    _stream = FirebaseFirestore.instance
-        .collection('MaterialProcurement')
-        .doc('${widget.depoName}')
-        .collection('Material Data')
-        .doc(userId)
-        .snapshots();
-    _isloading = false;
-    setState(() {});
+    // _materialprocurement = getmonthlyReport();
 
+    getTableData().whenComplete(() {
+      _stream = FirebaseFirestore.instance
+          .collection('MaterialProcurement')
+          .doc('${widget.depoName}')
+          .collection('Material Data')
+          .doc(userId)
+          .snapshots();
+
+      _materialDatasource = MaterialDatasource(
+          _materialprocurement, context, cityName, widget.depoName);
+      _dataGridController = DataGridController();
+    });
     super.initState();
   }
 
@@ -74,7 +79,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
               },
             ),
             preferredSize: const Size.fromHeight(50)),
-        body: _isloading
+        body: isLoading
             ? LoadingPage()
             : Column(children: [
                 SfDataGridTheme(
@@ -336,19 +341,19 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                 ),
                               ]);
                         } else {
-                          alldata = '';
-                          alldata = snapshot.data['data'] as List<dynamic>;
-                          _materialprocurement.clear();
-                          alldata.forEach((element) {
-                            _materialprocurement.add(
-                                MaterialProcurementModel.fromjsaon(element));
-                            _materialDatasource = MaterialDatasource(
-                                _materialprocurement,
-                                context,
-                                cityName,
-                                widget.depoName);
-                            _dataGridController = DataGridController();
-                          });
+                          // alldata = '';
+                          // alldata = snapshot.data['data'] as List<dynamic>;
+                          // _materialprocurement.clear();
+                          // alldata.forEach((element) {
+                          //   _materialprocurement.add(
+                          //       MaterialProcurementModel.fromjson(element));
+                          //   _materialDatasource = MaterialDatasource(
+                          //       _materialprocurement,
+                          //       context,
+                          //       cityName,
+                          //       widget.depoName);
+                          //   _dataGridController = DataGridController();
+                          // });
                           return SfDataGrid(
                               source: _materialDatasource,
                               allowEditing: true,
@@ -436,11 +441,12 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8.0),
                                     alignment: Alignment.center,
-                                    child: Text('OEM Drawing Approval by Engg',
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheaderwhitecolor
-                                        //    textAlign: TextAlign.center,
-                                        ),
+                                    child: Text(
+                                      'OEM Drawing Approval by Engg',
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheaderwhitecolor,
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                                 GridColumn(
@@ -454,7 +460,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                         horizontal: 8.0),
                                     alignment: Alignment.center,
                                     child: Text(
-                                        'Manufacturing clearance Given to OEM',
+                                        'Manufacturing clearance given to OEM',
                                         overflow: TextOverflow.values.first,
                                         style: tableheaderwhitecolor
                                         //    textAlign: TextAlign.center,
@@ -620,9 +626,12 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                 croNumber: '',
                 unit: '',
                 qty: 1,
-                materialSite: DateFormat().add_yMd().format(DateTime.now())));
+                materialSite: DateFormat('dd-MM-yyyy').format(DateTime.now())));
+
+            _dataGridController = DataGridController();
             _materialDatasource.buildDataGridRows();
             _materialDatasource.updateDatagridSource();
+            print(_materialprocurement.length);
           }),
         ));
   }
@@ -696,5 +705,28 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
           qty: 1,
           materialSite: DateFormat().add_yMd().format(DateTime.now()))
     ];
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('MaterialProcurement')
+        .doc('${widget.depoName}')
+        .collection('Material Data')
+        .doc(userId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      _materialprocurement =
+          mapData.map((map) => MaterialProcurementModel.fromjson(map)).toList();
+      checkTable = false;
+    }
+
+    isLoading = false;
+    setState(() {});
   }
 }

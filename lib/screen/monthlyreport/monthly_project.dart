@@ -32,9 +32,10 @@ class _MonthlyProjectState extends State<MonthlyProject> {
   late MonthlyDataSource monthlyDataSource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];
+  bool checkTable = true;
+  bool isLoading = true;
   Stream? _stream;
   dynamic alldata;
-  bool _isloading = true;
   String title = 'Monthly Project';
 
   @override
@@ -42,18 +43,23 @@ class _MonthlyProjectState extends State<MonthlyProject> {
     // getUserId().whenComplete(() {
     widget.cityName =
         Provider.of<CitiesProvider>(context, listen: false).getName;
-    _stream = FirebaseFirestore.instance
-        .collection('MonthlyProjectReport2')
-        .doc('${widget.depoName}')
-        // .collection('AllMonthData')
-        .collection('userId')
-        .doc(userId)
-        .collection('Monthly Data')
-        // .collection('MonthData')
-        .doc(DateFormat.yMMM().format(DateTime.now()))
-        .snapshots();
-    _isloading = false;
-    setState(() {});
+
+    getTableData().whenComplete(() {
+      _stream = FirebaseFirestore.instance
+          .collection('MonthlyProjectReport2')
+          .doc('${widget.depoName}')
+          // .collection('AllMonthData')
+          .collection('userId')
+          .doc(userId)
+          .collection('Monthly Data')
+          // .collection('MonthData')
+          .doc(DateFormat.yMMM().format(DateTime.now()))
+          .snapshots();
+
+      monthlyDataSource = MonthlyDataSource(monthlyProject, context);
+      _dataGridController = DataGridController();
+    });
+
     // });
 
     super.initState();
@@ -119,7 +125,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
           // ),
 
           preferredSize: const Size.fromHeight(50)),
-      body: _isloading
+      body: isLoading
           ? LoadingPage()
           : Column(
               children: [
@@ -316,15 +322,15 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 ]),
                           );
                         } else {
-                          alldata = snapshot.data['data'] as List<dynamic>;
-                          monthlyProject.clear();
-                          alldata.forEach((element) {
-                            monthlyProject
-                                .add(MonthlyProjectModel.fromjson(element));
-                            monthlyDataSource =
-                                MonthlyDataSource(monthlyProject, context);
-                            _dataGridController = DataGridController();
-                          });
+                          // alldata = snapshot.data['data'] as List<dynamic>;
+                          // monthlyProject.clear();
+                          // alldata.forEach((element) {
+                          //   monthlyProject
+                          //       .add(MonthlyProjectModel.fromjson(element));
+                          //   monthlyDataSource =
+                          //       MonthlyDataSource(monthlyProject, context);
+                          //   _dataGridController = DataGridController();
+                          // });
                           return SfDataGridTheme(
                             data: SfDataGridThemeData(headerColor: blue),
                             child: SfDataGrid(
@@ -490,7 +496,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'Action',
                                     autoFitPadding: tablepadding,
                                     allowEditing: true,
-                                    width:150,
+                                    width: 150,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -669,5 +675,30 @@ class _MonthlyProjectState extends State<MonthlyProject> {
         ),
       ),
     );
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('MonthlyProjectReport2')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection('Monthly Data')
+        .doc(DateFormat.yMMM().format(DateTime.now()))
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      monthlyProject =
+          mapData.map((map) => MonthlyProjectModel.fromjson(map)).toList();
+      checkTable = false;
+    }
+
+    isLoading = false;
+    setState(() {});
   }
 }
