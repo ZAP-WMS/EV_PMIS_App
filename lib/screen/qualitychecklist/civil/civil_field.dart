@@ -70,6 +70,8 @@ class _CivilFieldState extends State<CivilField> {
     fillingController = TextEditingController();
   }
 
+  List<QualitychecklistModel> data = [];
+  bool checkTable = true;
   List<dynamic> excavationtabledatalist = [];
   List<dynamic> backfillingtabledatalist = [];
   List<dynamic> massonarytabledatalist = [];
@@ -95,6 +97,7 @@ class _CivilFieldState extends State<CivilField> {
   late QualityPavingDataSource _qualityPavingDataSource;
   late QualityRoofingDataSource _qualityRoofingDataSource;
   late QualityProofingDataSource _qualityProofingDataSource;
+  bool isLoading = true;
 
   List<QualitychecklistModel> qualitylisttable1 = <QualitychecklistModel>[];
   List<QualitychecklistModel> qualitylisttable2 = <QualitychecklistModel>[];
@@ -112,6 +115,7 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
+    print('Init method running');
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     _stream = FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
@@ -124,10 +128,17 @@ class _CivilFieldState extends State<CivilField> {
 
     initializeController();
     _fetchUserData();
+
+    getTableData().whenComplete(() {
+      qualitylisttable1 = checkTable ? excavation_getData() : data;
+      _qualityExcavationDataSource = QualityExcavationDataSource(
+          qualitylisttable1, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    });
+
     qualitylisttable1 = excavation_getData();
     _qualityExcavationDataSource = QualityExcavationDataSource(
         qualitylisttable1, widget.depoName!, cityName!);
-    _dataGridController = DataGridController();
 
     qualitylisttable2 = backfilling_getData();
     _qualityBackFillingDataSource = QualityBackFillingDataSource(
@@ -450,60 +461,62 @@ class _CivilFieldState extends State<CivilField> {
                         //     ),
                         //   );
                       } else if (snapshot.hasData) {
-                        alldata = '';
-                        alldata = snapshot.data['data'] as List<dynamic>;
-                        qualitylisttable1.clear();
-                        alldata.forEach((element) {
-                          qualitylisttable1
-                              .add(QualitychecklistModel.fromJson(element));
-                          widget.fieldclnName == 'Exc'
-                              ? _qualityExcavationDataSource =
-                                  QualityExcavationDataSource(qualitylisttable1,
-                                      widget.depoName!, cityName!)
-                              : widget.fieldclnName == 'BackFilling'
-                                  ? _qualityBackFillingDataSource =
-                                      QualityBackFillingDataSource(
-                                          qualitylisttable1,
-                                          widget.depoName!,
-                                          cityName!)
-                                  : widget.fieldclnName == 'Massonary'
-                                      ? _qualityMassonaryDataSource =
-                                          QualityMassonaryDataSource(
-                                              qualitylisttable1,
-                                              widget.depoName!,
-                                              cityName!)
-                                      : widget.fieldclnName == 'Glazzing'
-                                          ? _qualityGlazzingDataSource =
-                                              QualityGlazzingDataSource(
-                                                  qualitylisttable1,
-                                                  widget.depoName!,
-                                                  cityName!)
-                                          : widget.fieldclnName == 'Ceilling'
-                                              ? _qualityCeillingDataSource =
-                                                  QualityCeillingDataSource(
-                                                      qualitylisttable1,
-                                                      widget.depoName!,
-                                                      cityName!)
-                                              : widget.fieldclnName ==
-                                                      'Flooring'
-                                                  ? _qualityflooringDataSource =
-                                                      QualityflooringDataSource(
-                                                          qualitylisttable1,
-                                                          widget.depoName!,
-                                                          cityName!)
-                                                  : widget.fieldclnName == 'Inspection'
-                                                      ? _qualityInspectionDataSource = QualityInspectionDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                      : widget.fieldclnName == 'Ironite'
-                                                          ? _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                          : widget.fieldclnName == 'Painting'
-                                                              ? _qualityPaintingDataSource = QualityPaintingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                              : widget.fieldclnName == 'Paving'
-                                                                  ? _qualityPavingDataSource = QualityPavingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                                  : widget.fieldclnName == 'Roofing'
-                                                                      ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                                                                      : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-                        });
+                        getTableData();
+                        // alldata = '';
+                        // alldata = snapshot.data['data'] as List<dynamic>;
+                        // qualitylisttable1.clear();
+                        // alldata.forEach((element) {
+                        //   qualitylisttable1
+                        //       .add(QualitychecklistModel.fromJson(element));
+                        //   widget.fieldclnName == 'Exc'
+                        //       ? _qualityExcavationDataSource =
+                        //           QualityExcavationDataSource(qualitylisttable1,
+                        //               widget.depoName!, cityName!)
+                        //       : widget.fieldclnName == 'BackFilling'
+                        //           ? _qualityBackFillingDataSource =
+                        //               QualityBackFillingDataSource(
+                        //                   qualitylisttable1,
+                        //                   widget.depoName!,
+                        //                   cityName!)
+                        //           : widget.fieldclnName == 'Massonary'
+                        //               ? _qualityMassonaryDataSource =
+                        //                   QualityMassonaryDataSource(
+                        //                       qualitylisttable1,
+                        //                       widget.depoName!,
+                        //                       cityName!)
+                        //               : widget.fieldclnName == 'Glazzing'
+                        //                   ? _qualityGlazzingDataSource =
+                        //                       QualityGlazzingDataSource(
+                        //                           qualitylisttable1,
+                        //                           widget.depoName!,
+                        //                           cityName!)
+                        //                   : widget.fieldclnName == 'Ceilling'
+                        //                       ? _qualityCeillingDataSource =
+                        //                           QualityCeillingDataSource(
+                        //                               qualitylisttable1,
+                        //                               widget.depoName!,
+                        //                               cityName!)
+                        //                       : widget.fieldclnName ==
+                        //                               'Flooring'
+                        //                           ? _qualityflooringDataSource =
+                        //                               QualityflooringDataSource(
+                        //                                   qualitylisttable1,
+                        //                                   widget.depoName!,
+                        //                                   cityName!)
+                        //                           : widget.fieldclnName == 'Inspection'
+                        //                               ? _qualityInspectionDataSource = QualityInspectionDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                        //                               : widget.fieldclnName == 'Ironite'
+                        //                                   ? _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                        //                                   : widget.fieldclnName == 'Painting'
+                        //                                       ? _qualityPaintingDataSource = QualityPaintingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                        //                                       : widget.fieldclnName == 'Paving'
+                        //                                           ? _qualityPavingDataSource = QualityPavingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                        //                                           : widget.fieldclnName == 'Roofing'
+                        //                                               ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
+                        //                                               : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
+                        //   _dataGridController = DataGridController();
+                        // });
+
                         return SfDataGridTheme(
                           data: SfDataGridThemeData(headerColor: blue),
                           child: SfDataGrid(
@@ -774,5 +787,85 @@ class _CivilFieldState extends State<CivilField> {
         }
       });
     });
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('CivilQualityChecklist')
+        .doc(widget.depoName)
+        .collection('userId')
+        .doc(userId)
+        .collection(widget.fieldclnName)
+        .doc(currentDate)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      data = mapData.map((map) => QualitychecklistModel.fromJson(map)).toList();
+      checkTable = false;
+    }
+
+    if (widget.fieldclnName == 'BackFilling') {
+      qualitylisttable2 = checkTable ? backfilling_getData() : data;
+      _qualityBackFillingDataSource = QualityBackFillingDataSource(
+          qualitylisttable2, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'BackFilling') {
+      qualitylisttable3 = checkTable ? massonary_getData() : data;
+      _qualityMassonaryDataSource = QualityMassonaryDataSource(
+          qualitylisttable3, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Glazzing') {
+      qualitylisttable4 = checkTable ? glazzing_getData() : data;
+      _qualityGlazzingDataSource = QualityGlazzingDataSource(
+          qualitylisttable4, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Ceilling') {
+      qualitylisttable5 = checkTable ? ceilling_getData() : data;
+      _qualityCeillingDataSource = QualityCeillingDataSource(
+          qualitylisttable5, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Flooring') {
+      qualitylisttable6 = checkTable ? florring_getData() : data;
+      _qualityflooringDataSource = QualityflooringDataSource(
+          qualitylisttable6, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Inspection') {
+      qualitylisttable7 = checkTable ? inspection_getData() : data;
+      _qualityInspectionDataSource = QualityInspectionDataSource(
+          qualitylisttable7, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Ironite') {
+      qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
+      _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
+          qualitylisttable8, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Painting') {
+      qualitylisttable9 = checkTable ? painting_getData() : data;
+      _qualityPaintingDataSource = QualityPaintingDataSource(
+          qualitylisttable9, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Paving') {
+      qualitylisttable10 = checkTable ? paving_getData() : data;
+      _qualityPavingDataSource = QualityPavingDataSource(
+          qualitylisttable10, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Roofing') {
+      print('roofing');
+      qualitylisttable11 = checkTable ? roofing_getData() : data;
+      _qualityRoofingDataSource = QualityRoofingDataSource(
+          qualitylisttable11, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    } else if (widget.fieldclnName == 'Proofing') {
+      print('Proofing');
+      qualitylisttable12 = checkTable ? proofing_getData() : data;
+      _qualityProofingDataSource = QualityProofingDataSource(
+          qualitylisttable12, widget.depoName!, cityName!);
+      _dataGridController = DataGridController();
+    }
   }
 }
