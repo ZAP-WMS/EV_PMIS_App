@@ -149,56 +149,60 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                 preferredSize: const Size.fromHeight(50),
               ),
               body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    HeaderValue(context, widget.showTable, 'Project',
-                        'Project Name', projectName),
-                    HeaderValue(
-                        context, widget.showTable, 'Ref No ', 'Ref No', refNo),
-                    HeaderValue(context, widget.showTable, 'LOI Ref\nNumber',
-                        'LOI Ref Number', loiRefNum),
-                    HeaderValue(context, widget.showTable, 'Date    ',
-                        'Enter Date', date),
-                    HeaderValue(context, widget.showTable, 'Site\nLocation',
-                        'Site Location', siteLocation),
-                    HeaderValue(
-                        context, widget.showTable, 'Note     ', 'Note', note),
-                    Container(
-                      height: 60,
-                      padding:
-                          const EdgeInsets.only(left: 10, right: 10, top: 10),
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Text(
-                              'Working \nDates       ',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      HeaderValue(context, widget.showTable, 'Project',
+                          'Project Name', projectName),
+                      HeaderValue(context, widget.showTable, 'Ref No ',
+                          'Ref No', refNo),
+                      HeaderValue(context, widget.showTable, 'LOI Ref\nNumber',
+                          'LOI Ref Number', loiRefNum),
+                      HeaderValue(context, widget.showTable, 'Date    ',
+                          'Enter Date', date),
+                      HeaderValue(context, widget.showTable, 'Site\nLocation',
+                          'Site Location', siteLocation),
+                      HeaderValue(
+                          context, widget.showTable, 'Note     ', 'Note', note),
+                      Container(
+                        height: 60,
+                        padding: const EdgeInsets.only(right: 10, top: 10),
+                        child: Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 5.0, right: 16),
+                              child: Text(
+                                'Working \nDates       ',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                              child: TextFormField(
-                            controller: startDate,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                contentPadding:
-                                    EdgeInsets.only(left: 4, right: 4),
-                                hintText: 'From'),
-                          )),
-                          const SizedBox(width: 10),
-                          Expanded(
-                              child: TextFormField(
-                                  controller: endDate,
-                                  decoration: const InputDecoration(
-                                      contentPadding:
-                                          EdgeInsets.only(left: 4, right: 4),
-                                      border: OutlineInputBorder(),
-                                      hintText: 'To')))
-                        ],
+                            Expanded(
+                                child: TextFormField(
+                              controller: startDate,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.only(left: 4, right: 4),
+                                  hintText: 'From'),
+                            )),
+                            const SizedBox(width: 10),
+                            Expanded(
+                                child: TextFormField(
+                                    controller: endDate,
+                                    decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(left: 4, right: 4),
+                                        border: OutlineInputBorder(),
+                                        hintText: 'To')))
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               //   Center(
@@ -566,16 +570,9 @@ List<JMRModel> getData() {
 HeaderValue(BuildContext context, bool isReadOnly, String title,
     String hintValue, TextEditingController fieldData) {
   return Container(
-    padding: const EdgeInsets.only(
-      left: 4,
-      bottom: 4,
-      top: 10,
-      right: 4,
-    ),
-    width: MediaQuery.of(context).size.width,
-    height: 70,
+    padding: EdgeInsets.only(top: 5, bottom: 5),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,

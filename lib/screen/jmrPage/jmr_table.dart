@@ -462,6 +462,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             child: Text('Description of items',
                                                 overflow:
                                                     TextOverflow.values.first,
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 14,
