@@ -50,7 +50,7 @@ class MaterialProcurementModel {
     required this.materialSite,
   });
 
-  factory MaterialProcurementModel.fromjsaon(Map<String, dynamic> json) {
+  factory MaterialProcurementModel.fromjson(Map<String, dynamic> json) {
     return MaterialProcurementModel(
         cityName: json['cityName'],
         details: json['details'],

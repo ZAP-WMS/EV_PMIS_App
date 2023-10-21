@@ -8,7 +8,6 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../FirebaseApi/firebase_api.dart';
-import '../../authentication/authservice.dart';
 import '../../components/Loading_page.dart';
 import '../../model/daily_projectModel.dart';
 import '../../datasource/dailyproject_datasource.dart';
@@ -32,48 +31,42 @@ class DailyProject extends StatefulWidget {
 }
 
 class _DailyProjectState extends State<DailyProject> {
+  bool isLoading = true;
+  bool checkTable = true;
   List<DailyProjectModel> dailyproject = <DailyProjectModel>[];
   late DailyDataSource _dailyDataSource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];
   Stream? _stream;
   var alldata;
-  bool _isloading = true;
 
   @override
   void initState() {
     widget.cityName =
         Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    // selectedDate = DateFormat.yMMMMd().format(DateTime.now());
-
-    // dailyproject = getmonthlyReport();
-    // _dailyDataSource = DailyDataSource(
-    //     dailyproject, context, widget.cityName!, widget.depoName!, userId);
-    // _dataGridController = DataGridController();
-
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
-    _dailyDataSource = DailyDataSource(dailyproject, context, widget.cityName!,
-        widget.depoName!, userId!, selectedDate!);
-    _dataGridController = DataGridController();
 
-    _isloading = false;
-    setState(() {});
+    getTableData().whenComplete(() {
+      _stream = FirebaseFirestore.instance
+          .collection('DailyProjectReport2')
+          .doc('${widget.depoName}')
+          .collection('userId')
+          .doc(userId)
+          .collection('date')
+          .doc(selectedDate)
+          .snapshots();
+      _dailyDataSource = DailyDataSource(dailyproject, context,
+          widget.cityName!, widget.depoName!, userId!, selectedDate!);
+      _dataGridController = DataGridController();
+    });
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _stream = FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
-        .doc('${widget.depoName}')
-        .collection('userId')
-        .doc(userId)
-        .collection('date')
-        .doc(selectedDate)
-        .snapshots();
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: PreferredSize(
@@ -104,28 +97,17 @@ class _DailyProjectState extends State<DailyProject> {
                 chooseDate(context);
               }),
           preferredSize: const Size.fromHeight(80)),
-      body: _isloading
+      body: isLoading
           ? LoadingPage()
           : Column(children: [
               Expanded(
-                  child: SfDataGridTheme(
-                data: SfDataGridThemeData(headerColor: blue),
-                child: StreamBuilder(
-                  stream: _stream,
-                  builder: (context, snapshot) {
-                    // if (snapshot.connectionState == ConnectionState.waiting) {
-                    //   return LoadingPage();
-                    // } else
-                    if (!snapshot.hasData || snapshot.data.exists == false) {
-                      _dailyDataSource = DailyDataSource(
-                          dailyproject,
-                          context,
-                          widget.cityName!,
-                          widget.depoName!,
-                          userId!,
-                          selectedDate!);
-                      _dataGridController = DataGridController();
-                      return SfDataGrid(
+                  child: StreamBuilder(
+                stream: _stream,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || snapshot.data.exists == false) {
+                    return SfDataGridTheme(
+                      data: SfDataGridThemeData(headerColor: blue),
+                      child: SfDataGrid(
                           source: _dailyDataSource,
                           allowEditing: true,
                           frozenColumnsCount: 2,
@@ -356,24 +338,26 @@ class _DailyProjectState extends State<DailyProject> {
                                     ),
                               ),
                             ),
-                          ]);
-                    } else {
-                      alldata = '';
-                      alldata = snapshot.data['data'];
-                      dailyproject.clear();
-
-                      alldata.forEach((element) {
-                        dailyproject.add(DailyProjectModel.fromjson(element));
-                        _dailyDataSource = DailyDataSource(
-                            dailyproject,
-                            context,
-                            widget.cityName!,
-                            widget.depoName!,
-                            userId!,
-                            selectedDate!);
-                        _dataGridController = DataGridController();
-                      });
-                      return SfDataGrid(
+                          ]),
+                    );
+                  } else {
+                    // alldata = '';
+                    // alldata = snapshot.data['data'] as List<dynamic>;
+                    // dailyproject.clear();
+                    // alldata.forEach((element) {
+                    //   dailyproject.add(DailyProjectModel.fromjson(element));
+                    //   _dailyDataSource = DailyDataSource(
+                    //       dailyproject,
+                    //       context,
+                    //       widget.cityName!,
+                    //       widget.depoName!,
+                    //       userId!,
+                    //       selectedDate!);
+                    //   _dataGridController = DataGridController();
+                    // });
+                    return SfDataGridTheme(
+                      data: SfDataGridThemeData(headerColor: blue),
+                      child: SfDataGrid(
                           source: _dailyDataSource,
                           allowEditing: true,
                           frozenColumnsCount: 2,
@@ -542,11 +526,11 @@ class _DailyProjectState extends State<DailyProject> {
                                     ),
                               ),
                             ),
-                          ]);
+                          ]));
                     }
                   },
                 ),
-              ))
+              )
             ]),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -557,9 +541,11 @@ class _DailyProjectState extends State<DailyProject> {
                 // state: "Maharashtra",
                 // depotName: 'depotName',
                 typeOfActivity: '',
-                activityDetails: '',
+                activityDetails: "",
                 progress: '',
                 status: ''));
+            _dataGridController = DataGridController();
+
             _dailyDataSource.buildDataGridRows();
             _dailyDataSource.updateDatagridSource();
           })),
@@ -668,5 +654,30 @@ class _DailyProjectState extends State<DailyProject> {
                     },
                   )),
             ));
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('DailyProjectReport2')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection('date')
+        .doc(selectedDate)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      dailyproject =
+          mapData.map((map) => DailyProjectModel.fromjson(map)).toList();
+      checkTable = false;
+    }
+
+    isLoading = false;
+    setState(() {});
   }
 }

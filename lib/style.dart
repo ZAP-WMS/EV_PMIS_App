@@ -56,6 +56,8 @@ TextStyle normaltext = GoogleFonts.ibmPlexSans(
   fontSize: 16,
 );
 
+TextStyle normalboldtext = TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
+
 TextStyle buttonWhite = GoogleFonts.ibmPlexSans(
     fontSize: 14,
     fontWeight: FontWeight.w500,

@@ -1,17 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/screen/keyevents/Grid_DataTableA2.dart';
+import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gantt_chart/gantt_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/key_datasource.dart';
 import '../../model/employee.dart';
+import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/navbar.dart';
+import '../../widgets/upload.dart';
 import '../homepage/gallery.dart';
 
 void main() {
@@ -214,6 +218,8 @@ class _KeyEventsState extends State<KeyEvents> {
   bool _isloading = true;
   @override
   void initState() {
+    widget.cityName =
+        Provider.of<CitiesProvider>(context, listen: false).getName;
     yourstream = FirebaseFirestore.instance
         .collection('KeyEventsTable')
         .doc(widget.depoName!)
@@ -749,13 +755,23 @@ class _KeyEventsState extends State<KeyEvents> {
                                           details.rowColumnIndex.rowIndex - 1];
 
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => StatutoryAprovalA2(
-                                            events: row.getCells().first.value,
-                                            depoName: widget.depoName,
-                                          )
+                                      builder: (context) {
+                                    if (row.getCells()[0].value == 'A1') {
+                                      return ViewAllPdf(
+                                          userId: userId,
+                                          cityName: widget.cityName,
+                                          depoName: widget.depoName,
+                                          title: 'Key Events',
+                                          docId: row.getCells()[1].value);
+                                    } else {
+                                      return StatutoryAprovalA2(
+                                        events: row.getCells().first.value,
+                                        depoName: widget.depoName,
+                                      );
+                                    }
+                                  }
                                       // menuwidget[
-                                      //     details.rowColumnIndex.rowIndex -
-                                      //         1]
+                                      //     details.rowColumnIndex.rowIndex - 1]
                                       ));
                                 },
                                 allowEditing: true,
@@ -987,10 +1003,21 @@ class _KeyEventsState extends State<KeyEvents> {
                                       details.rowColumnIndex.rowIndex - 1];
 
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => StatutoryAprovalA2(
-                                        events: row.getCells().first.value,
-                                        depoName: widget.depoName,
-                                      )
+                                  builder: (context) {
+                                if (row.getCells()[0].value == 'A1') {
+                                  return ViewAllPdf(
+                                      userId: userId,
+                                      cityName: widget.cityName,
+                                      depoName: widget.depoName,
+                                      title: 'Key Events',
+                                      docId: row.getCells()[1].value);
+                                } else {
+                                  return StatutoryAprovalA2(
+                                    events: row.getCells().first.value,
+                                    depoName: widget.depoName,
+                                  );
+                                }
+                              }
                                   // menuwidget[
                                   //     details.rowColumnIndex.rowIndex - 1]
                                   ));
@@ -1170,6 +1197,7 @@ class _KeyEventsState extends State<KeyEvents> {
                         ),
                         Container(
                             width: 300,
+                            height: _employees.length * 75,
                             child: SingleChildScrollView(
                               child: GanttChartView(
                                   scrollController: scrollController,

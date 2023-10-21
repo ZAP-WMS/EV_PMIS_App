@@ -24,33 +24,37 @@ class MaterialProcurement extends StatefulWidget {
 
 class _MaterialProcurementState extends State<MaterialProcurement> {
   List<MaterialProcurementModel> _materialprocurement = [];
+  List<MaterialProcurementModel> data = [];
   late MaterialDatasource _materialDatasource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];
   Stream? _stream;
-  bool _isloading = true;
+  bool checkTable = true;
+  bool isLoading = true;
   dynamic alldata;
   String? cityName;
 
   @override
   void initState() {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-
-    // _materialprocurement = getmonthlyReport();
-    getDataTable();
     _materialDatasource = MaterialDatasource(
         _materialprocurement, context, cityName, widget.depoName);
     _dataGridController = DataGridController();
 
-    _stream = FirebaseFirestore.instance
-        .collection('MaterialProcurement')
-        .doc('${widget.depoName}')
-        .collection('Material Data')
-        .doc(userId)
-        .snapshots();
-    _isloading = false;
-    setState(() {});
+    // _materialprocurement = getmonthlyReport();
 
+    getTableData().whenComplete(() {
+      _stream = FirebaseFirestore.instance
+          .collection('MaterialProcurement')
+          .doc('${widget.depoName}')
+          .collection('Material Data')
+          .doc(userId)
+          .snapshots();
+
+      _materialDatasource = MaterialDatasource(
+          _materialprocurement, context, cityName, widget.depoName);
+      _dataGridController = DataGridController();
+    });
     super.initState();
   }
 
@@ -75,536 +79,584 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
               },
             ),
             preferredSize: const Size.fromHeight(50)),
-        body: _isloading
+        body: isLoading
             ? LoadingPage()
-            : SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(children: [
-                  SfDataGridTheme(
+            : Column(children: [
+                SfDataGridTheme(
                     data: SfDataGridThemeData(headerColor: blue),
-                    child: StreamBuilder(
-                      stream: _stream,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData ||
-                            snapshot.data.exists == false) {
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height,
-                            child: SfDataGrid(
-                                source: _materialDatasource,
-                                allowEditing: true,
-                                frozenColumnsCount: 1,
-                                gridLinesVisibility: GridLinesVisibility.both,
-                                headerGridLinesVisibility:
-                                    GridLinesVisibility.both,
-                                selectionMode: SelectionMode.single,
-                                navigationMode: GridNavigationMode.cell,
-                                columnWidthMode: ColumnWidthMode.auto,
-                                editingGestureType: EditingGestureType.tap,
-                                controller: _dataGridController,
-                                columns: [
-                                  GridColumn(
-                                    columnName: 'cityName',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
+                    child: Expanded(
+                      child: StreamBuilder(
+                          stream: _stream,
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.exists == false) {
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: SfDataGrid(
+                                    source: _materialDatasource,
                                     allowEditing: true,
-                                    width: 100,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('City Name',
-                                          overflow: TextOverflow.values.first,
-                                          textAlign: TextAlign.center,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
+                                    frozenColumnsCount: 1,
+                                    gridLinesVisibility:
+                                        GridLinesVisibility.both,
+                                    headerGridLinesVisibility:
+                                        GridLinesVisibility.both,
+                                    selectionMode: SelectionMode.single,
+                                    navigationMode: GridNavigationMode.cell,
+                                    columnWidthMode: ColumnWidthMode.auto,
+                                    editingGestureType: EditingGestureType.tap,
+                                    controller: _dataGridController,
+                                    columns: [
+                                      GridColumn(
+                                        columnName: 'cityName',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 100,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'City Name',
+                                            overflow: TextOverflow.values.first,
+                                            textAlign: TextAlign.center,
+                                            style: tableheaderwhitecolor,
                                           ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'details',
-                                    width: 250,
-                                    allowEditing: true,
-                                    label: Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Details Item Description',
-                                          textAlign: TextAlign.center,
-                                          style: tableheaderwhitecolor),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'olaNo',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 130,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('OLA No',
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'vendorName',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 130,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Vendor Name',
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'details',
+                                        width: 250,
+                                        allowEditing: true,
+                                        label: Container(
+                                          padding: const EdgeInsets.all(8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                              'Details Item Description',
+                                              textAlign: TextAlign.center,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'olaNo',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 130,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('OLA No',
+                                              textAlign: TextAlign.center,
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'vendorName',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 130,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Vendor Name',
+                                              textAlign: TextAlign.center,
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor
+                                              //    textAlign: TextAlign.center,
+                                              ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'oemApproval',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 150,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'OEM Drawing Approval by Engg',
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor,
+                                            textAlign: TextAlign.center,
                                           ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'oemClearance',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 250,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                              'Manufacturing clearance Given to OEM',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor
+                                              //    textAlign: TextAlign.center,
+                                              ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'croPlacement',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 250,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Delivery time line after Placement of CRO',
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'croVendor',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 250,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'CRO release to Vendor',
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'croNumber',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 120,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'CRO Number ',
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'unit',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 120,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Unit',
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'qty',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: true,
+                                        width: 120,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Qty',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor
+                                              //    textAlign: TextAlign.center,
+                                              ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'materialSite',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: false,
+                                        width: 250,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                              'Receipt of Material at site',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor
+                                              //    textAlign: TextAlign.center,
+                                              ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Add',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: false,
+                                        width: 120,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Add Row',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor
+                                              //    textAlign: TextAlign.center,
+                                              ),
+                                        ),
+                                      ),
+                                      GridColumn(
+                                        columnName: 'Delete',
+                                        autoFitPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                        allowEditing: false,
+                                        width: 120,
+                                        label: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          alignment: Alignment.center,
+                                          child: Text('Delete Row',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: tableheaderwhitecolor
+                                              //    textAlign: TextAlign.center,
+                                              ),
+                                        ),
+                                      ),
+                                    ]),
+                              );
+                            } else {
+                              // alldata = '';
+                              // alldata = snapshot.data['data'] as List<dynamic>;
+                              // _materialprocurement.clear();
+                              // alldata.forEach((element) {
+                              //   _materialprocurement.add(
+                              //       MaterialProcurementModel.fromjson(element));
+                              //   _materialDatasource = MaterialDatasource(
+                              //       _materialprocurement,
+                              //       context,
+                              //       cityName,
+                              //       widget.depoName);
+                              //   _dataGridController = DataGridController();
+                              // });
+                              return SfDataGrid(
+                                  source: _materialDatasource,
+                                  allowEditing: true,
+                                  frozenColumnsCount: 1,
+                                  gridLinesVisibility: GridLinesVisibility.both,
+                                  headerGridLinesVisibility:
+                                      GridLinesVisibility.both,
+                                  selectionMode: SelectionMode.single,
+                                  navigationMode: GridNavigationMode.cell,
+                                  columnWidthMode: ColumnWidthMode.auto,
+                                  editingGestureType: EditingGestureType.tap,
+                                  controller: _dataGridController,
+                                  columns: [
+                                    GridColumn(
+                                      columnName: 'cityName',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 100,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('City Name',
+                                            overflow: TextOverflow.values.first,
+                                            textAlign: TextAlign.center,
+                                            style: tableheaderwhitecolor
+                                            //    textAlign: TextAlign.center,
+                                            ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'oemApproval',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 150,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
+                                    GridColumn(
+                                      columnName: 'details',
+                                      width: 250,
+                                      allowEditing: true,
+                                      label: Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Details Item Description',
+                                            textAlign: TextAlign.center,
+                                            style: tableheaderwhitecolor),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'olaNo',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 130,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('OLA No',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'vendorName',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 130,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Vendor Name',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor
+                                            //    textAlign: TextAlign.center,
+                                            ),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'oemApproval',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 150,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
                                           'OEM Drawing Approval by Engg',
                                           overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
+                                          style: tableheaderwhitecolor,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'oemClearance',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                          'Manufacturing clearance Given to OEM',
+                                    GridColumn(
+                                      columnName: 'oemClearance',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 250,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Manufacturing clearance given to OEM',
                                           overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
+                                          style: tableheaderwhitecolor,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'croPlacement',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
+                                    GridColumn(
+                                      columnName: 'croPlacement',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 250,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
                                           'Delivery time line after Placement of CRO',
                                           overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'croVendor',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('CRO release to Vendor',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'croNumber',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('CRO Number ',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'unit',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Unit',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'qty',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Qty',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'materialSite',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: false,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Receipt of Material at site',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Add',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: false,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Add Row',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Delete',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: false,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Delete Row',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                ]),
-                          );
-                        } else {
-                           
-
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height,
-                            child: SfDataGrid(
-                                source: _materialDatasource,
-                                allowEditing: true,
-                                frozenColumnsCount: 1,
-                                gridLinesVisibility: GridLinesVisibility.both,
-                                headerGridLinesVisibility:
-                                    GridLinesVisibility.both,
-                                selectionMode: SelectionMode.single,
-                                navigationMode: GridNavigationMode.cell,
-                                columnWidthMode: ColumnWidthMode.auto,
-                                editingGestureType: EditingGestureType.tap,
-                                controller: _dataGridController,
-                                columns: [
-                                  GridColumn(
-                                    columnName: 'cityName',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 100,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('City Name',
-                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor,
                                           textAlign: TextAlign.center,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'details',
-                                    width: 250,
-                                    allowEditing: true,
-                                    label: Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Details Item Description',
+                                    GridColumn(
+                                      columnName: 'croVendor',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 250,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'CRO release to Vendor',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor,
                                           textAlign: TextAlign.center,
-                                          style: tableheaderwhitecolor),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'olaNo',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 130,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('OLA No',
+                                    GridColumn(
+                                      columnName: 'croNumber',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 120,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'CRO Number ',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor,
                                           textAlign: TextAlign.center,
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'vendorName',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 130,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Vendor Name',
+                                    GridColumn(
+                                      columnName: 'unit',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 120,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Unit',
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor
+                                            //    textAlign: TextAlign.center,
+                                            ),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'qty',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: true,
+                                      width: 120,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Qty',
+                                            overflow: TextOverflow.values.first,
+                                            style: tableheaderwhitecolor
+                                            //    textAlign: TextAlign.center,
+                                            ),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'materialSite',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: false,
+                                      width: 250,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Receipt of Material at site',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor,
                                           textAlign: TextAlign.center,
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'oemApproval',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 150,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                          'OEM Drawing Approval by Engg',
+                                    GridColumn(
+                                      columnName: 'Add',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: false,
+                                      width: 120,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Add Row',
                                           overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
+                                          style: tableheaderwhitecolor,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'oemClearance',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                          'Manufacturing clearance Given to OEM',
+                                    GridColumn(
+                                      columnName: 'Delete',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: false,
+                                      width: 120,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Delete Row',
                                           overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'croPlacement',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                          'Delivery time line after Placement of CRO',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'croVendor',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('CRO release to Vendor',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'croNumber',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('CRO Number ',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'unit',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Unit',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'qty',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: true,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Qty',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'materialSite',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: false,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Receipt of Material at site',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Add',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: false,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Add Row',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Delete',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: false,
-                                    width: 120,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Text('Delete Row',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
-                                    ),
-                                  ),
-                                ]),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ]),
-              ),
+                                          style: tableheaderwhitecolor,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    )
+                                  ]);
+                            }
+                          }),
+                    ))
+              ]),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: (() {
@@ -620,9 +672,12 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                 croNumber: '',
                 unit: '',
                 qty: 1,
-                materialSite: DateFormat().add_yMd().format(DateTime.now())));
+                materialSite: DateFormat('dd-MM-yyyy').format(DateTime.now())));
+
+            _dataGridController = DataGridController();
             _materialDatasource.buildDataGridRows();
             _materialDatasource.updateDatagridSource();
+            print(_materialprocurement.length);
           }),
         ));
   }
@@ -697,6 +752,27 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
           materialSite: DateFormat().add_yMd().format(DateTime.now()))
     ];
   }
-}
 
-void getDataTable() {}
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('MaterialProcurement')
+        .doc('${widget.depoName}')
+        .collection('Material Data')
+        .doc(userId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      _materialprocurement =
+          mapData.map((map) => MaterialProcurementModel.fromjson(map)).toList();
+      checkTable = false;
+    }
+
+    isLoading = false;
+    setState(() {});
+  }
+}
