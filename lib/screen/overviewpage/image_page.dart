@@ -3,6 +3,7 @@ import 'package:ev_pmis_app/screen/overviewpage/viewFIle.dart';
 import 'package:ev_pmis_app/screen/overviewpage/view_excel.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 import '../../FirebaseApi/firebase_api.dart';
@@ -23,7 +24,10 @@ class ImagePage extends StatelessWidget {
     print('fileurl' + file.url);
     return Scaffold(
         appBar: AppBar(
-          title: Text(file.name),
+          title: Text(
+            file.name,
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+          ),
           backgroundColor: blue,
           centerTitle: true,
           actions: [
@@ -85,14 +89,30 @@ class ImagePage extends StatelessWidget {
           ],
         ),
         body: isImage
-            ? Center(
-                child: Image.network(
-                  file.url,
-                  height: MediaQuery.of(context).size.width,
-                  width: MediaQuery.of(context).size.height,
-                  fit: BoxFit.contain,
-                ),
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    width: MediaQuery.of(context).size.width,
+                    child: PhotoView(
+                      backgroundDecoration:
+                          const BoxDecoration(color: Colors.white),
+                      imageProvider: NetworkImage(file.url),
+                    ),
+                  )
+                ],
               )
+
+            // Center(
+            //     child: Image.network(
+            //       file.url,
+            //       height: MediaQuery.of(context).size.width,
+            //       width: MediaQuery.of(context).size.height,
+            //       fit: BoxFit.contain,
+            //     ),
+            //   )
             : isPdf
                 ? ViewFile(path: file.url)
                 : ViewExcel(

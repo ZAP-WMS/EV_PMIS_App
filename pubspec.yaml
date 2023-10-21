@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   url_launcher:
+  photo_view:
   path_provider:
   apptive_grid_theme: ^1.2.0
   cloud_firestore: 
