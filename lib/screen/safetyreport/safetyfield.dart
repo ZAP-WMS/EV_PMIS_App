@@ -191,7 +191,10 @@ class _SafetyFieldState extends State<SafetyField> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Installation date'),
+                                Text(
+                                  'Installation date',
+                                  style: normaltextbold,
+                                ),
                                 Container(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 5),
@@ -254,6 +257,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                           )),
                                       Text(
                                         DateFormat('dd-MM-yyyy').format(date),
+                                        style: normaltextbold,
                                         textAlign: TextAlign.center,
                                       ),
                                     ],
@@ -271,7 +275,10 @@ class _SafetyFieldState extends State<SafetyField> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Enegization date'),
+                                Text(
+                                  'Enegization date',
+                                  style: normaltextbold,
+                                ),
                                 Container(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 5),
@@ -334,6 +341,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                           )),
                                       Text(
                                         DateFormat('dd-MM-yyyy').format(date1!),
+                                        style: normaltextbold,
                                         textAlign: TextAlign.center,
                                       ),
                                     ],
@@ -351,7 +359,10 @@ class _SafetyFieldState extends State<SafetyField> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('on Boarding date'),
+                                Text(
+                                  'on Boarding date',
+                                  style: normaltextbold,
+                                ),
                                 Container(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 5),
@@ -415,6 +426,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                       Text(
                                         DateFormat('dd-MM-yyyy').format(date2!),
                                         textAlign: TextAlign.center,
+                                        style: normaltextbold,
                                       ),
                                     ],
                                   ),

@@ -36,6 +36,9 @@ TextStyle tableheader = const TextStyle(
   fontSize: 12,
 );
 
+TextStyle normaltextbold =
+    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
+
 TextStyle tableheadersubtitle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: red);
 

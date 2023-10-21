@@ -447,6 +447,7 @@ class EmployeeDataSource extends DataGridSource {
                                         }
                                       }),
                                       onCancel: () {
+                                        Navigator.pop(context);
                                         _controller.selectedRanges = null;
                                       },
                                     ),

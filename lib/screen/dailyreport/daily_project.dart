@@ -108,25 +108,24 @@ class _DailyProjectState extends State<DailyProject> {
           ? LoadingPage()
           : Column(children: [
               Expanded(
-                  child: StreamBuilder(
-                stream: _stream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return LoadingPage();
-                  } else if (!snapshot.hasData ||
-                      snapshot.data.exists == false) {
-                    // dailyproject = getmonthlyReport();
-                    _dailyDataSource = DailyDataSource(
-                        dailyproject,
-                        context,
-                        widget.cityName!,
-                        widget.depoName!,
-                        userId!,
-                        selectedDate!);
-                    _dataGridController = DataGridController();
-                    return SfDataGridTheme(
-                      data: SfDataGridThemeData(headerColor: blue),
-                      child: SfDataGrid(
+                  child: SfDataGridTheme(
+                data: SfDataGridThemeData(headerColor: blue),
+                child: StreamBuilder(
+                  stream: _stream,
+                  builder: (context, snapshot) {
+                    // if (snapshot.connectionState == ConnectionState.waiting) {
+                    //   return LoadingPage();
+                    // } else
+                    if (!snapshot.hasData || snapshot.data.exists == false) {
+                      _dailyDataSource = DailyDataSource(
+                          dailyproject,
+                          context,
+                          widget.cityName!,
+                          widget.depoName!,
+                          userId!,
+                          selectedDate!);
+                      _dataGridController = DataGridController();
+                      return SfDataGrid(
                           source: _dailyDataSource,
                           allowEditing: true,
                           frozenColumnsCount: 2,
@@ -357,26 +356,24 @@ class _DailyProjectState extends State<DailyProject> {
                                     ),
                               ),
                             ),
-                          ]),
-                    );
-                  } else {
-                    alldata = '';
-                    alldata = snapshot.data['data'] as List<dynamic>;
-                    dailyproject.clear();
-                    alldata.forEach((element) {
-                      dailyproject.add(DailyProjectModel.fromjson(element));
-                      _dailyDataSource = DailyDataSource(
-                          dailyproject,
-                          context,
-                          widget.cityName!,
-                          widget.depoName!,
-                          userId!,
-                          selectedDate!);
-                      _dataGridController = DataGridController();
-                    });
-                    return SfDataGridTheme(
-                      data: SfDataGridThemeData(headerColor: blue),
-                      child: SfDataGrid(
+                          ]);
+                    } else {
+                      alldata = '';
+                      alldata = snapshot.data['data'];
+                      dailyproject.clear();
+
+                      alldata.forEach((element) {
+                        dailyproject.add(DailyProjectModel.fromjson(element));
+                        _dailyDataSource = DailyDataSource(
+                            dailyproject,
+                            context,
+                            widget.cityName!,
+                            widget.depoName!,
+                            userId!,
+                            selectedDate!);
+                        _dataGridController = DataGridController();
+                      });
+                      return SfDataGrid(
                           source: _dailyDataSource,
                           allowEditing: true,
                           frozenColumnsCount: 2,
@@ -545,10 +542,10 @@ class _DailyProjectState extends State<DailyProject> {
                                     ),
                               ),
                             ),
-                          ]),
-                    );
-                  }
-                },
+                          ]);
+                    }
+                  },
+                ),
               ))
             ]),
       floatingActionButton: FloatingActionButton(
@@ -559,8 +556,8 @@ class _DailyProjectState extends State<DailyProject> {
                 // date: DateFormat().add_yMd(storeData()).format(DateTime.now()),
                 // state: "Maharashtra",
                 // depotName: 'depotName',
-                typeOfActivity: 'Electrical Infra',
-                activityDetails: "Initial Survey of DEpot",
+                typeOfActivity: '',
+                activityDetails: '',
                 progress: '',
                 status: ''));
             _dailyDataSource.buildDataGridRows();
