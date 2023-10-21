@@ -141,6 +141,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return ClosureReportAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );

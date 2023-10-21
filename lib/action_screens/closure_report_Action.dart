@@ -1,5 +1,5 @@
+import 'package:ev_pmis_app/screen/closureReport/closure_report_admin/closure_summary_table.dart';
 import 'package:ev_pmis_app/screen/closureReport/closurefield.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/quality_checklist.dart';
 import 'package:flutter/material.dart';
 
 class ClosureReportAction extends StatefulWidget {
@@ -19,6 +19,7 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
   @override
   void initState() {
     selectWidget();
+    print(widget.role);
     // TODO: implement initState
     super.initState();
   }
@@ -34,7 +35,8 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
         selectedUi = ClosureField(depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = ClosureField(depoName: widget.depoName);
+        selectedUi = ClosureSummaryTable(
+            cityName: widget.cityName, depoName: widget.depoName);
     }
 
     return selectedUi;
