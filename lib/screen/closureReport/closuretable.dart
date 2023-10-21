@@ -13,6 +13,7 @@ import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../homepage/gallery.dart';
 
+//This is a comment
 class ClosureTable extends StatefulWidget {
   String depoName;
   ClosureTable({super.key, required this.depoName});
