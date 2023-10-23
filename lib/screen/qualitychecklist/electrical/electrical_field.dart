@@ -50,6 +50,8 @@ class _ElectricalFieldState extends State<ElectricalField> {
   List<QualitychecklistModel> data = [];
   bool checkTable = true;
   bool isLoading = true;
+  String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+  String? visDate = DateFormat.yMMMd().format(DateTime.now());
 
   String? cityName;
   Stream? _stream;
@@ -236,6 +238,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     'customerName': customerController.text
                   });
                 },
+                 showDate: visDate,
                 choosedate: () {
                   chooseDate(context);
                 }),
@@ -948,14 +951,14 @@ class _ElectricalFieldState extends State<ElectricalField> {
     }
   }
 
-  void chooseDate(BuildContext context) {
+  void chooseDate(BuildContext dialogcontext) {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
+        context: dialogcontext,
+        builder: (dialogcontext) => AlertDialog(
               title: const Text('All Date'),
               content: Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(dialogcontext).size.height * 0.8,
+                  width: MediaQuery.of(dialogcontext).size.width * 0.8,
                   child: SfDateRangePicker(
                     selectionShape: DateRangePickerSelectionShape.rectangle,
                     view: DateRangePickerView.month,
@@ -975,8 +978,8 @@ class _ElectricalFieldState extends State<ElectricalField> {
                       selectedDate = DateFormat.yMMMMd()
                           .format(DateTime.parse(value.toString()));
 
-                      showDate = selectedDate;
-                      print(showDate);
+                       visDate = DateFormat.yMMMd()
+                          .format(DateTime.parse(value.toString()));
                       Navigator.pop(context);
                       setState(() {
                         checkTable = true;

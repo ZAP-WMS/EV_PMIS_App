@@ -17,9 +17,6 @@ import '../../widgets/appbar_back_date.dart';
 import '../../widgets/navbar.dart';
 import '../homepage/gallery.dart';
 
-String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
-String? showDate = DateFormat.yMMMd().format(DateTime.now());
-
 class DailyProject extends StatefulWidget {
   String? cityName;
   String? depoName;
@@ -40,11 +37,17 @@ class _DailyProjectState extends State<DailyProject> {
   Stream? _stream;
   var alldata;
 
+  String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+  String? visDate = DateFormat.yMMMd().format(DateTime.now());
+
   @override
   void initState() {
     widget.cityName =
         Provider.of<CitiesProvider>(context, listen: false).getName;
 
+    _dailyDataSource = DailyDataSource(dailyproject, context, widget.cityName!,
+        widget.depoName!, userId!, selectedDate!);
+    _dataGridController = DataGridController();
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
     _stream = FirebaseFirestore.instance
@@ -66,8 +69,6 @@ class _DailyProjectState extends State<DailyProject> {
 
   @override
   Widget build(BuildContext context) {
-    String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
-    String? showDate = DateFormat.yMMMd().format(DateTime.now());
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: PreferredSize(
@@ -94,6 +95,7 @@ class _DailyProjectState extends State<DailyProject> {
                     'DailyProjectReport2', widget.depoName!, 'userId', userId!);
                 storeData();
               },
+              showDate: visDate,
               choosedate: () {
                 chooseDate(context);
               }),
@@ -620,14 +622,14 @@ class _DailyProjectState extends State<DailyProject> {
     );
   }
 
-  void chooseDate(BuildContext context) {
+  void chooseDate(BuildContext dialogueContext) {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
+        context: dialogueContext,
+        builder: (dialogueContext) => AlertDialog(
               title: const Text('All Date'),
-              content: Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  width: MediaQuery.of(context).size.width * 0.8,
+              content: SizedBox(
+                  height: MediaQuery.of(dialogueContext).size.height * 0.8,
+                  width: MediaQuery.of(dialogueContext).size.width * 0.8,
                   child: SfDateRangePicker(
                     selectionShape: DateRangePickerSelectionShape.rectangle,
                     view: DateRangePickerView.month,
@@ -647,10 +649,12 @@ class _DailyProjectState extends State<DailyProject> {
                       selectedDate = DateFormat.yMMMMd()
                           .format(DateTime.parse(value.toString()));
 
-                      showDate = selectedDate;
-                      print(showDate);
+                      visDate = DateFormat.yMMMd()
+                          .format(DateTime.parse(value.toString()));
+                      // print(showDate);
                       Navigator.pop(context);
                       setState(() {
+                        checkTable = true;
                         dailyproject.clear();
                         getTableData().whenComplete(() {
                           _stream = FirebaseFirestore.instance

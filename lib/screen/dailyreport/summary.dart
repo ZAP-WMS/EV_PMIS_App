@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/date_format.dart';
 import 'package:ev_pmis_app/screen/dailyreport/daily_project.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -272,7 +273,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                             .doc('${widget.depoName}')
                             // .collection('AllMonthData')
                             .collection('userId')
-                            .doc(userId)
+                            .doc(widget.userId)
                             .collection('Monthly Data')
                             // .collection('MonthData')
                             .doc(DateFormat.yMMM().format(startdate!))
@@ -515,7 +516,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                         widget.cityName!,
                                         widget.depoName!,
                                         widget.userId,
-                                        selectedDate!);
+                                        selecteddate.toString());
                                     _dataGridController = DataGridController();
 
                                     return SfDataGridTheme(
@@ -982,7 +983,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                             widget.cityName!,
                                             widget.depoName!,
                                             userId,
-                                            selectedDate!);
+                                            selecteddate.toString());
                                     _dataGridController = DataGridController();
                                   });
                                   return SfDataGridTheme(

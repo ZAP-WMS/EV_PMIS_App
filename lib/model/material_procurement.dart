@@ -13,7 +13,7 @@ class MaterialProcurementModel {
   String? croVendor;
   String? croNumber;
   String? unit;
-  int? qty;
+  int qty;
   String? materialSite;
 
   // String? scope;

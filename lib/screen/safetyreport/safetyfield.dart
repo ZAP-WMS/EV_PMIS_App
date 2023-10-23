@@ -37,6 +37,8 @@ Stream? _stream;
 bool checkTable = true;
 dynamic alldata;
 String? cityName;
+String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+String? showDate = DateFormat.yMMMd().format(DateTime.now());
 
 bool isLoading = true;
 // ignore: prefer_typing_uninitialized_variables

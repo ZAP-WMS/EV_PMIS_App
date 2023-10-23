@@ -118,10 +118,11 @@ class _CivilFieldState extends State<CivilField> {
   List<QualitychecklistModel> qualitylisttable12 = <QualitychecklistModel>[];
   late DataGridController _dataGridController;
 
+  String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+  String? visDate = DateFormat.yMMMd().format(DateTime.now());
+
   @override
   void initState() {
-    String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
-    String? showDate = DateFormat.yMMMd().format(DateTime.now());
     print('Init method running');
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     _stream = FirebaseFirestore.instance
@@ -279,6 +280,7 @@ class _CivilFieldState extends State<CivilField> {
               FirebaseApi().nestedKeyEventsField(
                   'CivilChecklistField', widget.depoName!, 'userId', userId!);
             },
+            showDate: visDate,
             choosedate: () {
               chooseDate(context);
             }),
@@ -939,14 +941,14 @@ class _CivilFieldState extends State<CivilField> {
     // }
   }
 
-  void chooseDate(BuildContext context) {
+  void chooseDate(BuildContext dialogcontext) {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
+        context: dialogcontext,
+        builder: (dialogcontext) => AlertDialog(
               title: const Text('All Date'),
               content: Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(dialogcontext).size.height * 0.8,
+                  width: MediaQuery.of(dialogcontext).size.width * 0.8,
                   child: SfDateRangePicker(
                     selectionShape: DateRangePickerSelectionShape.rectangle,
                     view: DateRangePickerView.month,
@@ -966,8 +968,9 @@ class _CivilFieldState extends State<CivilField> {
                       selectedDate = DateFormat.yMMMMd()
                           .format(DateTime.parse(value.toString()));
 
-                      showDate = selectedDate;
-                      print(showDate);
+                      visDate = DateFormat.yMMMd()
+                          .format(DateTime.parse(value.toString()));
+                      //     print(showDate);
                       Navigator.pop(context);
                       setState(() {
                         checkTable = true;
