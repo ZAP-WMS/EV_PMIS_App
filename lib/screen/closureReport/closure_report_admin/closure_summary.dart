@@ -260,55 +260,6 @@ class _ClosureSummaryState extends State<ClosureSummary> {
                 )));
   }
 
-  Future<void> getRowsForFutureBuilder(String user_id) async {
-    final pdfLogo = MemoryImage(
-      (await rootBundle.load('assets/pdf_logo.jpeg')).buffer.asUint8List(),
-    );
-
-    for (int i = 0; i < tableRows.length; i++) {
-      List<Widget> url = [];
-
-      rowOfWidget.add(customTableTextRow(tableRows[i][0], tableRows[i][1]));
-
-      final path =
-          'ClosureReport/${widget.cityName}/${widget.depoName}/$user_id/${tableRows[i][0]}';
-
-      ListResult result =
-          await FirebaseStorage.instance.ref().child(path).listAll();
-
-      if (result.items.isNotEmpty) {
-        for (var img in result.items) {
-          final downloadUrl = await img.getDownloadURL();
-          if (img.name.endsWith('.pdf')) {
-            url.add(IconButton(
-              hoverColor: Colors.transparent,
-              iconSize: 80,
-              onPressed: () {
-                // openPdf(downloadUrl);
-              },
-              icon: Image(
-                image: pdfLogo,
-              ),
-            ));
-          } else {
-            url.add(IconButton(
-              hoverColor: Colors.transparent,
-              iconSize: 80,
-              onPressed: () {
-                // openPdf(downloadUrl);
-              },
-              icon: Image(
-                filterQuality: FilterQuality.high,
-                image: NetworkImage(downloadUrl),
-              ),
-            ));
-          }
-        }
-      }
-      rowOfWidget.add(customTableImageRow(url));
-    }
-  }
-
   customTableTextRow(String srNo, String row) {
     return TableRow(children: [
       TableCell(
