@@ -47,16 +47,15 @@ class _DailyProjectState extends State<DailyProject> {
 
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
-
+    _stream = FirebaseFirestore.instance
+        .collection('DailyProjectReport2')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection('date')
+        .doc(selectedDate)
+        .snapshots();
     getTableData().whenComplete(() {
-      _stream = FirebaseFirestore.instance
-          .collection('DailyProjectReport2')
-          .doc('${widget.depoName}')
-          .collection('userId')
-          .doc(userId)
-          .collection('date')
-          .doc(selectedDate)
-          .snapshots();
       _dailyDataSource = DailyDataSource(dailyproject, context,
           widget.cityName!, widget.depoName!, userId!, selectedDate!);
       _dataGridController = DataGridController();
@@ -67,6 +66,8 @@ class _DailyProjectState extends State<DailyProject> {
 
   @override
   Widget build(BuildContext context) {
+    String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+    String? showDate = DateFormat.yMMMd().format(DateTime.now());
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: PreferredSize(
