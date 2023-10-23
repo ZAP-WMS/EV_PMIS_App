@@ -254,8 +254,13 @@ class _ClosureSummaryState extends State<ClosureSummary> {
   openFile(FirebaseFile url) {
     Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => ImagePage(
+        PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            pageBuilder: (_, __, ___) => ImagePage(
                   file: url,
                 )));
   }

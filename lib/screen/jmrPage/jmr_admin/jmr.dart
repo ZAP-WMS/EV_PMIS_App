@@ -93,9 +93,14 @@ class _JmrState extends State<Jmr> {
               ],
             ),
           ),
-          body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: [customRowList('Civil'), customRowList('Electrical')]),
+          body: isLoading
+              ? const LoadingPage()
+              : TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                      customRowList('Civil'),
+                      customRowList('Electrical')
+                    ]),
         ));
   }
 
@@ -153,7 +158,7 @@ class _JmrState extends State<Jmr> {
                               itemBuilder: (context, index2) {
                                 return Container(
                                   padding: const EdgeInsets.only(
-                                      left: 15.0, right: 10.0, bottom: 10.0),
+                                      left: 15.0, right: 0.0, bottom: 10.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -178,7 +183,7 @@ class _JmrState extends State<Jmr> {
                                       SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.75,
+                                                0.8,
                                         child: SingleChildScrollView(
                                           physics:
                                               const BouncingScrollPhysics(),
@@ -215,7 +220,7 @@ class _JmrState extends State<Jmr> {
         children: [
           SizedBox(
             height: 30,
-            width: MediaQuery.of(context).size.width * 0.72,
+            width: MediaQuery.of(context).size.width * 0.77,
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
@@ -289,8 +294,6 @@ class _JmrState extends State<Jmr> {
     List<dynamic> userListId =
         querySnapshot.docs.map((data) => data.id).toList();
 
-    print('userListId - ${userListId}');
-
     for (int i = 0; i < userListId.length; i++) {
       List<int> tempList = [];
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -330,7 +333,6 @@ class _JmrState extends State<Jmr> {
           tempList.add(0);
         }
       }
-      print('jmrTabLen - ${jmrTabLen}');
       jmrTabLen.add(tempList);
     }
 

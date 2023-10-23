@@ -122,21 +122,20 @@ class _JmrFieldPageAdminState extends State<JmrFieldPageAdmin> {
         Navigator.pop(context);
         return true;
       },
-      child: _isLoading
-          ? LoadingPage()
-          : Scaffold(
-              appBar: PreferredSize(
-                // ignore: sort_child_properties_last
-                child: CustomAppBar(
-                  height: 30,
-                  isCentered: true,
-                  isSync: false,
-                  title:
-                      'JMR / ${widget.depoName} / ${widget.title.toString()}',
-                ),
-                preferredSize: const Size.fromHeight(50),
-              ),
-              body: SingleChildScrollView(
+      child: Scaffold(
+        appBar: PreferredSize(
+          // ignore: sort_child_properties_last
+          child: CustomAppBar(
+            height: 30,
+            isCentered: true,
+            isSync: false,
+            title: 'JMR / ${widget.depoName} / ${widget.title.toString()}',
+          ),
+          preferredSize: const Size.fromHeight(50),
+        ),
+        body: _isLoading
+            ? LoadingPage()
+            : SingleChildScrollView(
                 child: Column(
                   children: [
                     HeaderValue(context, widget.showTable, 'Project',
@@ -189,44 +188,64 @@ class _JmrFieldPageAdminState extends State<JmrFieldPageAdmin> {
                   ],
                 ),
               ),
-              //   Center(
-              floatingActionButton: FloatingActionButton.extended(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => JmrTablePageAdmin(
-                                  userId: widget.userId,
-                                  dataFetchingIndex: widget.dataFetchingIndex,
-                                  showTable: widget.showTable,
-                                  title: widget.title,
-                                  jmrTab: widget.jmrTab,
-                                  cityName: widget.cityName,
-                                  depoName: widget.depoName,
-                                  jmrIndex: widget.jmrIndex,
-                                  tabName: widget.tabName,
-                                )));
-                  },
-                  label: widget.showTable
-                      ? Row(
-                          children: const [
-                            Text(
-                              'Next',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Icon(Icons.arrow_forward),
-                          ],
-                        )
-                      : Row(
-                          children: const [
-                            Text(
-                              'Proceed To Sync',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Icon(Icons.arrow_forward),
-                          ],
-                        )), // child: Image.asset(widget.img.toString()),
-            ),
+        //   Center(
+        floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 200),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      pageBuilder: (_, __, ___) => JmrTablePageAdmin(
+                            userId: widget.userId,
+                            dataFetchingIndex: widget.dataFetchingIndex,
+                            showTable: widget.showTable,
+                            title: widget.title,
+                            jmrTab: widget.jmrTab,
+                            cityName: widget.cityName,
+                            depoName: widget.depoName,
+                            jmrIndex: widget.jmrIndex,
+                            tabName: widget.tabName,
+                          )));
+
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => JmrTablePageAdmin(
+              //               userId: widget.userId,
+              //               dataFetchingIndex: widget.dataFetchingIndex,
+              //               showTable: widget.showTable,
+              //               title: widget.title,
+              //               jmrTab: widget.jmrTab,
+              //               cityName: widget.cityName,
+              //               depoName: widget.depoName,
+              //               jmrIndex: widget.jmrIndex,
+              //               tabName: widget.tabName,
+              //             )));
+            },
+            label: widget.showTable
+                ? Row(
+                    children: const [
+                      Text(
+                        'Next',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Icon(Icons.arrow_forward),
+                    ],
+                  )
+                : Row(
+                    children: const [
+                      Text(
+                        'Proceed To Sync',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Icon(Icons.arrow_forward),
+                    ],
+                  )), // child: Image.asset(widget.img.toString()),
+      ),
     );
   }
 

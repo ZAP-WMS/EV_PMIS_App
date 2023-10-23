@@ -142,527 +142,471 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
         Navigator.pop(context);
         return true;
       },
-      child: _isLoading
-          ? LoadingPage()
-          : Scaffold(
-              appBar: PreferredSize(
-                // ignore: sort_child_properties_last
-                child: CustomAppBar(
-                  height: 30,
-                  isCentered: true,
-                  isSync: widget.showTable ? false : true,
-                  title:
-                      'JMR / ${widget.depoName} / ${widget.title.toString()}',
-                ),
-                preferredSize: const Size.fromHeight(50),
-              ),
-              body: _isLoading
-                  ? LoadingPage()
-                  : SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          StreamBuilder(
-                            stream: _stream,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return LoadingPage();
-                              }
-                              if (!snapshot.hasData) {
-                                jmrtable = getData();
-                                _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow);
-                                _dataGridController = DataGridController();
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.8,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: SingleChildScrollView(
-                                    child: SfDataGridTheme(
-                                      data: SfDataGridThemeData(
-                                          headerColor: blue),
-                                      child: SfDataGrid(
-                                        source: _jmrDataSource,
-                                        //key: key,
-                                        allowEditing:
-                                            widget.showTable ? false : true,
-                                        frozenColumnsCount: 1,
-                                        gridLinesVisibility:
-                                            GridLinesVisibility.both,
-                                        headerGridLinesVisibility:
-                                            GridLinesVisibility.both,
-                                        selectionMode: SelectionMode.single,
-                                        navigationMode: GridNavigationMode.cell,
-                                        columnWidthMode: ColumnWidthMode.none,
-                                        editingGestureType:
-                                            EditingGestureType.tap,
-                                        controller: _dataGridController,
-                                        columns: [
-                                          GridColumn(
-                                            columnName: 'srNo',
-                                            autoFitPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 8),
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Sr No',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Description',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                  'Description of items',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Activity',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Activity Details',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white,
-                                                  )),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'RefNo',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('BOQ RefNo',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Abstract',
-                                            allowEditing: true,
-                                            width: 180,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Abstract of JMR',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'UOM',
-                                            allowEditing: true,
-                                            width: 80,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('UOM',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Rate',
-                                            allowEditing: true,
-                                            width: 80,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Rate',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'TotalQty',
-                                            allowEditing: true,
-                                            width: 120,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Total Qty',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'TotalAmount',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Amount',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Delete',
-                                            autoFitPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 16),
-                                            allowEditing: false,
-                                            width: 120,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Delete Row',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)
-                                                  //    textAlign: TextAlign.center,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
+      child: Scaffold(
+        appBar: PreferredSize(
+          // ignore: sort_child_properties_last
+          child: CustomAppBar(
+            height: 30,
+            isCentered: true,
+            isSync: widget.showTable ? false : true,
+            title: 'JMR / ${widget.depoName} / ${widget.title.toString()}',
+          ),
+          preferredSize: const Size.fromHeight(50),
+        ),
+        body: _isLoading
+            ? const LoadingPage()
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StreamBuilder(
+                      stream: _stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return LoadingPage();
+                        }
+                        if (!snapshot.hasData) {
+                          jmrtable = getData();
+                          _jmrDataSource = JmrDataSource(jmrtable, deleteRow);
+                          _dataGridController = DataGridController();
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            width: MediaQuery.of(context).size.width,
+                            child: SingleChildScrollView(
+                              child: SfDataGridTheme(
+                                data: SfDataGridThemeData(headerColor: blue),
+                                child: SfDataGrid(
+                                  source: _jmrDataSource,
+                                  //key: key,
+                                  allowEditing: widget.showTable ? false : true,
+                                  frozenColumnsCount: 1,
+                                  gridLinesVisibility: GridLinesVisibility.both,
+                                  headerGridLinesVisibility:
+                                      GridLinesVisibility.both,
+                                  selectionMode: SelectionMode.single,
+                                  navigationMode: GridNavigationMode.cell,
+                                  columnWidthMode: ColumnWidthMode.none,
+                                  editingGestureType: EditingGestureType.tap,
+                                  controller: _dataGridController,
+                                  columns: [
+                                    GridColumn(
+                                      columnName: 'srNo',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                      allowEditing: true,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Sr No',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
                                       ),
                                     ),
-                                  ),
-                                );
-                              } else if (snapshot.hasData) {
-                                jmrtable = convertListToJmrModel(data);
-                                _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow);
-
-                                _dataGridController = DataGridController();
-
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.8,
-                                  child: SfDataGridTheme(
-                                    data: SfDataGridThemeData(
-                                      headerColor: blue,
+                                    GridColumn(
+                                      columnName: 'Description',
+                                      allowEditing: true,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Description of items',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
+                                      ),
                                     ),
-                                    child: SfDataGrid(
-                                      source: _jmrDataSource,
-                                      //key: key,
-                                      allowEditing:
-                                          widget.showTable ? false : true,
-                                      frozenColumnsCount: 1,
-                                      gridLinesVisibility:
-                                          GridLinesVisibility.both,
-                                      headerGridLinesVisibility:
-                                          GridLinesVisibility.both,
-                                      selectionMode: SelectionMode.single,
-                                      navigationMode: GridNavigationMode.cell,
-                                      columnWidthMode: ColumnWidthMode.auto,
-                                      editingGestureType:
-                                          EditingGestureType.tap,
-                                      controller: _dataGridController,
-                                      allowColumnsResizing: true,
-
-                                      headerRowHeight: 40,
-                                      columns: [
-                                        GridColumn(
-                                          columnName: 'srNo',
-                                          autoFitPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 9),
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('SrNo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          width: 150,
-                                          columnName: 'Description',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Description of items',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Activity',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Activity Details',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: white,
-                                                )),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'RefNo',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('BOQ RefNo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Abstract',
-                                          allowEditing: true,
-                                          width: 180,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Abstract of JMR',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'UOM',
-                                          allowEditing: true,
-                                          width: 80,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('UOM',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Rate',
-                                          allowEditing: true,
-                                          width: 80,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Rate',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'TotalQty',
-                                          allowEditing: true,
-                                          width: 120,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Total Qty',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'TotalAmount',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Amount',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Delete',
-                                          autoFitPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 16),
-                                          allowEditing: false,
-                                          width: 120,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Delete Row',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)
-                                                //    textAlign: TextAlign.center,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
+                                    GridColumn(
+                                      columnName: 'Activity',
+                                      allowEditing: true,
+                                      label: Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Activity Details',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white,
+                                            )),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              } else {
-                                return const NodataAvailable();
-                              }
-                            },
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5, bottom: 10),
-                                child: Visibility(
-                                  visible: widget.showTable ? false : true,
-                                  child: FloatingActionButton(
-                                    hoverColor: Colors.blue[900],
-                                    heroTag: "btn1",
-                                    onPressed: () {
-                                      data.add([
-                                        data.length + 1,
-                                        'Supply and Laying',
-                                        'onboarding one no. of EV charger of 200kw',
-                                        '8.31 (Additional)',
-                                        'abstract of JMR sheet No 1 & Item Sr No 1',
-                                        'Mtr',
-                                        500.00,
-                                        110,
-                                        55000.00
-                                      ]);
-                                      setState(() {});
-                                    },
-                                    child: const Icon(Icons.add),
-                                  ),
+                                    GridColumn(
+                                      columnName: 'RefNo',
+                                      allowEditing: true,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('BOQ RefNo',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'Abstract',
+                                      allowEditing: true,
+                                      width: 180,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Abstract of JMR',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'UOM',
+                                      allowEditing: true,
+                                      width: 80,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('UOM',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'Rate',
+                                      allowEditing: true,
+                                      width: 80,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Rate',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'TotalQty',
+                                      allowEditing: true,
+                                      width: 120,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Total Qty',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'TotalAmount',
+                                      allowEditing: true,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Amount',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)),
+                                      ),
+                                    ),
+                                    GridColumn(
+                                      columnName: 'Delete',
+                                      autoFitPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                      allowEditing: false,
+                                      width: 120,
+                                      label: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Text('Delete Row',
+                                            overflow: TextOverflow.values.first,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: white)
+                                            //    textAlign: TextAlign.center,
+                                            ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5, bottom: 10),
-                                child: Visibility(
-                                  visible: widget.showTable ? false : true,
-                                  child: FloatingActionButton.extended(
-                                    hoverColor: Colors.blue[900],
-                                    heroTag: "btn2",
-                                    isExtended: true,
-                                    onPressed: () {
-                                      selectExcelFile().then((value) {
-                                        setState(() {});
-                                      });
-                                    },
-                                    label: const Text('Upload Excel'),
+                            ),
+                          );
+                        } else if (snapshot.hasData) {
+                          jmrtable = convertListToJmrModel(data);
+                          _jmrDataSource = JmrDataSource(jmrtable, deleteRow);
+
+                          _dataGridController = DataGridController();
+
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            child: SfDataGridTheme(
+                              data: SfDataGridThemeData(
+                                headerColor: blue,
+                              ),
+                              child: SfDataGrid(
+                                source: _jmrDataSource,
+                                //key: key,
+                                allowEditing: widget.showTable ? false : true,
+                                frozenColumnsCount: 1,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                selectionMode: SelectionMode.single,
+                                navigationMode: GridNavigationMode.cell,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                editingGestureType: EditingGestureType.tap,
+                                controller: _dataGridController,
+                                allowColumnsResizing: true,
+
+                                headerRowHeight: 40,
+                                columns: [
+                                  GridColumn(
+                                    columnName: 'srNo',
+                                    autoFitPadding: const EdgeInsets.symmetric(
+                                        horizontal: 9),
+                                    allowEditing: true,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('SrNo',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                                  GridColumn(
+                                    width: 150,
+                                    columnName: 'Description',
+                                    allowEditing: true,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Description of items',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Activity',
+                                    allowEditing: true,
+                                    label: Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Activity Details',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                            color: white,
+                                          )),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'RefNo',
+                                    allowEditing: true,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('BOQ RefNo',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Abstract',
+                                    allowEditing: true,
+                                    width: 180,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Abstract of JMR',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'UOM',
+                                    allowEditing: true,
+                                    width: 80,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('UOM',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Rate',
+                                    allowEditing: true,
+                                    width: 80,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Rate',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'TotalQty',
+                                    allowEditing: true,
+                                    width: 120,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Total Qty',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'TotalAmount',
+                                    allowEditing: true,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Amount',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Delete',
+                                    autoFitPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    allowEditing: false,
+                                    width: 120,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Delete Row',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              color: white)
+                                          //    textAlign: TextAlign.center,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          return const NodataAvailable();
+                        }
+                      },
                     ),
-            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5, bottom: 10),
+                          child: Visibility(
+                            visible: widget.showTable ? false : true,
+                            child: FloatingActionButton(
+                              hoverColor: Colors.blue[900],
+                              heroTag: "btn1",
+                              onPressed: () {
+                                data.add([
+                                  data.length + 1,
+                                  'Supply and Laying',
+                                  'onboarding one no. of EV charger of 200kw',
+                                  '8.31 (Additional)',
+                                  'abstract of JMR sheet No 1 & Item Sr No 1',
+                                  'Mtr',
+                                  500.00,
+                                  110,
+                                  55000.00
+                                ]);
+                                setState(() {});
+                              },
+                              child: const Icon(Icons.add),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5, bottom: 10),
+                          child: Visibility(
+                            visible: widget.showTable ? false : true,
+                            child: FloatingActionButton.extended(
+                              hoverColor: Colors.blue[900],
+                              heroTag: "btn2",
+                              isExtended: true,
+                              onPressed: () {
+                                selectExcelFile().then((value) {
+                                  setState(() {});
+                                });
+                              },
+                              label: const Text('Upload Excel'),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+      ),
     );
   }
 
