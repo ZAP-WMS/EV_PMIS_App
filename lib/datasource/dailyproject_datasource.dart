@@ -89,9 +89,9 @@ class DailyDataSource extends DataGridSource {
                           ),
                         ));
                   },
-                  child: Text(
+                  child: const Text(
                     'View',
-                    style: tablefontsize,
+                    style: TextStyle(fontSize: 12),
                   ))
               : (dataGridCell.columnName == 'upload')
                   ? ElevatedButton(
@@ -114,7 +114,7 @@ class DailyDataSource extends DataGridSource {
                               ),
                             ));
                       },
-                      child: Text('Upload', style: tablefontsize))
+                      child: Text('Upload', style: TextStyle(fontSize: 12)))
                   : (dataGridCell.columnName == 'Add')
                       ? ElevatedButton(
                           onPressed: () {

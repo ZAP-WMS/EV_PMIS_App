@@ -526,11 +526,11 @@ class _DailyProjectState extends State<DailyProject> {
                                     ),
                               ),
                             ),
-                          ]),
-                    );
-                  }
-                },
-              ))
+                          ]));
+                    }
+                  },
+                ),
+              )
             ]),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),

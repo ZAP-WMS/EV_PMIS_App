@@ -257,8 +257,9 @@ class _SafetyFieldState extends State<SafetyField> {
                                           )),
                                       Text(
                                         DateFormat('dd-MM-yyyy').format(date),
+                                        style: normaltextbold,
                                         textAlign: TextAlign.center,
-                                        style: normalboldtext,
+                                      
                                       ),
                                     ],
                                   ),
@@ -338,6 +339,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                           )),
                                       Text(
                                         DateFormat('dd-MM-yyyy').format(date1!),
+                                        
                                         textAlign: TextAlign.center,
                                         style: normalboldtext,
                                       ),

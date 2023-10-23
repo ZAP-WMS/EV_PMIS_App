@@ -286,10 +286,7 @@ class DetailedEngSourceEV extends DataGridSource {
                                   style: TextStyle(fontSize: 12),
                                 ));
                           })
-                        : dataGridCell.columnName == 'Number' &&
-                                dataGridCell.value == 0
-                            ? Text('')
-                            : (dataGridCell.columnName == 'PreparationDate') &&
+                        :  (dataGridCell.columnName == 'PreparationDate') &&
                                     dataGridCell.value != ''
                                 ? Row(
                                     children: [

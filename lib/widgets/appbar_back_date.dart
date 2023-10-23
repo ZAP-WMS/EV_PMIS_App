@@ -105,19 +105,18 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                           width: 35,
                         ),
                       )
-                    : Container(),
-                widget.haveSynced
-                    ? InkWell(
-                        onTap: () {
-                          widget.store!();
-                        },
-                        child: Image.asset(
-                          'assets/appbar/sync.jpeg',
-                          height: 35,
-                          width: 35,
-                        ),
-                      )
-                    : Container()
+                    : widget.haveSynced
+                        ? InkWell(
+                            onTap: () {
+                              widget.store!();
+                            },
+                            child: Image.asset(
+                              'assets/appbar/sync.jpeg',
+                              height: 35,
+                              width: 35,
+                            ),
+                          )
+                        : Container()
               ],
             ),
           )

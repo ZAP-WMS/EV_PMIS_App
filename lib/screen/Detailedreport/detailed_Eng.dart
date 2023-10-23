@@ -17,6 +17,7 @@ import '../../date_format.dart';
 import '../../model/detailed_engModel.dart';
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
+import '../homepage/gallery.dart';
 
 class DetailedEng extends StatefulWidget {
   String? depoName;
@@ -45,7 +46,7 @@ class _DetailedEngtState extends State<DetailedEng>
   Stream? _stream2;
   var alldata;
   bool _isloading = true;
-  dynamic userId;
+  bool checkTable = true;
   String? cityName;
 
   @override
@@ -54,6 +55,45 @@ class _DetailedEngtState extends State<DetailedEng>
 
     // getmonthlyReport();
     // getmonthlyReportEv();
+
+    getTableDataRfc().whenComplete(() {
+      // _stream = FirebaseFirestore.instance
+      //     .collection('DetailEngineering')
+      //     .doc('${widget.depoName}')
+      //     .collection('RFC LAYOUT DRAWING')
+      //     .doc(userId)
+      //     .snapshots();
+
+      _detailedDataSource = DetailedEngSource(
+          DetailedProject, context, cityName!, widget.depoName!, userId);
+      _dataGridController = DataGridController();
+    });
+
+    getTableDataEv().whenComplete(() {
+      _stream1 = FirebaseFirestore.instance
+          .collection('DetailEngineering')
+          .doc('${widget.depoName}')
+          .collection('EV LAYOUT DRAWING')
+          .doc(userId)
+          .snapshots();
+
+      _detailedEngSourceev = DetailedEngSourceEV(
+          DetailedProjectev, context, cityName!, widget.depoName!, userId);
+      _dataGridController = DataGridController();
+    });
+
+    getTableDataShed().whenComplete(() {
+      _stream2 = FirebaseFirestore.instance
+          .collection('DetailEngineering')
+          .doc('${widget.depoName}')
+          .collection('Shed LAYOUT DRAWING')
+          .doc(userId)
+          .snapshots();
+
+      _detailedEngSourceShed = DetailedEngSourceShed(
+          DetailedProjectshed, context, cityName!, widget.depoName!, userId);
+    });
+
     getUserId().whenComplete(() {
       // DetailedProject = getmonthlyReport();
       _detailedDataSource = DetailedEngSource(DetailedProject, context,
@@ -179,7 +219,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProject.add(DetailedEngModel(
                 siNo: 1,
                 title: '',
-                number: null,
+                number: 'null',
                 preparationDate:
                     DateFormat('dd-MM-yyyy').format(DateTime.now()),
                 submissionDate: dmy,
@@ -193,7 +233,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectev.add(DetailedEngModel(
                 siNo: 1,
                 title: '',
-                number: null,
+                number: 'null',
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,
@@ -205,7 +245,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectshed.add(DetailedEngModel(
                 siNo: 1,
                 title: '',
-                number: null,
+                number: 'null',
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,
@@ -627,22 +667,22 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                             ]);
                       } else {
-                        alldata = '';
-                        alldata = snapshot.data['data'] as List<dynamic>;
-                        DetailedProject.clear();
-                        _detailedDataSource.buildDataGridRows();
-                        _detailedDataSource.updateDatagridSource();
-                        alldata.forEach((element) {
-                          DetailedProject.add(
-                              DetailedEngModel.fromjsaon(element));
-                          _detailedDataSource = DetailedEngSource(
-                              DetailedProject,
-                              context,
-                              cityName!,
-                              widget.depoName.toString(),
-                              userId);
-                          _dataGridController = DataGridController();
-                        });
+                        // alldata = '';
+                        // alldata = snapshot.data['data'] as List<dynamic>;
+                        // DetailedProject.clear();
+                        // _detailedDataSource.buildDataGridRows();
+                        // _detailedDataSource.updateDatagridSource();
+                        // alldata.forEach((element) {
+                        //   DetailedProject.add(
+                        //       DetailedEngModel.fromjson(element));
+                        //   _detailedDataSource = DetailedEngSource(
+                        //       DetailedProject,
+                        //       context,
+                        //       cityName!,
+                        //       widget.depoName.toString(),
+                        //       userId);
+                        //   _dataGridController = DataGridController();
+                        // });
 
                         return SfDataGrid(
                             source: _selectedIndex == 0
@@ -1042,22 +1082,22 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                             ]);
                       } else {
-                        alldata = '';
-                        alldata = snapshot.data['data'] as List<dynamic>;
-                        DetailedProjectev.clear();
-                        _detailedEngSourceev.buildDataGridRowsEV();
-                        _detailedEngSourceev.updateDatagridSource();
-                        alldata.forEach((element) {
-                          DetailedProjectev.add(
-                              DetailedEngModel.fromjsaon(element));
-                          _detailedEngSourceev = DetailedEngSourceEV(
-                              DetailedProjectev,
-                              context,
-                              cityName!,
-                              widget.depoName.toString(),
-                              userId);
-                          _dataGridController = DataGridController();
-                        });
+                        // alldata = '';
+                        // alldata = snapshot.data['data'] as List<dynamic>;
+                        // DetailedProjectev.clear();
+                        // _detailedEngSourceev.buildDataGridRowsEV();
+                        // _detailedEngSourceev.updateDatagridSource();
+                        // alldata.forEach((element) {
+                        //   DetailedProjectev.add(
+                        //       DetailedEngModel.fromjson(element));
+                        //   _detailedEngSourceev = DetailedEngSourceEV(
+                        //       DetailedProjectev,
+                        //       context,
+                        //       cityName!,
+                        //       widget.depoName.toString(),
+                        //       userId);
+                        //   _dataGridController = DataGridController();
+                        // });
 
                         return SfDataGrid(
                             source: _selectedIndex == 0
@@ -1472,22 +1512,22 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                             ]);
                       } else {
-                        alldata = '';
-                        alldata = snapshot.data['data'] as List<dynamic>;
-                        DetailedProjectshed.clear();
-                        _detailedEngSourceShed.buildDataGridRowsShed();
-                        _detailedEngSourceShed.updateDatagridSource();
-                        alldata.forEach((element) {
-                          DetailedProjectshed.add(
-                              DetailedEngModel.fromjsaon(element));
-                          _detailedEngSourceShed = DetailedEngSourceShed(
-                              DetailedProjectshed,
-                              context,
-                              cityName!,
-                              widget.depoName.toString(),
-                              userId);
-                          _dataGridController = DataGridController();
-                        });
+                        // alldata = '';
+                        // alldata = snapshot.data['data'] as List<dynamic>;
+                        // DetailedProjectshed.clear();
+                        // _detailedEngSourceShed.buildDataGridRowsShed();
+                        // _detailedEngSourceShed.updateDatagridSource();
+                        // alldata.forEach((element) {
+                        //   DetailedProjectshed.add(
+                        //       DetailedEngModel.fromjson(element));
+                        //   _detailedEngSourceShed = DetailedEngSourceShed(
+                        //       DetailedProjectshed,
+                        //       context,
+                        //       cityName!,
+                        //       widget.depoName.toString(),
+                        //       userId);
+                        //   _dataGridController = DataGridController();
+                        // });
 
                         return SfDataGrid(
                             source: _selectedIndex == 0
@@ -1692,5 +1732,74 @@ class _DetailedEngtState extends State<DetailedEng>
       //   }),
       // )
     );
+  }
+
+  Future<void> getTableDataRfc() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('DetailEngineering')
+        .doc('${widget.depoName}')
+        .collection('RFC LAYOUT DRAWING')
+        .doc(userId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      DetailedProject =
+          mapData.map((map) => DetailedEngModel.fromjson(map)).toList();
+      checkTable = false;
+    }
+
+    _isloading = false;
+    setState(() {});
+  }
+
+  Future<void> getTableDataEv() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('DetailEngineering')
+        .doc('${widget.depoName}')
+        .collection('EV LAYOUT DRAWING')
+        .doc(userId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      DetailedProjectev =
+          mapData.map((map) => DetailedEngModel.fromjson(map)).toList();
+      checkTable = false;
+    }
+
+    _isloading = false;
+    setState(() {});
+  }
+
+  Future<void> getTableDataShed() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('DetailEngineering')
+        .doc('${widget.depoName}')
+        .collection('EV LAYOUT DRAWING')
+        .doc(userId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      DetailedProjectshed =
+          mapData.map((map) => DetailedEngModel.fromjson(map)).toList();
+      checkTable = false;
+    }
+
+    _isloading = false;
+    setState(() {});
   }
 }

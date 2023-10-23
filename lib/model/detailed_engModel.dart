@@ -20,7 +20,7 @@ class DetailedEngModel {
   String? approveDate;
   String? releaseDate;
 
-  factory DetailedEngModel.fromjsaon(Map<String, dynamic> json) {
+  factory DetailedEngModel.fromjson(Map<String, dynamic> json) {
     return DetailedEngModel(
         siNo: json['SiNo'],
         title: json['Title'],

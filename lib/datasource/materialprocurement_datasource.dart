@@ -92,7 +92,8 @@ class MaterialDatasource extends DataGridSource {
                           unit: '',
                           qty: 1,
                           materialSite:
-                              DateFormat().add_yMd().format(DateTime.now())));
+                              DateFormat('dd-MM-yyyy').format(DateTime.now())));
+                  // DateFormat().add_yMd().format(DateTime.now())));
                 },
                 child: const Text('Add'))
             : (dataGridCell.columnName == 'Delete')
@@ -202,9 +203,9 @@ class MaterialDatasource extends DataGridSource {
     notifyListeners();
   }
 
-  void updateDataGrid({required RowColumnIndex rowColumnIndex}) {
-    notifyDataSourceListeners(rowColumnIndex: rowColumnIndex);
-  }
+  // void updateDataGrid({required RowColumnIndex rowColumnIndex}) {
+  //   notifyDataSourceListeners(rowColumnIndex: rowColumnIndex);
+  // }
 
   @override
   void onCellSubmit(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
