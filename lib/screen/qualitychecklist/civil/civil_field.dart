@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/dailyreport/summary.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/widgets/activity_headings.dart';
+import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import '../../../FirebaseApi/firebase_api.dart';
 import '../../../QualityDatasource/qualityCivilDatasource/quality_Ironite_flooring.dart';
 import '../../../QualityDatasource/qualityCivilDatasource/quality_backfilling.dart';
 import '../../../QualityDatasource/qualityCivilDatasource/quality_ceiling.dart';
@@ -27,6 +31,8 @@ import '../../../style.dart';
 import '../../../widgets/custom_textfield.dart';
 import '../../../widgets/quality_list.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+
+import '../../dailyreport/daily_project.dart';
 
 class CivilField extends StatefulWidget {
   String? depoName;
@@ -114,6 +120,8 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
+    String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+    String? showDate = DateFormat.yMMMd().format(DateTime.now());
     print('Init method running');
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     _stream = FirebaseFirestore.instance
@@ -122,7 +130,7 @@ class _CivilFieldState extends State<CivilField> {
         .collection('userId')
         .doc(userId)
         .collection(widget.fieldclnName)
-        .doc(currentDate)
+        .doc(selectedDate)
         .snapshots();
 
     initializeController();
@@ -202,61 +210,81 @@ class _CivilFieldState extends State<CivilField> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const NavbarDrawer(),
-      appBar: CustomAppBar(
-          title: '${widget.depoName!}/${widget.title}',
-          height: 50,
-          isSync: true,
-          store: () async {
-            _showDialog(context);
-            CivilstoreData(
+      appBar: PreferredSize(
+        // ignore: sort_child_properties_last
+        child: CustomAppBarBackDate(
+            text: '${widget.depoName!}/${widget.title}',
+            haveCalender: true,
+            haveSynced: true,
+            haveSummary: false,
+            onTap: () => Navigator.push(
                 context,
-                widget.fieldclnName == 'Exc'
-                    ? _qualityExcavationDataSource
-                    : widget.fieldclnName == 'BackFilling'
-                        ? _qualityBackFillingDataSource
-                        : widget.fieldclnName == 'Massonary'
-                            ? _qualityMassonaryDataSource
-                            : widget.fieldclnName == 'Glazzing'
-                                ? _qualityGlazzingDataSource
-                                : widget.fieldclnName == 'Ceilling'
-                                    ? _qualityCeillingDataSource
-                                    : widget.fieldclnName == 'Flooring'
-                                        ? _qualityflooringDataSource
-                                        : widget.fieldclnName == 'Inspection'
-                                            ? _qualityInspectionDataSource
-                                            : widget.fieldclnName == 'Ironite'
-                                                ? _qualityIroniteflooringDataSource
-                                                : widget.fieldclnName ==
-                                                        'Painting'
-                                                    ? _qualityPaintingDataSource
-                                                    : widget.fieldclnName ==
-                                                            'Paving'
-                                                        ? _qualityPaintingDataSource
-                                                        : widget.fieldclnName ==
-                                                                'Roofing'
-                                                            ? _qualityRoofingDataSource
-                                                            : _qualityProofingDataSource,
-                widget.depoName!,
-                currentDate);
-            await FirebaseFirestore.instance
-                .collection('CivilChecklistField')
-                .doc('${widget.depoName}')
-                .collection('userId')
-                .doc(userId)
-                .collection(widget.fieldclnName)
-                .doc(currentDate)
-                .set({
-              'projectName': projectController.text,
-              'location': locationController.text,
-              'vendor': vendorController.text,
-              'drawing': drawingController.text,
-              'date': dateController.text,
-              'componentName': componentController.text,
-              'grid': gridController.text,
-              'filling': fillingController.text
-            });
-          },
-          isCentered: false),
+                MaterialPageRoute(
+                  builder: (context) => ViewSummary(
+                    cityName: cityName,
+                    depoName: widget.depoName.toString(),
+                    id: 'Quality Checklist',
+                    userId: userId,
+                  ),
+                )),
+            store: () async {
+              _showDialog(context);
+              CivilstoreData(
+                  context,
+                  widget.fieldclnName == 'Exc'
+                      ? _qualityExcavationDataSource
+                      : widget.fieldclnName == 'BackFilling'
+                          ? _qualityBackFillingDataSource
+                          : widget.fieldclnName == 'Massonary'
+                              ? _qualityMassonaryDataSource
+                              : widget.fieldclnName == 'Glazzing'
+                                  ? _qualityGlazzingDataSource
+                                  : widget.fieldclnName == 'Ceilling'
+                                      ? _qualityCeillingDataSource
+                                      : widget.fieldclnName == 'Flooring'
+                                          ? _qualityflooringDataSource
+                                          : widget.fieldclnName == 'Inspection'
+                                              ? _qualityInspectionDataSource
+                                              : widget.fieldclnName == 'Ironite'
+                                                  ? _qualityIroniteflooringDataSource
+                                                  : widget.fieldclnName ==
+                                                          'Painting'
+                                                      ? _qualityPaintingDataSource
+                                                      : widget.fieldclnName ==
+                                                              'Paving'
+                                                          ? _qualityPaintingDataSource
+                                                          : widget.fieldclnName ==
+                                                                  'Roofing'
+                                                              ? _qualityRoofingDataSource
+                                                              : _qualityProofingDataSource,
+                  widget.depoName!,
+                  selectedDate!);
+              await FirebaseFirestore.instance
+                  .collection('CivilChecklistField')
+                  .doc('${widget.depoName}')
+                  .collection('userId')
+                  .doc(userId)
+                  .collection(widget.fieldclnName)
+                  .doc(selectedDate)
+                  .set({
+                'projectName': projectController.text,
+                'location': locationController.text,
+                'vendor': vendorController.text,
+                'drawing': drawingController.text,
+                'date': dateController.text,
+                'componentName': componentController.text,
+                'grid': gridController.text,
+                'filling': fillingController.text
+              });
+              FirebaseApi().nestedKeyEventsField(
+                  'CivilChecklistField', widget.depoName!, 'userId', userId!);
+            },
+            choosedate: () {
+              chooseDate(context);
+            }),
+
+        preferredSize: const Size.fromHeight(80),
+      ),
       body: isLoading
           ? LoadingPage()
           : StreamBuilder(
@@ -266,7 +294,7 @@ class _CivilFieldState extends State<CivilField> {
                   .collection('userId')
                   .doc(userId)
                   .collection(widget.fieldclnName)
-                  .doc(currentDate)
+                  .doc(selectedDate)
                   .snapshots(),
               builder: (context, snapshot) {
                 return SingleChildScrollView(
@@ -753,6 +781,8 @@ class _CivilFieldState extends State<CivilField> {
         .set({
       'data': excavationtabledatalist,
     }).whenComplete(() {
+      FirebaseApi().nestedKeyEventsField(
+          'CivilQualityChecklist', widget.depoName!, 'userId', userId!);
       excavationtabledatalist.clear();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -786,19 +816,30 @@ class _CivilFieldState extends State<CivilField> {
         .collection("userId")
         .doc(userId)
         .collection(widget.fieldclnName)
-        .doc(currentDate)
+        .doc(selectedDate)
         .get()
         .then((ds) {
-      setState(() {
-        projectController.text = ds.data()!['projectName'] ?? '';
-        locationController.text = ds.data()!['location'] ?? '';
-        vendorController.text = ds.data()!['vendor'] ?? '';
-        drawingController.text = ds.data()!['drawing'] ?? '';
-        dateController.text = ds.data()!['date'] ?? '';
-        componentController.text = ds.data()!['componentName'] ?? '';
-        gridController.text = ds.data()!['grid'] ?? '';
-        fillingController.text = ds.data()!['filling'] ?? '';
-      });
+      if (ds.exists) {
+        setState(() {
+          projectController.text = ds.data()!['projectName'] ?? '';
+          locationController.text = ds.data()!['location'] ?? '';
+          vendorController.text = ds.data()!['vendor'] ?? '';
+          drawingController.text = ds.data()!['drawing'] ?? '';
+          dateController.text = ds.data()!['date'] ?? '';
+          componentController.text = ds.data()!['componentName'] ?? '';
+          gridController.text = ds.data()!['grid'] ?? '';
+          fillingController.text = ds.data()!['filling'] ?? '';
+        });
+      } else {
+        projectController.clear();
+        locationController.clear();
+        vendorController.clear();
+        drawingController.clear();
+        dateController.clear();
+        componentController.clear();
+        gridController.clear();
+        fillingController.clear();
+      }
     });
   }
 
@@ -809,7 +850,7 @@ class _CivilFieldState extends State<CivilField> {
         .collection('userId')
         .doc(userId)
         .collection(widget.fieldclnName)
-        .doc(currentDate)
+        .doc(selectedDate)
         .get();
 
     if (documentSnapshot.exists) {
@@ -888,5 +929,140 @@ class _CivilFieldState extends State<CivilField> {
     //       qualitylisttable12, widget.depoName!, cityName!);
     //   _dataGridController = DataGridController();
     // }
+  }
+
+  void chooseDate(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('All Date'),
+              content: Container(
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: SfDateRangePicker(
+                    selectionShape: DateRangePickerSelectionShape.rectangle,
+                    view: DateRangePickerView.month,
+                    showTodayButton: false,
+                    onSelectionChanged:
+                        (DateRangePickerSelectionChangedArgs args) {
+                      // if (args.value is PickerDateRange) {
+                      //   // rangeStartDate = args.value.startDate;
+                      //   // rangeEndDate = args.value.endDate;
+                      // } else {
+                      //   final List<PickerDateRange> selectedRanges = args.value;
+                      // }
+                    },
+                    selectionMode: DateRangePickerSelectionMode.single,
+                    showActionButtons: true,
+                    onSubmit: ((value) {
+                      selectedDate = DateFormat.yMMMMd()
+                          .format(DateTime.parse(value.toString()));
+
+                      showDate = selectedDate;
+                      print(showDate);
+                      Navigator.pop(context);
+                      setState(() {
+                        checkTable = true;
+                        _fetchUserData();
+                        data.clear();
+                        getTableData().whenComplete(() {
+                          qualitylisttable1 =
+                              checkTable ? excavation_getData() : data;
+                          _qualityExcavationDataSource =
+                              QualityExcavationDataSource(qualitylisttable1,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable1 =
+                              checkTable ? excavation_getData() : data;
+                          _qualityExcavationDataSource =
+                              QualityExcavationDataSource(qualitylisttable1,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable2 =
+                              checkTable ? backfilling_getData() : data;
+                          _qualityBackFillingDataSource =
+                              QualityBackFillingDataSource(qualitylisttable2,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable3 =
+                              checkTable ? massonary_getData() : data;
+                          _qualityMassonaryDataSource =
+                              QualityMassonaryDataSource(qualitylisttable3,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable4 =
+                              checkTable ? glazzing_getData() : data;
+                          _qualityGlazzingDataSource =
+                              QualityGlazzingDataSource(qualitylisttable4,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable5 =
+                              checkTable ? ceilling_getData() : data;
+                          _qualityCeillingDataSource =
+                              QualityCeillingDataSource(qualitylisttable5,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable6 =
+                              checkTable ? florring_getData() : data;
+                          _qualityflooringDataSource =
+                              QualityflooringDataSource(qualitylisttable6,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable7 =
+                              checkTable ? inspection_getData() : data;
+                          _qualityInspectionDataSource =
+                              QualityInspectionDataSource(qualitylisttable7,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable8 =
+                              checkTable ? ironite_florring_getData() : data;
+                          _qualityIroniteflooringDataSource =
+                              QualityIroniteflooringDataSource(
+                                  qualitylisttable8,
+                                  widget.depoName!,
+                                  cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable9 =
+                              checkTable ? painting_getData() : data;
+                          _qualityPaintingDataSource =
+                              QualityPaintingDataSource(qualitylisttable9,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable10 =
+                              checkTable ? paving_getData() : data;
+                          _qualityPavingDataSource = QualityPavingDataSource(
+                              qualitylisttable10, widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable11 =
+                              checkTable ? roofing_getData() : data;
+                          _qualityRoofingDataSource = QualityRoofingDataSource(
+                              qualitylisttable11, widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+
+                          qualitylisttable12 =
+                              checkTable ? proofing_getData() : data;
+                          _qualityProofingDataSource =
+                              QualityProofingDataSource(qualitylisttable12,
+                                  widget.depoName!, cityName!);
+                          _dataGridController = DataGridController();
+                        });
+                      });
+                    }),
+                    onCancel: () {
+                      Navigator.pop(context);
+                    },
+                  )),
+            ));
   }
 }

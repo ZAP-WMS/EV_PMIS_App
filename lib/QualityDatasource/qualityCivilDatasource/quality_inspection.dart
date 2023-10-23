@@ -591,6 +591,6 @@ class QualityInspectionDataSource extends DataGridSource {
         ? RegExp('[0-9]')
         : isDateTimeBoard
             ? RegExp('[0-9/]')
-            : RegExp('[a-zA-Z ]');
+            : RegExp('[a-zA-Z0-9.@!#^&*(){+-}%|<>?_=+,/ )]');
   }
 }
