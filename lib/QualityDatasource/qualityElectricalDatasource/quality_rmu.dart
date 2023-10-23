@@ -93,7 +93,7 @@ class QualityrmuDataSource extends DataGridSource {
                       },
                       child: Text(
                         'Upload',
-                        style: tablefontsize,
+                        style: uploadViewStyle,
                       ));
                 })
               : dataGridCell.columnName == 'View'
@@ -116,7 +116,7 @@ class QualityrmuDataSource extends DataGridSource {
                           },
                           child: Text(
                             'View',
-                            style: tablefontsize,
+                            style: uploadViewStyle,
                           ));
                     })
 

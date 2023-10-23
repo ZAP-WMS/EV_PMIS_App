@@ -91,7 +91,7 @@ class QualityPSSDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text('Upload', style: tablefontsize));
+                      child: Text('Upload', style: uploadViewStyle));
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
@@ -113,7 +113,7 @@ class QualityPSSDataSource extends DataGridSource {
                           },
                           child: Text(
                             'View',
-                            style: tablefontsize,
+                            style: uploadViewStyle,
                           ));
                     })
                   //     : dataGridCell.columnName == 'ActualStart' ||

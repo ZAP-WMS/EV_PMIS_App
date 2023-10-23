@@ -73,7 +73,7 @@ class QualityctDataSource extends DataGridSource {
               //         dataGridCell.columnName == 'Weightage')
               Alignment.center,
           // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -94,7 +94,7 @@ class QualityctDataSource extends DataGridSource {
                       },
                       child: Text(
                         'Upload',
-                        style: tablefontsize,
+                        style: uploadViewStyle,
                       ));
                 })
               : dataGridCell.columnName == 'View'
@@ -117,7 +117,7 @@ class QualityctDataSource extends DataGridSource {
                           },
                           child: Text(
                             'View',
-                            style: tablefontsize,
+                            style: uploadViewStyle,
                           ));
                     })
 

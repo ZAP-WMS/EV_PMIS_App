@@ -92,10 +92,11 @@ class QualityProofingDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text(
-                        'Upload',
-                        style: tablefontsize,
-                      ));
+                      child: const Text('Upload',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          )));
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
@@ -114,9 +115,12 @@ class QualityProofingDataSource extends DataGridSource {
                                       srNo: row.getCells()[0].value,
                                     )));
                           },
-                          child: Text(
+                          child: const Text(
                             'View',
-                            style: tablefontsize,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ));
                     })
 
