@@ -101,7 +101,7 @@ class _UploadDocumentState extends State<UploadDocument> {
                             result = await FilePicker.platform.pickFiles(
                               withData: true,
                               type: FileType.any,
-                              allowMultiple: true,
+                              allowMultiple: false,
                               // allowedExtensions: ['pdf']
                             );
                             if (result == null) {

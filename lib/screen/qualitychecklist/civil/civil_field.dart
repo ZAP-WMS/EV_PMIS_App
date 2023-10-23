@@ -283,7 +283,7 @@ class _CivilFieldState extends State<CivilField> {
               chooseDate(context);
             }),
 
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(60),
       ),
       body: isLoading
           ? LoadingPage()
@@ -300,15 +300,21 @@ class _CivilFieldState extends State<CivilField> {
                 return SingleChildScrollView(
                   child: Column(
                     children: [
-                      safetyField(projectController, 'Project Name'),
-                      safetyField(locationController, 'Location'),
-                      safetyField(vendorController, 'Vendor / SubVendor'),
-                      safetyField(drawingController, 'Drawing No.'),
-                      safetyField(dateController, 'Date'),
+                      safetyField(projectController, 'Project Name',
+                          TextInputAction.next),
                       safetyField(
-                          componentController, 'Component of the Structure'),
-                      safetyField(gridController, 'Grid / Axis Level'),
-                      safetyField(fillingController, 'Type of Filling'),
+                          locationController, 'Location', TextInputAction.next),
+                      safetyField(vendorController, 'Vendor / SubVendor',
+                          TextInputAction.next),
+                      safetyField(drawingController, 'Drawing No.',
+                          TextInputAction.next),
+                      safetyField(dateController, 'Date', TextInputAction.next),
+                      safetyField(componentController,
+                          'Component of the Structure', TextInputAction.next),
+                      safetyField(gridController, 'Grid / Axis Level',
+                          TextInputAction.next),
+                      safetyField(fillingController, 'Type of Filling',
+                          TextInputAction.done),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: StreamBuilder(
@@ -733,16 +739,18 @@ class _CivilFieldState extends State<CivilField> {
     );
   }
 
-  Widget safetyField(TextEditingController controller, String title) {
+  Widget safetyField(TextEditingController controller, String title,
+      TextInputAction inputType) {
     return Container(
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
       child: CustomTextField(
-          controller: controller,
-          labeltext: title,
-          validatortext: '$title is Required',
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.next),
+        controller: controller,
+        labeltext: title,
+        validatortext: '$title is Required',
+        keyboardType: TextInputType.text,
+        textInputAction: inputType,
+      ),
     );
   }
 

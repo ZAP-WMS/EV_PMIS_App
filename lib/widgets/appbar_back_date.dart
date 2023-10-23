@@ -92,7 +92,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
               : Container(),
           Container(
             padding: const EdgeInsets.only(bottom: 8, right: 5),
-            width: 80,
+            width: widget.haveSummary ? 80 : 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -105,7 +105,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                           width: 35,
                         ),
                       )
-                    : Container(),
+                    : Text(''),
                 widget.haveSynced
                     ? InkWell(
                         onTap: () {

@@ -82,7 +82,8 @@ class CloseReportDataSource extends DataGridSource {
                         //               ],
                         //             ))));
                       },
-                      child: Text('Upload', style: tablefontsize));
+                      child: const Text('Upload',
+                          style: TextStyle(fontSize: 12, color: Colors.white)));
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
@@ -122,7 +123,9 @@ class CloseReportDataSource extends DataGridSource {
                             //               ],
                             //             ))));
                           },
-                          child: Text('View', style: tablefontsize));
+                          child: const Text('View',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.white)));
                     })
                   // : (dataGridCell.columnName == 'Date')
                   //     ? Row(

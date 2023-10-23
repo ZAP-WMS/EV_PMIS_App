@@ -538,7 +538,7 @@ class _DailyProjectState extends State<DailyProject> {
           child: Icon(Icons.add),
           onPressed: (() {
             dailyproject.add(DailyProjectModel(
-                siNo: 1,
+                siNo: _dailyDataSource.rows.length + 1,
                 // date: DateFormat().add_yMd(storeData()).format(DateTime.now()),
                 // state: "Maharashtra",
                 // depotName: 'depotName',
@@ -546,6 +546,7 @@ class _DailyProjectState extends State<DailyProject> {
                 activityDetails: "",
                 progress: '',
                 status: ''));
+            print(_dailyDataSource.rows.length + 1);
             _dataGridController = DataGridController();
 
             _dailyDataSource.buildDataGridRows();
