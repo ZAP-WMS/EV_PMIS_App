@@ -31,7 +31,7 @@ class _OverviewPageState extends State<OverviewPage> {
     '/testing-page',
     // '/depotOverview',
     '/closure-page',
-    '/planning-page',
+    '/testing-page',
   ];
   List imagedata = [
     'assets/overview_image/overview.png',

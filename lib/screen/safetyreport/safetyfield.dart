@@ -36,6 +36,8 @@ List<dynamic> tabledata2 = [];
 Stream? _stream;
 dynamic alldata;
 String? cityName;
+String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+String? showDate = DateFormat.yMMMd().format(DateTime.now());
 
 bool _isloading = true;
 // ignore: prefer_typing_uninitialized_variables
@@ -259,7 +261,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         DateFormat('dd-MM-yyyy').format(date),
                                         style: normaltextbold,
                                         textAlign: TextAlign.center,
-                                      
                                       ),
                                     ],
                                   ),
@@ -339,7 +340,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                           )),
                                       Text(
                                         DateFormat('dd-MM-yyyy').format(date1!),
-                                        
                                         textAlign: TextAlign.center,
                                         style: normalboldtext,
                                       ),

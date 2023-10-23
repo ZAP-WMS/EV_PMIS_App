@@ -3,7 +3,6 @@ import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
 import '../Authentication/login_register.dart';
 import '../authentication/authservice.dart';
 import '../screen/dailyreport/daily_project.dart';
@@ -11,6 +10,7 @@ import '../style.dart';
 
 class CustomAppBarBackDate extends StatefulWidget {
   String? text;
+  String? showDate;
   String? appbardate;
   // final IconData? icon;
   final bool haveCalender;
@@ -22,12 +22,12 @@ class CustomAppBarBackDate extends StatefulWidget {
   bool havebottom;
   bool havedropdown;
   bool isdetailedTab;
-
   TabBar? tabBar;
 
   CustomAppBarBackDate(
       {super.key,
       this.text,
+      this.showDate,
       this.appbardate,
       this.haveSynced = false,
       this.haveSummary = false,
@@ -50,6 +50,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
 
   @override
   void initState() {
+    widget.showDate = DateFormat.yMMMd().format(DateTime.now());
     getUserId().whenComplete(() {
       setState(() {});
     });
@@ -84,7 +85,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                     ),
                     // child: const Icon(Icons.calendar_today, size: 25)),
                     Text(
-                      showDate!,
+                      widget.showDate!,
                       style: TextStyle(color: white, fontSize: 10),
                     ),
                   ],

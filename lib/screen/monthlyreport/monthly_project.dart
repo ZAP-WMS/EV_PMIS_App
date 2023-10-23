@@ -72,32 +72,33 @@ class _MonthlyProjectState extends State<MonthlyProject> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
-              text:
-                  '${widget.depoName}/Monthly Report/${DateFormat('MMMM').format(DateTime.now())}',
+            text:
+                '${widget.depoName}/Monthly Report/${DateFormat('MMMM').format(DateTime.now())}',
 
-              //  ${DateFormat.yMMMMd().format(DateTime.now())}',
-              haveCalender: false,
-              haveSynced: true,
-              haveSummary: true,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewSummary(
-                      cityName: widget.cityName.toString(),
-                      depoName: widget.depoName.toString(),
-                      id: 'Monthly Report',
-                      userId: userId,
-                    ),
-                  )),
-              store: () {
-                _showDialog(context);
-                FirebaseApi().nestedKeyEventsField('MonthlyProjectReport2',
-                    widget.depoName!, 'userId', userId!);
-                storeData();
-              },
-              choosedate: () {
-                // chooseDate(context);
-              }),
+            //  ${DateFormat.yMMMMd().format(DateTime.now())}',
+            haveCalender: false,
+            haveSynced: true,
+            haveSummary: true,
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewSummary(
+                    cityName: widget.cityName.toString(),
+                    depoName: widget.depoName.toString(),
+                    id: 'Monthly Report',
+                    userId: userId,
+                  ),
+                )),
+            store: () {
+              _showDialog(context);
+              FirebaseApi().nestedKeyEventsField(
+                  'MonthlyProjectReport2', widget.depoName!, 'userId', userId!);
+              storeData();
+            },
+            //  choosedate: ('') {
+            // chooseDate(context);
+            // }
+          ),
           // CustomAppBar(
           //   title:
           //       ' ${widget.cityName}/ ${widget.depoName} / Monthly Report / ${DateFormat('MMMM').format(DateTime.now())}',
@@ -135,7 +136,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return LoadingPage();
+                          return const LoadingPage();
                         } else if (!snapshot.hasData ||
                             snapshot.data.exists == false) {
                           monthlyProject = getmonthlyReport();
@@ -166,12 +167,12 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'ActivityNo',
                                     autoFitPadding: tablepadding,
                                     allowEditing: false,
-                                    width: 80,
+                                    width: 65,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
-                                      child: Text(
-                                          'Activities SI. No as per Gant Chart',
+                                      child: Text("SI No.",
+                                          // 'Activities SI. No as per Gant Chart',
                                           overflow: TextOverflow.values.first,
                                           textAlign: TextAlign.center,
                                           style: tableheaderwhitecolor
@@ -183,7 +184,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'ActivityDetails',
                                     autoFitPadding: tablepadding,
                                     allowEditing: false,
-                                    width: 350,
+                                    width: 250,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -278,7 +279,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'Progress',
                                     autoFitPadding: tablepadding,
                                     allowEditing: true,
-                                    width: 250,
+                                    width: 150,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -293,7 +294,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'Status',
                                     autoFitPadding: tablepadding,
                                     allowEditing: true,
-                                    width: 250,
+                                    width: 150,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
@@ -308,7 +309,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     columnName: 'Action',
                                     autoFitPadding: tablepadding,
                                     allowEditing: true,
-                                    width: 250,
+                                    width: 150,
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,

@@ -217,7 +217,7 @@ class _DetailedEngtState extends State<DetailedEng>
           onPressed: (() {
             if (_selectedIndex == 0) {
               DetailedProject.add(DetailedEngModel(
-                siNo: 1,
+                siNo: _detailedDataSource.dataGridRows.length + 1,
                 title: '',
                 number: 'null',
                 preparationDate:
@@ -231,7 +231,7 @@ class _DetailedEngtState extends State<DetailedEng>
             }
             if (_selectedIndex == 1) {
               DetailedProjectev.add(DetailedEngModel(
-                siNo: 1,
+                siNo: _detailedEngSourceev.dataGridRows.length + 1,
                 title: '',
                 number: 'null',
                 preparationDate: dmy,
@@ -243,7 +243,7 @@ class _DetailedEngtState extends State<DetailedEng>
               _detailedEngSourceev.updateDatagridSource();
             } else {
               DetailedProjectshed.add(DetailedEngModel(
-                siNo: 1,
+                siNo: _detailedEngSourceShed.dataGridRows.length + 1,
                 title: '',
                 number: 'null',
                 preparationDate: dmy,

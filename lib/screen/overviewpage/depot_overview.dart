@@ -1020,31 +1020,34 @@ class _DepotOverviewState extends State<DepotOverview> {
                       ],
                     ),
                   ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'add',
-          onPressed: () {
-            _employees.add(
-              DepotOverviewModel(
-                srNo: 1,
-                date: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-                riskDescription: '',
-                typeRisk: 'Material Supply',
-                impactRisk: 'High',
-                owner: '',
-                migrateAction: ' ',
-                contigentAction: '',
-                progressAction: '',
-                reason: '',
-                targetDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-                status: 'Close',
-              ),
-            );
+        floatingActionButton: isProjectManager == true
+            ? FloatingActionButton(
+                heroTag: 'add',
+                onPressed: () {
+                  _employees.add(
+                    DepotOverviewModel(
+                      srNo: 1,
+                      date: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                      riskDescription: '',
+                      typeRisk: 'Material Supply',
+                      impactRisk: 'High',
+                      owner: '',
+                      migrateAction: ' ',
+                      contigentAction: '',
+                      progressAction: '',
+                      reason: '',
+                      targetDate:
+                          DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                      status: 'Close',
+                    ),
+                  );
 
-            _employeeDataSource.buildDataGridRows();
-            _employeeDataSource.updateDatagridSource();
-          },
-          child: const Icon(Icons.add),
-        ));
+                  _employeeDataSource.buildDataGridRows();
+                  _employeeDataSource.updateDatagridSource();
+                },
+                child: const Icon(Icons.add),
+              )
+            : Container());
   }
 
   overviewField(TextEditingController controller, String title, String msg) {
