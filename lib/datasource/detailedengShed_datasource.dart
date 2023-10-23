@@ -177,24 +177,39 @@ class DetailedEngSourceShed extends DataGridSource {
                                   context: mainContext,
                                   builder: (context) {
                                     return AlertDialog(
+                                      actionsAlignment:
+                                          MainAxisAlignment.center,
+                                      elevation: 10,
+                                      backgroundColor: Colors.white,
+                                      icon: const Icon(
+                                        Icons.warning_amber,
+                                        size: 45,
+                                        color: Colors.red,
+                                      ),
                                       title: const Text(
-                                          'Please Add Drawing Number First'),
+                                        'Drawing Number is Required',
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 14,
+                                            letterSpacing: 2,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                       actions: [
-                                        // TextButton(
-                                        //   child: const Text('No'),
-                                        //   onPressed: () {
-                                        //     Navigator.of(context).pop();
-                                        //   },
-                                        // ),
                                         TextButton(
+                                          style: const ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.blue)),
                                           child: const Text(
-                                            'Yes',
-                                            style: TextStyle(fontSize: 12),
+                                            'OK',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           onPressed: () {
-                                            Navigator.of(context).pop();
+                                            Navigator.pop(context);
                                           },
-                                        ),
+                                        )
                                       ],
                                     );
                                   },

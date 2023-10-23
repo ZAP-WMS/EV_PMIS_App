@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/electrical/electrical_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -140,14 +141,10 @@ class DetailedEngSource extends DataGridSource {
                         siNo: dataRowIndex + 2,
                         title: '',
                         number: null,
-                        preparationDate:
-                            dmy,
-                        submissionDate:
-                            dmy,
-                        approveDate:
-                            dmy,
-                        releaseDate:
-                            dmy,
+                        preparationDate: dmy,
+                        submissionDate: dmy,
+                        approveDate: dmy,
+                        releaseDate: dmy,
                       ));
                 },
                 child: const Text(
@@ -181,24 +178,39 @@ class DetailedEngSource extends DataGridSource {
                                   context: mainContext,
                                   builder: (context) {
                                     return AlertDialog(
+                                      actionsAlignment:
+                                          MainAxisAlignment.center,
+                                      elevation: 10,
+                                      backgroundColor: Colors.white,
+                                      icon: const Icon(
+                                        Icons.warning_amber,
+                                        size: 45,
+                                        color: Colors.red,
+                                      ),
                                       title: const Text(
-                                          'Please Add Drawing Number First'),
+                                        'Drawing Number is Required',
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 14,
+                                            letterSpacing: 2,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                       actions: [
-                                        // TextButton(
-                                        //   child: const Text('No'),
-                                        //   onPressed: () {
-                                        //     Navigator.of(context).pop();
-                                        //   },
-                                        // ),
                                         TextButton(
+                                          style: const ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.blue)),
                                           child: const Text(
-                                            'Yes',
-                                            style: TextStyle(fontSize: 12),
+                                            'OK',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           onPressed: () {
-                                            Navigator.of(context).pop();
+                                            Navigator.pop(context);
                                           },
-                                        ),
+                                        )
                                       ],
                                     );
                                   },

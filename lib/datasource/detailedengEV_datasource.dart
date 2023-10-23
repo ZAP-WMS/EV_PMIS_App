@@ -139,14 +139,10 @@ class DetailedEngSourceEV extends DataGridSource {
                         siNo: dataRowIndex + 2,
                         title: '',
                         number: null,
-                        preparationDate:
-                            dmy,
-                        submissionDate:
-                            dmy,
-                        approveDate:
-                            dmy,
-                        releaseDate:
-                            dmy,
+                        preparationDate: dmy,
+                        submissionDate: dmy,
+                        approveDate: dmy,
+                        releaseDate: dmy,
                       ));
                 },
                 child: const Text(
@@ -180,24 +176,39 @@ class DetailedEngSourceEV extends DataGridSource {
                                   context: mainContext,
                                   builder: (context) {
                                     return AlertDialog(
+                                      actionsAlignment:
+                                          MainAxisAlignment.center,
+                                      elevation: 10,
+                                      backgroundColor: Colors.white,
+                                      icon: const Icon(
+                                        Icons.warning_amber,
+                                        size: 45,
+                                        color: Colors.red,
+                                      ),
                                       title: const Text(
-                                          'Please Add Drawing Number First'),
+                                        'Drawing Number is Required',
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 14,
+                                            letterSpacing: 2,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                       actions: [
-                                        // TextButton(
-                                        //   child: const Text('No'),
-                                        //   onPressed: () {
-                                        //     Navigator.of(context).pop();
-                                        //   },
-                                        // ),
                                         TextButton(
+                                          style: const ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.blue)),
                                           child: const Text(
-                                            'Yes',
-                                            style: TextStyle(fontSize: 12),
+                                            'OK',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           onPressed: () {
-                                            Navigator.of(context).pop();
+                                            Navigator.pop(context);
                                           },
-                                        ),
+                                        )
                                       ],
                                     );
                                   },
@@ -287,7 +298,110 @@ class DetailedEngSourceEV extends DataGridSource {
                                   style: TextStyle(fontSize: 12),
                                 ));
                           })
-                        :  (dataGridCell.columnName == 'PreparationDate') &&
+                        : (dataGridCell.columnName == 'PreparationDate') &&
+                                dataGridCell.value != ''
+                            ? Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: mainContext,
+                                          builder: (context) => AlertDialog(
+                                                title: const Text('All Date'),
+                                                content: Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.8,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    child: SfDateRangePicker(
+                                                      selectionShape:
+                                                          DateRangePickerSelectionShape
+                                                              .rectangle,
+                                                      view: DateRangePickerView
+                                                          .month,
+                                                      showTodayButton: false,
+                                                      // onSelectionChanged:
+                                                      //     (DateRangePickerSelectionChangedArgs
+                                                      //         args) {
+                                                      //   if (args.value
+                                                      //       is PickerDateRange) {
+                                                      //     rangeStartDate =
+                                                      //         args.value
+                                                      //             .startDate;
+                                                      //     rangeEndDate =
+                                                      //         args.value
+                                                      //             .endDate;
+                                                      //   } else {
+                                                      //     final List<
+                                                      //             PickerDateRange>
+                                                      //         selectedRanges =
+                                                      //         args.value;
+                                                      //   }
+                                                      // },
+                                                      selectionMode:
+                                                          DateRangePickerSelectionMode
+                                                              .single,
+                                                      showActionButtons: true,
+                                                      onSubmit: ((value) {
+                                                        date = DateTime.parse(
+                                                            value.toString());
+                                                        date1 = DateTime.parse(
+                                                            value.toString());
+                                                        date2 = DateTime.parse(
+                                                            value.toString());
+
+                                                        final int dataRowIndex =
+                                                            dataGridRows
+                                                                .indexOf(row);
+                                                        if (dataRowIndex !=
+                                                            null) {
+                                                          final int
+                                                              dataRowIndex =
+                                                              dataGridRows
+                                                                  .indexOf(row);
+                                                          dataGridRows[
+                                                                      dataRowIndex]
+                                                                  .getCells()[
+                                                              5] = DataGridCell<
+                                                                  String>(
+                                                              columnName:
+                                                                  'PreparationDate',
+                                                              value: DateFormat(
+                                                                      'dd-MM-yyyy')
+                                                                  .format(
+                                                                      date!));
+                                                          _detailedengev[
+                                                                      dataRowIndex]
+                                                                  .preparationDate =
+                                                              DateFormat(
+                                                                      'dd-MM-yyyy')
+                                                                  .format(
+                                                                      date!);
+                                                          notifyListeners();
+
+                                                          Navigator.pop(
+                                                              context);
+                                                        }
+                                                      }),
+                                                    )),
+                                              ));
+                                    },
+                                    icon: const Icon(Icons.calendar_today,
+                                        size: 20),
+                                  ),
+                                  Text(
+                                    dataGridCell.value.toString(),
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
+                              )
+                            : (dataGridCell.columnName == 'SubmissionDate') &&
                                     dataGridCell.value != ''
                                 ? Row(
                                     children: [
@@ -324,12 +438,12 @@ class DetailedEngSourceEV extends DataGridSource {
                                                           //         args) {
                                                           //   if (args.value
                                                           //       is PickerDateRange) {
-                                                          //     rangeStartDate =
-                                                          //         args.value
-                                                          //             .startDate;
-                                                          //     rangeEndDate =
-                                                          //         args.value
-                                                          //             .endDate;
+                                                          //     rangeStartDate = args
+                                                          //         .value
+                                                          //         .startDate;
+                                                          //     rangeEndDate = args
+                                                          //         .value
+                                                          //         .endDate;
                                                           //   } else {
                                                           //     final List<
                                                           //             PickerDateRange>
@@ -368,17 +482,17 @@ class DetailedEngSourceEV extends DataGridSource {
                                                               dataGridRows[
                                                                           dataRowIndex]
                                                                       .getCells()[
-                                                                  5] = DataGridCell<
+                                                                  6] = DataGridCell<
                                                                       String>(
                                                                   columnName:
-                                                                      'PreparationDate',
+                                                                      'SubmissionDate',
                                                                   value: DateFormat(
                                                                           'dd-MM-yyyy')
                                                                       .format(
                                                                           date!));
                                                               _detailedengev[
                                                                       dataRowIndex]
-                                                                  .preparationDate = DateFormat(
+                                                                  .submissionDate = DateFormat(
                                                                       'dd-MM-yyyy')
                                                                   .format(
                                                                       date!);
@@ -391,17 +505,15 @@ class DetailedEngSourceEV extends DataGridSource {
                                                         )),
                                                   ));
                                         },
-                                        icon: const Icon(Icons.calendar_today,
-                                            size: 20),
+                                        icon: const Icon(Icons.calendar_today),
                                       ),
                                       Text(
                                         dataGridCell.value.toString(),
-                                        style: const TextStyle(fontSize: 12),
+                                        style: TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   )
-                                : (dataGridCell.columnName ==
-                                            'SubmissionDate') &&
+                                : (dataGridCell.columnName == 'ApproveDate') &&
                                         dataGridCell.value != ''
                                     ? Row(
                                         children: [
@@ -413,7 +525,7 @@ class DetailedEngSourceEV extends DataGridSource {
                                                       (context) => AlertDialog(
                                                             title: const Text(
                                                                 'All Date'),
-                                                            content: Container(
+                                                            content: SizedBox(
                                                                 height: MediaQuery.of(
                                                                             context)
                                                                         .size
@@ -435,21 +547,13 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                   showTodayButton:
                                                                       false,
                                                                   // onSelectionChanged:
-                                                                  //     (DateRangePickerSelectionChangedArgs
-                                                                  //         args) {
+                                                                  //     (DateRangePickerSelectionChangedArgs args) {
                                                                   //   if (args.value
                                                                   //       is PickerDateRange) {
-                                                                  //     rangeStartDate = args
-                                                                  //         .value
-                                                                  //         .startDate;
-                                                                  //     rangeEndDate = args
-                                                                  //         .value
-                                                                  //         .endDate;
+                                                                  //     rangeStartDate = args.value.startDate;
+                                                                  //     rangeEndDate = args.value.endDate;
                                                                   //   } else {
-                                                                  //     final List<
-                                                                  //             PickerDateRange>
-                                                                  //         selectedRanges =
-                                                                  //         args.value;
+                                                                  //     final List<PickerDateRange> selectedRanges = args.value;
                                                                   //   }
                                                                   // },
                                                                   selectionMode:
@@ -462,12 +566,10 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                     date = DateTime
                                                                         .parse(value
                                                                             .toString());
-                                                                    date1 = DateTime
-                                                                        .parse(value
-                                                                            .toString());
-                                                                    date2 = DateTime
-                                                                        .parse(value
-                                                                            .toString());
+                                                                    // date1 =
+                                                                    //     DateTime.parse(value.toString());
+                                                                    // date2 =
+                                                                    //     DateTime.parse(value.toString());
 
                                                                     final int
                                                                         dataRowIndex =
@@ -481,15 +583,15 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                               .indexOf(row);
                                                                       dataGridRows[dataRowIndex]
                                                                               .getCells()[
-                                                                          6] = DataGridCell<
+                                                                          7] = DataGridCell<
                                                                               String>(
                                                                           columnName:
-                                                                              'SubmissionDate',
+                                                                              'ApproveDate',
                                                                           value:
                                                                               DateFormat('dd-MM-yyyy').format(date!));
                                                                       _detailedengev[
                                                                               dataRowIndex]
-                                                                          .submissionDate = DateFormat(
+                                                                          .approveDate = DateFormat(
                                                                               'dd-MM-yyyy')
                                                                           .format(
                                                                               date!);
@@ -507,12 +609,13 @@ class DetailedEngSourceEV extends DataGridSource {
                                           ),
                                           Text(
                                             dataGridCell.value.toString(),
-                                            style: TextStyle(fontSize: 12),
+                                            style:
+                                                const TextStyle(fontSize: 12),
                                           ),
                                         ],
                                       )
                                     : (dataGridCell.columnName ==
-                                                'ApproveDate') &&
+                                                'ReleaseDate') &&
                                             dataGridCell.value != ''
                                         ? Row(
                                             children: [
@@ -526,86 +629,13 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                 title: const Text(
                                                                     'All Date'),
                                                                 content:
-                                                                    SizedBox(
+                                                                    Container(
                                                                         height: MediaQuery.of(context).size.height *
                                                                             0.8,
                                                                         width: MediaQuery.of(context).size.width *
                                                                             0.8,
                                                                         child:
                                                                             SfDateRangePicker(
-                                                                          selectionShape:
-                                                                              DateRangePickerSelectionShape.rectangle,
-                                                                          view:
-                                                                              DateRangePickerView.month,
-                                                                          showTodayButton:
-                                                                              false,
-                                                                          // onSelectionChanged:
-                                                                          //     (DateRangePickerSelectionChangedArgs args) {
-                                                                          //   if (args.value
-                                                                          //       is PickerDateRange) {
-                                                                          //     rangeStartDate = args.value.startDate;
-                                                                          //     rangeEndDate = args.value.endDate;
-                                                                          //   } else {
-                                                                          //     final List<PickerDateRange> selectedRanges = args.value;
-                                                                          //   }
-                                                                          // },
-                                                                          selectionMode:
-                                                                              DateRangePickerSelectionMode.single,
-                                                                          showActionButtons:
-                                                                              true,
-                                                                          onSubmit:
-                                                                              ((value) {
-                                                                            date =
-                                                                                DateTime.parse(value.toString());
-                                                                            // date1 =
-                                                                            //     DateTime.parse(value.toString());
-                                                                            // date2 =
-                                                                            //     DateTime.parse(value.toString());
-
-                                                                            final int
-                                                                                dataRowIndex =
-                                                                                dataGridRows.indexOf(row);
-                                                                            if (dataRowIndex !=
-                                                                                null) {
-                                                                              final int dataRowIndex = dataGridRows.indexOf(row);
-                                                                              dataGridRows[dataRowIndex].getCells()[7] = DataGridCell<String>(columnName: 'ApproveDate', value: DateFormat('dd-MM-yyyy').format(date!));
-                                                                              _detailedengev[dataRowIndex].approveDate = DateFormat('dd-MM-yyyy').format(date!);
-                                                                              notifyListeners();
-
-                                                                              Navigator.pop(context);
-                                                                            }
-                                                                          }),
-                                                                        )),
-                                                              ));
-                                                },
-                                                icon: const Icon(
-                                                    Icons.calendar_today),
-                                              ),
-                                              Text(
-                                                dataGridCell.value.toString(),
-                                                style: const TextStyle(
-                                                    fontSize: 12),
-                                              ),
-                                            ],
-                                          )
-                                        : (dataGridCell.columnName ==
-                                                    'ReleaseDate') &&
-                                                dataGridCell.value != ''
-                                            ? Row(
-                                                children: [
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      showDialog(
-                                                          context: mainContext,
-                                                          builder:
-                                                              (context) =>
-                                                                  AlertDialog(
-                                                                    title: const Text(
-                                                                        'All Date'),
-                                                                    content: Container(
-                                                                        height: MediaQuery.of(context).size.height * 0.8,
-                                                                        width: MediaQuery.of(context).size.width * 0.8,
-                                                                        child: SfDateRangePicker(
                                                                           selectionShape:
                                                                               DateRangePickerSelectionShape.rectangle,
                                                                           view:
@@ -649,171 +679,170 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                             }
                                                                           }),
                                                                         )),
-                                                                  ));
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.calendar_today),
-                                                  ),
-                                                  Text(
-                                                    dataGridCell.value
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        fontSize: 12),
-                                                  ),
-                                                ],
-                                              )
-                                            // : dataGridCell.columnName == 'Title' &&
-                                            //         dataGridCell.value !=
-                                            //             'RFC Drawings of Civil Activities' &&
-                                            //         dataGridCell.value == 'EV Layout'
-                                            //     ? DropdownButton<String>(
-                                            //         value: dataGridCell.value,
-                                            //         autofocus: true,
-                                            //         focusColor: Colors.transparent,
-                                            //         underline: const SizedBox.shrink(),
-                                            //         icon: const Icon(
-                                            //             Icons.arrow_drop_down_sharp),
-                                            //         isExpanded: true,
-                                            //         style: textStyle,
-                                            //         onChanged: (String? value) {
-                                            //           final dynamic oldValue = row
-                                            //                   .getCells()
-                                            //                   .firstWhereOrNull(
-                                            //                       (DataGridCell dataCell) =>
-                                            //                           dataCell.columnName ==
-                                            //                           dataGridCell
-                                            //                               .columnName)
-                                            //                   ?.value ??
-                                            //               '';
-                                            //           if (oldValue == value ||
-                                            //               value == null) {
-                                            //             return;
-                                            //           }
-
-                                            //           final int dataRowIndex =
-                                            //               dataGridRows.indexOf(row);
-                                            //           dataGridRows[dataRowIndex]
-                                            //                   .getCells()[2] =
-                                            //               DataGridCell<String>(
-                                            //                   columnName: 'Title',
-                                            //                   value: value);
-                                            //           _detailedeng[dataRowIndex].title =
-                                            //               value.toString();
-                                            //           notifyListeners();
-                                            //         },
-                                            //         items: typeRiskMenuItems
-                                            //             .map<DropdownMenuItem<String>>(
-                                            //                 (String value) {
-                                            //           return DropdownMenuItem<String>(
-                                            //             value: value,
-                                            //             child: Text(value),
-                                            //           );
-                                            //         }).toList())
-                                            //     : dataGridCell.columnName == 'Title' &&
-                                            //             dataGridCell.value !=
-                                            //                 'EV Layout Drawings of Electrical Activities' &&
-                                            //             dataGridCell.value ==
-                                            //                 'Electrical Work'
-                                            //         ? DropdownButton<String>(
-                                            //             value: dataGridCell.value,
-                                            //             autofocus: true,
-                                            //             focusColor: Colors.transparent,
-                                            //             underline: const SizedBox.shrink(),
-                                            //             icon: const Icon(
-                                            //                 Icons.arrow_drop_down_sharp),
-                                            //             isExpanded: true,
-                                            //             style: textStyle,
-                                            //             onChanged: (String? value) {
-                                            //               final dynamic oldValue = row
-                                            //                       .getCells()
-                                            //                       .firstWhereOrNull(
-                                            //                           (DataGridCell
-                                            //                                   dataCell) =>
-                                            //                               dataCell
-                                            //                                   .columnName ==
-                                            //                               dataGridCell
-                                            //                                   .columnName)
-                                            //                       ?.value ??
-                                            //                   '';
-                                            //               if (oldValue == value ||
-                                            //                   value == null) {
-                                            //                 return;
-                                            //               }
-
-                                            //               final int dataRowIndex =
-                                            //                   dataGridRows.indexOf(row);
-                                            //               dataGridRows[dataRowIndex]
-                                            //                       .getCells()[2] =
-                                            //                   DataGridCell<String>(
-                                            //                       columnName: 'Title',
-                                            //                       value: value);
-                                            //               _detailedeng[dataRowIndex].title =
-                                            //                   value.toString();
-                                            //               notifyListeners();
-                                            //             },
-                                            //             items: ElectricalActivities.map<
-                                            //                     DropdownMenuItem<String>>(
-                                            //                 (String value) {
-                                            //               return DropdownMenuItem<String>(
-                                            //                 value: value,
-                                            //                 child: Text(value),
-                                            //               );
-                                            //             }).toList())
-                                            //         : dataGridCell.columnName == 'Title' &&
-                                            //                 dataGridCell.value !=
-                                            //                     'Shed Lighting Drawings & Specification' &&
-                                            //                 dataGridCell.value ==
-                                            //                     'Illumination Design'
-                                            //             ? DropdownButton<String>(
-                                            //                 value: dataGridCell.value,
-                                            //                 autofocus: true,
-                                            //                 focusColor: Colors.transparent,
-                                            //                 underline:
-                                            //                     const SizedBox.shrink(),
-                                            //                 icon:
-                                            //                     const Icon(Icons.arrow_drop_down_sharp),
-                                            //                 isExpanded: true,
-                                            //                 style: textStyle,
-                                            //                 onChanged: (String? value) {
-                                            //                   final dynamic oldValue = row
-                                            //                           .getCells()
-                                            //                           .firstWhereOrNull(
-                                            //                               (DataGridCell
-                                            //                                       dataCell) =>
-                                            //                                   dataCell
-                                            //                                       .columnName ==
-                                            //                                   dataGridCell
-                                            //                                       .columnName)
-                                            //                           ?.value ??
-                                            //                       '';
-                                            //                   if (oldValue == value ||
-                                            //                       value == null) {
-                                            //                     return;
-                                            //                   }
-
-                                            //                   final int dataRowIndex =
-                                            //                       dataGridRows.indexOf(row);
-                                            //                   dataGridRows[dataRowIndex]
-                                            //                           .getCells()[2] =
-                                            //                       DataGridCell<String>(
-                                            //                           columnName: 'Title',
-                                            //                           value: value);
-                                            //                   _detailedeng[dataRowIndex]
-                                            //                       .title = value.toString();
-                                            //                   notifyListeners();
-                                            //                 },
-                                            //                 items: Specification.map<DropdownMenuItem<String>>((String value) {
-                                            //                   return DropdownMenuItem<
-                                            //                       String>(
-                                            //                     value: value,
-                                            //                     child: Text(value),
-                                            //                   );
-                                            //                 }).toList())
-                                            : Text(
-                                                dataGridCell.value.toString(),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(fontSize: 12),
+                                                              ));
+                                                },
+                                                icon: const Icon(
+                                                    Icons.calendar_today),
                                               ),
+                                              Text(
+                                                dataGridCell.value.toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              ),
+                                            ],
+                                          )
+                                        // : dataGridCell.columnName == 'Title' &&
+                                        //         dataGridCell.value !=
+                                        //             'RFC Drawings of Civil Activities' &&
+                                        //         dataGridCell.value == 'EV Layout'
+                                        //     ? DropdownButton<String>(
+                                        //         value: dataGridCell.value,
+                                        //         autofocus: true,
+                                        //         focusColor: Colors.transparent,
+                                        //         underline: const SizedBox.shrink(),
+                                        //         icon: const Icon(
+                                        //             Icons.arrow_drop_down_sharp),
+                                        //         isExpanded: true,
+                                        //         style: textStyle,
+                                        //         onChanged: (String? value) {
+                                        //           final dynamic oldValue = row
+                                        //                   .getCells()
+                                        //                   .firstWhereOrNull(
+                                        //                       (DataGridCell dataCell) =>
+                                        //                           dataCell.columnName ==
+                                        //                           dataGridCell
+                                        //                               .columnName)
+                                        //                   ?.value ??
+                                        //               '';
+                                        //           if (oldValue == value ||
+                                        //               value == null) {
+                                        //             return;
+                                        //           }
+
+                                        //           final int dataRowIndex =
+                                        //               dataGridRows.indexOf(row);
+                                        //           dataGridRows[dataRowIndex]
+                                        //                   .getCells()[2] =
+                                        //               DataGridCell<String>(
+                                        //                   columnName: 'Title',
+                                        //                   value: value);
+                                        //           _detailedeng[dataRowIndex].title =
+                                        //               value.toString();
+                                        //           notifyListeners();
+                                        //         },
+                                        //         items: typeRiskMenuItems
+                                        //             .map<DropdownMenuItem<String>>(
+                                        //                 (String value) {
+                                        //           return DropdownMenuItem<String>(
+                                        //             value: value,
+                                        //             child: Text(value),
+                                        //           );
+                                        //         }).toList())
+                                        //     : dataGridCell.columnName == 'Title' &&
+                                        //             dataGridCell.value !=
+                                        //                 'EV Layout Drawings of Electrical Activities' &&
+                                        //             dataGridCell.value ==
+                                        //                 'Electrical Work'
+                                        //         ? DropdownButton<String>(
+                                        //             value: dataGridCell.value,
+                                        //             autofocus: true,
+                                        //             focusColor: Colors.transparent,
+                                        //             underline: const SizedBox.shrink(),
+                                        //             icon: const Icon(
+                                        //                 Icons.arrow_drop_down_sharp),
+                                        //             isExpanded: true,
+                                        //             style: textStyle,
+                                        //             onChanged: (String? value) {
+                                        //               final dynamic oldValue = row
+                                        //                       .getCells()
+                                        //                       .firstWhereOrNull(
+                                        //                           (DataGridCell
+                                        //                                   dataCell) =>
+                                        //                               dataCell
+                                        //                                   .columnName ==
+                                        //                               dataGridCell
+                                        //                                   .columnName)
+                                        //                       ?.value ??
+                                        //                   '';
+                                        //               if (oldValue == value ||
+                                        //                   value == null) {
+                                        //                 return;
+                                        //               }
+
+                                        //               final int dataRowIndex =
+                                        //                   dataGridRows.indexOf(row);
+                                        //               dataGridRows[dataRowIndex]
+                                        //                       .getCells()[2] =
+                                        //                   DataGridCell<String>(
+                                        //                       columnName: 'Title',
+                                        //                       value: value);
+                                        //               _detailedeng[dataRowIndex].title =
+                                        //                   value.toString();
+                                        //               notifyListeners();
+                                        //             },
+                                        //             items: ElectricalActivities.map<
+                                        //                     DropdownMenuItem<String>>(
+                                        //                 (String value) {
+                                        //               return DropdownMenuItem<String>(
+                                        //                 value: value,
+                                        //                 child: Text(value),
+                                        //               );
+                                        //             }).toList())
+                                        //         : dataGridCell.columnName == 'Title' &&
+                                        //                 dataGridCell.value !=
+                                        //                     'Shed Lighting Drawings & Specification' &&
+                                        //                 dataGridCell.value ==
+                                        //                     'Illumination Design'
+                                        //             ? DropdownButton<String>(
+                                        //                 value: dataGridCell.value,
+                                        //                 autofocus: true,
+                                        //                 focusColor: Colors.transparent,
+                                        //                 underline:
+                                        //                     const SizedBox.shrink(),
+                                        //                 icon:
+                                        //                     const Icon(Icons.arrow_drop_down_sharp),
+                                        //                 isExpanded: true,
+                                        //                 style: textStyle,
+                                        //                 onChanged: (String? value) {
+                                        //                   final dynamic oldValue = row
+                                        //                           .getCells()
+                                        //                           .firstWhereOrNull(
+                                        //                               (DataGridCell
+                                        //                                       dataCell) =>
+                                        //                                   dataCell
+                                        //                                       .columnName ==
+                                        //                                   dataGridCell
+                                        //                                       .columnName)
+                                        //                           ?.value ??
+                                        //                       '';
+                                        //                   if (oldValue == value ||
+                                        //                       value == null) {
+                                        //                     return;
+                                        //                   }
+
+                                        //                   final int dataRowIndex =
+                                        //                       dataGridRows.indexOf(row);
+                                        //                   dataGridRows[dataRowIndex]
+                                        //                           .getCells()[2] =
+                                        //                       DataGridCell<String>(
+                                        //                           columnName: 'Title',
+                                        //                           value: value);
+                                        //                   _detailedeng[dataRowIndex]
+                                        //                       .title = value.toString();
+                                        //                   notifyListeners();
+                                        //                 },
+                                        //                 items: Specification.map<DropdownMenuItem<String>>((String value) {
+                                        //                   return DropdownMenuItem<
+                                        //                       String>(
+                                        //                     value: value,
+                                        //                     child: Text(value),
+                                        //                   );
+                                        //                 }).toList())
+                                        : Text(
+                                            dataGridCell.value.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 12),
+                                          ),
       );
     }).toList());
   }
