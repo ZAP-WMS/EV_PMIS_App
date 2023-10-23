@@ -92,9 +92,12 @@ class QualityPaintingDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text(
+                      child: const Text(
                         'Upload',
-                        style: tablefontsize,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
                       ));
                 })
               : dataGridCell.columnName == 'View'
@@ -114,9 +117,12 @@ class QualityPaintingDataSource extends DataGridSource {
                                       srNo: row.getCells()[0].value,
                                     )));
                           },
-                          child: Text(
+                          child: const Text(
                             'View',
-                            style: tablefontsize,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ));
                     })
                   //     : dataGridCell.columnName == 'ActualStart' ||

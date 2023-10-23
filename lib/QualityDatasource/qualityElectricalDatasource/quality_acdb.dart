@@ -90,7 +90,7 @@ class QualityacdDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text('Upload', style: tablefontsize));
+                      child: Text('Upload', style: uploadViewStyle));
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
@@ -109,7 +109,7 @@ class QualityacdDataSource extends DataGridSource {
                                       srNo: row.getCells()[0].value,
                                     )));
                           },
-                          child: Text('View', style: tablefontsize));
+                          child: Text('View', style: uploadViewStyle));
                     })
 
                   // dataGridCell.columnName == 'button'

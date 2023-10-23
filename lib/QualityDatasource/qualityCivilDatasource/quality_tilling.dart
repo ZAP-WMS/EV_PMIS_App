@@ -94,7 +94,7 @@ class QualityTeilingDataSource extends DataGridSource {
                       },
                       child: Text(
                         'Upload',
-                        style: tablefontsize,
+                        style: uploadViewStyle,
                       ));
                 })
               : dataGridCell.columnName == 'View'
@@ -115,7 +115,10 @@ class QualityTeilingDataSource extends DataGridSource {
                               ),
                             ));
                           },
-                          child: const Text('View'));
+                          child: Text(
+                            'View',
+                            style: uploadViewStyle,
+                          ));
                     })
 
                   // dataGridCell.columnName == 'button'

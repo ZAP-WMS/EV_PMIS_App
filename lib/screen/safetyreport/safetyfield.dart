@@ -34,10 +34,11 @@ late SafetyChecklistDataSource _safetyChecklistDataSource;
 late DataGridController _dataGridController;
 List<dynamic> tabledata2 = [];
 Stream? _stream;
+bool checkTable = true;
 dynamic alldata;
 String? cityName;
 
-bool _isloading = true;
+bool isLoading = true;
 // ignore: prefer_typing_uninitialized_variables
 dynamic depotlocation,
     depotname,
@@ -89,8 +90,9 @@ class _SafetyFieldState extends State<SafetyField> {
     initializeController();
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
     _fetchUserData();
-    getUserId().whenComplete(() {
-      safetylisttable = getData();
+
+    getTableData().whenComplete(() {
+      safetylisttable = checkTable ? getData() : safetylisttable;
       _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,
           cityName!, 'widget.depoName!', userId, selectedDate!);
       _dataGridController = DataGridController();
@@ -103,9 +105,6 @@ class _SafetyFieldState extends State<SafetyField> {
           .collection('date')
           .doc(DateFormat.yMMMMd().format(DateTime.now()))
           .snapshots();
-
-      _isloading = false;
-      setState(() {});
     });
 
     super.initState();
@@ -167,7 +166,7 @@ class _SafetyFieldState extends State<SafetyField> {
         preferredSize: const Size.fromHeight(50),
       ),
       drawer: const NavbarDrawer(),
-      body: _isloading
+      body: isLoading
           ? LoadingPage()
           : StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -259,7 +258,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         DateFormat('dd-MM-yyyy').format(date),
                                         style: normaltextbold,
                                         textAlign: TextAlign.center,
-                                      
                                       ),
                                     ],
                                   ),
@@ -339,7 +337,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                           )),
                                       Text(
                                         DateFormat('dd-MM-yyyy').format(date1!),
-                                        
                                         textAlign: TextAlign.center,
                                         style: normalboldtext,
                                       ),
@@ -571,22 +568,22 @@ class _SafetyFieldState extends State<SafetyField> {
                                   ),
                                 );
                               } else {
-                                alldata = '';
-                                alldata =
-                                    snapshot.data['data'] as List<dynamic>;
-                                safetylisttable.clear();
-                                alldata.forEach((element) {
-                                  safetylisttable.add(
-                                      SafetyChecklistModel.fromJson(element));
-                                  _safetyChecklistDataSource =
-                                      SafetyChecklistDataSource(
-                                          safetylisttable,
-                                          cityName!,
-                                          widget.depoName!,
-                                          userId,
-                                          selectedDate!);
-                                  _dataGridController = DataGridController();
-                                });
+                                // alldata = '';
+                                // alldata =
+                                //     snapshot.data['data'] as List<dynamic>;
+                                // safetylisttable.clear();
+                                // alldata.forEach((element) {
+                                //   safetylisttable.add(
+                                //       SafetyChecklistModel.fromJson(element));
+                                //   _safetyChecklistDataSource =
+                                //       SafetyChecklistDataSource(
+                                //           safetylisttable,
+                                //           cityName!,
+                                //           widget.depoName!,
+                                //           userId,
+                                //           selectedDate!);
+                                //   _dataGridController = DataGridController();
+                                // });
                                 return SizedBox(
                                   height: MediaQuery.of(context).size.height,
                                   child: SfDataGridTheme(
@@ -1273,6 +1270,31 @@ class _SafetyFieldState extends State<SafetyField> {
         }
       });
     });
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('SafetyChecklistTable2')
+        .doc(widget.depoName!)
+        .collection('userId')
+        .doc(userId)
+        .collection('date')
+        .doc(DateFormat.yMMMMd().format(DateTime.now()))
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      safetylisttable =
+          mapData.map((map) => SafetyChecklistModel.fromJson(map)).toList();
+      checkTable = false;
+    }
+
+    isLoading = false;
+    setState(() {});
   }
 }
 

@@ -91,9 +91,12 @@ class QualityCeillingDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text(
+                      child: const Text(
                         'Upload',
-                        style: tablefontsize,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
                       ));
                 })
               : dataGridCell.columnName == 'View'
@@ -114,9 +117,12 @@ class QualityCeillingDataSource extends DataGridSource {
                               ),
                             ));
                           },
-                          child: Text(
+                          child: const Text(
                             'View',
-                            style: tablefontsize,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ));
                     })
 
