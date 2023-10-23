@@ -179,8 +179,7 @@ class EmployeeDataSource extends DataGridSource {
 
                                     Duration diff = endDate!.difference(date!);
 
-                                    print(
-                                        'Difference' + diff.inDays.toString());
+                                    print('Difference${diff.inDays}');
 
                                     final int dataRowIndex =
                                         dataGridRows.indexOf(row);
