@@ -1,4 +1,4 @@
-import 'package:ev_pmis_app/screen/jmrPage/jmr.dart';
+import 'package:ev_pmis_app/screen/jmrPage/jmr_user/jmr.dart';
 import 'package:flutter/material.dart';
 
 import '../screen/jmrPage/jmr_admin/jmr.dart';

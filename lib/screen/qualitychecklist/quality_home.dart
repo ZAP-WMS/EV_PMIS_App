@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/civil/civil_field.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/electrical/electrical_field.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/civil/civil_field.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/electrical/electrical_field.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';

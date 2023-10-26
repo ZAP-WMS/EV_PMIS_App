@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/screen/dailyreport/daily_project.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_admin/daily_report_admin.dart';
 import 'package:ev_pmis_app/screen/materialprocurement/material_vendor.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,8 @@ class _DailyProjectActionState extends State<DailyProjectAction> {
         selectedUi = DailyProject(depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = DailyProject(
+        selectedUi = DailyProjectAdmin(
+          cityName: widget.cityName,
           depoName: widget.depoName,
         );
     }

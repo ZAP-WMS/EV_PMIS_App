@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
-
 import '../../authentication/authservice.dart';
 import '../../shared_preferences/shared_preferences.dart';
-import '../../widgets/internet_checker.dart';
 import '../../widgets/navbar.dart';
 
 dynamic userId = '';
@@ -22,7 +19,6 @@ class _GalleryPageState extends State<GalleryPage> {
   String role = '';
   @override
   void initState() {
-   
     super.initState();
     getUserId();
   }

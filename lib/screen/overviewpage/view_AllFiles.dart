@@ -46,6 +46,7 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                 '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
             : widget.title == '/BOQSurvey' ||
                     widget.title == '/BOQElectrical' ||
+                    widget.title == '/BOQCivil' ||
                     widget.title == 'Key Events'
                 ? FirebaseApi.listAll(
                     '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')

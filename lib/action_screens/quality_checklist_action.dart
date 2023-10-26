@@ -1,8 +1,6 @@
-import 'package:ev_pmis_app/screen/Detailedreport/detailed_Eng.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/quality_checklist.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:flutter/material.dart';
 
+import '../screen/qualitychecklist/quality_admin/quality_home_admin.dart';
 import '../screen/qualitychecklist/quality_home.dart';
 
 class QualityChecklistAction extends StatefulWidget {
@@ -22,7 +20,6 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -37,7 +34,8 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
         selectedUi = QualityHome(depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = QualityHome(depoName: widget.depoName);
+        selectedUi = QualityHomeAdmin(
+            cityName: widget.cityName, depoName: widget.depoName);
     }
 
     return selectedUi;

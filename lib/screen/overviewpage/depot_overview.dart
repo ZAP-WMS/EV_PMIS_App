@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
-import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,9 +18,10 @@ import '../../widgets/custom_textfield.dart';
 import '../../widgets/navbar.dart';
 
 class DepotOverview extends StatefulWidget {
+  String? role;
   String? cityName;
   String? depoName;
-  DepotOverview({super.key, required this.depoName});
+  DepotOverview({super.key, required this.depoName, this.role});
 
   @override
   State<DepotOverview> createState() => _DepotOverviewState();
@@ -29,15 +29,16 @@ class DepotOverview extends StatefulWidget {
 
 class _DepotOverviewState extends State<DepotOverview> {
   String? cityName;
+  String userId = '';
   bool isProjectManager = false;
-
-  bool _isloading = true;
+  bool checkTable = true;
+  bool isLoading = true;
   List<dynamic> tabledata2 = [];
   late DepotOverviewDatasource _employeeDataSource;
   List<DepotOverviewModel> _employees = <DepotOverviewModel>[];
   late DataGridController _dataGridController;
   Stream? _stream;
-  var alldata;
+  // var alldata;
 
   late TextEditingController _addressController,
       _scopeController,
@@ -81,19 +82,18 @@ class _DepotOverviewState extends State<DepotOverview> {
     super.initState();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     initializeController();
-    _employeeDataSource = DepotOverviewDatasource(_employees, context);
-    _dataGridController = DataGridController();
-
-    _stream = FirebaseFirestore.instance
-        .collection('OverviewCollectionTable')
-        .doc(widget.depoName)
-        .collection("OverviewTabledData")
-        .doc(userId)
-        .snapshots();
 
     verifyProjectManager().whenComplete(() {
-      setState(() {
-        _isloading = false;
+      getTableData().whenComplete(() {
+        _stream = FirebaseFirestore.instance
+            .collection('OverviewCollectionTable')
+            .doc(widget.depoName)
+            .collection("OverviewTabledData")
+            .doc(userId)
+            .snapshots();
+
+        _employeeDataSource = DepotOverviewDatasource(_employees, context);
+        _dataGridController = DataGridController();
       });
     });
   }
@@ -110,7 +110,11 @@ class _DepotOverviewState extends State<DepotOverview> {
           isCentered: true,
           title: '${widget.depoName}/Depot Overview',
           height: 50,
-          isSync: isProjectManager ? true : false,
+          isSync: isProjectManager
+              ? widget.role == 'admin'
+                  ? false
+                  : true
+              : false,
           store: () async {
             // overviewField(cityName!, widget.depoName!);
             overviewFieldstore(cityName!, widget.depoName!);
@@ -118,8 +122,8 @@ class _DepotOverviewState extends State<DepotOverview> {
           },
         ),
         drawer: const NavbarDrawer(),
-        body: _isloading
-            ? LoadingPage()
+        body: isLoading
+            ? const LoadingPage()
             : isProjectManager == false
                 ? Center(
                     child: Column(
@@ -193,24 +197,30 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                       const SizedBox(width: 10),
                                       ElevatedButton(
-                                          onPressed: () async {
-                                            res = await FilePicker.platform
-                                                .pickFiles(
-                                              type: FileType.any,
-                                              withData: true,
-                                            );
+                                          onPressed: widget.role == 'admin'
+                                              ? null
+                                              : () async {
+                                                  res = await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                    type: FileType.any,
+                                                    withData: true,
+                                                  );
 
-                                            bytes = res!.files.first.bytes!;
-                                            if (res == null) {
-                                              print("No file selected");
-                                            } else {
-                                              setState(() {});
-                                              res!.files.forEach((element) {
-                                                print(element.name);
-                                                print(res!.files.first.name);
-                                              });
-                                            }
-                                          },
+                                                  bytes =
+                                                      res!.files.first.bytes!;
+                                                  if (res == null) {
+                                                    print("No file selected");
+                                                  } else {
+                                                    setState(() {});
+                                                    res!.files
+                                                        .forEach((element) {
+                                                      print(element.name);
+                                                      print(res!
+                                                          .files.first.name);
+                                                    });
+                                                  }
+                                                },
                                           child: const Text(
                                             'Pick file',
                                             textAlign: TextAlign.end,
@@ -263,7 +273,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ViewAllPdf(
-                                                            title: 'BOQSurvey',
+                                                            title: '/BOQSurvey',
                                                             cityName: cityName!,
                                                             depoName: widget
                                                                 .depoName!,
@@ -302,24 +312,28 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                       const SizedBox(width: 10),
                                       ElevatedButton(
-                                          onPressed: () async {
-                                            result1 = await FilePicker.platform
-                                                .pickFiles(
-                                              type: FileType.any,
-                                              withData: true,
-                                            );
+                                          onPressed: widget.role == 'admin'
+                                              ? null
+                                              : () async {
+                                                  result1 = await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                    type: FileType.any,
+                                                    withData: true,
+                                                  );
 
-                                            fileBytes1 =
-                                                result1!.files.first.bytes!;
-                                            if (result1 == null) {
-                                              print("No file selected");
-                                            } else {
-                                              setState(() {});
-                                              result1!.files.forEach((element) {
-                                                print(element.name);
-                                              });
-                                            }
-                                          },
+                                                  fileBytes1 = result1!
+                                                      .files.first.bytes!;
+                                                  if (result1 == null) {
+                                                    print("No file selected");
+                                                  } else {
+                                                    setState(() {});
+                                                    result1!.files
+                                                        .forEach((element) {
+                                                      print(element.name);
+                                                    });
+                                                  }
+                                                },
                                           child: const Text(
                                             'Pick file',
                                             textAlign: TextAlign.end,
@@ -373,7 +387,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                     builder: (context) =>
                                                         ViewAllPdf(
                                                             title:
-                                                                'BOQElectrical',
+                                                                '/BOQElectrical',
                                                             cityName: cityName!,
                                                             depoName: widget
                                                                 .depoName!,
@@ -413,23 +427,26 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                       const SizedBox(width: 10),
                                       ElevatedButton(
-                                          onPressed: () async {
-                                            result2 = await FilePicker.platform
-                                                .pickFiles(
-                                              type: FileType.any,
-                                              withData: true,
-                                            );
+                                          onPressed: widget.role == 'admin'
+                                              ? null
+                                              : () async {
+                                                  result2 = await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                    type: FileType.any,
+                                                    withData: true,
+                                                  );
 
-                                            fileBytes2 =
-                                                result2!.files.first.bytes!;
-                                            if (result2 == null) {
-                                              print("No file selected");
-                                            } else {
-                                              setState(() {});
-                                              result2!.files
-                                                  .forEach((element) {});
-                                            }
-                                          },
+                                                  fileBytes2 = result2!
+                                                      .files.first.bytes!;
+                                                  if (result2 == null) {
+                                                    print("No file selected");
+                                                  } else {
+                                                    setState(() {});
+                                                    result2!.files
+                                                        .forEach((element) {});
+                                                  }
+                                                },
                                           child: const Text(
                                             'Pick file',
                                             textAlign: TextAlign.end,
@@ -481,7 +498,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ViewAllPdf(
-                                                            title: 'BOQCivil',
+                                                            title: '/BOQCivil',
                                                             cityName: cityName!,
                                                             depoName: widget
                                                                 .depoName!,
@@ -509,7 +526,8 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   data: SfDataGridThemeData(headerColor: blue),
                                   child: SfDataGrid(
                                     source: _employeeDataSource,
-                                    allowEditing: true,
+                                    allowEditing:
+                                        widget.role == 'admin' ? false : true,
                                     frozenColumnsCount: 2,
                                     gridLinesVisibility:
                                         GridLinesVisibility.both,
@@ -752,17 +770,17 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   ),
                                 );
                               } else {
-                                alldata = '';
-                                alldata =
-                                    snapshot.data['data'] as List<dynamic>;
-                                _employees.clear();
-                                alldata.forEach((element) {
-                                  _employees.add(
-                                      DepotOverviewModel.fromJson(element));
-                                  _employeeDataSource = DepotOverviewDatasource(
-                                      _employees, context);
-                                  _dataGridController = DataGridController();
-                                });
+                                // alldata = '';
+                                // alldata =
+                                //     snapshot.data['data'] as List<dynamic>;
+                                // _employees.clear();
+                                // alldata.forEach((element) {
+                                //   _employees.add(
+                                //       DepotOverviewModel.fromJson(element));
+                                //   _employeeDataSource = DepotOverviewDatasource(
+                                //       _employees, context);
+                                //   _dataGridController = DataGridController();
+                                // });
                                 return SfDataGridTheme(
                                   data: SfDataGridThemeData(headerColor: blue),
                                   child: SfDataGrid(
@@ -1055,6 +1073,7 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          role: widget.role,
           controller: controller,
           labeltext: title,
           validatortext: '$title is Required',
@@ -1063,12 +1082,12 @@ class _DepotOverviewState extends State<DepotOverview> {
     );
   }
 
-  void _fetchUserData() async {
+  void _fetchUserData(String user_id) async {
     await FirebaseFirestore.instance
         .collection('OverviewCollection')
         .doc(widget.depoName)
         .collection("OverviewFieldData")
-        .doc(userId)
+        .doc(user_id)
         .get()
         .then((ds) {
       setState(() {
@@ -1242,26 +1261,66 @@ class _DepotOverviewState extends State<DepotOverview> {
   }
 
   Future<void> verifyProjectManager() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('AssignedRole')
-        .where('roles', arrayContains: 'Project Manager')
-        .get();
+    if (widget.role == 'admin') {
+      QuerySnapshot getProjectManager = await FirebaseFirestore.instance
+          .collection('AssignedRole')
+          .where('roles', arrayContains: 'Project Manager')
+          .get();
 
-    List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
+      getProjectManager.docs.forEach((element) {
+        final selectedCity = (element.data() as dynamic)['cities'] ?? '';
+        if (selectedCity[0] == cityName) {
+          userId = (element.data() as dynamic)['userId'] ?? '';
+        }
+      });
 
-    for (int i = 0; i < tempList.length; i++) {
-      if (tempList[i]['userId'].toString() == userId.toString()) {
-        for (int j = 0; j < tempList[i]['depots'].length; j++) {
-          List<dynamic> depot = tempList[i]['depots'];
+      isProjectManager = true;
+      setState(() {});
+    } else {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('AssignedRole')
+          .where('roles', arrayContains: 'Project Manager')
+          .get();
 
-          if (depot[j].toString() == widget.depoName) {
-            print(depot);
-            isProjectManager = true;
-            setState(() {});
+      List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
+
+      for (int i = 0; i < tempList.length; i++) {
+        if (tempList[i]['userId'].toString() == userId.toString()) {
+          for (int j = 0; j < tempList[i]['depots'].length; j++) {
+            List<dynamic> depot = tempList[i]['depots'];
+
+            if (depot[j].toString() == widget.depoName) {
+              isProjectManager = true;
+              setState(() {});
+            }
           }
         }
       }
     }
-    _fetchUserData();
+
+    _fetchUserData(userId);
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('OverviewCollectionTable')
+        .doc(widget.depoName)
+        .collection("OverviewTabledData")
+        .doc(userId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      _employees =
+          mapData.map((map) => DepotOverviewModel.fromJson(map)).toList();
+      checkTable = false;
+    }
+
+    isLoading = false;
+    setState(() {});
   }
 }

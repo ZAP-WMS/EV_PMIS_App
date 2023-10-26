@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/electrical/electrical_table.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/electrical/electrical_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';

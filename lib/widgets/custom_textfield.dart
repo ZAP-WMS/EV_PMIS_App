@@ -6,6 +6,7 @@ import '../style.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
+  String? role;
   String labeltext;
   // final String? validator;
   final String? validatortext;
@@ -18,7 +19,8 @@ class CustomTextField extends StatefulWidget {
       // this.validator,
       required this.validatortext,
       required this.keyboardType,
-      required this.textInputAction});
+      required this.textInputAction,
+      this.role});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -28,6 +30,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.role == 'admin' ? true : false,
       autofocus: false,
       controller: widget.controller,
       style: const TextStyle(fontSize: 13),

@@ -1,4 +1,3 @@
-import 'package:ev_pmis_app/screen/jmrPage/jmr.dart';
 import 'package:ev_pmis_app/screen/overviewpage/depot_overview.dart';
 import 'package:flutter/material.dart';
 
@@ -30,10 +29,14 @@ class _DepotOverviewActionState extends State<DepotOverviewAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = DepotOverview(depoName: widget.depoName);
+        selectedUi = DepotOverview(
+          depoName: widget.depoName,
+          role: widget.role,
+        );
         break;
       case 'admin':
         selectedUi = DepotOverview(
+          role: widget.role,
           depoName: widget.depoName,
         );
     }

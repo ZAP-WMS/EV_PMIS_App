@@ -9,26 +9,26 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_EP.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_acdb.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_cdi.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_charger.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_ci.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_cmu.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_ct.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_msp.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
-import '../../../components/Loading_page.dart';
-import '../../../model/quality_checklistModel.dart';
-import '../../../provider/cities_provider.dart';
-import '../../../style.dart';
-import '../../../widgets/activity_headings.dart';
-import '../../../widgets/custom_textfield.dart';
-import '../../../widgets/quality_list.dart';
-import '../../dailyreport/daily_project.dart';
-import '../../homepage/gallery.dart';
-import '../../safetyreport/safetyfield.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_EP.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_acdb.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_cdi.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_charger.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_ci.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_cmu.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_ct.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_msp.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
+import '../../../../components/Loading_page.dart';
+import '../../../../model/quality_checklistModel.dart';
+import '../../../../provider/cities_provider.dart';
+import '../../../../style.dart';
+import '../../../../widgets/activity_headings.dart';
+import '../../../../widgets/custom_textfield.dart';
+import '../../../../widgets/quality_list.dart';
+import '../../../dailyreport/daily_project.dart';
+import '../../../homepage/gallery.dart';
+import '../../../safetyreport/safetyfield.dart';
 
 class ElectricalField extends StatefulWidget {
   String? depoName;
@@ -238,7 +238,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     'customerName': customerController.text
                   });
                 },
-                 showDate: visDate,
+                showDate: visDate,
                 choosedate: () {
                   chooseDate(context);
                 }),
@@ -978,7 +978,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                       selectedDate = DateFormat.yMMMMd()
                           .format(DateTime.parse(value.toString()));
 
-                       visDate = DateFormat.yMMMd()
+                      visDate = DateFormat.yMMMd()
                           .format(DateTime.parse(value.toString()));
                       Navigator.pop(context);
                       setState(() {
