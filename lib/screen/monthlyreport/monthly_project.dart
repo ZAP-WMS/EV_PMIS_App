@@ -127,7 +127,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
 
           preferredSize: const Size.fromHeight(50)),
       body: isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(
               children: [
                 Expanded(

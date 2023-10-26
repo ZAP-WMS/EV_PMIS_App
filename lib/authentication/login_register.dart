@@ -79,7 +79,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                 ),
               ),
               body: TabBarView(children: [
-                LoginPage(),
+                const LoginPage(),
                 RegisterPge(),
               ]),
             )),
