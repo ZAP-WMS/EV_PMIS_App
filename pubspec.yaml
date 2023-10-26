@@ -32,7 +32,7 @@ dependencies:
   photo_view:
   path_provider:
   apptive_grid_theme: ^1.2.0
-  cloud_firestore: 
+  cloud_firestore:
   connectivity_plus: ^5.0.0
   cupertino_icons: ^1.0.2
   excel: ^2.1.0
@@ -52,7 +52,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   intl: ^0.18.1
   lottie: ^2.3.2
-  open_file: 
+  open_file:
   persistent_bottom_nav_bar: null
   provider: ^6.0.5
   shared_preferences: ^2.2.0
@@ -61,14 +61,16 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^20.4.54
   tab_indicator_styler: ^2.0.0
   flutter_typeahead:
-  pdf: 
+  pdf:
   printing:
   permission_handler:
+  pin_input_text_field:
   lecle_downloads_path_provider:
   flutter_local_notifications:
   progress_dialog_null_safe:
   syncfusion_flutter_core: ^20.4.54
-  
+  flutter_windowmanager: ^0.2.0
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

@@ -749,7 +749,7 @@ class _CivilFieldState extends State<CivilField> {
       child: CustomTextField(
         controller: controller,
         labeltext: title,
-        validatortext: '$title is Required',
+        // validatortext: '$title is Required',
         keyboardType: TextInputType.text,
         textInputAction: inputType,
       ),

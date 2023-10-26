@@ -13,8 +13,17 @@ Color yellow = Colors.yellow;
 TextStyle headline = GoogleFonts.ibmPlexSans(
     fontSize: 12, fontWeight: FontWeight.w400, color: black);
 
+TextStyle headlineblack = GoogleFonts.ibmPlexSans(
+    fontSize: 14, fontWeight: FontWeight.w400, color: black);
+
+TextStyle bodyTextblack = GoogleFonts.ibmPlexSans(
+    fontSize: 12, fontWeight: FontWeight.w300, color: black);
+
 TextStyle headlineBold = GoogleFonts.ibmPlexSans(
     fontSize: 18, fontWeight: FontWeight.w600, color: black);
+
+TextStyle bodytext = GoogleFonts.ibmPlexSans(
+    fontSize: 12, fontWeight: FontWeight.w300, color: black);
 
 TextStyle logoheadline = GoogleFonts.ibmPlexSans(
     fontSize: 35, fontWeight: FontWeight.w600, color: black);
@@ -56,7 +65,8 @@ TextStyle normaltext = GoogleFonts.ibmPlexSans(
   fontSize: 16,
 );
 
-TextStyle normalboldtext = TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
+TextStyle normalboldtext =
+    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
 
 TextStyle buttonWhite = GoogleFonts.ibmPlexSans(
     fontSize: 14,

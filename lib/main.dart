@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,11 @@ import 'package:provider/provider.dart';
 void main() async {
   // its used for status bar color
 
+  Future.delayed(Duration.zero, () async {
+    //to run async code in initState
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    // enables secure mode for app, disables screenshot, screen recording
+  });
 // here i have initialize my firebase
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
@@ -23,6 +29,7 @@ void main() async {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft
   ]);
+
   await Firebase.initializeApp();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const initializationSettingsAndroid =

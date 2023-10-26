@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/authentication/reset_password.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,14 +44,19 @@ class _LoginPageState extends State<LoginPage> {
                       //     empIdController.text, 'Employee Id is required'),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      validatortext: 'Employee ID Required',
+                      validatortext: (value) {
+                        return checkFieldEmpty(value!, 'Email is Required');
+                      },
                     ),
                     _space(16),
                     CustomTextField(
                         controller: passwordcontroller,
                         labeltext: 'Password',
-                        validatortext: 'Password is required',
-                        keyboardType: TextInputType.emailAddress,
+                        validatortext: (value) {
+                          return checkFieldEmpty(
+                              passwordcontroller.text, 'Password is Required');
+                        },
+                        keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done),
                     _space(16),
                     Row(
@@ -69,9 +76,8 @@ class _LoginPageState extends State<LoginPage> {
                                 //               //     .instance
                                 //               //     .currentUser!
                                 //               //     .email!,
-                                //               )))
-                                //               ),
-                                style: TextStyle(color: Colors.blue))
+                                //               )))),
+                                style: const TextStyle(color: Colors.blue))
                           ],
                         )),
                       ],

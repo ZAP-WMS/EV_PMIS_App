@@ -14,7 +14,7 @@ class RegisterPge extends StatefulWidget {
 }
 
 class _RegisterPgeState extends State<RegisterPge> {
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final _formkey = GlobalKey<FormState>();
   final TextEditingController firstNamecontroller = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
@@ -32,7 +32,7 @@ class _RegisterPgeState extends State<RegisterPge> {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Form(
-                key: _key,
+                key: _formkey,
                 child: Column(
                   children: [
                     _space(16),
@@ -40,7 +40,10 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: firstNamecontroller,
                       labeltext: 'First Name',
                       keyboardType: TextInputType.emailAddress,
-                      validatortext: 'First Name is Required',
+                      validatortext: (value) {
+                        return validateField(
+                            firstNamecontroller.text, 'First Name is Required');
+                      },
                       textInputAction: TextInputAction.next,
                     ),
                     _space(16),
@@ -48,7 +51,10 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: lastNameController,
                       labeltext: 'Last Name',
                       keyboardType: TextInputType.emailAddress,
-                      validatortext: 'Last Name is Required',
+                      validatortext: (value) {
+                        return validateField(
+                            lastNameController.text, 'Last Name is Required');
+                      },
                       textInputAction: TextInputAction.next,
                     ),
                     _space(16),
@@ -56,7 +62,9 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: numberController,
                       labeltext: 'Mobile Number',
                       keyboardType: TextInputType.emailAddress,
-                      validatortext: 'Mobile Number is Required',
+                      validatortext: (value) {
+                        return validateNumber(value);
+                      },
                       textInputAction: TextInputAction.next,
                     ),
                     _space(16),
@@ -64,7 +72,9 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: emailIdController,
                       labeltext: 'Email ID',
                       keyboardType: TextInputType.emailAddress,
-                      validatortext: 'Email ID is Required',
+                      validatortext: (value) {
+                        return validateEmail(value!);
+                      },
                       textInputAction: TextInputAction.next,
                     ),
                     _space(16),
@@ -72,7 +82,9 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: designationController,
                       labeltext: 'Designation',
                       keyboardType: TextInputType.text,
-                      validatortext: 'Designation is Required',
+                      validatortext: (value) {
+                        return validateField(value!, 'Designation is Required');
+                      },
                       textInputAction: TextInputAction.next,
                     ),
                     _space(16),
@@ -80,14 +92,19 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: departmentController,
                       labeltext: 'Department',
                       keyboardType: TextInputType.text,
-                      validatortext: 'Department is Required',
+                      validatortext: (value) {
+                        return validateField(
+                            value!, 'Department Name is Required');
+                      },
                       textInputAction: TextInputAction.next,
                     ),
                     _space(16),
                     CustomTextField(
                       controller: passwordController,
                       labeltext: 'Password',
-                      validatortext: 'Password is Required',
+                      validatortext: (value) {
+                        return validatePassword(value!);
+                      },
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                     ),
@@ -95,7 +112,10 @@ class _RegisterPgeState extends State<RegisterPge> {
                     CustomTextField(
                       controller: confController,
                       labeltext: 'Confirm Password',
-                      validatortext: 'Confirm Password is Required',
+                      validatortext: (value) {
+                        return validateConfirmPassword(
+                            passwordController.text, confController.text);
+                      },
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                     ),
@@ -129,7 +149,7 @@ class _RegisterPgeState extends State<RegisterPge> {
   }
 
   void register() async {
-    if (_key.currentState!.validate()) {
+    if (_formkey.currentState!.validate()) {
       showCupertinoDialog(
         context: context,
         builder: (context) => const CupertinoAlertDialog(
@@ -175,10 +195,17 @@ class _RegisterPgeState extends State<RegisterPge> {
                 content: const Text('Registration Successfull Please Sign In'),
                 backgroundColor: blue,
               ));
+
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginRegister()),
               );
+              _showRegistrationDialog(
+                  context,
+                  firstNamecontroller.text[0] +
+                      lastNameController.text[0] +
+                      numberController.text.substring(6, 10),
+                  confController.text);
             } else {
               Navigator.pop(context);
               //     authService.firebaseauth.signOut();
@@ -190,11 +217,125 @@ class _RegisterPgeState extends State<RegisterPge> {
       });
     }
   }
+
+  String? validateField(String fieldContent, String errMsg) {
+    if (fieldContent.isEmpty) {
+      return errMsg;
+    }
+    return null;
+  }
 }
 
-checkFieldEmpty(String fieldContent, String errMsg) {
-  if (fieldContent.isEmpty) {
-    return '$errMsg is Required';
+String? validateEmail(String value) {
+  // Check if the email is empty
+  if (value.isEmpty) {
+    return 'Email address is required';
+  }
+
+  // Use a regular expression to validate the email format
+  String emailRegex = r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+(\.[a-zA-Z]+)?$';
+  RegExp regex = RegExp(emailRegex);
+  if (!regex.hasMatch(value)) {
+    return 'Enter a valid email address';
+  }
+
+  // Return null if the input is valid
+  return null;
+}
+
+String? validatePassword(String value) {
+  // Check if the password is empty
+  if (value.isEmpty) {
+    return 'Password is required';
+  }
+
+  if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+      .hasMatch(value)) {
+    return 'Password should be 8 caharecter & at least one upper case , contain alphabate , numbers & special character';
   }
   return null;
+
+  // Return null if the input is valid
+}
+
+String? validateConfirmPassword(String password, String confirmPassword) {
+  // Check if the confirm password is empty
+  if (confirmPassword.isEmpty) {
+    return 'Confirm password is required';
+  }
+
+  // Check if the confirm password matches the original password
+  if (password != confirmPassword) {
+    return 'Passwords do not match';
+  }
+
+  // Return null if the input is valid
+  return null;
+}
+
+String? validateNumber(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Mobile number is required';
+  }
+  // Regular expression to match a valid mobile phone number
+  String pattern = r'^(?:[+0]9)?[0-9]{10}$';
+  RegExp regex = RegExp(pattern);
+  if (!regex.hasMatch(value)) {
+    return 'Invalid mobile number';
+  }
+  return null;
+}
+
+void _showRegistrationDialog(
+    BuildContext context, dynamic userId, dynamic pass) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Center(
+        child: Container(
+          height: 300,
+          width: 600,
+          child: AlertDialog(
+            title: const Text(
+              'Please Remember Your Login Details',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    const Text('Your User ID: '),
+                    Text(
+                      userId,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text('Your Password: '),
+                    Text(
+                      pass,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
