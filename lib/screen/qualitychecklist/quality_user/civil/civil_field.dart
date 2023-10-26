@@ -32,7 +32,7 @@ import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/quality_list.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
-import '../../../dailyreport/daily_project.dart';
+import '../../../dailyreport/daily_report_user/daily_project.dart';
 
 class CivilField extends StatefulWidget {
   String? depoName;

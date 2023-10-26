@@ -26,7 +26,7 @@ import '../../../../style.dart';
 import '../../../../widgets/activity_headings.dart';
 import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/quality_list.dart';
-import '../../../dailyreport/daily_project.dart';
+import '../../../dailyreport/daily_report_user/daily_project.dart';
 import '../../../homepage/gallery.dart';
 import '../../../safetyreport/safetyfield.dart';
 

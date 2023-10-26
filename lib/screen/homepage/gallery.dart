@@ -17,6 +17,7 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   String role = '';
+
   @override
   void initState() {
     super.initState();

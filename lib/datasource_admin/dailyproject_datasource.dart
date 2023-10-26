@@ -1,8 +1,9 @@
+import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/model_admin/daily_projectModel.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -27,7 +28,7 @@ class DailyDataSource extends DataGridSource {
   }
 
   @override
-  List<DailyProjectModel> _montlyproject = [];
+  List<DailyProjectModelAdmin> _montlyproject = [];
 
   List<DataGridRow> dataGridRows = [];
   final _dateFormatter = DateFormat.yMd();

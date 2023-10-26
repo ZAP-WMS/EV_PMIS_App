@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/model_admin/material_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -24,7 +25,7 @@ class MaterialDatasource extends DataGridSource {
   }
 
   @override
-  List<MaterialProcurementModel> _material = [];
+  List<MaterialProcurementModelAdmin> _material = [];
 
   List<DataGridRow> dataGridRows = [];
 
@@ -197,8 +198,8 @@ class MaterialDatasource extends DataGridSource {
       _material[dataRowIndex].unit = newCellValue;
     } else if (column.columnName == 'qty') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'qty', value: newCellValue);
-      _material[dataRowIndex].qty = newCellValue;
+          DataGridCell<int>(columnName: 'qty', value: int.parse(newCellValue));
+      _material[dataRowIndex].qty = int.parse(newCellValue);
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(columnName: 'materialSite', value: newCellValue);
@@ -236,7 +237,7 @@ class MaterialDatasource extends DataGridSource {
     // The new cell value must be reset.
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
-    newCellValue = null;
+    newCellValue;
 
     final bool isNumericType =
         // column.columnName == 'OriginalDuration' ||
@@ -265,12 +266,13 @@ class MaterialDatasource extends DataGridSource {
       padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
+        textInputAction: TextInputAction.done,
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
@@ -283,17 +285,17 @@ class MaterialDatasource extends DataGridSource {
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
-              newCellValue = double.parse(value);
+              newCellValue = int.parse(value);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {
               newCellValue = value;
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/authentication/authservice.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
-import 'package:ev_pmis_app/model/daily_projectModel.dart';
+import 'package:ev_pmis_app/components/loading_pdf.dart';
+import 'package:ev_pmis_app/datasource_admin/dailyproject_datasource.dart';
+import 'package:ev_pmis_app/model_admin/daily_projectModel.dart';
 import 'package:ev_pmis_app/screen/dailyreport/summary.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../../../datasource_admin/dailyproject_datasource.dart';
 
 class DailyProjectAdmin extends StatefulWidget {
   String? userId;
@@ -26,15 +28,15 @@ class DailyProjectAdmin extends StatefulWidget {
   });
 
   @override
-  State<DailyProjectAdmin> createState() => _DailyProjectState();
+  State<DailyProjectAdmin> createState() => _DailyProjectAdminState();
 }
 
-class _DailyProjectState extends State<DailyProjectAdmin> {
+class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   DateTime? startdate = DateTime.now();
   DateTime? enddate = DateTime.now();
   DateTime? rangestartDate;
   DateTime? rangeEndDate;
-  List<DailyProjectModel> DailyProject = <DailyProjectModel>[];
+  List<DailyProjectModelAdmin> DailyProject = <DailyProjectModelAdmin>[];
   late DailyDataSource _dailyDataSource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];
@@ -43,17 +45,25 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
   bool specificUser = true;
   QuerySnapshot? snap;
   dynamic companyId;
-  dynamic alldata;
+  // dynamic alldata;
   List id = [];
 
   @override
   void initState() {
     getUserId();
     identifyUser();
-
-    _dailyDataSource =
-        DailyDataSource(DailyProject, context, '', widget.depoName!);
+    // getmonthlyReport();
+    // DailyProject = getmonthlyReport();
+    _dailyDataSource = DailyDataSource(
+        DailyProject, context, widget.cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
+    // _stream = FirebaseFirestore.instance
+    //     .collection('DailyProjectReport')
+    //     .doc('${widget.depoName}')
+    //     // .collection(widget.userId!)
+    //     // .doc(DateFormat.yMMMMd().format(DateTime.now()))
+    //     .snapshots();
 
     super.initState();
     getAllData();
@@ -64,8 +74,8 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
     id.clear();
     getTableData().whenComplete(() {
       nestedTableData(id).whenComplete(() {
-        _dailyDataSource =
-            DailyDataSource(DailyProject, context, '', widget.depoName!);
+        _dailyDataSource = DailyDataSource(
+            DailyProject, context, widget.cityName!, widget.depoName!);
         _dataGridController = DataGridController();
         _isLoading = false;
         setState(() {});
@@ -110,16 +120,14 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
+                  width: MediaQuery.of(context).size.width * 0.99,
                   height: 40,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 190,
+                        width: 170,
                         height: 40,
-                        // width: 190,
-                        // height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: blue)),
@@ -184,19 +192,24 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
                           ],
                         ),
                       ),
+                      const SizedBox(width: 20),
                       Container(
-                        padding: const EdgeInsets.only(left: 5.0),
-                        width: 140,
+                        padding: const EdgeInsets.only(left: 10.0),
+                        width: 160,
                         height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: blue)),
                         child: Row(
                           children: [
-                            Text(
-                              DateFormat.yMMMMd().format(enddate!),
-                              textAlign: TextAlign.center,
-                            )
+                            Row(
+                              children: [
+                                Text(
+                                  DateFormat.yMMMMd().format(enddate!),
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -223,7 +236,7 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
                               child: SfDataGrid(
                                   source: _dailyDataSource,
                                   allowEditing: true,
-                                  frozenColumnsCount: 2,
+                                  frozenColumnsCount: 1,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
                                       GridLinesVisibility.both,
@@ -451,6 +464,7 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
                         ],
                       );
                     } else {
+                      print(_dailyDataSource.rows[0].getCells().length);
                       // alldata = '';
                       // alldata = snapshot.data['data'] as List<dynamic>;
                       // DailyProject.clear();
@@ -754,11 +768,23 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
   }
 
   Future<void> nestedTableData(docss) async {
-    if (isLoading = false) {
-      setState(() {
-        isLoading = true;
-      });
-    }
+    final pr = ProgressDialog(context);
+    pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Loading Data....',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600));
+
+    pr.show();
+
     // showCupertinoDialog(
     //   context: context,
     //   builder: (context) => const CupertinoAlertDialog(
@@ -774,7 +800,6 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
           initialdate.isBefore(enddate!.add(const Duration(days: 1)));
           initialdate = initialdate.add(const Duration(days: 1))) {
         String temp = DateFormat.yMMMMd().format(initialdate);
-        print(temp);
         await FirebaseFirestore.instance
             .collection('DailyProjectReport2')
             .doc(widget.depoName!)
@@ -787,16 +812,16 @@ class _DailyProjectState extends State<DailyProjectAdmin> {
           if (value.data() != null) {
             for (int j = 0; j < value.data()!['data'].length; j++) {
               DailyProject.add(
-                  DailyProjectModel.fromjson(value.data()!['data'][j]));
+                  DailyProjectModelAdmin.fromjson(value.data()!['data'][j]));
               print(DailyProject);
             }
           }
         });
       }
     }
-    setState(() {
-      isLoading = false;
-    });
+    await pr.hide();
+
+    // Navigator.pop(context);
   }
   // value.docs.forEach((element) {
   //   print('after');

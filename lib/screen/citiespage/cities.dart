@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
@@ -37,7 +38,7 @@ class _CitiesPageState extends State<CitiesPage> {
   @override
   Widget build(BuildContext context) {
     return isloading
-        ? CircularProgressIndicator()
+        ? const CircularProgressIndicator()
         : Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Container(
@@ -54,7 +55,7 @@ class _CitiesPageState extends State<CitiesPage> {
                 stream: _stream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                   return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
@@ -114,7 +115,9 @@ class _CitiesPageState extends State<CitiesPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     image: DecorationImage(
-                        image: NetworkImage(image), fit: BoxFit.fill)))),
+                        image: CachedNetworkImageProvider(image),
+                        //  NetworkImage(image),
+                        fit: BoxFit.fill)))),
         Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(

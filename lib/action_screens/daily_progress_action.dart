@@ -1,4 +1,4 @@
-import 'package:ev_pmis_app/screen/dailyreport/daily_project.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.dart';
 import 'package:ev_pmis_app/screen/dailyreport/daily_report_admin/daily_report_admin.dart';
 import 'package:ev_pmis_app/screen/materialprocurement/material_vendor.dart';
 import 'package:flutter/material.dart';
