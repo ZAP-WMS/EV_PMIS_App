@@ -73,7 +73,7 @@ class QualityExcavationDataSource extends DataGridSource {
               //         dataGridCell.columnName == 'Weightage')
               Alignment.center,
           // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -91,10 +91,11 @@ class QualityExcavationDataSource extends DataGridSource {
                                   srNo: row.getCells()[0].value,
                                 )));
                       },
-                      child: const Text(
-                        'Upload',
-                        style: TextStyle(fontSize: 12),
-                      ));
+                      child: const Text('Upload',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          )));
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
@@ -116,7 +117,7 @@ class QualityExcavationDataSource extends DataGridSource {
                           },
                           child: const Text(
                             'View',
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           ));
                     })
 

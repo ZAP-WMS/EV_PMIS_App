@@ -72,7 +72,7 @@ class QualityPavingDataSource extends DataGridSource {
               //         dataGridCell.columnName == 'Weightage')
               Alignment.center,
           // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -91,9 +91,12 @@ class QualityPavingDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text(
+                      child: const Text(
                         'Upload',
-                        style: tablefontsize,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
                       ));
                 })
               : dataGridCell.columnName == 'View'
@@ -113,9 +116,12 @@ class QualityPavingDataSource extends DataGridSource {
                                       srNo: row.getCells()[0].value,
                                     )));
                           },
-                          child: Text(
+                          child: const Text(
                             'View',
-                            style: tablefontsize,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ));
                     })
 

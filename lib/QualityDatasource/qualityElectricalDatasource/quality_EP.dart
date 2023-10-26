@@ -91,7 +91,7 @@ class QualityEPDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text('Upload', style: tablefontsize));
+                      child: Text('Upload', style: uploadViewStyle));
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
@@ -111,7 +111,7 @@ class QualityEPDataSource extends DataGridSource {
                               ),
                             ));
                           },
-                          child: Text('View', style: tablefontsize));
+                          child: Text('View', style: uploadViewStyle));
                     })
 
                   // dataGridCell.columnName == 'button'

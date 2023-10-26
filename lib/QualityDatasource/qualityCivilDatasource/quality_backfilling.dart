@@ -91,9 +91,12 @@ class QualityBackFillingDataSource extends DataGridSource {
                           ),
                         ));
                       },
-                      child: Text(
+                      child: const Text(
                         'Upload',
-                        style: tablefontsize,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
                       ));
                 })
               : dataGridCell.columnName == 'View'
@@ -113,9 +116,12 @@ class QualityBackFillingDataSource extends DataGridSource {
                                       srNo: row.getCells()[0].value,
                                     )));
                           },
-                          child: Text(
+                          child: const Text(
                             'View',
-                            style: tablefontsize,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ));
                     })
 
@@ -590,6 +596,6 @@ class QualityBackFillingDataSource extends DataGridSource {
         ? RegExp('[0-9]')
         : isDateTimeBoard
             ? RegExp('[0-9/]')
-            :RegExp('[a-zA-Z0-9.@!#^&*(){+-}%|<>?_=+,/ )]');
+            : RegExp('[a-zA-Z0-9.@!#^&*(){+-}%|<>?_=+,/ )]');
   }
 }
