@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
 
 import '../style.dart';
+import 'otp_authentication.dart';
+
+String? smscode;
 
 class CheckOtp extends StatefulWidget {
+  String name;
   final int mobileNumber;
-  const CheckOtp({Key? key, required this.mobileNumber}) : super(key: key);
+  CheckOtp({Key? key, required this.name, required this.mobileNumber})
+      : super(key: key);
 
   @override
   State<CheckOtp> createState() => _CheckOtpState();
@@ -16,6 +21,7 @@ class _CheckOtpState extends State<CheckOtp> {
   @override
   void initState() {
     super.initState();
+
     // FirebaseAuth.instance.sendPasswordResetEmail(email: widget.mobileNumber);
   }
 
@@ -101,27 +107,30 @@ class OTPInputBox extends StatefulWidget {
 
 class _OTPInputBoxState extends State<OTPInputBox> {
   TextEditingController _pinEditingController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: PinInputTextField(
         pinLength: 6, // You can change the length of the OTP
         decoration: BoxLooseDecoration(
           strokeColorBuilder: PinListenColorBuilder(Colors.black, Colors.blue),
-          radius: Radius.circular(8),
+          radius: const Radius.circular(8),
         ),
         controller: _pinEditingController,
         autoFocus: true,
         textInputAction: TextInputAction.done,
         onChanged: (pin) {
           // You can handle the entered OTP here
+          pin = _pinEditingController.text;
           print(pin);
         },
         onSubmit: (pin) {
           // Triggered when the user submits the OTP
-          print("Entered OTP: $pin");
+          smscode = pin;
+          setState(() {
+            
+          });
         },
       ),
     );

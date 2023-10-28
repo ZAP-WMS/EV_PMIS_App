@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../style.dart';
+import 'otp_authentication.dart';
 
 class ResetPass extends StatefulWidget {
   // final String email;
@@ -20,7 +21,9 @@ class _ResetPassState extends State<ResetPass> {
   FocusNode? _focusNode;
   TextEditingController textEditingController = TextEditingController();
   List docss = [];
-  int? mobileNum;
+  var temp;
+  String? mobileNum;
+  String? name;
 
   @override
   void initState() {
@@ -99,17 +102,24 @@ class _ResetPassState extends State<ResetPass> {
                     ),
                     onPressed: () {
                       if (textEditingController.text.isNotEmpty) {
-                        getNumber(textEditingController.text).whenComplete(() {
+                        getNumber(textEditingController.text)
+                            .whenComplete(() async {
+                          Navigator.pop(context);
+                          verifyPhoneNumber('+91$mobileNum');
+
+                          // ignore: use_build_context_synchronously
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CheckOtp(
-                                        mobileNumber: mobileNum!.toInt(),
+                                        name: name!,
+                                        mobileNumber: int.parse(mobileNum!),
                                       )));
                         });
                       } else {
+                        // ignore: prefer_const_constructors
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('User Id is required'),
+                          content: const Text('User Id is required'),
                         ));
                       }
                     },
@@ -133,6 +143,30 @@ class _ResetPassState extends State<ResetPass> {
   }
 
   Future getNumber(dynamic id) async {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        content: SizedBox(
+          height: 120,
+          width: 50,
+          child: Center(
+            child: Column(
+              children: const [
+                CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+                SizedBox(height: 10),
+                CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+                SizedBox(height: 10),
+                Text('Wait We are verifying your Id')
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
     String? clnName;
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('User').get();
@@ -148,8 +182,8 @@ class _ResetPassState extends State<ResetPass> {
           .then((value) {
         if (value.data()!['Employee Id'] == id) {
           setState(() {
+            name = value.data()!['FirstName'];
             mobileNum = value.data()!['Phone Number'];
-            print(mobileNum);
           });
         }
       });

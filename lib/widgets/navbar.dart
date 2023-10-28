@@ -186,12 +186,12 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                                 await SharedPreferences.getInstance();
                             await preferences.clear();
                             // ignore: use_build_context_synchronously
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginRegister(),
-                              ),
-                            );
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginRegister(),
+                                ),
+                                (Route<dynamic> route) => false);
 
                             // exit(0);
                           },

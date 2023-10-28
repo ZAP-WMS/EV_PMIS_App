@@ -63,20 +63,20 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         RichText(
-                            text: const TextSpan(
+                            text: TextSpan(
                           children: <TextSpan>[
                             TextSpan(
                                 text: ' Forget Password ?',
-                                // recognizer: TapGestureRecognizer()
-                                //   ..onTap = (() => Navigator.push(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //           builder: (context) => ResetPass(
-                                //               // email: FirebaseAuth
-                                //               //     .instance
-                                //               //     .currentUser!
-                                //               //     .email!,
-                                //               )))),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = (() => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ResetPass(
+                                              // email: FirebaseAuth
+                                              //     .instance
+                                              //     .currentUser!
+                                              //     .email!,
+                                              )))),
                                 style: const TextStyle(color: Colors.blue))
                           ],
                         )),
