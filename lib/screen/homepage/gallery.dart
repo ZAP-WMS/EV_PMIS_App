@@ -137,7 +137,6 @@ class _GalleryPageState extends State<GalleryPage> {
 
   void isNewVersion() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.remove('isNewVersion');
     final getVersion = preferences.getString('isNewVersion');
 
     if (getVersion != '1.01') {
