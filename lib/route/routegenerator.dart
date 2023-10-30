@@ -20,7 +20,7 @@ import '../action_screens/jmr_action_screen.dart';
 import 'package:ev_pmis_app/widgets/no_internet.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
 import 'package:provider/provider.dart';
-
+import '../authentication/change_password.dart';
 import '../screen/chatPage/feedback.dart';
 import '../screen/testingpage/testing_page.dart';
 
@@ -52,12 +52,8 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return OverviewPage(
-            depoName: argument['depoName'],
-            role: argument['role'],
-          );
-//
-// Overview Pages Start from here...
-//
+              depoName: argument['depoName'], role: argument['role']);
+
         case '/depotOverview':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -136,13 +132,7 @@ class RouteGenerator {
             role: argument['role'],
             cityName: argument['cityName'],
           );
-        // case '/testing-page':
-        //   Map<String, dynamic> argument =
-        //       settings.arguments as Map<String, dynamic>;
-        //   return TestingAction(
-        //     depoName: argument['depoName'],
-        //     role: argument['role'],
-        //   );
+
         case '/closure-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -158,6 +148,13 @@ class RouteGenerator {
           return QualityHomeAdmin(
             cityName: argument['cityName'],
             depoName: argument['depoName'],
+          );
+        case '/change-password':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return ChangePassword(
+            name: argument['name'],
+            mobileNumber: argument[' mobileNumber'],
           );
       }
       return const NodataAvailable();
