@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import '../../components/Loading_page.dart';
+import '../../../components/Loading_page.dart';
 import 'package:ev_pmis_app/model/jmr.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -143,7 +143,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         return true;
       },
       child: _isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Scaffold(
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
@@ -160,7 +160,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                 preferredSize: const Size.fromHeight(50),
               ),
               body: _isLoading
-                  ? LoadingPage()
+                  ? const LoadingPage()
                   : SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

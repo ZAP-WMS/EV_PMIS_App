@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../../components/Loading_page.dart';
-import '../../datasource/closereport_datasource.dart';
-import '../../model/closer_report.dart';
-import '../../provider/cities_provider.dart';
-import '../../style.dart';
-import '../homepage/gallery.dart';
+import '../../../components/Loading_page.dart';
+import '../../../datasource/closereport_datasource.dart';
+import '../../../model/closer_report.dart';
+import '../../../provider/cities_provider.dart';
+import '../../../style.dart';
+import '../../homepage/gallery.dart';
 
 //This is a comment
 class ClosureTable extends StatefulWidget {

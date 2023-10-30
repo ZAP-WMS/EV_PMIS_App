@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
@@ -46,8 +47,8 @@ class _DepotPageState extends State<DepotPage> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 0.9,
-                                mainAxisSpacing: 5,
+                                childAspectRatio: 1.2,
+                                mainAxisSpacing: 3,
                                 crossAxisCount: 2),
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -92,7 +93,9 @@ class _DepotPageState extends State<DepotPage> {
               border: Border.all(color: grey),
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                  image: NetworkImage(image), fit: BoxFit.fill))),
+                  image: CachedNetworkImageProvider(image),
+                  //  NetworkImage(image),
+                  fit: BoxFit.fill))),
       Expanded(
         child: Text(
           text,

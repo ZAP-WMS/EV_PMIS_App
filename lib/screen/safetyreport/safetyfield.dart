@@ -15,7 +15,7 @@ import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/appbar_back_date.dart';
 import '../../widgets/custom_textfield.dart';
-import '../dailyreport/daily_project.dart';
+import '../dailyreport/daily_report_user/daily_project.dart';
 import '../dailyreport/summary.dart';
 import '../homepage/gallery.dart';
 import 'package:syncfusion_flutter_core/theme.dart';

@@ -1,9 +1,9 @@
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class DailyProjectModel {
-  DailyProjectModel({
+class DailyProjectModelAdmin {
+  DailyProjectModelAdmin({
     required this.siNo,
-    this.date,
+    required this.date,
     // required this.state,
     // required this.depotName,
     required this.typeOfActivity,
@@ -13,20 +13,19 @@ class DailyProjectModel {
   });
   int? siNo;
   String? date;
-  String? state;
-  dynamic depotName;
+  // String? state;
+  // String? depotName;
   String? typeOfActivity;
   String? activityDetails;
   String? progress;
   String? status;
 
-  factory DailyProjectModel.fromjson(Map<String, dynamic> json) {
-    return DailyProjectModel(
-        date: json['Date'],
+  factory DailyProjectModelAdmin.fromjson(Map<String, dynamic> json) {
+    return DailyProjectModelAdmin(
         siNo: json['SiNo'],
-
-        // state: json['State'],
-        // depotName: json['DepotName'],
+        date: json['Date'],
+        // state: json['state'],
+        // depotName: json['depotName'],
         typeOfActivity: json['TypeOfActivity'],
         activityDetails: json['ActivityDetails'],
         progress: json['Progress'],
@@ -37,17 +36,13 @@ class DailyProjectModel {
     return DataGridRow(cells: <DataGridCell>[
       DataGridCell(columnName: 'Date', value: date),
       DataGridCell(columnName: 'SiNo', value: siNo),
-
       // DataGridCell(columnName: 'State', value: state),
-      // DataGridCell(columnName: 'DepotName', value: depotName),
+
       DataGridCell(columnName: 'TypeOfActivity', value: typeOfActivity),
       DataGridCell(columnName: 'ActivityDetails', value: activityDetails),
       DataGridCell(columnName: 'Progress', value: progress),
       DataGridCell(columnName: 'Status', value: status),
-      const DataGridCell(columnName: 'upload', value: null),
-      const DataGridCell(columnName: 'view', value: null),
-      const DataGridCell(columnName: 'Add', value: null),
-      const DataGridCell(columnName: 'Delete', value: null)
+      const DataGridCell(columnName: 'View', value: null),
     ]);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class MaterialProcurementModel {
+class MaterialProcurementModelAdmin {
   String? cityName;
   String? details;
   String? olaNo;
@@ -35,7 +35,7 @@ class MaterialProcurementModel {
   // String? poPlaced;
   // String? materialReceived;
 
-  MaterialProcurementModel({
+  MaterialProcurementModelAdmin({
     required this.cityName,
     required this.details,
     required this.olaNo,
@@ -50,8 +50,8 @@ class MaterialProcurementModel {
     required this.materialSite,
   });
 
-  factory MaterialProcurementModel.fromjsaon(Map<String, dynamic> json) {
-    return MaterialProcurementModel(
+  factory MaterialProcurementModelAdmin.fromjson(Map<String, dynamic> json) {
+    return MaterialProcurementModelAdmin(
         cityName: json['cityName'],
         details: json['details'],
         olaNo: json['olaNo'],
@@ -81,8 +81,6 @@ class MaterialProcurementModel {
       DataGridCell<String>(columnName: 'unit', value: unit),
       DataGridCell<int>(columnName: 'qty', value: qty),
       DataGridCell<String>(columnName: 'materialSite', value: materialSite),
-      const DataGridCell(columnName: 'Add', value: null),
-      const DataGridCell(columnName: 'Delete', value: null)
     ]);
   }
 }

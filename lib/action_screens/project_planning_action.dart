@@ -1,7 +1,6 @@
-import 'package:ev_pmis_app/screen/jmrPage/jmr.dart';
+import 'package:ev_pmis_app/screen/planning/planning_admin/planning_summary.dart';
 import 'package:ev_pmis_app/screen/planning/project_planning.dart';
 import 'package:flutter/material.dart';
-import '../screen/jmrPage/jmr_admin/jmr.dart';
 
 class ProjectPlanningAction extends StatefulWidget {
   String? role;
@@ -35,7 +34,7 @@ class _ProjectPlanningActionState extends State<ProjectPlanningAction> {
             KeyEvents(cityName: widget.cityName, depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = KeyEvents(
+        selectedUi = PlanningTable(
           depoName: widget.depoName,
           cityName: widget.cityName,
         );

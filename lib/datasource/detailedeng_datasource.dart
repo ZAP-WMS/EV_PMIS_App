@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/electrical/electrical_table.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/electrical/electrical_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -16,9 +16,10 @@ class DetailedEngSource extends DataGridSource {
   String cityName;
   String depoName;
   String userId;
+  String role;
   BuildContext mainContext;
   DetailedEngSource(this._detailedeng, this.mainContext, this.cityName,
-      this.depoName, this.userId) {
+      this.depoName, this.userId, this.role) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -261,6 +262,7 @@ class DetailedEngSource extends DataGridSource {
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ViewAllPdf(
+                                            role: role,
                                             title: 'DetailedEngRFC',
                                             cityName: cityName,
                                             depoName: depoName,
@@ -269,10 +271,8 @@ class DetailedEngSource extends DataGridSource {
                                                 .getCells()[4]
                                                 .value
                                                 .toString(),
-                                            docId: row
-                                                .getCells()[0]
-                                                .value
-                                                .toString(),
+                                            docId:
+                                                '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
                                           )
                                       // ViewFile()
                                       // UploadDocument(

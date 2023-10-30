@@ -10,6 +10,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_file_plus/open_file_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -29,15 +31,25 @@ void main() async {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft
   ]);
-
   await Firebase.initializeApp();
+
+// To show file downloaded notification for pdf
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
   const initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (details) async {
+      await OpenFile.open(details.payload!);
+    },
+  );
+// To request permission for notification and storage
+  await [
+    Permission.notification,
+    Permission.storage,
+  ].request();
   runApp(const MyApp());
 }
 

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../Authentication/login_register.dart';
 import '../authentication/authservice.dart';
-import '../screen/dailyreport/daily_project.dart';
+import '../screen/dailyreport/daily_report_user/daily_project.dart';
 import '../style.dart';
 
 class CustomAppBarBackDate extends StatefulWidget {

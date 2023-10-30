@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/authentication/authservice.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
-import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,9 +19,10 @@ import '../../widgets/custom_textfield.dart';
 import '../../widgets/navbar.dart';
 
 class DepotOverview extends StatefulWidget {
+  String? role;
   String? cityName;
   String? depoName;
-  DepotOverview({super.key, required this.depoName});
+  DepotOverview({super.key, required this.depoName, this.role});
 
   @override
   State<DepotOverview> createState() => _DepotOverviewState();
@@ -29,9 +30,10 @@ class DepotOverview extends StatefulWidget {
 
 class _DepotOverviewState extends State<DepotOverview> {
   String? cityName;
+  String userId = '';
   bool isProjectManager = false;
-
-  bool _isloading = true;
+  bool checkTable = true;
+  bool isLoading = true;
   List<dynamic> tabledata2 = [];
   late DepotOverviewDatasource _employeeDataSource;
   List<DepotOverviewModel> _employees = <DepotOverviewModel>[];
@@ -79,21 +81,20 @@ class _DepotOverviewState extends State<DepotOverview> {
   @override
   void initState() {
     super.initState();
+
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     initializeController();
-    _employeeDataSource = DepotOverviewDatasource(_employees, context);
-    _dataGridController = DataGridController();
-
-    _stream = FirebaseFirestore.instance
-        .collection('OverviewCollectionTable')
-        .doc(widget.depoName)
-        .collection("OverviewTabledData")
-        .doc(userId)
-        .snapshots();
-
     verifyProjectManager().whenComplete(() {
-      setState(() {
-        _isloading = false;
+      getTableData().whenComplete(() {
+        _stream = FirebaseFirestore.instance
+            .collection('OverviewCollectionTable')
+            .doc(widget.depoName)
+            .collection("OverviewTabledData")
+            .doc(userId)
+            .snapshots();
+
+        _employeeDataSource = DepotOverviewDatasource(_employees, context);
+        _dataGridController = DataGridController();
       });
     });
   }
@@ -110,7 +111,11 @@ class _DepotOverviewState extends State<DepotOverview> {
           isCentered: true,
           title: '${widget.depoName}/Depot Overview',
           height: 50,
-          isSync: isProjectManager ? true : false,
+          isSync: isProjectManager
+              ? widget.role == 'admin'
+                  ? false
+                  : true
+              : false,
           store: () async {
             // overviewField(cityName!, widget.depoName!);
             overviewFieldstore(cityName!, widget.depoName!);
@@ -118,8 +123,8 @@ class _DepotOverviewState extends State<DepotOverview> {
           },
         ),
         drawer: const NavbarDrawer(),
-        body: _isloading
-            ? LoadingPage()
+        body: isLoading
+            ? const LoadingPage()
             : isProjectManager == false
                 ? Center(
                     child: Column(
@@ -176,7 +181,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                             children: [
                               SizedBox(
                                 width: MediaQuery.of(context).size.width / 2,
-                                height: 35,
+                                height: 40,
                                 child: Padding(
                                   padding: const EdgeInsets.all(3.0),
                                   child: Row(
@@ -193,24 +198,30 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                       const SizedBox(width: 10),
                                       ElevatedButton(
-                                          onPressed: () async {
-                                            res = await FilePicker.platform
-                                                .pickFiles(
-                                              type: FileType.any,
-                                              withData: true,
-                                            );
+                                          onPressed: widget.role == 'admin'
+                                              ? null
+                                              : () async {
+                                                  res = await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                    type: FileType.any,
+                                                    withData: true,
+                                                  );
 
-                                            bytes = res!.files.first.bytes!;
-                                            if (res == null) {
-                                              print("No file selected");
-                                            } else {
-                                              setState(() {});
-                                              res!.files.forEach((element) {
-                                                print(element.name);
-                                                print(res!.files.first.name);
-                                              });
-                                            }
-                                          },
+                                                  bytes =
+                                                      res!.files.first.bytes!;
+                                                  if (res == null) {
+                                                    print("No file selected");
+                                                  } else {
+                                                    setState(() {});
+                                                    res!.files
+                                                        .forEach((element) {
+                                                      print(element.name);
+                                                      print(res!
+                                                          .files.first.name);
+                                                    });
+                                                  }
+                                                },
                                           child: const Text(
                                             'Pick file',
                                             textAlign: TextAlign.end,
@@ -263,7 +274,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ViewAllPdf(
-                                                            title: 'BOQSurvey',
+                                                            title: '/BOQSurvey',
                                                             cityName: cityName!,
                                                             depoName: widget
                                                                 .depoName!,
@@ -285,7 +296,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                             children: [
                               Container(
                                 width: MediaQuery.of(context).size.width / 2,
-                                height: 35,
+                                height: 40,
                                 child: Padding(
                                   padding: const EdgeInsets.all(3.0),
                                   child: Row(
@@ -302,24 +313,28 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                       const SizedBox(width: 10),
                                       ElevatedButton(
-                                          onPressed: () async {
-                                            result1 = await FilePicker.platform
-                                                .pickFiles(
-                                              type: FileType.any,
-                                              withData: true,
-                                            );
+                                          onPressed: widget.role == 'admin'
+                                              ? null
+                                              : () async {
+                                                  result1 = await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                    type: FileType.any,
+                                                    withData: true,
+                                                  );
 
-                                            fileBytes1 =
-                                                result1!.files.first.bytes!;
-                                            if (result1 == null) {
-                                              print("No file selected");
-                                            } else {
-                                              setState(() {});
-                                              result1!.files.forEach((element) {
-                                                print(element.name);
-                                              });
-                                            }
-                                          },
+                                                  fileBytes1 = result1!
+                                                      .files.first.bytes!;
+                                                  if (result1 == null) {
+                                                    print("No file selected");
+                                                  } else {
+                                                    setState(() {});
+                                                    result1!.files
+                                                        .forEach((element) {
+                                                      print(element.name);
+                                                    });
+                                                  }
+                                                },
                                           child: const Text(
                                             'Pick file',
                                             textAlign: TextAlign.end,
@@ -373,7 +388,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                     builder: (context) =>
                                                         ViewAllPdf(
                                                             title:
-                                                                'BOQElectrical',
+                                                                '/BOQElectrical',
                                                             cityName: cityName!,
                                                             depoName: widget
                                                                 .depoName!,
@@ -396,7 +411,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                             children: [
                               Container(
                                 width: MediaQuery.of(context).size.width / 2,
-                                height: 35,
+                                height: 40,
                                 child: Padding(
                                   padding: const EdgeInsets.all(3.0),
                                   child: Row(
@@ -413,23 +428,26 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                       const SizedBox(width: 10),
                                       ElevatedButton(
-                                          onPressed: () async {
-                                            result2 = await FilePicker.platform
-                                                .pickFiles(
-                                              type: FileType.any,
-                                              withData: true,
-                                            );
+                                          onPressed: widget.role == 'admin'
+                                              ? null
+                                              : () async {
+                                                  result2 = await FilePicker
+                                                      .platform
+                                                      .pickFiles(
+                                                    type: FileType.any,
+                                                    withData: true,
+                                                  );
 
-                                            fileBytes2 =
-                                                result2!.files.first.bytes!;
-                                            if (result2 == null) {
-                                              print("No file selected");
-                                            } else {
-                                              setState(() {});
-                                              result2!.files
-                                                  .forEach((element) {});
-                                            }
-                                          },
+                                                  fileBytes2 = result2!
+                                                      .files.first.bytes!;
+                                                  if (result2 == null) {
+                                                    print("No file selected");
+                                                  } else {
+                                                    setState(() {});
+                                                    result2!.files
+                                                        .forEach((element) {});
+                                                  }
+                                                },
                                           child: const Text(
                                             'Pick file',
                                             textAlign: TextAlign.end,
@@ -481,7 +499,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ViewAllPdf(
-                                                            title: 'BOQCivil',
+                                                            title: '/BOQCivil',
                                                             cityName: cityName!,
                                                             depoName: widget
                                                                 .depoName!,
@@ -499,18 +517,19 @@ class _DepotOverviewState extends State<DepotOverview> {
                               ),
                             ]),
                         const SizedBox(height: 15),
-                        SingleChildScrollView(
-                          child: StreamBuilder(
-                            stream: _stream,
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData ||
-                                  snapshot.data.exists == false) {
-                                return SfDataGridTheme(
+                        StreamBuilder(
+                          stream: _stream,
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data.exists == false) {
+                              return SingleChildScrollView(
+                                child: SfDataGridTheme(
                                   data: SfDataGridThemeData(headerColor: blue),
                                   child: SfDataGrid(
                                     source: _employeeDataSource,
-                                    allowEditing: true,
-                                    frozenColumnsCount: 2,
+                                    allowEditing:
+                                        widget.role == 'admin' ? false : true,
+                                    frozenColumnsCount: 1,
                                     gridLinesVisibility:
                                         GridLinesVisibility.both,
                                     headerGridLinesVisibility:
@@ -527,18 +546,16 @@ class _DepotOverviewState extends State<DepotOverview> {
                                     columns: [
                                       GridColumn(
                                         visible: false,
+                                        width: 100,
                                         columnName: 'srNo',
-                                        autoFitPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 16),
                                         allowEditing: true,
                                         label: Container(
-                                          alignment: Alignment.center,
                                           child: Text(
                                             'Sr No',
                                             style: tableheaderwhitecolor,
-                                            softWrap: true,
-                                            //   //  textAlign: TextAlign.center,
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
                                           ),
                                         ),
                                       ),
@@ -550,7 +567,9 @@ class _DepotOverviewState extends State<DepotOverview> {
                                           alignment: Alignment.center,
                                           child: Text(
                                             'Risk On Date',
-                                            // overflow: TextOverflow.values.first,
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
                                             style: tableheaderwhitecolor,
                                           ),
                                         ),
@@ -558,15 +577,11 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       GridColumn(
                                         columnName: 'RiskDescription',
                                         width: 180,
-                                        // autoFitPadding: tablepadding,
                                         allowEditing: true,
                                         label: Container(
-                                          padding: const EdgeInsets.all(8.0),
                                           alignment: Alignment.center,
                                           child: Text('Risk Description',
-                                              //  textAlign: TextAlign.center,
-                                              softWrap: true,
-                                              overflow: TextOverflow.clip,
+                                              overflow: TextOverflow.ellipsis,
                                               style: tableheaderwhitecolor),
                                         ),
                                       ),
@@ -575,9 +590,11 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         width: 180,
                                         allowEditing: false,
                                         label: Container(
-                                          padding: const EdgeInsets.all(8.0),
                                           alignment: Alignment.center,
                                           child: Text('Type',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
                                               style: tableheaderwhitecolor),
                                         ),
                                       ),
@@ -588,7 +605,9 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         label: Container(
                                           alignment: Alignment.center,
                                           child: Text('Impact Risk',
-                                              // overflow: TextOverflow.values.first,
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
                                               style: tableheaderwhitecolor),
                                         ),
                                       ),
@@ -601,37 +620,41 @@ class _DepotOverviewState extends State<DepotOverview> {
                                             Container(
                                               alignment: Alignment.center,
                                               child: Text('Owner',
-                                                  textAlign: TextAlign.center,
-                                                  // overflow: TextOverflow.values.first,
+                                                  softWrap:
+                                                      true, // Allow text to wrap
+                                                  overflow: TextOverflow.clip,
                                                   style: tableheaderwhitecolor),
                                             ),
                                             Text(
                                                 'Person Who will manage the risk',
-                                                // overflow: TextOverflow.values.first,
+                                                softWrap:
+                                                    true, // Allow text to wrap
+                                                overflow: TextOverflow.clip,
                                                 textAlign: TextAlign.center,
-                                                style: tableheadersubtitle)
+                                                style: tableheaderwhitecolor)
                                           ],
                                         ),
                                       ),
                                       GridColumn(
                                         columnName: 'MigratingRisk',
                                         allowEditing: true,
-                                        columnWidthMode:
-                                            ColumnWidthMode.fitByCellValue,
                                         width: 150,
                                         label: Column(
                                           children: [
                                             Container(
                                               alignment: Alignment.center,
                                               child: Text('Mitigation Action',
-                                                  // overflow: TextOverflow.values.first,
+                                                  softWrap:
+                                                      true, // Allow text to wrap
+                                                  overflow: TextOverflow.clip,
                                                   style: tableheaderwhitecolor),
                                             ),
                                             Text(
                                                 'Action to Mitigate the risk e.g reduce the likelihood',
-                                                // overflow: TextOverflow.values.first,
-                                                textAlign: TextAlign.center,
-                                                style: tableheadersubtitle),
+                                                softWrap:
+                                                    true, // Allow text to wrap
+                                                overflow: TextOverflow.clip,
+                                                style: tableheadersubtitle)
                                           ],
                                         ),
                                       ),
@@ -642,18 +665,21 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         label: Column(
                                           children: [
                                             Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 16.0),
                                               alignment: Alignment.center,
                                               child: Text('Contigent Action',
-                                                  // overflow: TextOverflow.values.first,
+                                                  softWrap:
+                                                      true, // Allow text to wrap
+                                                  overflow: TextOverflow.clip,
                                                   style: tableheaderwhitecolor),
                                             ),
                                             Text(
                                                 'Action to be taken if the risk happens',
-                                                // overflow: TextOverflow.values.first,
+                                                softWrap:
+                                                    true, // Allow text to wrap
+                                                overflow: TextOverflow.clip,
                                                 textAlign: TextAlign.center,
+
+                                                //  textAlign: TextAlign.center,
                                                 style: tableheadersubtitle)
                                           ],
                                         ),
@@ -663,10 +689,11 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         allowEditing: true,
                                         width: 180,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16.0),
                                           alignment: Alignment.center,
                                           child: Text('Progression Action',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
                                               // overflow: TextOverflow.values.first,
                                               style: tableheaderwhitecolor),
                                         ),
@@ -676,10 +703,11 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         allowEditing: true,
                                         width: 150,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16.0),
                                           alignment: Alignment.center,
                                           child: Text('Remark',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
                                               // overflow: TextOverflow.values.first,
                                               style: tableheaderwhitecolor),
                                         ),
@@ -689,12 +717,12 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         allowEditing: false,
                                         width: 160,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16.0),
                                           alignment: Alignment.center,
                                           child: Text(
                                               'Target Completion Date Of Risk',
-                                              // overflow: TextOverflow.values.first,
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
                                               textAlign: TextAlign.center,
                                               style: tableheaderwhitecolor),
                                         ),
@@ -704,27 +732,24 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         allowEditing: false,
                                         width: 150,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16.0),
                                           alignment: Alignment.center,
                                           child: Text('Status',
-                                              // overflow: TextOverflow.values.first,
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
                                               style: tableheaderwhitecolor),
                                         ),
                                       ),
                                       GridColumn(
                                         columnName: 'Add',
-                                        autoFitPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 16),
                                         allowEditing: false,
                                         width: 120,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
                                           alignment: Alignment.center,
                                           child: Text('Add Row',
-                                              // overflow: TextOverflow.values.first,
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
                                               style: tableheaderwhitecolor
                                               //   //  textAlign: TextAlign.center,
                                               ),
@@ -732,9 +757,6 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                       GridColumn(
                                         columnName: 'Delete',
-                                        autoFitPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 16),
                                         allowEditing: false,
                                         width: 120,
                                         label: Container(
@@ -742,28 +764,68 @@ class _DepotOverviewState extends State<DepotOverview> {
                                               horizontal: 8.0),
                                           alignment: Alignment.center,
                                           child: Text('Delete Row',
-                                              // overflow: TextOverflow.values.first,
-                                              style: tableheaderwhitecolor
-                                              //   //  textAlign: TextAlign.center,
-                                              ),
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
+                                              style: tableheaderwhitecolor),
                                         ),
                                       ),
+                                      // GridColumn(
+                                      //   columnName: 'Add',
+                                      //   autoFitPadding:
+                                      //       const EdgeInsets.symmetric(
+                                      //           horizontal: 16),
+                                      //   allowEditing: false,
+                                      //   width: 120,
+                                      //   label: Container(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 8.0),
+                                      //     alignment: Alignment.center,
+                                      //     child: Text('Add Row',
+                                      //         // overflow: TextOverflow.values.first,
+                                      //         style: tableheaderwhitecolor
+                                      //         //   //  textAlign: TextAlign.center,
+                                      //         ),
+                                      //   ),
+                                      // ),
+                                      // GridColumn(
+                                      //   columnName: 'Delete',
+                                      //   autoFitPadding:
+                                      //       const EdgeInsets.symmetric(
+                                      //           horizontal: 16),
+                                      //   allowEditing: false,
+                                      //   width: 120,
+                                      //   label: Container(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 8.0),
+                                      //     alignment: Alignment.center,
+                                      //     child: Text('Delete Row',
+                                      //         // overflow: TextOverflow.values.first,
+                                      //         style: tableheaderwhitecolor
+                                      //         //   //  textAlign: TextAlign.center,
+                                      //         ),
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
-                                );
-                              } else {
-                                alldata = '';
-                                alldata =
-                                    snapshot.data['data'] as List<dynamic>;
-                                _employees.clear();
-                                alldata.forEach((element) {
-                                  _employees.add(
-                                      DepotOverviewModel.fromJson(element));
-                                  _employeeDataSource = DepotOverviewDatasource(
-                                      _employees, context);
-                                  _dataGridController = DataGridController();
-                                });
-                                return SfDataGridTheme(
+                                ),
+                              );
+                            } else {
+                              // alldata = '';
+                              // alldata = snapshot.data['data'] as List<dynamic>;
+                              // _employees.clear();
+                              // alldata.forEach((element) {
+                              //   _employees
+                              //       .add(DepotOverviewModel.fromJson(element));
+                              //   _employeeDataSource = DepotOverviewDatasource(
+                              //       _employees, context);
+                              //   _dataGridController = DataGridController();
+                              // });
+
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.65,
+                                child: SfDataGridTheme(
                                   data: SfDataGridThemeData(headerColor: blue),
                                   child: SfDataGrid(
                                     source: _employeeDataSource,
@@ -1012,10 +1074,10 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       ),
                                     ],
                                   ),
-                                );
-                              }
-                            },
-                          ),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -1055,6 +1117,7 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          role: widget.role,
           controller: controller,
           labeltext: title,
           // validatortext: '$title is Required',
@@ -1063,12 +1126,12 @@ class _DepotOverviewState extends State<DepotOverview> {
     );
   }
 
-  void _fetchUserData() async {
+  void _fetchUserData(String user_id) async {
     await FirebaseFirestore.instance
         .collection('OverviewCollection')
         .doc(widget.depoName)
         .collection("OverviewFieldData")
-        .doc(userId)
+        .doc(user_id)
         .get()
         .then((ds) {
       setState(() {
@@ -1175,6 +1238,13 @@ class _DepotOverviewState extends State<DepotOverview> {
     });
   }
 
+  Future<void> getUserId() async {
+    await AuthService().getCurrentUserId().then((value) {
+      userId = value;
+      setState(() {});
+    });
+  }
+
   overviewFieldstore(String cityName, String depoName) async {
     FirebaseFirestore.instance
         .collection('OverviewCollection')
@@ -1242,26 +1312,67 @@ class _DepotOverviewState extends State<DepotOverview> {
   }
 
   Future<void> verifyProjectManager() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('AssignedRole')
-        .where('roles', arrayContains: 'Project Manager')
-        .get();
+    await getUserId();
+    if (widget.role == 'admin') {
+      QuerySnapshot getProjectManager = await FirebaseFirestore.instance
+          .collection('AssignedRole')
+          .where('roles', arrayContains: 'Project Manager')
+          .get();
 
-    List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
+      getProjectManager.docs.forEach((element) {
+        final selectedCity = (element.data() as dynamic)['cities'] ?? '';
+        if (selectedCity[0] == cityName) {
+          userId = (element.data() as dynamic)['userId'] ?? '';
+        }
+      });
 
-    for (int i = 0; i < tempList.length; i++) {
-      if (tempList[i]['userId'].toString() == userId.toString()) {
-        for (int j = 0; j < tempList[i]['depots'].length; j++) {
-          List<dynamic> depot = tempList[i]['depots'];
+      isProjectManager = true;
+      setState(() {});
+    } else {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('AssignedRole')
+          .where('roles', arrayContains: 'Project Manager')
+          .get();
 
-          if (depot[j].toString() == widget.depoName) {
-            print(depot);
-            isProjectManager = true;
-            setState(() {});
+      List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
+
+      for (int i = 0; i < tempList.length; i++) {
+        if (tempList[i]['userId'].toString() == userId.toString()) {
+          for (int j = 0; j < tempList[i]['depots'].length; j++) {
+            List<dynamic> depot = tempList[i]['depots'];
+
+            if (depot[j].toString() == widget.depoName) {
+              isProjectManager = true;
+              setState(() {});
+            }
           }
         }
       }
     }
-    _fetchUserData();
+
+    _fetchUserData(userId);
+  }
+
+  Future<void> getTableData() async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('OverviewCollectionTable')
+        .doc(widget.depoName)
+        .collection("OverviewTabledData")
+        .doc(userId)
+        .get();
+
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> tempData =
+          documentSnapshot.data() as Map<String, dynamic>;
+
+      List<dynamic> mapData = tempData['data'];
+
+      _employees =
+          mapData.map((map) => DepotOverviewModel.fromJson(map)).toList();
+      checkTable = false;
+    }
+
+    isLoading = false;
+    setState(() {});
   }
 }

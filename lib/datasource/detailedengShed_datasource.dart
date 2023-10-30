@@ -15,9 +15,10 @@ class DetailedEngSourceShed extends DataGridSource {
   String cityName;
   String depoName;
   String userId;
+  String? role;
   BuildContext mainContext;
   DetailedEngSourceShed(this._detailedengshed, this.mainContext, this.cityName,
-      this.depoName, this.userId) {
+      this.depoName, this.userId, this.role) {
     buildDataGridRowsShed();
   }
   void buildDataGridRowsShed() {
@@ -258,6 +259,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ViewAllPdf(
+                                            role: role,
                                             title: 'DetailedEngShed',
                                             cityName: cityName,
                                             depoName: depoName,
@@ -266,10 +268,8 @@ class DetailedEngSourceShed extends DataGridSource {
                                                 .getCells()[4]
                                                 .value
                                                 .toString(),
-                                            docId: row
-                                                .getCells()[0]
-                                                .value
-                                                .toString(),
+                                            docId:
+                                                '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
                                           ) // UploadDocument(
                                       //     title: 'DetailedEngRFC',
                                       //     cityName: cityName,

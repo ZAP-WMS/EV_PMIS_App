@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import '../../components/Loading_page.dart';
+import '../../../components/Loading_page.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/model/jmr.dart';
 import 'package:ev_pmis_app/style.dart';

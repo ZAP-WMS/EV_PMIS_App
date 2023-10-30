@@ -14,6 +14,7 @@ import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/homepage/home_page.dart';
 import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/quality_home_admin.dart';
 import 'package:flutter/material.dart';
 import '../action_screens/jmr_action_screen.dart';
 import 'package:ev_pmis_app/widgets/no_internet.dart';
@@ -65,6 +66,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return ProjectPlanningAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -73,6 +75,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MaterialProcurementAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -81,6 +84,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DailyProjectAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -98,6 +102,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DetailEngineeringAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -125,6 +130,7 @@ class RouteGenerator {
           return QualityChecklistAction(
             depoName: argument['depoName'],
             role: argument['role'],
+            cityName: argument['cityName'],
           );
 
         case '/closure-page':
@@ -136,6 +142,13 @@ class RouteGenerator {
             role: argument['role'],
           );
 
+        case '/quality-admin':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return QualityHomeAdmin(
+            cityName: argument['cityName'],
+            depoName: argument['depoName'],
+          );
         case '/change-password':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;

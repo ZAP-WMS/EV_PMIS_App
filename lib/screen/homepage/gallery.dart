@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../authentication/authservice.dart';
 import '../../shared_preferences/shared_preferences.dart';
-import '../../widgets/internet_checker.dart';
 import '../../widgets/navbar.dart';
 
 dynamic userId = '';
@@ -20,9 +18,19 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   String role = '';
+  List<String> updates = [
+    'Fixed Bugs',
+    'Added cache features',
+    'Admin role available completely',
+    'Improved overall performance',
+    'User now get a pop-up of user id and password on register',
+    'User can download uploaded files',
+    'Internet connectivity checker added',
+  ];
+
   @override
   void initState() {
-   
+    isNewVersion();
     super.initState();
     getUserId();
   }
@@ -125,6 +133,76 @@ class _GalleryPageState extends State<GalleryPage> {
 
   void getData() async {
     role = await StoredDataPreferences.getSharedPreferences('role');
+  }
+
+  void isNewVersion() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    final getVersion = preferences.getString('isNewVersion');
+
+    if (getVersion != '1.01') {
+      preferences.setString('isNewVersion', '1.01');
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              backgroundColor: white,
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    Divider(
+                      height: 1,
+                      color: black,
+                      thickness: 1,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 5, top: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'What\'s New : v1.01',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      height: 1,
+                      color: Colors.black,
+                      thickness: 1,
+                    ),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: updates.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              padding: const EdgeInsets.only(
+                                  left: 5, right: 10, top: 10, bottom: 10),
+                              child: RichText(
+                                  text: TextSpan(children: [
+                                WidgetSpan(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(2),
+                                  child: Icon(
+                                    Icons.star,
+                                    size: 12,
+                                    color: black,
+                                  ),
+                                )),
+                                TextSpan(
+                                  text: '${updates[index]}',
+                                  style: TextStyle(fontSize: 16, color: black),
+                                )
+                              ])));
+                        }),
+                  ],
+                ),
+              ),
+            );
+          });
+    }
   }
 }
 

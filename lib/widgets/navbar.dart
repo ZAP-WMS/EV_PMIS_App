@@ -5,6 +5,7 @@ import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/internet_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_full_pdf_viewer_null_safe/full_pdf_viewer_scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screen/homepage/gallery.dart';
 import '../style.dart';
@@ -35,15 +36,13 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               size: 48.0,
               color: Colors.white,
             ),
-            // otherAccountsPictures: const [
-            //   Icon(
-            //     Icons.bookmark_border,
-            //     color: Colors.white,
-            //   ),
-            // ],
-            accountName: Text(
-              userId!,
-              textAlign: TextAlign.center,
+            accountName: Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                userId!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             accountEmail: const Text(''),
           ),
@@ -91,14 +90,18 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               ),
               title: const Text('Chat'),
               onTap: () {
-                // SystemChrome.setPreferredOrientations([
-                //   DeviceOrientation.portraitUp,
-                //   DeviceOrientation.portraitDown,
-                //   // DeviceOrientation.landscapeLeft,
-                // ]);
                 Navigator.pushNamed(context, '/chat-page');
               }),
-          const Divider(),
+
+          // ListTile(
+          //     leading: Icon(
+          //       Icons.supervised_user_circle,
+          //       color: blue,
+          //     ),
+          //     title: const Text('User Manual'),
+          //     onTap: () {}),
+
+          // const Divider(),
           // ListTile(
           //     leading: const Icon(Icons.settings),
           //     title: const Text('Settings'),
@@ -123,13 +126,8 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               ),
               title: const Text('Logout'),
               onTap: () {
-                // SystemChrome.setPreferredOrientations([
-                //   DeviceOrientation.portraitUp,
-                //   DeviceOrientation.portraitDown,
-                //   // DeviceOrientation.landscapeLeft,
-                // ]);
                 onWillPop(context);
-              }),
+              })
         ],
       ),
     );

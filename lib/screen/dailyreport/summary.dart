@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/date_format.dart';
-import 'package:ev_pmis_app/screen/dailyreport/daily_project.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

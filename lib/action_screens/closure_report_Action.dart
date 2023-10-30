@@ -1,5 +1,5 @@
 import 'package:ev_pmis_app/screen/closureReport/closure_report_admin/closure_summary_table.dart';
-import 'package:ev_pmis_app/screen/closureReport/closurefield.dart';
+import 'package:ev_pmis_app/screen/closureReport/closure_report_user/closurefield.dart';
 import 'package:flutter/material.dart';
 
 class ClosureReportAction extends StatefulWidget {
