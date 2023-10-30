@@ -143,7 +143,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         return true;
       },
       child: _isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Scaffold(
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
@@ -160,7 +160,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                 preferredSize: const Size.fromHeight(50),
               ),
               body: _isLoading
-                  ? LoadingPage()
+                  ? const LoadingPage()
                   : SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -70,6 +70,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return ProjectPlanningAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -105,6 +106,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DetailEngineeringAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );

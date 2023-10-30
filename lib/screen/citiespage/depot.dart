@@ -47,8 +47,8 @@ class _DepotPageState extends State<DepotPage> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 0.9,
-                                mainAxisSpacing: 5,
+                                childAspectRatio: 1.2,
+                                mainAxisSpacing: 3,
                                 crossAxisCount: 2),
                         itemBuilder: (context, index) {
                           return GestureDetector(

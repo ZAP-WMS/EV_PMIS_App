@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                 key: _formkey,
                 child: Column(
                   children: [
-                    _space(16),
+                    _space(10),
                     CustomTextField(
                       controller: empIdController,
                       labeltext: 'Employee ID',
@@ -48,8 +48,9 @@ class _LoginPageState extends State<LoginPage> {
                         return checkFieldEmpty(value!, 'Email is Required');
                       },
                     ),
-                    _space(16),
+                    _space(10),
                     CustomTextField(
+                        isObscure: true,
                         controller: passwordcontroller,
                         labeltext: 'Password',
                         validatortext: (value) {
@@ -58,26 +59,25 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done),
-                    _space(16),
+                    // _space(16),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // TextButton(
+                        //   child: const Text(
+                        //     'User Manual',
+                        //     style: TextStyle(
+                        //         fontWeight: FontWeight.bold,
+                        //         color: Colors.blue),
+                        //   ),
+                        //   onPressed: () {},
+                        // ),
                         RichText(
                             text: const TextSpan(
                           children: <TextSpan>[
                             TextSpan(
                                 text: ' Forget Password ?',
-                                // recognizer: TapGestureRecognizer()
-                                //   ..onTap = (() => Navigator.push(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //           builder: (context) => ResetPass(
-                                //               // email: FirebaseAuth
-                                //               //     .instance
-                                //               //     .currentUser!
-                                //               //     .email!,
-                                //               )))),
-                                style: const TextStyle(color: Colors.blue))
+                                style: TextStyle(color: Colors.blue))
                           ],
                         )),
                       ],

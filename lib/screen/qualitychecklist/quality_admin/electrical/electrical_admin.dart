@@ -37,6 +37,7 @@ class ElectricalReportAdmin extends StatefulWidget {
 }
 
 class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
+  String pathToOpenFile = '';
   List<String> completeTabForElectrical = [
     'PSS',
     'RMU',
@@ -266,14 +267,14 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
 
       int counter = 1;
       String newFilePath = file.path;
-
+      pathToOpenFile = newFilePath.toString();
       if (await File(newFilePath).exists()) {
         final baseName = fileName.split('.').first;
         final extension = fileName.split('.').last;
         newFilePath =
             '$documentDirectory/$baseName-${counter.toString()}.$extension';
         counter++;
-
+        pathToOpenFile = newFilePath;
         await file.copy(newFilePath);
         counter++;
       } else {
@@ -319,8 +320,9 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
             channelDescription: 'repeating description');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin().show(
-        0, 'Pdf Downloaded', 'Electrical Quality Report', notificationDetails);
+    await FlutterLocalNotificationsPlugin().show(0,
+        'Electrical Quality Pdf Downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
   }
 
   Future<Uint8List> _generatePDF(
@@ -783,6 +785,7 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
           context,
           MaterialPageRoute(
               builder: (context) => PdfViewScreen(
+                    getContext: context,
                     pdfData: pdfData,
                     pageName: 'Electrical Checklist Report',
                   )));

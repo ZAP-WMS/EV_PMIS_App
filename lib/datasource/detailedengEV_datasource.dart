@@ -16,8 +16,9 @@ class DetailedEngSourceEV extends DataGridSource {
   String depoName;
   String userId;
   BuildContext mainContext;
+  String? role;
   DetailedEngSourceEV(this._detailedengev, this.mainContext, this.cityName,
-      this.depoName, this.userId) {
+      this.depoName, this.userId, this.role) {
     buildDataGridRowsEV();
   }
   void buildDataGridRowsEV() {
@@ -258,6 +259,7 @@ class DetailedEngSourceEV extends DataGridSource {
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ViewAllPdf(
+                                          role: role,
                                           title: 'DetailedEngEV',
                                           cityName: cityName,
                                           depoName: depoName,
@@ -266,10 +268,8 @@ class DetailedEngSourceEV extends DataGridSource {
                                               .getCells()[4]
                                               .value
                                               .toString(),
-                                          docId: row
-                                              .getCells()[0]
-                                              .value
-                                              .toString()) // UploadDocument(
+                                          docId:
+                                              '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}') // UploadDocument(
                                       //     title: 'DetailedEngRFC',
                                       //     cityName: cityName,
                                       //     depoName: depoName,

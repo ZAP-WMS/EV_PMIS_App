@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,16 +8,15 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:ev_pmis_app/widgets/upload.dart';
 import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
-import '../model/detailed_engModel.dart';
 import '../style.dart';
 
 class DetailedEngSource extends DataGridSource {
   String cityName;
   String depoName;
-
+  String? role;
   BuildContext mainContext;
-  DetailedEngSource(
-      this._detailedeng, this.mainContext, this.cityName, this.depoName) {
+  DetailedEngSource(this._detailedeng, this.mainContext, this.cityName,
+      this.depoName, this.role) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -26,13 +26,13 @@ class DetailedEngSource extends DataGridSource {
   }
 
   @override
-  List<DetailedEngModel> _detailedeng = [];
+  List<DetailedEngModelAdmin> _detailedeng = [];
   // List<DetailedEngModel> _detailedeng = [];
 
   TextStyle textStyle = const TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.w400,
-      fontSize: 14,
+      fontSize: 12,
       color: Colors.black87);
   List<String> typeRiskMenuItems = [
     'EV Layout',
@@ -117,7 +117,7 @@ class DetailedEngSource extends DataGridSource {
       return Container(
         // color: getcolor(),
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: (dataGridCell.columnName == 'Delete')
             ? IconButton(
                 onPressed: () {
@@ -173,21 +173,15 @@ class DetailedEngSource extends DataGridSource {
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
+                                        role: role,
                                         title: 'DetailedEngRFC',
                                         cityName: cityName,
                                         depoName: depoName,
                                         // userId: userId,
                                         docId:
-                                            row.getCells()[4].value.toString(),
+                                            '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
                                         userId: userId,
-                                      )
-                                  // ViewFile()
-                                  // UploadDocument(
-                                  //     title: 'DetailedEngRFC',
-                                  //     cityName: cityName,
-                                  //     depoName: depoName,
-                                  //     activity: '${row.getCells()[1].value.toString()}'),
-                                  ));
+                                      )));
                               // showDialog(
                               //     context: context,
                               //     builder: (context) => AlertDialog(
@@ -710,6 +704,8 @@ class DetailedEngSource extends DataGridSource {
                                         : Text(
                                             dataGridCell.value.toString(),
                                             textAlign: TextAlign.center,
+                                            style:
+                                                const TextStyle(fontSize: 10),
                                           ),
       );
     }).toList());
@@ -828,7 +824,7 @@ class DetailedEngSource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),

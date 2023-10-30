@@ -37,6 +37,7 @@ class CivilReportAdmin extends StatefulWidget {
 }
 
 class _CivilReportAdminState extends State<CivilReportAdmin> {
+  String pathTpoOpenFile = '';
   List<String> completeTabForCivil = [
     'Excavation',
     'BackFilling',
@@ -270,6 +271,7 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
 
       int counter = 1;
       String newFilePath = file.path;
+      pathTpoOpenFile = newFilePath;
 
       if (await File(newFilePath).exists()) {
         final baseName = fileName.split('.').first;
@@ -279,6 +281,7 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
         counter++;
 
         await file.copy(newFilePath);
+        pathTpoOpenFile = newFilePath;
         counter++;
       } else {
         await file.writeAsBytes(pdfData);
@@ -323,8 +326,9 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
             channelDescription: 'repeating description');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin()
-        .show(0, 'Pdf Downloaded', 'Civil Quality Report', notificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Civil Quality Pdf Downloaded', 'Tap to open', notificationDetails,
+        payload: pathTpoOpenFile);
   }
 
   Future<Uint8List> _generatePDF(
@@ -782,6 +786,7 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
           context,
           MaterialPageRoute(
               builder: (context) => PdfViewScreen(
+                    getContext: context,
                     pdfData: pdfData,
                     pageName: 'Civil Checklist Report',
                   )));

@@ -170,14 +170,14 @@ showAlertDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Alert Dialog Title'),
-        content: Text('This is the content of the alert dialog.'),
+        title: const Text('Alert Dialog Title'),
+        content: const Text('This is the content of the alert dialog.'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       );
