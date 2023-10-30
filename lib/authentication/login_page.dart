@@ -67,16 +67,17 @@ class _LoginPageState extends State<LoginPage> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: ' Forget Password ?',
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = (() => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ResetPass(
-                                              // email: FirebaseAuth
-                                              //     .instance
-                                              //     .currentUser!
-                                              //     .email!,
-                                              )))),
+                                recognizer: TapGestureRecognizer(),
+                                // ..onTap = (() => Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ResetPass(
+                                //             // email: FirebaseAuth
+                                //             //     .instance
+                                //             //     .currentUser!
+                                //             //     .email!,
+                                //             )))
+                                //             ),
                                 style: const TextStyle(color: Colors.blue))
                           ],
                         )),

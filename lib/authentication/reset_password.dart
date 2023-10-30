@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/authentication/check_otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,8 @@ class ResetPass extends StatefulWidget {
     Key? key,
     // required this.email,
   }) : super(key: key);
+
+  static String verify = '';
 
   @override
   State<ResetPass> createState() => _ResetPassState();
@@ -105,16 +108,27 @@ class _ResetPassState extends State<ResetPass> {
                         getNumber(textEditingController.text)
                             .whenComplete(() async {
                           Navigator.pop(context);
-                          verifyPhoneNumber('+91$mobileNum');
+                          // verifyPhoneNumber('+91$mobileNum');
+                          await FirebaseAuth.instance.verifyPhoneNumber(
+                              phoneNumber: '+91$mobileNum',
+                              verificationCompleted:
+                                  (PhoneAuthCredential credential) {},
+                              verificationFailed: (FirebaseAuthException e) {},
+                              codeSent:
+                                  (String verificationId, int? resendToken) {
+                                ResetPass.verify = verificationId;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CheckOtp(
+                                            name: name!,
+                                            mobileNumber:
+                                                int.parse(mobileNum!))));
+                              },
+                              codeAutoRetrievalTimeout:
+                                  (String verificationId) {});
 
                           // ignore: use_build_context_synchronously
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CheckOtp(
-                                        name: name!,
-                                        mobileNumber: int.parse(mobileNum!),
-                                      )));
                         });
                       } else {
                         // ignore: prefer_const_constructors

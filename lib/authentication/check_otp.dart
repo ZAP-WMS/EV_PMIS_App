@@ -1,11 +1,10 @@
+import 'package:ev_pmis_app/authentication/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
 
 import '../style.dart';
 import 'otp_authentication.dart';
-
-String? smscode;
 
 class CheckOtp extends StatefulWidget {
   String name;
@@ -52,21 +51,7 @@ class _CheckOtpState extends State<CheckOtp> {
                   textAlign: TextAlign.center),
             ),
             const SizedBox(height: 40),
-            // SizedBox(
-            //   height: 48,
-            //   child: ElevatedButton(
-            //       style: ElevatedButton.styleFrom(
-            //         shape: RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(6.0)),
-            //         minimumSize: MediaQuery.of(context).size,
-            //         backgroundColor: blue,
-            //       ),
-            //       onPressed: () async {
-            //         await LaunchApp.openApp(
-            //             androidPackageName: 'com.google.android.gm');
-            //       },
-            //       child: Text('Open Email App', style: subtitle2black)),
-            // ),
+
             OTPInputBox(),
             const SizedBox(height: 30),
             InkWell(
@@ -107,31 +92,46 @@ class OTPInputBox extends StatefulWidget {
 
 class _OTPInputBoxState extends State<OTPInputBox> {
   TextEditingController _pinEditingController = TextEditingController();
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? smscode;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: PinInputTextField(
-        pinLength: 6, // You can change the length of the OTP
-        decoration: BoxLooseDecoration(
-          strokeColorBuilder: PinListenColorBuilder(Colors.black, Colors.blue),
-          radius: const Radius.circular(8),
-        ),
-        controller: _pinEditingController,
-        autoFocus: true,
-        textInputAction: TextInputAction.done,
-        onChanged: (pin) {
-          // You can handle the entered OTP here
-          pin = _pinEditingController.text;
-          print(pin);
-        },
-        onSubmit: (pin) {
-          // Triggered when the user submits the OTP
-          smscode = pin;
-          setState(() {
-            
-          });
-        },
+      child: Column(
+        children: [
+          PinInputTextField(
+            pinLength: 6, // You can change the length of the OTP
+            decoration: BoxLooseDecoration(
+              strokeColorBuilder:
+                  PinListenColorBuilder(Colors.black, Colors.blue),
+              radius: const Radius.circular(8),
+            ),
+            controller: _pinEditingController,
+            autoFocus: true,
+            textInputAction: TextInputAction.done,
+            onChanged: (pin) {
+              // You can handle the entered OTP here
+              pin = _pinEditingController.text;
+              print(pin);
+            },
+            onSubmit: (pin) {
+              // Triggered when the user submits the OTP
+              smscode = pin;
+              setState(() {});
+            },
+          ),
+          ElevatedButton(
+              onPressed: () async {
+                PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                    verificationId: ResetPass.verify, smsCode: smscode!);
+
+                // Sign the user in (or link) with the credential
+                await auth.signInWithCredential(credential);
+              },
+              child: const Text('Verify User ID'))
+        ],
       ),
     );
   }
