@@ -1,15 +1,14 @@
 import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
-import '../../model/quality_checklistModel.dart';
-import '../../screen/homepage/gallery.dart';
-import '../../screen/overviewpage/view_AllFiles.dart';
 import '../../style.dart';
+import '../../viewmodels/quality_checklistModel.dart';
+import '../../views/homepage/gallery.dart';
 import '../../widgets/upload.dart';
 
 class QualityctDataSource extends DataGridSource {

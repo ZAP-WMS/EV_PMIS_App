@@ -5,10 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../../model/quality_checklistModel.dart';
-import '../../screen/homepage/gallery.dart';
-import '../../screen/overviewpage/view_AllFiles.dart';
 import '../../style.dart';
+import '../../viewmodels/quality_checklistModel.dart';
+import '../../views/homepage/gallery.dart';
+import '../../views/overviewpage/view_AllFiles.dart';
 import '../../widgets/upload.dart';
 
 class QualityPaintingDataSource extends DataGridSource {
@@ -43,14 +43,14 @@ class QualityPaintingDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    DateTime? rangeStartDate = DateTime.now();
-    DateTime? rangeEndDate = DateTime.now();
-    DateTime? date;
-    DateTime? endDate;
-    DateTime? rangeStartDate1 = DateTime.now();
-    DateTime? rangeEndDate1 = DateTime.now();
-    DateTime? date1;
-    DateTime? endDate1;
+    // DateTime? rangeStartDate = DateTime.now();
+    // DateTime? rangeEndDate = DateTime.now();
+    // DateTime? date;
+    // DateTime? endDate;
+    // DateTime? rangeStartDate1 = DateTime.now();
+    // DateTime? rangeEndDate1 = DateTime.now();
+    // DateTime? date1;
+    // DateTime? endDate1;
     String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {

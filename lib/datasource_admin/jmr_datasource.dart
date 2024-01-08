@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../model/jmr.dart';
 import '../style.dart';
+import '../viewmodels/jmr.dart';
 
 class JmrDataSource extends DataGridSource {
   // BuildContext mainContext;

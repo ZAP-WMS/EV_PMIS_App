@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../model/depot_overview.dart';
+import '../viewmodels/depot_overview.dart';
 import '../style.dart';
 
 class DepotOverviewDatasource extends DataGridSource {

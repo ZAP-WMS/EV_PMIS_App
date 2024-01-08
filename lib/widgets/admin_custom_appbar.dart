@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import '../Authentication/login_register.dart';
 import '../style.dart';
+import '../views/authentication/login_register.dart';
 
 class CustomAppBar extends StatefulWidget {
   final String? text;

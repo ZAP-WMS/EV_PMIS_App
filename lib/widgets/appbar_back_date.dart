@@ -3,10 +3,9 @@ import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import '../Authentication/login_register.dart';
-import '../authentication/authservice.dart';
-import '../screen/dailyreport/daily_project.dart';
 import '../style.dart';
+import '../views/authentication/authservice.dart';
+import '../views/authentication/login_register.dart';
 
 class CustomAppBarBackDate extends StatefulWidget {
   String? text;

@@ -1,5 +1,7 @@
 import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/provider/energy_provider.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
+import 'package:ev_pmis_app/provider/key_provider.dart';
 import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
 import 'package:ev_pmis_app/style.dart';
@@ -51,7 +53,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => CitiesProvider()),
         ChangeNotifierProvider(create: (context) => SummaryProvider()),
-        ChangeNotifierProvider(create: (context) => ConnectivityProvider())
+        ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
+        ChangeNotifierProvider(create: (context) => KeyProvider()),
+        ChangeNotifierProvider(create: (context) => EnergyProvider())
       ],
       child: GetMaterialApp(
         // initialRoute: '/jmrPage',

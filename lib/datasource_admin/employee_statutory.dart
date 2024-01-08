@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../model/model/employee_statutory.dart';
-import '../screen/overviewpage/viewFIle.dart';
+import '../viewmodels/employee_statutory.dart';
+import '../views/overviewpage/viewFIle.dart';
 
 class EmployeeDataStatutory extends DataGridSource {
   BuildContext mainContext;

@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../screen/overviewpage/view_AllFiles.dart';
 import '../style.dart';
-import '../model/daily_projectModel.dart';
+import '../viewmodels/daily_projectModel.dart';
+import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';
 
 class DailyDataSource extends DataGridSource {

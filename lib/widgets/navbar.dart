@@ -1,13 +1,14 @@
-import 'package:ev_pmis_app/authentication/login_register.dart';
+
 import 'package:ev_pmis_app/feedback/chat.dart';
-import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
+
 import 'package:ev_pmis_app/widgets/internet_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../screen/homepage/gallery.dart';
 import '../style.dart';
+import '../views/authentication/login_register.dart';
+import '../views/citiespage/cities_home.dart';
+import '../views/homepage/gallery.dart';
 
 class NavbarDrawer extends StatefulWidget {
   const NavbarDrawer({super.key});
