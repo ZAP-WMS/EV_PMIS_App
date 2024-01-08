@@ -64,9 +64,7 @@ class _ViewSummaryState extends State<ViewSummary> {
   late EnergyManagementDatasource _energyManagementDatasource;
   late DailyDataSource _dailyDataSource;
   List<dynamic> tabledata2 = [];
-  Stream? _dailystream;
   var alldata;
-  bool _isloading = false;
   dynamic userId;
 
   @override
@@ -74,9 +72,7 @@ class _ViewSummaryState extends State<ViewSummary> {
     super.initState();
     _summaryProvider = Provider.of<SummaryProvider>(context, listen: false);
 
-    getUserId().then((value) {
-      _isloading = false;
-    });
+    getUserId().then((value) {});
   }
 
   @override
@@ -753,204 +749,6 @@ class _ViewSummaryState extends State<ViewSummary> {
                           },
                         ),
                       )
-
-                    // ? Expanded(
-                    //     child: StreamBuilder(
-                    //     stream: FirebaseFirestore.instance
-                    //         .collection('DailyProjectReport')
-                    //         .doc('${widget.depoName}')
-                    //         .collection(widget.userId)
-                    //         // .doc(DateFormat.yMMMMd().format(startdate!))
-                    //         .snapshots(),
-                    //     builder: (context, snapshot) {
-                    //       if (snapshot.connectionState ==
-                    //           ConnectionState.waiting) {
-                    //         return LoadingPage();
-                    //       } else if (!snapshot.hasData ||
-                    //           snapshot.data!.docs == null) {
-                    //         return const NodataAvailable();
-                    //       } else {
-                    //         alldata = '';
-
-                    //         dailyproject.clear();
-                    //         alldata.forEach((element) {
-                    //           dailyproject
-                    //               .add(DailyProjectModel.fromjson(element));
-                    //           _dailyDataSource = DailyDataSource(
-                    //               dailyproject, context, widget.depoName!);
-                    //           _dataGridController = DataGridController();
-                    //         });
-
-                    //         for (int i = 0;
-                    //             i < snapshot.data!.docs.length;
-                    //             i++) {
-                    //           // for (DateTime date = startdate!;
-                    //           //     date.isBefore(
-                    //           //         enddate!.add(Duration(days: 1)));
-                    //           //     date.add(Duration(days: 1)))
-                    //           //   print(snapshot.data);
-                    //           alldata = snapshot.data!.docs[i]['data']
-                    //               as List<dynamic>;
-                    //           // alldata = snapshot.data!.docs[i]['data']
-                    //           //     as List<dynamic>;
-                    //           alldata.forEach((element) {
-                    //             dailyproject
-                    //                 .add(DailyProjectModel.fromjson(element));
-                    //             _dailyDataSource = DailyDataSource(
-                    //                 dailyproject, context, widget.depoName!);
-                    //             _dataGridController = DataGridController();
-                    //           });
-                    //         }
-
-                    //         return SfDataGridTheme(
-                    //           data: SfDataGridThemeData(headerColor: lightblue),
-                    //           child: SfDataGrid(
-                    //               source: _dailyDataSource,
-                    //               allowEditing: true,
-                    //               frozenColumnsCount: 2,
-                    //               gridLinesVisibility: GridLinesVisibility.both,
-                    //               headerGridLinesVisibility:
-                    //                   GridLinesVisibility.both,
-                    //               selectionMode: SelectionMode.single,
-                    //               navigationMode: GridNavigationMode.cell,
-                    //               columnWidthMode: ColumnWidthMode.auto,
-                    //               editingGestureType: EditingGestureType.tap,
-                    //               controller: _dataGridController,
-                    //               columns: [
-                    //                 GridColumn(
-                    //                   columnName: 'SiNo',
-                    //                   autoFitPadding:
-                    //
-                    //                           tablepadding,
-                    //                   allowEditing: true,
-                    //                   width: 70,
-                    //                   label: Container(
-                    //                     padding: const EdgeInsets.symmetric(
-                    //                         horizontal: 8.0),
-                    //                     alignment: Alignment.center,
-                    //                     child: Text('SI No.',
-                    //                         overflow: TextOverflow.values.first,
-                    //                         textAlign: TextAlign.center,
-                    //                         style: TextStyle(
-                    //                             fontWeight: FontWeight.bold,
-                    //                             fontSize: 16,
-                    //                             color: white)
-                    //                         //    textAlign: TextAlign.center,
-                    //                         ),
-                    //                   ),
-                    //                 ),
-                    //                 GridColumn(
-                    //                   columnName: 'TypeOfActivity',
-                    //                   autoFitPadding:
-                    //
-                    //                           tablepadding,
-                    //                   allowEditing: true,
-                    //                   width: 200,
-                    //                   label: Container(
-                    //                     padding: const EdgeInsets.symmetric(
-                    //                         horizontal: 8.0),
-                    //                     alignment: Alignment.center,
-                    //                     child: Text('Type of Activity',
-                    //                         overflow: TextOverflow.values.first,
-                    //                         style: TextStyle(
-                    //                             fontWeight: FontWeight.bold,
-                    //                             fontSize: 16,
-                    //                             color: white)
-                    //                         //    textAlign: TextAlign.center,
-                    //                         ),
-                    //                   ),
-                    //                 ),
-                    //                 GridColumn(
-                    //                   columnName: 'ActivityDetails',
-                    //                   autoFitPadding:
-                    //
-                    //                           tablepadding,
-                    //                   allowEditing: true,
-                    //                   width: 220,
-                    //                   label: Container(
-                    //                     padding: const EdgeInsets.symmetric(
-                    //                         horizontal: 8.0),
-                    //                     alignment: Alignment.center,
-                    //                     child: Text('Activity Details',
-                    //                         overflow: TextOverflow.values.first,
-                    //                         style: TextStyle(
-                    //                             fontWeight: FontWeight.bold,
-                    //                             fontSize: 16,
-                    //                             color: white)
-                    //                         //    textAlign: TextAlign.center,
-                    //                         ),
-                    //                   ),
-                    //                 ),
-                    //                 GridColumn(
-                    //                   columnName: 'Progress',
-                    //                   autoFitPadding:
-                    //
-                    //                           tablepadding,
-                    //                   allowEditing: true,
-                    //                   width: 320,
-                    //                   label: Container(
-                    //                     padding: const EdgeInsets.symmetric(
-                    //                         horizontal: 8.0),
-                    //                     alignment: Alignment.center,
-                    //                     child: Text('Progress',
-                    //                         overflow: TextOverflow.values.first,
-                    //                         style: TextStyle(
-                    //                             fontWeight: FontWeight.bold,
-                    //                             fontSize: 16,
-                    //                             color: white)
-                    //                         //    textAlign: TextAlign.center,
-                    //                         ),
-                    //                   ),
-                    //                 ),
-                    //                 GridColumn(
-                    //                   columnName: 'Status',
-                    //                   autoFitPadding:
-                    //
-                    //                           tablepadding,
-                    //                   allowEditing: true,
-                    //                   width: 320,
-                    //                   label: Container(
-                    //                     padding: const EdgeInsets.symmetric(
-                    //                         horizontal: 8.0),
-                    //                     alignment: Alignment.center,
-                    //                     child: Text('Remark / Status',
-                    //                         overflow: TextOverflow.values.first,
-                    //                         style: TextStyle(
-                    //                             fontWeight: FontWeight.bold,
-                    //                             fontSize: 16,
-                    //                             color: white)
-                    //                         //    textAlign: TextAlign.center,
-                    //                         ),
-                    //                   ),
-                    //                 ),
-                    //                 GridColumn(
-                    //                   columnName: 'Delete',
-                    //                   autoFitPadding:
-                    //
-                    //                           tablepadding,
-                    //                   allowEditing: true,
-                    //                   visible: false,
-                    //                   width: 120,
-                    //                   label: Container(
-                    //                     padding: const EdgeInsets.symmetric(
-                    //                         horizontal: 8.0),
-                    //                     alignment: Alignment.center,
-                    //                     child: Text('Delete Row',
-                    //                         overflow: TextOverflow.values.first,
-                    //                         style: TextStyle(
-                    //                             fontWeight: FontWeight.bold,
-                    //                             fontSize: 16,
-                    //                             color: white)
-                    //                         //    textAlign: TextAlign.center,
-                    //                         ),
-                    //                   ),
-                    //                 ),
-                    //               ]),
-                    //         );
-                    //       }
-                    //     },
-                    //   ))
-
                     : widget.id == 'Quality Checklist'
                         ? Expanded(
                             child: QualityChecklist(
@@ -996,10 +794,10 @@ class _ViewSummaryState extends State<ViewSummary> {
                                           return Column(
                                             children: [
                                               Flexible(
-                                                flex: 2,
+                                                flex: 1,
                                                 child: SfDataGridTheme(
                                                     data: SfDataGridThemeData(
-                                                        headerColor: lightblue),
+                                                        headerColor: blue),
                                                     child: SfDataGrid(
                                                       source:
                                                           _energyManagementDatasource,
@@ -1011,6 +809,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                       headerGridLinesVisibility:
                                                           GridLinesVisibility
                                                               .both,
+                                                      headerRowHeight: 40,
+
                                                       selectionMode:
                                                           SelectionMode.single,
                                                       navigationMode:
@@ -1023,13 +823,13 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                               .tap,
                                                       controller:
                                                           _dataGridController,
-                                                      onQueryRowHeight:
-                                                          (details) {
-                                                        return details
-                                                            .getIntrinsicRowHeight(
-                                                                details
-                                                                    .rowIndex);
-                                                      },
+                                                      // onQueryRowHeight:
+                                                      //     (details) {
+                                                      //   return details
+                                                      //       .getIntrinsicRowHeight(
+                                                      //           details
+                                                      //               .rowIndex);
+                                                      // },
                                                       columns: [
                                                         GridColumn(
                                                           visible: true,
@@ -1184,9 +984,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                           label: Container(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        16.0),
+                                                                    .all(8.0),
                                                             alignment: Alignment
                                                                 .center,
                                                             child: Container(
@@ -1230,9 +1028,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                           label: Container(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        16.0),
+                                                                    .all(8.0),
                                                             alignment: Alignment
                                                                 .center,
                                                             child: Text(
@@ -1271,17 +1067,13 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                           visible: false,
                                                           autoFitPadding:
                                                               const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      16),
+                                                                  .all(8.0),
                                                           allowEditing: false,
                                                           width: 120,
                                                           label: Container(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        8.0),
+                                                                    .all(8.0),
                                                             alignment: Alignment
                                                                 .center,
                                                             child: Text(
@@ -1301,17 +1093,13 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                           visible: false,
                                                           autoFitPadding:
                                                               const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      16),
+                                                                  .all(8.0),
                                                           allowEditing: false,
                                                           width: 120,
                                                           label: Container(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        8.0),
+                                                                    .all(8.0),
                                                             alignment: Alignment
                                                                 .center,
                                                             child: Text(
@@ -1321,9 +1109,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                         .values
                                                                         .first,
                                                                 style:
-                                                                    tableheaderwhitecolor
-                                                                //    textAlign: TextAlign.center,
-                                                                ),
+                                                                    tableheaderwhitecolor),
                                                           ),
                                                         ),
                                                       ],

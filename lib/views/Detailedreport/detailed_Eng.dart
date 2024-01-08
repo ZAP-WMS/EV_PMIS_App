@@ -156,7 +156,7 @@ class _DetailedEngtState extends State<DetailedEng>
             backgroundColor: blue,
             title: Text(
               '${widget.depoName}/Detailed Engineering',
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             actions: [
               InkWell(

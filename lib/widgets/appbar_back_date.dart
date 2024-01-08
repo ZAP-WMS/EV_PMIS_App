@@ -65,7 +65,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
         title: Text(
           widget.text.toString(),
           maxLines: 3,
-          style: const TextStyle(fontSize: 14),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
         actions: [
           widget.haveCalender

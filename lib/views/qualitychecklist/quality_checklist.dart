@@ -222,8 +222,12 @@ class _QualityChecklistState extends State<QualityChecklist> {
               backgroundColor: blue,
               title: widget.isHeader!
                   ? Text(
-                      '${widget.cityName}/${widget.depoName}/Quality Checklist')
+                      '${widget.cityName}/${widget.depoName}/Quality Checklist',
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
+                    )
                   : const Text(''),
+
               actions: [
                 widget.isHeader!
                     ? Row(

@@ -145,6 +145,8 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                   isSync: false,
                   title:
                       'JMR / ${widget.depoName} / ${widget.title.toString()}',
+                      
+                    
                 ),
                 preferredSize: const Size.fromHeight(50),
               ),

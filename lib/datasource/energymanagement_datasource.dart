@@ -104,7 +104,7 @@ class EnergyManagementDatasource extends DataGridSource {
 
       return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: (dataGridCell.columnName == 'startDate')
               ? Row(
                   children: [
@@ -193,6 +193,7 @@ class EnergyManagementDatasource extends DataGridSource {
                               : Text(
                                   dataGridCell.value.toString(),
                                   textAlign: TextAlign.center,
+                                  style: tablefontsize,
                                 ));
     }).toList());
   }
@@ -321,7 +322,7 @@ class EnergyManagementDatasource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 10.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),

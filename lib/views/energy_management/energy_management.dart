@@ -160,7 +160,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                 Flexible(
                   flex: 2,
                   child: SfDataGridTheme(
-                    data: SfDataGridThemeData(headerColor: lightblue),
+                    data: SfDataGridThemeData(headerColor: blue),
                     child: StreamBuilder(
                       stream: _stream,
                       builder: (context, snapshot) {
@@ -292,8 +292,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                 allowEditing: false,
                                 width: 230,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   alignment: Alignment.center,
                                   child: Container(
                                     alignment: Alignment.center,
@@ -319,8 +318,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                 allowEditing: true,
                                 width: 160,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   alignment: Alignment.center,
                                   child: Text('Engery Consumed (inkW)',
                                       overflow: TextOverflow.values.first,
@@ -342,12 +340,11 @@ class _EnergyManagementState extends State<EnergyManagement> {
                               GridColumn(
                                 columnName: 'Add',
                                 autoFitPadding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
+                                    const EdgeInsets.symmetric(horizontal: 12),
                                 allowEditing: false,
                                 width: 120,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   alignment: Alignment.center,
                                   child: Text('Add Row',
                                       overflow: TextOverflow.values.first,
@@ -363,8 +360,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                 allowEditing: false,
                                 width: 120,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   alignment: Alignment.center,
                                   child: Text('Delete Row',
                                       overflow: TextOverflow.values.first,
@@ -401,6 +397,8 @@ class _EnergyManagementState extends State<EnergyManagement> {
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
+                            headerRowHeight: 40,
+
                             // checkboxColumnSettings:
                             //     DataGridCheckboxColumnSettings(
                             //         showCheckboxOnHeader: false),
