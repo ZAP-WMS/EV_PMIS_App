@@ -11,8 +11,10 @@ import 'package:ev_pmis_app/action_screens/safety_checklist_action.dart';
 import 'package:ev_pmis_app/authentication/login_register.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
+import 'package:ev_pmis_app/screen/demand_energy/demandScreen.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/homepage/home_page.dart';
+import 'package:ev_pmis_app/screen/otp_verification/send_otp.dart';
 import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/quality_home_admin.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,8 @@ class RouteGenerator {
         return const NoInterneet();
       }
       switch (settings.name) {
+        case '/verifyPage':
+          return const OtpVerificationScreen();
         case '/splash-screen':
           return const SplashScreen();
         case '/login-page':
@@ -156,6 +160,8 @@ class RouteGenerator {
             name: argument['name'],
             mobileNumber: argument[' mobileNumber'],
           );
+        case '/demand':
+          return DemandEnergyScreen();
       }
       return const NodataAvailable();
     });

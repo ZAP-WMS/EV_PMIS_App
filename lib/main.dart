@@ -1,7 +1,11 @@
+import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
+import 'package:ev_pmis_app/provider/selected_row_index.dart';
 import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
+import 'package:ev_pmis_app/screen/ev_dashboard/ev_dashboard.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +20,12 @@ import 'package:provider/provider.dart';
 
 void main() async {
   // its used for status bar color
-
   Future.delayed(Duration.zero, () async {
     //to run async code in initState
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
     // enables secure mode for app, disables screenshot, screen recording
   });
+
 // here i have initialize my firebase
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
@@ -46,10 +50,10 @@ void main() async {
     },
   );
 // To request permission for notification and storage
-  await [
-    Permission.notification,
-    Permission.storage,
-  ].request();
+  // await [
+  //   Permission.notification,
+  //   Permission.storage,
+  // ].request();
   runApp(const MyApp());
 }
 
@@ -63,10 +67,13 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => CitiesProvider()),
         ChangeNotifierProvider(create: (context) => SummaryProvider()),
-        ChangeNotifierProvider(create: (context) => ConnectivityProvider())
+        ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
+        ChangeNotifierProvider(create: (context) => AllDepoSelectProvider()),
+        ChangeNotifierProvider(create: (context) => DemandEnergyProvider()),
+        ChangeNotifierProvider(create: (context) => SelectedRowIndexModel())
       ],
       child: GetMaterialApp(
-        // initialRoute: '/jmrPage',
+        // initialRoute: '/demand',
         initialRoute: '/splash-screen',
         // all the pages of routes are declared here
         onGenerateRoute: RouteGenerator.generateRoute,
@@ -75,7 +82,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: GoogleFonts.quicksand().fontFamily),
-        //home: LoginRegister()
+        // home: EVDashboardScreen()
       ),
     );
   }

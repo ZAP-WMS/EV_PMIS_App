@@ -147,6 +147,8 @@ class _GalleryPageState extends State<GalleryPage> {
             return Dialog(
               backgroundColor: white,
               child: Container(
+                height: 500,
+                width: MediaQuery.of(context).size.width * 0.8,
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [

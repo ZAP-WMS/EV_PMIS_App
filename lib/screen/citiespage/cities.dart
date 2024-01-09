@@ -100,20 +100,27 @@ class _CitiesPageState extends State<CitiesPage> {
     return Column(
       children: [
         Card(
-            color: white,
-            elevation: 5,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.elliptical(100, 100))),
-            child: Container(
-                width: 50,
-                height: 50,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    image: DecorationImage(
-                        image: CachedNetworkImageProvider(image),
-                        //  NetworkImage(image),
-                        fit: BoxFit.fill)))),
+          color: white,
+          elevation: 5,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.elliptical(100, 100))),
+          child: Container(
+            width: 50,
+            height: 50,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(
+                  image,
+                ),
+                //  NetworkImage(image),
+                fit: BoxFit.fill,
+              ),
+            ),
+            // child: CachedNetworkImage(imageUrl: image),
+          ),
+        ),
         Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(

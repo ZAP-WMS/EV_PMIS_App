@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 import '../../authentication/authservice.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/detailedengEV_datasource.dart';

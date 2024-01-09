@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                         textInputAction: TextInputAction.done),
                     // _space(16),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         // TextButton(
                         //   child: const Text(
@@ -72,28 +72,31 @@ class _LoginPageState extends State<LoginPage> {
                         //   ),
                         //   onPressed: () {},
                         // ),
-                        RichText(
-                            text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: ' Forget Password ?',
-                                recognizer: TapGestureRecognizer(),
-                                // ..onTap = (() => Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => ResetPass(
-                                //             // email: FirebaseAuth
-                                //             //     .instance
-                                //             //     .currentUser!
-                                //             //     .email!,
-                                //             )))
-                                //             ),
-                                style: const TextStyle(color: Colors.blue))
-                          ],
-                        )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                              text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: ' Forget Password ?',
+                                  recognizer: TapGestureRecognizer(),
+                                  // ..onTap = (() => Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => ResetPass(
+                                  //             // email: FirebaseAuth
+                                  //             //     .instance
+                                  //             //     .currentUser!
+                                  //             //     .email!,
+                                  //             )))
+                                  //             ),
+                                  style: const TextStyle(color: Colors.blue))
+                            ],
+                          )),
+                        ),
                       ],
                     ),
-                    _space(16),
+                    _space(10),
                     SizedBox(
                         width: 200,
                         height: 50,
@@ -152,18 +155,20 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-      await checkRole();
-      await StoredDataPreferences.saveString('role', role);
+      // await checkRole();
+      // await StoredDataPreferences.saveString('role', role);
 
-      QuerySnapshot snap = isUser
-          ? await FirebaseFirestore.instance
+      QuerySnapshot snap =
+          //  isUser
+          //     ?
+          await FirebaseFirestore.instance
               .collection('User')
               .where('Employee Id', isEqualTo: empIdController.text)
-              .get()
-          : await FirebaseFirestore.instance
-              .collection('Admin')
-              .where('Employee Id', isEqualTo: empIdController.text)
               .get();
+      // : await FirebaseFirestore.instance
+      //     .collection('Admin')
+      //     .where('Employee Id', isEqualTo: empIdController.text)
+      //     .get();
 
       try {
         if (passwordcontroller.text == snap.docs[0]['Password'] &&
@@ -187,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
         if (e.toString() ==
             'RangeError (index): Invalid value: Valid value range is empty: 0') {
           setState(() {
-            error = 'Employee Id does not exist!';
+            error = 'Employee Id does not exist! ${e.toString()}';
           });
         } else {
           setState(() {
