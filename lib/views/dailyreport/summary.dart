@@ -793,317 +793,194 @@ class _ViewSummaryState extends State<ViewSummary> {
 
                                           return Column(
                                             children: [
-                                              Flexible(
-                                                flex: 1,
-                                                child: SfDataGridTheme(
-                                                    data: SfDataGridThemeData(
-                                                        headerColor: blue),
-                                                    child: SfDataGrid(
-                                                      source:
-                                                          _energyManagementDatasource,
-                                                      allowEditing: false,
-                                                      frozenColumnsCount: 2,
-                                                      gridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      headerGridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      headerRowHeight: 40,
+                                              SfDataGridTheme(
+                                                  data: SfDataGridThemeData(
+                                                      headerColor: blue),
+                                                  child: SfDataGrid(
+                                                    source:
+                                                        _energyManagementDatasource,
+                                                    allowEditing: false,
+                                                    frozenColumnsCount: 1,
+                                                    gridLinesVisibility:
+                                                        GridLinesVisibility
+                                                            .both,
+                                                    headerGridLinesVisibility:
+                                                        GridLinesVisibility
+                                                            .both,
+                                                    headerRowHeight: 40,
 
-                                                      selectionMode:
-                                                          SelectionMode.single,
-                                                      navigationMode:
-                                                          GridNavigationMode
-                                                              .cell,
-                                                      columnWidthMode:
-                                                          ColumnWidthMode.auto,
-                                                      editingGestureType:
-                                                          EditingGestureType
-                                                              .tap,
-                                                      controller:
-                                                          _dataGridController,
-                                                      // onQueryRowHeight:
-                                                      //     (details) {
-                                                      //   return details
-                                                      //       .getIntrinsicRowHeight(
-                                                      //           details
-                                                      //               .rowIndex);
-                                                      // },
-                                                      columns: [
-                                                        GridColumn(
-                                                          visible: true,
-                                                          columnName: 'srNo',
-                                                          allowEditing: false,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text('Sr No',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor
-                                                                //    textAlign: TextAlign.center,
-                                                                ),
-                                                          ),
+                                                    selectionMode:
+                                                        SelectionMode.single,
+                                                    navigationMode:
+                                                        GridNavigationMode.cell,
+                                                    columnWidthMode:
+                                                        ColumnWidthMode.auto,
+                                                    editingGestureType:
+                                                        EditingGestureType.tap,
+                                                    controller:
+                                                        _dataGridController,
+                                                    // onQueryRowHeight:
+                                                    //     (details) {
+                                                    //   return details
+                                                    //       .getIntrinsicRowHeight(
+                                                    //           details
+                                                    //               .rowIndex);
+                                                    // },
+                                                    columns: [
+                                                      GridColumn(
+                                                        visible: true,
+                                                        columnName: 'srNo',
+                                                        allowEditing: false,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text('Sr No',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor
+                                                              //    textAlign: TextAlign.center,
+                                                              ),
                                                         ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'DepotName',
-                                                          width: 180,
-                                                          allowEditing: false,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Depot Name',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'DepotName',
+                                                        width: 180,
+                                                        allowEditing: false,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Depot Name',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
                                                         ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'VehicleNo',
-                                                          width: 180,
-                                                          allowEditing: true,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Veghicle No',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'pssNo',
-                                                          width: 80,
-                                                          allowEditing: true,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'PSS No',
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'chargerId',
-                                                          width: 80,
-                                                          allowEditing: true,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Charger ID',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'startSoc',
-                                                          allowEditing: true,
-                                                          width: 80,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Start SOC',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'endSoc',
-                                                          allowEditing: true,
-                                                          columnWidthMode:
-                                                              ColumnWidthMode
-                                                                  .fitByCellValue,
-                                                          width: 80,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'End SOC',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'startDate',
-                                                          allowEditing: false,
-                                                          width: 230,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Start Date & Time',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'endDate',
-                                                          allowEditing: false,
-                                                          width: 230,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Container(
-                                                              alignment:
-                                                                  Alignment
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'VehicleNo',
+                                                        width: 180,
+                                                        allowEditing: true,
+                                                        label: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Veghicle No',
+                                                              textAlign:
+                                                                  TextAlign
                                                                       .center,
-                                                              child: Text(
-                                                                  'End Date & Time',
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .values
-                                                                          .first,
-                                                                  style:
-                                                                      tableheaderwhitecolor),
-                                                            ),
-                                                          ),
+                                                              style:
+                                                                  tableheaderwhitecolor),
                                                         ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'totalTime',
-                                                          allowEditing: false,
-                                                          width: 180,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Total time of Charging',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'energyConsumed',
-                                                          allowEditing: true,
-                                                          width: 160,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Engery Consumed (inkW)',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'timeInterval',
-                                                          allowEditing: false,
-                                                          width: 150,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Interval',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'Add',
-                                                          visible: false,
-                                                          autoFitPadding:
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'pssNo',
+                                                        width: 80,
+                                                        allowEditing: true,
+                                                        label: Container(
+                                                          padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
-                                                          allowEditing: false,
-                                                          width: 120,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Add Row',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor
-                                                                //    textAlign: TextAlign.center,
-                                                                ),
-                                                          ),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text('PSS No',
+                                                              style:
+                                                                  tableheaderwhitecolor),
                                                         ),
-                                                        GridColumn(
-                                                          columnName: 'Delete',
-                                                          visible: false,
-                                                          autoFitPadding:
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'chargerId',
+                                                        width: 80,
+                                                        allowEditing: true,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Charger ID',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'startSoc',
+                                                        allowEditing: true,
+                                                        width: 80,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Start SOC',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'endSoc',
+                                                        allowEditing: true,
+                                                        columnWidthMode:
+                                                            ColumnWidthMode
+                                                                .fitByCellValue,
+                                                        width: 80,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text('End SOC',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'startDate',
+                                                        allowEditing: false,
+                                                        width: 230,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Start Date & Time',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'endDate',
+                                                        allowEditing: false,
+                                                        width: 230,
+                                                        label: Container(
+                                                          padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
-                                                          allowEditing: false,
-                                                          width: 120,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Container(
                                                             alignment: Alignment
                                                                 .center,
                                                             child: Text(
-                                                                'Delete Row',
+                                                                'End Date & Time',
                                                                 overflow:
                                                                     TextOverflow
                                                                         .values
@@ -1112,9 +989,117 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                     tableheaderwhitecolor),
                                                           ),
                                                         ),
-                                                      ],
-                                                    )),
-                                              ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'totalTime',
+                                                        allowEditing: false,
+                                                        width: 180,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Total time of Charging',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName:
+                                                            'energyConsumed',
+                                                        allowEditing: true,
+                                                        width: 160,
+                                                        label: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Engery Consumed (inkW)',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName:
+                                                            'timeInterval',
+                                                        allowEditing: false,
+                                                        width: 150,
+                                                        label: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Interval',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'Add',
+                                                        visible: false,
+                                                        autoFitPadding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        allowEditing: false,
+                                                        width: 120,
+                                                        label: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text('Add Row',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor
+                                                              //    textAlign: TextAlign.center,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      GridColumn(
+                                                        columnName: 'Delete',
+                                                        visible: false,
+                                                        autoFitPadding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        allowEditing: false,
+                                                        width: 120,
+                                                        label: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                              'Delete Row',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .values
+                                                                      .first,
+                                                              style:
+                                                                  tableheaderwhitecolor),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
                                               Consumer<SummaryProvider>(builder:
                                                   (context, value, child) {
                                                 return Flexible(

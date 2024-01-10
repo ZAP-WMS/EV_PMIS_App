@@ -14,7 +14,6 @@ class EnergyProvider extends ChangeNotifier {
     final List<dynamic> energyConsumedList = [];
     timeIntervalList.clear();
     energyConsumedList.clear();
-    int currentMonth = DateTime.now().month;
     String monthName = DateFormat('MMMM').format(DateTime.now());
 
     FirebaseFirestore.instance
@@ -37,7 +36,7 @@ class EnergyProvider extends ChangeNotifier {
         for (int i = 0; i < value.data()!['data'].length; i++) {
           timeIntervalList.add(value.data()!['data'][i]['timeInterval']);
           energyConsumedList.add(value.data()!['data'][i]['energyConsumed']);
-          print(energyConsumedList);
+          // print(energyConsumedList);
         }
 
         intervalListData = timeIntervalList;

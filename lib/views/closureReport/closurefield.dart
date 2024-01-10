@@ -115,193 +115,187 @@ class _ClosureFieldState extends State<ClosureField> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: StreamBuilder(
+                      stream: _stream,
                       builder: (context, snapshot) {
-                        return StreamBuilder(
-                          stream: _stream,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return LoadingPage();
-                            }
-                            if (!snapshot.hasData ||
-                                snapshot.data.exists == false) {
-                              return SfDataGridTheme(
-                                data: SfDataGridThemeData(headerColor: blue),
-                                child: SfDataGrid(
-                                  source: _closeReportDataSource,
-                                  //key: key,
-                                  allowEditing: true,
-                                  frozenColumnsCount: 1,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerGridLinesVisibility:
-                                      GridLinesVisibility.both,
-                                  selectionMode: SelectionMode.single,
-                                  navigationMode: GridNavigationMode.cell,
-                                  columnWidthMode: ColumnWidthMode.auto,
-                                  editingGestureType: EditingGestureType.tap,
-                                  controller: _dataGridController,
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const LoadingPage();
+                        }
+                        if (!snapshot.hasData ||
+                            snapshot.data.exists == false) {
+                          return SfDataGridTheme(
+                            data: SfDataGridThemeData(headerColor: blue),
+                            child: SfDataGrid(
+                              source: _closeReportDataSource,
+                              //key: key,
+                              allowEditing: true,
+                              frozenColumnsCount: 1,
+                              gridLinesVisibility: GridLinesVisibility.both,
+                              headerGridLinesVisibility:
+                                  GridLinesVisibility.both,
+                              selectionMode: SelectionMode.single,
+                              navigationMode: GridNavigationMode.cell,
+                              columnWidthMode: ColumnWidthMode.auto,
+                              editingGestureType: EditingGestureType.tap,
+                              controller: _dataGridController,
 
-                                  columns: [
-                                    GridColumn(
-                                      columnName: 'srNo',
-                                      width: 60,
-                                      autoFitPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 16),
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Sr No',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'Content',
-                                      width: 350,
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            'List of Content for ${widget.depoName}  Infrastructure',
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'Upload',
-                                      allowEditing: false,
-                                      visible: true,
-                                      width: 120,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Upload',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'View',
-                                      allowEditing: false,
-                                      width: 120,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('View',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                  ],
-
-                                  // stackedHeaderRows: [
-                                  //   StackedHeaderRow(cells: [
-                                  //     StackedHeaderCell(
-                                  //         columnNames: ['Upload', 'View'],
-                                  //         child: Container(
-                                  //           padding: EdgeInsets.all(10),
-                                  //           child: Text(
-                                  //             'Attachment Details',
-                                  //             style:
-                                  //                 TextStyle(color: white, fontSize: 18),
-                                  //             textAlign: TextAlign.center,
-                                  //           ),
-                                  //         ))
-                                  //   ])
-                                  // ],
+                              columns: [
+                                GridColumn(
+                                  columnName: 'srNo',
+                                  width: 60,
+                                  autoFitPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  allowEditing: false,
+                                  label: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    alignment: Alignment.center,
+                                    child: Text('Sr No',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor),
+                                  ),
                                 ),
-                              );
-                            } else if (snapshot.hasData) {
-                              // alldata = '';
-                              // alldata = snapshot.data['data'] as List<dynamic>;
-                              // qualitylisttable1.clear();
-                              // alldata.forEach((element) {});
-                              return SfDataGridTheme(
-                                data: SfDataGridThemeData(headerColor: blue),
-                                child: SfDataGrid(
-                                  source: _closeReportDataSource,
-                                  //key: key,
-                                  allowEditing: true,
-                                  frozenColumnsCount: 1,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerGridLinesVisibility:
-                                      GridLinesVisibility.both,
-                                  selectionMode: SelectionMode.single,
-                                  navigationMode: GridNavigationMode.cell,
-                                  columnWidthMode: ColumnWidthMode.auto,
-                                  editingGestureType: EditingGestureType.tap,
-                                  controller: _dataGridController,
-
-                                  columns: [
-                                    GridColumn(
-                                      columnName: 'srNo',
-                                      width: 60,
-                                      autoFitPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 16),
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Sr No',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'Content',
-                                      width: 350,
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            'List of Content for ${widget.depoName}  Infrastructure',
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'Upload',
-                                      allowEditing: false,
-                                      visible: true,
-                                      width: 150,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Upload',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'View',
-                                      allowEditing: false,
-                                      width: 150,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('View',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                  ],
+                                GridColumn(
+                                  columnName: 'Content',
+                                  width: 350,
+                                  allowEditing: false,
+                                  label: Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                        'List of Content for ${widget.depoName}  Infrastructure',
+                                        style: tableheaderwhitecolor),
+                                  ),
                                 ),
-                              );
-                            } else {
-                              // here w3e have to put Nodata page
-                              return LoadingPage();
-                            }
-                          },
-                        );
+                                GridColumn(
+                                  columnName: 'Upload',
+                                  allowEditing: false,
+                                  visible: true,
+                                  width: 120,
+                                  label: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    alignment: Alignment.center,
+                                    child: Text('Upload',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor),
+                                  ),
+                                ),
+                                GridColumn(
+                                  columnName: 'View',
+                                  allowEditing: false,
+                                  width: 120,
+                                  label: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    alignment: Alignment.center,
+                                    child: Text('View',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor),
+                                  ),
+                                ),
+                              ],
+
+                              // stackedHeaderRows: [
+                              //   StackedHeaderRow(cells: [
+                              //     StackedHeaderCell(
+                              //         columnNames: ['Upload', 'View'],
+                              //         child: Container(
+                              //           padding: EdgeInsets.all(10),
+                              //           child: Text(
+                              //             'Attachment Details',
+                              //             style:
+                              //                 TextStyle(color: white, fontSize: 18),
+                              //             textAlign: TextAlign.center,
+                              //           ),
+                              //         ))
+                              //   ])
+                              // ],
+                            ),
+                          );
+                        } else if (snapshot.hasData) {
+                          // alldata = '';
+                          // alldata = snapshot.data['data'] as List<dynamic>;
+                          // qualitylisttable1.clear();
+                          // alldata.forEach((element) {});
+                          return SfDataGridTheme(
+                            data: SfDataGridThemeData(headerColor: blue),
+                            child: SfDataGrid(
+                              source: _closeReportDataSource,
+                              //key: key,
+                              allowEditing: true,
+                              frozenColumnsCount: 1,
+                              gridLinesVisibility: GridLinesVisibility.both,
+                              headerGridLinesVisibility:
+                                  GridLinesVisibility.both,
+                              selectionMode: SelectionMode.single,
+                              navigationMode: GridNavigationMode.cell,
+                              columnWidthMode: ColumnWidthMode.auto,
+                              editingGestureType: EditingGestureType.tap,
+                              controller: _dataGridController,
+
+                              columns: [
+                                GridColumn(
+                                  columnName: 'srNo',
+                                  width: 60,
+                                  autoFitPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  allowEditing: false,
+                                  label: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    alignment: Alignment.center,
+                                    child: Text('Sr No',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor),
+                                  ),
+                                ),
+                                GridColumn(
+                                  columnName: 'Content',
+                                  width: 350,
+                                  allowEditing: false,
+                                  label: Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                        'List of Content for ${widget.depoName}  Infrastructure',
+                                        style: tableheaderwhitecolor),
+                                  ),
+                                ),
+                                GridColumn(
+                                  columnName: 'Upload',
+                                  allowEditing: false,
+                                  visible: true,
+                                  width: 150,
+                                  label: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    alignment: Alignment.center,
+                                    child: Text('Upload',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor),
+                                  ),
+                                ),
+                                GridColumn(
+                                  columnName: 'View',
+                                  allowEditing: false,
+                                  width: 150,
+                                  label: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    alignment: Alignment.center,
+                                    child: Text('View',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          // here w3e have to put Nodata page
+                          return LoadingPage();
+                        }
                       },
                     ),
                   ),
