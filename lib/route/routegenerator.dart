@@ -12,11 +12,13 @@ import 'package:ev_pmis_app/authentication/login_register.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
 import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
 import 'package:ev_pmis_app/screen/demand_energy/demandScreen.dart';
+import 'package:ev_pmis_app/screen/ev_dashboard/ev_dashboard.dart';
 import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/screen/homepage/home_page.dart';
 import 'package:ev_pmis_app/screen/otp_verification/send_otp.dart';
 import 'package:ev_pmis_app/screen/overviewpage/overview.dart';
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/quality_home_admin.dart';
+import 'package:ev_pmis_app/screen/split_dashboard/split_screen.dart';
 import 'package:flutter/material.dart';
 import '../action_screens/jmr_action_screen.dart';
 import 'package:ev_pmis_app/widgets/no_internet.dart';
@@ -160,8 +162,14 @@ class RouteGenerator {
             name: argument['name'],
             mobileNumber: argument[' mobileNumber'],
           );
+        case '/evDashboard':
+          return EVDashboardScreen();
+
         case '/demand':
           return DemandEnergyScreen();
+
+        case '/splitDashboard':
+          return SplitScreen();
       }
       return const NodataAvailable();
     });

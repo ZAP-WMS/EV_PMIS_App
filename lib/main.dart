@@ -6,6 +6,7 @@ import 'package:ev_pmis_app/provider/selected_row_index.dart';
 import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
 import 'package:ev_pmis_app/screen/ev_dashboard/ev_dashboard.dart';
+import 'package:ev_pmis_app/screen/split_dashboard/split_screen.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SelectedRowIndexModel())
       ],
       child: GetMaterialApp(
-        // initialRoute: '/demand',
+        // initialRoute: '/splash',
         initialRoute: '/splash-screen',
         // all the pages of routes are declared here
         onGenerateRoute: RouteGenerator.generateRoute,
@@ -82,7 +83,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: GoogleFonts.quicksand().fontFamily),
-        // home: EVDashboardScreen()
+        // home: SplitScreen(),
       ),
     );
   }

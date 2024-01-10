@@ -155,20 +155,18 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-      // await checkRole();
-      // await StoredDataPreferences.saveString('role', role);
+      await checkRole();
+      await StoredDataPreferences.saveString('role', role);
 
-      QuerySnapshot snap =
-          //  isUser
-          //     ?
-          await FirebaseFirestore.instance
+      QuerySnapshot snap = isUser
+          ? await FirebaseFirestore.instance
               .collection('User')
               .where('Employee Id', isEqualTo: empIdController.text)
+              .get()
+          : await FirebaseFirestore.instance
+              .collection('Admin')
+              .where('Employee Id', isEqualTo: empIdController.text)
               .get();
-      // : await FirebaseFirestore.instance
-      //     .collection('Admin')
-      //     .where('Employee Id', isEqualTo: empIdController.text)
-      //     .get();
 
       try {
         if (passwordcontroller.text == snap.docs[0]['Password'] &&
@@ -177,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
           _sharedPreferences
               .setString('employeeId', empIdController.text)
               .then((_) {
-            Navigator.pushReplacementNamed(context, '/gallery');
+            Navigator.pushReplacementNamed(context, '/splitDashboard');
           });
         } else {
           // ignore: use_build_context_synchronously

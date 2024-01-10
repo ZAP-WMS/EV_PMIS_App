@@ -109,6 +109,19 @@ class _DemandEnergyScreenState extends State<DemandEnergyScreen> {
           ),
         ],
       ),
+      floatingActionButton: SizedBox(
+        width: 100,
+        height: 40,
+        child: ElevatedButton(
+            style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(blue)),
+            onPressed: () {
+              Navigator.pushNamed(context, '/splitDashboard');
+            },
+            child: const Text(
+              'Back',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            )),
+      ),
     );
   }
 
