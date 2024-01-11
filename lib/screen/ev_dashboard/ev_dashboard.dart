@@ -2595,14 +2595,8 @@ class _EVDashboardScreenState extends State<EVDashboardScreen> {
 
       List<dynamic> userIdList = querySnapshot.docs.map((e) => e.id).toList();
       for (int j = 0; j < userIdList.length; j++) {
-        dynamic allweightage = 0.0;
-        dynamic allperScope = 0.0;
-        dynamic allExecuted = 0.0;
-        dynamic weightage;
-        dynamic balanceQty = 0.0;
-        dynamic perscope;
-        dynamic qtyExecuted;
-        num percprogress = 0.0;
+        print('Point1');
+
         await FirebaseFirestore.instance
             .collection('KeyEventsTable')
             .doc(selectedDepoList[i])
@@ -2611,6 +2605,8 @@ class _EVDashboardScreenState extends State<EVDashboardScreen> {
             .collection('KeyAllEvents')
             .get()
             .then((value) {
+          print('Point2');
+
           value.docs.forEach((element) {
             var alldata = element.data()['data'];
             List<int> indicesToSkip = [0, 2, 6, 13, 18, 28, 32, 38, 64, 76];
@@ -2622,16 +2618,25 @@ class _EVDashboardScreenState extends State<EVDashboardScreen> {
                 estimatedDate.add(alldata[k]['ActualStart']);
                 actualEndDate.add(alldata[k]['ActualEnd']);
               }
+
               // print('skipe${indicesToSkip.contains(k)}');
               if (indicesToSkip.contains(k)) {
-                int qtyExecuted = alldata[k]['QtyExecuted'];
-                double weightage = alldata[k]['Weightage'];
-                int scope = alldata[k]['QtyScope'];
+                print('Point3');
+
+                num qtyExecuted = alldata[k]['QtyExecuted'];
+
+                num weightage = alldata[k]['Weightage'];
+                print('Point3.1');
+
+                num scope = alldata[k]['QtyScope'];
+                print('Point3.2');
 
                 dynamic perc = ((qtyExecuted / scope) * weightage);
-                double value = perc.isNaN ? 0.0 : perc;
-                totalperc = totalperc + value;
-                print(totalperc.toStringAsFixed(2));
+                num value = perc ?? 0.0;
+                totalperc = totalperc + value.toDouble();
+                print('Point4');
+
+                // print(totalperc.toStringAsFixed(2));
               }
             }
           });

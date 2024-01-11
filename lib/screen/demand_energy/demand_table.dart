@@ -84,7 +84,7 @@ class _DemandTableState extends State<DemandTable>
               Container(
                 margin: const EdgeInsets.only(left: 5),
                 height: 30,
-                width: mediaQuery * 0.25,
+                width: mediaQuery * 0.215,
                 child: TypeAheadField(
                   debounceDuration: const Duration(seconds: 1),
                   noItemsFoundBuilder: (context) {
@@ -103,6 +103,7 @@ class _DemandTableState extends State<DemandTable>
                         fontSize: 12, fontWeight: FontWeight.bold),
                     controller: cityController,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 5),
                       labelText: 'Select a City',
                       labelStyle: TextStyle(color: Colors.black, fontSize: 13),
                       border: OutlineInputBorder(),
@@ -157,7 +158,7 @@ class _DemandTableState extends State<DemandTable>
                     ),
                     controller: selectedDepo,
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.all(8),
+                      contentPadding: EdgeInsets.only(left: 5),
                       labelText: 'Select a Depot',
                       labelStyle: TextStyle(
                         color: Colors.black,
@@ -193,8 +194,10 @@ class _DemandTableState extends State<DemandTable>
                       margin: EdgeInsets.only(bottom: 5),
                       // color: blue,
                       height: 40,
-                      width: 145,
+                      width: 120,
                       child: CheckboxListTile(
+                        selectedTileColor: white,
+                        contentPadding: EdgeInsets.only(left: 5),
                         checkColor: Colors.greenAccent,
                         title: const Text(
                           'All Depots',

@@ -5,12 +5,9 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../authentication/authservice.dart';
 import '../../../components/Loading_page.dart';
 import '../../../style.dart';
-========
 import '../../components/Loading_page.dart';
+import '../../screen/jmrPage/jmr_user/jmr_fields.dart';
 import '../../style.dart';
-import '../authentication/authservice.dart';
->>>>>>>> 5e6398d46257283c0f50aa324ed452feac67391e:lib/views/jmrPage/jmr.dart
-import 'jmr_fields.dart';
 
 class JmrUserPage extends StatefulWidget {
   String? cityName;

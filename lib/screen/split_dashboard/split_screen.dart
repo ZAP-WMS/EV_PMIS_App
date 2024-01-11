@@ -9,15 +9,20 @@ class SplitScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: blue,
-        centerTitle: true,
-        title: const Text('Dashboard',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: AppBar(
+          backgroundColor: blue,
+          centerTitle: true,
+          title: const Text('Dashboard',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+        ),
       ),
       body: Container(
-        height: context.height * 0.8,
+        height: height * 0.8,
         child: Column(
           children: [
             Expanded(
@@ -33,7 +38,7 @@ class SplitScreen extends StatelessWidget {
                     child: Card(
                       elevation: 10,
                       child: Container(
-                        height: context.height * 0.3,
+                        height: height * 0.26,
                         width: context.width * 0.9,
                         decoration: const BoxDecoration(
                             image: DecorationImage(
@@ -77,7 +82,7 @@ class SplitScreen extends StatelessWidget {
                     child: Card(
                       elevation: 10,
                       child: Container(
-                        height: context.height * 0.3,
+                        height: height * 0.26,
                         width: context.width * 0.9,
                         decoration: const BoxDecoration(
                             image: DecorationImage(

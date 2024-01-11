@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
@@ -10,12 +11,12 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/closereport_datasource.dart';
-import '../../viewmodels/closer_report.dart';
+import '../../model/closer_report.dart';
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/activity_headings.dart';
 import '../../widgets/custom_textfield.dart';
-import '../homepage/gallery.dart';
+
 import '../safetyreport/safetyfield.dart';
 
 class ClosureField extends StatefulWidget {

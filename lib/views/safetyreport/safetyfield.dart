@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/homepage/gallery.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +8,16 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../FirebaseApi/firebase_api.dart';
-import '../../viewmodels/safety_checklistModel.dart';
-import '../../views/authentication/authservice.dart';
+import '../../authentication/authservice.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/safetychecklist_datasource.dart';
+import '../../model/safety_checklistModel.dart';
 import '../../provider/cities_provider.dart';
+import '../../screen/dailyreport/summary.dart';
 import '../../style.dart';
 import '../../widgets/appbar_back_date.dart';
 import '../../widgets/custom_textfield.dart';
-import '../dailyreport/summary.dart';
-import '../homepage/gallery.dart';
+
 import 'package:syncfusion_flutter_core/theme.dart';
 
 class SafetyField extends StatefulWidget {
