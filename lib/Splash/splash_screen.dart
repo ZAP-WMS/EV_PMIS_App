@@ -27,9 +27,14 @@ class SplashScreenState extends State<SplashScreen> {
     // user = FirebaseAuth.instance.currentUser == null;
     Timer(
         const Duration(milliseconds: 2000),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                user ? GalleryPage() : const LoginRegister())));
+        () => Navigator.pushNamedAndRemoveUntil(
+            context, user ? '/splitDashboard' : '/login-page', (route) => false)
+
+        //  Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //     builder: (BuildContext context) =>
+        //         user ? GalleryPage() : const LoginRegister())),
+
+        );
     // user ? const LoginRegister() : const HomePage())));
   }
 
