@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/authentication/authservice.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
-import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
+import 'package:ev_pmis_app/viewmodels/depot_overview.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
+import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import '../../datasource/depot_overviewdatasource.dart';
-import '../../model/depot_overview.dart';
 import '../../style.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/navbar.dart';
@@ -108,8 +108,9 @@ class _DepotOverviewState extends State<DepotOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
+          depoName: widget.depoName ?? '',
           isCentered: true,
-          title: '${widget.depoName}/Depot Overview',
+          title: 'Depot Overview',
           height: 50,
           isSync: isProjectManager
               ? widget.role == 'admin'

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
+import 'package:ev_pmis_app/viewmodels/closer_report.dart';
+import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,19 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../components/Loading_page.dart';
 import '../../../datasource/closereport_datasource.dart';
-import '../../../model/closer_report.dart';
 import '../../../provider/cities_provider.dart';
 import '../../../style.dart';
 import '../../../widgets/activity_headings.dart';
 import '../../../widgets/custom_textfield.dart';
-import '../../homepage/gallery.dart';
 
 class ClosureField extends StatefulWidget {
   String? depoName;
-  ClosureField({super.key, required this.depoName});
+  String userId;
+  ClosureField({super.key, required this.depoName, required this.userId});
 
   @override
   State<ClosureField> createState() => _ClosureFieldState();
@@ -53,13 +52,13 @@ class _ClosureFieldState extends State<ClosureField> {
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     closereport = getcloseReport();
     _closeReportDataSource = CloseReportDataSource(
-        closereport, context, widget.depoName!, cityName!, userId);
+        closereport, context, widget.depoName!, cityName!, widget.userId);
     _dataGridController = DataGridController();
     _stream = FirebaseFirestore.instance
         .collection('ClosureProjectReport')
         .doc(widget.depoName)
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .snapshots();
     super.initState();
   }
@@ -69,7 +68,8 @@ class _ClosureFieldState extends State<ClosureField> {
     return Scaffold(
         drawer: const NavbarDrawer(),
         appBar: CustomAppBar(
-          title: '${widget.depoName}/Closure Report',
+          depoName: '${widget.depoName}',
+          title: 'Closure Report',
           height: 50,
           isSync: true,
           store: () {
@@ -77,7 +77,7 @@ class _ClosureFieldState extends State<ClosureField> {
                 .collection('ClosureReport')
                 .doc('${widget.depoName}')
                 .collection("userId")
-                .doc(userId)
+                .doc(widget.userId)
                 .set(
               {
                 'DepotName': depotController.text,
@@ -345,7 +345,7 @@ class _ClosureFieldState extends State<ClosureField> {
         .collection('ClosureReport')
         .doc(widget.depoName)
         .collection("userId")
-        .doc(userId)
+        .doc(widget.userId)
         .get()
         .then((ds) {
       setState(() {
@@ -412,7 +412,7 @@ class _ClosureFieldState extends State<ClosureField> {
         .collection('ClosureReportTable')
         .doc(widget.depoName)
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .set(
       {'data': tabledata2},
       SetOptions(merge: true),

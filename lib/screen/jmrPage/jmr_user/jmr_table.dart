@@ -1,14 +1,14 @@
 import 'dart:io';
+import 'package:ev_pmis_app/viewmodels/jmr.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../components/Loading_page.dart';
-import 'package:ev_pmis_app/model/jmr.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:ev_pmis_app/authentication/authservice.dart';
 import 'package:ev_pmis_app/datasource/jmr_datasource.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
@@ -148,6 +148,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(
+                  depoName: widget.depoName ?? '',
                   store: () {
                     nextIndex().then((value) => StoreData());
                   },

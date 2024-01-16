@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/activity_headings.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// ignore: depend_on_referenced_packages
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../../QualityDatasource/qualityElectricalDatasource/quality_EP.dart';
@@ -18,11 +19,9 @@ import '../../../../QualityDatasource/qualityElectricalDatasource/quality_msp.da
 import '../../../../QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
 import '../../../../QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
 import '../../../../components/Loading_page.dart';
-import '../../../../model/quality_checklistModel.dart';
 import '../../../../provider/cities_provider.dart';
 import '../../../../style.dart';
 import '../../../../widgets/quality_list.dart';
-import '../../../homepage/gallery.dart';
 
 late QualityPSSDataSource _qualityPSSDataSource;
 late QualityrmuDataSource _qualityrmuDataSource;
@@ -152,6 +151,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
+          depoName: widget.depoName ?? '',
           title: 'Electrical Checklist /${widget.title}',
           height: 50,
           isSync: true,
@@ -632,7 +632,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
         .doc(depoName)
         .collection('PSS TABLE DATA')
         .doc('PSS')
-        .collection(userId!)
+        .collection(userId)
         .doc(currentDate)
         .set({
       'data': psstabledatalist,
@@ -655,7 +655,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
           .doc(depoName)
           .collection('RMU TABLE DATA')
           .doc('RMU')
-          .collection(userId!)
+          .collection(userId)
           .doc(currentDate)
           .set({
         'data': rmutabledatalist,
@@ -679,7 +679,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
             .doc(depoName)
             .collection('CONVENTIONAL TRANSFORMER TABLE DATA')
             .doc('CONVENTIONAL TRANSFORMER')
-            .collection(userId!)
+            .collection(userId)
             .doc(currentDate)
             .set({
           'data': cttabledatalist,
@@ -702,7 +702,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
               .doc(depoName)
               .collection('CTPT METERING UNIT TABLE DATA')
               .doc('CTPT METERING UNIT')
-              .collection(userId!)
+              .collection(userId)
               .doc(currentDate)
               .set({
             'data': cmutabledatalist,

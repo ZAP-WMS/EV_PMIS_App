@@ -1,7 +1,7 @@
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/civil/civil_admin.dart';
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/electrical/electrical_admin.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
@@ -86,10 +86,20 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
             // key: scaffoldKey,
 
             appBar: AppBar(
+              centerTitle: true,
               backgroundColor: blue,
-              title: Text(
-                '${widget.depoName}/Quality Checklist',
-                style: const TextStyle(fontSize: 14),
+              title: Column(
+                children: [
+                  const Text(
+                    'Quality Checklist',
+                    // maxLines: 2,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    widget.depoName ?? '',
+                    style: TextStyle(fontSize: 11),
+                  )
+                ],
               ),
               actions: const [],
               // leading:

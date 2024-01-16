@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/authentication/authservice.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/datasource_admin/dailyproject_datasource.dart';
 import 'package:ev_pmis_app/model_admin/daily_projectModel.dart';
 import 'package:ev_pmis_app/screen/dailyreport/summary.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
@@ -93,7 +92,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
             toDaily: true,
             depoName: widget.depoName,
             cityName: widget.cityName,
-            text: ' ${widget.cityName}/ ${widget.depoName} / Daily Report',
+            text: ' Daily Report',
             userId: widget.userId,
             haveSynced: false,
             //specificUser ? true : false,

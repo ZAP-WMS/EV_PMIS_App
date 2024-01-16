@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/viewmodels/closer_report.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +9,8 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../components/Loading_page.dart';
 import '../../../datasource/closereport_datasource.dart';
-import '../../../model/closer_report.dart';
 import '../../../provider/cities_provider.dart';
 import '../../../style.dart';
-import '../../homepage/gallery.dart';
 
 //This is a comment
 class ClosureTable extends StatefulWidget {
@@ -51,7 +51,8 @@ class _ClosureTableState extends State<ClosureTable> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
-        title: 'Closure Checklist/${widget.depoName}',
+        depoName: '${widget.depoName}',
+        title: 'Closure Checklist',
         height: 50,
         isSync: true,
         isCentered: false,

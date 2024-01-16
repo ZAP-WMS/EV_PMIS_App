@@ -1,17 +1,16 @@
 import 'dart:ui';
-import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import '../Authentication/login_register.dart';
-import '../authentication/authservice.dart';
-import '../screen/dailyreport/daily_report_user/daily_project.dart';
 import '../style.dart';
+import '../views/authentication/authservice.dart';
+import '../views/authentication/login_register.dart';
 
 class CustomAppBarBackDate extends StatefulWidget {
   String? text;
   String? showDate;
   String? appbardate;
+  String? depoName;
   // final IconData? icon;
   final bool haveCalender;
   final bool haveSynced;
@@ -38,7 +37,8 @@ class CustomAppBarBackDate extends StatefulWidget {
       this.havedropdown = false,
       this.havebottom = false,
       this.isdetailedTab = false,
-      this.tabBar});
+      this.tabBar,
+      required this.depoName});
 
   @override
   State<CustomAppBarBackDate> createState() => _CustomAppBarState();
@@ -63,10 +63,19 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
         titleSpacing: 0,
         bottomOpacity: 3.0,
         backgroundColor: blue,
-        title: Text(
-          widget.text.toString(),
-          maxLines: 3,
-          style: const TextStyle(fontSize: 14),
+        title: Column(
+          children: [
+            Text(
+              widget.text.toString(),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              widget.depoName ?? '',
+              style: const TextStyle(
+                fontSize: 11,
+              ),
+            ),
+          ],
         ),
         actions: [
           widget.haveCalender

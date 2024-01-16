@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
-import '../../../authentication/authservice.dart';
 import '../../../components/Loading_page.dart';
 import '../../../style.dart';
-import '../../components/Loading_page.dart';
-import '../../screen/jmrPage/jmr_user/jmr_fields.dart';
-import '../../style.dart';
+import '../authentication/authservice.dart';
+import 'jmr_fields.dart';
 
 class JmrUserPage extends StatefulWidget {
   String? cityName;

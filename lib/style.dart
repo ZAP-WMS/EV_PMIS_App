@@ -8,6 +8,7 @@ Color white = Colors.white;
 Color black = Colors.black;
 Color grey = Colors.grey;
 Color red = Colors.red;
+Color green = Color.fromARGB(255, 88, 221, 128);
 Color yellow = Colors.yellow;
 
 TextStyle headline = GoogleFonts.ibmPlexSans(
@@ -27,6 +28,11 @@ TextStyle bodytext = GoogleFonts.ibmPlexSans(
 
 TextStyle logoheadline = GoogleFonts.ibmPlexSans(
     fontSize: 35, fontWeight: FontWeight.w600, color: black);
+TextStyle captionWhite = GoogleFonts.ibmPlexSans(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.4,
+    color: white);
 
 TextStyle button = GoogleFonts.ibmPlexSans(
     fontSize: 14,

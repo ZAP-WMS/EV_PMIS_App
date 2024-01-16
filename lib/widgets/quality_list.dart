@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/quality_checklistModel.dart';
+import '../viewmodels/quality_checklistModel.dart';
 import 'activity_headings.dart';
 
 // EXCAVATION ACTIVITY DATA

@@ -1,14 +1,9 @@
-import 'package:ev_pmis_app/authentication/login_register.dart';
-import 'package:ev_pmis_app/feedback/chat.dart';
-import 'package:ev_pmis_app/screen/citiespage/cities_home.dart';
-import 'package:ev_pmis_app/screen/safetyreport/safetyfield.dart';
-import 'package:ev_pmis_app/widgets/internet_checker.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_full_pdf_viewer_null_safe/full_pdf_viewer_scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../screen/homepage/gallery.dart';
 import '../style.dart';
+import '../views/authentication/login_register.dart';
+import '../views/citiespage/cities_home.dart';
 
 class NavbarDrawer extends StatefulWidget {
   const NavbarDrawer({super.key});
@@ -18,14 +13,18 @@ class NavbarDrawer extends StatefulWidget {
 }
 
 class _NavbarDrawerState extends State<NavbarDrawer> {
+  String userId = '';
   @override
   void initState() {
+    getUserId();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width * 0.5;
     return Drawer(
+      width: width,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -39,7 +38,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
             accountName: Padding(
               padding: const EdgeInsets.only(left: 12),
               child: Text(
-                userId!,
+                userId,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
@@ -127,10 +126,18 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               title: const Text('Logout'),
               onTap: () {
                 onWillPop(context);
-              })
+              }),
         ],
       ),
     );
+  }
+
+  Future<void> getUserId() async {
+    await AuthService().getCurrentUserId().then((value) {
+      userId = value;
+      print('UserId - $value');
+      setState(() {});
+    });
   }
 
   Future<bool> onWillPop(BuildContext context) async {

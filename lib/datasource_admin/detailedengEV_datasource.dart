@@ -1,14 +1,14 @@
 import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
-import 'package:ev_pmis_app/screen/homepage/gallery.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
 import '../style.dart';
 import 'package:ev_pmis_app/widgets/upload.dart';
+import '../views/overviewpage/view_AllFiles.dart';
 
 class DetailedEngSourceEV extends DataGridSource {
   String cityName;
@@ -178,8 +178,7 @@ class DetailedEngSourceEV extends DataGridSource {
                                       cityName: cityName,
                                       depoName: depoName,
                                       userId: userId,
-                                      docId:
-                                          '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}')
+                                      docId: row.getCells()[4].value.toString())
                                   // ViewFile()
                                   // UploadDocument(
                                   //     title: 'DetailedEngRFC',

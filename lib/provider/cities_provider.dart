@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CitiesProvider extends ChangeNotifier {
-  String _citiesName = 'Bengaluru';
+  String _citiesName = 'Ahmedabad';
 
   String get getName => _citiesName;
 

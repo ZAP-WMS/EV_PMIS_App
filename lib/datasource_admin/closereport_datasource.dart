@@ -1,12 +1,12 @@
-import 'package:ev_pmis_app/model/close_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../screen/overviewpage/view_AllFiles.dart';
+import '../viewmodels/closer_report.dart';
 import '../style.dart';
+import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';
 
 class CloseReportDataSource extends DataGridSource {
@@ -27,7 +27,7 @@ class CloseReportDataSource extends DataGridSource {
   }
 
   @override
-  List<CloseReportModel> _montlyproject = [];
+  List<CloserReportModel> _montlyproject = [];
 
   List<DataGridRow> dataGridRows = [];
   final _dateFormatter = DateFormat.yMd();

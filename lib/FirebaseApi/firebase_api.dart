@@ -35,6 +35,69 @@ class FirebaseApi extends ChangeNotifier {
     await ref.writeToFile(file);
   }
 
+ energydefaultKeyEventsField(
+      String collectionName,
+      String cityName,
+      String collectionName2,
+      String deponame,
+      String collectionName3,
+      String year) {
+    FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(cityName)
+        .collection(collectionName2)
+        .doc(deponame)
+        .collection(collectionName3)
+        .doc(year)
+        .set({'depoName': deponame});
+  }
+
+  energynestedKeyEventsField(
+      String collectionName,
+      String cityName,
+      String collectionName2,
+      String deponame,
+      String collectionName3,
+      String year,
+      String collectionName4,
+      String monthName) {
+    FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(cityName)
+        .collection(collectionName2)
+        .doc(deponame)
+        .collection(collectionName3)
+        .doc(year)
+        .collection(collectionName4)
+        .doc(monthName)
+        .set({'depoName': deponame});
+  }
+
+  energynestedKeyEventsField2(
+      String collectionName,
+      String cityName,
+      String collectionName2,
+      String deponame,
+      String collectionName3,
+      String year,
+      String collectionName4,
+      String monthName,
+      String collectionName5,
+      String date) {
+    FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(cityName)
+        .collection(collectionName2)
+        .doc(deponame)
+        .collection(collectionName3)
+        .doc(year)
+        .collection(collectionName4)
+        .doc(monthName)
+        .collection(collectionName5)
+        .doc(date)
+        .set({'depoName': deponame});
+  }
+
   defaultKeyEventsField(String collectionName, String deponame) {
     FirebaseFirestore.instance
         .collection(collectionName)

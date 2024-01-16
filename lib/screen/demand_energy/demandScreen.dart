@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
-import 'package:ev_pmis_app/screen/citiespage/cities.dart';
 import 'package:ev_pmis_app/screen/demand_energy/bar_graph.dart';
 import 'package:ev_pmis_app/screen/demand_energy/demand_table.dart';
 import 'package:ev_pmis_app/style.dart';
@@ -115,7 +113,7 @@ class _DemandEnergyScreenState extends State<DemandEnergyScreen> {
         child: ElevatedButton(
             style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(blue)),
             onPressed: () {
-              Navigator.pushNamed(context, '/splitDashboard');
+              Navigator.pop(context);
             },
             child: const Text(
               'Back',

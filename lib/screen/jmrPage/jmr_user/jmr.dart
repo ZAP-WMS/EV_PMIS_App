@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import '../../../authentication/authservice.dart';
 import '../../../components/Loading_page.dart';
 import '../../../style.dart';
 import 'jmr_fields.dart';
@@ -68,9 +68,17 @@ class _JmrUserPageState extends State<JmrUserPage> {
                 Tab(text: 'Electrical Engineer'),
               ]),
           centerTitle: true,
-          title: Text(
-            'JMR / ${widget.depoName}',
-            style: const TextStyle(fontSize: 14),
+          title: Column(
+            children: [
+              const Text(
+                'JMR',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                widget.depoName ?? '',
+                style: const TextStyle(fontSize: 11),
+              ),
+            ],
           ),
         ),
         body: _isLoading

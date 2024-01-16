@@ -4,9 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../model/closer_report.dart';
-import '../screen/overviewpage/view_AllFiles.dart';
+import '../viewmodels/closer_report.dart';
+
 import '../style.dart';
+import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';
 
 class CloseReportDataSource extends DataGridSource {

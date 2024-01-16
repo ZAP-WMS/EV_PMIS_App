@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/activity_headings.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
@@ -19,11 +21,9 @@ import '../../../../QualityDatasource/qualityCivilDatasource/quality_paving.dart
 import '../../../../QualityDatasource/qualityCivilDatasource/quality_proofing.dart';
 import '../../../../QualityDatasource/qualityCivilDatasource/quality_roofing.dart';
 import '../../../../components/Loading_page.dart';
-import '../../../../model/quality_checklistModel.dart';
 import '../../../../provider/cities_provider.dart';
 import '../../../../style.dart';
 import '../../../../widgets/quality_list.dart';
-import '../../../homepage/gallery.dart';
 
 List<dynamic> excavationtabledatalist = [];
 List<dynamic> backfillingtabledatalist = [];
@@ -162,7 +162,8 @@ class _CivilTableState extends State<CivilTable> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
-          title: 'ChecklistTable/${widget.title}',
+          depoName: '${widget.title}',
+          title: 'ChecklistTable',
           height: 50,
           isSync: true,
           store: () {
@@ -513,7 +514,7 @@ class _CivilTableState extends State<CivilTable> {
         .doc(depoName)
         .collection('Excavation TABLE DATA')
         .doc('Excavation')
-        .collection(userId!)
+        .collection(userId)
         .doc(currentDate)
         .set({
       'data': excavationtabledatalist,
@@ -536,7 +537,7 @@ class _CivilTableState extends State<CivilTable> {
           .doc(depoName)
           .collection('BackFilling TABLE DATA')
           .doc('BackFilling')
-          .collection(userId!)
+          .collection(userId)
           .doc(currentDate)
           .set({
         'data': backfillingtabledatalist,
@@ -560,7 +561,7 @@ class _CivilTableState extends State<CivilTable> {
             .doc(depoName)
             .collection('Massonary TABLE DATA')
             .doc('Massonary')
-            .collection(userId!)
+            .collection(userId)
             .doc(currentDate)
             .set({
           'data': backfillingtabledatalist,
@@ -583,7 +584,7 @@ class _CivilTableState extends State<CivilTable> {
               .doc(depoName)
               .collection('Glazzing TABLE DATA')
               .doc('Glazzing')
-              .collection(userId!)
+              .collection(userId)
               .doc(currentDate)
               .set({
             'data': doorstabledatalist,
@@ -605,7 +606,7 @@ class _CivilTableState extends State<CivilTable> {
                 .doc(depoName)
                 .collection('CEILLING TABLE DATA')
                 .doc('CEILLING DATA')
-                .collection(userId!)
+                .collection(userId)
                 .doc(currentDate)
                 .set({
               'data': ceillingtabledatalist,
@@ -628,7 +629,7 @@ class _CivilTableState extends State<CivilTable> {
                   .doc(depoName)
                   .collection('FLOORING TABLE DATA')
                   .doc('FLOORING DATA')
-                  .collection(userId!)
+                  .collection(userId)
                   .doc(currentDate)
                   .set({
                 'data': flooringtabledatalist,
@@ -651,7 +652,7 @@ class _CivilTableState extends State<CivilTable> {
                     .doc(depoName)
                     .collection('INSPECTION TABLE DATA')
                     .doc('INSPECTION DATA')
-                    .collection(userId!)
+                    .collection(userId)
                     .doc(currentDate)
                     .set({
                   'data': inspectiontabledatalist,
@@ -674,7 +675,7 @@ class _CivilTableState extends State<CivilTable> {
                       .doc(depoName)
                       .collection('FLOORING TABLE DATA')
                       .doc('FLOORING DATA')
-                      .collection(userId!)
+                      .collection(userId)
                       .doc(currentDate)
                       .set({
                     'data': flooringtabledatalist,
@@ -697,7 +698,7 @@ class _CivilTableState extends State<CivilTable> {
                         .doc(depoName)
                         .collection('PAINTING TABLE DATA')
                         .doc('PAINTING DATA')
-                        .collection(userId!)
+                        .collection(userId)
                         .doc(currentDate)
                         .set({
                       'data': paintingtabledatalist,
@@ -720,7 +721,7 @@ class _CivilTableState extends State<CivilTable> {
                           .doc(depoName)
                           .collection('PAVING TABLE DATA')
                           .doc('PAVING DATA')
-                          .collection(userId!)
+                          .collection(userId)
                           .doc(currentDate)
                           .set({
                         'data': pavingtabledatalist,
@@ -743,7 +744,7 @@ class _CivilTableState extends State<CivilTable> {
                             .doc(depoName)
                             .collection('ROOFING TABLE DATA')
                             .doc('ROOFING DATA')
-                            .collection(userId!)
+                            .collection(userId)
                             .doc(currentDate)
                             .set({
                           'data': roofingtabledatalist,
@@ -767,7 +768,7 @@ class _CivilTableState extends State<CivilTable> {
                               .doc(depoName)
                               .collection('PROOFING TABLE DATA')
                               .doc('PROOFING DATA')
-                              .collection(userId!)
+                              .collection(userId)
                               .doc(currentDate)
                               .set({
                             'data': proofingtabledatalist,

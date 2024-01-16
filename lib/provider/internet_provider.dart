@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screen/connectivity/connectivity_service.dart';
+import '../views/connectivity/connectivity_service.dart';
 
 class ConnectivityProvider extends ChangeNotifier {
   final ConnectivityService _connectivityService = ConnectivityService();

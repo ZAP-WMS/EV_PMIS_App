@@ -35,28 +35,31 @@ dependencies:
   photo_view:
   path_provider:
   apptive_grid_theme: ^1.2.0
-  cloud_firestore:
+  cloud_firestore: 
   connectivity_plus: ^5.0.0
   cupertino_icons: ^1.0.2
   excel: ^2.1.0
-  file_picker: null
+  file_picker: 
   firebase_auth: ^4.8.0
   firebase_core: ^2.15.1
   firebase_storage: ^11.2.6
   cached_network_image:
-  
   flutter_launcher_icons: ^0.13.1
+  flutter_windowmanager: ^0.2.0
   gantt_chart: ^0.3.0
   get: ^4.6.5
-  google_fonts: null
+  google_fonts: 
   google_nav_bar: ^5.0.6
   image_picker: ^1.0.4
   internet_connection_checker: ^1.0.0+1
   intl: ^0.18.1
+  lecle_downloads_path_provider:
   lottie: ^2.3.2
   open_file:
   open_file_plus:
-  persistent_bottom_nav_bar: null
+  persistent_bottom_nav_bar: 
+  pin_input_text_field: 
+  printing: 
   provider: ^6.0.5
   shared_preferences: ^2.2.0
   syncfusion_flutter_datagrid: ^20.4.49
@@ -65,14 +68,10 @@ dependencies:
   tab_indicator_styler: ^2.0.0
   flutter_typeahead:
   pdf:
-  printing:
   permission_handler:
-  pin_input_text_field:
-  lecle_downloads_path_provider:
   flutter_local_notifications:
   progress_dialog_null_safe:
   syncfusion_flutter_core: ^20.4.54
-  flutter_windowmanager:
   percent_indicator:
   flutter_full_pdf_viewer_null_safe:
   fl_chart: ^0.62.0

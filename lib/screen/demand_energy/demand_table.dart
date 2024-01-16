@@ -113,7 +113,7 @@ class _DemandTableState extends State<DemandTable>
                     return ListTile(
                       title: Text(
                         suggestion.toString(),
-                        style: const TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 9),
                       ),
                     );
                   },
@@ -171,7 +171,7 @@ class _DemandTableState extends State<DemandTable>
                     return ListTile(
                       title: Text(
                         suggestion.toString(),
-                        style: const TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 9),
                       ),
                     );
                   },
@@ -291,6 +291,7 @@ class _DemandTableState extends State<DemandTable>
                                       (cellNo) => DataCell(
                                         Text(
                                           widget.rows[rowNo][cellNo].toString(),
+                                          style: const TextStyle(fontSize: 9),
                                         ),
                                       ),
                                     ),

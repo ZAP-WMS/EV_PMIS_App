@@ -1,24 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/screen/homepage/gallery.dart';
+import 'package:ev_pmis_app/FirebaseApi/firebase_api.dart';
+import 'package:ev_pmis_app/components/Loading_page.dart';
+import 'package:ev_pmis_app/datasource/safetychecklist_datasource.dart';
+import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/viewmodels/safety_checklistModel.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
+import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../../FirebaseApi/firebase_api.dart';
-import '../../authentication/authservice.dart';
-import '../../components/Loading_page.dart';
-import '../../datasource/safetychecklist_datasource.dart';
-import '../../model/safety_checklistModel.dart';
-import '../../provider/cities_provider.dart';
-import '../../screen/dailyreport/summary.dart';
-import '../../style.dart';
-import '../../widgets/appbar_back_date.dart';
-import '../../widgets/custom_textfield.dart';
 
-import 'package:syncfusion_flutter_core/theme.dart';
+import '../../screen/dailyreport/summary.dart';
 
 class SafetyField extends StatefulWidget {
   String? depoName;
@@ -117,7 +117,8 @@ class _SafetyFieldState extends State<SafetyField> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(
-          text: '${widget.depoName}/SafetyChecklist',
+          depoName: '${widget.depoName!}',
+          text: 'SafetyChecklist',
           // / ${DateFormat.yMMMMd().format(DateTime.now() )}',
           haveSummary: false,
 

@@ -1,13 +1,16 @@
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
+import 'package:ev_pmis_app/provider/energy_provider_admin.dart';
+import 'package:ev_pmis_app/provider/energy_provider_user.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
+import 'package:ev_pmis_app/provider/key_provider.dart';
+import 'package:ev_pmis_app/provider/scroll_top_provider.dart';
 import 'package:ev_pmis_app/provider/selected_row_index.dart';
 import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
-import 'package:ev_pmis_app/screen/ev_dashboard/ev_dashboard.dart';
-import 'package:ev_pmis_app/screen/split_dashboard/split_screen.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/energy_management/energy_management_admin.dart.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +19,6 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file_plus/open_file_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -69,9 +71,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CitiesProvider()),
         ChangeNotifierProvider(create: (context) => SummaryProvider()),
         ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
-        ChangeNotifierProvider(create: (context) => AllDepoSelectProvider()),
+        ChangeNotifierProvider(create: (context) => KeyProvider()),
+        ChangeNotifierProvider(create: (context) => EnergyProvider()),
+        ChangeNotifierProvider(create: (context) => SelectedRowIndexModel()),
         ChangeNotifierProvider(create: (context) => DemandEnergyProvider()),
-        ChangeNotifierProvider(create: (context) => SelectedRowIndexModel())
+        ChangeNotifierProvider(create: (context) => AllDepoSelectProvider()),
+        ChangeNotifierProvider(create: (context) => ScrollProvider()),
+        ChangeNotifierProvider(create: (context) => EnergyProviderAdmin()),
       ],
       child: GetMaterialApp(
         // initialRoute: '/splash',

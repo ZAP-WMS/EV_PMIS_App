@@ -5,10 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:ev_pmis_app/model/employee.dart';
-import 'package:ev_pmis_app/screen/overviewpage/viewFIle.dart';
+import 'package:ev_pmis_app/viewmodels/employee.dart';
 
-import '../model/depot_overview.dart';
+import '../viewmodels/depot_overview.dart';
 
 class DepotOverviewDatasource extends DataGridSource {
   BuildContext mainContext;

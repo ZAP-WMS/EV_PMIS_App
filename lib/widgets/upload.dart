@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import '../style.dart';
 
+import '../views/overviewpage/view_AllFiles.dart';
 import 'custom_appbar.dart';
 
 class UploadDocument extends StatefulWidget {
@@ -46,6 +47,7 @@ class _UploadDocumentState extends State<UploadDocument> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(50),
             child: CustomAppBar(
+              depoName: widget.depoName ?? '',
               title: '${widget.cityName}/${widget.depoName}/Upload Checklist',
               isSync: false,
               isCentered: true,
@@ -143,7 +145,8 @@ class _UploadDocumentState extends State<UploadDocument> {
                               String refname = (widget.title ==
                                       'QualityChecklist'
                                   ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/${result!.files.first.name}'
-                                  : widget.pagetitle == 'ClosureReport'
+                                  : widget.pagetitle == 'ClosureReport' ||
+                                          widget.pagetitle == 'Overview Page'
                                       ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${result!.files.first.name}'
                                       : widget.pagetitle == 'KeyEvents'
                                           ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/${result!.files.first.name}'
@@ -186,7 +189,24 @@ class _UploadDocumentState extends State<UploadDocument> {
                       child: Text(
                           'Back to ${widget.title == 'QualityChecklist' ? 'Quality Checklist' : widget.pagetitle}')),
                 ),
-              )
+              ),
+              widget.pagetitle == 'Overview Page'
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return ViewAllPdf(
+                              title: 'Overview Page',
+                              cityName: widget.cityName,
+                              depoName: widget.depoName,
+                              userId: widget.userId,
+                              docId: 'OverviewepoImages',
+                            );
+                          },
+                        ));
+                      },
+                      child: const Text('View File'))
+                  : Container()
             ],
           ),
         ));

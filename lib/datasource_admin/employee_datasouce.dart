@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../model/employee.dart';
+import '../viewmodels/employee.dart';
 
 class EmployeeDataSource extends DataGridSource {
   BuildContext mainContext;
@@ -212,10 +212,10 @@ class EmployeeDataSource extends DataGridSource {
                                                 value: _employees[dataRowIndex]
                                                     .delay,
                                                 columnName: 'Delay'),
-                                            DataGridCell(
-                                                value: _employees[dataRowIndex]
-                                                    .reasonDelay,
-                                                columnName: 'ReasonDelay'),
+                                            // DataGridCell(
+                                            //     value: _employees[dataRowIndex]
+                                            //         .reasonDelay,
+                                            //     columnName: 'ReasonDelay'),
                                             DataGridCell(
                                                 value: _employees[dataRowIndex]
                                                     .unit,
@@ -303,10 +303,10 @@ class EmployeeDataSource extends DataGridSource {
                                                 value: _employees[dataRowIndex]
                                                     .delay,
                                                 columnName: 'Delay'),
-                                            DataGridCell(
-                                                value: _employees[dataRowIndex]
-                                                    .reasonDelay,
-                                                columnName: 'ReasonDelay'),
+                                            // DataGridCell(
+                                            //     value: _employees[dataRowIndex]
+                                            //         .reasonDelay,
+                                            //     columnName: 'ReasonDelay'),
                                             DataGridCell(
                                                 value: _employees[dataRowIndex]
                                                     .unit,
@@ -385,10 +385,10 @@ class EmployeeDataSource extends DataGridSource {
                                                 value: _employees[dataRowIndex]
                                                     .delay,
                                                 columnName: 'Delay'),
-                                            DataGridCell(
-                                                value: _employees[dataRowIndex]
-                                                    .reasonDelay,
-                                                columnName: 'ReasonDelay'),
+                                            // DataGridCell(
+                                            //     value: _employees[dataRowIndex]
+                                            //         .reasonDelay,
+                                            //     columnName: 'ReasonDelay'),
                                             DataGridCell(
                                                 value: _employees[dataRowIndex]
                                                     .unit,
@@ -544,11 +544,11 @@ class EmployeeDataSource extends DataGridSource {
                                                         _employees[dataRowIndex]
                                                             .delay,
                                                     columnName: 'Delay'),
-                                                DataGridCell(
-                                                    value:
-                                                        _employees[dataRowIndex]
-                                                            .reasonDelay,
-                                                    columnName: 'ReasonDelay'),
+                                                // DataGridCell(
+                                                //     value:
+                                                //         _employees[dataRowIndex]
+                                                //             .reasonDelay,
+                                                //     columnName: 'ReasonDelay'),
                                                 DataGridCell(
                                                     value:
                                                         _employees[dataRowIndex]
@@ -656,11 +656,11 @@ class EmployeeDataSource extends DataGridSource {
                                                         _employees[dataRowIndex]
                                                             .delay,
                                                     columnName: 'Delay'),
-                                                DataGridCell(
-                                                    value:
-                                                        _employees[dataRowIndex]
-                                                            .reasonDelay,
-                                                    columnName: 'ReasonDelay'),
+                                                // DataGridCell(
+                                                //     value:
+                                                //         _employees[dataRowIndex]
+                                                //             .reasonDelay,
+                                                //     columnName: 'ReasonDelay'),
                                                 DataGridCell(
                                                     value:
                                                         _employees[dataRowIndex]
@@ -759,11 +759,11 @@ class EmployeeDataSource extends DataGridSource {
                                                         _employees[dataRowIndex]
                                                             .delay,
                                                     columnName: 'Delay'),
-                                                DataGridCell(
-                                                    value:
-                                                        _employees[dataRowIndex]
-                                                            .reasonDelay,
-                                                    columnName: 'ReasonDelay'),
+                                                // DataGridCell(
+                                                //     value:
+                                                //         _employees[dataRowIndex]
+                                                //             .reasonDelay,
+                                                //     columnName: 'ReasonDelay'),
                                                 DataGridCell(
                                                     value:
                                                         _employees[dataRowIndex]
@@ -895,11 +895,13 @@ class EmployeeDataSource extends DataGridSource {
           DataGridCell<int>(
               columnName: 'ActualDuration', value: newCellValue as int);
       _employees[dataRowIndex].actualDuration = newCellValue;
-    } else if (column.columnName == 'ReasonDelay') {
-      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<String>(columnName: 'ReasonDelay', value: newCellValue);
-      _employees[dataRowIndex].reasonDelay = newCellValue;
-    } else if (column.columnName == 'Delay') {
+    }
+    // else if (column.columnName == 'ReasonDelay') {
+    //   dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+    //       DataGridCell<String>(columnName: 'ReasonDelay', value: newCellValue);
+    //   _employees[dataRowIndex].reasonDelay = newCellValue;
+    // }
+    else if (column.columnName == 'Delay') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(columnName: 'Delay', value: newCellValue as int);
       _employees[dataRowIndex].delay = newCellValue;

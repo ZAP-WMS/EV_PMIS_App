@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
@@ -20,15 +22,10 @@ import '../../../../QualityDatasource/qualityElectricalDatasource/quality_msp.da
 import '../../../../QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
 import '../../../../QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
 import '../../../../components/Loading_page.dart';
-import '../../../../model/quality_checklistModel.dart';
 import '../../../../provider/cities_provider.dart';
 import '../../../../style.dart';
-import '../../../../widgets/activity_headings.dart';
 import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/quality_list.dart';
-import '../../../dailyreport/daily_report_user/daily_project.dart';
-import '../../../homepage/gallery.dart';
-import '../../../safetyreport/safetyfield.dart';
 
 class ElectricalField extends StatefulWidget {
   String? depoName;
@@ -190,7 +187,8 @@ class _ElectricalFieldState extends State<ElectricalField> {
         appBar: PreferredSize(
             // ignore: sort_child_properties_last
             child: CustomAppBarBackDate(
-                text: '${widget.depoName!}/${widget.title}',
+                depoName: widget.depoName!,
+                text: '${widget.title}',
                 haveSummary: false,
                 haveSynced: true,
                 haveCalender: true,

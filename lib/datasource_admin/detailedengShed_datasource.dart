@@ -1,17 +1,18 @@
 import 'package:collection/collection.dart';
 import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
-import 'package:ev_pmis_app/screen/homepage/gallery.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/quality_checklist.dart';
+
 import '../style.dart';
-import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
+
 import 'package:ev_pmis_app/widgets/upload.dart';
-import '../model/daily_projectModel.dart';
-import '../model/detailed_engModel.dart';
+import '../viewmodels/daily_projectModel.dart';
+import '../viewmodels/detailed_engModel.dart';
+import '../views/overviewpage/view_AllFiles.dart';
 
 class DetailedEngSourceShed extends DataGridSource {
   String cityName;
@@ -181,8 +182,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                       cityName: cityName,
                                       depoName: depoName,
                                       userId: userId,
-                                      docId:
-                                          '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}')
+                                      docId: row.getCells()[4].value.toString())
                                   // ViewFile()
                                   // UploadDocument(
                                   //     title: 'DetailedEngRFC',

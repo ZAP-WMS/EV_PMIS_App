@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../model/monthly_projectModel.dart';
+import '../viewmodels/monthly_projectModel.dart';
 
 class MonthlyDataSource extends DataGridSource {
   // String cityName;

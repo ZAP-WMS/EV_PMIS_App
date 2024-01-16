@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../model/safety_checklistModel.dart';
-import '../screen/overviewpage/view_AllFiles.dart';
+import '../viewmodels/safety_checklistModel.dart';
+import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';
 
 class SafetyChecklistDataSource extends DataGridSource {

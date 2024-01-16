@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/authentication/authservice.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/datasource_admin/materialprocurement_datasource.dart';
-import 'package:ev_pmis_app/model/material_procurement.dart';
 import 'package:ev_pmis_app/model_admin/material_vendor.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/viewmodels/material_procurement.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,10 +72,9 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
               showDepoBar: true,
               toMaterial: true,
               userId: widget.userId,
-              depoName: widget.depoName,
+              depoName: widget.depoName ?? '',
               cityName: widget.cityName,
-              text:
-                  ' ${widget.cityName}/ ${widget.depoName} / Material Procurement',
+              text: 'Material Procurement',
               haveSummary: false,
               // onTap: () => Navigator.push(
               //     context,

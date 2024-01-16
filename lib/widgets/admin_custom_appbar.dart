@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import '../Authentication/login_register.dart';
 import '../style.dart';
+import '../views/authentication/login_register.dart';
 
 class CustomAppBar extends StatefulWidget {
   final String? text;
@@ -37,7 +37,7 @@ class CustomAppBar extends StatefulWidget {
 
   CustomAppBar(
       {super.key,
-      this.text,
+      required this.text,
       required this.userId,
       this.haveSynced = false,
       this.haveSummary = false,
@@ -84,10 +84,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            centerTitle: true,
             backgroundColor: blue,
-            title: Text(
-              widget.text.toString(),
-              style: const TextStyle(fontSize: 14),
+            title: Column(
+              children: [
+                Text(
+                  widget.text ?? '',
+                  // maxLines: 2,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  widget.depoName ?? '',
+                  style: TextStyle(fontSize: 11),
+                )
+              ],
             ),
             actions: [
               widget.toMainOverview

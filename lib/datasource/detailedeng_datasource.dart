@@ -1,15 +1,13 @@
 import 'package:collection/collection.dart';
-import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/electrical/electrical_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../date_format.dart';
-import '../model/detailed_engModel.dart';
-import '../screen/overviewpage/view_AllFiles.dart';
+import '../viewmodels/detailed_engModel.dart';
 import '../style.dart';
+import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';
 
 class DetailedEngSource extends DataGridSource {

@@ -6,9 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../model/jmr.dart';
 import '../provider/summary_provider.dart';
 import 'package:ev_pmis_app/style.dart';
+
+import '../viewmodels/jmr.dart';
 
 class JmrDataSource extends DataGridSource {
   Function deleteRow;

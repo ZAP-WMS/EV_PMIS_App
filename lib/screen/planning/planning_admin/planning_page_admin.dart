@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/datasource_admin/key_datasource.dart';
-import 'package:ev_pmis_app/model/employee.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
-import 'package:ev_pmis_app/screen/keyevents/Grid_DataTableA2.dart';
-import 'package:ev_pmis_app/screen/overviewpage/view_AllFiles.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/viewmodels/employee.dart';
+import 'package:ev_pmis_app/views/keyevents/Grid_DataTableA2.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:ev_pmis_app/widgets/upload.dart';
 import 'package:flutter/material.dart';
@@ -331,6 +330,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
+                  depoName: '',
                   title: '${widget.depoName}/Project Planning',
                   height: 50,
                   isSync: false,
@@ -1256,7 +1256,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualstartDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
-          reasonDelay: '',
           delay: 0,
           unit: 0,
           scope: 0,
@@ -1274,7 +1273,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualstartDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
-          reasonDelay: '',
           delay: 0,
           unit: 0,
           scope: 0,
@@ -1293,7 +1291,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualstartDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
-          reasonDelay: '',
           delay: 0,
           unit: 0,
           scope: 0,
@@ -1311,7 +1308,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1328,7 +1324,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1345,7 +1340,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1362,7 +1356,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1379,7 +1372,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1396,7 +1388,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1413,7 +1404,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
         actualDuration: 0,
         delay: 0,
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1442,7 +1432,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1468,7 +1457,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           delay: durationParse(
               edate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
               aedate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-          reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1496,7 +1484,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         delay: durationParse(
             edate3 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate3 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1524,7 +1511,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         delay: durationParse(
             edate4 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate4 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1552,7 +1538,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         delay: durationParse(
             edate5 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate5 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1580,7 +1565,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         delay: durationParse(
             edate6 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate6 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1608,7 +1592,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         delay: durationParse(
             edate7 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate7 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1634,7 +1617,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
             asdate8 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate8 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
         delay: 0,
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1662,7 +1644,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         delay: durationParse(
             edate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1690,7 +1671,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         delay: durationParse(
             edate10 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate10 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-        reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,

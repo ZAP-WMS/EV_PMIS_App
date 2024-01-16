@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/authentication/authservice.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/datasource_admin/detailedengEV_datasource.dart';
 import 'package:ev_pmis_app/datasource_admin/detailedengShed_datasource.dart';
 import 'package:ev_pmis_app/datasource_admin/detailedeng_datasource.dart';
 import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -167,10 +167,19 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
+            centerTitle: true,
             backgroundColor: blue,
-            title: const Text(
-              'Detailed Engineering',
-              style: TextStyle(fontSize: 14),
+            title: Column(
+              children: [
+                Text(
+                  'Detailed Engineering',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  widget.depoName ?? '',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             actions: [
               Padding(
