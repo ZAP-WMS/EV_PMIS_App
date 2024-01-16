@@ -209,7 +209,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   int durationParse(String fromtime, String todate) {
     DateTime startdate = DateFormat('dd-MM-yyyy').parse(fromtime);
     DateTime enddate = DateFormat('dd-MM-yyyy').parse(todate);
-    return enddate.add(Duration(days: 1)).difference(startdate).inDays;
+    return enddate.add(const Duration(days: 1)).difference(startdate).inDays;
   }
 }
 
@@ -245,7 +245,7 @@ Future<bool> onWillPop(BuildContext context) async {
                         child: Container(
                           height: 40,
                           decoration: BoxDecoration(
-                            //color: blue,
+                            border: Border.all(color: blue),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           //color: blue,
@@ -256,6 +256,9 @@ Future<bool> onWillPop(BuildContext context) async {
                           )),
                         ),
                       )),
+                      const SizedBox(
+                        width: 5,
+                      ),
                       Expanded(
                           child: InkWell(
                         onTap: () {

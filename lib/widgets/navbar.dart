@@ -172,7 +172,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                           child: Container(
                             height: 40,
                             decoration: BoxDecoration(
-                              //color: blue,
+                              border: Border.all(color: blue),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             //color: blue,
@@ -183,6 +183,9 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                             )),
                           ),
                         )),
+                        const SizedBox(
+                          width: 5,
+                        ),
                         Expanded(
                             child: InkWell(
                           onTap: () async {

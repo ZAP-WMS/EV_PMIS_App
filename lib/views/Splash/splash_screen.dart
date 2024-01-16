@@ -15,14 +15,29 @@ class SplashScreen extends StatefulWidget {
   SplashScreenState createState() => SplashScreenState();
 }
 
-class SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
   dynamic userId = '';
   bool user = false;
   String role = '';
   late SharedPreferences sharedPreferences;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _fadeAnimation = Tween<double>(begin: 1.0, end: 0.1)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _controller.repeat(reverse: true);
 
     _getCurrentUser();
     // user = FirebaseAuth.instance.currentUser == null;
@@ -46,32 +61,35 @@ class SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Positioned.fill(
-              child: Center(
-            child: Image.asset(
-              "assets/Tata-Power.jpeg",
-              filterQuality: FilterQuality.high,
-              fit: BoxFit.cover,
-            ),
-          )),
-          Positioned(
-            bottom: 70,
-            left: 0,
-            right: 0,
-            child: Text(
-              "TATA POWER",
-              style: GoogleFonts.workSans(
-                fontSize: 32.0,
-                color: Colors.white.withOpacity(0.87),
-                letterSpacing: -0.04,
-                height: 5.0,
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: Stack(
+          children: [
+            Positioned.fill(
+                child: Center(
+              child: Image.asset(
+                "assets/Tata-Power.jpeg",
+                filterQuality: FilterQuality.high,
+                fit: BoxFit.cover,
               ),
-              textAlign: TextAlign.center,
-            ),
-          )
-        ],
+            )),
+            // Positioned(
+            //   bottom: 70,
+            //   left: 0,
+            //   right: 0,
+            //   child: Text(
+            //     "TATA POWER",
+            //     style: GoogleFonts.workSans(
+            //       fontSize: 32.0,
+            //       color: Colors.white.withOpacity(0.87),
+            //       letterSpacing: -0.04,
+            //       height: 5.0,
+            //     ),
+            //     textAlign: TextAlign.center,
+            //   ),
+            // )
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/authentication/login_register.dart';
+import 'package:ev_pmis_app/widgets/custom_alert_box.dart';
+import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,7 +33,8 @@ class SplitScreen extends StatelessWidget {
                 padding: EdgeInsets.only(right: 15),
                 child: InkWell(
                     onTap: () {
-                      customLogoutWarning(context);
+                      CustomAlertBox().customLogOut(context,
+                          'Are you sure want to logout?', '/login-page', false);
                     },
                     child: const Icon(
                       Icons.logout_sharp,
@@ -144,82 +148,6 @@ class SplitScreen extends StatelessWidget {
             )),
       ),
     );
-  }
-
-  Future<void> customLogoutWarning(BuildContext pageContext) async {
-    await showDialog(
-        context: pageContext,
-        builder: (context) {
-          return Dialog(
-            child: Container(
-              width: 300,
-              height: 150,
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: const Icon(
-                      Icons.warning,
-                      color: Color.fromRGBO(243, 201, 75, 1),
-                      size: 60,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: const Text(
-                      'Are You Sure Want To Logout?',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 80,
-                        height: 30,
-                        margin: const EdgeInsets.all(5),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(blue)),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'No',
-                            style: TextStyle(fontSize: 15, color: white),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 80,
-                        height: 30,
-                        margin: const EdgeInsets.all(5),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(red)),
-                          onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/login-page', (route) => false);
-                          },
-                          child: const Text(
-                            'Yes',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        });
   }
 
   Future<void> showCustomAlert(BuildContext pageContext) async {
