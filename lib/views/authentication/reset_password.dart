@@ -29,6 +29,7 @@ class _ResetPassState extends State<ResetPass> {
   var temp;
   String? mobileNum;
   String? name;
+  String? lastName;
 
   @override
   void initState() {
@@ -110,20 +111,24 @@ class _ResetPassState extends State<ResetPass> {
                         getNumber(textEditingController.text)
                             .whenComplete(() async {
                           Navigator.pop(context);
+                          print('mobile number$mobileNum');
                           // verifyPhoneNumber('+91$mobileNum');
                           await FirebaseAuth.instance.verifyPhoneNumber(
                               phoneNumber: '+91$mobileNum',
                               verificationCompleted:
                                   (PhoneAuthCredential credential) {},
-                              verificationFailed: (FirebaseAuthException e) {},
+                              verificationFailed: (FirebaseAuthException e) {
+                                print(e.toString());
+                              },
                               codeSent:
                                   (String verificationId, int? resendToken) {
                                 ResetPass.verify = verificationId;
+                                print('verifycode${ResetPass.verify}');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => CheckOtp(
-                                            name: name!,
+                                            name: name! + lastName!,
                                             mobileNumber:
                                                 int.parse(mobileNum!))));
                               },
@@ -199,6 +204,7 @@ class _ResetPassState extends State<ResetPass> {
         if (value.data()!['Employee Id'] == id) {
           setState(() {
             name = value.data()!['FirstName'];
+            lastName = value.data()!['LastName'];
             mobileNum = value.data()!['Phone Number'];
           });
         }

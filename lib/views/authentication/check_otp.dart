@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/views/authentication/reset_password.dart';
+import 'package:ev_pmis_app/views/authentication/update_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
@@ -26,58 +27,60 @@ class _CheckOtpState extends State<CheckOtp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 70),
-            //         SvgPicture.asset('Assets/icon/yt.svg', width: 128, height: 128),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 265,
-              child: Text('Check your mobile',
-                  style: TextStyle(color: black, fontSize: 25),
-                  textAlign: TextAlign.center),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 282,
-              child: Text(
-                  'We have sent an otp to ${widget.mobileNumber} with a link to get back into your account ',
-                  style: TextStyle(color: black, fontSize: 14),
-                  textAlign: TextAlign.center),
-            ),
-            const SizedBox(height: 40),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 70),
+              //         SvgPicture.asset('Assets/icon/yt.svg', width: 128, height: 128),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 265,
+                child: Text('Check your mobile',
+                    style: TextStyle(color: black, fontSize: 25),
+                    textAlign: TextAlign.center),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 282,
+                child: Text(
+                    'We have sent an otp to ${widget.mobileNumber} with a link to get back into your account ',
+                    style: TextStyle(color: black, fontSize: 14),
+                    textAlign: TextAlign.center),
+              ),
+              const SizedBox(height: 40),
 
-            OTPInputBox(),
-            const SizedBox(height: 30),
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Text('Skip, I\'ll confirm later',
+              OTPInputBox(name: widget.name),
+              const SizedBox(height: 30),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Skip, I\'ll confirm later',
+                    style: headlineblack, textAlign: TextAlign.center),
+              ),
+              const SizedBox(height: 70),
+              Text('Did not receive the otp? ',
                   style: headlineblack, textAlign: TextAlign.center),
-            ),
-            const SizedBox(height: 70),
-            Text('Did not receive the otp? ',
-                style: headlineblack, textAlign: TextAlign.center),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Text('or ', style: TextStyle(color: black, fontSize: 14)),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Send again',
-                      style: TextStyle(color: blue, fontSize: 14)),
-                ),
-              ],
-            ),
-          ],
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Text('or ', style: TextStyle(color: black, fontSize: 14)),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Send again',
+                        style: TextStyle(color: blue, fontSize: 14)),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -85,6 +88,9 @@ class _CheckOtpState extends State<CheckOtp> {
 }
 
 class OTPInputBox extends StatefulWidget {
+  String name;
+  OTPInputBox({super.key, required this.name});
+
   @override
   _OTPInputBoxState createState() => _OTPInputBoxState();
 }
@@ -112,24 +118,37 @@ class _OTPInputBoxState extends State<OTPInputBox> {
             textInputAction: TextInputAction.done,
             onChanged: (pin) {
               // You can handle the entered OTP here
-              pin = _pinEditingController.text;
-              print(pin);
+              // _pinEditingController.text = pin;
+              // print(pin);
+              // smscode = pin;
+              // setState(() {});
             },
             onSubmit: (pin) {
               // Triggered when the user submits the OTP
-              smscode = pin;
-              setState(() {});
+              _pinEditingController.text = pin;
             },
           ),
           ElevatedButton(
               onPressed: () async {
-                PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                    verificationId: ResetPass.verify, smsCode: smscode!);
+                if (_pinEditingController.text != null) {
+                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                      verificationId: ResetPass.verify,
+                      smsCode: _pinEditingController.text);
 
-                // Sign the user in (or link) with the credential
-                await auth.signInWithCredential(credential);
+                  // Sign the user in (or link) with the credential
+                  await auth.signInWithCredential(credential);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UpdatePassword(
+                          docName: widget.name,
+                        ),
+                      ));
+                } else {
+                  print('SMS code is null.');
+                }
               },
-              child: const Text('Verify User ID'))
+              child: const Text('Submit'))
         ],
       ),
     );

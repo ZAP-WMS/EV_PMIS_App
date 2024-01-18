@@ -5,7 +5,6 @@ import 'package:ev_pmis_app/views/action_screens/depot_overview_action.dart';
 import 'package:ev_pmis_app/views/action_screens/detail_eng_action.dart';
 import 'package:ev_pmis_app/views/action_screens/material_procurement_action.dart';
 import 'package:ev_pmis_app/views/action_screens/monthly_report_action.dart';
-import 'package:ev_pmis_app/views/action_screens/project_planning_action.dart';
 import 'package:ev_pmis_app/views/action_screens/quality_checklist_action.dart';
 import 'package:ev_pmis_app/views/action_screens/safety_checklist_action.dart';
 import 'package:ev_pmis_app/views/authentication/login_register.dart';
