@@ -30,6 +30,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           },
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next,
+          isSuffixIcon: false,
         ),
         _space(16),
         CustomTextField(
@@ -41,6 +42,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           },
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
+          isSuffixIcon: false,
         ),
         ElevatedButton(
             onPressed: () {

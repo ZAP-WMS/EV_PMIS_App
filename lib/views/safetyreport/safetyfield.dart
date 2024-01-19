@@ -1169,6 +1169,7 @@ class _SafetyFieldState extends State<SafetyField> {
           controller: controller,
           labeltext: title,
           // validatortext: '$title is Required',
+           isSuffixIcon: false,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next),
     );

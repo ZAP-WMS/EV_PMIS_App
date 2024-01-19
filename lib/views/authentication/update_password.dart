@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/authentication/register_page.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class UpdatePassword extends StatefulWidget {
@@ -22,6 +23,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmNewPasswordController =
       TextEditingController();
+  bool _isHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -35,40 +37,40 @@ class _UpdatePasswordState extends State<UpdatePassword> {
       //   title: Text('Update Password'),
       // ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         child: Form(
           key: _formkey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // TextFormField(
-              //   controller: _currentPasswordController,
-              //   obscureText: true,
-              //   decoration: InputDecoration(labelText: 'Current Password'),
-              // ),
-              // SizedBox(height: 16.0),
-              TextFormField(
-                controller: _newPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'New Password'),
-                validator: (value) {
-                  return validatePassword(value!);
-                },
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _confirmNewPasswordController,
-                obscureText: true,
-                decoration:
-                    const InputDecoration(labelText: 'Confirm New Password'),
-                validator: (value) {
-                  return validateConfirmPassword(_newPasswordController.text,
-                      _confirmNewPasswordController.text);
-                },
-              ),
+              CustomTextField(
+                  controller: _newPasswordController,
+                  labeltext: 'New Password',
+                  isSuffixIcon: true,
+                  validatortext: (value) {
+                    return validatePassword(value!);
+                  },
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.next),
+              const SizedBox(height: 20.0),
+              CustomTextField(
+                  controller: _confirmNewPasswordController,
+                  labeltext: 'Confirm New Password',
+                  isSuffixIcon: true,
+                  validatortext: (value) {
+                    return validatePassword(value!);
+                  },
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.next),
               const SizedBox(height: 32.0),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: blue),
+                style: ElevatedButton.styleFrom(
+                  shadowColor: blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Border radius
+                  ),
+                  backgroundColor: blue,
+                ),
                 onPressed: () {
                   // Add your password update logic here
                   // Validate input, check if new password and confirm new password match, etc.
@@ -114,5 +116,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
         print('New password and confirm new password do not match');
       }
     }
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 }

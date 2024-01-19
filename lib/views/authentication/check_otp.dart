@@ -57,7 +57,7 @@ class _CheckOtpState extends State<CheckOtp> {
               const SizedBox(height: 30),
               InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, '/login-page');
                 },
                 child: Text('Skip, I\'ll confirm later',
                     style: headlineblack, textAlign: TextAlign.center),

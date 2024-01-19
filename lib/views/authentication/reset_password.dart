@@ -110,32 +110,46 @@ class _ResetPassState extends State<ResetPass> {
                       if (textEditingController.text.isNotEmpty) {
                         getNumber(textEditingController.text)
                             .whenComplete(() async {
-                          Navigator.pop(context);
                           print('mobile number$mobileNum');
-                          // verifyPhoneNumber('+91$mobileNum');
-                          await FirebaseAuth.instance.verifyPhoneNumber(
-                              phoneNumber: '+91$mobileNum',
-                              verificationCompleted:
-                                  (PhoneAuthCredential credential) {},
-                              verificationFailed: (FirebaseAuthException e) {
-                                print(e.toString());
-                              },
-                              codeSent:
-                                  (String verificationId, int? resendToken) {
-                                ResetPass.verify = verificationId;
-                                print('verifycode${ResetPass.verify}');
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CheckOtp(
-                                            name: name! + lastName!,
-                                            mobileNumber:
-                                                int.parse(mobileNum!))));
-                              },
-                              codeAutoRetrievalTimeout:
-                                  (String verificationId) {});
+                          if (mobileNum != null) {
+                            // verifyPhoneNumber('+91$mobileNum');
+                            await FirebaseAuth.instance.verifyPhoneNumber(
+                                phoneNumber: '+91$mobileNum',
+                                verificationCompleted:
+                                    (PhoneAuthCredential credential) {},
+                                verificationFailed: (FirebaseAuthException e) {
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(e.toString()),
+                                    backgroundColor: red,
+                                  ));
+                                },
+                                codeSent:
+                                    (String verificationId, int? resendToken) {
+                                  ResetPass.verify = verificationId;
+                                  print('verifycode${ResetPass.verify}');
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CheckOtp(
+                                              name: name! + lastName!,
+                                              mobileNumber:
+                                                  int.parse(mobileNum!))));
+                                },
+                                codeAutoRetrievalTimeout:
+                                    (String verificationId) {});
 
-                          // ignore: use_build_context_synchronously
+                            // ignore: use_build_context_synchronously
+                          } else {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text(
+                                  "We could not find your ID. Please check once to ensure it is correct."),
+                              backgroundColor: red,
+                            ));
+                          }
                         });
                       } else {
                         // ignore: prefer_const_constructors

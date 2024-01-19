@@ -1001,9 +1001,10 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
-       
+          
           controller: controller,
           labeltext: title,
+           isSuffixIcon: false,
           // validatortext: '$title is Required',
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next),

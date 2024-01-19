@@ -751,6 +751,7 @@ class _CivilFieldState extends State<CivilField> {
       child: CustomTextField(
         controller: controller,
         labeltext: title,
+        isSuffixIcon: false,
         // validatortext: '$title is Required',
         keyboardType: TextInputType.text,
         textInputAction: inputType,

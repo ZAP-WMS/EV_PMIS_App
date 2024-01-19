@@ -1193,6 +1193,7 @@ class _DepotOverviewState extends State<DepotOverview> {
       child: CustomTextField(
           controller: controller,
           labeltext: title,
+          isSuffixIcon: false,
           // validatortext: '$title is Required',
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next),

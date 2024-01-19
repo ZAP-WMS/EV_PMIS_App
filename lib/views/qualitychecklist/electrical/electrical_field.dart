@@ -768,6 +768,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
       child: CustomTextField(
           controller: controller,
           labeltext: title,
+           isSuffixIcon: false,
           // validatortext: '$title is Required',
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next),

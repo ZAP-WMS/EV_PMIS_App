@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final TextEditingController empIdController = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
+  bool _isHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                       //     empIdController.text, 'Employee Id is required'),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return checkFieldEmpty(value!, 'Email is Required');
                       },
@@ -59,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                               passwordcontroller.text, 'Password is Required');
                         },
                         keyboardType: TextInputType.visiblePassword,
+                        isSuffixIcon: false,
                         textInputAction: TextInputAction.done),
                     _space(16),
                     Row(
@@ -73,19 +76,15 @@ class _LoginPageState extends State<LoginPage> {
                                   ..onTap = (() => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              //  UpdatePassword(
-                                              //       docName: '',
-                                              //     )
-                                              // CheckOtp(
-                                              //     name: '',
-                                              //     mobileNumber: 9321327107)
-                                              ResetPass(
-                                                  // email: FirebaseAuth
-                                                  //     .instance
-                                                  //     .currentUser!
-                                                  //     .email!,
-                                                  )))),
+                                        builder: (context) =>
+                                            // UpdatePassword(
+                                            //       docName: '',
+                                            //     )
+                                            // CheckOtp(
+                                            //     name: '',
+                                            //     mobileNumber: 9321327107)
+                                            ResetPass(),
+                                      ))),
                                 style: TextStyle(color: blue))
                           ],
                         )),
@@ -227,5 +226,11 @@ class _LoginPageState extends State<LoginPage> {
       print('Error Occured while checking role - $e');
       return role;
     }
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 }

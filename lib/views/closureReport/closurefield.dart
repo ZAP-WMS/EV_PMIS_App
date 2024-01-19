@@ -331,6 +331,7 @@ class _ClosureFieldState extends State<ClosureField> {
           labeltext: title,
           // validatortext: '$title is Required',
           keyboardType: TextInputType.text,
+          isSuffixIcon: false,
           textInputAction: TextInputAction.next),
     );
   }

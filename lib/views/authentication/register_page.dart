@@ -40,6 +40,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: firstNamecontroller,
                       labeltext: 'First Name',
                       keyboardType: TextInputType.emailAddress,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(
                             firstNamecontroller.text, 'First Name is Required');
@@ -51,6 +52,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: lastNameController,
                       labeltext: 'Last Name',
                       keyboardType: TextInputType.emailAddress,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(
                             lastNameController.text, 'Last Name is Required');
@@ -62,6 +64,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: numberController,
                       labeltext: 'Mobile Number',
                       keyboardType: TextInputType.emailAddress,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return validateNumber(value);
                       },
@@ -72,6 +75,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: emailIdController,
                       labeltext: 'Email ID',
                       keyboardType: TextInputType.emailAddress,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return validateEmail(value!);
                       },
@@ -82,6 +86,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: designationController,
                       labeltext: 'Designation',
                       keyboardType: TextInputType.text,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(value!, 'Designation is Required');
                       },
@@ -92,6 +97,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       controller: departmentController,
                       labeltext: 'Department',
                       keyboardType: TextInputType.text,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(
                             value!, 'Department Name is Required');
@@ -107,6 +113,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       },
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
+                      isSuffixIcon: true,
                     ),
                     _space(16),
                     CustomTextField(
@@ -118,6 +125,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       },
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
+                      isSuffixIcon: true,
                     ),
                     _space(16),
                     SizedBox(
