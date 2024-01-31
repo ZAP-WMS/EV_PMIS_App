@@ -63,10 +63,27 @@ class MyApp extends StatelessWidget {
         // all the pages of routes are declared here
         onGenerateRoute: RouteGenerator.generateRoute,
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'TP-EV-PMIS',
         theme: ThemeData(
-            primarySwatch: Colors.blue,
-            fontFamily: GoogleFonts.quicksand().fontFamily),
+          brightness: Brightness.light,
+          fontFamily: 'Montserrat',
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.white,
+          dividerColor: const Color.fromARGB(255, 2, 42, 75),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(color: blue),
+            ),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6),
+                borderSide: BorderSide(color: blue)),
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            focusColor: black,
+            // labelStyle: Colors.b
+          ),
+        ),
+
         //home: LoginRegister()
       ),
     );

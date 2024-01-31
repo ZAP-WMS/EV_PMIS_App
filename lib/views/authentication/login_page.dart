@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                               passwordcontroller.text, 'Password is Required');
                         },
                         keyboardType: TextInputType.visiblePassword,
-                        isSuffixIcon: false,
+                        isSuffixIcon: true,
                         textInputAction: TextInputAction.done),
                     _space(16),
                     Row(
@@ -191,7 +191,9 @@ class _LoginPageState extends State<LoginPage> {
             error = 'Error occured!';
           });
         }
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(error)));
       }
