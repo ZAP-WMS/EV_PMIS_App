@@ -148,6 +148,8 @@ class MaterialDatasource extends DataGridSource {
                                                   DateRangePickerSelectionMode
                                                       .single,
                                               showActionButtons: true,
+                                              onCancel: () =>
+                                                  Navigator.pop(context),
                                               onSubmit: ((value) {
                                                 date = DateTime.parse(
                                                     value.toString());

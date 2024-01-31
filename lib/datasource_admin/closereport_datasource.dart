@@ -1,15 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../viewmodels/closer_report.dart';
-import '../viewmodels/daily_projectModel.dart';
-
-
 import '../style.dart';
 import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';

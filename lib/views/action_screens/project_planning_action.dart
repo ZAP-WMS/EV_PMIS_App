@@ -1,4 +1,4 @@
-
+import 'package:ev_pmis_app/screen/planning/planning_admin/planning_summary.dart';
 import 'package:flutter/material.dart';
 
 import '../planning/project_planning.dart';
@@ -35,7 +35,7 @@ class _ProjectPlanningActionState extends State<ProjectPlanningAction> {
             KeyEvents(cityName: widget.cityName, depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = KeyEvents(
+        selectedUi = PlanningTable(
           depoName: widget.depoName,
           cityName: widget.cityName,
         );

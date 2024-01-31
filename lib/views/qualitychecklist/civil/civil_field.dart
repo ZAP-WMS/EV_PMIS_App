@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/activity_headings.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
@@ -10,31 +11,26 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../../../FirebaseApi/firebase_api.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_Ironite_flooring.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_backfilling.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_ceiling.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_excavation.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_flooring.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_glazzing.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_inspection.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_massonary.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_painting.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_paving.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_proofing.dart';
-import '../../../QualityDatasource/qualityCivilDatasource/quality_roofing.dart';
-import '../../../components/Loading_page.dart';
-
-import '../../../provider/cities_provider.dart';
-import '../../../style.dart';
-import '../../../viewmodels/quality_checklistModel.dart';
-import '../../../widgets/custom_textfield.dart';
-import '../../../widgets/quality_list.dart';
+import '../../../../FirebaseApi/firebase_api.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_Ironite_flooring.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_backfilling.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_ceiling.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_excavation.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_flooring.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_glazzing.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_inspection.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_massonary.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_painting.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_paving.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_proofing.dart';
+import '../../../../QualityDatasource/qualityCivilDatasource/quality_roofing.dart';
+import '../../../../components/Loading_page.dart';
+import '../../../../provider/cities_provider.dart';
+import '../../../../style.dart';
+import '../../../../widgets/custom_textfield.dart';
+import '../../../../widgets/quality_list.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-
-import '../../dailyreport/daily_project.dart';
 import '../../dailyreport/summary.dart';
-import '../../homepage/gallery.dart';
 
 class CivilField extends StatefulWidget {
   String? depoName;
@@ -216,7 +212,8 @@ class _CivilFieldState extends State<CivilField> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(
-            text: '${widget.depoName!}/${widget.title}',
+            depoName: '${widget.depoName!}',
+            text: '${widget.title}',
             haveCalender: true,
             haveSynced: true,
             haveSummary: false,

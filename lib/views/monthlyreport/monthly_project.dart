@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ import '../../viewmodels/monthly_projectModel.dart';
 import '../../widgets/appbar_back_date.dart';
 
 import '../dailyreport/summary.dart';
-import '../homepage/gallery.dart';
 
 class MonthlyProject extends StatefulWidget {
   String? cityName;
@@ -72,8 +72,8 @@ class _MonthlyProjectState extends State<MonthlyProject> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
-            text:
-                '${widget.depoName}/Monthly Report/${DateFormat('MMMM').format(DateTime.now())}',
+            depoName: widget.depoName,
+            text: 'Monthly Report/${DateFormat('MMMM').format(DateTime.now())}',
 
             //  ${DateFormat.yMMMMd().format(DateTime.now())}',
             haveCalender: false,

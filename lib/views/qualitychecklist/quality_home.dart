@@ -1,14 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/civil/civil_field.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/electrical/electrical_field.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
 import '../../style.dart';
-import '../dailyreport/summary.dart';
-import 'civil/civil_field.dart';
-import 'electrical/electrical_field.dart';
 
 class QualityHome extends StatefulWidget {
   String? depoName;
@@ -90,9 +85,18 @@ class _QualityHomeState extends State<QualityHome> {
 
             appBar: AppBar(
               backgroundColor: blue,
-              title: Text('${widget.depoName}/Quality Checklist',
-                  style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.bold)),
+              centerTitle: true,
+              title: Column(
+                children: [
+                  const Text('Quality Checklist',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(widget.depoName ?? '',
+                      style: const TextStyle(
+                        fontSize: 11,
+                      )),
+                ],
+              ),
               actions: const [
                 // Row(
                 //   children: [

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../components/Loading_page.dart';
 import '../../../style.dart';
@@ -44,9 +43,19 @@ class _JmrState extends State<Jmr> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(
-              '${widget.depoName} / JMR',
-              style: const TextStyle(fontSize: 15),
+            centerTitle: true,
+            title: Column(
+              children: [
+                const Text(
+                  'JMR',
+                  // maxLines: 2,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  widget.depoName ?? '',
+                  style: const TextStyle(fontSize: 11),
+                )
+              ],
             ),
             backgroundColor: blue,
             actions: [

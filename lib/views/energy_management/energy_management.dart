@@ -9,7 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../FirebaseApi/firebase_api.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/energymanagement_datasource.dart';
-import '../../provider/energy_provider.dart';
+import '../../provider/energy_provider_user.dart';
 import '../../style.dart';
 import '../../viewmodels/energy_management.dart';
 import '../dailyreport/summary.dart';
@@ -45,6 +45,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
 
   @override
   void initState() {
+    print(widget.userId);
     _energyProvider = Provider.of<EnergyProvider>(context, listen: false);
     _energyProvider!
         .fetchGraphData(widget.cityName!, widget.depoName!, widget.userId);
@@ -63,6 +64,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
         .collection('UserId')
         .doc(widget.userId)
         .snapshots();
+
     _energyManagementdatasource = EnergyManagementDatasource(_energyManagement,
         context, widget.userId!, widget.cityName, widget.depoName);
     _dataGridController = DataGridController();
@@ -92,13 +94,13 @@ class _EnergyManagementState extends State<EnergyManagement> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
+            depoName: widget.depoName,
             // showDepoBar: true,
             // toOverview: true,
             // cityName: widget.cityName,
             // depoName: widget.depoName,
             // userId: userId,
-            text:
-                '${widget.cityName}/${widget.depoName}/Depot Energy Management',
+            text: 'Depot Energy Management',
             haveSummary: true,
             onTap: () => Navigator.push(
                 context,
@@ -164,7 +166,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                             EnergyManagementDatasource(
                                 _energyManagement,
                                 context,
-                                widget.userId!,
+                                widget.userId,
                                 widget.cityName,
                                 widget.depoName);
                         _dataGridController = DataGridController();
@@ -378,7 +380,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                               EnergyManagementDatasource(
                                   _energyManagement,
                                   context,
-                                  widget.userId!,
+                                  widget.userId,
                                   widget.cityName,
                                   widget.depoName);
                           _dataGridController = DataGridController();
@@ -734,8 +736,9 @@ class _EnergyManagementState extends State<EnergyManagement> {
   }
 
   List<BarChartGroupData> barChartGroupData(List<dynamic> data) {
+    print('kkk - ${data[0]}');
+
     return List.generate(data.length, ((index) {
-      print('$index${data[index]}');
       return BarChartGroupData(
         x: index,
         barRods: [

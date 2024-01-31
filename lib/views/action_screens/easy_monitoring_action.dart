@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../planning/project_planning.dart';
 
 class EasyMonitoringAction extends StatefulWidget {

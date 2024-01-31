@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +15,6 @@ import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../viewmodels/material_procurement.dart';
 import '../../widgets/custom_appbar.dart';
-import '../homepage/gallery.dart';
 
 class MaterialProcurement extends StatefulWidget {
   String? depoName;
@@ -67,8 +67,9 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
         appBar: PreferredSize(
             // ignore: sort_child_properties_last
             child: CustomAppBar(
-              isCentered: false,
-              title: '${widget.depoName}/Material Procurement',
+              depoName: widget.depoName ?? '',
+              isCentered: true,
+              title: 'Material Procurement',
               height: 50,
               isSync: true,
               store: () {
@@ -96,7 +97,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                 height: MediaQuery.of(context).size.height,
                                 child: SfDataGrid(
                                     source: _materialDatasource,
-                                    allowEditing: true,
+                                    allowEditing: false,
                                     frozenColumnsCount: 1,
                                     gridLinesVisibility:
                                         GridLinesVisibility.both,
@@ -113,7 +114,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                         autoFitPadding:
                                             const EdgeInsets.symmetric(
                                                 horizontal: 16),
-                                        allowEditing: true,
+                                        allowEditing: false,
                                         width: 100,
                                         label: Container(
                                           padding: const EdgeInsets.symmetric(
@@ -388,7 +389,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                               // });
                               return SfDataGrid(
                                   source: _materialDatasource,
-                                  allowEditing: true,
+                                  allowEditing: false,
                                   frozenColumnsCount: 1,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
@@ -404,7 +405,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 100,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -421,7 +422,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     GridColumn(
                                       columnName: 'details',
                                       width: 250,
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       label: Container(
                                         padding: const EdgeInsets.all(8.0),
                                         alignment: Alignment.center,
@@ -435,7 +436,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 130,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -452,7 +453,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 130,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -471,7 +472,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 150,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -490,7 +491,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 250,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -509,7 +510,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 250,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -528,7 +529,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 250,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -547,7 +548,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 120,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -566,7 +567,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 120,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -584,7 +585,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 120,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(

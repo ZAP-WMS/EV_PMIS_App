@@ -148,10 +148,11 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
         appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            depoName: '${widget.depoName} / ${widget.title.toString()}',
             height: 30,
             isCentered: true,
             isSync: widget.showTable ? false : true,
-            title: 'JMR / ${widget.depoName} / ${widget.title.toString()}',
+            title: 'JMR',
           ),
           preferredSize: const Size.fromHeight(50),
         ),

@@ -17,6 +17,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
+            depoName: '',
             title: 'Feedback Page',
             height: 50,
             isSync: false,

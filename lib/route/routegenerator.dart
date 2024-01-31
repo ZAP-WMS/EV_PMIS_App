@@ -1,15 +1,24 @@
 import 'package:ev_pmis_app/views/Splash/splash_screen.dart';
 import 'package:ev_pmis_app/views/action_screens/closure_report_Action.dart';
 import 'package:ev_pmis_app/views/action_screens/daily_progress_action.dart';
+import 'package:ev_pmis_app/views/action_screens/demand_graph_Action.dart';
 import 'package:ev_pmis_app/views/action_screens/depot_overview_action.dart';
 import 'package:ev_pmis_app/views/action_screens/detail_eng_action.dart';
+import 'package:ev_pmis_app/views/action_screens/ev_dashboard_action.dart';
 import 'package:ev_pmis_app/views/action_screens/material_procurement_action.dart';
 import 'package:ev_pmis_app/views/action_screens/monthly_report_action.dart';
 import 'package:ev_pmis_app/views/action_screens/quality_checklist_action.dart';
 import 'package:ev_pmis_app/views/action_screens/safety_checklist_action.dart';
 import 'package:ev_pmis_app/views/authentication/login_register.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
+import 'package:ev_pmis_app/screen/demand_energy/demandScreen.dart';
+import 'package:ev_pmis_app/screen/ev_dashboard/ev_dashboard_user/ev_dashboard_user.dart';
+import 'package:ev_pmis_app/screen/otp_verification/send_otp.dart';
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/quality_home_admin.dart';
+import 'package:ev_pmis_app/screen/split_dashboard/split_screen.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/energy_management/energy_management.dart';
+import 'package:ev_pmis_app/views/energy_management/energy_management_admin.dart.dart';
 import 'package:ev_pmis_app/widgets/upload.dart';
 import 'package:flutter/material.dart';
 import '../views/action_screens/jmr_action_screen.dart';
@@ -19,15 +28,11 @@ import 'package:provider/provider.dart';
 import '../views/authentication/change_password.dart';
 import '../views/chatPage/feedback.dart';
 import '../views/citiespage/cities_home.dart';
-import '../views/homepage/gallery.dart';
-import '../views/homepage/home_page.dart';
 import '../views/keyevents/key_events2.dart';
 import '../views/overviewpage/overview.dart';
-import '../views/testingpage/testing_page.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
-    final args = settings.arguments;
     return MaterialPageRoute(builder: (context) {
       final isConnected =
           Provider.of<ConnectivityProvider>(context).isConnected;
@@ -35,14 +40,12 @@ class RouteGenerator {
         return const NoInterneet();
       }
       switch (settings.name) {
+        case '/verifyPage':
+          return const OtpVerificationScreen();
         case '/splash-screen':
           return const SplashScreen();
         case '/login-page':
           return const LoginRegister();
-        case '/gallery':
-          return const GalleryPage();
-        case '/homepage':
-          return HomePage();
         case '/cities-page':
           return CitiesHome();
         case '/depot-inside-page':
@@ -60,7 +63,10 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return OverviewPage(
-              depoName: argument['depoName'], role: argument['role']);
+            depoName: argument['depoName'],
+            role: argument['role'],
+            userId: argument['userId'],
+          );
 
         case '/depotOverview':
           Map<String, dynamic> argument =
@@ -76,18 +82,12 @@ class RouteGenerator {
             depoName: argument['depoName'],
             // role: argument['role'],
           );
-        // case '/planning-page':
-        //   Map<String, dynamic> argument =
-        //       settings.arguments as Map<String, dynamic>;
-        //   return ProjectPlanningAction(
-        //     depoName: argument['depoName'],
-        //     role: argument['role'],
-        //   );
 
         case '/material-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MaterialProcurementAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -96,6 +96,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DailyProjectAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -113,6 +114,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DetailEngineeringAction(
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
@@ -140,17 +142,26 @@ class RouteGenerator {
           return QualityChecklistAction(
             depoName: argument['depoName'],
             role: argument['role'],
+            cityName: argument['cityName'],
           );
 
         case '/closure-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return ClosureReportAction(
+            userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
 
+        case '/quality-admin':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return QualityHomeAdmin(
+            cityName: argument['cityName'],
+            depoName: argument['depoName'],
+          );
         case '/change-password':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -158,14 +169,29 @@ class RouteGenerator {
             name: argument['name'],
             mobileNumber: argument[' mobileNumber'],
           );
+        case '/evDashboard':
+          final role = settings.arguments as String;
+          // CustomPageRoute(page: page)
+          return EVDashboardAction(
+            role: role,
+          );
+
+        case '/demand':
+          return DemandEnergyScreen();
+
+        case '/splitDashboard':
+          final args = settings.arguments as String;
+          return SplitScreen(
+            role: args,
+          );
 
         case '/depot-energy':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
-          return EnergyManagement(
+          return DemandActionScreen(
             cityName: argument['cityName'],
             depoName: argument['depoName'],
-            userId: userId,
+            role: argument['role'],
           );
       }
       return const NodataAvailable();

@@ -1,13 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../style.dart';
 
+String userId = '';
+
 class DepotPage extends StatefulWidget {
   String? role;
   String? cityName;
-  DepotPage({super.key, this.cityName, this.role});
+  DepotPage({
+    super.key,
+    this.cityName,
+    this.role,
+  });
 
   @override
   State<DepotPage> createState() => _DepotPageState();
@@ -15,6 +23,14 @@ class DepotPage extends StatefulWidget {
 
 class _DepotPageState extends State<DepotPage> {
   Stream? _stream;
+
+  @override
+  void initState() {
+    getUserId();
+    // TODO: implement initState
+    super.initState();
+    print('depotPage - UserId- ${userId}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,17 +58,19 @@ class _DepotPageState extends State<DepotPage> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 0.9,
-                                mainAxisSpacing: 5,
+                                childAspectRatio: 1.2,
+                                mainAxisSpacing: 3,
                                 crossAxisCount: 2),
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () => Navigator.pushNamed(
-                                context, '/overview page', arguments: {
-                              'depoName': snapshot.data!.docs[index]
-                                  ['DepoName'],
-                              'role': widget.role
-                            }),
+                                context, '/overview page',
+                                arguments: {
+                                  'depoName': snapshot.data!.docs[index]
+                                      ['DepoName'],
+                                  'role': widget.role,
+                                  'userId': userId
+                                }),
                             // onTap: () => Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
@@ -78,6 +96,14 @@ class _DepotPageState extends State<DepotPage> {
     );
   }
 
+  Future<void> getUserId() async {
+    await AuthService().getCurrentUserId().then((value) {
+      userId = value;
+      print('UserId - $value');
+      // setState(() {});
+    });
+  }
+
   Widget depolist(String image, String text) {
     return Column(children: [
       Container(
@@ -88,7 +114,11 @@ class _DepotPageState extends State<DepotPage> {
               border: Border.all(color: grey),
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                  image: NetworkImage(image), fit: BoxFit.fill))),
+                  image: CachedNetworkImageProvider(
+                    image,
+                  ),
+                  //  NetworkImage(image),
+                  fit: BoxFit.cover))),
       Expanded(
         child: Text(
           text,

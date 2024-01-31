@@ -6,7 +6,8 @@ import 'detailed_Eng.dart';
 
 class DetailedEngHome extends StatefulWidget {
   String? depoName;
-  DetailedEngHome({super.key, required this.depoName});
+  String role;
+  DetailedEngHome({super.key, required this.depoName, required this.role});
 
   @override
   State<DetailedEngHome> createState() => _DetailedEngHomeState();
@@ -22,6 +23,7 @@ class _DetailedEngHomeState extends State<DetailedEngHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+          depoName: widget.depoName ?? '',
           isCentered: false,
           title: 'Detailed Engineering',
           height: 40,
@@ -33,8 +35,10 @@ class _DetailedEngHomeState extends State<DetailedEngHome> {
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        DetailedEng(depoName: widget.depoName),
+                    builder: (context) => DetailedEng(
+                      depoName: widget.depoName,
+                      role: '',
+                    ),
                   )),
               child: card(
                 title[index],

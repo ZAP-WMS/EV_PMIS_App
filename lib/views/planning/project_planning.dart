@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +17,6 @@ import '../../viewmodels/employee.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/navbar.dart';
 import '../../widgets/upload.dart';
-import '../homepage/gallery.dart';
 import '../keyevents/Grid_DataTableA2.dart';
 import '../overviewpage/view_AllFiles.dart';
 
@@ -331,7 +331,8 @@ class _KeyEventsState extends State<KeyEvents> {
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
-                  title: '${widget.depoName}/Project Planning',
+                  depoName: widget.depoName ?? '',
+                  title: 'Project Planning',
                   height: 50,
                   isSync: false,
                   isCentered: false,
@@ -1255,7 +1256,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualstartDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           delay: 0,
           unit: 0,
           scope: 0,
@@ -1273,7 +1274,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualstartDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           delay: 0,
           unit: 0,
           scope: 0,
@@ -1292,7 +1293,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualstartDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           delay: 0,
           unit: 0,
           scope: 0,
@@ -1310,7 +1311,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1327,7 +1328,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1344,7 +1345,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1361,7 +1362,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1378,7 +1379,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1395,7 +1396,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1412,7 +1413,7 @@ class _KeyEventsState extends State<KeyEvents> {
         actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
         actualDuration: 0,
         delay: 0,
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1441,7 +1442,7 @@ class _KeyEventsState extends State<KeyEvents> {
           actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
           actualDuration: 0,
           delay: 0,
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1467,7 +1468,7 @@ class _KeyEventsState extends State<KeyEvents> {
           delay: durationParse(
               edate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
               aedate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-         // reasonDelay: '',
+          // reasonDelay: '',
           unit: 0,
           scope: 0,
           qtyExecuted: 0,
@@ -1495,7 +1496,7 @@ class _KeyEventsState extends State<KeyEvents> {
         delay: durationParse(
             edate3 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate3 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1523,7 +1524,7 @@ class _KeyEventsState extends State<KeyEvents> {
         delay: durationParse(
             edate4 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate4 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1551,7 +1552,7 @@ class _KeyEventsState extends State<KeyEvents> {
         delay: durationParse(
             edate5 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate5 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1579,7 +1580,7 @@ class _KeyEventsState extends State<KeyEvents> {
         delay: durationParse(
             edate6 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate6 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1607,7 +1608,7 @@ class _KeyEventsState extends State<KeyEvents> {
         delay: durationParse(
             edate7 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate7 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1633,7 +1634,7 @@ class _KeyEventsState extends State<KeyEvents> {
             asdate8 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate8 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
         delay: 0,
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1661,7 +1662,7 @@ class _KeyEventsState extends State<KeyEvents> {
         delay: durationParse(
             edate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate2 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,
@@ -1689,7 +1690,7 @@ class _KeyEventsState extends State<KeyEvents> {
         delay: durationParse(
             edate10 ?? DateFormat('dd-MM-yyyy').format(DateTime.now()),
             aedate10 ?? DateFormat('dd-MM-yyyy').format(DateTime.now())),
-       // reasonDelay: '',
+        // reasonDelay: '',
         unit: 0,
         scope: 0,
         qtyExecuted: 0,

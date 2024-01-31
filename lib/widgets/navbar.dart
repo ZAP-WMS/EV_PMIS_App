@@ -1,14 +1,9 @@
-
-import 'package:ev_pmis_app/feedback/chat.dart';
-
-import 'package:ev_pmis_app/widgets/internet_checker.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../style.dart';
 import '../views/authentication/login_register.dart';
 import '../views/citiespage/cities_home.dart';
-import '../views/homepage/gallery.dart';
 
 class NavbarDrawer extends StatefulWidget {
   const NavbarDrawer({super.key});
@@ -18,14 +13,18 @@ class NavbarDrawer extends StatefulWidget {
 }
 
 class _NavbarDrawerState extends State<NavbarDrawer> {
+  String userId = '';
   @override
   void initState() {
+    getUserId();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width * 0.5;
     return Drawer(
+      width: width,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -36,15 +35,13 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               size: 48.0,
               color: Colors.white,
             ),
-            // otherAccountsPictures: const [
-            //   Icon(
-            //     Icons.bookmark_border,
-            //     color: Colors.white,
-            //   ),
-            // ],
-            accountName: Text(
-              userId!,
-              textAlign: TextAlign.center,
+            accountName: Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                userId,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             accountEmail: const Text(''),
           ),
@@ -92,14 +89,18 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               ),
               title: const Text('Chat'),
               onTap: () {
-                // SystemChrome.setPreferredOrientations([
-                //   DeviceOrientation.portraitUp,
-                //   DeviceOrientation.portraitDown,
-                //   // DeviceOrientation.landscapeLeft,
-                // ]);
                 Navigator.pushNamed(context, '/chat-page');
               }),
-          const Divider(),
+
+          // ListTile(
+          //     leading: Icon(
+          //       Icons.supervised_user_circle,
+          //       color: blue,
+          //     ),
+          //     title: const Text('User Manual'),
+          //     onTap: () {}),
+
+          // const Divider(),
           // ListTile(
           //     leading: const Icon(Icons.settings),
           //     title: const Text('Settings'),
@@ -124,16 +125,19 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               ),
               title: const Text('Logout'),
               onTap: () {
-                // SystemChrome.setPreferredOrientations([
-                //   DeviceOrientation.portraitUp,
-                //   DeviceOrientation.portraitDown,
-                //   // DeviceOrientation.landscapeLeft,
-                // ]);
                 onWillPop(context);
               }),
         ],
       ),
     );
+  }
+
+  Future<void> getUserId() async {
+    await AuthService().getCurrentUserId().then((value) {
+      userId = value;
+      print('UserId - $value');
+      setState(() {});
+    });
   }
 
   Future<bool> onWillPop(BuildContext context) async {
@@ -168,7 +172,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                           child: Container(
                             height: 40,
                             decoration: BoxDecoration(
-                              //color: blue,
+                              border: Border.all(color: blue),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             //color: blue,
@@ -179,6 +183,9 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                             )),
                           ),
                         )),
+                        const SizedBox(
+                          width: 5,
+                        ),
                         Expanded(
                             child: InkWell(
                           onTap: () async {

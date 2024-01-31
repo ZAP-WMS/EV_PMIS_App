@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import '../../components/Loading_page.dart';
+import '../../../components/Loading_page.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -137,16 +137,14 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(
+                  depoName: '${widget.depoName} / ${widget.title.toString()}',
                   store: () {
                     nextIndex().then((value) => StoreData());
                   },
                   height: 30,
                   isCentered: true,
                   isSync: false,
-                  title:
-                      'JMR / ${widget.depoName} / ${widget.title.toString()}',
-                      
-                    
+                  title: 'JMR',
                 ),
                 preferredSize: const Size.fromHeight(50),
               ),

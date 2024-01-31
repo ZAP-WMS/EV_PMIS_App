@@ -22,15 +22,16 @@ class DailyProjectModel {
 
   factory DailyProjectModel.fromjson(Map<String, dynamic> json) {
     return DailyProjectModel(
-        date: json['Date'],
-        siNo: json['SiNo'],
+      date: json['Date'],
+      siNo: json['SiNo'],
 
-        // state: json['State'],
-        // depotName: json['DepotName'],
-        typeOfActivity: json['TypeOfActivity'],
-        activityDetails: json['ActivityDetails'],
-        progress: json['Progress'],
-        status: json['Status']);
+      // state: json['State'],
+      // depotName: json['DepotName'],
+      typeOfActivity: json['TypeOfActivity'],
+      activityDetails: json['ActivityDetails'],
+      progress: json['Progress'],
+      status: json['Status'],
+    );
   }
 
   DataGridRow dataGridRow() {

@@ -38,7 +38,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
             toClosure: true,
             depoName: widget.depoName,
             cityName: widget.cityName,
-            text: '${widget.depoName} / Closure Report',
+            text: 'Closure Report',
             userId: widget.userId,
           ),
           preferredSize: const Size.fromHeight(50)),

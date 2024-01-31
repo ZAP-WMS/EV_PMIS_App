@@ -1,28 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/activity_headings.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// ignore: depend_on_referenced_packages
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_EP.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_acdb.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_cdi.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_charger.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_ci.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_cmu.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_ct.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_msp.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
-import '../../../components/Loading_page.dart';
-import '../../../provider/cities_provider.dart';
-import '../../../style.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_EP.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_acdb.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_cdi.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_charger.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_ci.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_cmu.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_ct.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_msp.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
+import '../../../../QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
+import '../../../../components/Loading_page.dart';
+import '../../../../provider/cities_provider.dart';
+import '../../../../style.dart';
+import '../../../../widgets/quality_list.dart';
 import '../../../viewmodels/quality_checklistModel.dart';
-import '../../../widgets/quality_list.dart';
-import '../../homepage/gallery.dart';
 
 late QualityPSSDataSource _qualityPSSDataSource;
 late QualityrmuDataSource _qualityrmuDataSource;
@@ -152,6 +151,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
+          depoName: widget.depoName ?? '',
           title: 'Electrical Checklist /${widget.title}',
           height: 50,
           isSync: true,

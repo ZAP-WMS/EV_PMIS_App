@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/screen/materialprocurement/material_vendor_admin/material_vendor.dart';
 import 'package:flutter/material.dart';
 
 import '../materialprocurement/material_vendor.dart';
@@ -35,7 +36,8 @@ class _MaterialProcurementActionState extends State<MaterialProcurementAction> {
         selectedUi = MaterialProcurement(depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = MaterialProcurement(
+        selectedUi = MaterialProcurementAdmin(
+          cityName: widget.cityName,
           depoName: widget.depoName,
         );
     }

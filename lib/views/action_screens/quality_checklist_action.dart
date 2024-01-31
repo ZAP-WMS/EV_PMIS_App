@@ -1,8 +1,7 @@
-
+import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/quality_home_admin.dart';
 import 'package:flutter/material.dart';
 
 import '../qualitychecklist/quality_home.dart';
-
 
 class QualityChecklistAction extends StatefulWidget {
   String? role;
@@ -21,7 +20,6 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -36,7 +34,8 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
         selectedUi = QualityHome(depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = QualityHome(depoName: widget.depoName);
+        selectedUi = QualityHomeAdmin(
+            cityName: widget.cityName, depoName: widget.depoName);
     }
 
     return selectedUi;

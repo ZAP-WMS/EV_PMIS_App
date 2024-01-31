@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/dailyreport/summary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../../FirebaseApi/firebase_api.dart';
-import '../../components/Loading_page.dart';
+import '../../../FirebaseApi/firebase_api.dart';
+import '../../../components/Loading_page.dart';
+import '../../../datasource/dailyproject_datasource.dart';
+import '../../../provider/cities_provider.dart';
+import '../../../style.dart';
+import '../../../widgets/appbar_back_date.dart';
+import '../../../widgets/navbar.dart';
 import '../../viewmodels/daily_projectModel.dart';
-import '../../datasource/dailyproject_datasource.dart';
-import '../../provider/cities_provider.dart';
-import '../../style.dart';
-import '../../widgets/appbar_back_date.dart';
-import '../../widgets/navbar.dart';
-import '../homepage/gallery.dart';
 
 class DailyProject extends StatefulWidget {
   String? cityName;
@@ -46,7 +46,7 @@ class _DailyProjectState extends State<DailyProject> {
         Provider.of<CitiesProvider>(context, listen: false).getName;
 
     _dailyDataSource = DailyDataSource(dailyproject, context, widget.cityName!,
-        widget.depoName!, userId!, selectedDate!);
+        widget.depoName!, userId, selectedDate!);
     _dataGridController = DataGridController();
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
@@ -60,7 +60,7 @@ class _DailyProjectState extends State<DailyProject> {
         .snapshots();
     getTableData().whenComplete(() {
       _dailyDataSource = DailyDataSource(dailyproject, context,
-          widget.cityName!, widget.depoName!, userId!, selectedDate!);
+          widget.cityName!, widget.depoName!, userId, selectedDate!);
       _dataGridController = DataGridController();
     });
 
@@ -74,7 +74,8 @@ class _DailyProjectState extends State<DailyProject> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
-              text: '${widget.depoName}/Daily Report',
+              depoName: widget.depoName,
+              text: 'Daily Report',
               //  ${DateFormat.yMMMMd().format(DateTime.now())}',
               haveSynced: true,
               haveSummary: true,

@@ -13,6 +13,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   bool isCentered = true;
   bool isprogress;
   bool haveupload;
+  String depoName;
   final void Function()? store;
   CustomAppBar({
     super.key,
@@ -23,6 +24,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.haveupload = false,
     required this.isCentered,
     this.store,
+    required this.depoName,
   });
 
   @override
@@ -38,10 +40,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: widget.isCentered ? true : false,
-      title: Text(
-        widget.title,
-        maxLines: 2,
-        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+      title: Column(
+        children: [
+          Text(
+            widget.title,
+            // maxLines: 2,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            widget.depoName,
+            style: TextStyle(fontSize: 11),
+          )
+        ],
       ),
       backgroundColor: blue,
       shape: const RoundedRectangleBorder(
@@ -199,7 +209,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   int durationParse(String fromtime, String todate) {
     DateTime startdate = DateFormat('dd-MM-yyyy').parse(fromtime);
     DateTime enddate = DateFormat('dd-MM-yyyy').parse(todate);
-    return enddate.add(Duration(days: 1)).difference(startdate).inDays;
+    return enddate.add(const Duration(days: 1)).difference(startdate).inDays;
   }
 }
 
@@ -235,7 +245,7 @@ Future<bool> onWillPop(BuildContext context) async {
                         child: Container(
                           height: 40,
                           decoration: BoxDecoration(
-                            //color: blue,
+                            border: Border.all(color: blue),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           //color: blue,
@@ -246,6 +256,9 @@ Future<bool> onWillPop(BuildContext context) async {
                           )),
                         ),
                       )),
+                      const SizedBox(
+                        width: 5,
+                      ),
                       Expanded(
                           child: InkWell(
                         onTap: () {
@@ -285,14 +298,14 @@ showAlertDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Alert Dialog Title'),
-        content: Text('This is the content of the alert dialog.'),
+        title: const Text('Alert Dialog Title'),
+        content: const Text('This is the content of the alert dialog.'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       );

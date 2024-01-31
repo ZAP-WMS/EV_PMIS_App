@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
-
+import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -11,20 +12,16 @@ import '../style.dart';
 import 'package:ev_pmis_app/widgets/upload.dart';
 import '../viewmodels/daily_projectModel.dart';
 import '../viewmodels/detailed_engModel.dart';
-import '../views/homepage/gallery.dart';
 import '../views/overviewpage/view_AllFiles.dart';
 
 class DetailedEngSourceShed extends DataGridSource {
   String cityName;
   String depoName;
   BuildContext mainContext;
+  String? role;
   // String userId;
-  DetailedEngSourceShed(
-    this._detailedengev,
-    this.mainContext,
-    this.cityName,
-    this.depoName,
-  ) {
+  DetailedEngSourceShed(this._detailedengev, this.mainContext, this.cityName,
+      this.depoName, this.role) {
     buildDataGridRowsEV();
   }
   void buildDataGridRowsEV() {
@@ -34,7 +31,7 @@ class DetailedEngSourceShed extends DataGridSource {
   }
 
   @override
-  List<DetailedEngModel> _detailedengev = [];
+  List<DetailedEngModelAdmin> _detailedengev = [];
   // List<DetailedEngModel> _detailedeng = [];
 
   TextStyle textStyle = const TextStyle(
@@ -180,6 +177,7 @@ class DetailedEngSourceShed extends DataGridSource {
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
+                                      role: role,
                                       title: 'DetailedEngShed',
                                       cityName: cityName,
                                       depoName: depoName,
@@ -210,7 +208,10 @@ class DetailedEngSourceShed extends DataGridSource {
                               //               ],
                               //             ))));
                             },
-                            child: const Text('View'));
+                            child: const Text(
+                              'View',
+                              style: TextStyle(fontSize: 12),
+                            ));
                       })
                     : dataGridCell.columnName == 'Number' &&
                             dataGridCell.value == 0
@@ -395,7 +396,10 @@ class DetailedEngSourceShed extends DataGridSource {
                                         },
                                         icon: const Icon(Icons.calendar_today),
                                       ),
-                                      Text(dataGridCell.value.toString()),
+                                      Text(
+                                        dataGridCell.value.toString(),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
                                     ],
                                   )
                                 : (dataGridCell.columnName == 'ApproveDate') &&
@@ -714,6 +718,8 @@ class DetailedEngSourceShed extends DataGridSource {
                                         : Text(
                                             dataGridCell.value.toString(),
                                             textAlign: TextAlign.center,
+                                            style:
+                                                const TextStyle(fontSize: 10),
                                           ),
       );
     }).toList());
@@ -832,7 +838,7 @@ class DetailedEngSourceShed extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),

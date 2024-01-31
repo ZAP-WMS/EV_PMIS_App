@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gantt_chart/gantt_chart.dart';
@@ -14,7 +15,6 @@ import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/keyboard_listener.dart';
-import '../homepage/gallery.dart';
 import '../planning/project_planning.dart';
 import '../safetyreport/safetyfield.dart';
 
@@ -143,6 +143,7 @@ class _StatutoryAprovalA2State extends State<StatutoryAprovalA2> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(
+          depoName: widget.depoName ?? '',
           title: 'Key Events /${widget.depoName!}/${widget.events}',
           isSync: specificUser ? true : false,
           isCentered: true,

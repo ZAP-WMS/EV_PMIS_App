@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +15,6 @@ import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/activity_headings.dart';
 import '../../widgets/custom_textfield.dart';
-import '../homepage/gallery.dart';
 import '../safetyreport/safetyfield.dart';
 
 class ClosureField extends StatefulWidget {
@@ -70,7 +69,8 @@ class _ClosureFieldState extends State<ClosureField> {
     return Scaffold(
         drawer: const NavbarDrawer(),
         appBar: CustomAppBar(
-          title: '${widget.depoName}/Closure Report',
+          depoName: widget.depoName ?? '',
+          title: 'Closure Report',
           height: 50,
           isSync: true,
           store: () {
@@ -141,14 +141,15 @@ class _ClosureFieldState extends State<ClosureField> {
 
                               columns: [
                                 GridColumn(
+                                  filterIconPadding: const EdgeInsets.all(0),
                                   columnName: 'srNo',
                                   width: 60,
                                   autoFitPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
+                                      horizontal: 10),
                                   allowEditing: false,
                                   label: Container(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
+                                        horizontal: 0),
                                     alignment: Alignment.center,
                                     child: Text('Sr No',
                                         overflow: TextOverflow.values.first,

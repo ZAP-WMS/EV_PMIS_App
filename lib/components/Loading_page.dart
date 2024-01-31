@@ -11,12 +11,16 @@ class LoadingPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('animations/loading_animation.gif'),
-            const SizedBox(height: 10),
+            SizedBox(
+                height: 70,
+                width: 70,
+                child: Image.asset(
+                  'animations/loading_animation.gif',
+                )),
             const Text(
               'Loading...',
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             )

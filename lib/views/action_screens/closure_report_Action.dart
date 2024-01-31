@@ -1,14 +1,19 @@
+import 'package:ev_pmis_app/screen/closureReport/closure_report_user/closurefield.dart';
+import 'package:ev_pmis_app/views/closureReport/closure_report_admin/closure_summary_table.dart';
 import 'package:flutter/material.dart';
-
-import '../closureReport/closure_report_admin/closure_summary_table.dart';
-import '../closureReport/closurefield.dart';
 
 class ClosureReportAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
+  String userId;
 
-  ClosureReportAction({super.key, this.cityName, this.role, this.depoName});
+  ClosureReportAction(
+      {super.key,
+      this.cityName,
+      this.role,
+      this.depoName,
+      required this.userId});
 
   @override
   State<ClosureReportAction> createState() => _ClosureReportActionState();
@@ -33,7 +38,10 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = ClosureField(depoName: widget.depoName);
+        selectedUi = ClosureField(
+          depoName: widget.depoName,
+          userId: widget.userId,
+        );
         break;
       case 'admin':
         selectedUi = ClosureSummaryTable(

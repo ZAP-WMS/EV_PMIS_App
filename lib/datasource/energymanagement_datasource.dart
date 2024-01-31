@@ -10,7 +10,7 @@ import '../viewmodels/energy_management.dart';
 
 class EnergyManagementDatasource extends DataGridSource {
   BuildContext mainContext;
-  String userId;
+  String? userId;
   String? cityName;
   String? depoName;
 

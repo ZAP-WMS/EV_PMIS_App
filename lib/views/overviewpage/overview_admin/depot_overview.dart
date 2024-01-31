@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/datasource/depot_overviewdatasource.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
@@ -12,9 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 import '../../../viewmodels/depot_overview.dart';
-import '../../homepage/gallery.dart';
 
 class DepotOverview extends StatefulWidget {
   String? cityName;
@@ -109,6 +108,7 @@ class _DepotOverviewState extends State<DepotOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
+          depoName: widget.depoName ?? '',
           isCentered: true,
           title: '${widget.depoName}/Depot Overview',
           height: 50,
@@ -1001,7 +1001,6 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
-          
           controller: controller,
           labeltext: title,
            isSuffixIcon: false,

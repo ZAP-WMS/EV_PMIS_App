@@ -26,7 +26,7 @@ class _LoginRegisterState extends State<LoginRegister> {
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(280),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Column(children: [
                     Text("PMIS", style: headlineBold),
                     _space(10),

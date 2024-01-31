@@ -38,6 +38,7 @@ class _SafetySummaryState extends State<SafetySummary> {
   List<List<dynamic>> rowList = [];
   bool enableLoading = false;
   String cityName = '';
+  String pathToOpenFile = '';
 
   Future<List<List<dynamic>>> fetchData() async {
     rowList.clear();
@@ -62,7 +63,7 @@ class _SafetySummaryState extends State<SafetySummary> {
             toSafety: true,
             showDepoBar: true,
             cityName: cityName,
-            text: '${widget.cityName} / Safety Report',
+            text: 'Safety Report',
             userId: widget.userId,
           )),
       body: enableLoading
@@ -92,6 +93,7 @@ class _SafetySummaryState extends State<SafetySummary> {
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: DataTable(
+                              horizontalMargin: 5,
                               columnSpacing: 20,
                               showBottomBorder: true,
                               decoration: BoxDecoration(
@@ -243,14 +245,14 @@ class _SafetySummaryState extends State<SafetySummary> {
 
       int counter = 1;
       String newFilePath = file.path;
-
+      pathToOpenFile = newFilePath.toString();
       if (await File(newFilePath).exists()) {
         final baseName = fileName.split('.').first;
         final extension = fileName.split('.').last;
         newFilePath =
             '$documentDirectory/$baseName-${counter.toString()}.$extension';
         counter++;
-
+        pathToOpenFile = newFilePath.toString();
         await file.copy(newFilePath);
         counter++;
       } else {
@@ -296,8 +298,9 @@ class _SafetySummaryState extends State<SafetySummary> {
             channelDescription: 'repeating description');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin()
-        .show(0, 'Pdf Downloaded', 'Safety Report', notificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Safety Report Downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
   }
 
   Future<Uint8List> _generatePDF(
@@ -794,6 +797,7 @@ class _SafetySummaryState extends State<SafetySummary> {
           context,
           MaterialPageRoute(
               builder: (context) => PdfViewScreen(
+                    getContext: context,
                     pdfData: pdfData,
                     pageName: 'Safety Report',
                   )));

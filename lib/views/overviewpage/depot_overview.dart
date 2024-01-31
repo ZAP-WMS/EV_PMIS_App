@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:file_picker/file_picker.dart';
@@ -16,7 +17,6 @@ import '../../viewmodels/depot_overview.dart';
 import '../../style.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/navbar.dart';
-import '../homepage/gallery.dart';
 
 class DepotOverview extends StatefulWidget {
   // String? cityName;
@@ -112,8 +112,9 @@ class _DepotOverviewState extends State<DepotOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
+          depoName: widget.depoName ?? '',
           isCentered: true,
-          title: '${widget.depoName}/Depot Overview',
+          title: 'Depot Overview',
           height: 50,
           isSync: isProjectManager ? true : false,
           store: () async {

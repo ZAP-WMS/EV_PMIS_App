@@ -17,7 +17,11 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       drawer: NavbarDrawer(),
       appBar: CustomAppBar(
-          title: 'Feedback Page', height: 50, isSync: false, isCentered: false),
+          depoName: widget.depoName,
+          title: 'Feedback Page',
+          height: 50,
+          isSync: false,
+          isCentered: false),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

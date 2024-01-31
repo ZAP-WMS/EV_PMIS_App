@@ -1,5 +1,5 @@
+import 'package:ev_pmis_app/screen/Detailedreport/detail_report_admin/detail_admin.dart';
 import 'package:flutter/material.dart';
-
 import '../Detailedreport/detailed_Eng.dart';
 
 class DetailEngineeringAction extends StatefulWidget {
@@ -32,11 +32,16 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = DetailedEng(depoName: widget.depoName);
-        break;
-      case 'admin':
         selectedUi = DetailedEng(
           depoName: widget.depoName,
+          role: 'user',
+        );
+        break;
+      case 'admin':
+        selectedUi = DetailedEngAdmin(
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          role: 'admin',
         );
     }
 

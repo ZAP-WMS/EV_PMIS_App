@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/views/authentication/check_otp.dart';
-import 'package:ev_pmis_app/views/authentication/reset_password.dart';
-import 'package:ev_pmis_app/views/authentication/update_password.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
                       //     empIdController.text, 'Employee Id is required'),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      isSuffixIcon: false,
                       validatortext: (value) {
                         return checkFieldEmpty(value!, 'Email is Required');
                       },
@@ -61,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
                               passwordcontroller.text, 'Password is Required');
                         },
                         keyboardType: TextInputType.visiblePassword,
-                        isSuffixIcon: true,
                         textInputAction: TextInputAction.done),
                     _space(16),
                     Row(
@@ -72,20 +67,18 @@ class _LoginPageState extends State<LoginPage> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: ' Forget Password ?',
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = (() => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            // UpdatePassword(
-                                            //       docName: '',
-                                            //     )
-                                            // CheckOtp(
-                                            //     name: '',
-                                            //     mobileNumber: 9321327107)
-                                            ResetPass(),
-                                      ))),
-                                style: TextStyle(color: blue))
+                                recognizer: TapGestureRecognizer(),
+                                // ..onTap = (() => Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ResetPass(
+                                //             // email: FirebaseAuth
+                                //             //     .instance
+                                //             //     .currentUser!
+                                //             //     .email!,
+                                //             )))
+                                //             ),
+                                style: const TextStyle(color: Colors.blue))
                           ],
                         )),
                       ],
@@ -103,18 +96,19 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: const Text('Sign In'))),
 
-                    // Text("Project Management Information System",
-                    //     style: headlineBold),
-                    // Text(" EV Monitoring ", style: headlineBold),
-                    Image.asset(
-                      'assets/Tata-Power.jpeg',
-                      height: 150,
-                      width: 200,
-                    ),
-                    Text("Project Management Information System",
-                        textAlign: TextAlign.center, style: headlineBold),
-                  ],
-                )),
+                      // Text("Project Management Information System",
+                      //     style: headlineBold),
+                      // Text(" EV Monitoring ", style: headlineBold),
+                      Image.asset(
+                        'assets/Tata-Power.jpeg',
+                        height: 150,
+                        width: 200,
+                      ),
+                      Text("Project Management Information System",
+                          textAlign: TextAlign.center, style: headlineBold),
+                    ],
+                  )),
+            ),
           ),
         ),
       ),
@@ -169,7 +163,8 @@ class _LoginPageState extends State<LoginPage> {
           _sharedPreferences
               .setString('employeeId', empIdController.text)
               .then((_) {
-            Navigator.pushReplacementNamed(context, '/gallery');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/splitDashboard', arguments: role, (route) => false);
           });
         } else {
           // ignore: use_build_context_synchronously
@@ -184,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
         if (e.toString() ==
             'RangeError (index): Invalid value: Valid value range is empty: 0') {
           setState(() {
-            error = 'Employee Id does not exist!';
+            error = 'Employee Id does not exist! ${e.toString()}';
           });
         } else {
           setState(() {

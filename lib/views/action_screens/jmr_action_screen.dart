@@ -1,5 +1,5 @@
+import 'package:ev_pmis_app/screen/jmrPage/jmr_user/jmr.dart';
 import 'package:flutter/material.dart';
-import '../jmrPage/jmr.dart';
 import '../jmrPage/jmr_admin/jmr.dart';
 
 class JmrActionScreen extends StatefulWidget {

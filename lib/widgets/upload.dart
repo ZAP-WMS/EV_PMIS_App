@@ -47,7 +47,8 @@ class _UploadDocumentState extends State<UploadDocument> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(50),
             child: CustomAppBar(
-              title: '${widget.cityName}/${widget.depoName}/Upload Checklist',
+              depoName: widget.depoName ?? '',
+              title: 'Upload Checklist',
               isSync: false,
               isCentered: true,
               height: 50,
@@ -147,7 +148,9 @@ class _UploadDocumentState extends State<UploadDocument> {
                                   : widget.pagetitle == 'ClosureReport' ||
                                           widget.pagetitle == 'Overview Page'
                                       ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${result!.files.first.name}'
-                                      : '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/${result!.files.first.name}');
+                                      : widget.pagetitle == 'KeyEvents'
+                                          ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/${result!.files.first.name}'
+                                          : '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/${result!.files.first.name}');
 
                               // String? fileName = result!.files.first.name;
 
@@ -187,7 +190,7 @@ class _UploadDocumentState extends State<UploadDocument> {
                           'Back to ${widget.title == 'QualityChecklist' ? 'Quality Checklist' : widget.pagetitle}')),
                 ),
               ),
-               widget.pagetitle == 'Overview Page'
+              widget.pagetitle == 'Overview Page'
                   ? ElevatedButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(

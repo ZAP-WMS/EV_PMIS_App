@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/internet_checker.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _CitiesHomeState extends State<CitiesHome> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
+        depoName: '',
         isCentered: true,
         title: 'Cities',
         height: 50,

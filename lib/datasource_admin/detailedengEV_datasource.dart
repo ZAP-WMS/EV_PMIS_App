@@ -1,25 +1,23 @@
-import 'package:collection/collection.dart';
-
+import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../style.dart';
 import 'package:ev_pmis_app/widgets/upload.dart';
-import '../viewmodels/daily_projectModel.dart';
-import '../viewmodels/detailed_engModel.dart';
-import '../views/homepage/gallery.dart';
 import '../views/overviewpage/view_AllFiles.dart';
 
 class DetailedEngSourceEV extends DataGridSource {
   String cityName;
   String depoName;
   BuildContext mainContext;
+  String? role;
   // String userId;
-  DetailedEngSourceEV(
-      this._detailedengev, this.mainContext, this.cityName, this.depoName) {
+  DetailedEngSourceEV(this._detailedengev, this.mainContext, this.cityName,
+      this.depoName, this.role) {
     buildDataGridRowsEV();
   }
   void buildDataGridRowsEV() {
@@ -29,7 +27,7 @@ class DetailedEngSourceEV extends DataGridSource {
   }
 
   @override
-  List<DetailedEngModel> _detailedengev = [];
+  List<DetailedEngModelAdmin> _detailedengev = [];
   // List<DetailedEngModel> _detailedeng = [];
 
   TextStyle textStyle = const TextStyle(
@@ -175,6 +173,7 @@ class DetailedEngSourceEV extends DataGridSource {
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
+                                      role: role,
                                       title: 'DetailedEngEV',
                                       cityName: cityName,
                                       depoName: depoName,
@@ -390,7 +389,10 @@ class DetailedEngSourceEV extends DataGridSource {
                                         },
                                         icon: const Icon(Icons.calendar_today),
                                       ),
-                                      Text(dataGridCell.value.toString()),
+                                      Text(
+                                        dataGridCell.value.toString(),
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
                                     ],
                                   )
                                 : (dataGridCell.columnName == 'ApproveDate') &&
@@ -709,6 +711,8 @@ class DetailedEngSourceEV extends DataGridSource {
                                         : Text(
                                             dataGridCell.value.toString(),
                                             textAlign: TextAlign.center,
+                                            style:
+                                                const TextStyle(fontSize: 10),
                                           ),
       );
     }).toList());

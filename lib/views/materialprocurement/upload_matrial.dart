@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
@@ -12,7 +13,6 @@ import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../viewmodels/material_procurement.dart';
 import '../../widgets/navbar.dart';
-import '../homepage/gallery.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
 import '../safetyreport/safetyfield.dart';
@@ -58,6 +58,7 @@ class _UploadMaterialState extends State<UploadMaterial> {
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
+          depoName: widget.depoName ?? '',
           title: 'Material Procurement',
           height: 50,
           isSync: true,

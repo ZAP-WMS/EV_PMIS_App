@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 import '../../components/Loading_page.dart';
 import '../../datasource/detailedengEV_datasource.dart';
 import '../../datasource/detailedengShed_datasource.dart';
@@ -18,11 +17,11 @@ import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../viewmodels/detailed_engModel.dart';
 import '../authentication/authservice.dart';
-import '../homepage/gallery.dart';
 
 class DetailedEng extends StatefulWidget {
   String? depoName;
-  DetailedEng({super.key, required this.depoName});
+  String? role;
+  DetailedEng({super.key, required this.depoName, required this.role});
 
   @override
   State<DetailedEng> createState() => _DetailedEngtState();
@@ -65,8 +64,8 @@ class _DetailedEngtState extends State<DetailedEng>
       //     .doc(userId)
       //     .snapshots();
 
-      _detailedDataSource = DetailedEngSource(
-          DetailedProject, context, cityName!, widget.depoName!, userId);
+      _detailedDataSource = DetailedEngSource(DetailedProject, context,
+          cityName!, widget.depoName!, userId, widget.role!);
       _dataGridController = DataGridController();
     });
 
@@ -78,8 +77,8 @@ class _DetailedEngtState extends State<DetailedEng>
           .doc(userId)
           .snapshots();
 
-      _detailedEngSourceev = DetailedEngSourceEV(
-          DetailedProjectev, context, cityName!, widget.depoName!, userId);
+      _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
+          cityName!, widget.depoName!, userId, widget.role);
       _dataGridController = DataGridController();
     });
 
@@ -91,24 +90,29 @@ class _DetailedEngtState extends State<DetailedEng>
           .doc(userId)
           .snapshots();
 
-      _detailedEngSourceShed = DetailedEngSourceShed(
-          DetailedProjectshed, context, cityName!, widget.depoName!, userId);
+      _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
+          context, cityName!, widget.depoName!, userId, widget.role);
     });
 
     getUserId().whenComplete(() {
       // DetailedProject = getmonthlyReport();
-      _detailedDataSource = DetailedEngSource(DetailedProject, context,
-          cityName.toString(), widget.depoName.toString(), userId);
+      _detailedDataSource = DetailedEngSource(
+          DetailedProject,
+          context,
+          cityName.toString(),
+          widget.depoName.toString(),
+          userId,
+          widget.role!);
       _dataGridController = DataGridController();
 
       // DetailedProjectev = getmonthlyReportEv();
       _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
-          cityName!, widget.depoName.toString(), userId);
+          cityName!, widget.depoName.toString(), userId, widget.role);
       _dataGridController = DataGridController();
 
       // DetailedProjectshed = getmonthlyReportEv();
       _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
-          context, cityName!, widget.depoName.toString(), userId);
+          context, cityName!, widget.depoName.toString(), userId, widget.role);
       _dataGridController = DataGridController();
       _controller = TabController(length: 3, vsync: this);
 
@@ -153,10 +157,21 @@ class _DetailedEngtState extends State<DetailedEng>
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
+            centerTitle: true,
             backgroundColor: blue,
-            title: Text(
-              '${widget.depoName}/Detailed Engineering',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            title: Column(
+              children: [
+                const Text(
+                  'Detailed Engineering',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  widget.depoName ?? '',
+                  style: const TextStyle(
+                    fontSize: 11,
+                  ),
+                ),
+              ],
             ),
             actions: [
               InkWell(
@@ -668,22 +683,23 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                             ]);
                       } else {
-                        // alldata = '';
-                        // alldata = snapshot.data['data'] as List<dynamic>;
-                        // DetailedProject.clear();
-                        // _detailedDataSource.buildDataGridRows();
-                        // _detailedDataSource.updateDatagridSource();
-                        // alldata.forEach((element) {
-                        //   DetailedProject.add(
-                        //       DetailedEngModel.fromjson(element));
-                        //   _detailedDataSource = DetailedEngSource(
-                        //       DetailedProject,
-                        //       context,
-                        //       cityName!,
-                        //       widget.depoName.toString(),
-                        //       userId);
-                        //   _dataGridController = DataGridController();
-                        // });
+                        alldata = '';
+                        alldata = snapshot.data['data'] as List<dynamic>;
+                        DetailedProject.clear();
+                        _detailedDataSource.buildDataGridRows();
+                        _detailedDataSource.updateDatagridSource();
+                        alldata.forEach((element) {
+                          DetailedProject.add(
+                              DetailedEngModel.fromjson(element));
+                          _detailedDataSource = DetailedEngSource(
+                              DetailedProject,
+                              context,
+                              cityName!,
+                              widget.depoName.toString(),
+                              userId,
+                              widget.role!);
+                          _dataGridController = DataGridController();
+                        });
 
                         return SfDataGrid(
                             source: _selectedIndex == 0
@@ -1083,22 +1099,23 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                             ]);
                       } else {
-                        // alldata = '';
-                        // alldata = snapshot.data['data'] as List<dynamic>;
-                        // DetailedProjectev.clear();
-                        // _detailedEngSourceev.buildDataGridRowsEV();
-                        // _detailedEngSourceev.updateDatagridSource();
-                        // alldata.forEach((element) {
-                        //   DetailedProjectev.add(
-                        //       DetailedEngModel.fromjson(element));
-                        //   _detailedEngSourceev = DetailedEngSourceEV(
-                        //       DetailedProjectev,
-                        //       context,
-                        //       cityName!,
-                        //       widget.depoName.toString(),
-                        //       userId);
-                        //   _dataGridController = DataGridController();
-                        // });
+                        alldata = '';
+                        alldata = snapshot.data['data'] as List<dynamic>;
+                        DetailedProjectev.clear();
+                        _detailedEngSourceev.buildDataGridRowsEV();
+                        _detailedEngSourceev.updateDatagridSource();
+                        alldata.forEach((element) {
+                          DetailedProjectev.add(
+                              DetailedEngModel.fromjson(element));
+                          _detailedEngSourceev = DetailedEngSourceEV(
+                              DetailedProjectev,
+                              context,
+                              cityName!,
+                              widget.depoName.toString(),
+                              userId,
+                              widget.role);
+                          _dataGridController = DataGridController();
+                        });
 
                         return SfDataGrid(
                             source: _selectedIndex == 0
@@ -1323,7 +1340,7 @@ class _DetailedEngtState extends State<DetailedEng>
   tabScreen2() {
     return Scaffold(
       body: _isloading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(children: [
               SfDataGridTheme(
                 data: SfDataGridThemeData(headerColor: blue),
@@ -1513,22 +1530,23 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                             ]);
                       } else {
-                        // alldata = '';
-                        // alldata = snapshot.data['data'] as List<dynamic>;
-                        // DetailedProjectshed.clear();
-                        // _detailedEngSourceShed.buildDataGridRowsShed();
-                        // _detailedEngSourceShed.updateDatagridSource();
-                        // alldata.forEach((element) {
-                        //   DetailedProjectshed.add(
-                        //       DetailedEngModel.fromjson(element));
-                        //   _detailedEngSourceShed = DetailedEngSourceShed(
-                        //       DetailedProjectshed,
-                        //       context,
-                        //       cityName!,
-                        //       widget.depoName.toString(),
-                        //       userId);
-                        //   _dataGridController = DataGridController();
-                        // });
+                        alldata = '';
+                        alldata = snapshot.data['data'] as List<dynamic>;
+                        DetailedProjectshed.clear();
+                        _detailedEngSourceShed.buildDataGridRowsShed();
+                        _detailedEngSourceShed.updateDatagridSource();
+                        alldata.forEach((element) {
+                          DetailedProjectshed.add(
+                              DetailedEngModel.fromjson(element));
+                          _detailedEngSourceShed = DetailedEngSourceShed(
+                              DetailedProjectshed,
+                              context,
+                              cityName!,
+                              widget.depoName.toString(),
+                              userId,
+                              widget.role);
+                          _dataGridController = DataGridController();
+                        });
 
                         return SfDataGrid(
                             source: _selectedIndex == 0

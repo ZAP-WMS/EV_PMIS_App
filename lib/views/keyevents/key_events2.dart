@@ -386,6 +386,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                 appBar: PreferredSize(
                     preferredSize: const Size.fromHeight(50),
                     child: CustomAppBar(
+                      depoName: widget.depoName ?? '',
                       isprogress: true,
                       title: '$cityName/${widget.depoName}',
                       height: 50,

@@ -11,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import '../../../components/Loading_page.dart';
 import 'package:pdf/widgets.dart' as pw;
-
 import '../../../widgets/common_pdf_view.dart';
 
 class MonthlySummary extends StatefulWidget {
@@ -27,6 +26,8 @@ class MonthlySummary extends StatefulWidget {
 
 class _MonthlySummaryState extends State<MonthlySummary> {
   bool enableLoading = false;
+  String pathToOpenFile = '';
+
   List<dynamic> temp = [];
 
   //Daily Project Row List for view summary
@@ -66,12 +67,12 @@ class _MonthlySummaryState extends State<MonthlySummary> {
           cityName: widget.cityName,
           userId: widget.userId,
           depoName: widget.depoName,
-          text: '${widget.depoName} / Monthly Report',
+          text: 'Monthly Report',
         ),
         preferredSize: const Size.fromHeight(50),
       ),
       body: enableLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : FutureBuilder<List<List<dynamic>>>(
               future: fetchData(),
               builder: (context, snapshot) {
@@ -258,6 +259,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
 
       int counter = 1;
       String newFilePath = file.path;
+      pathToOpenFile = newFilePath;
 
       if (await File(newFilePath).exists()) {
         final baseName = fileName.split('.').first;
@@ -265,7 +267,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
         newFilePath =
             '$documentDirectory/$baseName-${counter.toString()}.$extension';
         counter++;
-
+        pathToOpenFile = newFilePath;
         await file.copy(newFilePath);
         counter++;
       } else {
@@ -305,20 +307,21 @@ class _MonthlySummaryState extends State<MonthlySummary> {
       final savedPDFFile = await savePDFToFile(pdfData, fileName);
       print('File Created - ${savedPDFFile.path}');
     }
+
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
             'repeating channel id', 'repeating channel name',
             channelDescription: 'repeating description');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin()
-        .show(0, 'Pdf Downloaded', 'Monthly Report', notificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Monthly Report Pdf downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
   }
 
   Future<Uint8List> _generatePDF(
       String userId, String date, int decision) async {
     final pr = ProgressDialog(context);
-
     if (decision == 1) {
       pr.style(
           progressWidgetAlignment: Alignment.center,
@@ -335,7 +338,6 @@ class _MonthlySummaryState extends State<MonthlySummary> {
               color: Colors.black,
               fontSize: 18.0,
               fontWeight: FontWeight.w600));
-
       pr.show();
     }
 
@@ -510,6 +512,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
           context,
           MaterialPageRoute(
               builder: (context) => PdfViewScreen(
+                    getContext: context,
                     pdfData: pdfData,
                     pageName: 'Monthly Report',
                   )));

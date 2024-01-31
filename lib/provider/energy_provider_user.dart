@@ -32,16 +32,15 @@ class EnergyProvider extends ChangeNotifier {
         .get()
         .then((value) {
       var alldata = value.data();
-      if (value.data() != null) {
-        for (int i = 0; i < value.data()!['data'].length; i++) {
-          timeIntervalList.add(value.data()!['data'][i]['timeInterval']);
-          energyConsumedList.add(value.data()!['data'][i]['energyConsumed']);
+      if (alldata != null) {
+        for (int i = 0; i < alldata['data'].length; i++) {
+          timeIntervalList.add(alldata['data'][i]['timeInterval']);
+          energyConsumedList.add(alldata['data'][i]['energyConsumed']);
           // print(energyConsumedList);
         }
 
         intervalListData = timeIntervalList;
         energyListData = energyConsumedList;
-
         notifyListeners();
       } else {
         intervalListData = timeIntervalList;

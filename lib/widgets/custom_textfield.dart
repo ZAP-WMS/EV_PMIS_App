@@ -4,8 +4,11 @@ import '../style.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
+  String? role;
+  bool isObscure;
   String labeltext;
   bool isSuffixIcon = false;
+  bool isProjectManager;
   final String? Function(String?)? validatortext;
 
   final TextInputType? keyboardType;
@@ -17,7 +20,10 @@ class CustomTextField extends StatefulWidget {
       required this.isSuffixIcon,
       this.validatortext,
       required this.keyboardType,
-      required this.textInputAction});
+      required this.textInputAction,
+      this.role,
+      this.isProjectManager = true,
+      this.isObscure = false});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -28,6 +34,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+   
+      readOnly: widget.isProjectManager ? false : true,
       autofocus: false,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,

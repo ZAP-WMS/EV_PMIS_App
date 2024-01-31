@@ -1,7 +1,6 @@
-
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_admin/daily_report_admin.dart';
 import 'package:flutter/material.dart';
-
-import '../dailyreport/daily_project.dart';
 
 class DailyProjectAction extends StatefulWidget {
   String? role;
@@ -34,7 +33,8 @@ class _DailyProjectActionState extends State<DailyProjectAction> {
         selectedUi = DailyProject(depoName: widget.depoName);
         break;
       case 'admin':
-        selectedUi = DailyProject(
+        selectedUi = DailyProjectAdmin(
+          cityName: widget.cityName,
           depoName: widget.depoName,
         );
     }
