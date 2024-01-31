@@ -72,7 +72,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
     DailyProject.clear();
     id.clear();
     getTableData().whenComplete(() {
-      nestedTableData(id).whenComplete(() {
+      nestedTableData(id, context).whenComplete(() {
         _dailyDataSource = DailyDataSource(
             DailyProject, context, widget.cityName!, widget.depoName!);
         _dataGridController = DataGridController();
@@ -766,8 +766,8 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
     });
   }
 
-  Future<void> nestedTableData(docss) async {
-    final pr = ProgressDialog(context);
+  Future<void> nestedTableData(docss, BuildContext pageContext) async {
+    final pr = ProgressDialog(pageContext);
     pr.style(
         progressWidgetAlignment: Alignment.center,
         message: 'Loading Data....',
@@ -782,7 +782,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
         messageTextStyle: const TextStyle(
             color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600));
 
-    pr.show();
+    await pr.show();
 
     // showCupertinoDialog(
     //   context: context,
@@ -818,7 +818,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
         });
       }
     }
-    await pr.hide();
+    pr.hide();
 
     // Navigator.pop(context);
   }

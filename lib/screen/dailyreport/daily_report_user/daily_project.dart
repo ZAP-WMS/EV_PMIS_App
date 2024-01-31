@@ -46,7 +46,7 @@ class _DailyProjectState extends State<DailyProject> {
         Provider.of<CitiesProvider>(context, listen: false).getName;
 
     _dailyDataSource = DailyDataSource(dailyproject, context, widget.cityName!,
-        widget.depoName!, userId!, selectedDate!);
+        widget.depoName!, userId, selectedDate!);
     _dataGridController = DataGridController();
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
@@ -60,7 +60,7 @@ class _DailyProjectState extends State<DailyProject> {
         .snapshots();
     getTableData().whenComplete(() {
       _dailyDataSource = DailyDataSource(dailyproject, context,
-          widget.cityName!, widget.depoName!, userId!, selectedDate!);
+          widget.cityName!, widget.depoName!, userId, selectedDate!);
       _dataGridController = DataGridController();
     });
 
@@ -93,7 +93,7 @@ class _DailyProjectState extends State<DailyProject> {
               store: () {
                 _showDialog(context);
                 FirebaseApi().nestedKeyEventsField(
-                    'DailyProjectReport2', widget.depoName!, 'userId', userId!);
+                    'DailyProjectReport2', widget.depoName!, 'userId', userId);
                 storeData();
               },
               showDate: visDate,
@@ -102,7 +102,7 @@ class _DailyProjectState extends State<DailyProject> {
               }),
           preferredSize: const Size.fromHeight(80)),
       body: isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(children: [
               Expanded(
                 child: StreamBuilder(

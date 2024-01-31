@@ -81,7 +81,6 @@ class _DepotOverviewState extends State<DepotOverview> {
   @override
   void initState() {
     super.initState();
-
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     initializeController();
     verifyProjectManager().whenComplete(() {
@@ -112,11 +111,7 @@ class _DepotOverviewState extends State<DepotOverview> {
           isCentered: true,
           title: 'Depot Overview',
           height: 50,
-          isSync: isProjectManager
-              ? widget.role == 'admin'
-                  ? false
-                  : true
-              : false,
+          isSync: isProjectManager ? true : false,
           store: () async {
             // overviewField(cityName!, widget.depoName!);
             overviewFieldstore(cityName!, widget.depoName!);
@@ -126,963 +121,927 @@ class _DepotOverviewState extends State<DepotOverview> {
         drawer: const NavbarDrawer(),
         body: isLoading
             ? const LoadingPage()
-            : isProjectManager == false
-                ? Center(
-                    child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          height: 200,
-                          width: 200,
-                          child: Image.asset(
-                            'assets/overview_image/depotOverview.webp',
-                          )),
-                      const Text(
-                        'Only Project Manager Can Access This Page',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 30),
-                      )
-                    ],
-                  ))
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        overviewField(
-                            _addressController,
-                            'Depot Location and Address ',
-                            'Password is required'),
-                        overviewField(_scopeController, 'No of Buses in Scope',
-                            'Password is required'),
-                        overviewField(_chargerController,
-                            'No of Charger Required', 'Charger are required'),
-                        overviewField(_ratingController, 'Rating of Charger',
-                            'Rating of charger required'),
-                        overviewField(_loadController,
-                            'Required Sanctioned Load', 'Charger are required'),
-                        overviewField(
-                            _powersourceController,
-                            'Existing Utility of PowerSource',
-                            'Rating of charger required'),
-                        overviewField(_electricalManagerNameController,
-                            'Project Manager', 'Charger are required'),
-                        overviewField(
-                            _electricalEngineerController,
-                            'Electrical Engineer',
-                            'Rating of charger required'),
-                        overviewField(_electricalVendorController,
-                            'Electrical Vendor', 'Charger are required'),
-                        overviewField(_civilManagerNameController,
-                            'Civil Manager', 'Rating of charger required'),
-                        overviewField(_civilEngineerController,
-                            'Civil Engineering', 'Charger are required'),
-                        overviewField(_civilVendorController, 'Civil Vendor',
-                            'Rating of charger required'),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 2,
-                                height: 40,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'Details of Survey',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: black),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      ElevatedButton(
-                                          onPressed: widget.role == 'admin'
-                                              ? null
-                                              : () async {
-                                                  res = await FilePicker
-                                                      .platform
-                                                      .pickFiles(
-                                                    type: FileType.any,
-                                                    withData: true,
-                                                  );
-
-                                                  bytes =
-                                                      res!.files.first.bytes!;
-                                                  if (res == null) {
-                                                    print("No file selected");
-                                                  } else {
-                                                    setState(() {});
-                                                    res!.files
-                                                        .forEach((element) {
-                                                      print(element.name);
-                                                      print(res!
-                                                          .files.first.name);
-                                                    });
-                                                  }
-                                                },
-                                          child: const Text(
-                                            'Pick file',
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const SizedBox(width: 10)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Row(
+            // : isProjectManager == false
+            //     ?
+            //      Center(
+            //         child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           SizedBox(
+            //               height: 200,
+            //               width: 200,
+            //               child: Image.asset(
+            //                 'assets/overview_image/depotOverview.webp',
+            //               )),
+            //           const Text(
+            //             'Only Project Manager Can Access This Page',
+            //             textAlign: TextAlign.center,
+            //             style: TextStyle(fontSize: 30),
+            //           )
+            //         ],
+            //       ))
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    overviewField(
+                        _addressController,
+                        'Depot Location and Address ',
+                        'Password is required',
+                        isProjectManager),
+                    overviewField(_scopeController, 'No of Buses in Scope',
+                        'Password is required', isProjectManager),
+                    overviewField(_chargerController, 'No of Charger Required',
+                        'Charger are required', isProjectManager),
+                    overviewField(_ratingController, 'Rating of Charger',
+                        'Rating of charger required', isProjectManager),
+                    overviewField(_loadController, 'Required Sanctioned Load',
+                        'Charger are required', isProjectManager),
+                    overviewField(
+                        _powersourceController,
+                        'Existing Utility of PowerSource',
+                        'Rating of charger required',
+                        isProjectManager),
+                    overviewField(
+                        _electricalManagerNameController,
+                        'Project Manager',
+                        'Charger are required',
+                        isProjectManager),
+                    overviewField(
+                        _electricalEngineerController,
+                        'Electrical Engineer',
+                        'Rating of charger required',
+                        isProjectManager),
+                    overviewField(
+                        _electricalVendorController,
+                        'Electrical Vendor',
+                        'Charger are required',
+                        isProjectManager),
+                    overviewField(_civilManagerNameController, 'Civil Manager',
+                        'Rating of charger required', isProjectManager),
+                    overviewField(_civilEngineerController, 'Civil Engineering',
+                        'Charger are required', isProjectManager),
+                    overviewField(_civilVendorController, 'Civil Vendor',
+                        'Rating of charger required', isProjectManager),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: 40,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
                                 children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                          width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2 -
-                                              50,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                              color: lightblue,
-                                              border: Border.all(color: grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: Row(
-                                            children: [
-                                              if (res != null)
-                                                Expanded(
-                                                  child: Text(
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    res!.files.first.name,
-                                                    //  textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: white),
-                                                  ),
-                                                )
-                                            ],
-                                          )),
-                                      IconButton(
-                                          alignment: Alignment.bottomRight,
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ViewAllPdf(
-                                                            title: '/BOQSurvey',
-                                                            cityName: cityName!,
-                                                            depoName: widget
-                                                                .depoName!,
-                                                            userId: userId,
-                                                            docId: 'survey')));
-                                          },
-                                          icon: Icon(
-                                            Icons.folder,
-                                            color: yellow,
-                                            size: 35,
-                                          ))
-                                    ],
+                                  Expanded(
+                                    child: Text(
+                                      'Details of Survey',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: black),
+                                    ),
                                   ),
+                                  const SizedBox(width: 10),
+                                  ElevatedButton(
+                                      onPressed: isProjectManager == false
+                                          ? null
+                                          : () async {
+                                              res = await FilePicker.platform
+                                                  .pickFiles(
+                                                type: FileType.any,
+                                                withData: true,
+                                              );
+
+                                              bytes = res!.files.first.bytes!;
+                                              if (res == null) {
+                                                print("No file selected");
+                                              } else {
+                                                setState(() {});
+                                                res!.files.forEach((element) {
+                                                  print(element.name);
+                                                  print(res!.files.first.name);
+                                                });
+                                              }
+                                            },
+                                      child: const Text(
+                                        'Pick file',
+                                        textAlign: TextAlign.end,
+                                      )),
+                                  const SizedBox(width: 10)
                                 ],
                               ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ),
+                          ),
+                          Row(
                             children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width / 2,
-                                height: 40,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'BOQ Electrical',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: black),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      ElevatedButton(
-                                          onPressed: widget.role == 'admin'
-                                              ? null
-                                              : () async {
-                                                  result1 = await FilePicker
-                                                      .platform
-                                                      .pickFiles(
-                                                    type: FileType.any,
-                                                    withData: true,
-                                                  );
-
-                                                  fileBytes1 = result1!
-                                                      .files.first.bytes!;
-                                                  if (result1 == null) {
-                                                    print("No file selected");
-                                                  } else {
-                                                    setState(() {});
-                                                    result1!.files
-                                                        .forEach((element) {
-                                                      print(element.name);
-                                                    });
-                                                  }
-                                                },
-                                          child: const Text(
-                                            'Pick file',
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const SizedBox(width: 10),
-                                    ],
-                                  ),
-                                ),
-                              ),
                               Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                          width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2 -
-                                              50,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                              color: lightblue,
-                                              border: Border.all(color: grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: Row(
-                                            children: [
-                                              if (result1 != null)
-                                                Expanded(
-                                                  child: Text(
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    result1!.files.first.name,
-                                                    //  textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: white),
-                                                  ),
-                                                )
-                                            ],
-                                          )),
-                                      IconButton(
-                                          alignment: Alignment.bottomRight,
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ViewAllPdf(
-                                                            title:
-                                                                '/BOQElectrical',
-                                                            cityName: cityName!,
-                                                            depoName: widget
-                                                                .depoName!,
-                                                            userId: userId,
-                                                            docId:
-                                                                'electrical')));
-                                          },
-                                          icon: Icon(
-                                            Icons.folder,
-                                            color: yellow,
-                                            size: 35,
-                                          ))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width / 2,
-                                height: 40,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          'BOQ Civil',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              color: black),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      ElevatedButton(
-                                          onPressed: widget.role == 'admin'
-                                              ? null
-                                              : () async {
-                                                  result2 = await FilePicker
-                                                      .platform
-                                                      .pickFiles(
-                                                    type: FileType.any,
-                                                    withData: true,
-                                                  );
-
-                                                  fileBytes2 = result2!
-                                                      .files.first.bytes!;
-                                                  if (result2 == null) {
-                                                    print("No file selected");
-                                                  } else {
-                                                    setState(() {});
-                                                    result2!.files
-                                                        .forEach((element) {});
-                                                  }
-                                                },
-                                          child: const Text(
-                                            'Pick file',
-                                            textAlign: TextAlign.end,
-                                          )),
-                                      const SizedBox(width: 10),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                          width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2 -
-                                              50,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                              color: lightblue,
-                                              border: Border.all(color: grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: Row(
-                                            children: [
-                                              if (result2 != null)
-                                                Expanded(
-                                                  child: Text(
-                                                    result2!.files.first.name,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    //  textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: white),
-                                                  ),
-                                                )
-                                            ],
-                                          )),
-                                      IconButton(
-                                          alignment: Alignment.bottomRight,
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ViewAllPdf(
-                                                            title: '/BOQCivil',
-                                                            cityName: cityName!,
-                                                            depoName: widget
-                                                                .depoName!,
-                                                            userId: userId,
-                                                            docId: 'civil')));
-                                          },
-                                          icon: Icon(
-                                            Icons.folder,
-                                            color: yellow,
-                                            size: 35,
-                                          ))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ]),
-                        const SizedBox(height: 15),
-                        StreamBuilder(
-                          stream: _stream,
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData ||
-                                snapshot.data.exists == false) {
-                              return SingleChildScrollView(
-                                child: SfDataGridTheme(
-                                  data: SfDataGridThemeData(headerColor: blue),
-                                  child: SfDataGrid(
-                                    source: _employeeDataSource,
-                                    allowEditing:
-                                        widget.role == 'admin' ? false : true,
-                                    frozenColumnsCount: 1,
-                                    gridLinesVisibility:
-                                        GridLinesVisibility.both,
-                                    headerGridLinesVisibility:
-                                        GridLinesVisibility.both,
-                                    selectionMode: SelectionMode.multiple,
-                                    navigationMode: GridNavigationMode.cell,
-                                    columnWidthMode: ColumnWidthMode.auto,
-                                    editingGestureType: EditingGestureType.tap,
-                                    controller: _dataGridController,
-                                    onQueryRowHeight: (details) {
-                                      return details.getIntrinsicRowHeight(
-                                          details.rowIndex);
-                                    },
-                                    columns: [
-                                      GridColumn(
-                                        visible: false,
-                                        width: 100,
-                                        columnName: 'srNo',
-                                        allowEditing: true,
-                                        label: Container(
-                                          child: Text(
-                                            'Sr No',
-                                            style: tableheaderwhitecolor,
-                                            softWrap:
-                                                true, // Allow text to wrap
-                                            overflow: TextOverflow.clip,
-                                          ),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Date',
-                                        width: 130,
-                                        allowEditing: false,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            'Risk On Date',
-                                            softWrap:
-                                                true, // Allow text to wrap
-                                            overflow: TextOverflow.clip,
-                                            style: tableheaderwhitecolor,
-                                          ),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'RiskDescription',
-                                        width: 180,
-                                        allowEditing: true,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Risk Description',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'TypeRisk',
-                                        width: 180,
-                                        allowEditing: false,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Type',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'impactRisk',
-                                        width: 150,
-                                        allowEditing: false,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Impact Risk',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Owner',
-                                        allowEditing: true,
-                                        width: 150,
-                                        label: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Text('Owner',
-                                                  softWrap:
-                                                      true, // Allow text to wrap
-                                                  overflow: TextOverflow.clip,
-                                                  style: tableheaderwhitecolor),
-                                            ),
-                                            Text(
-                                                'Person Who will manage the risk',
-                                                softWrap:
-                                                    true, // Allow text to wrap
-                                                overflow: TextOverflow.clip,
-                                                textAlign: TextAlign.center,
-                                                style: tableheaderwhitecolor)
-                                          ],
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'MigratingRisk',
-                                        allowEditing: true,
-                                        width: 150,
-                                        label: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Text('Mitigation Action',
-                                                  softWrap:
-                                                      true, // Allow text to wrap
-                                                  overflow: TextOverflow.clip,
-                                                  style: tableheaderwhitecolor),
-                                            ),
-                                            Text(
-                                                'Action to Mitigate the risk e.g reduce the likelihood',
-                                                softWrap:
-                                                    true, // Allow text to wrap
-                                                overflow: TextOverflow.clip,
-                                                style: tableheadersubtitle)
-                                          ],
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'ContigentAction',
-                                        allowEditing: true,
-                                        width: 180,
-                                        label: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Text('Contigent Action',
-                                                  softWrap:
-                                                      true, // Allow text to wrap
-                                                  overflow: TextOverflow.clip,
-                                                  style: tableheaderwhitecolor),
-                                            ),
-                                            Text(
-                                                'Action to be taken if the risk happens',
-                                                softWrap:
-                                                    true, // Allow text to wrap
-                                                overflow: TextOverflow.clip,
-                                                textAlign: TextAlign.center,
-
+                                  Container(
+                                      width: MediaQuery.of(context).size.width /
+                                              2 -
+                                          50,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                          color: lightblue,
+                                          border: Border.all(color: grey),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Row(
+                                        children: [
+                                          if (res != null)
+                                            Expanded(
+                                              child: Text(
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                res!.files.first.name,
                                                 //  textAlign: TextAlign.center,
-                                                style: tableheadersubtitle)
-                                          ],
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'ProgressionAction',
-                                        allowEditing: true,
-                                        width: 180,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Progression Action',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              // overflow: TextOverflow.values.first,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Reason',
-                                        allowEditing: true,
-                                        width: 150,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Remark',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              // overflow: TextOverflow.values.first,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'TargetDate',
-                                        allowEditing: false,
-                                        width: 160,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                              'Target Completion Date Of Risk',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              textAlign: TextAlign.center,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Status',
-                                        allowEditing: false,
-                                        width: 150,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Status',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Add',
-                                        allowEditing: false,
-                                        width: 120,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Add Row',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor
-                                              //   //  textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 15, color: white),
                                               ),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Delete',
-                                        allowEditing: false,
-                                        width: 120,
-                                        label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          alignment: Alignment.center,
-                                          child: Text('Delete Row',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      // GridColumn(
-                                      //   columnName: 'Add',
-                                      //   autoFitPadding:
-                                      //       const EdgeInsets.symmetric(
-                                      //           horizontal: 16),
-                                      //   allowEditing: false,
-                                      //   width: 120,
-                                      //   label: Container(
-                                      //     padding: const EdgeInsets.symmetric(
-                                      //         horizontal: 8.0),
-                                      //     alignment: Alignment.center,
-                                      //     child: Text('Add Row',
-                                      //         // overflow: TextOverflow.values.first,
-                                      //         style: tableheaderwhitecolor
-                                      //         //   //  textAlign: TextAlign.center,
-                                      //         ),
-                                      //   ),
-                                      // ),
-                                      // GridColumn(
-                                      //   columnName: 'Delete',
-                                      //   autoFitPadding:
-                                      //       const EdgeInsets.symmetric(
-                                      //           horizontal: 16),
-                                      //   allowEditing: false,
-                                      //   width: 120,
-                                      //   label: Container(
-                                      //     padding: const EdgeInsets.symmetric(
-                                      //         horizontal: 8.0),
-                                      //     alignment: Alignment.center,
-                                      //     child: Text('Delete Row',
-                                      //         // overflow: TextOverflow.values.first,
-                                      //         style: tableheaderwhitecolor
-                                      //         //   //  textAlign: TextAlign.center,
-                                      //         ),
-                                      //   ),
-                                      // ),
-                                    ],
+                                            )
+                                        ],
+                                      )),
+                                  IconButton(
+                                      alignment: Alignment.bottomRight,
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ViewAllPdf(
+                                                        title: '/BOQSurvey',
+                                                        cityName: cityName!,
+                                                        depoName:
+                                                            widget.depoName!,
+                                                        userId: userId,
+                                                        docId: 'survey')));
+                                      },
+                                      icon: Icon(
+                                        Icons.folder,
+                                        color: yellow,
+                                        size: 35,
+                                      ))
+                                ],
+                              ),
+                            ],
+                          ),
+                        ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: 40,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'BOQ Electrical',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: black),
+                                    ),
                                   ),
-                                ),
-                              );
-                            } else {
-                              // alldata = '';
-                              // alldata = snapshot.data['data'] as List<dynamic>;
-                              // _employees.clear();
-                              // alldata.forEach((element) {
-                              //   _employees
-                              //       .add(DepotOverviewModel.fromJson(element));
-                              //   _employeeDataSource = DepotOverviewDatasource(
-                              //       _employees, context);
-                              //   _dataGridController = DataGridController();
-                              // });
+                                  const SizedBox(width: 10),
+                                  ElevatedButton(
+                                      onPressed: isProjectManager == false
+                                          ? null
+                                          : () async {
+                                              result1 = await FilePicker
+                                                  .platform
+                                                  .pickFiles(
+                                                type: FileType.any,
+                                                withData: true,
+                                              );
 
-                              return SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.65,
-                                child: SfDataGridTheme(
-                                  data: SfDataGridThemeData(headerColor: blue),
-                                  child: SfDataGrid(
-                                    source: _employeeDataSource,
+                                              fileBytes1 =
+                                                  result1!.files.first.bytes!;
+                                              if (result1 == null) {
+                                                print("No file selected");
+                                              } else {
+                                                setState(() {});
+                                                result1!.files
+                                                    .forEach((element) {
+                                                  print(element.name);
+                                                });
+                                              }
+                                            },
+                                      child: const Text(
+                                        'Pick file',
+                                        textAlign: TextAlign.end,
+                                      )),
+                                  const SizedBox(width: 10),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                      width: MediaQuery.of(context).size.width /
+                                              2 -
+                                          50,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                          color: lightblue,
+                                          border: Border.all(color: grey),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Row(
+                                        children: [
+                                          if (result1 != null)
+                                            Expanded(
+                                              child: Text(
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                result1!.files.first.name,
+                                                //  textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 15, color: white),
+                                              ),
+                                            )
+                                        ],
+                                      )),
+                                  IconButton(
+                                      alignment: Alignment.bottomRight,
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ViewAllPdf(
+                                                        title: '/BOQElectrical',
+                                                        cityName: cityName!,
+                                                        depoName:
+                                                            widget.depoName!,
+                                                        userId: userId,
+                                                        docId: 'electrical')));
+                                      },
+                                      icon: Icon(
+                                        Icons.folder,
+                                        color: yellow,
+                                        size: 35,
+                                      ))
+                                ],
+                              ),
+                            ],
+                          ),
+                        ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: 40,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'BOQ Civil',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: black),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  ElevatedButton(
+                                      onPressed: isProjectManager == false
+                                          ? null
+                                          : () async {
+                                              result2 = await FilePicker
+                                                  .platform
+                                                  .pickFiles(
+                                                type: FileType.any,
+                                                withData: true,
+                                              );
+
+                                              fileBytes2 =
+                                                  result2!.files.first.bytes!;
+                                              if (result2 == null) {
+                                                print("No file selected");
+                                              } else {
+                                                setState(() {});
+                                                result2!.files
+                                                    .forEach((element) {});
+                                              }
+                                            },
+                                      child: const Text(
+                                        'Pick file',
+                                        textAlign: TextAlign.end,
+                                      )),
+                                  const SizedBox(width: 10),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                      width: MediaQuery.of(context).size.width /
+                                              2 -
+                                          50,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                          color: lightblue,
+                                          border: Border.all(color: grey),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Row(
+                                        children: [
+                                          if (result2 != null)
+                                            Expanded(
+                                              child: Text(
+                                                result2!.files.first.name,
+                                                overflow: TextOverflow.ellipsis,
+                                                //  textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 15, color: white),
+                                              ),
+                                            )
+                                        ],
+                                      )),
+                                  IconButton(
+                                      alignment: Alignment.bottomRight,
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ViewAllPdf(
+                                                        title: '/BOQCivil',
+                                                        cityName: cityName!,
+                                                        depoName:
+                                                            widget.depoName!,
+                                                        userId: userId,
+                                                        docId: 'civil')));
+                                      },
+                                      icon: Icon(
+                                        Icons.folder,
+                                        color: yellow,
+                                        size: 35,
+                                      ))
+                                ],
+                              ),
+                            ],
+                          ),
+                        ]),
+                    const SizedBox(height: 15),
+                    StreamBuilder(
+                      stream: _stream,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData ||
+                            snapshot.data.exists == false) {
+                          return SingleChildScrollView(
+                            child: SfDataGridTheme(
+                              data: SfDataGridThemeData(headerColor: blue),
+                              child: SfDataGrid(
+                                source: _employeeDataSource,
+                                allowEditing:
+                                    isProjectManager == false ? false : true,
+                                frozenColumnsCount: 1,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                selectionMode: SelectionMode.multiple,
+                                navigationMode: GridNavigationMode.cell,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                editingGestureType: EditingGestureType.tap,
+                                controller: _dataGridController,
+                                onQueryRowHeight: (details) {
+                                  return details
+                                      .getIntrinsicRowHeight(details.rowIndex);
+                                },
+                                columns: [
+                                  GridColumn(
+                                    visible: false,
+                                    width: 100,
+                                    columnName: 'srNo',
                                     allowEditing: true,
-                                    frozenColumnsCount: 2,
-                                    gridLinesVisibility:
-                                        GridLinesVisibility.both,
-                                    headerGridLinesVisibility:
-                                        GridLinesVisibility.both,
-                                    selectionMode: SelectionMode.single,
-                                    navigationMode: GridNavigationMode.cell,
-                                    columnWidthMode: ColumnWidthMode.fill,
-                                    editingGestureType: EditingGestureType.tap,
-                                    controller: _dataGridController,
-                                    onQueryRowHeight: (details) {
-                                      return details.getIntrinsicRowHeight(
-                                          details.rowIndex,
-                                          canIncludeHiddenColumns: true);
-                                    },
-                                    columns: [
-                                      GridColumn(
-                                        visible: false,
-                                        width: 100,
-                                        columnName: 'srNo',
-                                        allowEditing: true,
-                                        label: Container(
-                                          child: Text(
-                                            'Sr No',
-                                            style: tableheaderwhitecolor,
-                                            softWrap:
-                                                true, // Allow text to wrap
-                                            overflow: TextOverflow.clip,
-                                          ),
-                                        ),
+                                    label: Container(
+                                      child: Text(
+                                        'Sr No',
+                                        style: tableheaderwhitecolor,
+                                        softWrap: true, // Allow text to wrap
+                                        overflow: TextOverflow.clip,
                                       ),
-                                      GridColumn(
-                                        columnName: 'Date',
-                                        width: 130,
-                                        allowEditing: false,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            'Risk On Date',
-                                            softWrap:
-                                                true, // Allow text to wrap
-                                            overflow: TextOverflow.clip,
-                                            style: tableheaderwhitecolor,
-                                          ),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'RiskDescription',
-                                        width: 180,
-                                        allowEditing: true,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Risk Description',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'TypeRisk',
-                                        width: 180,
-                                        allowEditing: false,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Type',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'impactRisk',
-                                        width: 150,
-                                        allowEditing: false,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Impact Risk',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Owner',
-                                        allowEditing: true,
-                                        width: 150,
-                                        label: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Text('Owner',
-                                                  softWrap:
-                                                      true, // Allow text to wrap
-                                                  overflow: TextOverflow.clip,
-                                                  style: tableheaderwhitecolor),
-                                            ),
-                                            Text(
-                                                'Person Who will manage the risk',
-                                                softWrap:
-                                                    true, // Allow text to wrap
-                                                overflow: TextOverflow.clip,
-                                                textAlign: TextAlign.center,
-                                                style: tableheaderwhitecolor)
-                                          ],
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'MigratingRisk',
-                                        allowEditing: true,
-                                        width: 150,
-                                        label: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Text('Mitigation Action',
-                                                  softWrap:
-                                                      true, // Allow text to wrap
-                                                  overflow: TextOverflow.clip,
-                                                  style: tableheaderwhitecolor),
-                                            ),
-                                            Text(
-                                                'Action to Mitigate the risk e.g reduce the likelihood',
-                                                softWrap:
-                                                    true, // Allow text to wrap
-                                                overflow: TextOverflow.clip,
-                                                style: tableheadersubtitle)
-                                          ],
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'ContigentAction',
-                                        allowEditing: true,
-                                        width: 180,
-                                        label: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.center,
-                                              child: Text('Contigent Action',
-                                                  softWrap:
-                                                      true, // Allow text to wrap
-                                                  overflow: TextOverflow.clip,
-                                                  style: tableheaderwhitecolor),
-                                            ),
-                                            Text(
-                                                'Action to be taken if the risk happens',
-                                                softWrap:
-                                                    true, // Allow text to wrap
-                                                overflow: TextOverflow.clip,
-                                                textAlign: TextAlign.center,
-
-                                                //  textAlign: TextAlign.center,
-                                                style: tableheadersubtitle)
-                                          ],
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'ProgressionAction',
-                                        allowEditing: true,
-                                        width: 180,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Progression Action',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              // overflow: TextOverflow.values.first,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Reason',
-                                        allowEditing: true,
-                                        width: 150,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Remark',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              // overflow: TextOverflow.values.first,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'TargetDate',
-                                        allowEditing: false,
-                                        width: 160,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                              'Target Completion Date Of Risk',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              textAlign: TextAlign.center,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Status',
-                                        allowEditing: false,
-                                        width: 150,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Status',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Add',
-                                        allowEditing: false,
-                                        width: 120,
-                                        label: Container(
-                                          alignment: Alignment.center,
-                                          child: Text('Add Row',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor
-                                              //   //  textAlign: TextAlign.center,
-                                              ),
-                                        ),
-                                      ),
-                                      GridColumn(
-                                        columnName: 'Delete',
-                                        allowEditing: false,
-                                        width: 120,
-                                        label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          alignment: Alignment.center,
-                                          child: Text('Delete Row',
-                                              softWrap:
-                                                  true, // Allow text to wrap
-                                              overflow: TextOverflow.clip,
-                                              style: tableheaderwhitecolor),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
+                                  GridColumn(
+                                    columnName: 'Date',
+                                    width: 130,
+                                    allowEditing: false,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Risk On Date',
+                                        softWrap: true, // Allow text to wrap
+                                        overflow: TextOverflow.clip,
+                                        style: tableheaderwhitecolor,
+                                      ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'RiskDescription',
+                                    width: 180,
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Risk Description',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'TypeRisk',
+                                    width: 180,
+                                    allowEditing: false,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Type',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'impactRisk',
+                                    width: 150,
+                                    allowEditing: false,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Impact Risk',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Owner',
+                                    allowEditing: true,
+                                    width: 150,
+                                    label: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text('Owner',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                        Text('Person Who will manage the risk',
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
+                                            textAlign: TextAlign.center,
+                                            style: tableheaderwhitecolor)
+                                      ],
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'MigratingRisk',
+                                    allowEditing: true,
+                                    width: 150,
+                                    label: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text('Mitigation Action',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                        Text(
+                                            'Action to Mitigate the risk e.g reduce the likelihood',
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
+                                            style: tableheadersubtitle)
+                                      ],
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'ContigentAction',
+                                    allowEditing: true,
+                                    width: 180,
+                                    label: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text('Contigent Action',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                        Text(
+                                            'Action to be taken if the risk happens',
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
+                                            textAlign: TextAlign.center,
+
+                                            //  textAlign: TextAlign.center,
+                                            style: tableheadersubtitle)
+                                      ],
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'ProgressionAction',
+                                    allowEditing: true,
+                                    width: 180,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Progression Action',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          // overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Reason',
+                                    allowEditing: true,
+                                    width: 150,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Remark',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          // overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'TargetDate',
+                                    allowEditing: false,
+                                    width: 160,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          'Target Completion Date Of Risk',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          textAlign: TextAlign.center,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Status',
+                                    allowEditing: false,
+                                    width: 150,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Status',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Add',
+                                    allowEditing: false,
+                                    width: 120,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Add Row',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor
+                                          //   //  textAlign: TextAlign.center,
+                                          ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Delete',
+                                    allowEditing: false,
+                                    width: 120,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Delete Row',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  // GridColumn(
+                                  //   columnName: 'Add',
+                                  //   autoFitPadding:
+                                  //       const EdgeInsets.symmetric(
+                                  //           horizontal: 16),
+                                  //   allowEditing: false,
+                                  //   width: 120,
+                                  //   label: Container(
+                                  //     padding: const EdgeInsets.symmetric(
+                                  //         horizontal: 8.0),
+                                  //     alignment: Alignment.center,
+                                  //     child: Text('Add Row',
+                                  //         // overflow: TextOverflow.values.first,
+                                  //         style: tableheaderwhitecolor
+                                  //         //   //  textAlign: TextAlign.center,
+                                  //         ),
+                                  //   ),
+                                  // ),
+                                  // GridColumn(
+                                  //   columnName: 'Delete',
+                                  //   autoFitPadding:
+                                  //       const EdgeInsets.symmetric(
+                                  //           horizontal: 16),
+                                  //   allowEditing: false,
+                                  //   width: 120,
+                                  //   label: Container(
+                                  //     padding: const EdgeInsets.symmetric(
+                                  //         horizontal: 8.0),
+                                  //     alignment: Alignment.center,
+                                  //     child: Text('Delete Row',
+                                  //         // overflow: TextOverflow.values.first,
+                                  //         style: tableheaderwhitecolor
+                                  //         //   //  textAlign: TextAlign.center,
+                                  //         ),
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          // alldata = '';
+                          // alldata = snapshot.data['data'] as List<dynamic>;
+                          // _employees.clear();
+                          // alldata.forEach((element) {
+                          //   _employees
+                          //       .add(DepotOverviewModel.fromJson(element));
+                          //   _employeeDataSource = DepotOverviewDatasource(
+                          //       _employees, context);
+                          //   _dataGridController = DataGridController();
+                          // });
+
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.65,
+                            child: SfDataGridTheme(
+                              data: SfDataGridThemeData(headerColor: blue),
+                              child: SfDataGrid(
+                                source: _employeeDataSource,
+                                allowEditing: true,
+                                frozenColumnsCount: 2,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                selectionMode: SelectionMode.single,
+                                navigationMode: GridNavigationMode.cell,
+                                columnWidthMode: ColumnWidthMode.fill,
+                                editingGestureType: EditingGestureType.tap,
+                                controller: _dataGridController,
+                                onQueryRowHeight: (details) {
+                                  return details.getIntrinsicRowHeight(
+                                      details.rowIndex,
+                                      canIncludeHiddenColumns: true);
+                                },
+                                columns: [
+                                  GridColumn(
+                                    visible: false,
+                                    width: 100,
+                                    columnName: 'srNo',
+                                    allowEditing: true,
+                                    label: Container(
+                                      child: Text(
+                                        'Sr No',
+                                        style: tableheaderwhitecolor,
+                                        softWrap: true, // Allow text to wrap
+                                        overflow: TextOverflow.clip,
+                                      ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Date',
+                                    width: 130,
+                                    allowEditing: false,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Risk On Date',
+                                        softWrap: true, // Allow text to wrap
+                                        overflow: TextOverflow.clip,
+                                        style: tableheaderwhitecolor,
+                                      ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'RiskDescription',
+                                    width: 180,
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Risk Description',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'TypeRisk',
+                                    width: 180,
+                                    allowEditing: false,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Type',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'impactRisk',
+                                    width: 150,
+                                    allowEditing: false,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Impact Risk',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Owner',
+                                    allowEditing: true,
+                                    width: 150,
+                                    label: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text('Owner',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                        Text('Person Who will manage the risk',
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
+                                            textAlign: TextAlign.center,
+                                            style: tableheaderwhitecolor)
+                                      ],
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'MigratingRisk',
+                                    allowEditing: true,
+                                    width: 150,
+                                    label: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text('Mitigation Action',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                        Text(
+                                            'Action to Mitigate the risk e.g reduce the likelihood',
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
+                                            style: tableheadersubtitle)
+                                      ],
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'ContigentAction',
+                                    allowEditing: true,
+                                    width: 180,
+                                    label: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text('Contigent Action',
+                                              softWrap:
+                                                  true, // Allow text to wrap
+                                              overflow: TextOverflow.clip,
+                                              style: tableheaderwhitecolor),
+                                        ),
+                                        Text(
+                                            'Action to be taken if the risk happens',
+                                            softWrap:
+                                                true, // Allow text to wrap
+                                            overflow: TextOverflow.clip,
+                                            textAlign: TextAlign.center,
+
+                                            //  textAlign: TextAlign.center,
+                                            style: tableheadersubtitle)
+                                      ],
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'ProgressionAction',
+                                    allowEditing: true,
+                                    width: 180,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Progression Action',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          // overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Reason',
+                                    allowEditing: true,
+                                    width: 150,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Remark',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          // overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'TargetDate',
+                                    allowEditing: false,
+                                    width: 160,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          'Target Completion Date Of Risk',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          textAlign: TextAlign.center,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Status',
+                                    allowEditing: false,
+                                    width: 150,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Status',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Add',
+                                    allowEditing: false,
+                                    width: 120,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Add Row',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor
+                                          //   //  textAlign: TextAlign.center,
+                                          ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Delete',
+                                    allowEditing: false,
+                                    width: 120,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Delete Row',
+                                          softWrap: true, // Allow text to wrap
+                                          overflow: TextOverflow.clip,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      },
                     ),
-                  ),
+                  ],
+                ),
+              ),
         floatingActionButton: isProjectManager == true
             ? FloatingActionButton(
                 heroTag: 'add',
@@ -1113,11 +1072,13 @@ class _DepotOverviewState extends State<DepotOverview> {
             : Container());
   }
 
-  overviewField(TextEditingController controller, String title, String msg) {
+  overviewField(TextEditingController controller, String title, String msg,
+      bool isPManager) {
     return Container(
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          isProjectManager: isPManager,
           role: widget.role,
           controller: controller,
           labeltext: title,
@@ -1345,12 +1306,13 @@ class _DepotOverviewState extends State<DepotOverview> {
             if (depot[j].toString() == widget.depoName) {
               isProjectManager = true;
               setState(() {});
+              break;
             }
           }
         }
       }
     }
-
+    print('Project Manager Logged In - $isProjectManager');
     _fetchUserData(userId);
   }
 

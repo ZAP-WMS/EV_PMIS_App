@@ -17,7 +17,8 @@ class SplitScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: () async {
-        showCustomAlert(context);
+        CustomAlertBox()
+            .customLogOut(context, 'Do you want to Exit ?', '', true);
         return true;
       },
       child: Scaffold(
@@ -30,7 +31,7 @@ class SplitScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             actions: [
               Container(
-                padding: EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15),
                 child: InkWell(
                     onTap: () {
                       CustomAlertBox().customLogOut(context,

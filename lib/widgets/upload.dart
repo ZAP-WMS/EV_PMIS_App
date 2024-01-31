@@ -48,7 +48,7 @@ class _UploadDocumentState extends State<UploadDocument> {
             preferredSize: const Size.fromHeight(50),
             child: CustomAppBar(
               depoName: widget.depoName ?? '',
-              title: '${widget.cityName}/${widget.depoName}/Upload Checklist',
+              title: 'Upload Checklist',
               isSync: false,
               isCentered: true,
               height: 50,

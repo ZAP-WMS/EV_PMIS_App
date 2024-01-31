@@ -6,6 +6,7 @@ class CustomTextField extends StatefulWidget {
   String? role;
   bool isObscure;
   String labeltext;
+  bool isProjectManager;
   final String? Function(String?)? validatortext;
 
   final TextInputType? keyboardType;
@@ -18,6 +19,7 @@ class CustomTextField extends StatefulWidget {
       required this.keyboardType,
       required this.textInputAction,
       this.role,
+      this.isProjectManager = true,
       this.isObscure = false});
 
   @override
@@ -29,7 +31,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: widget.isObscure,
-      readOnly: widget.role == 'admin' ? true : false,
+      readOnly: widget.isProjectManager ? false : true,
       autofocus: false,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,
