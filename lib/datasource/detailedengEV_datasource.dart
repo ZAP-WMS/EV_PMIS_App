@@ -132,6 +132,7 @@ class DetailedEngSourceEV extends DataGridSource {
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: (dataGridCell.columnName == 'Add')
             ? ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: blue),
                 onPressed: () {
                   addRowAtIndex(
                       dataRowIndex + 1,

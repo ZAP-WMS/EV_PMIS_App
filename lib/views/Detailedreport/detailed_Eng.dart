@@ -158,7 +158,7 @@ class _DetailedEngtState extends State<DetailedEng>
       child: Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            backgroundColor: blue,
+            backgroundColor: white,
             title: Column(
               children: [
                 const Text(
@@ -172,6 +172,10 @@ class _DetailedEngtState extends State<DetailedEng>
                   ),
                 ),
               ],
+            ),
+            flexibleSpace: Container(
+              height: 80,
+              color: blue,
             ),
             actions: [
               InkWell(
@@ -212,9 +216,16 @@ class _DetailedEngtState extends State<DetailedEng>
               //     )
             ],
             bottom: TabBar(
+              unselectedLabelColor: tabbarColor,
+              labelColor:
+                  _selectedIndex == _selectedIndex ? white : tabbarColor,
               onTap: (value) {
                 _selectedIndex = value;
               },
+              indicator: BoxDecoration(
+                color:
+                    blue, // Set the background color of the selected tab label
+              ),
               tabs: const [
                 Tab(text: "RFC Drawings of Civil Activities"),
                 Tab(text: "EV Layout Drawings of Electrical Activities"),
@@ -229,6 +240,7 @@ class _DetailedEngtState extends State<DetailedEng>
           tabScreen2(),
         ]),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: blue,
           child: Icon(Icons.add),
           onPressed: (() {
             if (_selectedIndex == 0) {
@@ -494,7 +506,10 @@ class _DetailedEngtState extends State<DetailedEng>
           ? LoadingPage()
           : Column(children: [
               SfDataGridTheme(
-                data: SfDataGridThemeData(headerColor: blue),
+                data: SfDataGridThemeData(
+                    headerColor: white,
+                    gridLineColor: blue,
+                    gridLineStrokeWidth: 2),
                 child: Expanded(
                   child: StreamBuilder(
                     stream: _stream,
@@ -593,7 +608,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'PreparationDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -608,7 +623,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'SubmissionDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -623,7 +638,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ApproveDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -638,7 +653,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ReleaseDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -792,9 +807,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                autoFitPadding: tablepadding,
+                                // autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -809,7 +824,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'SubmissionDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -824,7 +839,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ApproveDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -839,7 +854,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ReleaseDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -912,7 +927,10 @@ class _DetailedEngtState extends State<DetailedEng>
           ? LoadingPage()
           : Column(children: [
               SfDataGridTheme(
-                data: SfDataGridThemeData(headerColor: blue),
+                data: SfDataGridThemeData(
+                    headerColor: white,
+                    gridLineColor: blue,
+                    gridLineStrokeWidth: 2),
                 child: Expanded(
                   child: StreamBuilder(
                     stream: _stream1,
@@ -1011,7 +1029,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'PreparationDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1026,7 +1044,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'SubmissionDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1041,7 +1059,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ApproveDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1056,7 +1074,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ReleaseDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1210,7 +1228,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'PreparationDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1225,7 +1243,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'SubmissionDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1240,7 +1258,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ApproveDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1255,7 +1273,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ReleaseDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1343,7 +1361,10 @@ class _DetailedEngtState extends State<DetailedEng>
           ? const LoadingPage()
           : Column(children: [
               SfDataGridTheme(
-                data: SfDataGridThemeData(headerColor: blue),
+                data: SfDataGridThemeData(
+                    headerColor: white,
+                    gridLineColor: blue,
+                    gridLineStrokeWidth: 2),
                 child: Expanded(
                   child: StreamBuilder(
                     stream: _stream2,
@@ -1442,7 +1463,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'PreparationDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1457,7 +1478,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'SubmissionDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1472,7 +1493,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ApproveDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1487,7 +1508,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ReleaseDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1641,7 +1662,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'PreparationDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1656,7 +1677,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'SubmissionDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1671,7 +1692,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'ApproveDate',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 150,
+                                width: 152,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,

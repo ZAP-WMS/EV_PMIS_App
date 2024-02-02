@@ -178,7 +178,10 @@ class _CivilTableState extends State<CivilTable> {
           }
           if (!snapshot.hasData || snapshot.data.exists == false) {
             return SfDataGridTheme(
-              data: SfDataGridThemeData(headerColor: blue),
+              data: SfDataGridThemeData(
+                  gridLineColor: blue,
+                  gridLineStrokeWidth: 2,
+                  frozenPaneLineColor: blue),
               child: SfDataGrid(
                 source: widget.titleIndex == 0
                     ? _qualityExcavationDataSource
@@ -337,7 +340,10 @@ class _CivilTableState extends State<CivilTable> {
               qualitylisttable1.add(QualitychecklistModel.fromJson(element));
             });
             return SfDataGridTheme(
-              data: SfDataGridThemeData(headerColor: blue),
+              data: SfDataGridThemeData(
+                  gridLineColor: blue,
+                  gridLineStrokeWidth: 2,
+                  frozenPaneLineColor: blue),
               child: SfDataGrid(
                 source: widget.titleIndex == 0
                     ? _qualityExcavationDataSource

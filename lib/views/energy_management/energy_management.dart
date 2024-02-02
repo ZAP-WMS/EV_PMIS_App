@@ -598,72 +598,69 @@ class _EnergyManagementState extends State<EnergyManagement> {
                   _energyProvider!.fetchGraphData(
                       widget.cityName!, widget.depoName!, widget.userId);
 
-                  return Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: BarChart(
-                        swapAnimationCurve: Curves.linear,
-                        swapAnimationDuration:
-                            const Duration(milliseconds: 1000),
-                        BarChartData(
-                          backgroundColor: white,
-                          barTouchData: BarTouchData(
-                            enabled: true,
-                            allowTouchBarBackDraw: true,
-                            touchTooltipData: BarTouchTooltipData(
-                              tooltipRoundedRadius: 5,
-                              tooltipBgColor: Colors.transparent,
-                              tooltipMargin: 5,
-                            ),
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 25),
+                    child: BarChart(
+                      swapAnimationCurve: Curves.linear,
+                      swapAnimationDuration: const Duration(milliseconds: 1000),
+                      BarChartData(
+                        backgroundColor: white,
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          allowTouchBarBackDraw: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipRoundedRadius: 5,
+                            tooltipBgColor: Colors.transparent,
+                            tooltipMargin: 5,
                           ),
-                          minY: 0,
-                          titlesData: FlTitlesData(
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (data1, meta) {
-                                  return Text(
-                                    value.intervalData[data1.toInt()],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
-                                  );
-                                },
-                              ),
-                            ),
-                            rightTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            topTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: false,
-                                getTitlesWidget: (data2, meta) {
-                                  return Text(
-                                    value.energyData[data2.toInt()],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          gridData: FlGridData(
-                            drawHorizontalLine: true,
-                            drawVerticalLine: true,
-                          ),
-                          borderData: FlBorderData(
-                            border: const Border(
-                              left: BorderSide(),
-                              bottom: BorderSide(),
-                            ),
-                          ),
-                          maxY: (value.intervalData.isEmpty &&
-                                  value.energyData.isEmpty)
-                              ? 50000
-                              : value.energyData.reduce((max, current) =>
-                                  max > current ? max : current),
-                          barGroups: barChartGroupData(value.energyData),
                         ),
+                        minY: 0,
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (data1, meta) {
+                                return Text(
+                                  value.intervalData[data1.toInt()],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                );
+                              },
+                            ),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                              getTitlesWidget: (data2, meta) {
+                                return Text(
+                                  value.energyData[data2.toInt()],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          drawHorizontalLine: true,
+                          drawVerticalLine: true,
+                        ),
+                        borderData: FlBorderData(
+                          border: const Border(
+                            left: BorderSide(),
+                            bottom: BorderSide(),
+                          ),
+                        ),
+                        maxY: (value.intervalData.isEmpty &&
+                                value.energyData.isEmpty)
+                            ? 50000
+                            : value.energyData.reduce((max, current) =>
+                                max > current ? max : current),
+                        barGroups: barChartGroupData(value.energyData),
                       ),
                     ),
                   );

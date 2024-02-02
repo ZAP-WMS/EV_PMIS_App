@@ -145,7 +145,10 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                           _dataGridController = DataGridController();
 
                           return SfDataGridTheme(
-                            data: SfDataGridThemeData(headerColor: blue),
+                            data: SfDataGridThemeData(
+                                headerColor: white,
+                                gridLineColor: blue,
+                                gridLineStrokeWidth: 2),
                             child: SfDataGrid(
                                 source: monthlyDataSource,
                                 allowEditing: true,
@@ -333,7 +336,10 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                           //   _dataGridController = DataGridController();
                           // });
                           return SfDataGridTheme(
-                            data: SfDataGridThemeData(headerColor: blue),
+                            data: SfDataGridThemeData(
+                                headerColor: white,
+                                gridLineColor: blue,
+                                gridLineStrokeWidth: 2),
                             child: SfDataGrid(
                                 source: monthlyDataSource,
                                 allowEditing: true,

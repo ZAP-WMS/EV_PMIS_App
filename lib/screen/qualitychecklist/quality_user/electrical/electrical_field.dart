@@ -303,7 +303,10 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                 //  widget.isHeader!
                                 //     ?
                                 SfDataGridTheme(
-                              data: SfDataGridThemeData(headerColor: blue),
+                              data: SfDataGridThemeData(
+                                  gridLineColor: blue,
+                                  gridLineStrokeWidth: 2,
+                                  frozenPaneLineColor: blue),
                               child: SfDataGrid(
                                 source: widget.fielClnName == 'PSS'
                                     ? _qualityPSSDataSource
@@ -383,11 +386,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                       padding: const EdgeInsets.all(8.0),
                                       alignment: Alignment.center,
                                       child: Text('RESPONSIBILITY',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: white,
-                                          )),
+                                          style: tableheaderwhitecolor),
                                     ),
                                   ),
                                   GridColumn(
@@ -555,7 +554,10 @@ class _ElectricalFieldState extends State<ElectricalField> {
                             // });
 
                             return SfDataGridTheme(
-                              data: SfDataGridThemeData(headerColor: blue),
+                              data: SfDataGridThemeData(
+                                  gridLineColor: blue,
+                                  gridLineStrokeWidth: 2,
+                                  frozenPaneLineColor: blue),
                               child: SfDataGrid(
                                 source: widget.fielClnName == 'PSS'
                                     ? _qualityPSSDataSource
@@ -636,11 +638,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                       padding: const EdgeInsets.all(8.0),
                                       alignment: Alignment.center,
                                       child: Text('RESPONSIBILITY',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: white,
-                                          )),
+                                          style: tableheaderwhitecolor),
                                     ),
                                   ),
                                   GridColumn(
@@ -648,8 +646,8 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                     allowEditing: true,
                                     width: 250,
                                     label: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('DOCUMENT REFERENCE',
                                           overflow: TextOverflow.values.first,

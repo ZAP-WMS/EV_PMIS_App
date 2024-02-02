@@ -125,7 +125,7 @@ class _DepotOverviewState extends State<DepotOverview> {
         ),
         drawer: const NavbarDrawer(),
         body: _isloading
-            ? LoadingPage()
+            ? const LoadingPage()
             // : isProjectManager == false
             //     ? Center(
             //         child: Column(
@@ -662,7 +662,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                           if (!snapshot.hasData ||
                               snapshot.data.exists == false) {
                             return SfDataGridTheme(
-                              data: SfDataGridThemeData(headerColor: blue),
+                              data: SfDataGridThemeData(gridLineColor: blue),
                               child: SfDataGrid(
                                 source: _employeeDataSource,
                                 allowEditing: true,
@@ -692,7 +692,6 @@ class _DepotOverviewState extends State<DepotOverview> {
                                         'Sr No',
                                         style: tableheaderwhitecolor,
                                         softWrap: true,
-                                        //   //  textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ),
@@ -913,7 +912,8 @@ class _DepotOverviewState extends State<DepotOverview> {
                               _dataGridController = DataGridController();
                             });
                             return SfDataGridTheme(
-                              data: SfDataGridThemeData(headerColor: blue),
+                              data: SfDataGridThemeData(
+                                  gridLineColor: blue, headerColor: white),
                               child: SfDataGrid(
                                 source: _employeeDataSource,
                                 allowEditing: true,

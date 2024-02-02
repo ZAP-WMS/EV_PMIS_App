@@ -102,7 +102,7 @@ class _DailyProjectState extends State<DailyProject> {
               }),
           preferredSize: const Size.fromHeight(80)),
       body: isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(children: [
               Expanded(
                 child: StreamBuilder(
@@ -110,7 +110,10 @@ class _DailyProjectState extends State<DailyProject> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.exists == false) {
                       return SfDataGridTheme(
-                        data: SfDataGridThemeData(headerColor: blue),
+                        data: SfDataGridThemeData(
+                            headerColor: white,
+                            gridLineColor: blue,
+                            gridLineStrokeWidth: 2),
                         child: SfDataGrid(
                             source: _dailyDataSource,
                             allowEditing: true,
@@ -360,7 +363,10 @@ class _DailyProjectState extends State<DailyProject> {
                       //   _dataGridController = DataGridController();
                       // });
                       return SfDataGridTheme(
-                          data: SfDataGridThemeData(headerColor: blue),
+                          data: SfDataGridThemeData(
+                              headerColor: white,
+                              gridLineColor: blue,
+                              gridLineStrokeWidth: 2),
                           child: SfDataGrid(
                               source: _dailyDataSource,
                               allowEditing: true,

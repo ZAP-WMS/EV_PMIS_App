@@ -6,10 +6,11 @@ Color blue = const Color.fromARGB(255, 9, 83, 161);
 Color lightblue = Colors.blue;
 Color white = Colors.white;
 Color black = Colors.black;
-Color grey = Colors.grey;
+Color grey = Color(0xFFEDEDED);
 Color red = Colors.red;
 Color green = Color.fromARGB(255, 88, 221, 128);
 Color yellow = Colors.yellow;
+Color tabbarColor = Colors.grey;
 
 TextStyle headline = GoogleFonts.ibmPlexSans(
     fontSize: 12, fontWeight: FontWeight.w400, color: black);
@@ -58,12 +59,12 @@ TextStyle tableheadersubtitle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: red);
 
 TextStyle tableheaderwhitecolor =
-    TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: white);
+    TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: blue);
 
 TextStyle tablefontsize = const TextStyle(fontSize: 12, color: Colors.black);
 TextStyle uploadViewStyle = const TextStyle(fontSize: 12, color: Colors.white);
 EdgeInsets tablepadding =
-    const EdgeInsets.symmetric(horizontal: 5, vertical: 14);
+    const EdgeInsets.symmetric(horizontal: 5, vertical: 12);
 
 TextStyle normaltext = GoogleFonts.ibmPlexSans(
   fontWeight: FontWeight.w600,

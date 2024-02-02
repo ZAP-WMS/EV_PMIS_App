@@ -106,19 +106,19 @@ class _OverviewPageState extends State<OverviewPage> {
               shrinkWrap: true,
               itemCount: description.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1.2),
               itemBuilder: (context, index) {
                 return Card(
-                  elevation: 5,
+                  color: grey,
+                  elevation: 20,
+
                   // shadowColor: blue,
                   // borderOnForeground: true,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      color: blue,
-                    ),
+                    side: BorderSide(color: blue, width: 2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: InkWell(
@@ -151,16 +151,16 @@ class _OverviewPageState extends State<OverviewPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatar(
-          minRadius: 20,
-          maxRadius: 27,
-          backgroundColor: blue,
+          minRadius: 30,
+          maxRadius: 30,
+          backgroundColor: grey,
           child: CircleAvatar(
-            minRadius: 20,
-            maxRadius: 25,
-            backgroundColor: white,
+            minRadius: 30,
+            maxRadius: 30,
+            backgroundColor: grey,
             child: SizedBox(
-              height: 30,
-              width: 30,
+              height: 50,
+              width: 50,
               child: Image.asset(
                 image,
                 fit: BoxFit.cover,

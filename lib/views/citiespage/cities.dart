@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:flutter/material.dart';
@@ -34,14 +35,14 @@ class _CitiesPageState extends State<CitiesPage> {
   @override
   Widget build(BuildContext context) {
     return isloading
-        ? const CircularProgressIndicator()
+        ? LoadingPage()
         : Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Container(
               padding: const EdgeInsets.only(top: 20),
               width: 100,
               decoration: BoxDecoration(
-                border: Border.all(color: grey),
+                border: Border.all(color: blue, width: 2),
                 color: white,
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.elliptical(40, 40),
@@ -102,8 +103,10 @@ class _CitiesPageState extends State<CitiesPage> {
         Card(
           color: white,
           elevation: 5,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.elliptical(100, 100))),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: blue),
+              borderRadius:
+                  const BorderRadius.all(Radius.elliptical(100, 100))),
           child: Container(
             width: 50,
             height: 50,
@@ -132,9 +135,9 @@ class _CitiesPageState extends State<CitiesPage> {
               selectionColor: white,
               style: active
                   ? TextStyle(
-                      color: white, fontWeight: FontWeight.bold, fontSize: 12)
+                      color: white, fontWeight: FontWeight.bold, fontSize: 10)
                   : TextStyle(
-                      color: blue, fontWeight: FontWeight.bold, fontSize: 12)),
+                      color: blue, fontWeight: FontWeight.bold, fontSize: 10)),
         ),
       ],
     );

@@ -46,16 +46,17 @@ class _JmrUserPageState extends State<JmrUserPage> {
         appBar: AppBar(
           backgroundColor: Colors.blue[900],
           bottom: TabBar(
-              labelColor: white,
-              labelStyle: buttonWhite,
-              unselectedLabelColor: Colors.black,
+              unselectedLabelColor: tabbarColor,
+              labelColor:
+                  _selectedIndex == _selectedIndex ? white : tabbarColor,
               //indicatorSize: TabBarIndicatorSize.label,
-              indicator: MaterialIndicator(
-                  horizontalPadding: 24,
-                  bottomLeftRadius: 8,
-                  bottomRightRadius: 8,
-                  color: white,
-                  paintingStyle: PaintingStyle.fill),
+              indicator: BoxDecoration(color: blue),
+              //  MaterialIndicator(
+              //     horizontalPadding: 24,
+              //     bottomLeftRadius: 8,
+              //     bottomRightRadius: 8,
+              //     color: white,
+              //     paintingStyle: PaintingStyle.fill),
               onTap: (value) {
                 _selectedIndex = value;
                 getJmrLen(5);
@@ -71,6 +72,10 @@ class _JmrUserPageState extends State<JmrUserPage> {
           title: Text(
             'JMR / ${widget.depoName}',
             style: const TextStyle(fontSize: 14),
+          ),
+          flexibleSpace: Container(
+            height: 80,
+            color: blue,
           ),
         ),
         body: _isLoading

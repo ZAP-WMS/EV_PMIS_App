@@ -509,7 +509,8 @@ class _DepotOverviewState extends State<DepotOverview> {
                             snapshot.data.exists == false) {
                           return SingleChildScrollView(
                             child: SfDataGridTheme(
-                              data: SfDataGridThemeData(headerColor: blue),
+                              data: SfDataGridThemeData(
+                                  headerColor: white, gridLineColor: blue),
                               child: SfDataGrid(
                                 source: _employeeDataSource,
                                 allowEditing:

@@ -84,7 +84,7 @@ class _QualityHomeState extends State<QualityHome> {
             // key: scaffoldKey,
 
             appBar: AppBar(
-              backgroundColor: blue,
+              backgroundColor: white,
               centerTitle: true,
               title: Column(
                 children: [
@@ -96,6 +96,10 @@ class _QualityHomeState extends State<QualityHome> {
                         fontSize: 11,
                       )),
                 ],
+              ),
+              flexibleSpace: Container(
+                height: 60,
+                color: blue,
               ),
               actions: const [
                 // Row(
@@ -188,23 +192,26 @@ class _QualityHomeState extends State<QualityHome> {
                 child: Column(
                   children: [
                     TabBar(
-                      labelColor: white,
-                      labelStyle: buttonWhite,
-                      unselectedLabelColor: Colors.black,
-                      indicator: MaterialIndicator(
-                          horizontalPadding: 24,
-                          bottomLeftRadius: 8,
-                          bottomRightRadius: 8,
-                          color: white,
-                          paintingStyle: PaintingStyle.fill),
-                      tabs: const [
-                        Tab(text: 'Civil Engineer'),
-                        Tab(text: 'Electrical Engineer'),
-                      ],
+                      unselectedLabelColor: tabbarColor,
+                      labelColor: _selectedIndex == _selectedIndex
+                          ? white
+                          : tabbarColor,
                       onTap: (value) {
                         _selectedIndex = value;
                         setState(() {});
                       },
+                      indicator: BoxDecoration(
+                        color:
+                            blue, // Set the background color of the selected tab label
+                      ),
+                      tabs: const [
+                        Tab(text: 'Civil Engineer'),
+                        Tab(text: 'Electrical Engineer'),
+                      ],
+                      // onTap: (value) {
+                      //   _selectedIndex = value;
+                      //   setState(() {});
+                      // },
                     ),
                   ],
                 ),
@@ -252,17 +259,18 @@ class _QualityHomeState extends State<QualityHome> {
 
   Widget tabbarlist(List<String> list, int index) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(8.0),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
+          border: Border.all(color: blue),
           borderRadius: BorderRadius.circular(10),
-          color: blue,
+          color: white,
         ),
         child: Text(
           list[index],
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 13, color: white),
+          style: TextStyle(fontSize: 13, color: blue),
         ),
       ),
     );

@@ -13,7 +13,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   bool isCentered = true;
   bool isprogress;
   bool haveupload;
-  String depoName;
+  String? depoName;
   final void Function()? store;
   CustomAppBar({
     super.key,
@@ -24,7 +24,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.haveupload = false,
     required this.isCentered,
     this.store,
-    required this.depoName,
+    this.depoName,
   });
 
   @override
@@ -45,10 +45,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
           Text(
             widget.title,
             // maxLines: 2,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          ), 
           Text(
-            widget.depoName,
+            widget.depoName!,
             style: TextStyle(fontSize: 11),
           )
         ],

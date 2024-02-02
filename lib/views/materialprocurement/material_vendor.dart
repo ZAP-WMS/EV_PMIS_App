@@ -83,10 +83,13 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
             ),
             preferredSize: const Size.fromHeight(50)),
         body: isLoading
-            ? LoadingPage()
+            ? const LoadingPage()
             : Column(children: [
                 SfDataGridTheme(
-                    data: SfDataGridThemeData(headerColor: blue),
+                    data: SfDataGridThemeData(
+                        headerColor: white,
+                        gridLineColor: blue,
+                        gridLineStrokeWidth: 2),
                     child: Expanded(
                       child: StreamBuilder(
                           stream: _stream,

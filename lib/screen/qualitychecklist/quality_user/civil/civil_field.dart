@@ -326,7 +326,10 @@ class _CivilFieldState extends State<CivilField> {
                             if (!snapshot.hasData ||
                                 snapshot.data.exists == false) {
                               return SfDataGridTheme(
-                                data: SfDataGridThemeData(headerColor: blue),
+                                data: SfDataGridThemeData(
+                                    gridLineColor: blue,
+                                    gridLineStrokeWidth: 2,
+                                    frozenPaneLineColor: blue),
                                 child: SfDataGrid(
                                   source: widget.fieldclnName == 'Exc'
                                       ? _qualityExcavationDataSource
@@ -414,13 +417,9 @@ class _CivilFieldState extends State<CivilField> {
                                       label: Container(
                                         padding: const EdgeInsets.all(8.0),
                                         alignment: Alignment.center,
-                                        child:
-                                            Text("Contractor’s Site Engineer",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  color: white,
-                                                )),
+                                        child: Text(
+                                            "Contractor’s Site Engineer",
+                                            style: tableheaderwhitecolor),
                                       ),
                                     ),
                                     GridColumn(
@@ -643,13 +642,9 @@ class _CivilFieldState extends State<CivilField> {
                                       label: Container(
                                         padding: const EdgeInsets.all(8.0),
                                         alignment: Alignment.center,
-                                        child:
-                                            Text("Contractor’s Site Engineer",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  color: white,
-                                                )),
+                                        child: Text(
+                                            "Contractor’s Site Engineer",
+                                            style: tableheaderwhitecolor),
                                       ),
                                     ),
                                     GridColumn(

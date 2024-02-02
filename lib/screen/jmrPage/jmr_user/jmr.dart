@@ -44,18 +44,19 @@ class _JmrUserPageState extends State<JmrUserPage> {
       child: SafeArea(
           child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue[900],
+          backgroundColor: white,
           bottom: TabBar(
               labelColor: white,
               labelStyle: buttonWhite,
               unselectedLabelColor: Colors.black,
               //indicatorSize: TabBarIndicatorSize.label,
-              indicator: MaterialIndicator(
-                  horizontalPadding: 24,
-                  bottomLeftRadius: 8,
-                  bottomRightRadius: 8,
-                  color: white,
-                  paintingStyle: PaintingStyle.fill),
+              indicator: BoxDecoration(color: blue),
+              // MaterialIndicator(
+              //     horizontalPadding: 24,
+              //     bottomLeftRadius: 8,
+              //     bottomRightRadius: 8,
+              //     color: white,
+              //     paintingStyle: PaintingStyle.fill),
               onTap: (value) {
                 _selectedIndex = value;
                 getJmrLen(5);
@@ -79,6 +80,10 @@ class _JmrUserPageState extends State<JmrUserPage> {
                 style: const TextStyle(fontSize: 11),
               ),
             ],
+          ),
+          flexibleSpace: Container(
+            height: 60,
+            color: blue,
           ),
         ),
         body: _isLoading

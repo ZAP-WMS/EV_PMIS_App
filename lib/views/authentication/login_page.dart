@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                       //     empIdController.text, 'Employee Id is required'),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
+                      isSuffixIcon: false,
                       validatortext: (value) {
                         return checkFieldEmpty(value!, 'Email is Required');
                       },
@@ -56,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                           return checkFieldEmpty(
                               passwordcontroller.text, 'Password is Required');
                         },
+                        isSuffixIcon: true,
                         keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done),
                     _space(16),
@@ -96,19 +98,18 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: const Text('Sign In'))),
 
-                      // Text("Project Management Information System",
-                      //     style: headlineBold),
-                      // Text(" EV Monitoring ", style: headlineBold),
-                      Image.asset(
-                        'assets/Tata-Power.jpeg',
-                        height: 150,
-                        width: 200,
-                      ),
-                      Text("Project Management Information System",
-                          textAlign: TextAlign.center, style: headlineBold),
-                    ],
-                  )),
-            ),
+                    // Text("Project Management Information System",
+                    //     style: headlineBold),
+                    // Text(" EV Monitoring ", style: headlineBold),
+                    Image.asset(
+                      'assets/Tata-Power.jpeg',
+                      height: 150,
+                      width: 200,
+                    ),
+                    Text("Project Management Information System",
+                        textAlign: TextAlign.center, style: headlineBold),
+                  ],
+                )),
           ),
         ),
       ),

@@ -124,7 +124,8 @@ class _ClosureFieldState extends State<ClosureField> {
                         if (!snapshot.hasData ||
                             snapshot.data.exists == false) {
                           return SfDataGridTheme(
-                            data: SfDataGridThemeData(headerColor: blue),
+                            data: SfDataGridThemeData(
+                                gridLineColor: blue, gridLineStrokeWidth: 2),
                             child: SfDataGrid(
                               source: _closeReportDataSource,
                               //key: key,
@@ -220,7 +221,8 @@ class _ClosureFieldState extends State<ClosureField> {
                           // qualitylisttable1.clear();
                           // alldata.forEach((element) {});
                           return SfDataGridTheme(
-                            data: SfDataGridThemeData(headerColor: blue),
+                            data: SfDataGridThemeData(
+                                gridLineColor: blue, gridLineStrokeWidth: 2),
                             child: SfDataGrid(
                               source: _closeReportDataSource,
                               //key: key,

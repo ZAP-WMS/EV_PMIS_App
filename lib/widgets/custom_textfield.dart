@@ -7,7 +7,7 @@ class CustomTextField extends StatefulWidget {
   String? role;
   bool isObscure;
   String labeltext;
-  bool isSuffixIcon = false;
+  bool isSuffixIcon;
   bool isProjectManager;
   final String? Function(String?)? validatortext;
 
@@ -17,7 +17,7 @@ class CustomTextField extends StatefulWidget {
       {super.key,
       required this.controller,
       required this.labeltext,
-      required this.isSuffixIcon,
+      this.isSuffixIcon = false,
       this.validatortext,
       required this.keyboardType,
       required this.textInputAction,
@@ -34,7 +34,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-   
       readOnly: widget.isProjectManager ? false : true,
       autofocus: false,
       controller: widget.controller,

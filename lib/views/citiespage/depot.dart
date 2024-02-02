@@ -54,37 +54,41 @@ class _DepotPageState extends State<DepotPage> {
                     Expanded(
                       child: GridView.builder(
                         itemCount: snapshot.data!.docs.length,
-                        padding: const EdgeInsets.only(bottom: 15, top: 15),
+                        padding: const EdgeInsets.only(bottom: 15, top: 10),
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 1.2,
+                                childAspectRatio: 1.0,
                                 mainAxisSpacing: 3,
                                 crossAxisCount: 2),
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () => Navigator.pushNamed(
-                                context, '/overview page',
-                                arguments: {
-                                  'depoName': snapshot.data!.docs[index]
-                                      ['DepoName'],
-                                  'role': widget.role,
-                                  'userId': userId
-                                }),
-                            // onTap: () => Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => OverviewPage(
-                            //         role: widget.role,
-                            //         depoName: snapshot.data!.docs[index]
-                            //             ['DepoName'],
-                            //       ),
-                            //     )),
-                            child: depolist(
-                              snapshot.data!.docs[index]['DepoUrl'],
-                              snapshot.data!.docs[index]['DepoName'],
-                            ),
-                          );
+                              onTap: () => Navigator.pushNamed(
+                                      context, '/overview page',
+                                      arguments: {
+                                        'depoName': snapshot.data!.docs[index]
+                                            ['DepoName'],
+                                        'role': widget.role,
+                                        'userId': userId
+                                      }),
+                              // onTap: () => Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => OverviewPage(
+                              //         role: widget.role,
+                              //         depoName: snapshot.data!.docs[index]
+                              //             ['DepoName'],
+                              //       ),
+                              //     )),
+                              child: cards(
+                                snapshot.data!.docs[index]['DepoName'],
+                                snapshot.data!.docs[index]['DepoUrl'],
+                              )
+                              //  depolist(
+                              //   snapshot.data!.docs[index]['DepoUrl'],
+                              //   snapshot.data!.docs[index]['DepoName'],
+                              // ),
+                              );
                         },
                       ),
                     ),
@@ -102,6 +106,58 @@ class _DepotPageState extends State<DepotPage> {
       print('UserId - $value');
       // setState(() {});
     });
+  }
+
+  Widget cards(String desc, String image) {
+    return Container(
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+      decoration: BoxDecoration(
+          color: grey,
+          border: Border.all(color: blue, width: 2),
+          borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            minRadius: 40,
+            maxRadius: 40,
+            backgroundColor: grey,
+            child: SizedBox(
+              height: 60,
+              width: 60,
+              child: Container(
+                  decoration: BoxDecoration(
+                      // border: Border.all(color: blue),
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            image,
+                          ),
+                          //  NetworkImage(image),
+                          fit: BoxFit.cover))),
+              // child: Image.asset(
+              //   image,
+              //   fit: BoxFit.cover,
+              // ),
+            ),
+          ),
+          // const SizedBox(height: 5),
+          Container(
+            // margin: const EdgeInsets.all(1),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 110),
+              child: Text(
+                desc,
+                style:
+                    const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget depolist(String image, String text) {

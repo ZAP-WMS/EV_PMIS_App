@@ -458,12 +458,16 @@ class _SafetyFieldState extends State<SafetyField> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return LoadingPage();
+                                return const LoadingPage();
                               }
                               if (!snapshot.hasData ||
                                   snapshot.data.exists == false) {
                                 return SfDataGridTheme(
-                                  data: SfDataGridThemeData(headerColor: blue),
+                                  data: SfDataGridThemeData(
+                                      gridLineColor: blue,
+                                      gridLineStrokeWidth: 2,
+                                      frozenPaneLineColor: blue,
+                                      frozenPaneLineWidth: 3),
                                   child: SfDataGrid(
                                     source: _safetyChecklistDataSource,
                                     allowEditing: true,
@@ -590,8 +594,11 @@ class _SafetyFieldState extends State<SafetyField> {
                                 return SizedBox(
                                   height: MediaQuery.of(context).size.height,
                                   child: SfDataGridTheme(
-                                    data:
-                                        SfDataGridThemeData(headerColor: blue),
+                                    data: SfDataGridThemeData(
+                                        gridLineColor: blue,
+                                        gridLineStrokeWidth: 2,
+                                        frozenPaneLineColor: blue,
+                                        frozenPaneLineWidth: 3),
                                     child: SfDataGrid(
                                       source: _safetyChecklistDataSource,
                                       //key: key,
@@ -1170,7 +1177,7 @@ class _SafetyFieldState extends State<SafetyField> {
           controller: controller,
           labeltext: title,
           // validatortext: '$title is Required',
-           isSuffixIcon: false,
+          isSuffixIcon: false,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next),
     );

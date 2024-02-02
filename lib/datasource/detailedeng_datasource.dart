@@ -130,9 +130,10 @@ class DetailedEngSource extends DataGridSource {
       return Container(
         // color: getcolor(),
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: (dataGridCell.columnName == 'Add')
             ? ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: blue),
                 onPressed: () {
                   addRowAtIndex(
                       dataRowIndex + 1,
@@ -520,7 +521,7 @@ class DetailedEngSource extends DataGridSource {
                                       ),
                                       Text(
                                         dataGridCell.value.toString(),
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   )

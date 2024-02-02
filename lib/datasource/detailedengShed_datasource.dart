@@ -133,6 +133,7 @@ class DetailedEngSourceShed extends DataGridSource {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: (dataGridCell.columnName == 'Add')
             ? ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: blue),
                 onPressed: () {
                   addRowAtIndex(
                       dataRowIndex + 1,
@@ -683,8 +684,11 @@ class DetailedEngSourceShed extends DataGridSource {
                                                 icon: const Icon(
                                                     Icons.calendar_today),
                                               ),
-                                              Text(dataGridCell.value
-                                                  .toString()),
+                                              Text(
+                                                dataGridCell.value.toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              ),
                                             ],
                                           )
                                         // : dataGridCell.columnName == 'Title' &&
