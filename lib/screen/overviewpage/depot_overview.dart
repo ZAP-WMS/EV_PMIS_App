@@ -90,7 +90,7 @@ class _DepotOverviewState extends State<DepotOverview> {
             .collection('OverviewCollectionTable')
             .doc(widget.depoName)
             .collection("OverviewTabledData")
-            .doc(userId)
+            .doc(projectManagerId)
             .snapshots();
 
         _employeeDataSource = DepotOverviewDatasource(_employees, context);
@@ -1276,58 +1276,95 @@ class _DepotOverviewState extends State<DepotOverview> {
   }
 
   Future<void> verifyProjectManager() async {
-    // await getUserId();
-    if (widget.role == 'admin') {
-      QuerySnapshot getProjectManager = await FirebaseFirestore.instance
-          .collection('AssignedRole')
-          .where('roles', arrayContains: 'Project Manager')
-          .get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .where('roles', arrayContains: 'Project Manager')
+        .get();
 
-      getProjectManager.docs.forEach((element) {
-        final selectedCity = (element.data() as dynamic)['cities'] ?? '';
-        if (selectedCity[0] == cityName) {
-          userId = (element.data() as dynamic)['userId'] ?? '';
-        }
-      });
+    List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
 
-      isProjectManager = true;
-      setState(() {});
-    } else {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('AssignedRole')
-          .where('roles', arrayContains: 'Project Manager')
-          .get();
+    for (int i = 0; i < tempList.length; i++) {
+      if (tempList[i]['userId'].toString() == userId.toString()) {
+        for (int j = 0; j < tempList[i]['depots'].length; j++) {
+          List<dynamic> depot = tempList[i]['depots'];
 
-      List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
-
-      for (int i = 0; i < tempList.length; i++) {
-        if (tempList[i]['userId'].toString() == userId.toString()) {
-          for (int j = 0; j < tempList[i]['depots'].length; j++) {
-            List<dynamic> depot = tempList[i]['depots'];
-            userId = tempList[i]['userId'];
-
-            if (depot[j].toString() == widget.depoName) {
-              isProjectManager = true;
-              projectManagerId = tempList[i]['userId'].toString();
-              setState(() {});
-              break;
-            }
+          if (depot[j].toString() == widget.depoName) {
+            print(depot);
+            isProjectManager = true;
+            projectManagerId = tempList[i]['userId'].toString();
+            break;
           }
         }
-        projectManagerId = tempList[i]['userId'].toString();
-        print('ID$projectManagerId');
+      } else {
+        for (int j = 0; j < tempList[i]['depots'].length; j++) {
+          List<dynamic> depot = tempList[i]['depots'];
+
+          if (depot[j].toString() == widget.depoName) {
+            isProjectManager = false;
+            projectManagerId = tempList[i]['userId'].toString();
+            break;
+          }
+        }
       }
     }
-    print('Project Manager Logged In - $isProjectManager');
-    _fetchUserData(projectManagerId!);
+
+    _fetchUserData(projectManagerId.toString());
   }
+
+  // Future<void> verifyProjectManager() async {
+  //   // await getUserId();
+  //   if (widget.role == 'admin') {
+  //     QuerySnapshot getProjectManager = await FirebaseFirestore.instance
+  //         .collection('AssignedRole')
+  //         .where('roles', arrayContains: 'Project Manager')
+  //         .get();
+
+  //     getProjectManager.docs.forEach((element) {
+  //       final selectedCity = (element.data() as dynamic)['cities'] ?? '';
+  //       if (selectedCity[0] == cityName) {
+  //         userId = (element.data() as dynamic)['userId'] ?? '';
+  //       }
+  //     });
+
+  //     isProjectManager = true;
+  //     setState(() {});
+  //   } else {
+  //     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //         .collection('AssignedRole')
+  //         .where('roles', arrayContains: 'Project Manager')
+  //         .get();
+
+  //     List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
+
+  //     for (int i = 0; i < tempList.length; i++) {
+  //       if (tempList[i]['userId'].toString() == userId.toString()) {
+  //         for (int j = 0; j < tempList[i]['depots'].length; j++) {
+  //           List<dynamic> depot = tempList[i]['depots'];
+  //           userId = tempList[i]['userId'];
+
+  //           if (depot[j].toString() == widget.depoName) {
+  //             isProjectManager = true;
+  //             // projectManagerId = tempList[i]['userId'].toString();
+  //             // setState(() {});
+  //             break;
+  //           }
+  //         }
+  //       }
+  //       projectManagerId = tempList[i]['userId'].toString();
+  //       setState(() {});
+  //       print('ID$projectManagerId');
+  //     }
+  //   }
+  //   print('Project Manager Logged In - $isProjectManager');
+  //   _fetchUserData(projectManagerId!);
+  // }
 
   Future<void> getTableData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('OverviewCollectionTable')
         .doc(widget.depoName)
         .collection("OverviewTabledData")
-        .doc(userId)
+        .doc(projectManagerId)
         .get();
 
     if (documentSnapshot.exists) {
