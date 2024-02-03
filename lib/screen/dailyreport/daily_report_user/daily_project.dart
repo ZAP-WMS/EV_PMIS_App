@@ -110,7 +110,11 @@ class _DailyProjectState extends State<DailyProject> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.exists == false) {
                       return SfDataGridTheme(
-                        data: SfDataGridThemeData(headerColor: blue),
+                        data: SfDataGridThemeData(
+                            gridLineColor: blue,
+                            gridLineStrokeWidth: 2,
+                            frozenPaneLineColor: blue,
+                            frozenPaneLineWidth: 2),
                         child: SfDataGrid(
                             source: _dailyDataSource,
                             allowEditing: true,
@@ -130,11 +134,11 @@ class _DailyProjectState extends State<DailyProject> {
                               GridColumn(
                                 columnName: 'Date',
                                 visible: false,
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: true,
                                 width: 150,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Date',
                                       overflow: TextOverflow.values.first,
@@ -148,11 +152,11 @@ class _DailyProjectState extends State<DailyProject> {
                               GridColumn(
                                 columnName: 'SiNo',
                                 visible: false,
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: true,
                                 width: 70,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('SI No.',
                                       overflow: TextOverflow.values.first,
@@ -169,7 +173,7 @@ class _DailyProjectState extends State<DailyProject> {
                               //   allowEditing: false,
                               //   width: 160,
                               //   label: Container(
-                              //     padding: tablepadding,
+                              //     //Padding: tablepadding,
                               //     alignment: Alignment.center,
                               //     child: Text('Date',
                               //         textAlign: TextAlign.center,
@@ -188,7 +192,7 @@ class _DailyProjectState extends State<DailyProject> {
                               //   allowEditing: true,
                               //   width: 120,
                               //   label: Container(
-                              //     padding: tablepadding,
+                              //     //Padding: tablepadding,
                               //     alignment: Alignment.center,
                               //     child: Text('State',
                               //         textAlign: TextAlign.center,
@@ -209,7 +213,7 @@ class _DailyProjectState extends State<DailyProject> {
                               //   allowEditing: true,
                               //   width: 150,
                               //   label: Container(
-                              //     padding: tablepadding,
+                              //     //Padding: tablepadding,
                               //     alignment: Alignment.center,
                               //     child: Text('Depot Name',
                               //         overflow: TextOverflow.values.first,
@@ -223,11 +227,11 @@ class _DailyProjectState extends State<DailyProject> {
                               // ),
                               GridColumn(
                                 columnName: 'TypeOfActivity',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: true,
                                 width: 200,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Type of Activity',
                                       overflow: TextOverflow.values.first,
@@ -238,11 +242,11 @@ class _DailyProjectState extends State<DailyProject> {
                               ),
                               GridColumn(
                                 columnName: 'ActivityDetails',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: true,
                                 width: 220,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Activity Details',
                                       overflow: TextOverflow.values.first,
@@ -253,12 +257,12 @@ class _DailyProjectState extends State<DailyProject> {
                               ),
                               GridColumn(
                                 columnName: 'Progress',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: true,
                                 columnWidthMode: ColumnWidthMode.fill,
                                 width: 300,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Progress',
                                       overflow: TextOverflow.values.first,
@@ -269,11 +273,11 @@ class _DailyProjectState extends State<DailyProject> {
                               ),
                               GridColumn(
                                 columnName: 'Status',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: true,
                                 width: 280,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Remark / Status',
                                       overflow: TextOverflow.values.first,
@@ -284,11 +288,11 @@ class _DailyProjectState extends State<DailyProject> {
                               ),
                               GridColumn(
                                 columnName: 'upload',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: false,
                                 width: 150,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Upload Image',
                                       overflow: TextOverflow.values.first,
@@ -299,11 +303,11 @@ class _DailyProjectState extends State<DailyProject> {
                               ),
                               GridColumn(
                                 columnName: 'view',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: false,
                                 width: 120,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('View Image',
                                       overflow: TextOverflow.values.first,
@@ -314,11 +318,11 @@ class _DailyProjectState extends State<DailyProject> {
                               ),
                               GridColumn(
                                 columnName: 'Add',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: false,
                                 width: 120,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Add Row',
                                       overflow: TextOverflow.values.first,
@@ -329,11 +333,11 @@ class _DailyProjectState extends State<DailyProject> {
                               ),
                               GridColumn(
                                 columnName: 'Delete',
-                                autoFitPadding: tablepadding,
+                                //autoFit//Padding: tablepadding,
                                 allowEditing: false,
                                 width: 120,
                                 label: Container(
-                                  padding: tablepadding,
+                                  //Padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Delete Row',
                                       overflow: TextOverflow.values.first,
@@ -360,7 +364,11 @@ class _DailyProjectState extends State<DailyProject> {
                       //   _dataGridController = DataGridController();
                       // });
                       return SfDataGridTheme(
-                          data: SfDataGridThemeData(headerColor: blue),
+                          data: SfDataGridThemeData(
+                              gridLineColor: blue,
+                              gridLineStrokeWidth: 2,
+                              frozenPaneLineColor: blue,
+                              frozenPaneLineWidth: 2),
                           child: SfDataGrid(
                               source: _dailyDataSource,
                               allowEditing: true,
@@ -380,11 +388,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 GridColumn(
                                   columnName: 'Date',
                                   visible: false,
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: true,
                                   width: 70,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Date',
                                         overflow: TextOverflow.values.first,
@@ -397,11 +405,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 GridColumn(
                                   columnName: 'SiNo',
                                   visible: false,
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: true,
                                   width: 70,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('SI No.',
                                         overflow: TextOverflow.values.first,
@@ -413,11 +421,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'TypeOfActivity',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: true,
                                   width: 200,
                                   label: Container(
-                                    padding: tablepadding,
+                                    // //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Type of Activity',
                                         overflow: TextOverflow.values.first,
@@ -428,11 +436,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'ActivityDetails',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: true,
                                   width: 220,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Activity Details',
                                         overflow: TextOverflow.values.first,
@@ -443,11 +451,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'Progress',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: true,
                                   width: 300,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Progress',
                                         overflow: TextOverflow.values.first,
@@ -458,11 +466,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'Status',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: true,
                                   width: 280,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Remark / Status',
                                         overflow: TextOverflow.values.first,
@@ -473,11 +481,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'upload',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: false,
                                   width: 150,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Upload Image',
                                         overflow: TextOverflow.values.first,
@@ -488,11 +496,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'view',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: false,
                                   width: 120,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('view Image',
                                         overflow: TextOverflow.values.first,
@@ -503,11 +511,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'Add',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: false,
                                   width: 120,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Add Row',
                                         overflow: TextOverflow.values.first,
@@ -518,11 +526,11 @@ class _DailyProjectState extends State<DailyProject> {
                                 ),
                                 GridColumn(
                                   columnName: 'Delete',
-                                  autoFitPadding: tablepadding,
+                                  //autoFit//Padding: tablepadding,
                                   allowEditing: false,
                                   width: 120,
                                   label: Container(
-                                    padding: tablepadding,
+                                    //Padding: tablepadding,
                                     alignment: Alignment.center,
                                     child: Text('Delete Row',
                                         overflow: TextOverflow.values.first,

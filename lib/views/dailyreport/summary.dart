@@ -795,7 +795,10 @@ class _ViewSummaryState extends State<ViewSummary> {
                                             children: [
                                               SfDataGridTheme(
                                                   data: SfDataGridThemeData(
-                                                      headerColor: blue),
+                                                      gridLineColor: blue,
+                                                      gridLineStrokeWidth: 2,
+                                                      frozenPaneLineColor: blue,
+                                                      frozenPaneLineWidth: 3),
                                                   child: SfDataGrid(
                                                     source:
                                                         _energyManagementDatasource,
@@ -1256,7 +1259,10 @@ class _ViewSummaryState extends State<ViewSummary> {
                                       });
                                       return SfDataGridTheme(
                                         data: SfDataGridThemeData(
-                                            headerColor: blue),
+                                            gridLineColor: blue,
+                                            gridLineStrokeWidth: 2,
+                                            frozenPaneLineColor: blue,
+                                            frozenPaneLineWidth: 3),
                                         child: SfDataGrid(
                                           source: _safetyChecklistDataSource,
                                           //key: key,

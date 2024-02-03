@@ -174,7 +174,7 @@ class _DetailedEngtState extends State<DetailedEng>
               ],
             ),
             flexibleSpace: Container(
-              height: 80,
+              height: 100,
               color: blue,
             ),
             actions: [

@@ -40,6 +40,7 @@ class _DepotOverviewState extends State<DepotOverview> {
   late DataGridController _dataGridController;
   Stream? _stream;
   var alldata;
+  String? projectManagerId;
 
   late TextEditingController _addressController,
       _scopeController,
@@ -1275,7 +1276,7 @@ class _DepotOverviewState extends State<DepotOverview> {
   }
 
   Future<void> verifyProjectManager() async {
-    await getUserId();
+    // await getUserId();
     if (widget.role == 'admin') {
       QuerySnapshot getProjectManager = await FirebaseFirestore.instance
           .collection('AssignedRole')
@@ -1303,18 +1304,22 @@ class _DepotOverviewState extends State<DepotOverview> {
         if (tempList[i]['userId'].toString() == userId.toString()) {
           for (int j = 0; j < tempList[i]['depots'].length; j++) {
             List<dynamic> depot = tempList[i]['depots'];
+            userId = tempList[i]['userId'];
 
             if (depot[j].toString() == widget.depoName) {
               isProjectManager = true;
+              projectManagerId = tempList[i]['userId'].toString();
               setState(() {});
               break;
             }
           }
         }
+        projectManagerId = tempList[i]['userId'].toString();
+        print('ID$projectManagerId');
       }
     }
     print('Project Manager Logged In - $isProjectManager');
-    _fetchUserData(userId);
+    _fetchUserData(projectManagerId!);
   }
 
   Future<void> getTableData() async {
