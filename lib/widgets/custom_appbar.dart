@@ -46,10 +46,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
             widget.title,
             // maxLines: 2,
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ), 
+          ),
           Text(
             widget.depoName!,
-            style: TextStyle(fontSize: 11),
+            style: const TextStyle(fontSize: 11),
           )
         ],
       ),

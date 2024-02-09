@@ -511,7 +511,10 @@ class _DepotOverviewState extends State<DepotOverview> {
                           return SingleChildScrollView(
                             child: SfDataGridTheme(
                               data: SfDataGridThemeData(
-                                  headerColor: white, gridLineColor: blue),
+                                  gridLineColor: blue,
+                                  gridLineStrokeWidth: 2,
+                                  frozenPaneLineWidth: 3,
+                                  frozenPaneLineColor: blue),
                               child: SfDataGrid(
                                 source: _employeeDataSource,
                                 allowEditing:
@@ -800,7 +803,11 @@ class _DepotOverviewState extends State<DepotOverview> {
                           return SizedBox(
                             height: MediaQuery.of(context).size.height * 0.65,
                             child: SfDataGridTheme(
-                              data: SfDataGridThemeData(headerColor: blue),
+                              data: SfDataGridThemeData(
+                                  gridLineColor: blue,
+                                  gridLineStrokeWidth: 2,
+                                  frozenPaneLineWidth: 3,
+                                  frozenPaneLineColor: blue),
                               child: SfDataGrid(
                                 source: _employeeDataSource,
                                 allowEditing: true,
