@@ -125,6 +125,7 @@ class RouteGenerator {
           return JmrActionScreen(
             depoName: argument['depoName'],
             role: argument['role'],
+            cityName: argument['cityName'],
           );
 
         case '/safety-page':

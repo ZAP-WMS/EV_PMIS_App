@@ -71,6 +71,10 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
         _isload = false;
         setState(() {});
       });
+    } else if (widget.title == 'jmr') {
+      futureFiles = FirebaseApi.listAll(widget.fldrName!);
+      _isload = false;
+      setState(() {});
     } else {
       futureFiles = widget.title == 'QualityChecklist'
           ? FirebaseApi.listAll(

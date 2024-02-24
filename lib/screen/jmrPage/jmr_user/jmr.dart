@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
@@ -250,7 +251,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
             padding: const EdgeInsets.only(
               top: 5,
             ),
-            height: 90,
+            height: MediaQuery.of(context).size.height * 0.13,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: jmrListIndex,
@@ -303,6 +304,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
             ),
           ),
           Container(
+            margin: EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -316,17 +318,22 @@ class _JmrUserPageState extends State<JmrUserPage> {
                       ),
                       onPressed: () async {
                         FilePickerResult? result =
-                            await FilePicker.platform.pickFiles();
+                            await FilePicker.platform.pickFiles(
+                          withData: true,
+                          type: FileType.any,
+                          allowMultiple: false,
+                          // allowedExtensions: ['pdf']
+                        );
 
                         if (result != null) {
-                          final bytes = result.files.single.bytes;
+                          Uint8List? fileBytes = result.files.first.bytes;
                           fileName = result.files.single.name;
                           final storage = FirebaseStorage.instance;
                           await storage
                               .ref()
                               .child(
                                   'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}/$fileName')
-                              .putData(bytes!);
+                              .putData(fileBytes!);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.green,
                               content: Text(
