@@ -6,6 +6,7 @@ class AllDepoSelectProvider with ChangeNotifier {
 
   void setCheckedBool(bool value) {
     _isChecked = value;
+    print('isChecked - ${value}');
     notifyListeners();
   }
 

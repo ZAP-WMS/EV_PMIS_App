@@ -77,6 +77,7 @@ dependencies:
   fl_chart: ^0.62.0
   data_table_2: ^2.4.2
   pie_chart: ^5.4.0
+  dropdown_button2: ^2.1.4
 
 dev_dependencies:
   flutter_lints: ^2.0.0

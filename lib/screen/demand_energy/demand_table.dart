@@ -96,7 +96,9 @@ class _DemandTableState extends State<DemandTable>
                     );
                   },
                   hideOnLoading: false,
-                  animationDuration: const Duration(milliseconds: 1000),
+                  animationDuration: const Duration(
+                    milliseconds: 1000,
+                  ),
                   animationStart: 0,
                   textFieldConfiguration: TextFieldConfiguration(
                     style: const TextStyle(

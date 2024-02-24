@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
 import 'package:ev_pmis_app/style.dart';
@@ -8,11 +9,17 @@ import 'package:provider/provider.dart';
 class BarGraphScreen extends StatefulWidget {
   final List<dynamic> timeIntervalList;
   final List<dynamic> monthList;
+  List<List<double>> allDepotsYearlyConsumedList;
+  List<double> allDepotsMonthlyConsumedList;
+  List<List<double>> allDepotsQuaterlyConsumedList;
 
-  const BarGraphScreen({
+  BarGraphScreen({
     super.key,
     required this.timeIntervalList,
     required this.monthList,
+    required this.allDepotsYearlyConsumedList,
+    required this.allDepotsMonthlyConsumedList,
+    required this.allDepotsQuaterlyConsumedList,
   });
 
   @override
@@ -20,8 +27,6 @@ class BarGraphScreen extends StatefulWidget {
 }
 
 class _BarGraphScreenState extends State<BarGraphScreen> {
-  bool isFirstTime = true;
-
   int _selectedIndex = 0;
 
   List<bool> choiceChipBoolList = [true, false, false, false];
@@ -35,13 +40,19 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
     ],
   );
 
+  final ScrollController _scrollController = ScrollController();
+
   List<String> choiceChipLabels = ['Day', 'Monthly', 'Quaterly', 'Yearly'];
+
+  Color themeBlue = const Color.fromARGB(255, 77, 164, 235);
+
   List<String> quaterlyMonths = [
     'Jan - Mar',
     'Apr - Jun',
     'Jul - Sep',
     'Oct - Dec'
   ];
+
   List<String> yearlyMonths = [
     'Jan',
     'Feb',
@@ -57,302 +68,558 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
     'Dec'
   ];
 
-  final double candleWidth = 20;
+  final List<String> _months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
 
-  @override
-  void initState() {
-    widget.timeIntervalList.add('Candle1');
-    widget.timeIntervalList.add('Candle2');
-    widget.timeIntervalList.add('Candle3');
-    widget.timeIntervalList.add('Candle4');
-    super.initState();
-  }
+  final List<String> _quarters = [
+    "Jan - Mar",
+    "Apr - Jun",
+    "Jul - Sep",
+    "Oct - Dec"
+  ];
+
+  final List<String> yearly = [
+    "2023",
+    "2024",
+    "2025",
+    "2026",
+    "2027",
+    "2028",
+    "2029",
+    "2030",
+    "2031",
+    "2032",
+    "2033",
+    "2034",
+    "2035",
+    "2036",
+    "2037",
+    "2038",
+    "2039",
+    "2040"
+  ];
+
+  String? _monthValue;
+  String? _quarterValue;
+  String? _yearValue;
+
+  final double candleWidth = 5;
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
     final allDepoProvider =
         Provider.of<AllDepoSelectProvider>(context, listen: false);
 
-    return WillPopScope(
-      onWillPop: () async {
-        allDepoProvider.setCheckedBool(false);
-        return true;
-      },
-      child: Material(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 234, 243, 250),
-                  borderRadius: BorderRadius.circular(5)),
-              margin: const EdgeInsets.only(bottom: 10),
-              child: const Text(
-                'Energy Consumed (in kW)',
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
+    return Material(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 234, 243, 250),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            margin: const EdgeInsets.only(
+              bottom: 15,
+              top: 10,
+            ),
+            child: const Text(
+              'Energy Consumed (in kW)',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Consumer<DemandEnergyProvider>(
-              builder: (context, providerValue, child) {
-                return Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(
-                            bottom: 10,
-                          ),
-                          height: 30,
-                          width: 320,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: choiceChipLabels.length,
-                              shrinkWrap: true,
-                              itemBuilder: ((context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.only(left: 2),
-                                  // height: 30,
-                                  child: ChoiceChip(
-                                    label: Text(
-                                      choiceChipLabels[index],
-                                      style:
-                                          TextStyle(color: white, fontSize: 12),
-                                    ),
-                                    selected: choiceChipBoolList[index],
-                                    selectedColor: Colors.blue,
-                                    backgroundColor: blue,
-                                    onSelected: provider.isLoadingBarCandle
-                                        ? (_) {}
-                                        : (value) {
-                                            if (provider
-                                                    .selectedDepo.isNotEmpty ||
-                                                allDepoProvider.isChecked ==
-                                                    true) {
-                                              // isFirstTime = false;
-                                              switch (index) {
-                                                case 0:
-                                                  _selectedIndex = 0;
-                                                  provider.setLoadingBarCandle(
-                                                      true);
-                                                  break;
-                                                case 1:
-                                                  _selectedIndex = 1;
-                                                  provider.setLoadingBarCandle(
-                                                      true);
-                                                  break;
-                                                case 2:
-                                                  _selectedIndex = 2;
-                                                  provider.setLoadingBarCandle(
-                                                      true);
-                                                  break;
-                                                case 3:
-                                                  _selectedIndex = 3;
-                                                  provider.setLoadingBarCandle(
-                                                      true);
-                                                  break;
-                                                default:
-                                                  _selectedIndex = 0;
+          ),
+          Consumer<DemandEnergyProvider>(
+            builder: (context, providerValue, child) {
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 40, //30
+                        width: MediaQuery.of(context).size.width, // 320
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: choiceChipLabels.length,
+                            shrinkWrap: true,
+                            itemBuilder: ((context, index) {
+                              return index == 0
+                                  ? Container(
+                                      child: ChoiceChip(
+                                        side: BorderSide(color: themeBlue),
+                                        elevation: 3.0,
+                                        labelPadding: const EdgeInsets.only(
+                                          left: 12.0,
+                                          right: 12.0,
+                                        ),
+                                        label: Text(
+                                          choiceChipLabels[index],
+                                          style: TextStyle(
+                                              color: _selectedIndex == 0
+                                                  ? white
+                                                  : themeBlue),
+                                        ),
+                                        selected: choiceChipBoolList[index],
+                                        selectedColor: _selectedIndex == 0
+                                            ? Colors.blue
+                                            : white,
+                                        backgroundColor: white,
+                                        onSelected: provider.isLoadingBarCandle
+                                            ? (_) {}
+                                            : (value) {
+                                                if (provider.selectedDepo
+                                                        .isNotEmpty ||
+                                                    allDepoProvider.isChecked ==
+                                                        true) {
+                                                  switch (index) {
+                                                    case 0:
+                                                      _selectedIndex = 0;
+                                                      provider
+                                                          .setLoadingBarCandle(
+                                                              true);
+                                                      break;
+                                                    case 1:
+                                                      _selectedIndex = 1;
+                                                      provider
+                                                          .setLoadingBarCandle(
+                                                              true);
+                                                      break;
+                                                    case 2:
+                                                      _selectedIndex = 2;
+                                                      provider
+                                                          .setLoadingBarCandle(
+                                                              true);
+                                                      break;
+                                                    case 3:
+                                                      _selectedIndex = 3;
+                                                      provider
+                                                          .setLoadingBarCandle(
+                                                              true);
+                                                      break;
+                                                    default:
+                                                      _selectedIndex = 0;
+                                                  }
+                                                  choiceChipBoolList[index] =
+                                                      value;
+                                                  resetChoiceChip(index);
+                                                  providerValue
+                                                      .reloadWidget(true);
+                                                  providerValue
+                                                      .setSelectedIndex(
+                                                          _selectedIndex,
+                                                          allDepoProvider
+                                                              .isChecked);
+                                                } else {
+                                                  showCustomAlert();
+                                                }
+                                              },
+                                      ),
+                                    )
+                                  : Container(
+                                      margin: const EdgeInsets.all(3.0),
+                                      child: Center(
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton2<String>(
+                                            isExpanded: true,
+                                            hint: Row(
+                                              children: [
+                                                Text(
+                                                  choiceChipLabels[index],
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: themeBlue,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            items: index == 1
+                                                ? customDropDownTab(
+                                                    _months,
+                                                    index,
+                                                    _selectedIndex == 1
+                                                        ? white
+                                                        : themeBlue)
+                                                : index == 2
+                                                    ? customDropDownTab(
+                                                        _quarters,
+                                                        index,
+                                                        _selectedIndex == 2
+                                                            ? white
+                                                            : themeBlue)
+                                                    : customDropDownTab(
+                                                        yearly,
+                                                        index,
+                                                        _selectedIndex == 3
+                                                            ? white
+                                                            : themeBlue),
+                                            value: index == 1
+                                                ? _monthValue
+                                                : index == 2
+                                                    ? _quarterValue
+                                                    : _yearValue,
+                                            onChanged: (String? value) {
+                                              if (provider.selectedDepo
+                                                      .isNotEmpty ||
+                                                  allDepoProvider.isChecked ==
+                                                      true) {
+                                                choiceChipBoolList[index] =
+                                                    !choiceChipBoolList[index];
+                                                index == 1
+                                                    ? _monthValue = value
+                                                    : index == 2
+                                                        ? _quarterValue = value
+                                                        : _yearValue = value;
+
+                                                switch (index) {
+                                                  case 1:
+                                                    _selectedIndex = 1;
+                                                    provider
+                                                        .setLoadingBarCandle(
+                                                            true);
+                                                    provider.setSelectedMonth(
+                                                        value!);
+                                                    break;
+                                                  case 2:
+                                                    _selectedIndex = 2;
+                                                    provider
+                                                        .setLoadingBarCandle(
+                                                            true);
+                                                    provider.setQuarterMonth(
+                                                        value!);
+                                                    break;
+                                                  case 3:
+                                                    _selectedIndex = 3;
+                                                    provider
+                                                        .setLoadingBarCandle(
+                                                            true);
+                                                    provider.setYear(value!);
+                                                    break;
+                                                  default:
+                                                    _selectedIndex = 0;
+                                                }
+
+                                                resetChoiceChip(index);
+                                                providerValue
+                                                    .reloadWidget(true);
+                                                providerValue.setSelectedIndex(
+                                                    _selectedIndex,
+                                                    allDepoProvider.isChecked);
+                                              } else {
+                                                showCustomAlert();
                                               }
-                                              choiceChipBoolList[index] = value;
-                                              resetChoiceChip(index);
-                                              providerValue.reloadWidget(true);
-                                              providerValue.setSelectedIndex(
-                                                  _selectedIndex,
-                                                  allDepoProvider.isChecked);
-                                            } else {
-                                              showCustomAlert();
-                                            }
-                                          },
-                                  ),
-                                );
-                              })),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-            Consumer<DemandEnergyProvider>(
-              builder: (context, value, child) {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 20, left: 5),
-                    // color: blue,
-                    height: height * 0.45,
-                    width:
-                        allDepoProvider.isChecked && provider.selectedIndex == 0
-                            ? 1000
-                            : width * 0.98,
-                    child: BarChart(
-                      swapAnimationCurve: Curves.easeInOut,
-                      swapAnimationDuration: const Duration(
-                        milliseconds: 1500,
-                      ),
-                      BarChartData(
-                        alignment: BarChartAlignment.spaceEvenly,
-                        // backgroundColor: const Color.fromARGB(
-                        //   255,
-                        //   236,
-                        //   252,
-                        //   255,
-                        // ),
-                        barTouchData: BarTouchData(
-                          enabled: true,
-                          touchTooltipData: BarTouchTooltipData(
-                            tooltipRoundedRadius: 5,
-                            tooltipBgColor: Colors.transparent,
-                            tooltipMargin: 5,
-                          ),
-                        ),
-                        maxY: (provider.maxEnergyConsumed ?? 0.0) + 5000,
-                        minY: 0,
-                        titlesData: FlTitlesData(
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              reservedSize: 150,
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                return Container(
-                                  margin: const EdgeInsets.only(top: 10),
-                                  padding: const EdgeInsets.only(left: 90),
-                                  child: Transform.rotate(
-                                    alignment: Alignment.center,
-                                    angle: 30.2,
-                                    child: Container(
-                                      margin: const EdgeInsets.only(top: 10),
-                                      child: ConstrainedBox(
-                                        constraints:
-                                            const BoxConstraints(maxWidth: 130),
-                                        child: Text(
-                                          getTextForBarChart(
-                                              _selectedIndex,
-                                              allDepoProvider.isChecked,
-                                              value.toInt()),
-                                          // textAlign: TextAlign.end,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
+                                            },
+                                            buttonStyleData: ButtonStyleData(
+                                              height: 30,
+                                              width: 90,
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
+                                                border: Border.all(
+                                                  color: themeBlue,
+                                                ),
+                                                color: index == _selectedIndex
+                                                    ? themeBlue
+                                                    : white,
+                                              ),
+                                              elevation: 2,
+                                            ),
+                                            iconStyleData: IconStyleData(
+                                              iconSize: 12,
+                                              iconEnabledColor:
+                                                  index == _selectedIndex
+                                                      ? white
+                                                      : Colors.blue,
+                                            ),
+                                            dropdownStyleData:
+                                                DropdownStyleData(
+                                              maxHeight: 200,
+                                              width: 90,
+                                              decoration: BoxDecoration(
+                                                backgroundBlendMode:
+                                                    BlendMode.color,
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
+                                                color: index == _selectedIndex
+                                                    ? themeBlue
+                                                    : Colors.white,
+                                              ),
+                                              offset: const Offset(0, 0),
+                                            ),
+                                            menuItemStyleData:
+                                                const MenuItemStyleData(
+                                              height: 30,
+                                              padding: EdgeInsets.only(
+                                                  left: 14, right: 14),
+                                            ),
                                           ),
                                         ),
                                       ),
+                                    );
+                            })),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+          Container(
+            height: 350,
+            width: MediaQuery.of(context).size.width,
+            child: Consumer<DemandEnergyProvider>(
+              builder: (context, value, child) {
+                return Scrollbar(
+                  thickness: 3,
+                  radius: const Radius.circular(
+                    1,
+                  ),
+                  thumbVisibility: true,
+                  trackVisibility: true,
+                  interactive: true,
+                  scrollbarOrientation: ScrollbarOrientation.bottom,
+                  controller: _scrollController,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    controller: _scrollController,
+                    itemCount: 1,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        height: 250,
+                        margin: const EdgeInsets.only(top: 50.0),
+                        width: (provider.isCheckboxChecked == true &&
+                                _selectedIndex == 3)
+                            ? 2000
+                            : MediaQuery.of(context).size.width,
+                        child: BarChart(
+                          swapAnimationCurve: Curves.easeInOut,
+                          swapAnimationDuration: const Duration(
+                            milliseconds: 1500,
+                          ),
+                          BarChartData(
+                            alignment: BarChartAlignment.spaceEvenly,
+                            barTouchData: BarTouchData(
+                              enabled: true,
+                              touchTooltipData: BarTouchTooltipData(
+                                tooltipRoundedRadius: 5,
+                                tooltipBgColor: Colors.white,
+                                tooltipMargin: 5,
+                                tooltipBorder: BorderSide(color: blue),
+                                maxContentWidth: 100,
+
+                                // Hover Depo Name And Energy Consumed
+
+                                getTooltipItem:
+                                    (group, groupIndex, rod, rodIndex) {
+                                  return BarTooltipItem(
+                                    provider.isCheckboxChecked
+                                        ? _selectedIndex == 0
+                                            ? '${provider.depoList![groupIndex.toInt()]}\n'
+                                            : '${provider.depoList![rodIndex.toInt()]}\n'
+                                        : provider.selectedDepo.isNotEmpty
+                                            ? '${provider.selectedDepo}\n'
+                                            : '',
+                                    const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 8,
                                     ),
-                                  ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: provider.isCheckboxChecked
+                                            ? _selectedIndex == 3
+                                                ? '${widget.allDepotsYearlyConsumedList[groupIndex][rodIndex]} kW'
+                                                : _selectedIndex == 2
+                                                    ? '${widget.allDepotsQuaterlyConsumedList[groupIndex][rodIndex]} kW'
+                                                    : _selectedIndex == 1
+                                                        ? '${widget.allDepotsMonthlyConsumedList[rodIndex]} kW'
+                                                        : '${provider.allDepoDailyEnergyConsumedList[groupIndex]} kW'
+
+                                            // If False
+                                            : _selectedIndex == 1
+                                                ? '${provider.monthlyEnergyConsumed} kW'
+                                                : _selectedIndex == 2
+                                                    ? '${provider.quaterlyEnergyConsumedList[groupIndex]} kW'
+                                                    : _selectedIndex == 3
+                                                        ? '${provider.yearlyEnergyConsumedList[groupIndex]} kW'
+                                                        : '0 kW',
+                                        style: TextStyle(
+                                          color: black,
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            maxY: (provider.maxEnergyConsumed ?? 0.0) + 5000,
+                            minY: 0,
+                            titlesData: FlTitlesData(
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  reservedSize: 60.0,
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    return Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 20, top: 10),
+                                      child: Transform.rotate(
+                                        alignment: Alignment.center,
+                                        angle: 30.2,
+                                        child: Text(
+                                          allDepoProvider.isChecked == false
+                                              ? provider.selectedIndex == 1
+                                                  ? provider.selectedMonth
+                                                  : provider.selectedIndex == 2
+                                                      ? provider
+                                                              .selectedQuarterNames[
+                                                          value.toInt()]
+                                                      : provider.selectedIndex ==
+                                                              3
+                                                          ? yearlyMonths[
+                                                              value.toInt()]
+                                                          : widget.timeIntervalList[
+                                                              value.toInt()]
+
+                                              //
+
+                                              : provider.selectedIndex == 0
+                                                  ? ''
+
+                                                  //  provider.depoList![
+                                                  //     value.toInt()]
+
+                                                  : provider.selectedIndex == 2
+                                                      ? provider
+                                                              .selectedQuarterNames[
+                                                          value.toInt()]
+                                                      : provider.selectedIndex ==
+                                                              3
+                                                          ? yearlyMonths[
+                                                              value.toInt()]
+                                                          : widget.monthList[
+                                                              value.toInt()],
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: false,
+                                ),
+                              ),
+                              // leftTitles: AxisTitles(
+                              //   axisNameSize: 150,
+                              //   sideTitles: SideTitles(
+                              //     showTitles: true,
+                              //     reservedSize: 100,
+                              //     getTitlesWidget: (value, meta) {
+                              //       return Text('100k');
+                              //     },
+                              //   ),
+                              // ),
+                            ),
+                            gridData: FlGridData(
+                              show: false,
+                              drawVerticalLine: false,
+                              drawHorizontalLine: true,
+                              checkToShowHorizontalLine: (value) =>
+                                  value % 1 == 0,
+                              getDrawingHorizontalLine: (value) {
+                                return FlLine(
+                                  color: Colors.grey,
+                                  strokeWidth: 1,
                                 );
                               },
                             ),
-                          ),
-                          rightTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          topTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: false,
+                            borderData: FlBorderData(
+                              border: const Border(
+                                left: BorderSide(),
+                                bottom: BorderSide(),
+                              ),
                             ),
+                            barGroups:
+                                //  tempBarData()
+                                allDepoProvider.isChecked == false
+                                    ? provider.selectedIndex == 1
+                                        ? getMonthlyBarGroups()
+                                        : provider.selectedIndex == 2
+                                            ? getQuaterlyBarData()
+                                            : provider.selectedIndex == 3
+                                                ? getYearlyBarData()
+                                                : getBarGroups()
+                                    : provider.selectedIndex == 0
+                                        ? getAllDepoDailyBarGroupData()
+                                        : provider.selectedIndex == 1
+                                            ? getAllDepoMonthlyBarGroupData()
+                                            : provider.selectedIndex == 2
+                                                ? getAllDepoQuarterlyBarGroupData()
+                                                : getAllDepoYearlyBarGroupData(),
                           ),
                         ),
-                        gridData: FlGridData(
-                          show: false,
-                          drawVerticalLine: false,
-                          drawHorizontalLine: true,
-                          checkToShowHorizontalLine: (value) => value % 1 == 0,
-                          getDrawingHorizontalLine: (value) {
-                            return FlLine(
-                              color: Colors.grey,
-                              strokeWidth: 1,
-                            );
-                          },
-                        ),
-                        borderData: FlBorderData(
-                          border: const Border(
-                            left: BorderSide(),
-                            bottom: BorderSide(),
-                          ),
-                        ),
-                        barGroups: allDepoProvider.isChecked == false
-                            ? provider.selectedIndex == 1
-                                ? getMonthlyBarGroups()
-                                : provider.selectedIndex == 2
-                                    ? getQuaterlyBarData()
-                                    : provider.selectedIndex == 3
-                                        ? getYearlyBarData()
-                                        : getBarGroups()
-                            : provider.selectedIndex == 0
-                                ? getAllDepoDailyBarGroupData()
-                                : provider.selectedIndex == 1
-                                    ? getAllDepoMonthlyBarGroupData(
-                                        provider.maxEnergyConsumed ?? 0)
-                                    : provider.selectedIndex == 2
-                                        ? getAllDepoQuarterlyBarGroupData()
-                                        : getAllDepoYearlyBarGroupData(),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 );
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  String getTextForBarChart(int currentIndex, bool isChecked, int value) {
-    final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
-    // isFirstTime = false;
-    if (isChecked == false) {
-      switch (currentIndex) {
-        case 0:
-          return widget.timeIntervalList[value.toInt()];
-        case 1:
-          return widget.monthList[value.toInt()];
-        case 2:
-          return quaterlyMonths[value.toInt()];
-        case 3:
-          return yearlyMonths[value.toInt()];
-      }
-    } else {
-      switch (currentIndex) {
-        case 0:
-          return provider.depoList![value.toInt()];
-        case 1:
-          return widget.monthList[value.toInt()];
-
-        case 2:
-          return quaterlyMonths[value.toInt()];
-        case 3:
-          return yearlyMonths[value.toInt()];
-      }
-    }
-    return '';
-  }
-
   List<BarChartGroupData> getBarGroups() {
     final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
-    print('Fetching BarGroups - ${provider.dailyEnergyConsumed}');
+    // print('Daily BarChart Data Extracting');
     return List.generate(
-      widget.timeIntervalList.length,
+      provider.dailyEnergyConsumed?.length == null
+          ? widget.timeIntervalList.length
+          : 0,
       (index) {
         return BarChartGroupData(
           // groupVertically: true,
-          showingTooltipIndicators: [0],
+          // showingTooltipIndicators: [0],
           x: index,
           barRods: [
             BarChartRodData(
               gradient: _barRodGradient,
               width: candleWidth,
               borderRadius: BorderRadius.circular(2),
-              // toY: 100,
               toY: provider.dailyEnergyConsumed?[index] ?? 0.0,
             ),
           ],
@@ -363,21 +630,20 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
 
   List<BarChartGroupData> getMonthlyBarGroups() {
     final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
-    final allDepoProvider =
-        Provider.of<AllDepoSelectProvider>(context, listen: false);
-    // print('Monthly BarChart Data Extracting - ${provider.maxEnergyConsumed}');
+    print('MonthlyBarGroup - ${provider.monthlyEnergyConsumed}');
+    // print('Monthly BarChart Data Extracting');
     return List.generate(
       1,
       (index) {
         return BarChartGroupData(
-          showingTooltipIndicators: [0],
+          // showingTooltipIndicators: [0],
           x: index,
           barRods: [
             BarChartRodData(
               gradient: _barRodGradient,
               width: candleWidth,
               borderRadius: BorderRadius.circular(2),
-              toY: provider.maxEnergyConsumed ?? 0.0,
+              toY: provider.monthlyEnergyConsumed ?? 0.0,
             ),
           ],
         );
@@ -389,18 +655,25 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
     final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
     // print('Quaterly BarChart Data Extracting');
     return List.generate(
-      4,
+      3,
       (index) {
         return BarChartGroupData(
-          showingTooltipIndicators: [0],
+          // showingTooltipIndicators: [0],
           x: index,
           barRods: [
-            BarChartRodData(
-              gradient: _barRodGradient,
-              width: candleWidth,
-              borderRadius: BorderRadius.circular(2),
-              toY: provider.quaterlyEnergyConsumedList?[index] ?? 0.0,
-            ),
+            provider.quaterlyEnergyConsumedList.isEmpty
+                ? BarChartRodData(
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: 100,
+                  )
+                : BarChartRodData(
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: provider.quaterlyEnergyConsumedList[index] ?? 0.0,
+                  ),
           ],
         );
       },
@@ -415,15 +688,23 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
       12,
       (index) {
         return BarChartGroupData(
-          showingTooltipIndicators: [0],
+          groupVertically: true,
+          // showingTooltipIndicators: [0],
           x: index,
           barRods: [
-            BarChartRodData(
-              gradient: _barRodGradient,
-              width: candleWidth,
-              borderRadius: BorderRadius.circular(2),
-              toY: provider.yearlyEnergyConsumedList?[index] ?? 0.0,
-            ),
+            provider.yearlyEnergyConsumedList.isEmpty
+                ? BarChartRodData(
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: 100.0,
+                  )
+                : BarChartRodData(
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: provider.yearlyEnergyConsumedList[index],
+                  ),
           ],
         );
       },
@@ -434,42 +715,60 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
     final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
     // print('Daily BarChart Data Extracting');
     return List.generate(
-      provider.depoList?.length ?? 0,
+      provider.depoList?.length ?? 5,
       (index) {
         return BarChartGroupData(
           // groupVertically: true,
-          showingTooltipIndicators: [0],
+          // showingTooltipIndicators: [0],
           x: index,
           barRods: [
-            BarChartRodData(
-              gradient: _barRodGradient,
-              width: candleWidth,
-              borderRadius: BorderRadius.circular(2),
-              toY: provider.allDepoDailyEnergyConsumedList?[index] ?? 0,
-            ),
+            provider.allDepoDailyEnergyConsumedList.isEmpty
+                ? BarChartRodData(
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: 100,
+                  )
+                : BarChartRodData(
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: provider.allDepoDailyEnergyConsumedList[index],
+                  ),
           ],
         );
       },
     ).toList();
   }
 
-  List<BarChartGroupData> getAllDepoMonthlyBarGroupData(
-      double? energyConsumed) {
+  List<BarChartGroupData> getAllDepoMonthlyBarGroupData() {
+    final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
+    print("MonthEnergy - ${widget.allDepotsMonthlyConsumedList}");
+
     return List.generate(
-      1,
-      (index) {
+      widget.allDepotsMonthlyConsumedList.isEmpty ? 1 : 1,
+      (index1) {
         return BarChartGroupData(
-          // groupVertically: true,
-          showingTooltipIndicators: [0],
-          x: index,
-          barRods: [
-            BarChartRodData(
-              gradient: _barRodGradient,
-              width: candleWidth,
-              borderRadius: BorderRadius.circular(2),
-              toY: energyConsumed ?? 0.0,
-            ),
-          ],
+          x: index1,
+          barRods: widget.allDepotsMonthlyConsumedList.isNotEmpty
+              ? List.generate(
+                  widget.allDepotsMonthlyConsumedList.length,
+                  (index2) => BarChartRodData(
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: widget.allDepotsMonthlyConsumedList[index2],
+                  ),
+                ).toList()
+              : List.generate(1, (index2) {
+                  return BarChartRodData(
+                    // color: randomColor,
+                    gradient: _barRodGradient,
+                    width: candleWidth,
+                    borderRadius: BorderRadius.circular(2),
+                    toY: 1000,
+                  );
+                }).toList(),
         );
       },
     ).toList();
@@ -477,47 +776,65 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
 
   List<BarChartGroupData> getAllDepoQuarterlyBarGroupData() {
     final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
+    print('allDepoQuaterlyData - ${widget.allDepotsQuaterlyConsumedList}');
     // print('Daily BarChart Data Extracting');
     return List.generate(
-      4,
-      (index) {
+      3,
+      (index1) {
         return BarChartGroupData(
-          // groupVertically: true,
-          showingTooltipIndicators: [0],
-          x: index,
-          barRods: [
-            BarChartRodData(
-              gradient: _barRodGradient,
-              width: candleWidth,
-              borderRadius: BorderRadius.circular(2),
-              toY: provider.allDepoQuaterlyEnergyConsumedList?[index] ?? 0.0,
-            ),
-          ],
-        );
+            // showingTooltipIndicators: [0],
+            x: index1,
+            barRods: widget.allDepotsQuaterlyConsumedList.isEmpty
+                ? List.generate(
+                    10,
+                    (index2) => BarChartRodData(
+                      gradient: _barRodGradient,
+                      width: candleWidth,
+                      borderRadius: BorderRadius.circular(2),
+                      toY: 100.0,
+                    ),
+                  )
+                : List.generate(
+                    widget.allDepotsQuaterlyConsumedList[index1].length,
+                    (index2) => BarChartRodData(
+                      gradient: _barRodGradient,
+                      width: candleWidth,
+                      borderRadius: BorderRadius.circular(2),
+                      toY: provider.allDepoQuaterlyEnergyConsumedList[index1]
+                          [index2],
+                    ),
+                  ));
       },
     ).toList();
   }
 
   List<BarChartGroupData> getAllDepoYearlyBarGroupData() {
-    final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
+    print('TempBarData - ${widget.allDepotsYearlyConsumedList}');
 
-    // print('Daily BarChart Data Extracting');
     return List.generate(
-      12,
-      (index) {
+      widget.allDepotsYearlyConsumedList.isEmpty ? 5 : 12,
+      (index1) {
         return BarChartGroupData(
-          // groupVertically: true,
-          showingTooltipIndicators: [0],
-          x: index,
-          barRods: [
-            BarChartRodData(
-              gradient: _barRodGradient,
-              width: candleWidth,
-              borderRadius: BorderRadius.circular(2),
-              toY: provider.allDepoYearlyEnergyConsumedList?[index] ?? 0.0,
-            ),
-          ],
-        );
+            x: index1,
+            barRods: widget.allDepotsYearlyConsumedList.isEmpty
+                ? List.generate(1, (index2) {
+                    return BarChartRodData(
+                      // color: randomColor,
+                      gradient: _barRodGradient,
+                      width: candleWidth,
+                      borderRadius: BorderRadius.circular(2),
+                      toY: 100,
+                    );
+                  }).toList()
+                : List.generate(
+                    widget.allDepotsYearlyConsumedList[index1].length,
+                    (index2) => BarChartRodData(
+                      gradient: _barRodGradient,
+                      width: candleWidth,
+                      borderRadius: BorderRadius.circular(2),
+                      toY: widget.allDepotsYearlyConsumedList[index1][index2],
+                    ),
+                  ).toList());
       },
     ).toList();
   }
@@ -579,5 +896,30 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
             ),
           );
         });
+  }
+
+  customDropDownTab(List<String> dataList, int selectedIndex, Color textColor) {
+    // final demandProvider =
+    //     Provider.of<DemandEnergyProvider>(context, listen: false);
+    return dataList
+        .map(
+          (String item1) => DropdownMenuItem<String>(
+            value: item1,
+            onTap: () {
+              // selectedIndex == 2
+              //     ? demandProvider.setQuarterMonth(item1)
+              //     : print('Error in selecting Quarter Month');
+            },
+            child: Text(
+              item1,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 }

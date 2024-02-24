@@ -17,8 +17,17 @@ class DemandEnergyProvider extends ChangeNotifier {
   String _selectedDepo = '';
   String get selectedDepo => _selectedDepo;
 
+  String _selectedMonth = '';
+  String get selectedMonth => _selectedMonth;
+
+  String _selectedQuarter = '';
+  String get selectedQuarter => _selectedQuarter;
+
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
+
+  String _selectedYear = '';
+  String get selectedYear => _selectedYear;
 
   List<double>? _dailyEnergyConsumed;
   List<double>? get dailyEnergyConsumed => _dailyEnergyConsumed;
@@ -26,26 +35,26 @@ class DemandEnergyProvider extends ChangeNotifier {
   double? _monthlyEnergyConsumed;
   double? get monthlyEnergyConsumed => _monthlyEnergyConsumed;
 
-  List<double>? _quaterlyEnergyConsumedList;
-  List<double>? get quaterlyEnergyConsumedList => _quaterlyEnergyConsumedList;
+  List<double> _quaterlyEnergyConsumedList = [];
+  List<double> get quaterlyEnergyConsumedList => _quaterlyEnergyConsumedList;
 
-  List<double>? _yearlyEnergyConsumedList;
-  List<double>? get yearlyEnergyConsumedList => _yearlyEnergyConsumedList;
+  List<double> _yearlyEnergyConsumedList = [];
+  List<double> get yearlyEnergyConsumedList => _yearlyEnergyConsumedList;
 
-  List<double>? _allDepoDailyEnergyConsumedList;
-  List<double>? get allDepoDailyEnergyConsumedList =>
+  List<double> _allDepoDailyEnergyConsumedList = [];
+  List<double> get allDepoDailyEnergyConsumedList =>
       _allDepoDailyEnergyConsumedList;
 
   List<double>? _allDepoMonthlyEnergyConsumedList;
   List<double>? get allDepoMonthlyEnergyConsumedList =>
       _allDepoMonthlyEnergyConsumedList;
 
-  List<double>? _allDepoQuaterlyEnergyConsumedList;
-  List<double>? get allDepoQuaterlyEnergyConsumedList =>
+  List<List<double>> _allDepoQuaterlyEnergyConsumedList = [];
+  List<List<double>> get allDepoQuaterlyEnergyConsumedList =>
       _allDepoQuaterlyEnergyConsumedList;
 
-  List<double>? _allDepoYearlyEnergyConsumedList;
-  List<double>? get allDepoYearlyEnergyConsumedList =>
+  List<List<double>>? _allDepoYearlyEnergyConsumedList;
+  List<List<double>>? get allDepoYearlyEnergyConsumedList =>
       _allDepoYearlyEnergyConsumedList;
 
   double? _maxEnergyConsumed;
@@ -53,6 +62,9 @@ class DemandEnergyProvider extends ChangeNotifier {
 
   List<dynamic>? _depoList;
   List<dynamic>? get depoList => _depoList;
+
+  List<String> _selectedQuarterNames = [];
+  List<String> get selectedQuarterNames => _selectedQuarterNames;
 
   Future<dynamic> Function()? _getCurrentDayData;
   Future<dynamic> Function()? get getCurrentDayData => _getCurrentDayData;
@@ -85,6 +97,22 @@ class DemandEnergyProvider extends ChangeNotifier {
 
   Future<dynamic> Function()? _getAllDepoYearlyData;
   Future<dynamic> Function()? get getAllDepoYearlyData => _getAllDepoYearlyData;
+
+  bool _isCheckboxChecked = false;
+  bool get isCheckboxChecked => _isCheckboxChecked;
+
+  void setQuarterNames(List<String> value) {
+    _selectedQuarterNames = value;
+  }
+
+  void setQuarterMonth(String value) {
+    _selectedQuarter = value;
+    print('Quarter is $selectedQuarter');
+  }
+
+  void setYear(String value) {
+    _selectedYear = value;
+  }
 
   void setAllDepoDailyData(Future<dynamic> Function()? value) {
     _getAllDepoDailyData = value;
@@ -145,8 +173,14 @@ class DemandEnergyProvider extends ChangeNotifier {
     _depoList = value;
   }
 
+  void setSelectedMonth(String value) {
+    _selectedMonth = value;
+    print("Selected Month - $_selectedMonth");
+  }
+
   void setMaxEnergyConsumed(double value) {
     _maxEnergyConsumed = value;
+    print('In Provider Total energy stored is - $_maxEnergyConsumed');
   }
 
   void reloadWidget(bool value) {
@@ -164,6 +198,7 @@ class DemandEnergyProvider extends ChangeNotifier {
 
   void setYearlyConsumedList(List<double> value) {
     _yearlyEnergyConsumedList = value;
+    print('Yearly Consumed List -${value} ');
   }
 
   void setAllDepoDailyConsumedList(List<double> value) {
@@ -174,11 +209,12 @@ class DemandEnergyProvider extends ChangeNotifier {
     _allDepoMonthlyEnergyConsumedList = value;
   }
 
-  void setAllDepoQuaterlyConsumedList(List<double> value) {
+  void setAllDepoQuaterlyConsumedList(List<List<double>> value) {
     _allDepoQuaterlyEnergyConsumedList = value;
   }
 
-  void setAllDepoYearlyConsumedList(List<double> value) {
+  void setAllDepoYearlyConsumedList(List<List<double>> value) {
+    print('all Depo Yearly Consumed List is $value');
     _allDepoYearlyEnergyConsumedList = value;
   }
 
@@ -202,8 +238,16 @@ class DemandEnergyProvider extends ChangeNotifier {
     _endDate = value;
   }
 
+  void setIsCheckboxChecked(bool value) {
+    _isCheckboxChecked = value;
+    print(_isCheckboxChecked);
+  }
+
   void setSelectedIndex(int value, bool isAllDepoChecked) async {
     _selectedIndex = value;
+    print('selected index is $selectedIndex');
+    print('isAllDepoChecked - $isAllDepoChecked');
+    _isCheckboxChecked = isAllDepoChecked;
 
     if (isAllDepoChecked) {
       switch (value) {
