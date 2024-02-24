@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
 import 'package:ev_pmis_app/screen/demand_energy/bar_graph.dart';
 import 'package:ev_pmis_app/screen/demand_energy/demand_table.dart';
@@ -74,57 +75,71 @@ class _DemandEnergyScreenState extends State<DemandEnergyScreen> {
     provider.setAllDepoQuaterlyData(getAllDepoQuarterData);
     provider.setAllDepoYearlyData(gettAllDepoYearlyData);
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(45),
-        child: AppBar(
-          centerTitle: true,
-          backgroundColor: blue,
-          title: const Text(
-            'EV Bus Depot Management System',
-            style: TextStyle(fontSize: 15),
+    return WillPopScope(
+      onWillPop: () async {
+        final allDepotProvider =
+            Provider.of<AllDepoSelectProvider>(context, listen: false);
+        allDepotProvider.setCheckedBool(false);
+
+        provider.setSelectedIndex(-1, false);
+        return true;
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(45),
+          child: AppBar(
+            centerTitle: true,
+            backgroundColor: blue,
+            title: const Text(
+              'EV Bus Depot Management System',
+              style: TextStyle(fontSize: 15),
+            ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          Flexible(
-            flex: 1,
-            child: DemandTable(
-              getQuaterlyData: getQuaterlyData,
-              getYearlyData: getYearlyData,
-              getMonthlyData: getCurrentMonthData,
-              getDailyData: getCurrentDayData,
-              columns: columns,
-              rows: rows,
-            ),
-          ),
-          Flexible(
-            flex: 2,
-            child: SingleChildScrollView(
-              child: BarGraphScreen(
-                monthList: monthList,
-                timeIntervalList: timeIntervalList,
-                allDepotsMonthlyConsumedList: [],
-                allDepotsQuaterlyConsumedList: [],
-                allDepotsYearlyConsumedList: [],
+        body: Column(
+          children: [
+            Flexible(
+              flex: 1,
+              child: DemandTable(
+                getQuaterlyData: getQuaterlyData,
+                getYearlyData: getYearlyData,
+                getMonthlyData: getCurrentMonthData,
+                getDailyData: getCurrentDayData,
+                getAllDepoDayData: getAllDepoDailyData,
+                getAllDepoMonthlyData: getAllDepoMonthlyData,
+                getAllDepoQuarterlyData: getAllDepoQuarterData,
+                getAllDepoYearlyData: gettAllDepoYearlyData,
+                columns: columns,
+                rows: rows,
               ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: SizedBox(
-        width: 100,
-        height: 40,
-        child: ElevatedButton(
-            style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(blue)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Back',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            )),
+            Flexible(
+              flex: 2,
+              child: SingleChildScrollView(
+                  child: BarGraphScreen(
+                monthList: monthList,
+                timeIntervalList: timeIntervalList,
+                allDepotsYearlyConsumedList: allDepotsYearlyConsumedList,
+                allDepotsMonthlyConsumedList: allDepotsMonthlyConsumedList,
+                allDepotsQuaterlyConsumedList: allDepoQuaterlyConsumedList,
+              )),
+            ),
+          ],
+        ),
+        floatingActionButton: SizedBox(
+          width: 90,
+          height: 30,
+          child: ElevatedButton(
+              style:
+                  ButtonStyle(backgroundColor: MaterialStatePropertyAll(blue)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Back',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              )),
+        ),
       ),
     );
   }

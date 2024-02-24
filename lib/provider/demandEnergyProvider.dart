@@ -29,8 +29,8 @@ class DemandEnergyProvider extends ChangeNotifier {
   String _selectedYear = '';
   String get selectedYear => _selectedYear;
 
-  List<double>? _dailyEnergyConsumed;
-  List<double>? get dailyEnergyConsumed => _dailyEnergyConsumed;
+  List<double> _dailyEnergyConsumed = [];
+  List<double> get dailyEnergyConsumed => _dailyEnergyConsumed;
 
   double? _monthlyEnergyConsumed;
   double? get monthlyEnergyConsumed => _monthlyEnergyConsumed;
@@ -307,7 +307,7 @@ class DemandEnergyProvider extends ChangeNotifier {
         default:
           break;
       }
-    } else {
+    } else if (value != -1) {
       showAlertWidget();
     }
 

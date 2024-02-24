@@ -134,7 +134,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
               borderRadius: BorderRadius.circular(5),
             ),
             margin: const EdgeInsets.only(
-              bottom: 15,
+              bottom: 5,
               top: 10,
             ),
             child: const Text(
@@ -155,8 +155,9 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
+                        margin: const EdgeInsets.only(left: 5.0),
                         height: 40, //30
-                        width: MediaQuery.of(context).size.width, // 320
+                        width: MediaQuery.of(context).size.width * 0.9, // 320
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: choiceChipLabels.length,
@@ -277,57 +278,70 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                                                 : index == 2
                                                     ? _quarterValue
                                                     : _yearValue,
-                                            onChanged: (String? value) {
-                                              if (provider.selectedDepo
-                                                      .isNotEmpty ||
-                                                  allDepoProvider.isChecked ==
-                                                      true) {
-                                                choiceChipBoolList[index] =
-                                                    !choiceChipBoolList[index];
-                                                index == 1
-                                                    ? _monthValue = value
-                                                    : index == 2
-                                                        ? _quarterValue = value
-                                                        : _yearValue = value;
+                                            onChanged: provider
+                                                    .isLoadingBarCandle
+                                                ? (_) {}
+                                                : (String? value) {
+                                                    if (provider.selectedDepo
+                                                            .isNotEmpty ||
+                                                        allDepoProvider
+                                                                .isChecked ==
+                                                            true) {
+                                                      choiceChipBoolList[
+                                                              index] =
+                                                          !choiceChipBoolList[
+                                                              index];
+                                                      index == 1
+                                                          ? _monthValue = value
+                                                          : index == 2
+                                                              ? _quarterValue =
+                                                                  value
+                                                              : _yearValue =
+                                                                  value;
 
-                                                switch (index) {
-                                                  case 1:
-                                                    _selectedIndex = 1;
-                                                    provider
-                                                        .setLoadingBarCandle(
-                                                            true);
-                                                    provider.setSelectedMonth(
-                                                        value!);
-                                                    break;
-                                                  case 2:
-                                                    _selectedIndex = 2;
-                                                    provider
-                                                        .setLoadingBarCandle(
-                                                            true);
-                                                    provider.setQuarterMonth(
-                                                        value!);
-                                                    break;
-                                                  case 3:
-                                                    _selectedIndex = 3;
-                                                    provider
-                                                        .setLoadingBarCandle(
-                                                            true);
-                                                    provider.setYear(value!);
-                                                    break;
-                                                  default:
-                                                    _selectedIndex = 0;
-                                                }
+                                                      switch (index) {
+                                                        case 1:
+                                                          _selectedIndex = 1;
+                                                          provider
+                                                              .setLoadingBarCandle(
+                                                                  true);
+                                                          provider
+                                                              .setSelectedMonth(
+                                                                  value!);
+                                                          break;
+                                                        case 2:
+                                                          _selectedIndex = 2;
+                                                          provider
+                                                              .setLoadingBarCandle(
+                                                                  true);
+                                                          provider
+                                                              .setQuarterMonth(
+                                                                  value!);
+                                                          break;
+                                                        case 3:
+                                                          _selectedIndex = 3;
+                                                          provider
+                                                              .setLoadingBarCandle(
+                                                                  true);
+                                                          provider
+                                                              .setYear(value!);
+                                                          break;
+                                                        default:
+                                                          _selectedIndex = 0;
+                                                      }
 
-                                                resetChoiceChip(index);
-                                                providerValue
-                                                    .reloadWidget(true);
-                                                providerValue.setSelectedIndex(
-                                                    _selectedIndex,
-                                                    allDepoProvider.isChecked);
-                                              } else {
-                                                showCustomAlert();
-                                              }
-                                            },
+                                                      resetChoiceChip(index);
+                                                      providerValue
+                                                          .reloadWidget(true);
+                                                      providerValue
+                                                          .setSelectedIndex(
+                                                              _selectedIndex,
+                                                              allDepoProvider
+                                                                  .isChecked);
+                                                    } else {
+                                                      showCustomAlert();
+                                                    }
+                                                  },
                                             buttonStyleData: ButtonStyleData(
                                               height: 30,
                                               width: 90,
@@ -357,8 +371,6 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                                               maxHeight: 200,
                                               width: 90,
                                               decoration: BoxDecoration(
-                                                backgroundBlendMode:
-                                                    BlendMode.color,
                                                 borderRadius:
                                                     BorderRadius.circular(14),
                                                 color: index == _selectedIndex
@@ -386,7 +398,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
             },
           ),
           Container(
-            height: 350,
+            height: 300,
             width: MediaQuery.of(context).size.width,
             child: Consumer<DemandEnergyProvider>(
               builder: (context, value, child) {
@@ -412,7 +424,10 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                         width: (provider.isCheckboxChecked == true &&
                                 _selectedIndex == 3)
                             ? 2000
-                            : MediaQuery.of(context).size.width,
+                            : (provider.isCheckboxChecked == true &&
+                                    _selectedIndex == 2)
+                                ? 600
+                                : MediaQuery.of(context).size.width,
                         child: BarChart(
                           swapAnimationCurve: Curves.easeInOut,
                           swapAnimationDuration: const Duration(
@@ -464,7 +479,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
                                                     ? '${provider.quaterlyEnergyConsumedList[groupIndex]} kW'
                                                     : _selectedIndex == 3
                                                         ? '${provider.yearlyEnergyConsumedList[groupIndex]} kW'
-                                                        : '0 kW',
+                                                        : '${provider.dailyEnergyConsumed[groupIndex]} kW',
                                         style: TextStyle(
                                           color: black,
                                           fontSize: 9,
@@ -607,9 +622,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
     final provider = Provider.of<DemandEnergyProvider>(context, listen: false);
     // print('Daily BarChart Data Extracting');
     return List.generate(
-      provider.dailyEnergyConsumed?.length == null
-          ? widget.timeIntervalList.length
-          : 0,
+      widget.timeIntervalList.isNotEmpty ? widget.timeIntervalList.length : 0,
       (index) {
         return BarChartGroupData(
           // groupVertically: true,
@@ -812,7 +825,7 @@ class _BarGraphScreenState extends State<BarGraphScreen> {
     print('TempBarData - ${widget.allDepotsYearlyConsumedList}');
 
     return List.generate(
-      widget.allDepotsYearlyConsumedList.isEmpty ? 5 : 12,
+      12,
       (index1) {
         return BarChartGroupData(
             x: index1,

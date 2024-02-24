@@ -87,6 +87,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'TP-EV-PMIS',
         theme: ThemeData(
+          scrollbarTheme: ScrollbarThemeData(
+              thumbColor: MaterialStatePropertyAll(blue),
+              thumbVisibility: MaterialStatePropertyAll(true)),
           brightness: Brightness.light,
           fontFamily: 'Montserrat',
           primarySwatch: Colors.blue,
