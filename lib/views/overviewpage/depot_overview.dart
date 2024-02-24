@@ -662,7 +662,11 @@ class _DepotOverviewState extends State<DepotOverview> {
                           if (!snapshot.hasData ||
                               snapshot.data.exists == false) {
                             return SfDataGridTheme(
-                              data: SfDataGridThemeData(gridLineColor: blue),
+                              data: SfDataGridThemeData(
+                                  gridLineColor: blue,
+                                  gridLineStrokeWidth: 2,
+                                  frozenPaneLineWidth: 3,
+                                  frozenPaneLineColor: blue),
                               child: SfDataGrid(
                                 source: _employeeDataSource,
                                 allowEditing: true,
@@ -913,7 +917,10 @@ class _DepotOverviewState extends State<DepotOverview> {
                             });
                             return SfDataGridTheme(
                               data: SfDataGridThemeData(
-                                  gridLineColor: blue, headerColor: white),
+                                  gridLineColor: blue,
+                                  gridLineStrokeWidth: 2,
+                                  frozenPaneLineWidth: 3,
+                                  frozenPaneLineColor: blue),
                               child: SfDataGrid(
                                 source: _employeeDataSource,
                                 allowEditing: true,

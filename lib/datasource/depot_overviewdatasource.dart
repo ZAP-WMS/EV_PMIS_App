@@ -92,6 +92,7 @@ class DepotOverviewDatasource extends DataGridSource {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: (dataGridCell.columnName == 'Add')
               ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: blue),
                   onPressed: () {
                     addRowAtIndex(
                       dataRowIndex + 1,
@@ -102,7 +103,7 @@ class DepotOverviewDatasource extends DataGridSource {
                         typeRisk: 'Material Supply',
                         impactRisk: 'High',
                         owner: '',
-                        migrateAction: ' ',
+                        migrateAction: '',
                         contigentAction: '',
                         progressAction: '',
                         reason: '',
@@ -112,7 +113,7 @@ class DepotOverviewDatasource extends DataGridSource {
                       ),
                     );
                   },
-                  child: Text('Add', style: TextStyle(fontSize: 12)))
+                  child: const Text('Add', style: TextStyle(fontSize: 12)))
               : (dataGridCell.columnName == 'Delete')
                   ? IconButton(
                       onPressed: () {

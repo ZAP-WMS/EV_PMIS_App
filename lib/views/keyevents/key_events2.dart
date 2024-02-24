@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
 import '../../FirebaseApi/firebase_api.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/key_datasource.dart';
@@ -379,7 +378,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
     // ];
 
     return _isLoading
-        ? LoadingPage()
+        ? const LoadingPage()
         : keyBoardArrow(
             scrollController: _scrollController,
             myScaffold: Scaffold(

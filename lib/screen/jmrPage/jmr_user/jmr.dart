@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
+import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../components/Loading_page.dart';
@@ -16,6 +19,7 @@ class JmrUserPage extends StatefulWidget {
 }
 
 class _JmrUserPageState extends State<JmrUserPage> {
+  String fileName = '';
   List currentTabList = [];
   String selectedDepot = '';
   int _selectedIndex = 0;
@@ -246,7 +250,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
             padding: const EdgeInsets.only(
               top: 5,
             ),
-            height: 130,
+            height: 90,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: jmrListIndex,
@@ -298,6 +302,87 @@ class _JmrUserPageState extends State<JmrUserPage> {
               },
             ),
           ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 30,
+                  width: 90,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                      ),
+                      onPressed: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+
+                        if (result != null) {
+                          final bytes = result.files.single.bytes;
+                          fileName = result.files.single.name;
+                          final storage = FirebaseStorage.instance;
+                          await storage
+                              .ref()
+                              .child(
+                                  'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}/$fileName')
+                              .putData(bytes!);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(
+                                'File Uploaded',
+                                style: TextStyle(color: white),
+                              )));
+                        } else {
+                          // User canceled the picker
+                        }
+                      },
+                      child: Text(
+                        'Upload',
+                        style: TextStyle(color: white),
+                      )),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewAllPdf(
+                                  cityName: widget.cityName,
+                                  depoName: widget.depoName,
+                                  title: 'jmr',
+                                  userId: userId,
+                                  fldrName:
+                                      'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
+                                )));
+
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => ViewJmrFiles(
+                    //               path:
+                    //                   'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
+                    //             )
+                    //             )
+                    //             );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5.0),
+                    padding: const EdgeInsets.only(
+                        right: 8.0, left: 8.0, top: 4.0, bottom: 4.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.blue),
+                    ),
+                    child: const Text(
+                      'View',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
     );

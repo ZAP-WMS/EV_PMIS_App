@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/authentication/reset_password.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -69,17 +70,16 @@ class _LoginPageState extends State<LoginPage> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: ' Forget Password ?',
-                                recognizer: TapGestureRecognizer(),
-                                // ..onTap = (() => Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => ResetPass(
-                                //             // email: FirebaseAuth
-                                //             //     .instance
-                                //             //     .currentUser!
-                                //             //     .email!,
-                                //             )))
-                                //             ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = (() => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ResetPass(
+                                              // email: FirebaseAuth
+                                              //     .instance
+                                              //     .currentUser!
+                                              //     .email!,
+                                              )))),
                                 style: const TextStyle(color: Colors.blue))
                           ],
                         )),
