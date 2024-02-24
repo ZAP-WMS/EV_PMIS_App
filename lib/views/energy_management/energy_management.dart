@@ -171,7 +171,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                             EnergyManagementDatasource(
                                 _energyManagement,
                                 context,
-                                widget.userId,
+                                widget.userId!,
                                 widget.cityName,
                                 widget.depoName);
                         _dataGridController = DataGridController();
@@ -378,6 +378,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                         _energyManagement.clear();
                         _energyManagementdatasource.buildDataGridRows();
                         _energyManagementdatasource.updateDatagridSource();
+
                         alldata.forEach((element) {
                           _energyManagement
                               .add(EnergyManagementModel.fromJson(element));
@@ -399,12 +400,6 @@ class _EnergyManagementState extends State<EnergyManagement> {
                           gridLinesVisibility: GridLinesVisibility.both,
                           headerGridLinesVisibility: GridLinesVisibility.both,
                           headerRowHeight: 40,
-
-                          // checkboxColumnSettings:
-                          //     DataGridCheckboxColumnSettings(
-                          //         showCheckboxOnHeader: false),
-
-                          // showCheckboxColumn: true,
                           selectionMode: SelectionMode.multiple,
                           navigationMode: GridNavigationMode.cell,
                           columnWidthMode: ColumnWidthMode.auto,

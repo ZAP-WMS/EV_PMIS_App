@@ -46,18 +46,21 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
 
     // _materialprocurement = getmonthlyReport();
     getUserId().whenComplete(() {
-      getTableData().whenComplete(() {
-        _stream = FirebaseFirestore.instance
-            .collection('MaterialProcurement')
-            .doc('${widget.depoName}')
-            .collection('Material Data')
-            .doc(userId)
-            .snapshots();
-
-        _materialDatasource = MaterialDatasource(
-            _materialprocurement, context, cityName, widget.depoName);
-        _dataGridController = DataGridController();
+      // getTableData().whenComplete(() {
+      _stream = FirebaseFirestore.instance
+          .collection('MaterialProcurement')
+          .doc('${widget.depoName}')
+          .collection('Material Data')
+          .doc(userId)
+          .snapshots();
+      setState(() {
+        isLoading = false;
       });
+      // _materialDatasource = MaterialDatasource(
+      //     _materialprocurement, context, cityName, widget.depoName);
+      // _dataGridController = DataGridController();
+
+      //  });
     });
 
     super.initState();
@@ -380,19 +383,19 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     ]),
                               );
                             } else {
-                              // alldata = '';
-                              // alldata = snapshot.data['data'] as List<dynamic>;
-                              // _materialprocurement.clear();
-                              // alldata.forEach((element) {
-                              //   _materialprocurement.add(
-                              //       MaterialProcurementModel.fromjson(element));
-                              //   _materialDatasource = MaterialDatasource(
-                              //       _materialprocurement,
-                              //       context,
-                              //       cityName,
-                              //       widget.depoName);
-                              //   _dataGridController = DataGridController();
-                              // });
+                              alldata = '';
+                              alldata = snapshot.data['data'] as List<dynamic>;
+                              _materialprocurement.clear();
+                              alldata.forEach((element) {
+                                _materialprocurement.add(
+                                    MaterialProcurementModel.fromjson(element));
+                                _materialDatasource = MaterialDatasource(
+                                    _materialprocurement,
+                                    context,
+                                    cityName,
+                                    widget.depoName);
+                                _dataGridController = DataGridController();
+                              });
                               return SfDataGrid(
                                   source: _materialDatasource,
                                   allowEditing: true,

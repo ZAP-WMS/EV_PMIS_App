@@ -175,7 +175,7 @@ class _StatutoryAprovalA2State extends State<StatutoryAprovalA2> {
                 if (!snapshot.hasData || snapshot.data.exists == false) {
                   _employees = getEmployeeData();
                   _employeeDataSource = EmployeeDataSource(
-                      _employees, context, userId!, cityName, widget.depoName);
+                      _employees, context, userId, cityName, widget.depoName);
                   _dataGridController = DataGridController();
 
                   return SingleChildScrollView(

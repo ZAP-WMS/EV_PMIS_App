@@ -51,12 +51,13 @@ class _DailyProjectState extends State<DailyProject> {
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
     _stream = FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
+        .collection('DailyProject3')
         .doc('${widget.depoName}')
-        .collection('userId')
-        .doc(userId)
-        .collection('date')
-        .doc(selectedDate)
+        // .collection('userId')
+        // .doc(userId)
+        // .collection('date')
+        .collection(selectedDate!)
+        .doc('userId')
         .snapshots();
     getTableData().whenComplete(() {
       _dailyDataSource = DailyDataSource(dailyproject, context,
@@ -93,7 +94,7 @@ class _DailyProjectState extends State<DailyProject> {
               store: () {
                 _showDialog(context);
                 FirebaseApi().nestedKeyEventsField(
-                    'DailyProjectReport2', widget.depoName!, 'userId', userId!);
+                    'DailyProject3', widget.depoName!, 'userId', userId!);
                 storeData();
               },
               showDate: visDate,
@@ -579,7 +580,7 @@ class _DailyProjectState extends State<DailyProject> {
     }
 
     FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
+        .collection('DailyProject3')
         .doc('${widget.depoName}')
         .collection('userId')
         .doc(userId)
@@ -665,7 +666,7 @@ class _DailyProjectState extends State<DailyProject> {
                         dailyproject.clear();
                         getTableData().whenComplete(() {
                           _stream = FirebaseFirestore.instance
-                              .collection('DailyProjectReport2')
+                              .collection('DailyProject3')
                               .doc('${widget.depoName}')
                               .collection('userId')
                               .doc(userId)
@@ -692,7 +693,7 @@ class _DailyProjectState extends State<DailyProject> {
 
   Future<void> getTableData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
+        .collection('DailyProject3')
         .doc('${widget.depoName}')
         .collection('userId')
         .doc(userId)

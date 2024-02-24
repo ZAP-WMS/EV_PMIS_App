@@ -20,7 +20,6 @@ import '../../../../QualityDatasource/qualityCivilDatasource/quality_glazzing.da
 import '../../../../QualityDatasource/qualityCivilDatasource/quality_inspection.dart';
 import '../../../../QualityDatasource/qualityCivilDatasource/quality_massonary.dart';
 import '../../../../QualityDatasource/qualityCivilDatasource/quality_painting.dart';
-import '../../../../QualityDatasource/qualityCivilDatasource/quality_paving.dart';
 import '../../../../QualityDatasource/qualityCivilDatasource/quality_proofing.dart';
 import '../../../../QualityDatasource/qualityCivilDatasource/quality_roofing.dart';
 import '../../../../components/Loading_page.dart';
@@ -96,7 +95,6 @@ class _CivilFieldState extends State<CivilField> {
   late QualityflooringDataSource _qualityflooringDataSource;
   late QualityInspectionDataSource _qualityInspectionDataSource;
   late QualityPaintingDataSource _qualityPaintingDataSource;
-  late QualityPavingDataSource _qualityPavingDataSource;
   late QualityRoofingDataSource _qualityRoofingDataSource;
   late QualityProofingDataSource _qualityProofingDataSource;
 
@@ -185,8 +183,6 @@ class _CivilFieldState extends State<CivilField> {
       _dataGridController = DataGridController();
 
       qualitylisttable10 = checkTable ? paving_getData() : data;
-      _qualityPavingDataSource = QualityPavingDataSource(
-          qualitylisttable10, widget.depoName!, cityName!);
       _dataGridController = DataGridController();
 
       qualitylisttable11 = checkTable ? roofing_getData() : data;
@@ -275,7 +271,7 @@ class _CivilFieldState extends State<CivilField> {
                 'filling': fillingController.text
               });
               FirebaseApi().nestedKeyEventsField(
-                  'CivilChecklistField', widget.depoName!, 'userId', userId!);
+                  'CivilChecklistField', widget.depoName!, 'userId', userId);
             },
             showDate: visDate,
             choosedate: () {
@@ -285,7 +281,7 @@ class _CivilFieldState extends State<CivilField> {
         preferredSize: const Size.fromHeight(60),
       ),
       body: isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('CivilChecklistField')
@@ -558,7 +554,10 @@ class _CivilFieldState extends State<CivilField> {
                               // });
 
                               return SfDataGridTheme(
-                                data: SfDataGridThemeData(headerColor: blue),
+                                data: SfDataGridThemeData(
+                                    gridLineColor: blue,
+                                    gridLineStrokeWidth: 2,
+                                    frozenPaneLineColor: blue),
                                 child: SfDataGrid(
                                   source: widget.fieldclnName == 'Exc'
                                       ? _qualityExcavationDataSource
@@ -706,7 +705,7 @@ class _CivilFieldState extends State<CivilField> {
                               );
                             } else {
                               // here w3e have to put Nodata page
-                              return LoadingPage();
+                              return const LoadingPage();
                             }
                           },
                         ),
@@ -784,7 +783,7 @@ class _CivilFieldState extends State<CivilField> {
       'data': excavationtabledatalist,
     }).whenComplete(() {
       FirebaseApi().nestedKeyEventsField(
-          'CivilQualityChecklist', widget.depoName!, 'userId', userId!);
+          'CivilQualityChecklist', widget.depoName!, 'userId', userId);
       excavationtabledatalist.clear();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -1043,8 +1042,6 @@ class _CivilFieldState extends State<CivilField> {
 
                           qualitylisttable10 =
                               checkTable ? paving_getData() : data;
-                          _qualityPavingDataSource = QualityPavingDataSource(
-                              qualitylisttable10, widget.depoName!, cityName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable11 =
