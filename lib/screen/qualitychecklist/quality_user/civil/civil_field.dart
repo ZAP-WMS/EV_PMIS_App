@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/screen/dailyreport/summary.dart';
+
 import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
@@ -25,6 +25,7 @@ import '../../../../QualityDatasource/qualityCivilDatasource/quality_roofing.dar
 import '../../../../components/Loading_page.dart';
 import '../../../../provider/cities_provider.dart';
 import '../../../../style.dart';
+import '../../../../views/dailyreport/summary.dart';
 import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/quality_list.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -461,7 +462,7 @@ class _CivilFieldState extends State<CivilField> {
                                     ),
                                     GridColumn(
                                       columnName: 'View',
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 150,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -689,7 +690,7 @@ class _CivilFieldState extends State<CivilField> {
                                     ),
                                     GridColumn(
                                       columnName: 'View',
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 150,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(

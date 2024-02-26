@@ -8,7 +8,7 @@ import '../viewmodels/energy_management.dart';
 class SummaryProvider extends ChangeNotifier {
   Map<String, dynamic> alldate = Map();
   List<DailyProjectModel> _dailydata = [];
-   List<EnergyManagementModel> _energydata = [];
+  List<EnergyManagementModel> _energydata = [];
 
   List<dynamic> intervalListData = [];
   List<dynamic> energyListData = [];
@@ -32,12 +32,10 @@ class SummaryProvider extends ChangeNotifier {
         initialdate = initialdate.add(const Duration(days: 1))) {
       print(DateFormat.yMMMMd().format(initialdate));
       FirebaseFirestore.instance
-          .collection('DailyProjectReport2')
+          .collection('DailyProject3')
           .doc(depoName)
-          .collection('userId')
+          .collection(DateFormat.yMMMMd().format(initialdate))
           .doc(userId)
-          .collection('date')
-          .doc(DateFormat.yMMMMd().format(initialdate))
           .get()
           .then((value) {
         if (value.data() != null) {
@@ -53,7 +51,7 @@ class SummaryProvider extends ChangeNotifier {
     }
   }
 
-fetchEnergyData(String cityName, String depoName, String userId,
+  fetchEnergyData(String cityName, String depoName, String userId,
       DateTime date, DateTime endDate) async {
     final List<dynamic> timeIntervalList = [];
     final List<dynamic> energyConsumedList = [];
@@ -104,7 +102,4 @@ fetchEnergyData(String cityName, String depoName, String userId,
       });
     }
   }
-
-
-
 }

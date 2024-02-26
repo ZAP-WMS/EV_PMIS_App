@@ -58,6 +58,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
 
     monthlyDataSource = MonthlyDataSource(monthlyProject, context);
     _dataGridController = DataGridController();
+    setState(() {
+      isLoading = false;
+    });
     //});
 
     // });
@@ -507,11 +510,12 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
-                                      child: Text('Next Month Action Plan',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
+                                      child: Text(
+                                        'Next Month Action Plan',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor,
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                   ),
                                 ]),

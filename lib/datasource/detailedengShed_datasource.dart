@@ -248,7 +248,10 @@ class DetailedEngSourceShed extends DataGridSource {
                               //               ],
                               //             ))));
                             },
-                            child: const Text('Upload'));
+                            child: const Text(
+                              'Upload',
+                              style: TextStyle(fontSize: 12),
+                            ));
                       })
                     : dataGridCell.columnName == 'ViewDrawing'
                         ? LayoutBuilder(builder:

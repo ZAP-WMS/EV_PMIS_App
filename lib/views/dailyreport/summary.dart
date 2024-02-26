@@ -525,7 +525,10 @@ class _ViewSummaryState extends State<ViewSummary> {
 
                                     return SfDataGridTheme(
                                       data: SfDataGridThemeData(
-                                          headerColor: blue),
+                                          gridLineColor: blue,
+                                          gridLineStrokeWidth: 2,
+                                          frozenPaneLineColor: blue,
+                                          frozenPaneLineWidth: 2),
                                       child: SfDataGrid(
                                           source: _dailyDataSource,
                                           allowEditing: true,

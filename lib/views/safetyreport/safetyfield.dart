@@ -18,7 +18,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../../screen/dailyreport/summary.dart';
+import '../dailyreport/summary.dart';
 
 class SafetyField extends StatefulWidget {
   String? depoName;

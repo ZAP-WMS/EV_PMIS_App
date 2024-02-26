@@ -1,4 +1,3 @@
-import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/energy_management/energy_management.dart';
 import 'package:ev_pmis_app/views/energy_management/energy_management_admin.dart.dart';

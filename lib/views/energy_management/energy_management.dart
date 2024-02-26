@@ -198,6 +198,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                           columns: [
                             GridColumn(
                               visible: true,
+                              width: 40,
                               columnName: 'srNo',
                               allowEditing: false,
                               label: Container(
@@ -227,7 +228,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                               label: Container(
                                 padding: const EdgeInsets.all(8.0),
                                 alignment: Alignment.center,
-                                child: Text('Veghicle No',
+                                child: Text('Vehicle No',
                                     textAlign: TextAlign.center,
                                     style: tableheaderwhitecolor),
                               ),
@@ -412,6 +413,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                           columns: [
                             GridColumn(
                               visible: true,
+                              width: 40,
                               columnName: 'srNo',
                               allowEditing: false,
                               label: Container(
@@ -441,7 +443,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                               label: Container(
                                 padding: const EdgeInsets.all(8.0),
                                 alignment: Alignment.center,
-                                child: Text('Veghicle No',
+                                child: Text('Vehicle No',
                                     textAlign: TextAlign.center,
                                     style: tableheaderwhitecolor),
                               ),
@@ -682,11 +684,10 @@ class _EnergyManagementState extends State<EnergyManagement> {
                 startSoc: 1,
                 endSoc: 1,
                 startDate:
-                    DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now()),
-                endDate:
-                    DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now()),
+                    DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+                endDate: DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
                 totalTime:
-                    DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now()),
+                    DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
                 energyConsumed: 1500,
                 timeInterval:
                     '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));

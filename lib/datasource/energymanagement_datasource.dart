@@ -95,9 +95,9 @@ class EnergyManagementDatasource extends DataGridSource {
     final int dataRowIndex = dataGridRows.indexOf(row);
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      DateTime startDate = DateFormat('dd-MM-yyyy HH:mm:ss')
+      DateTime startDate = DateFormat('dd-MM-yyyy HH:mm')
           .parse(_energyManagement[dataRowIndex].startDate);
-      DateTime endDate = DateFormat('dd-MM-yyyy HH:mm:ss')
+      DateTime endDate = DateFormat('dd-MM-yyyy HH:mm')
           .parse(_energyManagement[dataRowIndex].endDate);
 
       difference = endDate.difference(startDate);
@@ -112,7 +112,7 @@ class EnergyManagementDatasource extends DataGridSource {
                       onPressed: () async {
                         _selectDateTime(mainContext).whenComplete(() {
                           _energyManagement[dataRowIndex].startDate =
-                              DateFormat('dd-MM-yyyy HH:mm:ss')
+                              DateFormat('dd-MM-yyyy HH:mm')
                                   .format(selectedDateTime);
                           //   // print(startformattedTime); //output 14:59:00
                           // print(selectedDateTime);
@@ -137,7 +137,7 @@ class EnergyManagementDatasource extends DataGridSource {
                           onPressed: () async {
                             _selectDateTime(mainContext).whenComplete(() {
                               _energyManagement[dataRowIndex].endDate =
-                                  DateFormat('dd-MM-yyyy HH:mm:ss')
+                                  DateFormat('dd-MM-yyyy HH:mm')
                                       .format(selectedDateTime);
                               //   // print(startformattedTime); //output 14:59:00
                               // print(selectedDateTime);
@@ -168,13 +168,12 @@ class EnergyManagementDatasource extends DataGridSource {
                                         startSoc: 1,
                                         endSoc: 1,
                                         startDate:
-                                            DateFormat('dd-MM-yyyy HH:mm:ss')
+                                            DateFormat('dd-MM-yyyy HH:mm')
                                                 .format(DateTime.now()),
-                                        endDate:
-                                            DateFormat('dd-MM-yyyy HH:mm:ss')
-                                                .format(DateTime.now()),
+                                        endDate: DateFormat('dd-MM-yyyy HH:mm')
+                                            .format(DateTime.now()),
                                         totalTime:
-                                            DateFormat('dd-MM-yyyy HH:mm:ss')
+                                            DateFormat('dd-MM-yyyy HH:mm')
                                                 .format(DateTime.now()),
                                         energyConsumed: 1500,
                                         timeInterval:

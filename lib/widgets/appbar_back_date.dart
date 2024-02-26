@@ -67,7 +67,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
           children: [
             Text(
               widget.text.toString(),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             Text(
               widget.depoName ?? '',

@@ -24,9 +24,6 @@ class DailyProjectModel {
     return DailyProjectModel(
       date: json['Date'],
       siNo: json['SiNo'],
-
-      // state: json['State'],
-      // depotName: json['DepotName'],
       typeOfActivity: json['TypeOfActivity'],
       activityDetails: json['ActivityDetails'],
       progress: json['Progress'],
