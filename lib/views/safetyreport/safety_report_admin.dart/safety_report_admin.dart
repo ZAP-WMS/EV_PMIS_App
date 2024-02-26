@@ -305,6 +305,8 @@ class _SafetySummaryState extends State<SafetySummary> {
 
   Future<Uint8List> _generatePDF(
       String userId, String date, int decision) async {
+    bool isImageEmpty = false;
+
     final pr = ProgressDialog(context);
 
     if (decision == 1) {
@@ -323,15 +325,14 @@ class _SafetySummaryState extends State<SafetySummary> {
               color: Colors.black,
               fontSize: 18.0,
               fontWeight: FontWeight.w600));
-
       pr.show();
     }
 
     final headerStyle =
         pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold);
 
-    final fontData1 = await rootBundle.load('fonts/IBMPlexSans-Medium.ttf');
-    final fontData2 = await rootBundle.load('fonts/IBMPlexSans-Bold.ttf');
+    final fontData1 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
 
     const cellStyle = pw.TextStyle(
       color: PdfColors.black,
@@ -407,53 +408,57 @@ class _SafetySummaryState extends State<SafetySummary> {
 
     List<pw.TableRow> rows = [];
 
-    rows.add(pw.TableRow(children: [
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Sr No',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-      pw.Container(
-          padding:
-              const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
-          child: pw.Center(
-              child: pw.Text('Details',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Status',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Remark',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text(
-            'Image5',
-          ))),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text(
-            'Image6',
-          ))),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text(
-            'Image7',
-          ))),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text(
-            'Image8',
-          ))),
-    ]));
+    rows.add(
+      pw.TableRow(
+        children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Sr No',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.only(
+                  top: 4, bottom: 4, left: 2, right: 2),
+              child: pw.Center(
+                  child: pw.Text('Details',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Status',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Remark',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image5',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image6',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image7',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image8',
+              ))),
+        ],
+      ),
+    );
 
     List<dynamic> userData = [];
 
@@ -486,19 +491,22 @@ class _SafetySummaryState extends State<SafetySummary> {
             if (image.name.endsWith('.pdf')) {
               imageUrls.add(
                 pw.Container(
-                    alignment: pw.Alignment.center,
-                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 60,
-                    height: 100,
-                    child: pw.UrlLink(
-                        child: pw.Text(image.name), destination: downloadUrl)),
+                  alignment: pw.Alignment.center,
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.UrlLink(
+                      child: pw.Text(image.name,
+                          style: const pw.TextStyle(color: PdfColors.blue)),
+                      destination: downloadUrl),
+                ),
               );
             } else {
               final myImage = await networkImage(downloadUrl);
               imageUrls.add(
                 pw.Container(
                     padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 100,
+                    width: 60,
                     height: 100,
                     child: pw.Center(
                       child: pw.Image(myImage),
@@ -506,8 +514,20 @@ class _SafetySummaryState extends State<SafetySummary> {
               );
             }
           }
-          if (imageUrls.length < 8) {
-            int imageLoop = 8 - imageUrls.length;
+
+          if (imageUrls.length > 4) {
+            int imageLoop = 12 - imageUrls.length;
+            for (int i = 0; i < imageLoop; i++) {
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Text('')),
+              );
+            }
+          } else if (imageUrls.length < 4) {
+            int imageLoop = 4 - imageUrls.length;
             for (int i = 0; i < imageLoop; i++) {
               imageUrls.add(
                 pw.Container(
@@ -518,6 +538,8 @@ class _SafetySummaryState extends State<SafetySummary> {
               );
             }
           }
+        } else {
+          isImageEmpty = true;
         }
         result.items.clear();
 
@@ -545,9 +567,13 @@ class _SafetySummaryState extends State<SafetySummary> {
               child: pw.Center(
                   child: pw.Text(mapData['Remark'].toString(),
                       style: const pw.TextStyle(fontSize: 11)))),
+          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[0]),
+          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[1]),
+          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[2]),
+          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[3]),
         ]));
 
-        if (imageUrls.isNotEmpty) {
+        if (imageUrls.length > 4) {
           //Image Rows of PDF Table
           rows.add(pw.TableRow(children: [
             pw.Container(
@@ -560,17 +586,18 @@ class _SafetySummaryState extends State<SafetySummary> {
                 child: pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                     children: [
-                      imageUrls[0],
-                      imageUrls[1],
+                      imageUrls[4],
+                      imageUrls[5],
                     ])),
-            imageUrls[2],
-            imageUrls[3],
-            imageUrls[4],
-            imageUrls[5],
             imageUrls[6],
-            imageUrls[7]
+            imageUrls[7],
+            imageUrls[8],
+            imageUrls[9],
+            imageUrls[10],
+            imageUrls[11],
           ]));
         }
+
         imageUrls.clear();
       }
     }

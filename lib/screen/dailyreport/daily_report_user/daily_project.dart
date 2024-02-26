@@ -51,13 +51,12 @@ class _DailyProjectState extends State<DailyProject> {
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
     _stream = FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
+        .collection('DailyProject3')
         .doc('${widget.depoName}')
-        .collection('userId')
+        .collection(selectedDate.toString())
         .doc(userId)
-        .collection('date')
-        .doc(selectedDate)
         .snapshots();
+
     getTableData().whenComplete(() {
       _dailyDataSource = DailyDataSource(dailyproject, context,
           widget.cityName!, widget.depoName!, userId, selectedDate!);
@@ -93,7 +92,7 @@ class _DailyProjectState extends State<DailyProject> {
               store: () {
                 _showDialog(context);
                 FirebaseApi().nestedKeyEventsField(
-                    'DailyProjectReport2', widget.depoName!, 'userId', userId);
+                    'DailyProject3', widget.depoName!, 'userId', userId);
                 storeData();
               },
               showDate: visDate,
@@ -581,12 +580,10 @@ class _DailyProjectState extends State<DailyProject> {
     }
 
     FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
+        .collection('DailyProject3')
         .doc('${widget.depoName}')
-        .collection('userId')
+        .collection(selectedDate.toString())
         .doc(userId)
-        .collection('date')
-        .doc(selectedDate.toString())
         // .doc(DateFormat.yMMMMd().format(DateTime.now()))
         .set({
       'data': tabledata2,
@@ -667,12 +664,10 @@ class _DailyProjectState extends State<DailyProject> {
                         dailyproject.clear();
                         getTableData().whenComplete(() {
                           _stream = FirebaseFirestore.instance
-                              .collection('DailyProjectReport2')
+                              .collection('DailyProject3')
                               .doc('${widget.depoName}')
-                              .collection('userId')
+                              .collection(selectedDate.toString())
                               .doc(userId)
-                              .collection('date')
-                              .doc(selectedDate)
                               .snapshots();
                           _dailyDataSource = DailyDataSource(
                               dailyproject,
@@ -694,12 +689,10 @@ class _DailyProjectState extends State<DailyProject> {
 
   Future<void> getTableData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
+        .collection('DailyProject3')
         .doc('${widget.depoName}')
-        .collection('userId')
+        .collection(selectedDate.toString())
         .doc(userId)
-        .collection('date')
-        .doc(selectedDate)
         .get();
 
     if (documentSnapshot.exists) {
