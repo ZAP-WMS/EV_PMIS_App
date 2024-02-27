@@ -693,7 +693,8 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                       ? 50000
                                       : value.energyData.reduce(
                                           (max, current) =>
-                                              max > current ? max : current),
+                                              max > current ? max : current,
+                                        ),
                                   barGroups: barChartGroupData(
                                     value.energyData,
                                   ),

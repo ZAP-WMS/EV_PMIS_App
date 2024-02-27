@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../viewmodels/daily_projectModel.dart';
 import '../viewmodels/energy_management.dart';
 
+List<int> globalRowIndex = [];
+
 class SummaryProvider extends ChangeNotifier {
   Map<String, dynamic> alldate = Map();
   List<DailyProjectModel> _dailydata = [];
-   List<EnergyManagementModel> _energydata = [];
+  List<EnergyManagementModel> _energydata = [];
 
   List<dynamic> intervalListData = [];
   List<dynamic> energyListData = [];
@@ -41,10 +44,12 @@ class SummaryProvider extends ChangeNotifier {
           .get()
           .then((value) {
         if (value.data() != null) {
-          print('swswssw${value.data()!['data'].length}');
           for (int i = 0; i < value.data()!['data'].length; i++) {
+            globalItemLengthList.add(0);
+            isShowPinIcon.add(false);
             var _data = value.data()!['data'][i];
             loadeddata.add(DailyProjectModel.fromjson(_data));
+            globalRowIndex.add(i + 1);
           }
           _dailydata = loadeddata;
           notifyListeners();
@@ -53,7 +58,7 @@ class SummaryProvider extends ChangeNotifier {
     }
   }
 
-fetchEnergyData(String cityName, String depoName, String userId,
+  fetchEnergyData(String cityName, String depoName, String userId,
       DateTime date, DateTime endDate) async {
     final List<dynamic> timeIntervalList = [];
     final List<dynamic> energyConsumedList = [];
@@ -104,7 +109,4 @@ fetchEnergyData(String cityName, String depoName, String userId,
       });
     }
   }
-
-
-
 }

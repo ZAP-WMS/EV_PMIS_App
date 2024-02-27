@@ -17,6 +17,9 @@ import '../../../style.dart';
 import '../../../widgets/appbar_back_date.dart';
 import '../../../widgets/navbar.dart';
 
+List<bool> isShowPinIcon = [];
+List<int> globalItemLengthList = [];
+
 class DailyProject extends StatefulWidget {
   String? cityName;
   String? depoName;

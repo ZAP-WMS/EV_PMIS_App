@@ -1,8 +1,21 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/date_format.dart';
+import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -21,6 +34,8 @@ import '../../provider/summary_provider.dart';
 import '../../style.dart';
 import '../../widgets/nodata_available.dart';
 import '../qualitychecklist/quality_checklist.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class ViewSummary extends StatefulWidget {
   String? depoName;
@@ -45,6 +60,8 @@ class ViewSummary extends StatefulWidget {
 }
 
 class _ViewSummaryState extends State<ViewSummary> {
+  ProgressDialog? pr;
+  String pathToOpenFile = '';
   SummaryProvider? _summaryProvider;
   Future<List<DailyProjectModel>>? _dailydata;
   Future<List<EnergyManagementModel>>? _energydata;
@@ -53,6 +70,8 @@ class _ViewSummaryState extends State<ViewSummary> {
   DateTime? enddate = DateTime.now();
   DateTime? rangestartDate;
   DateTime? rangeEndDate;
+  Uint8List? pdfData;
+  String? pdfPath;
 
   List<MonthlyProjectModel> monthlyProject = <MonthlyProjectModel>[];
   List<SafetyChecklistModel> safetylisttable = <SafetyChecklistModel>[];
@@ -69,8 +88,12 @@ class _ViewSummaryState extends State<ViewSummary> {
 
   @override
   void initState() {
+    widget.id = 'Daily Report';
     super.initState();
     _summaryProvider = Provider.of<SummaryProvider>(context, listen: false);
+    pr = ProgressDialog(context,
+        customBody:
+            Container(height: 200, width: 100, child: const LoadingPdf()));
 
     getUserId().then((value) {});
   }
@@ -83,12 +106,14 @@ class _ViewSummaryState extends State<ViewSummary> {
         widget.userId, startdate!, enddate!);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            '${widget.depoName}/${widget.id}/View Summary',
-            style: const TextStyle(fontSize: 16),
-          ),
-          backgroundColor: blue,
+        appBar: CustomAppBar(
+          isDownload: true,
+          depoName: widget.depoName,
+          title: 'Daily Report',
+          height: 30,
+          isSync: false,
+          isCentered: false,
+          downloadFun: downloadPDF,
         ),
         body: Column(
           children: [
@@ -357,82 +382,6 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                 style: tableheaderwhitecolor),
                                           ),
                                         ),
-                                        // GridColumn(
-                                        //   columnName: 'Months',
-                                        //   auets.symmetric(
-                                        //       tablepadding),                                        //   allowEditing: false,
-                                        //   width: 200,
-                                        //   label: Container(
-                                        //     padding: const EdgeInsets.symmetric(
-                                        //         horizontal: 8.0),
-                                        //     alignment: Alignment.center,
-                                        //     child: Text('Months',
-                                        //         textAlign: TextAlign.center,
-                                        //         overflow: TextOverflow.values.first,
-                                        //         style: TextStyle(
-                                        //             fontWeight: FontWeight.bold,
-                                        //             fontSize: 16,
-                                        //             color: white)),
-                                        //   ),
-                                        // ),
-                                        // GridColumn(
-                                        //   columnName: 'Duration',
-                                        //                       //       const EdgeInsets.symmetric(tablepadding),
-                                        //   allowEditing: false,
-                                        //   width: 120,
-                                        //   label: Container(
-                                        //     padding:
-                                        //         const EdgeInsets.symmetric(horizontal: 8.0),
-                                        //     alignment: Alignment.center,
-                                        //     child: Text('Duration in Days',
-                                        //         textAlign: TextAlign.center,
-                                        //         overflow: TextOverflow.values.first,
-                                        //         style: TextStyle(
-                                        //             fontWeight: FontWeight.bold,
-                                        //             fontSize: 16,
-                                        //             color: white)
-                                        //         //    textAlign: TextAlign.center,
-                                        //         ),
-                                        //   ),
-                                        // ),
-                                        // GridColumn(
-                                        //   columnName: 'StartDate',
-                                        //                       //       const EdgeInsets.symmetric(tablepadding),
-                                        //   allowEditing: false,
-                                        //   width: 160,
-                                        //   label: Container(
-                                        //     padding:
-                                        //         const EdgeInsets.symmetric(horizontal: 8.0),
-                                        //     alignment: Alignment.center,
-                                        //     child: Text('Start Date',
-                                        //         overflow: TextOverflow.values.first,
-                                        //         style: TextStyle(
-                                        //             fontWeight: FontWeight.bold,
-                                        //             fontSize: 16,
-                                        //             color: white)
-                                        //         //    textAlign: TextAlign.center,
-                                        //         ),
-                                        //   ),
-                                        // ),
-                                        // GridColumn(
-                                        //   columnName: 'EndDate',
-                                        //                       //       const EdgeInsets.symmetric(tablepadding),
-                                        //   allowEditing: false,
-                                        //   width: 120,
-                                        //   label: Container(
-                                        //     padding:
-                                        //         const EdgeInsets.symmetric(horizontal: 8.0),
-                                        //     alignment: Alignment.center,
-                                        //     child: Text('End Date',
-                                        //         overflow: TextOverflow.values.first,
-                                        //         style: TextStyle(
-                                        //             fontWeight: FontWeight.bold,
-                                        //             fontSize: 16,
-                                        //             color: white)
-                                        //         //    textAlign: TextAlign.center,
-                                        //         ),
-                                        //   ),
-                                        // ),
                                         GridColumn(
                                           columnName: 'Progress',
                                           autoFitPadding: tablepadding,
@@ -1397,6 +1346,1203 @@ class _ViewSummaryState extends State<ViewSummary> {
                               )
           ],
         ));
+  }
+
+  Future<Uint8List> _generateEnergyPDF() async {
+    pr!.show();
+
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    const cellStyle = pw.TextStyle(
+      color: PdfColors.black,
+      fontSize: 14,
+    );
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(
+      pw.TableRow(
+        children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Depot Name',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.only(
+                  top: 4, bottom: 4, left: 2, right: 2),
+              child: pw.Center(
+                  child: pw.Text('Vehicle No',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('PSS No.',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Charger Id',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Start SOC',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'End SOC',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Start Date & Time',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'End Date & Time',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Total time of charging',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Energy Consumed',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Interval',
+              ))),
+        ],
+      ),
+    );
+
+    if (energymanagement.isNotEmpty) {
+      for (EnergyManagementModel mapData in energymanagement) {
+        //Text Rows of PDF Table
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(3.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.depotName.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(5.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.vehicleNo,
+                      style: const pw.TextStyle(
+                        fontSize: 13,
+                      )))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.pssNo.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.chargerId.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.startSoc.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.endSoc.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.startDate.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.endDate.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.totalTime.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.energyConsumed.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.timeInterval.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+        ]));
+      }
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Demand Energy Report',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text:
+                            '${startdate!.day}-${startdate!.month}-${startdate!.year} to ${enddate!.day}-${enddate!.month}-${enddate!.year}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : $userId',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+              columnWidths: {
+                0: const pw.FixedColumnWidth(100),
+                1: const pw.FixedColumnWidth(50),
+                2: const pw.FixedColumnWidth(50),
+                3: const pw.FixedColumnWidth(50),
+                4: const pw.FixedColumnWidth(70),
+                5: const pw.FixedColumnWidth(70),
+                6: const pw.FixedColumnWidth(70),
+                7: const pw.FixedColumnWidth(70),
+                8: const pw.FixedColumnWidth(70),
+                9: const pw.FixedColumnWidth(70),
+                10: const pw.FixedColumnWidth(70),
+              },
+              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+              tableWidth: pw.TableWidth.max,
+              border: pw.TableBorder.all(),
+              children: rows)
+        ],
+      ),
+    );
+
+    pdfData = await pdf.save();
+    pdfPath = 'DemandEnergyReport.pdf';
+
+    pr!.hide();
+    return pdfData!;
+  }
+
+  Future<Uint8List> _generateDailyPDF() async {
+    print('generating daily pdf');
+    pr!.style(
+      progressWidgetAlignment: Alignment.center,
+      // message: 'Loading Data....',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: const LoadingPdf(),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      maxProgress: 100.0,
+      progressTextStyle: const TextStyle(
+          color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+      messageTextStyle: const TextStyle(
+          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+    );
+
+    await pr!.show();
+
+    final summaryProvider =
+        Provider.of<SummaryProvider>(context, listen: false);
+    dailyproject = summaryProvider.dailydata;
+
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(pw.TableRow(children: [
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Sr No',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding:
+              const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+          child: pw.Center(
+              child: pw.Text('Date',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Type of Activity',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Activity Details',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Progress',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Remark / Status',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image1',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image2',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+    ]));
+
+    List<pw.Widget> imageUrls = [];
+
+    for (int i = 0; i < dailyproject.length; i++) {
+      String imagesPath =
+          '/Daily Report/${widget.cityName}/${widget.depoName}/${widget.userId}/${dailyproject[i].date}/${globalRowIndex[i]}';
+      print(imagesPath);
+
+      ListResult result =
+          await FirebaseStorage.instance.ref().child(imagesPath).listAll();
+
+      if (result.items.isNotEmpty) {
+        for (var image in result.items) {
+          String downloadUrl = await image.getDownloadURL();
+          if (image.name.endsWith('.pdf')) {
+            imageUrls.add(
+              pw.Container(
+                  width: 60,
+                  alignment: pw.Alignment.center,
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: pw.UrlLink(
+                      child: pw.Text(image.name,
+                          style: const pw.TextStyle(color: PdfColors.blue)),
+                      destination: downloadUrl)),
+            );
+          } else {
+            final myImage = await networkImage(downloadUrl);
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 80,
+                  child: pw.Center(
+                    child: pw.Image(myImage),
+                  )),
+            );
+          }
+        }
+
+        if (imageUrls.length < 2) {
+          int imageLoop = 2 - imageUrls.length;
+          for (int i = 0; i < imageLoop; i++) {
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 80,
+                  child: pw.Text('')),
+            );
+          }
+        } else if (imageUrls.length > 2) {
+          int imageLoop = 10 - imageUrls.length;
+          for (int i = 0; i < imageLoop; i++) {
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 80,
+                  height: 100,
+                  child: pw.Text('')),
+            );
+          }
+        }
+      } else {
+        for (int i = 0; i < 2; i++) {
+          imageUrls.add(
+            pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                width: 60,
+                height: 80,
+                child: pw.Text('')),
+          );
+        }
+      }
+      result.items.clear();
+
+      //Text Rows of PDF Table
+      rows.add(pw.TableRow(children: [
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((i + 1).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(dailyproject[i].date.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(dailyproject[i].typeOfActivity.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(dailyproject[i].activityDetails.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(dailyproject[i].progress.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(dailyproject[i].status.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        imageUrls[0],
+        imageUrls[1]
+      ]));
+
+      if (imageUrls.length - 2 > 0) {
+        //Image Rows of PDF Table
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+              child: pw.Text('')),
+          pw.Container(
+              padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+              width: 60,
+              height: 100,
+              child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                  children: [
+                    imageUrls[2],
+                    imageUrls[3],
+                  ])),
+          imageUrls[4],
+          imageUrls[5],
+          imageUrls[6],
+          imageUrls[7],
+          imageUrls[8],
+          imageUrls[9]
+        ]));
+      }
+      imageUrls.clear();
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        maxPages: 100,
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Daily Report Table',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text:
+                            '${startdate!.day}-${startdate!.month}-${startdate!.year} to ${enddate!.day}-${enddate!.month}-${enddate!.year}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : $userId',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+              columnWidths: {
+                0: const pw.FixedColumnWidth(30),
+                1: const pw.FixedColumnWidth(160),
+                2: const pw.FixedColumnWidth(70),
+                3: const pw.FixedColumnWidth(70),
+                4: const pw.FixedColumnWidth(70),
+                5: const pw.FixedColumnWidth(70),
+                6: const pw.FixedColumnWidth(70),
+                7: const pw.FixedColumnWidth(70),
+              },
+              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+              tableWidth: pw.TableWidth.max,
+              border: pw.TableBorder.all(),
+              children: rows)
+        ],
+      ),
+    );
+
+    pdfData = await pdf.save();
+    pdfPath = 'Daily Report.pdf';
+
+    pr!.hide();
+    return pdfData!;
+  }
+
+  Future<Uint8List> _generateSafetyPDF() async {
+    bool isImageEmpty = false;
+    pr!.show();
+
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    const cellStyle = pw.TextStyle(
+      color: PdfColors.black,
+      fontSize: 14,
+    );
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(
+      pw.TableRow(
+        children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Sr No',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.only(
+                  top: 4, bottom: 4, left: 2, right: 2),
+              child: pw.Center(
+                  child: pw.Text('Details',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Status',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Remark',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image5',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image6',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image7',
+              ))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Image8',
+              ))),
+        ],
+      ),
+    );
+
+    if (alldata.isNotEmpty) {
+      List<pw.Widget> imageUrls = [];
+
+      for (SafetyChecklistModel mapData in safetylisttable) {
+        String selectedDate = DateFormat.yMMMMd().format(startdate!);
+        print(selectedDate);
+        String images_Path =
+            '/SafetyChecklist/${widget.cityName}/${widget.depoName}/$userId/$selectedDate/${mapData.srNo}';
+        print(images_Path);
+        ListResult result =
+            await FirebaseStorage.instance.ref().child(images_Path).listAll();
+
+        if (result.items.isNotEmpty) {
+          for (var image in result.items) {
+            String downloadUrl = await image.getDownloadURL();
+            if (image.name.endsWith('.pdf')) {
+              imageUrls.add(
+                pw.Container(
+                  alignment: pw.Alignment.center,
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.UrlLink(
+                    child: pw.Text(image.name,
+                        style: const pw.TextStyle(color: PdfColors.blue)),
+                    destination: downloadUrl,
+                  ),
+                ),
+              );
+            } else {
+              final myImage = await networkImage(downloadUrl);
+              imageUrls.add(
+                pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.Center(
+                    child: pw.Image(myImage),
+                  ),
+                ),
+              );
+            }
+          }
+          if (imageUrls.length < 11) {
+            int imageLoop = 11 - imageUrls.length;
+            for (int i = 0; i < imageLoop; i++) {
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Text('')),
+              );
+            }
+          }
+        } else {
+          isImageEmpty = true;
+        }
+        result.items.clear();
+
+        //Text Rows of PDF Table
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(3.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.srNo.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(5.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.details,
+                      style: const pw.TextStyle(
+                        fontSize: 13,
+                      )))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.status.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.remark.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[0]),
+          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[1]),
+          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[2]),
+        ]));
+
+        if (imageUrls.isNotEmpty) {
+          //Image Rows of PDF Table
+          rows.add(pw.TableRow(children: [
+            pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: pw.Text('')),
+            pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                width: 60,
+                height: 100,
+                child: pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                    children: [
+                      imageUrls[3],
+                      imageUrls[4],
+                    ])),
+            imageUrls[5],
+            imageUrls[6],
+            imageUrls[7],
+            imageUrls[8],
+            imageUrls[9],
+            imageUrls[10],
+          ]));
+        }
+        imageUrls.clear();
+      }
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Safety Report',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text:
+                            '${startdate!.day}-${startdate!.month}-${startdate!.year} to ${enddate!.day}-${enddate!.month}-${enddate!.year}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : $userId',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+              columnWidths: {
+                0: const pw.FixedColumnWidth(30),
+                1: const pw.FixedColumnWidth(160),
+                2: const pw.FixedColumnWidth(70),
+                3: const pw.FixedColumnWidth(70),
+                4: const pw.FixedColumnWidth(70),
+                5: const pw.FixedColumnWidth(70),
+                6: const pw.FixedColumnWidth(70),
+                7: const pw.FixedColumnWidth(70),
+              },
+              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+              tableWidth: pw.TableWidth.max,
+              border: pw.TableBorder.all(),
+              children: rows)
+        ],
+      ),
+    );
+
+    pdfData = await pdf.save();
+    pdfPath = 'SafetyReport.pdf';
+
+    pr!.hide();
+    return pdfData!;
+  }
+
+  Future<Uint8List> _generateMonthlyPdf() async {
+    await pr!.show();
+
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    const cellStyle = pw.TextStyle(
+      color: PdfColors.black,
+      fontSize: 14,
+    );
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(
+      pw.TableRow(
+        children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Sr No',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.only(
+                  top: 4, bottom: 4, left: 2, right: 2),
+              child: pw.Center(
+                  child: pw.Text('Activity Details',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Progress',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text('Remark/Status',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(
+                'Next Month Action Plan',
+              ))),
+        ],
+      ),
+    );
+
+    if (monthlyProject.isNotEmpty) {
+      for (MonthlyProjectModel mapData in monthlyProject) {
+        // String selectedDate = DateFormat.yMMMMd().format(startdate!);
+
+        //Text Rows of PDF Table
+
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(3.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.activityNo.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(5.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.activityDetails.toString(),
+                      style: const pw.TextStyle(
+                        fontSize: 13,
+                      )))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.progress.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.status.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.action.toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+        ]));
+      }
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Monthly Report',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text:
+                            '${startdate!.day}-${startdate!.month}-${startdate!.year} to ${enddate!.day}-${enddate!.month}-${enddate!.year}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : $userId',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+              columnWidths: {
+                0: const pw.FixedColumnWidth(30),
+                1: const pw.FixedColumnWidth(160),
+                2: const pw.FixedColumnWidth(70),
+                3: const pw.FixedColumnWidth(70),
+                4: const pw.FixedColumnWidth(70),
+                5: const pw.FixedColumnWidth(70),
+                6: const pw.FixedColumnWidth(70),
+                7: const pw.FixedColumnWidth(70),
+              },
+              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+              tableWidth: pw.TableWidth.max,
+              border: pw.TableBorder.all(),
+              children: rows)
+        ],
+      ),
+    );
+
+    pdfData = await pdf.save();
+    pdfPath = 'MonthlyReport.pdf';
+
+    // Save the PDF file to device storage
+    if (kIsWeb) {
+    } else {
+      const Text('Sorry it is not ready for mobile platform');
+    }
+
+    pr!.hide();
+    return pdfData!;
+  }
+
+  Future<void> downloadPDF() async {
+    if (await Permission.storage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
+
+      pr.show();
+
+      final pdfData = widget.id == 'Daily Report'
+          ? await _generateDailyPDF()
+          : widget.id == 'Monthly Report'
+              ? await _generateMonthlyPdf()
+              : widget.id == 'Energy Management'
+                  ? await _generateEnergyPDF()
+                  : await _generateSafetyPDF();
+
+      await pr.hide();
+
+      String fileName = widget.id == 'Daily Report'
+          ? 'DailyReport.pdf'
+          : widget.id == 'Monthly Report'
+              ? 'MonthlyReport.pdf'
+              : widget.id == 'Energy Management'
+                  ? 'EnergyManagement.pdf'
+                  : 'SafetyReport.pdf';
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
+      print('File Created - ${savedPDFFile.path}');
+    }
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Safety Report Downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
+  }
+
+  Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+    if (await Permission.storage.request().isGranted) {
+      final documentDirectory =
+          (await DownloadsPath.downloadsDirectory())?.path;
+      final file = File('$documentDirectory/$fileName');
+
+      int counter = 1;
+      String newFilePath = file.path;
+      pathToOpenFile = newFilePath.toString();
+      if (await File(newFilePath).exists()) {
+        final baseName = fileName.split('.').first;
+        final extension = fileName.split('.').last;
+        newFilePath =
+            '$documentDirectory/$baseName-${counter.toString()}.$extension';
+        counter++;
+        pathToOpenFile = newFilePath.toString();
+        await file.copy(newFilePath);
+        counter++;
+      } else {
+        await file.writeAsBytes(pdfData);
+        return file;
+      }
+    }
+    return File('');
   }
 
   Future<void> getUserId() async {

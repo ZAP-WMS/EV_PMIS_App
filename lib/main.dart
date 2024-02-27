@@ -38,6 +38,7 @@ void main() async {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft
   ]);
+
   await Firebase.initializeApp();
 
 // To show file downloaded notification for pdf
@@ -52,6 +53,7 @@ void main() async {
       await OpenFile.open(details.payload!);
     },
   );
+
 // To request permission for notification and storage
   // await [
   //   Permission.notification,
