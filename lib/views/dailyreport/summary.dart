@@ -88,7 +88,6 @@ class _ViewSummaryState extends State<ViewSummary> {
 
   @override
   void initState() {
-    widget.id = 'Daily Report';
     super.initState();
     _summaryProvider = Provider.of<SummaryProvider>(context, listen: false);
     pr = ProgressDialog(context,
@@ -109,7 +108,7 @@ class _ViewSummaryState extends State<ViewSummary> {
         appBar: CustomAppBar(
           isDownload: true,
           depoName: widget.depoName,
-          title: 'Daily Report',
+          title: widget.id.toString(),
           height: 30,
           isSync: false,
           isCentered: false,
@@ -328,7 +327,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                               children: [
                                 Expanded(
                                     child: SfDataGridTheme(
-                                  data: SfDataGridThemeData(headerColor: blue),
+                                  data: SfDataGridThemeData(
+                                      headerColor: white, gridLineColor: blue),
                                   child: SfDataGrid(
                                       source: monthlyDataSource,
                                       allowEditing: true,
@@ -449,32 +449,22 @@ class _ViewSummaryState extends State<ViewSummary> {
                                 future: _dailydata,
                                 builder: (context, snapshot) {
                                   if (value.dailydata.length != 0) {
-                                    // if (snapshot.hasData) {
-                                    //   if (snapshot.data == null ||
-                                    //       snapshot.data!.length == 0) {
-                                    //     return const Center(
-                                    //       child: Text(
-                                    //         "No Data Found!",
-                                    //         style: TextStyle(fontSize: 25.0),
-                                    //       ),
-                                    //     );
-                                    //   } else {
-                                    //     return LoadingPage();
-                                    //   }
-                                    // } else {
                                     dailyproject = value.dailydata;
                                     _dailyDataSource = DailyDataSource(
-                                        dailyproject,
-                                        context,
-                                        widget.cityName!,
-                                        widget.depoName!,
-                                        widget.userId,
-                                        selecteddate.toString());
+                                      dailyproject,
+                                      context,
+                                      widget.cityName!,
+                                      widget.depoName!,
+                                      widget.userId,
+                                      selecteddate.toString(),
+                                    );
+
                                     _dataGridController = DataGridController();
 
                                     return SfDataGridTheme(
                                       data: SfDataGridThemeData(
-                                          headerColor: blue),
+                                          headerColor: white,
+                                          gridLineColor: blue),
                                       child: SfDataGrid(
                                           source: _dailyDataSource,
                                           allowEditing: true,
@@ -1349,8 +1339,6 @@ class _ViewSummaryState extends State<ViewSummary> {
   }
 
   Future<Uint8List> _generateEnergyPDF() async {
-    pr!.show();
-
     final headerStyle =
         pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
 
@@ -1616,7 +1604,6 @@ class _ViewSummaryState extends State<ViewSummary> {
     pdfData = await pdf.save();
     pdfPath = 'DemandEnergyReport.pdf';
 
-    pr!.hide();
     return pdfData!;
   }
 
@@ -1636,8 +1623,6 @@ class _ViewSummaryState extends State<ViewSummary> {
       messageTextStyle: const TextStyle(
           color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
     );
-
-    await pr!.show();
 
     final summaryProvider =
         Provider.of<SummaryProvider>(context, listen: false);
@@ -1926,20 +1911,21 @@ class _ViewSummaryState extends State<ViewSummary> {
           ]),
           pw.SizedBox(height: 10),
           pw.Table(
-              columnWidths: {
-                0: const pw.FixedColumnWidth(30),
-                1: const pw.FixedColumnWidth(160),
-                2: const pw.FixedColumnWidth(70),
-                3: const pw.FixedColumnWidth(70),
-                4: const pw.FixedColumnWidth(70),
-                5: const pw.FixedColumnWidth(70),
-                6: const pw.FixedColumnWidth(70),
-                7: const pw.FixedColumnWidth(70),
-              },
-              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
-              tableWidth: pw.TableWidth.max,
-              border: pw.TableBorder.all(),
-              children: rows)
+            columnWidths: {
+              0: const pw.FixedColumnWidth(30),
+              1: const pw.FixedColumnWidth(160),
+              2: const pw.FixedColumnWidth(70),
+              3: const pw.FixedColumnWidth(70),
+              4: const pw.FixedColumnWidth(70),
+              5: const pw.FixedColumnWidth(70),
+              6: const pw.FixedColumnWidth(70),
+              7: const pw.FixedColumnWidth(70),
+            },
+            defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+            tableWidth: pw.TableWidth.max,
+            border: pw.TableBorder.all(),
+            children: rows,
+          )
         ],
       ),
     );
@@ -1947,317 +1933,10 @@ class _ViewSummaryState extends State<ViewSummary> {
     pdfData = await pdf.save();
     pdfPath = 'Daily Report.pdf';
 
-    pr!.hide();
-    return pdfData!;
-  }
-
-  Future<Uint8List> _generateSafetyPDF() async {
-    bool isImageEmpty = false;
-    pr!.show();
-
-    final headerStyle =
-        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
-
-    final fontData1 =
-        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
-    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
-
-    const cellStyle = pw.TextStyle(
-      color: PdfColors.black,
-      fontSize: 14,
-    );
-
-    final profileImage = pw.MemoryImage(
-      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
-    );
-
-    List<pw.TableRow> rows = [];
-
-    rows.add(
-      pw.TableRow(
-        children: [
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text('Sr No',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.only(
-                  top: 4, bottom: 4, left: 2, right: 2),
-              child: pw.Center(
-                  child: pw.Text('Details',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text('Status',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text('Remark',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(
-                'Image5',
-              ))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(
-                'Image6',
-              ))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(
-                'Image7',
-              ))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(
-                'Image8',
-              ))),
-        ],
-      ),
-    );
-
-    if (alldata.isNotEmpty) {
-      List<pw.Widget> imageUrls = [];
-
-      for (SafetyChecklistModel mapData in safetylisttable) {
-        String selectedDate = DateFormat.yMMMMd().format(startdate!);
-        print(selectedDate);
-        String images_Path =
-            '/SafetyChecklist/${widget.cityName}/${widget.depoName}/$userId/$selectedDate/${mapData.srNo}';
-        print(images_Path);
-        ListResult result =
-            await FirebaseStorage.instance.ref().child(images_Path).listAll();
-
-        if (result.items.isNotEmpty) {
-          for (var image in result.items) {
-            String downloadUrl = await image.getDownloadURL();
-            if (image.name.endsWith('.pdf')) {
-              imageUrls.add(
-                pw.Container(
-                  alignment: pw.Alignment.center,
-                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  width: 60,
-                  height: 100,
-                  child: pw.UrlLink(
-                    child: pw.Text(image.name,
-                        style: const pw.TextStyle(color: PdfColors.blue)),
-                    destination: downloadUrl,
-                  ),
-                ),
-              );
-            } else {
-              final myImage = await networkImage(downloadUrl);
-              imageUrls.add(
-                pw.Container(
-                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  width: 60,
-                  height: 100,
-                  child: pw.Center(
-                    child: pw.Image(myImage),
-                  ),
-                ),
-              );
-            }
-          }
-          if (imageUrls.length < 11) {
-            int imageLoop = 11 - imageUrls.length;
-            for (int i = 0; i < imageLoop; i++) {
-              imageUrls.add(
-                pw.Container(
-                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 60,
-                    height: 100,
-                    child: pw.Text('')),
-              );
-            }
-          }
-        } else {
-          isImageEmpty = true;
-        }
-        result.items.clear();
-
-        //Text Rows of PDF Table
-        rows.add(pw.TableRow(children: [
-          pw.Container(
-              padding: const pw.EdgeInsets.all(3.0),
-              child: pw.Center(
-                  child: pw.Text(mapData.srNo.toString(),
-                      style: const pw.TextStyle(fontSize: 13)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(5.0),
-              child: pw.Center(
-                  child: pw.Text(mapData.details,
-                      style: const pw.TextStyle(
-                        fontSize: 13,
-                      )))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(mapData.status.toString(),
-                      style: const pw.TextStyle(fontSize: 13)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(mapData.remark.toString(),
-                      style: const pw.TextStyle(fontSize: 13)))),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[0]),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[1]),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[2]),
-        ]));
-
-        if (imageUrls.isNotEmpty) {
-          //Image Rows of PDF Table
-          rows.add(pw.TableRow(children: [
-            pw.Container(
-                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: pw.Text('')),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                width: 60,
-                height: 100,
-                child: pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                    children: [
-                      imageUrls[3],
-                      imageUrls[4],
-                    ])),
-            imageUrls[5],
-            imageUrls[6],
-            imageUrls[7],
-            imageUrls[8],
-            imageUrls[9],
-            imageUrls[10],
-          ]));
-        }
-        imageUrls.clear();
-      }
-    }
-
-    final pdf = pw.Document(
-      pageMode: PdfPageMode.outlines,
-    );
-
-    //First Half Page
-
-    pdf.addPage(
-      pw.MultiPage(
-        theme: pw.ThemeData.withFont(
-            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
-        pageFormat: const PdfPageFormat(1300, 900,
-            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
-        orientation: pw.PageOrientation.natural,
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        header: (pw.Context context) {
-          return pw.Container(
-              alignment: pw.Alignment.centerRight,
-              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
-              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
-              decoration: const pw.BoxDecoration(
-                  border: pw.Border(
-                      bottom:
-                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
-              child: pw.Column(children: [
-                pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: [
-                      pw.Text('Safety Report',
-                          textScaleFactor: 2,
-                          style: const pw.TextStyle(color: PdfColors.blue700)),
-                      pw.Container(
-                        width: 120,
-                        height: 120,
-                        child: pw.Image(profileImage),
-                      ),
-                    ]),
-              ]));
-        },
-        footer: (pw.Context context) {
-          return pw.Container(
-              alignment: pw.Alignment.centerRight,
-              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('User ID - $userId',
-                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
-                  style: pw.Theme.of(context)
-                      .defaultTextStyle
-                      .copyWith(color: PdfColors.black)));
-        },
-        build: (pw.Context context) => <pw.Widget>[
-          pw.Column(children: [
-            pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                children: [
-                  pw.RichText(
-                      text: pw.TextSpan(children: [
-                    const pw.TextSpan(
-                        text: 'Place : ',
-                        style:
-                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
-                    pw.TextSpan(
-                        text: '${widget.cityName} / ${widget.depoName}',
-                        style: const pw.TextStyle(
-                            color: PdfColors.blue700, fontSize: 15))
-                  ])),
-                  pw.RichText(
-                      text: pw.TextSpan(children: [
-                    const pw.TextSpan(
-                        text: 'Date : ',
-                        style:
-                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
-                    pw.TextSpan(
-                        text:
-                            '${startdate!.day}-${startdate!.month}-${startdate!.year} to ${enddate!.day}-${enddate!.month}-${enddate!.year}',
-                        style: const pw.TextStyle(
-                            color: PdfColors.blue700, fontSize: 15))
-                  ])),
-                  pw.RichText(
-                      text: pw.TextSpan(children: [
-                    pw.TextSpan(
-                        text: 'UserID : $userId',
-                        style: const pw.TextStyle(
-                            color: PdfColors.blue700, fontSize: 15)),
-                  ])),
-                ]),
-            pw.SizedBox(height: 20)
-          ]),
-          pw.SizedBox(height: 10),
-          pw.Table(
-              columnWidths: {
-                0: const pw.FixedColumnWidth(30),
-                1: const pw.FixedColumnWidth(160),
-                2: const pw.FixedColumnWidth(70),
-                3: const pw.FixedColumnWidth(70),
-                4: const pw.FixedColumnWidth(70),
-                5: const pw.FixedColumnWidth(70),
-                6: const pw.FixedColumnWidth(70),
-                7: const pw.FixedColumnWidth(70),
-              },
-              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
-              tableWidth: pw.TableWidth.max,
-              border: pw.TableBorder.all(),
-              children: rows)
-        ],
-      ),
-    );
-
-    pdfData = await pdf.save();
-    pdfPath = 'SafetyReport.pdf';
-
-    pr!.hide();
     return pdfData!;
   }
 
   Future<Uint8List> _generateMonthlyPdf() async {
-    await pr!.show();
-
     final headerStyle =
         pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
 
@@ -2463,7 +2142,6 @@ class _ViewSummaryState extends State<ViewSummary> {
       const Text('Sorry it is not ready for mobile platform');
     }
 
-    pr!.hide();
     return pdfData!;
   }
 
@@ -2485,17 +2163,13 @@ class _ViewSummaryState extends State<ViewSummary> {
             color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
       );
 
-      pr.show();
+      await pr.show();
 
       final pdfData = widget.id == 'Daily Report'
           ? await _generateDailyPDF()
           : widget.id == 'Monthly Report'
               ? await _generateMonthlyPdf()
-              : widget.id == 'Energy Management'
-                  ? await _generateEnergyPDF()
-                  : await _generateSafetyPDF();
-
-      await pr.hide();
+              : await _generateEnergyPDF();
 
       String fileName = widget.id == 'Daily Report'
           ? 'DailyReport.pdf'
@@ -2503,9 +2177,11 @@ class _ViewSummaryState extends State<ViewSummary> {
               ? 'MonthlyReport.pdf'
               : widget.id == 'Energy Management'
                   ? 'EnergyManagement.pdf'
-                  : 'SafetyReport.pdf';
+                  : '';
+
       final savedPDFFile = await savePDFToFile(pdfData, fileName);
-      print('File Created - ${savedPDFFile.path}');
+
+      await pr.hide();
     }
 
     const AndroidNotificationDetails androidNotificationDetails =
@@ -2515,7 +2191,7 @@ class _ViewSummaryState extends State<ViewSummary> {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await FlutterLocalNotificationsPlugin().show(
-        0, 'Safety Report Downloaded', 'Tap to open', notificationDetails,
+        0, '${widget.id} Downloaded', 'Tap to open', notificationDetails,
         payload: pathToOpenFile);
   }
 
@@ -2527,18 +2203,20 @@ class _ViewSummaryState extends State<ViewSummary> {
 
       int counter = 1;
       String newFilePath = file.path;
-      pathToOpenFile = newFilePath.toString();
       if (await File(newFilePath).exists()) {
         final baseName = fileName.split('.').first;
         final extension = fileName.split('.').last;
-        newFilePath =
-            '$documentDirectory/$baseName-${counter.toString()}.$extension';
-        counter++;
+        while (await File(newFilePath).exists()) {
+          counter++;
+          newFilePath =
+              '$documentDirectory/$baseName-${counter.toString()}.$extension';
+        }
         pathToOpenFile = newFilePath.toString();
         await file.copy(newFilePath);
-        counter++;
+        await file.writeAsBytes(pdfData);
       } else {
         await file.writeAsBytes(pdfData);
+        pathToOpenFile = newFilePath.toString();
         return file;
       }
     }

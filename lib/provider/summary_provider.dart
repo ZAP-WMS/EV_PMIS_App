@@ -33,14 +33,16 @@ class SummaryProvider extends ChangeNotifier {
     for (DateTime initialdate = date;
         initialdate.isBefore(endDate.add(const Duration(days: 1)));
         initialdate = initialdate.add(const Duration(days: 1))) {
-      print(DateFormat.yMMMMd().format(initialdate));
+      print(
+        DateFormat.yMMMMd().format(initialdate),
+      );
       FirebaseFirestore.instance
-          .collection('DailyProjectReport2')
+          .collection('DailyProject3')
           .doc(depoName)
-          .collection('userId')
+          .collection(
+            DateFormat.yMMMMd().format(initialdate),
+          )
           .doc(userId)
-          .collection('date')
-          .doc(DateFormat.yMMMMd().format(initialdate))
           .get()
           .then((value) {
         if (value.data() != null) {

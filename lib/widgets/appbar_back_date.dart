@@ -22,6 +22,8 @@ class CustomAppBarBackDate extends StatefulWidget {
   bool havedropdown;
   bool isdetailedTab;
   TabBar? tabBar;
+  bool isDownload;
+  Function()? downloadFun;
 
   CustomAppBarBackDate(
       {super.key,
@@ -38,7 +40,9 @@ class CustomAppBarBackDate extends StatefulWidget {
       this.havebottom = false,
       this.isdetailedTab = false,
       this.tabBar,
-      required this.depoName});
+      required this.depoName,
+      this.isDownload = false,
+      this.downloadFun});
 
   @override
   State<CustomAppBarBackDate> createState() => _CustomAppBarState();
@@ -101,7 +105,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                 )
               : Container(),
           Container(
-            padding: const EdgeInsets.only(bottom: 8, right: 5),
+            padding: const EdgeInsets.only(bottom: 0, right: 5),
             width: widget.haveSummary ? 80 : 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,7 +134,25 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                     : Container()
               ],
             ),
-          )
+          ),
+          widget.isDownload
+              ? InkWell(
+                  onTap: widget.downloadFun,
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        top: 8, bottom: 8, right: 5, left: 5.0),
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Icon(
+                      Icons.download,
+                      color: blue,
+                    ),
+                  ),
+                )
+              : Container()
         ],
         bottom: widget.havebottom
             ? TabBar(

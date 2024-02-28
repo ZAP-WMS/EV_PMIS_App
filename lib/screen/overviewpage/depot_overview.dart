@@ -81,6 +81,7 @@ class _DepotOverviewState extends State<DepotOverview> {
 
   @override
   void initState() {
+    print('DepotOverview page');
     super.initState();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     initializeController();

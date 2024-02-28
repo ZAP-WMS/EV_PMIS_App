@@ -37,7 +37,6 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
         selectedUi = QualityHomeAdmin(
             cityName: widget.cityName, depoName: widget.depoName);
     }
-
     return selectedUi;
   }
 }
