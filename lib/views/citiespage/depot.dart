@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
+import 'package:ev_pmis_app/notiification/notification_service.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../notiification/messaging_service.dart';
 import '../../style.dart';
 
 String userId = '';
@@ -29,6 +31,7 @@ class _DepotPageState extends State<DepotPage> {
   void initState() {
     getUserId();
     // TODO: implement initState
+    getToken();
     super.initState();
     print('depotPage - UserId- ${userId}');
   }
@@ -184,5 +187,13 @@ class _DepotPageState extends State<DepotPage> {
         ),
       ),
     ]);
+  }
+
+  void getToken() async {
+    String? token = await NotificationService().getFCMToken();
+    // Now you can use the token variable here
+    NotificationService().saveTokenToFirestore(userId, token);
+    sendNotificationToUser(token!, userId, 'hello');
+    print('FCM Token: $token');
   }
 }

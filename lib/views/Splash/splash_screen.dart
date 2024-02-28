@@ -1,12 +1,31 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/notiification/messaging_service.dart';
 
 import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
+import 'package:ev_pmis_app/style.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../authentication/login_register.dart';
+import '../../viewmodels/push_notification.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling background message:${message.messageId}");
+  RemoteMessage? initializeMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+  if (initializeMessage != null) {
+    PushNotification notification = PushNotification(
+      title: initializeMessage.notification!.title ?? '',
+      body: initializeMessage.notification!.body ?? '',
+      dataTitle: initializeMessage.data['title'] ?? '',
+      datBody: initializeMessage.data['body'] ?? '',
+    );
+  }
+}
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -24,14 +43,126 @@ class SplashScreenState extends State<SplashScreen>
   String role = '';
   late SharedPreferences sharedPreferences;
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  late FirebaseMessaging _messaging;
+  int _totalNotification = 0;
+  PushNotification? _notificationInfo;
+
+  void registerNotification() async {
+    await Firebase.initializeApp();
+    _messaging = FirebaseMessaging.instance;
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    NotificationSettings settings = await _messaging.requestPermission(
+        alert: true, badge: true, provisional: true, sound: true);
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print('Message Title:${message.notification!.title}');
+
+        PushNotification notification = PushNotification(
+          title: message.notification!.title ?? '',
+          body: message.notification!.body ?? '',
+          dataTitle: message.data['title'] ?? '',
+          datBody: message.data['body'] ?? '',
+        );
+        if (mounted) {
+          setState(() {
+            _notificationInfo = notification;
+            _totalNotification++;
+          });
+        }
+        if (notification != null) {
+          // For Display the notification in Overlay
+          print(notification.title!);
+         
+          showSimpleNotification(
+            Text(notification.title!),
+            subtitle: Text(notification.body ?? ''),
+            background: blue,
+            duration: const Duration(seconds: 2),
+          );
+        }
+      });
+    } else {
+      print('user has decline permission');
+    }
+  }
+
+  // for handling  the notification in firebase state
+  checkforInitialMessage() async {
+    await Firebase.initializeApp();
+    _messaging = FirebaseMessaging.instance;
+
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      PushNotification notification = PushNotification(
+        title: initialMessage.notification!.title ?? '',
+        body: initialMessage.notification!.body ?? '',
+        dataTitle: initialMessage.data['title'] ?? '',
+        datBody: initialMessage.data['body'] ?? '',
+      );
+      if (mounted) {
+        setState(() {
+          _notificationInfo = notification;
+          _totalNotification++;
+        });
+      }
+    }
+    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    // NotificationSettings settings = await _messaging.requestPermission(
+    //     alert: true, badge: true, provisional: true, sound: true);
+    // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //     print('Message Title:${message.notification!.title}');
+
+    //     PushNotification notification = PushNotification(
+    //       title: message.notification!.title ?? '',
+    //       body: message.notification!.body ?? '',
+    //       dataTitle: message.data['title'] ?? '',
+    //       datBody: message.data['body'] ?? '',
+    //     );
+
+    //     setState(() {
+    //       _notificationInfo = notification;
+    //       _totalNotification++;
+    //     });
+    //     if (notification != null) {
+    //       // For Display the notificatio in Overlay
+    //       showSimpleNotification(
+    //         Text(_notificationInfo.title!),
+    //         subtitle: Text(_notificationInfo.body ?? ''),
+    //         background: blue,
+    //         duration: Duration(seconds: 2),
+    //       );
+    //     }
+    //   });
+    // } else {
+    //   print('user has decline permission');
+    // }
   }
 
   @override
   void initState() {
+    _totalNotification = 0;
+    registerNotification();
+    checkforInitialMessage();
+
+    //For handling notification app is in backgroung not terminated
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      PushNotification notification = PushNotification(
+        title: message.notification!.title ?? '',
+        body: message.notification!.body ?? '',
+        dataTitle: message.data['title'] ?? '',
+        datBody: message.data['body'] ?? '',
+      );
+      if (mounted) {
+        setState(() {
+          _notificationInfo = notification;
+          _totalNotification++;
+        });
+      }
+    });
     super.initState();
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
@@ -55,6 +186,12 @@ class SplashScreenState extends State<SplashScreen>
 
         );
     // user ? const LoginRegister() : const HomePage())));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,10 +235,12 @@ class SplashScreenState extends State<SplashScreen>
     sharedPreferences = await SharedPreferences.getInstance();
     try {
       if (sharedPreferences.getString('employeeId') != null) {
-        setState(() {
-          userId = sharedPreferences.getString('employeeId');
-          user = true;
-        });
+        if (mounted) {
+          setState(() {
+            userId = sharedPreferences.getString('employeeId');
+            user = true;
+          });
+        }
         await checkRole(userId);
         StoredDataPreferences.saveString('role', role);
       }

@@ -16,7 +16,6 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-
 version: 1.0.0+1
 
 environment:
@@ -29,54 +28,57 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter:
-    sdk: flutter
-  url_launcher:
-  photo_view:
-  path_provider:
   apptive_grid_theme: ^1.2.0
-  cloud_firestore: 
+  cached_network_image: null
+  cloud_firestore: null
   connectivity_plus: ^5.0.0
   cupertino_icons: ^1.0.2
+  data_table_2: ^2.4.2
   excel: ^2.1.0
-  file_picker: 
+  file_picker: null
   firebase_auth: ^4.8.0
   firebase_core: ^2.15.1
+  firebase_messaging: ^14.7.10
   firebase_storage: ^11.2.6
-  cached_network_image:
+  fl_chart: ^0.62.0
+  flutter:
+    sdk: flutter
+  flutter_full_pdf_viewer_null_safe: null
   flutter_launcher_icons: ^0.13.1
+  flutter_local_notifications: null
+  flutter_typeahead: null
   flutter_windowmanager: ^0.2.0
   gantt_chart: ^0.3.0
   get: ^4.6.5
-  google_fonts: 
+  google_fonts: null
   google_nav_bar: ^5.0.6
+  http: ^0.13.6
   image_picker: ^1.0.4
   internet_connection_checker: ^1.0.0+1
   intl: ^0.18.1
-  lecle_downloads_path_provider:
+  lecle_downloads_path_provider: null
   lottie: ^2.3.2
-  open_file:
-  open_file_plus:
-  persistent_bottom_nav_bar: 
-  pin_input_text_field: 
-  printing: 
+  open_file: null
+  open_file_plus: null
+  overlay_support: ^2.1.0
+  path_provider: null
+  pdf: null
+  percent_indicator: null
+  permission_handler: null
+  persistent_bottom_nav_bar: null
+  photo_view: null
+  pie_chart: ^5.4.0
+  pin_input_text_field: null
+  printing: null
+  progress_dialog_null_safe: null
   provider: ^6.0.5
   shared_preferences: ^2.2.0
+  syncfusion_flutter_core: ^20.4.54
   syncfusion_flutter_datagrid: ^20.4.49
   syncfusion_flutter_datepicker: ^20.3.38
   syncfusion_flutter_pdfviewer: ^20.4.54
   tab_indicator_styler: ^2.0.0
-  flutter_typeahead:
-  pdf:
-  permission_handler:
-  flutter_local_notifications:
-  progress_dialog_null_safe:
-  syncfusion_flutter_core: ^20.4.54
-  percent_indicator:
-  flutter_full_pdf_viewer_null_safe:
-  fl_chart: ^0.62.0
-  data_table_2: ^2.4.2
-  pie_chart: ^5.4.0
+  url_launcher: null
 
 dev_dependencies:
   flutter_lints: ^2.0.0
