@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/notiification/messaging_service.dart';
-
 import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -73,7 +71,7 @@ class SplashScreenState extends State<SplashScreen>
         if (notification != null) {
           // For Display the notification in Overlay
           print(notification.title!);
-         
+          //   sendNotificationToUser(notification.title!, notification.body!);
           showSimpleNotification(
             Text(notification.title!),
             subtitle: Text(notification.body ?? ''),
@@ -101,6 +99,8 @@ class SplashScreenState extends State<SplashScreen>
         dataTitle: initialMessage.data['title'] ?? '',
         datBody: initialMessage.data['body'] ?? '',
       );
+
+      //    sendNotificationToUser(notification.title!, notification.body!);
       if (mounted) {
         setState(() {
           _notificationInfo = notification;
@@ -156,6 +156,7 @@ class SplashScreenState extends State<SplashScreen>
         dataTitle: message.data['title'] ?? '',
         datBody: message.data['body'] ?? '',
       );
+
       if (mounted) {
         setState(() {
           _notificationInfo = notification;
@@ -247,12 +248,6 @@ class SplashScreenState extends State<SplashScreen>
     } catch (e) {
       user = false;
     }
-    // Timer(
-    //     const Duration(milliseconds: 1000),
-    //     () => Navigator.of(context).pushReplacement(
-    //         MaterialPageRoute(builder: (BuildContext context) => LoginRegister()
-    //             // user ? const HomePage() : const LoginRegister()
-    //             )));
   }
 
   Future<String> checkRole(String id) async {

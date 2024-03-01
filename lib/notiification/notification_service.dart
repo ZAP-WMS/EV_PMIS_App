@@ -38,4 +38,4 @@ class NotificationService {
   Future<void> backgroundHandler(RemoteMessage message) async {
     print('Handling a background message ${message.messageId}');
   }
-}
+ }
