@@ -96,8 +96,8 @@ class QualityPavingDataSource extends DataGridSource {
                           ));
                     })
                   : Text(
-                      dataGridCell.value.toString(),
-                      style: tablefontsize,
+                      '${dataGridCell.value}',
+                      // style: tablefontsize,
                     ));
     }).toList());
   }

@@ -144,50 +144,53 @@ class _ElectricalFieldState extends State<ElectricalField> {
           QualityPSSDataSource(qualitylisttable1, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable2 = rmu_getData();
+      qualitylisttable2 = checkTable ? rmu_getData() : data;
       _qualityrmuDataSource =
           QualityrmuDataSource(qualitylisttable2, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable3 = ct_getData();
+      qualitylisttable3 = checkTable ? ct_getData() : data;
       _qualityctDataSource =
           QualityctDataSource(qualitylisttable3, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable4 = cmu_getData();
+      qualitylisttable4 = checkTable ? cmu_getData() : data;
       _qualitycmuDataSource =
           QualitycmuDataSource(qualitylisttable4, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable5 = acdb_getData();
+      qualitylisttable5 = checkTable ? acdb_getData() : data;
       _qualityacdDataSource =
           QualityacdDataSource(qualitylisttable5, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable6 = ci_getData();
+      qualitylisttable6 = checkTable ? ci_getData() : data;
       _qualityCIDataSource =
           QualityCIDataSource(qualitylisttable6, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable7 = cdi_getData();
+      qualitylisttable7 = checkTable ? cdi_getData() : data;
       _qualityCDIDataSource =
           QualityCDIDataSource(qualitylisttable7, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable8 = msp_getData();
+      qualitylisttable8 = checkTable ? msp_getData() : data;
       _qualityMSPDataSource =
           QualityMSPDataSource(qualitylisttable8, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable9 = charger_getData();
+      qualitylisttable9 = checkTable ? charger_getData() : data;
       _qualityChargerDataSource = QualityChargerDataSource(
           qualitylisttable9, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      qualitylisttable10 = earth_pit_getData();
+      qualitylisttable10 = checkTable ? earth_pit_getData() : data;
       _qualityEPDataSource =
           QualityEPDataSource(qualitylisttable10, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
+      isLoading = false;
+      setState(() {});
     });
 
     super.initState();
@@ -222,7 +225,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                       : widget.fielClnName == 'ACDB'
                                           ? _qualityacdDataSource
                                           : widget.fielClnName == 'CI'
-                                              ? _qualitycmuDataSource
+                                              ? _qualityCIDataSource
                                               : widget.fielClnName == 'CDI'
                                                   ? _qualityCDIDataSource
                                                   : widget.fielClnName == 'MSP'
@@ -585,7 +588,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                                 : widget.fielClnName == 'ACDB'
                                                     ? _qualityacdDataSource
                                                     : widget.fielClnName == 'CI'
-                                                        ? _qualitycmuDataSource
+                                                        ? _qualityCIDataSource
                                                         : widget.fielClnName ==
                                                                 'CDI'
                                                             ? _qualityCDIDataSource
@@ -896,69 +899,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
       data = mapData.map((map) => QualitychecklistModel.fromJson(map)).toList();
       checkTable = false;
-    }
-    isLoading = false;
-    setState(() {});
-
-    List<String> eleClnName = [
-      'PSS',
-      'RMU',
-      'CT',
-      'CMU',
-      'ACDB',
-      'CI',
-      'CDI',
-      'MSP',
-      'CHARGER',
-      'EARTH PIT'
-    ];
-
-    if (widget.fielClnName == 'RMU') {
-      qualitylisttable2 = checkTable ? rmu_getData() : data;
-      _qualityrmuDataSource =
-          QualityrmuDataSource(qualitylisttable2, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'CT') {
-      qualitylisttable3 = checkTable ? ct_getData() : data;
-      _qualityctDataSource =
-          QualityctDataSource(qualitylisttable3, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'CMU') {
-      qualitylisttable4 = checkTable ? cmu_getData() : data;
-      _qualitycmuDataSource =
-          QualitycmuDataSource(qualitylisttable4, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'ACDB') {
-      qualitylisttable5 = checkTable ? acdb_getData() : data;
-      _qualityacdDataSource =
-          QualityacdDataSource(qualitylisttable5, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'CI') {
-      qualitylisttable6 = checkTable ? ci_getData() : data;
-      _qualityCIDataSource =
-          QualityCIDataSource(qualitylisttable6, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'CDI') {
-      qualitylisttable7 = checkTable ? cdi_getData() : data;
-      _qualityCDIDataSource =
-          QualityCDIDataSource(qualitylisttable7, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'MSP') {
-      qualitylisttable8 = checkTable ? msp_getData() : data;
-      _qualityMSPDataSource =
-          QualityMSPDataSource(qualitylisttable8, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'CHARGER') {
-      qualitylisttable9 = checkTable ? charger_getData() : data;
-      _qualityChargerDataSource = QualityChargerDataSource(
-          qualitylisttable9, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-    } else if (widget.fielClnName == 'EARTH PIT') {
-      qualitylisttable10 = checkTable ? earth_pit_getData() : data;
-      _qualityEPDataSource =
-          QualityEPDataSource(qualitylisttable10, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
     }
   }
 

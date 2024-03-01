@@ -105,17 +105,6 @@ class _CivilFieldState extends State<CivilField> {
   bool checkTable = true;
   bool isLoading = true;
   List<dynamic> excavationtabledatalist = [];
-  List<dynamic> backfillingtabledatalist = [];
-  List<dynamic> massonarytabledatalist = [];
-  List<dynamic> doorstabledatalist = [];
-  List<dynamic> ceillingtabledatalist = [];
-  List<dynamic> flooringtabledatalist = [];
-  List<dynamic> inspectiontabledatalist = [];
-  List<dynamic> inronitetabledatalist = [];
-  List<dynamic> paintingtabledatalist = [];
-  List<dynamic> pavingtabledatalist = [];
-  List<dynamic> roofingtabledatalist = [];
-  List<dynamic> proofingtabledatalist = [];
 
   late QualityExcavationDataSource _qualityExcavationDataSource;
   late QualityBackFillingDataSource _qualityBackFillingDataSource;
@@ -226,6 +215,9 @@ class _CivilFieldState extends State<CivilField> {
       _qualityProofingDataSource = QualityProofingDataSource(
           qualitylisttable12, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
+      isLoading = false;
+      setState(() {});
     });
 
     super.initState();
@@ -532,8 +524,6 @@ class _CivilFieldState extends State<CivilField> {
                               //     ),
                               //   );
                             } else if (snapshot.hasData) {
-                              // getTableData();
-
                               return SfDataGridTheme(
                                 data: SfDataGridThemeData(
                                     headerColor: white, gridLineColor: blue),
@@ -730,16 +720,6 @@ class _CivilFieldState extends State<CivilField> {
   CivilstoreData(BuildContext context, dynamic datasource, String depoName,
       String currentDate) {
     Map<String, dynamic> excavationTableData = Map();
-    // Map<String, dynamic> backfillingTableData = Map();
-    // Map<String, dynamic> massonaryTableData = Map();
-    // Map<String, dynamic> doorsTableData = Map();
-    // Map<String, dynamic> ceillingTableData = Map();
-    // Map<String, dynamic> flooringTableData = Map();
-    // Map<String, dynamic> inspectionTableData = Map();
-    // Map<String, dynamic> paintingTableData = Map();
-    // Map<String, dynamic> pavingTableData = Map();
-    // Map<String, dynamic> roofingTableData = Map();
-    // Map<String, dynamic> proofingTableData = Map();
 
     for (var i in datasource.dataGridRows) {
       for (var data in i.getCells()) {
@@ -749,6 +729,7 @@ class _CivilFieldState extends State<CivilField> {
       }
 
       excavationtabledatalist.add(excavationTableData);
+      print('TableList - $excavationtabledatalist');
       excavationTableData = {};
     }
 
@@ -825,29 +806,6 @@ class _CivilFieldState extends State<CivilField> {
   }
 
   Future<void> getTableData() async {
-    data.clear();
-
-    if (isLoading == false) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-
-    List<String> tabName = [
-      'Exc',
-      'BackFilling',
-      'Massonary',
-      'Glazzing',
-      'Ceilling',
-      'Flooring',
-      'Inspection',
-      'Ironite',
-      'Painting',
-      'Paving',
-      'Roofing',
-      'Proofing',
-    ];
-
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc(widget.depoName)
@@ -862,83 +820,11 @@ class _CivilFieldState extends State<CivilField> {
           documentSnapshot.data() as Map<String, dynamic>;
 
       List<dynamic> mapData = tempData['data'];
+      print(mapData);
 
       data = mapData.map((map) => QualitychecklistModel.fromJson(map)).toList();
       checkTable = false;
     }
-
-    if (widget.fieldclnName == tabName[1]) {
-      qualitylisttable2 = checkTable ? backfilling_getData() : data;
-      _qualityBackFillingDataSource = QualityBackFillingDataSource(
-          qualitylisttable2, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[2]) {
-      qualitylisttable3 = checkTable ? massonary_getData() : data;
-      _qualityMassonaryDataSource = QualityMassonaryDataSource(
-          qualitylisttable3, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[3]) {
-      qualitylisttable4 = checkTable ? glazzing_getData() : data;
-      _qualityGlazzingDataSource = QualityGlazzingDataSource(
-          qualitylisttable4, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[4]) {
-      qualitylisttable5 = checkTable ? ceilling_getData() : data;
-      _qualityCeillingDataSource = QualityCeillingDataSource(
-          qualitylisttable5, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[5]) {
-      qualitylisttable6 = checkTable ? florring_getData() : data;
-      _qualityflooringDataSource = QualityflooringDataSource(
-          qualitylisttable6, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[6]) {
-      qualitylisttable7 = checkTable ? inspection_getData() : data;
-      _qualityInspectionDataSource = QualityInspectionDataSource(
-          qualitylisttable7, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[7]) {
-      qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
-      _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
-          qualitylisttable8, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[8]) {
-      qualitylisttable9 = checkTable ? painting_getData() : data;
-      _qualityPaintingDataSource = QualityPaintingDataSource(
-          qualitylisttable9, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[9]) {
-      qualitylisttable10 = checkTable ? paving_getData() : data;
-      _qualityPavingDataSource = QualityPavingDataSource(
-          qualitylisttable10, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[10]) {
-      print('roofing');
-      qualitylisttable11 = checkTable ? roofing_getData() : data;
-      _qualityRoofingDataSource = QualityRoofingDataSource(
-          qualitylisttable11, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    } else if (widget.fieldclnName == tabName[11]) {
-      print('Proofing');
-      qualitylisttable12 = checkTable ? proofing_getData() : data;
-      _qualityProofingDataSource = QualityProofingDataSource(
-          qualitylisttable12, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-      checkTable = true;
-    }
-
-    isLoading = false;
-    setState(() {});
   }
 
   void chooseDate(BuildContext dialogcontext) {

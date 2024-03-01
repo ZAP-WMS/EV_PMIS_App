@@ -75,7 +75,7 @@ class MonthlyDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child:
               //  dataGridCell.columnName == 'Months'
               //     ? Row(
@@ -422,27 +422,7 @@ class MonthlyDataSource extends DataGridSource {
           DataGridCell<String>(
               columnName: 'ActivityDetails', value: newCellValue);
       _montlyproject[dataRowIndex].activityDetails = newCellValue.toString();
-    }
-    // else if (column.columnName == 'Months') {
-    //   dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-    //       DataGridCell<String>(columnName: 'Months', value: newCellValue);
-    //   _montlyproject[dataRowIndex].months = newCellValue.toString();
-    // }
-    // } else if (column.columnName == 'Duration') {
-    //   dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-    //       DataGridCell<int>(columnName: 'Duration', value: newCellValue as int);
-    //   _montlyproject[dataRowIndex].duration = newCellValue;
-    // }
-    //  else if (column.columnName == 'StartDate') {
-    //   dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-    //       DataGridCell<String>(columnName: 'StartDate', value: newCellValue);
-    //   _montlyproject[dataRowIndex].startDate = newCellValue;
-    // } else if (column.columnName == 'EndDate') {
-    //   dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-    //       DataGridCell<String>(columnName: 'EndDate', value: newCellValue);
-    //   _montlyproject[dataRowIndex].endDate = newCellValue;
-    // }
-    else if (column.columnName == 'Progress') {
+    } else if (column.columnName == 'Progress') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(columnName: 'Progress', value: newCellValue);
       _montlyproject[dataRowIndex].progress = newCellValue;
@@ -476,24 +456,9 @@ class MonthlyDataSource extends DataGridSource {
             ?.toString() ??
         '';
 
-    // The new cell value must be reset.
-    // To avoid committing the [DataGridCell] value that was previously edited
-    // into the current non-modified [DataGridCell].
     newCellValue;
 
     final bool isNumericType = column.columnName == 'OriginalDuration';
-    // column.columnName == 'StartDate' ||
-    // column.columnName == 'EndDate' ||
-    // column.columnName == 'ActualStart' ||
-    // column.columnName == 'ActualEnd' ||
-    // column.columnName == 'ActualDuration' ||
-    // column.columnName == 'Delay' ||
-    // column.columnName == 'Unit' ||
-    // column.columnName == 'QtyScope' ||
-    // column.columnName == 'QtyExecuted' ||
-    // column.columnName == 'BalancedQty' ||
-    // column.columnName == 'Progress' ||
-    // column.columnName == 'Weightage';
 
     final bool isDateTimeType = column.columnName == 'StartDate' ||
         column.columnName == 'EndDate' ||
@@ -504,7 +469,6 @@ class MonthlyDataSource extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         autofocus: true,
@@ -532,6 +496,10 @@ class MonthlyDataSource extends DataGridSource {
               newCellValue = value;
             }
           }
+        },
+        onTapOutside: (value) {
+          submitCell();
+          newCellValue = '';
         },
         onSubmitted: (String value) {
           newCellValue = value;

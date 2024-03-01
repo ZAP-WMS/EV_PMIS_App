@@ -104,7 +104,7 @@ class EnergyManagementDatasource extends DataGridSource {
 
       return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: (dataGridCell.columnName == 'startDate')
               ? Row(
                   children: [
@@ -295,7 +295,7 @@ class EnergyManagementDatasource extends DataGridSource {
     // The new cell value must be reset.
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
-    newCellValue = null;
+    newCellValue = '';
 
     final bool isNumericType = column.columnName == 'pssNo' ||
         column.columnName == 'chargerId' ||
@@ -313,16 +313,12 @@ class EnergyManagementDatasource extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 10.0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
@@ -340,11 +336,11 @@ class EnergyManagementDatasource extends DataGridSource {
             } else {
               newCellValue = value;
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();
