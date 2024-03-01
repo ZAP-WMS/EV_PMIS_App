@@ -193,7 +193,7 @@ class _DepotPageState extends State<DepotPage> {
     String? token = await NotificationService().getFCMToken();
     // Now you can use the token variable here
     NotificationService().saveTokenToFirestore(userId, token);
-    sendNotificationToUser(token!, userId, 'hello');
+
     print('FCM Token: $token');
   }
 }

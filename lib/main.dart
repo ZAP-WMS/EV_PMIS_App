@@ -11,6 +11,7 @@ import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/viewmodels/push_notification.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,6 +23,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
+import 'notiification/notification_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -70,6 +72,7 @@ void main() async {
     initializationSettings,
     onDidReceiveNotificationResponse: (details) async {
       await OpenFile.open(details.payload!);
+      // await flutterLocalNotificationsPlugin.zonedSchedule(id, title, body, scheduledDate, notificationDetails, uiLocalNotificationDateInterpretation: uiLocalNotificationDateInterpretation)
     },
   );
 // To request permission for notification and storage
@@ -91,6 +94,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   User? user;
+  String? userId;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   // This widget is the root of your application.
@@ -98,15 +102,28 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     user = FirebaseAuth.instance.currentUser;
-    _firebaseMessaging.getToken().then((value) {
-      print("token::::$value");
-      // sendNotificationToUser(value!, 'title', 'body');
+
+    getUserId().whenComplete(() {
+      _firebaseMessaging.getToken().then((value) {
+        print("token::::$value");
+        NotificationService().saveTokenToFirestore(userId!, value);
+        // sendNotificationToUser(value!, 'title', 'body');
+      });
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        //handle incoming messages
+        print('receive message${message.notification?.body}');
+      });
     });
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      //handle incoming messages
-      print('receive message${message.notification?.body}');
-    });
+
     super.initState();
+  }
+
+  Future<void> getUserId() async {
+    await AuthService().getCurrentUserId().then((value) {
+      userId = value;
+      print('UserId - $value');
+      // setState(() {});
+    });
   }
 
   @override
