@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
@@ -102,18 +103,21 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     user = FirebaseAuth.instance.currentUser;
-
     getUserId().whenComplete(() {
-      _firebaseMessaging.getToken().then((value) {
-        print("token::::$value");
-        NotificationService().saveTokenToFirestore(userId!, value);
-        // sendNotificationToUser(value!, 'title', 'body');
-      });
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        //handle incoming messages
-        print('receive message${message.notification?.body}');
-      });
+      verifyProjectManager();
     });
+
+    // getUserId().whenComplete(() {
+    //   _firebaseMessaging.getToken().then((value) {
+    //     print("token::::$value");
+    //     NotificationService().saveTokenToFirestore(userId!, value);
+    //     // sendNotificationToUser(value!, 'title', 'body');
+    //   });
+    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //     //handle incoming messages
+    //     print('receive message${message.notification?.body}');
+    //   });
+    // });
 
     super.initState();
   }
@@ -124,6 +128,29 @@ class _MyAppState extends State<MyApp> {
       print('UserId - $value');
       // setState(() {});
     });
+  }
+
+  Future<void> verifyProjectManager() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .where('roles', arrayContains: 'Project Manager')
+        .get();
+
+    List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
+
+    for (int i = 0; i < tempList.length; i++) {
+      if (tempList[i]['userId'].toString() == userId.toString()) {
+        _firebaseMessaging.getToken().then((value) {
+          print("token::::$value");
+          NotificationService().saveTokenToFirestore(userId!, value);
+          // sendNotificationToUser(value!, 'title', 'body');
+        });
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          //handle incoming messages
+          print('receive message${message.notification?.body}');
+        });
+      }
+    }
   }
 
   @override

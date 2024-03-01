@@ -17,8 +17,7 @@ import 'package:ev_pmis_app/screen/otp_verification/send_otp.dart';
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/quality_home_admin.dart';
 import 'package:ev_pmis_app/screen/split_dashboard/split_screen.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-import 'package:ev_pmis_app/views/energy_management/energy_management.dart';
-import 'package:ev_pmis_app/views/energy_management/energy_management_admin.dart.dart';
+
 import 'package:ev_pmis_app/widgets/upload.dart';
 import 'package:flutter/material.dart';
 import '../views/action_screens/jmr_action_screen.dart';
@@ -28,6 +27,7 @@ import 'package:provider/provider.dart';
 import '../views/authentication/change_password.dart';
 import '../views/chatPage/feedback.dart';
 import '../views/citiespage/cities_home.dart';
+import '../views/dailyreport/notification_userlist.dart';
 import '../views/keyevents/key_events2.dart';
 import '../views/overviewpage/overview.dart';
 
@@ -193,6 +193,16 @@ class RouteGenerator {
             depoName: argument['depoName'],
             role: argument['role'],
           );
+
+        case '/user-list':
+          // Map<String, dynamic> argument =
+          //     settings.arguments as Map<String, dynamic>;
+          return userList();
+        //  DemandActionScreen(
+        //   cityName: argument['cityName'],
+        //   depoName: argument['depoName'],
+        //   role: argument['role'],
+        // );
       }
       return const NodataAvailable();
     });
