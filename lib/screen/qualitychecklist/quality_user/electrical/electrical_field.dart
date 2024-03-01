@@ -446,7 +446,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                   ),
                                   GridColumn(
                                     columnName: 'View',
-                                    allowEditing: true,
+                                    allowEditing: false,
                                     width: 150,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
@@ -698,7 +698,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                   ),
                                   GridColumn(
                                     columnName: 'View',
-                                    allowEditing: true,
+                                    allowEditing: false,
                                     width: 150,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(

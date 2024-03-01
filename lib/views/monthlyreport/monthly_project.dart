@@ -44,21 +44,24 @@ class _MonthlyProjectState extends State<MonthlyProject> {
     widget.cityName =
         Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    getTableData().whenComplete(() {
-      _stream = FirebaseFirestore.instance
-          .collection('MonthlyProjectReport2')
-          .doc('${widget.depoName}')
-          // .collection('AllMonthData')
-          .collection('userId')
-          .doc(userId)
-          .collection('Monthly Data')
-          // .collection('MonthData')
-          .doc(DateFormat.yMMM().format(DateTime.now()))
-          .snapshots();
+    // getTableData().whenComplete(() {
+    _stream = FirebaseFirestore.instance
+        .collection('MonthlyProjectReport2')
+        .doc('${widget.depoName}')
+        // .collection('AllMonthData')
+        .collection('userId')
+        .doc(userId)
+        .collection('Monthly Data')
+        // .collection('MonthData')
+        .doc(DateFormat.yMMM().format(DateTime.now()))
+        .snapshots();
 
-      monthlyDataSource = MonthlyDataSource(monthlyProject, context);
-      _dataGridController = DataGridController();
+    monthlyDataSource = MonthlyDataSource(monthlyProject, context);
+    _dataGridController = DataGridController();
+    setState(() {
+      isLoading = false;
     });
+    //});
 
     // });
 
@@ -92,7 +95,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
             store: () {
               _showDialog(context);
               FirebaseApi().nestedKeyEventsField(
-                  'MonthlyProjectReport2', widget.depoName!, 'userId', userId!);
+                  'MonthlyProjectReport2', widget.depoName!, 'userId', userId);
               storeData();
             },
             //  choosedate: ('') {
@@ -326,15 +329,15 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 ]),
                           );
                         } else {
-                          // alldata = snapshot.data['data'] as List<dynamic>;
-                          // monthlyProject.clear();
-                          // alldata.forEach((element) {
-                          //   monthlyProject
-                          //       .add(MonthlyProjectModel.fromjson(element));
-                          //   monthlyDataSource =
-                          //       MonthlyDataSource(monthlyProject, context);
-                          //   _dataGridController = DataGridController();
-                          // });
+                          alldata = snapshot.data['data'] as List<dynamic>;
+                          monthlyProject.clear();
+                          alldata.forEach((element) {
+                            monthlyProject
+                                .add(MonthlyProjectModel.fromjson(element));
+                            monthlyDataSource =
+                                MonthlyDataSource(monthlyProject, context);
+                            _dataGridController = DataGridController();
+                          });
                           return SfDataGridTheme(
                             data: SfDataGridThemeData(
                                 headerColor: white,
@@ -507,11 +510,12 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
-                                      child: Text('Next Month Action Plan',
-                                          overflow: TextOverflow.values.first,
-                                          style: tableheaderwhitecolor
-                                          //    textAlign: TextAlign.center,
-                                          ),
+                                      child: Text(
+                                        'Next Month Action Plan',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheaderwhitecolor,
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                   ),
                                 ]),

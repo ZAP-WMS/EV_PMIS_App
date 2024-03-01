@@ -417,7 +417,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                       ganttdata = [];
                       totalPecProgress = 0.0;
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return LoadingPage();
+                        return const LoadingPage();
                       }
                       if (!snapshot.hasData || snapshot.data.exists == false) {
                         // Parse the date string into a DateTime object
@@ -473,7 +473,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                   builder: (context) {
                                             return ViewAllPdf(
                                                 userId: userId,
-                                                cityName: widget.cityName,
+                                                cityName: cityName,
                                                 depoName: widget.depoName,
                                                 title: 'Key Events',
                                                 docId: addedRows.first
@@ -1858,7 +1858,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                   builder: (context) {
                                             return ViewAllPdf(
                                                 userId: userId,
-                                                cityName: widget.cityName,
+                                                cityName: cityName,
                                                 depoName: widget.depoName,
                                                 title: 'Key Events',
                                                 docId: addedRows.first

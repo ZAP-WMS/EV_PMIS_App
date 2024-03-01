@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class EnergyManagementModel {
@@ -43,7 +41,9 @@ class EnergyManagementModel {
         startDate: json['startDate'],
         endDate: json['endDate'],
         totalTime: json['totalTime'],
-        energyConsumed: json['energyConsumed'],
+        energyConsumed: (json['energyConsumed'] is int)
+            ? json['energyConsumed'].toDouble()
+            : json['energyConsumed'],
         timeInterval: json['timeInterval']);
   }
 

@@ -26,7 +26,7 @@ class _DetailedEngHomeState extends State<DetailedEngHome> {
           depoName: widget.depoName ?? '',
           isCentered: false,
           title: 'Detailed Engineering',
-          height: 40,
+          height: 55,
           isSync: false),
       body: ListView.builder(
         itemCount: 3,

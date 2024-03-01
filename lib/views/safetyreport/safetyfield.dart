@@ -18,7 +18,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../../screen/dailyreport/summary.dart';
+import '../dailyreport/summary.dart';
 
 class SafetyField extends StatefulWidget {
   String? depoName;
@@ -159,7 +159,7 @@ class _SafetyFieldState extends State<SafetyField> {
             _showDialog(context);
             store();
             FirebaseApi().nestedKeyEventsField(
-                'SafetyFieldData2', widget.depoName!, 'userId', userId!);
+                'SafetyFieldData2', widget.depoName!, 'userId', userId);
           },
           choosedate: () {
             chooseDate(context);
@@ -575,22 +575,22 @@ class _SafetyFieldState extends State<SafetyField> {
                                   ),
                                 );
                               } else {
-                                // alldata = '';
-                                // alldata =
-                                //     snapshot.data['data'] as List<dynamic>;
-                                // safetylisttable.clear();
-                                // alldata.forEach((element) {
-                                //   safetylisttable.add(
-                                //       SafetyChecklistModel.fromJson(element));
-                                //   _safetyChecklistDataSource =
-                                //       SafetyChecklistDataSource(
-                                //           safetylisttable,
-                                //           cityName!,
-                                //           widget.depoName!,
-                                //           userId,
-                                //           selectedDate!);
-                                //   _dataGridController = DataGridController();
-                                // });
+                                alldata = '';
+                                alldata =
+                                    snapshot.data['data'] as List<dynamic>;
+                                safetylisttable.clear();
+                                alldata.forEach((element) {
+                                  safetylisttable.add(
+                                      SafetyChecklistModel.fromJson(element));
+                                  _safetyChecklistDataSource =
+                                      SafetyChecklistDataSource(
+                                          safetylisttable,
+                                          cityName!,
+                                          widget.depoName!,
+                                          userId,
+                                          selectedDate!);
+                                  _dataGridController = DataGridController();
+                                });
                                 return SizedBox(
                                   height: MediaQuery.of(context).size.height,
                                   child: SfDataGridTheme(

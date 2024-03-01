@@ -10,16 +10,34 @@ import 'package:ev_pmis_app/provider/selected_row_index.dart';
 import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/views/energy_management/energy_management_admin.dart.dart';
+import 'package:ev_pmis_app/viewmodels/push_notification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:open_file_plus/open_file_plus.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling background message:${message.messageId}");
+  RemoteMessage? initializeMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+  if (initializeMessage != null) {
+    PushNotification notification = PushNotification(
+      title: initializeMessage.notification!.title ?? '',
+      body: initializeMessage.notification!.body ?? '',
+      dataTitle: initializeMessage.data['title'] ?? '',
+      datBody: initializeMessage.data['body'] ?? '',
+    );
+  }
+}
 
 void main() async {
   // its used for status bar color
@@ -31,6 +49,7 @@ void main() async {
 
 // here i have initialize my firebase
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: blue));
   SystemChrome.setPreferredOrientations([
@@ -41,6 +60,8 @@ void main() async {
 
   await Firebase.initializeApp();
 
+  // NotificationService().initialize();
+  // NotificationService().getFCMToken();
 // To show file downloaded notification for pdf
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const initializationSettingsAndroid =
@@ -60,13 +81,38 @@ void main() async {
   //   Permission.notification,
   //   Permission.storage,
   // ].request();
-  runApp(const MyApp());
+  runApp(MyApp());
+  //for handling the notification in terminated state
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  User? user;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   // This widget is the root of your application.
+
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    _firebaseMessaging.getToken().then((value) {
+      print("token::::$value");
+      // sendNotificationToUser(value!, 'title', 'body');
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //handle incoming messages
+      print('receive message${message.notification?.body}');
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -82,37 +128,36 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ScrollProvider()),
         ChangeNotifierProvider(create: (context) => EnergyProviderAdmin()),
       ],
-      child: GetMaterialApp(
-        // initialRoute: '/splash',
-        initialRoute: '/splash-screen',
-        // all the pages of routes are declared here
-        onGenerateRoute: RouteGenerator.generateRoute,
-        debugShowCheckedModeBanner: false,
-        title: 'TP-EV-PMIS',
-        theme: ThemeData(
-          scrollbarTheme: ScrollbarThemeData(
-              thumbColor: MaterialStatePropertyAll(blue),
-              thumbVisibility: MaterialStatePropertyAll(true)),
-          brightness: Brightness.light,
-          fontFamily: 'Montserrat',
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: Colors.white,
-          dividerColor: const Color.fromARGB(255, 2, 42, 75),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(color: blue),
-            ),
-            focusedBorder: OutlineInputBorder(
+      child: OverlaySupport(
+        child: GetMaterialApp(
+          // initialRoute: '/splash',
+          initialRoute: '/splash-screen',
+          // all the pages of routes are declared here
+          onGenerateRoute: RouteGenerator.generateRoute,
+          debugShowCheckedModeBanner: false,
+          title: 'TP-EV-PMIS',
+          theme: ThemeData(
+            brightness: Brightness.light,
+            fontFamily: 'Montserrat',
+            primarySwatch: Colors.blue,
+            scaffoldBackgroundColor: Colors.white,
+            dividerColor: const Color.fromARGB(255, 2, 42, 75),
+            inputDecorationTheme: InputDecorationTheme(
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6),
-                borderSide: BorderSide(color: blue)),
-            floatingLabelBehavior: FloatingLabelBehavior.auto,
-            focusColor: black,
-            // labelStyle: Colors.b
+                borderSide: BorderSide(color: blue),
+              ),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(color: blue)),
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              focusColor: black,
+              // labelStyle: Colors.b
+            ),
           ),
-        ),
 
-        //home: LoginRegister()
+          //home: LoginRegister()
+        ),
       ),
     );
   }

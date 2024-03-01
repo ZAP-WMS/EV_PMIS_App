@@ -163,7 +163,7 @@ class _DetailedEngtState extends State<DetailedEng>
               children: [
                 const Text(
                   'Detailed Engineering',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.depoName ?? '',
@@ -174,7 +174,7 @@ class _DetailedEngtState extends State<DetailedEng>
               ],
             ),
             flexibleSpace: Container(
-              height: 80,
+              height: 100,
               color: blue,
             ),
             actions: [
@@ -226,8 +226,11 @@ class _DetailedEngtState extends State<DetailedEng>
                 color:
                     blue, // Set the background color of the selected tab label
               ),
+              labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               tabs: const [
-                Tab(text: "RFC Drawings of Civil Activities"),
+                Tab(
+                  text: "RFC Drawings of Civil Activities",
+                ),
                 Tab(text: "EV Layout Drawings of Electrical Activities"),
                 Tab(text: "Shed Lighting Drawings & Specification"),
               ],
@@ -552,7 +555,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -564,7 +567,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -753,7 +756,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -765,7 +768,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -973,7 +976,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -985,7 +988,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1172,7 +1175,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1184,7 +1187,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1407,7 +1410,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1419,7 +1422,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1606,7 +1609,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1618,7 +1621,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 140,
+                                width: 120,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,

@@ -468,7 +468,7 @@ class _CivilFieldState extends State<CivilField> {
                                     ),
                                     GridColumn(
                                       columnName: 'View',
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 150,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -697,7 +697,7 @@ class _CivilFieldState extends State<CivilField> {
                                     ),
                                     GridColumn(
                                       columnName: 'View',
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 150,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(

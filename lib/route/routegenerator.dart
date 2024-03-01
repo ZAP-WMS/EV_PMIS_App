@@ -52,11 +52,11 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return UploadDocument(
-              pagetitle: 'Overview Page',
+              pagetitle: 'Depot Insights',
               cityName: argument['cityName'],
               depoName: argument['depoName'],
               userId: userId,
-              fldrName: 'OverviewepoImages');
+              fldrName: 'DepotImages');
         case '/chat-page':
           return FeedbackPage();
         case '/overview page':

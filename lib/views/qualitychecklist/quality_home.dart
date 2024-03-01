@@ -2,7 +2,6 @@ import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/civil/civil_fie
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_user/electrical/electrical_field.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../style.dart';
 
 class QualityHome extends StatefulWidget {
@@ -28,7 +27,7 @@ class _QualityHomeState extends State<QualityHome> {
     'Painting',
     'Paving',
     'Roofing',
-    'Proofing'
+    'Proofing',
   ];
 
   List<String> civillist = [
@@ -56,7 +55,7 @@ class _QualityHomeState extends State<QualityHome> {
     'CDI',
     'MSP',
     'CHARGER',
-    'EARTH PIT'
+    'EARTH PIT',
   ];
   List<String> electricallist = [
     'CHECKLIST FOR INSTALLATION OF PSS',

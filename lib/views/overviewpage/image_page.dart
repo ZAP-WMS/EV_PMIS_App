@@ -1,6 +1,7 @@
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/views/overviewpage/viewFIle.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_excel.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -27,7 +28,7 @@ class ImagePage extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             file.name,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           backgroundColor: blue,
           centerTitle: true,
@@ -86,7 +87,21 @@ class ImagePage extends StatelessWidget {
                 }
               },
             ),
-            const SizedBox(width: 12),
+            IconButton(
+                onPressed: () async {
+                  await FirebaseStorage.instance
+                      .refFromURL(file.url)
+                      .delete()
+                      // FirebaseStorage.instance
+                      //     .ref()
+                      //     .child(file.url)
+                      //     .delete()
+                      .then((value) {
+                    print('Delete Successfull');
+                    Navigator.pop(context);
+                  });
+                },
+                icon: const Icon(Icons.delete))
           ],
         ),
         body: isImage

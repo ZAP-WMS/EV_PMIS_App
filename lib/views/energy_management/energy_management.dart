@@ -94,65 +94,68 @@ class _EnergyManagementState extends State<EnergyManagement> {
         .fetchGraphData(widget.cityName!, widget.depoName!, widget.userId);
     return Scaffold(
       appBar: PreferredSize(
-          // ignore: sort_child_properties_last
-          child: CustomAppBarBackDate(
-            depoName: widget.depoName,
-            // showDepoBar: true,
-            // toOverview: true,
-            // cityName: widget.cityName,
-            // depoName: widget.depoName,
-            // userId: userId,
-            text: 'Depot Energy Management',
-            haveSummary: true,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewSummary(
-                    cityName: widget.cityName.toString(),
-                    depoName: widget.depoName.toString(),
-                    id: 'Energy Management',
-                    userId: widget.userId,
-                  ),
-                )),
-            haveSynced: true,
-            store: () {
-              FirebaseApi().defaultKeyEventsField(
-                  'EnergyManagementTable', widget.cityName!);
-              FirebaseApi().nestedKeyEventsField('EnergyManagementTable',
-                  widget.cityName!, 'Depots', widget.depoName!);
-              FirebaseApi().energydefaultKeyEventsField(
-                  'EnergyManagementTable',
-                  widget.cityName!,
-                  'Depots',
-                  widget.depoName!,
-                  'Year',
-                  DateTime.now().year.toString());
-              FirebaseApi().energynestedKeyEventsField(
-                  'EnergyManagementTable',
-                  widget.cityName!,
-                  'Depots',
-                  widget.depoName!,
-                  'Year',
-                  DateTime.now().year.toString(),
-                  'Months',
-                  monthName);
+        // ignore: sort_child_properties_last
+        child: CustomAppBarBackDate(
+          depoName: widget.depoName,
+          // showDepoBar: true,
+          // toOverview: true,
+          // cityName: widget.cityName,
+          // depoName: widget.depoName,
+          // userId: userId,
+          text: 'Depot Energy Management',
+          haveSummary: true,
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewSummary(
+                  cityName: widget.cityName.toString(),
+                  depoName: widget.depoName.toString(),
+                  id: 'Energy Management',
+                  userId: widget.userId,
+                ),
+              )),
+          haveSynced: true,
+          store: () {
+            FirebaseApi().defaultKeyEventsField(
+                'EnergyManagementTable', widget.cityName!);
+            FirebaseApi().nestedKeyEventsField('EnergyManagementTable',
+                widget.cityName!, 'Depots', widget.depoName!);
+            FirebaseApi().energydefaultKeyEventsField(
+                'EnergyManagementTable',
+                widget.cityName!,
+                'Depots',
+                widget.depoName!,
+                'Year',
+                DateTime.now().year.toString());
+            FirebaseApi().energynestedKeyEventsField(
+                'EnergyManagementTable',
+                widget.cityName!,
+                'Depots',
+                widget.depoName!,
+                'Year',
+                DateTime.now().year.toString(),
+                'Months',
+                monthName);
 
-              FirebaseApi().energynestedKeyEventsField2(
-                  'EnergyManagementTable',
-                  widget.cityName!,
-                  'Depots',
-                  widget.depoName!,
-                  'Year',
-                  DateTime.now().year.toString(),
-                  'Months',
-                  monthName,
-                  'Date',
-                  DateFormat.yMMMMd().format(DateTime.now()));
+            FirebaseApi().energynestedKeyEventsField2(
+                'EnergyManagementTable',
+                widget.cityName!,
+                'Depots',
+                widget.depoName!,
+                'Year',
+                DateTime.now().year.toString(),
+                'Months',
+                monthName,
+                'Date',
+                DateFormat.yMMMMd().format(DateTime.now()));
 
-              storeData();
-            },
-          ),
-          preferredSize: const Size.fromHeight(50,),),
+            storeData();
+          },
+        ),
+        preferredSize: const Size.fromHeight(
+          50,
+        ),
+      ),
       body: _isloading
           ? const LoadingPage()
           : SingleChildScrollView(
@@ -161,7 +164,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                 children: [
                   Container(
                     margin: const EdgeInsets.only(top: 5.0),
-                    height: MediaQuery.of(context).size.height * 0.52,
+                    height: MediaQuery.of(context).size.height * 0.46,
                     child: SfDataGridTheme(
                       data: SfDataGridThemeData(
                           gridLineColor: blue,
@@ -727,11 +730,10 @@ class _EnergyManagementState extends State<EnergyManagement> {
                 startSoc: 1,
                 endSoc: 1,
                 startDate:
-                    DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now()),
-                endDate:
-                    DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now()),
+                    DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+                endDate: DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
                 totalTime:
-                    DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now()),
+                    DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
                 energyConsumed: 1500,
                 timeInterval:
                     '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
