@@ -1,12 +1,20 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -26,6 +34,9 @@ import '../../../../provider/cities_provider.dart';
 import '../../../../style.dart';
 import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/quality_list.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class ElectricalField extends StatefulWidget {
   String? depoName;
@@ -44,6 +55,8 @@ class ElectricalField extends StatefulWidget {
 }
 
 class _ElectricalFieldState extends State<ElectricalField> {
+  String pathToOpenFile = '';
+
   List<QualitychecklistModel> data = [];
   bool checkTable = true;
   bool isLoading = true;
@@ -128,52 +141,52 @@ class _ElectricalFieldState extends State<ElectricalField> {
     getTableData().whenComplete(() {
       qualitylisttable1 = checkTable ? getData() : data;
       _qualityPSSDataSource =
-          QualityPSSDataSource(qualitylisttable1, widget.depoName!, cityName!);
+          QualityPSSDataSource(qualitylisttable1, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable2 = rmu_getData();
       _qualityrmuDataSource =
-          QualityrmuDataSource(qualitylisttable2, widget.depoName!, cityName!);
+          QualityrmuDataSource(qualitylisttable2, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable3 = ct_getData();
       _qualityctDataSource =
-          QualityctDataSource(qualitylisttable3, widget.depoName!, cityName!);
+          QualityctDataSource(qualitylisttable3, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable4 = cmu_getData();
       _qualitycmuDataSource =
-          QualitycmuDataSource(qualitylisttable4, widget.depoName!, cityName!);
+          QualitycmuDataSource(qualitylisttable4, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable5 = acdb_getData();
       _qualityacdDataSource =
-          QualityacdDataSource(qualitylisttable5, widget.depoName!, cityName!);
+          QualityacdDataSource(qualitylisttable5, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable6 = ci_getData();
       _qualityCIDataSource =
-          QualityCIDataSource(qualitylisttable6, widget.depoName!, cityName!);
+          QualityCIDataSource(qualitylisttable6, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable7 = cdi_getData();
       _qualityCDIDataSource =
-          QualityCDIDataSource(qualitylisttable7, widget.depoName!, cityName!);
+          QualityCDIDataSource(qualitylisttable7, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable8 = msp_getData();
       _qualityMSPDataSource =
-          QualityMSPDataSource(qualitylisttable8, widget.depoName!, cityName!);
+          QualityMSPDataSource(qualitylisttable8, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable9 = charger_getData();
       _qualityChargerDataSource = QualityChargerDataSource(
-          qualitylisttable9, widget.depoName!, cityName!);
+          qualitylisttable9, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable10 = earth_pit_getData();
       _qualityEPDataSource =
-          QualityEPDataSource(qualitylisttable10, widget.depoName!, cityName!);
+          QualityEPDataSource(qualitylisttable10, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     });
 
@@ -187,6 +200,8 @@ class _ElectricalFieldState extends State<ElectricalField> {
         appBar: PreferredSize(
             // ignore: sort_child_properties_last
             child: CustomAppBarBackDate(
+                isDownload: true,
+                downloadFun: downloadPDF,
                 depoName: widget.depoName!,
                 text: '${widget.title}',
                 haveSummary: false,
@@ -240,7 +255,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                 choosedate: () {
                   chooseDate(context);
                 }),
-            preferredSize: const Size.fromHeight(80)),
+            preferredSize: const Size.fromHeight(55)),
         body: isLoading
             ? LoadingPage()
             :
@@ -901,48 +916,48 @@ class _ElectricalFieldState extends State<ElectricalField> {
     if (widget.fielClnName == 'RMU') {
       qualitylisttable2 = checkTable ? rmu_getData() : data;
       _qualityrmuDataSource =
-          QualityrmuDataSource(qualitylisttable2, widget.depoName!, cityName!);
+          QualityrmuDataSource(qualitylisttable2, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CT') {
       qualitylisttable3 = checkTable ? ct_getData() : data;
       _qualityctDataSource =
-          QualityctDataSource(qualitylisttable3, widget.depoName!, cityName!);
+          QualityctDataSource(qualitylisttable3, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CMU') {
       qualitylisttable4 = checkTable ? cmu_getData() : data;
       _qualitycmuDataSource =
-          QualitycmuDataSource(qualitylisttable4, widget.depoName!, cityName!);
+          QualitycmuDataSource(qualitylisttable4, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'ACDB') {
       qualitylisttable5 = checkTable ? acdb_getData() : data;
       _qualityacdDataSource =
-          QualityacdDataSource(qualitylisttable5, widget.depoName!, cityName!);
+          QualityacdDataSource(qualitylisttable5, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CI') {
       qualitylisttable6 = checkTable ? ci_getData() : data;
       _qualityCIDataSource =
-          QualityCIDataSource(qualitylisttable6, widget.depoName!, cityName!);
+          QualityCIDataSource(qualitylisttable6, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CDI') {
       qualitylisttable7 = checkTable ? cdi_getData() : data;
       _qualityCDIDataSource =
-          QualityCDIDataSource(qualitylisttable7, widget.depoName!, cityName!);
+          QualityCDIDataSource(qualitylisttable7, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'MSP') {
       qualitylisttable8 = checkTable ? msp_getData() : data;
       _qualityMSPDataSource =
-          QualityMSPDataSource(qualitylisttable8, widget.depoName!, cityName!);
+          QualityMSPDataSource(qualitylisttable8, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CHARGER') {
       qualitylisttable9 = checkTable ? charger_getData() : data;
       _qualityChargerDataSource = QualityChargerDataSource(
-          qualitylisttable9, widget.depoName!, cityName!);
+          qualitylisttable9, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'EARTH PIT') {
       qualitylisttable10 = checkTable ? earth_pit_getData() : data;
       _qualityEPDataSource =
-          QualityEPDataSource(qualitylisttable10, widget.depoName!, cityName!);
+          QualityEPDataSource(qualitylisttable10, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     }
   }
@@ -1039,5 +1054,469 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     },
                   )),
             ));
+  }
+
+  Future<Uint8List> _generateElectricalPdf() async {
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    const cellStyle = pw.TextStyle(
+      color: PdfColors.black,
+      fontSize: 14,
+    );
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<List<dynamic>> fieldData = [
+      ['Employee Name :', nameController.text],
+      ['OLA Number :', olaController.text],
+      ['Doc No. :', docController.text],
+      ['Panel Sr.No. : ', panelController.text],
+      ['Vendor Name :', vendorController.text],
+      ['Depot Name :', depotController.text],
+      ['Date :', dateController.text],
+      ['Customer Name :', customerController.text],
+    ];
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(pw.TableRow(children: [
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Sr No',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding:
+              const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+          child: pw.Center(
+              child: pw.Text('Activity',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Responsibility',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Document Reference',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Observation',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image1',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image2',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image3',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+    ]));
+
+    if (data.isNotEmpty) {
+      List<pw.Widget> imageUrls = [];
+
+      for (QualitychecklistModel mapData in data) {
+        String imagesPath =
+            'QualityChecklist/Electrical_Engineer/$cityName/${widget.depoName}/$userId/${widget.fielClnName} Table/$selectedDate/${mapData.srNo}';
+        print('imagePath - $imagesPath');
+        ListResult result =
+            await FirebaseStorage.instance.ref().child(imagesPath).listAll();
+
+        if (result.items.isNotEmpty) {
+          for (var image in result.items) {
+            String downloadUrl = await image.getDownloadURL();
+            if (image.name.endsWith('.pdf')) {
+              imageUrls.add(
+                pw.Container(
+                    width: 60,
+                    alignment: pw.Alignment.center,
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    child: pw.UrlLink(
+                        child: pw.Text(image.name,
+                            style: const pw.TextStyle(color: PdfColors.blue)),
+                        destination: downloadUrl)),
+              );
+            } else {
+              final myImage = await networkImage(downloadUrl);
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Center(
+                      child: pw.Image(myImage),
+                    )),
+              );
+            }
+          }
+          if (imageUrls.length < 3) {
+            int imageLoop = 3 - imageUrls.length;
+            for (int i = 0; i < imageLoop; i++) {
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Text('')),
+              );
+            }
+          } else {
+            if (imageUrls.length > 3) {
+              int imageLoop = 11 - imageUrls.length;
+              for (int i = 0; i < imageLoop; i++) {
+                imageUrls.add(
+                  pw.Container(
+                      padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      width: 60,
+                      height: 100,
+                      child: pw.Text('')),
+                );
+              }
+            }
+          }
+        } else {
+          int imageLoop = 3;
+          for (int i = 0; i < imageLoop; i++) {
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.Text('')),
+            );
+          }
+        }
+
+        result.items.clear();
+
+        //Text Rows of PDF Table
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(3.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.srNo.toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.checklist,
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.responsibility,
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.reference.toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.observation.toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          imageUrls[0],
+          imageUrls[1],
+          imageUrls[2]
+        ]));
+
+        if (imageUrls.length - 3 > 0) {
+          //Image Rows of PDF Table
+          rows.add(pw.TableRow(children: [
+            pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: pw.Text('')),
+            pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                width: 60,
+                height: 100,
+                child: pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                    children: [
+                      imageUrls[3],
+                      imageUrls[4],
+                    ])),
+            imageUrls[5],
+            imageUrls[6],
+            imageUrls[7],
+            imageUrls[8],
+            imageUrls[9],
+            imageUrls[10],
+          ]));
+        }
+        imageUrls.clear();
+      }
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text(
+                          'Electrical Quality Report / ${widget.fielClnName} Table',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.SizedBox(width: 20),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '$cityName / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: selectedDate,
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : $userId',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table.fromTextArray(
+            columnWidths: {
+              0: const pw.FixedColumnWidth(100),
+              1: const pw.FixedColumnWidth(100),
+            },
+            headers: ['Details', 'Values'],
+            headerStyle: headerStyle,
+            headerPadding: const pw.EdgeInsets.all(10.0),
+            data: fieldData,
+            cellHeight: 35,
+            cellStyle: cellStyle,
+          )
+        ],
+      ),
+    );
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text(
+                          'Electrical Quality Report / ${widget.fielClnName} Table',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text(
+                    'Place:  $cityName/${widget.depoName}',
+                    textScaleFactor: 1.6,
+                  ),
+                  pw.Text(
+                    'Date:  $selectedDate ',
+                    textScaleFactor: 1.6,
+                  )
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+              columnWidths: {
+                0: const pw.FixedColumnWidth(30),
+                1: const pw.FixedColumnWidth(160),
+                2: const pw.FixedColumnWidth(70),
+                3: const pw.FixedColumnWidth(70),
+                4: const pw.FixedColumnWidth(70),
+                5: const pw.FixedColumnWidth(70),
+                6: const pw.FixedColumnWidth(70),
+                7: const pw.FixedColumnWidth(70),
+              },
+              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+              tableWidth: pw.TableWidth.max,
+              border: pw.TableBorder.all(),
+              children: rows)
+        ],
+      ),
+    );
+
+    final Uint8List pdfData = await pdf.save();
+    final String pdfPath =
+        'ElectricalQualityReport_${widget.fielClnName}($userId/$selectedDate).pdf';
+
+    // Save the PDF file to device storage
+
+    return pdfData;
+  }
+
+  Future<void> downloadPDF() async {
+    if (await Permission.storage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
+
+      await pr.show();
+
+      final pdfData = await _generateElectricalPdf();
+
+      String fileName = 'ElectricalQualityReport.pdf';
+
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
+
+      await pr.hide();
+    }
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Electric Quality Downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
+  }
+
+  Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+    if (await Permission.storage.request().isGranted) {
+      final documentDirectory =
+          (await DownloadsPath.downloadsDirectory())?.path;
+      final file = File('$documentDirectory/$fileName');
+
+      int counter = 1;
+      String newFilePath = file.path;
+      await file.writeAsBytes(pdfData);
+      pathToOpenFile = newFilePath.toString();
+      return file;
+      // }
+    }
+    return File('');
   }
 }

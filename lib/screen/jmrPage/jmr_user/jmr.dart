@@ -148,104 +148,106 @@ class _JmrUserPageState extends State<JmrUserPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  padding: const EdgeInsets.only(top: 5),
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
+                    border: Border.all(color: blue),
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.blue,
                   ),
                   width: 40,
                   height: 30,
                   child: Text(
                     textAlign: TextAlign.center,
                     title,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: blue, fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    index != 0
-                        ? currentTabList[index - 1] == 0
-                            ? showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    icon: Icon(
-                                      Icons.warning_amber,
-                                      size: 40,
-                                      color: Colors.blue[900],
-                                    ),
-                                    title: const Text(
-                                      'Please Create Jmr Orderly',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 13,
+                Container(
+                  height: 30,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      index != 0
+                          ? currentTabList[index - 1] == 0
+                              ? showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      icon: Icon(
+                                        Icons.warning_amber,
+                                        size: 40,
+                                        color: Colors.blue[900],
                                       ),
+                                      title: const Text(
+                                        'Please Create Jmr Orderly',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      actions: [
+                                        Center(
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('OK')),
+                                        )
+                                      ],
+                                    );
+                                  },
+                                )
+                              : Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => JmrFieldPage(
+                                      showTable: false,
+                                      title: '$Designation-$title',
+                                      jmrTab: title,
+                                      cityName: widget.cityName,
+                                      depoName: widget.depoName,
+                                      jmrIndex: index + 1,
+                                      tabName: tabsForJmr[_selectedIndex],
                                     ),
-                                    actions: [
-                                      Center(
-                                        child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('OK')),
-                                      )
-                                    ],
-                                  );
-                                },
-                              )
-                            : Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => JmrFieldPage(
-                                    showTable: false,
-                                    title: '$Designation-$title',
-                                    jmrTab: title,
-                                    cityName: widget.cityName,
-                                    depoName: widget.depoName,
-                                    jmrIndex: index + 1,
-                                    tabName: tabsForJmr[_selectedIndex],
                                   ),
+                                ).then((_) {
+                                  setState(() {
+                                    currentTabList.clear();
+                                    getJmrLen(5);
+                                  });
+                                })
+                          : Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => JmrFieldPage(
+                                  showTable: false,
+                                  title: '$Designation-$title',
+                                  jmrTab: title,
+                                  cityName: widget.cityName,
+                                  depoName: widget.depoName,
+                                  jmrIndex: index + 1,
+                                  tabName: tabsForJmr[_selectedIndex],
                                 ),
-                              ).then((_) {
-                                setState(() {
-                                  currentTabList.clear();
-                                  getJmrLen(5);
-                                });
-                              })
-                        : Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => JmrFieldPage(
-                                showTable: false,
-                                title: '$Designation-$title',
-                                jmrTab: title,
-                                cityName: widget.cityName,
-                                depoName: widget.depoName,
-                                jmrIndex: index + 1,
-                                tabName: tabsForJmr[_selectedIndex],
                               ),
-                            ),
-                          ).then((_) {
-                            setState(() {
-                              currentTabList.clear();
-                              getJmrLen(5);
+                            ).then((_) {
+                              setState(() {
+                                currentTabList.clear();
+                                getJmrLen(5);
+                              });
                             });
-                          });
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: blue),
-                  child: const Text(
-                    'Create New JMR',
-                    style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: blue),
+                    child: const Text(
+                      'Create New',
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(
-            height: 5.0,
           ),
           Container(
             padding: const EdgeInsets.only(
@@ -265,9 +267,9 @@ class _JmrUserPageState extends State<JmrUserPage> {
                         style: const TextStyle(fontSize: 11),
                       ),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        height: 30,
-                        width: 60,
+                        padding: const EdgeInsets.only(bottom: 8),
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        width: MediaQuery.of(context).size.width * 0.18,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -304,13 +306,13 @@ class _JmrUserPageState extends State<JmrUserPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 8.0),
+            margin: const EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 30,
-                  width: 90,
+                  height: MediaQuery.of(context).size.height * 0.03,
+                  width: MediaQuery.of(context).size.width * 0.2,
                   child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
@@ -346,44 +348,37 @@ class _JmrUserPageState extends State<JmrUserPage> {
                       },
                       child: Text(
                         'Upload',
-                        style: TextStyle(color: white),
+                        style: TextStyle(color: white, fontSize: 10),
                       )),
                 ),
                 InkWell(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewAllPdf(
-                                  cityName: widget.cityName,
-                                  depoName: widget.depoName,
-                                  title: 'jmr',
-                                  userId: userId,
-                                  fldrName:
-                                      'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
-                                )));
-
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => ViewJmrFiles(
-                    //               path:
-                    //                   'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
-                    //             )
-                    //             )
-                    //             );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewAllPdf(
+                          cityName: widget.cityName,
+                          depoName: widget.depoName,
+                          title: 'jmr',
+                          userId: userId,
+                          fldrName:
+                              'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
+                        ),
+                      ),
+                    );
                   },
                   child: Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.of(context).size.height * 0.03,
+                    width: MediaQuery.of(context).size.width * 0.15,
                     margin: const EdgeInsets.only(left: 5.0),
-                    padding: const EdgeInsets.only(
-                        right: 8.0, left: 8.0, top: 4.0, bottom: 4.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: Colors.blue),
                     ),
                     child: const Text(
                       'View',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: Colors.blue, fontSize: 10),
                     ),
                   ),
                 )

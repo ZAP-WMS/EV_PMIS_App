@@ -1,17 +1,14 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import '../../../components/Loading_page.dart';
-import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/datasource/jmr_datasource.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/nodata_available.dart';
 import 'package:intl/intl.dart';
 
 import '../../viewmodels/jmr.dart';
@@ -137,7 +134,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(
-                  depoName: '${widget.depoName} / ${widget.title.toString()}',
+                  isDownload: true,
                   store: () {
                     nextIndex().then((value) => StoreData());
                   },

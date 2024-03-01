@@ -51,6 +51,7 @@ void main() async {
     initializationSettings,
     onDidReceiveNotificationResponse: (details) async {
       await OpenFile.open(details.payload!);
+      print('location - ${details.payload}');
     },
   );
 

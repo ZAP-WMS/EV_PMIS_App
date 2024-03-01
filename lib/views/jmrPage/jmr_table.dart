@@ -149,6 +149,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
               appBar: PreferredSize(
                 // ignore: sort_child_properties_last
                 child: CustomAppBar(
+                  isDownload: true,
+                  downloadFun: () {},
                   depoName: '${widget.depoName} / ${widget.title.toString()}',
                   store: () {
                     nextIndex().then((value) => StoreData());

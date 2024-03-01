@@ -1,15 +1,21 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/screen/dailyreport/summary.dart';
 import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/views/qualitychecklist/quality_checklist.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -57,6 +63,7 @@ class CivilField extends StatefulWidget {
 }
 
 class _CivilFieldState extends State<CivilField> {
+  String pathToOpenFile = '';
   ProgressDialog? pr;
 
   String? cityName;
@@ -143,12 +150,10 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
-    print('1- ${widget.title} , 2 - ${widget.fieldclnName}');
+    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     pr = ProgressDialog(context,
         customBody:
             Container(height: 200, width: 100, child: const LoadingPdf()));
-    print('Init method running');
-    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     _stream = FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc('${widget.depoName}')
@@ -164,67 +169,67 @@ class _CivilFieldState extends State<CivilField> {
     getTableData().whenComplete(() {
       qualitylisttable1 = checkTable ? excavation_getData() : data;
       _qualityExcavationDataSource = QualityExcavationDataSource(
-          qualitylisttable1, widget.depoName!, cityName!);
+          qualitylisttable1, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable1 = checkTable ? excavation_getData() : data;
       _qualityExcavationDataSource = QualityExcavationDataSource(
-          qualitylisttable1, widget.depoName!, cityName!);
+          qualitylisttable1, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable2 = checkTable ? backfilling_getData() : data;
       _qualityBackFillingDataSource = QualityBackFillingDataSource(
-          qualitylisttable2, widget.depoName!, cityName!);
+          qualitylisttable2, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable3 = checkTable ? massonary_getData() : data;
       _qualityMassonaryDataSource = QualityMassonaryDataSource(
-          qualitylisttable3, widget.depoName!, cityName!);
+          qualitylisttable3, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable4 = checkTable ? glazzing_getData() : data;
       _qualityGlazzingDataSource = QualityGlazzingDataSource(
-          qualitylisttable4, widget.depoName!, cityName!);
+          qualitylisttable4, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable5 = checkTable ? ceilling_getData() : data;
       _qualityCeillingDataSource = QualityCeillingDataSource(
-          qualitylisttable5, widget.depoName!, cityName!);
+          qualitylisttable5, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable6 = checkTable ? florring_getData() : data;
       _qualityflooringDataSource = QualityflooringDataSource(
-          qualitylisttable6, widget.depoName!, cityName!);
+          qualitylisttable6, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable7 = checkTable ? inspection_getData() : data;
       _qualityInspectionDataSource = QualityInspectionDataSource(
-          qualitylisttable7, widget.depoName!, cityName!);
+          qualitylisttable7, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
       _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
-          qualitylisttable8, widget.depoName!, cityName!);
+          qualitylisttable8, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable9 = checkTable ? painting_getData() : data;
       _qualityPaintingDataSource = QualityPaintingDataSource(
-          qualitylisttable9, widget.depoName!, cityName!);
+          qualitylisttable9, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable10 = checkTable ? paving_getData() : data;
       _qualityPavingDataSource = QualityPavingDataSource(
-          qualitylisttable10, widget.depoName!, cityName!);
+          qualitylisttable10, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable11 = checkTable ? roofing_getData() : data;
       _qualityRoofingDataSource = QualityRoofingDataSource(
-          qualitylisttable11, widget.depoName!, cityName!);
+          qualitylisttable11, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable12 = checkTable ? proofing_getData() : data;
       _qualityProofingDataSource = QualityProofingDataSource(
-          qualitylisttable12, widget.depoName!, cityName!);
+          qualitylisttable12, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
     });
 
@@ -238,6 +243,7 @@ class _CivilFieldState extends State<CivilField> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(
+            downloadFun: downloadPDF,
             depoName: widget.depoName!,
             text: '${widget.title}',
             haveCalender: true,
@@ -933,56 +939,55 @@ class _CivilFieldState extends State<CivilField> {
                               checkTable ? excavation_getData() : data;
                           _qualityExcavationDataSource =
                               QualityExcavationDataSource(qualitylisttable1,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
-
                           qualitylisttable1 =
                               checkTable ? excavation_getData() : data;
                           _qualityExcavationDataSource =
                               QualityExcavationDataSource(qualitylisttable1,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable2 =
                               checkTable ? backfilling_getData() : data;
                           _qualityBackFillingDataSource =
                               QualityBackFillingDataSource(qualitylisttable2,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable3 =
                               checkTable ? massonary_getData() : data;
                           _qualityMassonaryDataSource =
                               QualityMassonaryDataSource(qualitylisttable3,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable4 =
                               checkTable ? glazzing_getData() : data;
                           _qualityGlazzingDataSource =
                               QualityGlazzingDataSource(qualitylisttable4,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable5 =
                               checkTable ? ceilling_getData() : data;
                           _qualityCeillingDataSource =
                               QualityCeillingDataSource(qualitylisttable5,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable6 =
                               checkTable ? florring_getData() : data;
                           _qualityflooringDataSource =
                               QualityflooringDataSource(qualitylisttable6,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable7 =
                               checkTable ? inspection_getData() : data;
                           _qualityInspectionDataSource =
                               QualityInspectionDataSource(qualitylisttable7,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable8 =
@@ -990,34 +995,34 @@ class _CivilFieldState extends State<CivilField> {
                           _qualityIroniteflooringDataSource =
                               QualityIroniteflooringDataSource(
                                   qualitylisttable8,
-                                  widget.depoName!,
-                                  cityName!);
+                                  cityName!,
+                                  widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable9 =
                               checkTable ? painting_getData() : data;
                           _qualityPaintingDataSource =
                               QualityPaintingDataSource(qualitylisttable9,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable10 =
                               checkTable ? paving_getData() : data;
                           _qualityPavingDataSource = QualityPavingDataSource(
-                              qualitylisttable10, widget.depoName!, cityName!);
+                              qualitylisttable10, cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable11 =
                               checkTable ? roofing_getData() : data;
                           _qualityRoofingDataSource = QualityRoofingDataSource(
-                              qualitylisttable11, widget.depoName!, cityName!);
+                              qualitylisttable11, cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable12 =
                               checkTable ? proofing_getData() : data;
                           _qualityProofingDataSource =
                               QualityProofingDataSource(qualitylisttable12,
-                                  widget.depoName!, cityName!);
+                                  cityName!, widget.depoName!);
                           _dataGridController = DataGridController();
                         });
                       });
@@ -1029,13 +1034,14 @@ class _CivilFieldState extends State<CivilField> {
             ));
   }
 
-  Future<List<int>> _generateCivilPdf() async {
+  Future<Uint8List> _generateCivilPdf() async {
     await pr!.show();
     final headerStyle =
         pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
 
-    final fontData1 = await rootBundle.load('fonts/IBMPlexSans-Medium.ttf');
-    final fontData2 = await rootBundle.load('fonts/IBMPlexSans-Bold.ttf');
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
 
     const cellStyle = pw.TextStyle(
       color: PdfColors.black,
@@ -1110,8 +1116,7 @@ class _CivilFieldState extends State<CivilField> {
 
       for (QualitychecklistModel mapData in data) {
         String imagesPath =
-            'QualityChecklist/civil_Engineer/${widget.cityName}/${widget.depoName}/$userId/${tabForCivil[_selectedIndex!]} Table/$date/${mapData.srNo}';
-
+            'QualityChecklist/civil_Engineer/$cityName/${widget.depoName}/$userId/${widget.fieldclnName} Table/$selectedDate/${mapData.srNo}';
         ListResult result =
             await FirebaseStorage.instance.ref().child(imagesPath).listAll();
 
@@ -1279,9 +1284,12 @@ class _CivilFieldState extends State<CivilField> {
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Text(
-                          'Civil Quality Report / ${completeTabForCivil[_selectedIndex!]} Table',
-                          textScaleFactor: 2,
-                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                        'Civil Quality Report / ${widget.fieldclnName} Table',
+                        textScaleFactor: 2,
+                        style: const pw.TextStyle(
+                          color: PdfColors.blue700,
+                        ),
+                      ),
                       pw.SizedBox(width: 20),
                       pw.Container(
                         width: 120,
@@ -1307,16 +1315,22 @@ class _CivilFieldState extends State<CivilField> {
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
                   pw.RichText(
-                      text: pw.TextSpan(children: [
-                    const pw.TextSpan(
-                        text: 'Place : ',
-                        style:
-                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
-                    pw.TextSpan(
-                        text: '${widget.cityName} / ${widget.depoName}',
-                        style: const pw.TextStyle(
-                            color: PdfColors.blue700, fontSize: 15))
-                  ])),
+                    text: pw.TextSpan(
+                      children: [
+                        const pw.TextSpan(
+                            text: 'Place : ',
+                            style: pw.TextStyle(
+                                color: PdfColors.black, fontSize: 17)),
+                        pw.TextSpan(
+                          text: '$cityName / ${widget.depoName}',
+                          style: const pw.TextStyle(
+                            color: PdfColors.blue700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   pw.RichText(
                       text: pw.TextSpan(children: [
                     const pw.TextSpan(
@@ -1379,9 +1393,12 @@ class _CivilFieldState extends State<CivilField> {
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Text(
-                          'Civil Quality Report / ${completeTabForCivil[_selectedIndex!]} Table',
-                          textScaleFactor: 2,
-                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                        'Civil Quality Report / ${widget.fieldclnName} Table',
+                        textScaleFactor: 2,
+                        style: const pw.TextStyle(
+                          color: PdfColors.blue700,
+                        ),
+                      ),
                       pw.Container(
                         width: 120,
                         height: 120,
@@ -1406,7 +1423,7 @@ class _CivilFieldState extends State<CivilField> {
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
                   pw.Text(
-                    'Place:  ${widget.cityName}/${widget.depoName}',
+                    'Place:  $cityName/${widget.depoName}',
                     textScaleFactor: 1.6,
                   ),
                   pw.Text(
@@ -1436,14 +1453,69 @@ class _CivilFieldState extends State<CivilField> {
       ),
     );
 
-    final List<int> pdfData = await pdf.save();
+    final Uint8List pdfData = await pdf.save();
     final String pdfPath =
         'CivilQualityReport_${widget.title}($userId/$selectedDate).pdf';
 
     // Save the PDF file to device storage
-
     pr!.hide();
 
     return pdfData;
+  }
+
+  Future<void> downloadPDF() async {
+    if (await Permission.storage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
+
+      await pr.show();
+
+      final pdfData = await _generateCivilPdf();
+
+      String fileName = 'CivilQualityReport.pdf';
+
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
+
+      await pr.hide();
+    }
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Civil Quality Downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
+  }
+
+  Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+    if (await Permission.storage.request().isGranted) {
+      final documentDirectory =
+          (await DownloadsPath.downloadsDirectory())?.path;
+      final file = File('$documentDirectory/$fileName');
+
+      int counter = 1;
+      String newFilePath = file.path;
+      await file.writeAsBytes(pdfData);
+      pathToOpenFile = newFilePath.toString();
+      return file;
+      // }
+    }
+    return File('');
   }
 }
