@@ -249,7 +249,7 @@ class _CivilFieldState extends State<CivilField> {
                 )),
             store: () async {
               _showDialog(context);
-              CivilstoreData(
+              civilStoreData(
                   context,
                   widget.fieldclnName == 'Exc'
                       ? _qualityExcavationDataSource
@@ -717,7 +717,7 @@ class _CivilFieldState extends State<CivilField> {
     );
   }
 
-  CivilstoreData(BuildContext context, dynamic datasource, String depoName,
+  civilStoreData(BuildContext context, dynamic datasource, String depoName,
       String currentDate) {
     Map<String, dynamic> excavationTableData = Map();
 

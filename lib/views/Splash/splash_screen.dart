@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/dailyreport/notification_userlist.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class SplashScreenState extends State<SplashScreen>
   int _totalNotification = 0;
   PushNotification? _notificationInfo;
 
+// WHEN APP IS OPENED
   void registerNotification() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
@@ -78,6 +80,11 @@ class SplashScreenState extends State<SplashScreen>
             background: blue,
             duration: const Duration(seconds: 2),
           );
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => userList()
+                  // NotificationPage(notification: notification),
+                  ));
         }
       });
     } else {
@@ -85,7 +92,7 @@ class SplashScreenState extends State<SplashScreen>
     }
   }
 
-  // for handling  the notification in firebase state
+  // for handling  the notification in terminate state
   checkforInitialMessage() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
@@ -99,7 +106,13 @@ class SplashScreenState extends State<SplashScreen>
         dataTitle: initialMessage.data['title'] ?? '',
         datBody: initialMessage.data['body'] ?? '',
       );
-
+      if (initialMessage != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => userList()
+                // NotificationPage(notification: notification),
+                ));
+      }
       //    sendNotificationToUser(notification.title!, notification.body!);
       if (mounted) {
         setState(() {
@@ -156,6 +169,11 @@ class SplashScreenState extends State<SplashScreen>
         dataTitle: message.data['title'] ?? '',
         datBody: message.data['body'] ?? '',
       );
+      
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => userList()),
+      // );
 
       if (mounted) {
         setState(() {
