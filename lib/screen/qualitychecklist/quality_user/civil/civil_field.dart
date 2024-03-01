@@ -736,6 +736,7 @@ class _CivilFieldState extends State<CivilField> {
   Widget safetyField(TextEditingController controller, String title,
       TextInputAction inputType) {
     return Container(
+      height: 45,
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
       child: CustomTextField(

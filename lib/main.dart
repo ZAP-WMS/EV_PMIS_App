@@ -157,11 +157,11 @@ class _MyAppState extends State<MyApp> {
             dividerColor: const Color.fromARGB(255, 2, 42, 75),
             inputDecorationTheme: InputDecorationTheme(
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(3),
                 borderSide: BorderSide(color: blue),
               ),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(3),
                   borderSide: BorderSide(color: blue)),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               focusColor: black,
