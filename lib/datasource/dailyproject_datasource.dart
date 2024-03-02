@@ -345,7 +345,7 @@ class DailyDataSource extends DataGridSource {
           FilteringTextInputFormatter.allow(regExp),
         ],
         keyboardType: isNumericType
-            ? TextInputType.number
+            ? TextInputType.numberWithOptions()
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
