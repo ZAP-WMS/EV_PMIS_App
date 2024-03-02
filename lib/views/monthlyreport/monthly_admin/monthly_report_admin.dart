@@ -390,7 +390,8 @@ class _MonthlySummaryState extends State<MonthlySummary> {
     }
 
     final pdf = pw.Document(pageMode: PdfPageMode.outlines);
-    final fontData2 = await rootBundle.load('fonts/IBMPlexSans-Medium.ttf');
+    final fontData2 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
 
     pdf.addPage(pw.MultiPage(
         theme: pw.ThemeData.withFont(

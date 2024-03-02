@@ -1,12 +1,21 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:ev_pmis_app/QualityDatasource/qualityCivilDatasource/quality_paving.dart';
+import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/views/qualitychecklist/quality_checklist.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -29,6 +38,9 @@ import '../../../../views/dailyreport/summary.dart';
 import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/quality_list.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class CivilField extends StatefulWidget {
   String? depoName;
@@ -50,6 +62,9 @@ class CivilField extends StatefulWidget {
 }
 
 class _CivilFieldState extends State<CivilField> {
+  String pathToOpenFile = '';
+  ProgressDialog? pr;
+
   String? cityName;
   Stream? _stream;
   late TextEditingController projectController,
@@ -71,21 +86,25 @@ class _CivilFieldState extends State<CivilField> {
     fillingController = TextEditingController();
   }
 
+  List<String> completeTabForCivil = [
+    'Excavation',
+    'BackFilling',
+    'Brick / Block Massonary',
+    'Doors, Windows, Hardware & Glazing',
+    'False Ceiling',
+    'Flooring & Tiling',
+    'Grouting Inspection',
+    'Ironite / Ips Flooring',
+    'Painting',
+    'Interlock Paving Work',
+    'Wall Cladding & Roofing',
+    'Water Proofing'
+  ];
+
   List<QualitychecklistModel> data = [];
   bool checkTable = true;
   bool isLoading = true;
   List<dynamic> excavationtabledatalist = [];
-  List<dynamic> backfillingtabledatalist = [];
-  List<dynamic> massonarytabledatalist = [];
-  List<dynamic> doorstabledatalist = [];
-  List<dynamic> ceillingtabledatalist = [];
-  List<dynamic> flooringtabledatalist = [];
-  List<dynamic> inspectiontabledatalist = [];
-  List<dynamic> inronitetabledatalist = [];
-  List<dynamic> paintingtabledatalist = [];
-  List<dynamic> pavingtabledatalist = [];
-  List<dynamic> roofingtabledatalist = [];
-  List<dynamic> proofingtabledatalist = [];
 
   late QualityExcavationDataSource _qualityExcavationDataSource;
   late QualityBackFillingDataSource _qualityBackFillingDataSource;
@@ -98,6 +117,7 @@ class _CivilFieldState extends State<CivilField> {
   late QualityPaintingDataSource _qualityPaintingDataSource;
   late QualityRoofingDataSource _qualityRoofingDataSource;
   late QualityProofingDataSource _qualityProofingDataSource;
+  late QualityPavingDataSource _qualityPavingDataSource;
 
   List<QualitychecklistModel> qualitylisttable1 = <QualitychecklistModel>[];
   List<QualitychecklistModel> qualitylisttable2 = <QualitychecklistModel>[];
@@ -118,8 +138,10 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
-    print('Init method running');
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+    pr = ProgressDialog(context,
+        customBody:
+            Container(height: 200, width: 100, child: const LoadingPdf()));
     _stream = FirebaseFirestore.instance
         .collection('CivilQualityChecklist')
         .doc('${widget.depoName}')
@@ -135,66 +157,67 @@ class _CivilFieldState extends State<CivilField> {
     getTableData().whenComplete(() {
       qualitylisttable1 = checkTable ? excavation_getData() : data;
       _qualityExcavationDataSource = QualityExcavationDataSource(
-          qualitylisttable1, widget.depoName!, cityName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable1 = checkTable ? excavation_getData() : data;
-      _qualityExcavationDataSource = QualityExcavationDataSource(
-          qualitylisttable1, widget.depoName!, cityName!);
+          qualitylisttable1, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
       qualitylisttable2 = checkTable ? backfilling_getData() : data;
       _qualityBackFillingDataSource = QualityBackFillingDataSource(
-          qualitylisttable2, widget.depoName!, cityName!);
+        qualitylisttable2,
+        cityName!,
+        widget.depoName!,
+      );
       _dataGridController = DataGridController();
-
       qualitylisttable3 = checkTable ? massonary_getData() : data;
       _qualityMassonaryDataSource = QualityMassonaryDataSource(
-          qualitylisttable3, widget.depoName!, cityName!);
+        qualitylisttable3,
+        cityName!,
+        widget.depoName!,
+      );
       _dataGridController = DataGridController();
-
       qualitylisttable4 = checkTable ? glazzing_getData() : data;
       _qualityGlazzingDataSource = QualityGlazzingDataSource(
-          qualitylisttable4, widget.depoName!, cityName!);
+        qualitylisttable4,
+        cityName!,
+        widget.depoName!,
+      );
       _dataGridController = DataGridController();
-
       qualitylisttable5 = checkTable ? ceilling_getData() : data;
       _qualityCeillingDataSource = QualityCeillingDataSource(
-          qualitylisttable5, widget.depoName!, cityName!);
-      _dataGridController = DataGridController();
-
+          qualitylisttable5, cityName!, widget.depoName!);
       qualitylisttable6 = checkTable ? florring_getData() : data;
       _qualityflooringDataSource = QualityflooringDataSource(
-          qualitylisttable6, widget.depoName!, cityName!);
+        qualitylisttable6,
+        cityName!,
+        widget.depoName!,
+      );
       _dataGridController = DataGridController();
-
       qualitylisttable7 = checkTable ? inspection_getData() : data;
       _qualityInspectionDataSource = QualityInspectionDataSource(
-          qualitylisttable7, widget.depoName!, cityName!);
+          qualitylisttable7, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
-
       qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
       _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
-          qualitylisttable8, widget.depoName!, cityName!);
+          qualitylisttable8, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
-
       qualitylisttable9 = checkTable ? painting_getData() : data;
       _qualityPaintingDataSource = QualityPaintingDataSource(
-          qualitylisttable9, widget.depoName!, cityName!);
+          qualitylisttable9, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
-
       qualitylisttable10 = checkTable ? paving_getData() : data;
+      _qualityPavingDataSource = QualityPavingDataSource(
+          qualitylisttable10, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
-
       qualitylisttable11 = checkTable ? roofing_getData() : data;
       _qualityRoofingDataSource = QualityRoofingDataSource(
-          qualitylisttable11, widget.depoName!, cityName!);
+          qualitylisttable11, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
-
       qualitylisttable12 = checkTable ? proofing_getData() : data;
       _qualityProofingDataSource = QualityProofingDataSource(
-          qualitylisttable12, widget.depoName!, cityName!);
+          qualitylisttable12, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
+      isLoading = false;
+      setState(() {});
     });
 
     super.initState();
@@ -207,10 +230,12 @@ class _CivilFieldState extends State<CivilField> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(
+            downloadFun: downloadPDF,
             depoName: widget.depoName!,
             text: '${widget.title}',
             haveCalender: true,
             haveSynced: true,
+            isDownload: true,
             haveSummary: false,
             onTap: () => Navigator.push(
                 context,
@@ -247,7 +272,7 @@ class _CivilFieldState extends State<CivilField> {
                                                       ? _qualityPaintingDataSource
                                                       : widget.fieldclnName ==
                                                               'Paving'
-                                                          ? _qualityPaintingDataSource
+                                                          ? _qualityPavingDataSource
                                                           : widget.fieldclnName ==
                                                                   'Roofing'
                                                               ? _qualityRoofingDataSource
@@ -325,6 +350,7 @@ class _CivilFieldState extends State<CivilField> {
                               return SfDataGridTheme(
                                 data: SfDataGridThemeData(
                                     gridLineColor: blue,
+                                    headerColor: white,
                                     gridLineStrokeWidth: 2,
                                     frozenPaneLineColor: blue),
                                 child: SfDataGrid(
@@ -354,7 +380,7 @@ class _CivilFieldState extends State<CivilField> {
                                                                       ? _qualityPaintingDataSource
                                                                       : widget.fieldclnName ==
                                                                               'Paving'
-                                                                          ? _qualityPaintingDataSource
+                                                                          ? _qualityPavingDataSource
                                                                           : widget.fieldclnName == 'Roofing'
                                                                               ? _qualityRoofingDataSource
                                                                               : _qualityProofingDataSource,
@@ -498,67 +524,9 @@ class _CivilFieldState extends State<CivilField> {
                               //     ),
                               //   );
                             } else if (snapshot.hasData) {
-                              getTableData();
-                              // alldata = '';
-                              // alldata = snapshot.data['data'] as List<dynamic>;
-                              // qualitylisttable1.clear();
-                              // alldata.forEach((element) {
-                              //   qualitylisttable1
-                              //       .add(QualitychecklistModel.fromJson(element));
-                              //   widget.fieldclnName == 'Exc'
-                              //       ? _qualityExcavationDataSource =
-                              //           QualityExcavationDataSource(qualitylisttable1,
-                              //               widget.depoName!, cityName!)
-                              //       : widget.fieldclnName == 'BackFilling'
-                              //           ? _qualityBackFillingDataSource =
-                              //               QualityBackFillingDataSource(
-                              //                   qualitylisttable1,
-                              //                   widget.depoName!,
-                              //                   cityName!)
-                              //           : widget.fieldclnName == 'Massonary'
-                              //               ? _qualityMassonaryDataSource =
-                              //                   QualityMassonaryDataSource(
-                              //                       qualitylisttable1,
-                              //                       widget.depoName!,
-                              //                       cityName!)
-                              //               : widget.fieldclnName == 'Glazzing'
-                              //                   ? _qualityGlazzingDataSource =
-                              //                       QualityGlazzingDataSource(
-                              //                           qualitylisttable1,
-                              //                           widget.depoName!,
-                              //                           cityName!)
-                              //                   : widget.fieldclnName == 'Ceilling'
-                              //                       ? _qualityCeillingDataSource =
-                              //                           QualityCeillingDataSource(
-                              //                               qualitylisttable1,
-                              //                               widget.depoName!,
-                              //                               cityName!)
-                              //                       : widget.fieldclnName ==
-                              //                               'Flooring'
-                              //                           ? _qualityflooringDataSource =
-                              //                               QualityflooringDataSource(
-                              //                                   qualitylisttable1,
-                              //                                   widget.depoName!,
-                              //                                   cityName!)
-                              //                           : widget.fieldclnName == 'Inspection'
-                              //                               ? _qualityInspectionDataSource = QualityInspectionDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                              //                               : widget.fieldclnName == 'Ironite'
-                              //                                   ? _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                              //                                   : widget.fieldclnName == 'Painting'
-                              //                                       ? _qualityPaintingDataSource = QualityPaintingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                              //                                       : widget.fieldclnName == 'Paving'
-                              //                                           ? _qualityPavingDataSource = QualityPavingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                              //                                           : widget.fieldclnName == 'Roofing'
-                              //                                               ? _qualityRoofingDataSource = QualityRoofingDataSource(qualitylisttable1, widget.depoName!, cityName!)
-                              //                                               : QualityProofingDataSource(qualitylisttable1, widget.depoName!, cityName!);
-                              //   _dataGridController = DataGridController();
-                              // });
-
                               return SfDataGridTheme(
                                 data: SfDataGridThemeData(
-                                    gridLineColor: blue,
-                                    gridLineStrokeWidth: 2,
-                                    frozenPaneLineColor: blue),
+                                    headerColor: white, gridLineColor: blue),
                                 child: SfDataGrid(
                                   source: widget.fieldclnName == 'Exc'
                                       ? _qualityExcavationDataSource
@@ -586,7 +554,7 @@ class _CivilFieldState extends State<CivilField> {
                                                                       ? _qualityPaintingDataSource
                                                                       : widget.fieldclnName ==
                                                                               'Paving'
-                                                                          ? _qualityPaintingDataSource
+                                                                          ? _qualityPavingDataSource
                                                                           : widget.fieldclnName == 'Roofing'
                                                                               ? _qualityRoofingDataSource
                                                                               : _qualityProofingDataSource,
@@ -752,16 +720,6 @@ class _CivilFieldState extends State<CivilField> {
   civilStoreData(BuildContext context, dynamic datasource, String depoName,
       String currentDate) {
     Map<String, dynamic> excavationTableData = Map();
-    // Map<String, dynamic> backfillingTableData = Map();
-    // Map<String, dynamic> massonaryTableData = Map();
-    // Map<String, dynamic> doorsTableData = Map();
-    // Map<String, dynamic> ceillingTableData = Map();
-    // Map<String, dynamic> flooringTableData = Map();
-    // Map<String, dynamic> inspectionTableData = Map();
-    // Map<String, dynamic> paintingTableData = Map();
-    // Map<String, dynamic> pavingTableData = Map();
-    // Map<String, dynamic> roofingTableData = Map();
-    // Map<String, dynamic> proofingTableData = Map();
 
     for (var i in datasource.dataGridRows) {
       for (var data in i.getCells()) {
@@ -771,6 +729,7 @@ class _CivilFieldState extends State<CivilField> {
       }
 
       excavationtabledatalist.add(excavationTableData);
+      print('TableList - $excavationtabledatalist');
       excavationTableData = {};
     }
 
@@ -861,77 +820,11 @@ class _CivilFieldState extends State<CivilField> {
           documentSnapshot.data() as Map<String, dynamic>;
 
       List<dynamic> mapData = tempData['data'];
+      print(mapData);
 
       data = mapData.map((map) => QualitychecklistModel.fromJson(map)).toList();
       checkTable = false;
     }
-
-    isLoading = false;
-    setState(() {});
-
-    // if (widget.fieldclnName == 'BackFilling') {
-    //   qualitylisttable2 = checkTable ? backfilling_getData() : data;
-    //   _qualityBackFillingDataSource = QualityBackFillingDataSource(
-    //       qualitylisttable2, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Exc') {
-    //   qualitylisttable1 = checkTable ? excavation_getData() : data;
-    //   _qualityExcavationDataSource = QualityExcavationDataSource(
-    //       qualitylisttable1, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'BackFilling') {
-    //   qualitylisttable3 = checkTable ? massonary_getData() : data;
-    //   _qualityMassonaryDataSource = QualityMassonaryDataSource(
-    //       qualitylisttable3, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Glazzing') {
-    //   qualitylisttable4 = checkTable ? glazzing_getData() : data;
-    //   _qualityGlazzingDataSource = QualityGlazzingDataSource(
-    //       qualitylisttable4, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Ceilling') {
-    //   qualitylisttable5 = checkTable ? ceilling_getData() : data;
-    //   _qualityCeillingDataSource = QualityCeillingDataSource(
-    //       qualitylisttable5, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Flooring') {
-    //   qualitylisttable6 = checkTable ? florring_getData() : data;
-    //   _qualityflooringDataSource = QualityflooringDataSource(
-    //       qualitylisttable6, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Inspection') {
-    //   qualitylisttable7 = checkTable ? inspection_getData() : data;
-    //   _qualityInspectionDataSource = QualityInspectionDataSource(
-    //       qualitylisttable7, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Ironite') {
-    //   qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
-    //   _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
-    //       qualitylisttable8, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Painting') {
-    //   qualitylisttable9 = checkTable ? painting_getData() : data;
-    //   _qualityPaintingDataSource = QualityPaintingDataSource(
-    //       qualitylisttable9, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Paving') {
-    //   qualitylisttable10 = checkTable ? paving_getData() : data;
-    //   _qualityPavingDataSource = QualityPavingDataSource(
-    //       qualitylisttable10, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Roofing') {
-    //   print('roofing');
-    //   qualitylisttable11 = checkTable ? roofing_getData() : data;
-    //   _qualityRoofingDataSource = QualityRoofingDataSource(
-    //       qualitylisttable11, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // } else if (widget.fieldclnName == 'Proofing') {
-    //   print('Proofing');
-    //   qualitylisttable12 = checkTable ? proofing_getData() : data;
-    //   _qualityProofingDataSource = QualityProofingDataSource(
-    //       qualitylisttable12, widget.depoName!, cityName!);
-    //   _dataGridController = DataGridController();
-    // }
   }
 
   void chooseDate(BuildContext dialogcontext) {
@@ -947,14 +840,7 @@ class _CivilFieldState extends State<CivilField> {
                     view: DateRangePickerView.month,
                     showTodayButton: false,
                     onSelectionChanged:
-                        (DateRangePickerSelectionChangedArgs args) {
-                      // if (args.value is PickerDateRange) {
-                      //   // rangeStartDate = args.value.startDate;
-                      //   // rangeEndDate = args.value.endDate;
-                      // } else {
-                      //   final List<PickerDateRange> selectedRanges = args.value;
-                      // }
-                    },
+                        (DateRangePickerSelectionChangedArgs args) {},
                     selectionMode: DateRangePickerSelectionMode.single,
                     showActionButtons: true,
                     onSubmit: ((value) {
@@ -969,96 +855,7 @@ class _CivilFieldState extends State<CivilField> {
                         checkTable = true;
                         _fetchUserData();
                         data.clear();
-                        getTableData().whenComplete(() {
-                          qualitylisttable1 =
-                              checkTable ? excavation_getData() : data;
-                          _qualityExcavationDataSource =
-                              QualityExcavationDataSource(qualitylisttable1,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable1 =
-                              checkTable ? excavation_getData() : data;
-                          _qualityExcavationDataSource =
-                              QualityExcavationDataSource(qualitylisttable1,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable2 =
-                              checkTable ? backfilling_getData() : data;
-                          _qualityBackFillingDataSource =
-                              QualityBackFillingDataSource(qualitylisttable2,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable3 =
-                              checkTable ? massonary_getData() : data;
-                          _qualityMassonaryDataSource =
-                              QualityMassonaryDataSource(qualitylisttable3,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable4 =
-                              checkTable ? glazzing_getData() : data;
-                          _qualityGlazzingDataSource =
-                              QualityGlazzingDataSource(qualitylisttable4,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable5 =
-                              checkTable ? ceilling_getData() : data;
-                          _qualityCeillingDataSource =
-                              QualityCeillingDataSource(qualitylisttable5,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable6 =
-                              checkTable ? florring_getData() : data;
-                          _qualityflooringDataSource =
-                              QualityflooringDataSource(qualitylisttable6,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable7 =
-                              checkTable ? inspection_getData() : data;
-                          _qualityInspectionDataSource =
-                              QualityInspectionDataSource(qualitylisttable7,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable8 =
-                              checkTable ? ironite_florring_getData() : data;
-                          _qualityIroniteflooringDataSource =
-                              QualityIroniteflooringDataSource(
-                                  qualitylisttable8,
-                                  widget.depoName!,
-                                  cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable9 =
-                              checkTable ? painting_getData() : data;
-                          _qualityPaintingDataSource =
-                              QualityPaintingDataSource(qualitylisttable9,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable10 =
-                              checkTable ? paving_getData() : data;
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable11 =
-                              checkTable ? roofing_getData() : data;
-                          _qualityRoofingDataSource = QualityRoofingDataSource(
-                              qualitylisttable11, widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-
-                          qualitylisttable12 =
-                              checkTable ? proofing_getData() : data;
-                          _qualityProofingDataSource =
-                              QualityProofingDataSource(qualitylisttable12,
-                                  widget.depoName!, cityName!);
-                          _dataGridController = DataGridController();
-                        });
+                        getTableData();
                       });
                     }),
                     onCancel: () {
@@ -1066,5 +863,490 @@ class _CivilFieldState extends State<CivilField> {
                     },
                   )),
             ));
+  }
+
+  Future<Uint8List> _generateCivilPdf() async {
+    await pr!.show();
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    const cellStyle = pw.TextStyle(
+      color: PdfColors.black,
+      fontSize: 14,
+    );
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<List<dynamic>> fieldData = [
+      ['PROJECT :', projectController.text],
+      ['Date :', dateController.text],
+      ['Location :', locationController.text],
+      ['Component of structure : ', componentController.text],
+      ['Vendor / Sub Vendor :', vendorController.text],
+      ['Grid / Axis & Level :', gridController.text],
+      ['Drawing Number :', drawingController.text],
+      ['Type of Filling :', fillingController.text],
+    ];
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(pw.TableRow(children: [
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Sr No',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding:
+              const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+          child: pw.Center(
+              child: pw.Text('Activity',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Responsibility',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Reference',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Observation',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image1',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image2',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Image3',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+    ]));
+
+    List<dynamic> userData = [];
+
+    if (data.isNotEmpty) {
+      List<pw.Widget> imageUrls = [];
+
+      for (QualitychecklistModel mapData in data) {
+        String imagesPath =
+            'QualityChecklist/civil_Engineer/$cityName/${widget.depoName}/$userId/${widget.fieldclnName} Table/$selectedDate/${mapData.srNo}';
+        ListResult result =
+            await FirebaseStorage.instance.ref().child(imagesPath).listAll();
+
+        if (result.items.isNotEmpty) {
+          for (var image in result.items) {
+            String downloadUrl = await image.getDownloadURL();
+            if (image.name.endsWith('.pdf')) {
+              imageUrls.add(
+                pw.Container(
+                    width: 60,
+                    alignment: pw.Alignment.center,
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    child: pw.UrlLink(
+                        child: pw.Text(image.name,
+                            style: const pw.TextStyle(color: PdfColors.blue)),
+                        destination: downloadUrl)),
+              );
+            } else {
+              final myImage = await networkImage(downloadUrl);
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Center(
+                      child: pw.Image(myImage),
+                    )),
+              );
+            }
+          }
+          if (imageUrls.length < 3) {
+            int imageLoop = 3 - imageUrls.length;
+            for (int i = 0; i < imageLoop; i++) {
+              imageUrls.add(
+                pw.Container(
+                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    width: 60,
+                    height: 100,
+                    child: pw.Text('')),
+              );
+            }
+          } else {
+            if (imageUrls.length > 3) {
+              int imageLoop = 11 - imageUrls.length;
+              for (int i = 0; i < imageLoop; i++) {
+                imageUrls.add(
+                  pw.Container(
+                      padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      width: 60,
+                      height: 100,
+                      child: pw.Text('')),
+                );
+              }
+            }
+          }
+        } else {
+          int imageLoop = 3;
+          for (int i = 0; i < imageLoop; i++) {
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.Text('')),
+            );
+          }
+        }
+
+        result.items.clear();
+
+        //Text Rows of PDF Table
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(3.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.srNo.toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.checklist,
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.responsibility,
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.reference.toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData.observation.toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 14)))),
+          imageUrls[0],
+          imageUrls[1],
+          imageUrls[2]
+        ]));
+
+        if (imageUrls.length - 3 > 0) {
+          //Image Rows of PDF Table
+          rows.add(pw.TableRow(children: [
+            pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: pw.Text('')),
+            pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                width: 60,
+                height: 100,
+                child: pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                    children: [
+                      imageUrls[3],
+                      imageUrls[4],
+                    ])),
+            imageUrls[5],
+            imageUrls[6],
+            imageUrls[7],
+            imageUrls[8],
+            imageUrls[9],
+            imageUrls[10],
+          ]));
+        }
+        imageUrls.clear();
+      }
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(
+          1300,
+          900,
+          marginLeft: 70,
+          marginRight: 70,
+          marginBottom: 80,
+          marginTop: 40,
+        ),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                border: pw.Border(
+                    bottom: pw.BorderSide(width: 0.5, color: PdfColors.grey)),
+              ),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text(
+                        'Civil Quality Report / ${widget.fieldclnName} Table',
+                        textScaleFactor: 2,
+                        style: const pw.TextStyle(
+                          color: PdfColors.blue700,
+                        ),
+                      ),
+                      pw.SizedBox(width: 20),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                    text: pw.TextSpan(
+                      children: [
+                        const pw.TextSpan(
+                            text: 'Place : ',
+                            style: pw.TextStyle(
+                                color: PdfColors.black, fontSize: 17)),
+                        pw.TextSpan(
+                          text: '$cityName / ${widget.depoName}',
+                          style: const pw.TextStyle(
+                            color: PdfColors.blue700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: date,
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : $userId',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table.fromTextArray(
+            columnWidths: {
+              0: const pw.FixedColumnWidth(100),
+              1: const pw.FixedColumnWidth(100),
+            },
+            headers: ['Details', 'Values'],
+            headerStyle: headerStyle,
+            headerPadding: const pw.EdgeInsets.all(10.0),
+            data: fieldData,
+            cellHeight: 35,
+            cellStyle: cellStyle,
+          )
+        ],
+      ),
+    );
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text(
+                        'Civil Quality Report / ${widget.fieldclnName} Table',
+                        textScaleFactor: 2,
+                        style: const pw.TextStyle(
+                          color: PdfColors.blue700,
+                        ),
+                      ),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - $userId',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text(
+                    'Place:  $cityName/${widget.depoName}',
+                    textScaleFactor: 1.6,
+                  ),
+                  pw.Text(
+                    'Date:  $date ',
+                    textScaleFactor: 1.6,
+                  )
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+              columnWidths: {
+                0: const pw.FixedColumnWidth(30),
+                1: const pw.FixedColumnWidth(160),
+                2: const pw.FixedColumnWidth(70),
+                3: const pw.FixedColumnWidth(70),
+                4: const pw.FixedColumnWidth(70),
+                5: const pw.FixedColumnWidth(70),
+                6: const pw.FixedColumnWidth(70),
+                7: const pw.FixedColumnWidth(70),
+              },
+              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+              tableWidth: pw.TableWidth.max,
+              border: pw.TableBorder.all(),
+              children: rows)
+        ],
+      ),
+    );
+
+    final Uint8List pdfData = await pdf.save();
+    final String pdfPath =
+        'CivilQualityReport_${widget.title}($userId/$selectedDate).pdf';
+
+    // Save the PDF file to device storage
+    pr!.hide();
+
+    return pdfData;
+  }
+
+  Future<void> downloadPDF() async {
+    if (await Permission.storage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
+
+      await pr.show();
+
+      final pdfData = await _generateCivilPdf();
+
+      String fileName = 'CivilQualityReport.pdf';
+
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
+
+      await pr.hide();
+    }
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'Civil Quality Downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
+  }
+
+  Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+    if (await Permission.storage.request().isGranted) {
+      final documentDirectory =
+          (await DownloadsPath.downloadsDirectory())?.path;
+      final file = File('$documentDirectory/$fileName');
+
+      int counter = 1;
+      String newFilePath = file.path;
+      await file.writeAsBytes(pdfData);
+      pathToOpenFile = newFilePath.toString();
+      return file;
+      // }
+    }
+    return File('');
   }
 }

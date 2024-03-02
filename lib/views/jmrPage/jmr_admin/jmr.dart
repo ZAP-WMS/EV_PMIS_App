@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../components/Loading_page.dart';
@@ -28,6 +29,7 @@ class _JmrState extends State<Jmr> {
 
   @override
   void initState() {
+    print('This jmr is working');
     generateAllJmrList();
     super.initState();
   }
@@ -145,20 +147,24 @@ class _JmrState extends State<Jmr> {
                   shrinkWrap: true,
                   itemCount: userList.length, //Length of user ID
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          left: 2.0, right: 2.0, bottom: 2.0),
+                    return Container(
+                      margin: const EdgeInsets.only(
+                          left: 5.0, right: 5.0, top: 5.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: blue),
+                      ),
                       child: ExpansionTile(
-                        backgroundColor: Colors.blue[500],
+                        // backgroundColor: Colors.blue[500],
                         trailing: const Icon(
                           Icons.arrow_drop_down,
                           color: Colors.white,
                         ),
-                        collapsedBackgroundColor: Colors.blue[400],
+                        collapsedBackgroundColor:
+                            const Color.fromARGB(255, 255, 255, 255),
                         title: Text(
                           'UserID - ${userList[index]}',
-                          style: const TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: blue, fontWeight: FontWeight.bold),
                         ),
                         children: [
                           ListView.builder(
@@ -167,7 +173,7 @@ class _JmrState extends State<Jmr> {
                               itemBuilder: (context, index2) {
                                 return Container(
                                   padding: const EdgeInsets.only(
-                                      left: 15.0, right: 0.0, bottom: 10.0),
+                                      left: 5.0, right: 0.0, bottom: 10.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -189,7 +195,7 @@ class _JmrState extends State<Jmr> {
                                       const SizedBox(
                                         width: 5.0,
                                       ),
-                                      SizedBox(
+                                      Container(
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.8,
@@ -198,7 +204,10 @@ class _JmrState extends State<Jmr> {
                                               const BouncingScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
                                           child: jmrTabList(
-                                              userList[index], index2, index),
+                                            userList[index],
+                                            index2,
+                                            index,
+                                          ),
                                         ),
                                       )
                                     ],
@@ -224,60 +233,83 @@ class _JmrState extends State<Jmr> {
     }
     return SizedBox(
       height: 30,
-      width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
         children: [
-          SizedBox(
-            height: 30,
-            width: MediaQuery.of(context).size.width * 0.77,
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount:
-                  currentTabList[secondIndex], // Length from list of jmr items
-              shrinkWrap: true,
-              itemBuilder: (context, index3) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.white)),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => JmrFieldPageAdmin(
-                                userId: currentUserId,
-                                showTable: true,
-                                dataFetchingIndex: index3 + 1,
-                                cityName: widget.cityName,
-                                title:
-                                    '${tabName[_selectedIndex]}-${title[firstIndex]}',
-                                jmrTab: title[secondIndex],
-                                depoName: widget.depoName,
-                                jmrIndex: firstIndex + 1,
-                                tabName: tabName[_selectedIndex],
-                              ),
-                            ));
-                      },
-                      child: Text(
-                        'JMR${index3 + 1}',
-                        style: TextStyle(color: Colors.blue[900]),
-                      )),
-                );
-              },
-            ),
+          Row(
+            children: [
+              Container(
+                height: 30,
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: currentTabList[
+                      secondIndex], // Length from list of jmr items
+                  shrinkWrap: true,
+                  itemBuilder: (context, index3) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: blue),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        width: 70,
+                        child: ElevatedButton(
+                          style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.white)),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => JmrFieldPageAdmin(
+                                    userId: currentUserId,
+                                    showTable: true,
+                                    dataFetchingIndex: index3 + 1,
+                                    cityName: widget.cityName,
+                                    title:
+                                        '${tabName[_selectedIndex]}-${title[firstIndex]}',
+                                    jmrTab: title[secondIndex],
+                                    depoName: widget.depoName,
+                                    jmrIndex: firstIndex + 1,
+                                    tabName: tabName[_selectedIndex],
+                                  ),
+                                ));
+                          },
+                          child: Text(
+                            'JMR${index3 + 1}',
+                            style: TextStyle(
+                                color: Colors.blue[900], fontSize: 11),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+            ],
           ),
-          const SizedBox(
-            width: 3,
-          ),
-          showDots
-              ? const Text(
-                  '...',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
-                )
-              : Container()
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewAllPdf(
+                      userId: currentUserId,
+                      title: 'jmr',
+                      cityName: widget.cityName!,
+                      depoName: widget.depoName!,
+                      fldrName:
+                          '/jmrFiles/${widget.cityName}/${widget.depoName}/$currentUserId/${secondIndex + 1}'),
+                ),
+              );
+            },
+            child: const Text('View'),
+          )
         ],
       ),
     );

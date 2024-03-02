@@ -38,7 +38,7 @@ class QualitychecklistModel {
       DataGridCell<String>(columnName: 'responsibility', value: responsibility),
       DataGridCell<dynamic>(columnName: 'Reference', value: reference),
       DataGridCell<String>(columnName: 'observation', value: observation),
-      // DataGridCell<int>(columnName: 'photoNo', value: photoNo),
+
       const DataGridCell<Widget>(columnName: 'Upload', value: null),
       const DataGridCell<Widget>(columnName: 'View', value: null),
       // const DataGridCell(columnName: 'Delete', value: null)

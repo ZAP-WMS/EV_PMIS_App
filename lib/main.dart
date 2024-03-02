@@ -61,6 +61,8 @@ void main() async {
     DeviceOrientation.landscapeLeft
   ]);
 
+  await Firebase.initializeApp();
+
   // NotificationService().initialize();
   // NotificationService().getFCMToken();
 // To show file downloaded notification for pdf
@@ -73,9 +75,9 @@ void main() async {
     initializationSettings,
     onDidReceiveNotificationResponse: (details) async {
       await OpenFile.open(details.payload!);
-      // await flutterLocalNotificationsPlugin.zonedSchedule(id, title, body, scheduledDate, notificationDetails, uiLocalNotificationDateInterpretation: uiLocalNotificationDateInterpretation)
     },
   );
+
 // To request permission for notification and storage
   // await [
   //   Permission.notification,

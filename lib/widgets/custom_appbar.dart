@@ -14,18 +14,21 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   bool isprogress;
   bool haveupload;
   String? depoName;
+  bool isDownload;
+  void Function()? downloadFun;
   final void Function()? store;
-  CustomAppBar({
-    super.key,
-    required this.title,
-    required this.height,
-    this.isprogress = false,
-    required this.isSync,
-    this.haveupload = false,
-    required this.isCentered,
-    this.store,
-    this.depoName,
-  });
+  CustomAppBar(
+      {super.key,
+      required this.title,
+      required this.height,
+      this.isprogress = false,
+      required this.isSync,
+      this.haveupload = false,
+      required this.isCentered,
+      this.store,
+      this.depoName,
+      this.isDownload = false,
+      this.downloadFun});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -175,7 +178,25 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           style: TextStyle(color: white, fontSize: 12),
                         )),
                   )
-                : Container()
+                : Container(),
+
+        widget.isDownload
+            ? InkWell(
+                onTap: widget.downloadFun,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 8, bottom: 8, right: 5),
+                  width: 60,
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(
+                    Icons.download,
+                    color: blue,
+                  ),
+                ),
+              )
+            : Container()
       ],
     );
   }

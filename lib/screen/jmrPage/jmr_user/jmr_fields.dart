@@ -3,16 +3,13 @@ import 'package:ev_pmis_app/viewmodels/jmr.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../components/Loading_page.dart';
-import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:ev_pmis_app/datasource/jmr_datasource.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/nodata_available.dart';
 import 'package:intl/intl.dart';
 
 import 'jmr_table.dart';
@@ -150,7 +147,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
               ),
               body: SingleChildScrollView(
                 child: Container(
-                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10.0),
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
@@ -168,8 +165,8 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                       HeaderValue(
                           context, widget.showTable, 'Note     ', 'Note', note),
                       Container(
-                        height: 60,
-                        padding: const EdgeInsets.only(right: 10, top: 10),
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.96,
                         child: Row(
                           children: [
                             const Padding(
@@ -177,11 +174,12 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                               child: Text(
                                 'Working \nDates       ',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                    fontSize: 11, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Expanded(
                                 child: TextFormField(
+                              style: const TextStyle(fontSize: 11),
                               controller: startDate,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
@@ -192,6 +190,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                             const SizedBox(width: 10),
                             Expanded(
                                 child: TextFormField(
+                                    style: const TextStyle(fontSize: 11),
                                     controller: endDate,
                                     decoration: const InputDecoration(
                                         contentPadding:
@@ -570,25 +569,25 @@ List<JMRModel> getData() {
 HeaderValue(BuildContext context, bool isReadOnly, String title,
     String hintValue, TextEditingController fieldData) {
   return Container(
-    padding: EdgeInsets.only(top: 5, bottom: 5),
+    margin: const EdgeInsets.only(bottom: 20),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
         ),
         SizedBox(
-          width: 300,
+          width: MediaQuery.of(context).size.width * 0.75,
           child: TextFormField(
             readOnly: isReadOnly,
             controller: fieldData,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               hintText: hintValue,
-              contentPadding: const EdgeInsets.only(left: 4, right: 4),
+              contentPadding: const EdgeInsets.only(left: 5, right: 5),
             ),
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 12),
           ),
         ),
       ],

@@ -78,6 +78,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^20.3.38
   syncfusion_flutter_pdfviewer: ^20.4.54
   tab_indicator_styler: ^2.0.0
+  dropdown_button2: ^2.1.4
   url_launcher: null
 
 dev_dependencies:

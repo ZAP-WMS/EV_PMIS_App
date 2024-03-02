@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../viewmodels/daily_projectModel.dart';
 import '../viewmodels/energy_management.dart';
+
+List<int> globalRowIndex = [];
 
 class SummaryProvider extends ChangeNotifier {
   Map<String, dynamic> alldate = Map();
@@ -30,19 +33,25 @@ class SummaryProvider extends ChangeNotifier {
     for (DateTime initialdate = date;
         initialdate.isBefore(endDate.add(const Duration(days: 1)));
         initialdate = initialdate.add(const Duration(days: 1))) {
-      print(DateFormat.yMMMMd().format(initialdate));
+      print(
+        DateFormat.yMMMMd().format(initialdate),
+      );
       FirebaseFirestore.instance
           .collection('DailyProject3')
           .doc(depoName)
-          .collection(DateFormat.yMMMMd().format(initialdate))
+          .collection(
+            DateFormat.yMMMMd().format(initialdate),
+          )
           .doc(userId)
           .get()
           .then((value) {
         if (value.data() != null) {
-          print('swswssw${value.data()!['data'].length}');
           for (int i = 0; i < value.data()!['data'].length; i++) {
+            globalItemLengthList.add(0);
+            isShowPinIcon.add(false);
             var _data = value.data()!['data'][i];
             loadeddata.add(DailyProjectModel.fromjson(_data));
+            globalRowIndex.add(i + 1);
           }
           _dailydata = loadeddata;
           notifyListeners();
