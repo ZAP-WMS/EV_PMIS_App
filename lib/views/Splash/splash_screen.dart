@@ -43,8 +43,8 @@ class SplashScreenState extends State<SplashScreen>
   late SharedPreferences sharedPreferences;
 
   late FirebaseMessaging _messaging;
-  int _totalNotification = 0;
-  PushNotification? _notificationInfo;
+  // int _totalNotification = 0;
+  // PushNotification? _notificationInfo;
 
 // WHEN APP IS OPENED
   void registerNotification() async {
@@ -64,27 +64,39 @@ class SplashScreenState extends State<SplashScreen>
           dataTitle: message.data['title'] ?? '',
           datBody: message.data['body'] ?? '',
         );
-        if (mounted) {
-          setState(() {
-            _notificationInfo = notification;
-            _totalNotification++;
-          });
-        }
         if (notification != null) {
           // For Display the notification in Overlay
           print(notification.title!);
           //   sendNotificationToUser(notification.title!, notification.body!);
-          showSimpleNotification(
-            Text(notification.title!),
-            subtitle: Text(notification.body ?? ''),
-            background: blue,
-            duration: const Duration(seconds: 2),
-          );
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => userList()
-                  // NotificationPage(notification: notification),
-                  ));
+          showSimpleNotification(Text(notification.title!),
+              subtitle: Text(notification.body ?? ''),
+              background: blue,
+              duration: const Duration(seconds: 2),
+              trailing: Builder(builder: (context) {
+            return TextButton(
+              child: Text(
+                'See User',
+                style: TextStyle(color: white, fontSize: 16),
+              ),
+              onPressed: () {
+                // Add your action here
+                print('Notification tapped!');
+                // Navigate to the desired screen, for example
+                Navigator.pushReplacementNamed(context, '/user-list');
+              },
+            );
+          }));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => userList()
+          //         // NotificationPage(notification: notification),
+          //         ));
+
+          // if (mounted) {
+          //   setState(() {
+          //     _notificationInfo = notification;
+          //     _totalNotification++;
+          //   });
         }
       });
     } else {
@@ -92,7 +104,7 @@ class SplashScreenState extends State<SplashScreen>
     }
   }
 
-  // for handling  the notification in terminate state
+  // for handling  the notification in terminate state when app are terminated from background
   checkforInitialMessage() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
@@ -107,19 +119,20 @@ class SplashScreenState extends State<SplashScreen>
         datBody: initialMessage.data['body'] ?? '',
       );
       if (initialMessage != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => userList()
-                // NotificationPage(notification: notification),
-                ));
+        Navigator.pushReplacementNamed(context, '/user-list');
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (context) => userList()
+        //         // NotificationPage(notification: notification),
+        //         ));
       }
       //    sendNotificationToUser(notification.title!, notification.body!);
-      if (mounted) {
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotification++;
-        });
-      }
+      // if (mounted) {
+      //   setState(() {
+      //     _notificationInfo = notification;
+      //     _totalNotification++;
+      //   });
+      // }
     }
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     // NotificationSettings settings = await _messaging.requestPermission(
@@ -156,7 +169,7 @@ class SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
-    _totalNotification = 0;
+    // _totalNotification = 0;
     registerNotification();
     checkforInitialMessage();
 
@@ -169,18 +182,15 @@ class SplashScreenState extends State<SplashScreen>
         dataTitle: message.data['title'] ?? '',
         datBody: message.data['body'] ?? '',
       );
-      
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => userList()),
-      // );
 
-      if (mounted) {
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotification++;
-        });
-      }
+      Navigator.pushReplacementNamed(context, '/user-list');
+
+      // if (mounted) {
+      //   setState(() {
+      //     _notificationInfo = notification;
+      //     _totalNotification++;
+      //   });
+      // }
     });
     super.initState();
     _controller =

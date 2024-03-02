@@ -31,7 +31,7 @@ class _DepotPageState extends State<DepotPage> {
   void initState() {
     getUserId();
     // TODO: implement initState
-    getToken();
+
     super.initState();
     print('depotPage - UserId- ${userId}');
   }
@@ -189,11 +189,11 @@ class _DepotPageState extends State<DepotPage> {
     ]);
   }
 
-  void getToken() async {
-    String? token = await NotificationService().getFCMToken();
-    // Now you can use the token variable here
-    NotificationService().saveTokenToFirestore(userId, token);
+  // void getToken() async {
+  //   String? token = await NotificationService().getFCMToken();
+  //   // Now you can use the token variable here
+  //   NotificationService().saveTokenToFirestore(userId, token);
 
-    print('FCM Token: $token');
-  }
+  //   print('FCM Token: $token');
+  // }
 }

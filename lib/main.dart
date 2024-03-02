@@ -139,6 +139,7 @@ class _MyAppState extends State<MyApp> {
     List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
 
     for (int i = 0; i < tempList.length; i++) {
+      print('userId${tempList[i]['userId'].toString()}');
       if (tempList[i]['userId'].toString() == userId.toString()) {
         _firebaseMessaging.getToken().then((value) {
           print("token::::$value");
