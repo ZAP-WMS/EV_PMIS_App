@@ -366,7 +366,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                         autoFitPadding:
                                             const EdgeInsets.symmetric(
                                                 horizontal: 16),
-                                        allowEditing: true,
+                                        allowEditing: false,
                                         width: 120,
                                         label: Container(
                                           padding: const EdgeInsets.symmetric(
@@ -650,7 +650,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 120,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(

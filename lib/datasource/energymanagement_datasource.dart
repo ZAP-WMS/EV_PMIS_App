@@ -261,7 +261,7 @@ class EnergyManagementDatasource extends DataGridSource {
     } else if (column.columnName == 'energyConsumed') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<double>(
-              columnName: 'energyConsumed', value: newCellValue);
+              columnName: 'energyConsumed', value: newCellValue as double);
       _energyManagement[dataRowIndex].energyConsumed = newCellValue as double;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -297,8 +297,7 @@ class EnergyManagementDatasource extends DataGridSource {
 
     final bool isNumericType = column.columnName == 'pssNo' ||
         column.columnName == 'chargerId' ||
-        // column.columnName == 'EndDate' ||
-        //    column.columnName == 'energyConsumed' ||
+        column.columnName == 'energyConsumed' ||
         column.columnName == 'endSoc' ||
         column.columnName == 'startSoc';
 
@@ -327,8 +326,12 @@ class EnergyManagementDatasource extends DataGridSource {
                 : TextInputType.text,
         onChanged: (String value) {
           if (value.isNotEmpty) {
+            if (column.columnName == 'energyConsumed') {
+              newCellValue = double.parse(value);
+            }
             if (isNumericType) {
-              newCellValue = value;
+              newCellValue = int.parse(value);
+              print(newCellValue);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {

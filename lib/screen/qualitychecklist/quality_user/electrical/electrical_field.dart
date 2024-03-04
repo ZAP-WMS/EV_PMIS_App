@@ -198,6 +198,56 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
   @override
   Widget build(BuildContext context) {
+    qualitylisttable1 = checkTable ? getData() : data;
+    _qualityPSSDataSource =
+        QualityPSSDataSource(qualitylisttable1, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable2 = checkTable ? rmu_getData() : data;
+    _qualityrmuDataSource =
+        QualityrmuDataSource(qualitylisttable2, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable3 = checkTable ? ct_getData() : data;
+    _qualityctDataSource =
+        QualityctDataSource(qualitylisttable3, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable4 = checkTable ? cmu_getData() : data;
+    _qualitycmuDataSource =
+        QualitycmuDataSource(qualitylisttable4, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable5 = checkTable ? acdb_getData() : data;
+    _qualityacdDataSource =
+        QualityacdDataSource(qualitylisttable5, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable6 = checkTable ? ci_getData() : data;
+    _qualityCIDataSource =
+        QualityCIDataSource(qualitylisttable6, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable7 = checkTable ? cdi_getData() : data;
+    _qualityCDIDataSource =
+        QualityCDIDataSource(qualitylisttable7, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable8 = checkTable ? msp_getData() : data;
+    _qualityMSPDataSource =
+        QualityMSPDataSource(qualitylisttable8, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable9 = checkTable ? charger_getData() : data;
+    _qualityChargerDataSource = QualityChargerDataSource(
+        qualitylisttable9, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable10 = checkTable ? earth_pit_getData() : data;
+    _qualityEPDataSource =
+        QualityEPDataSource(qualitylisttable10, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
     return Scaffold(
         drawer: const NavbarDrawer(),
         appBar: PreferredSize(

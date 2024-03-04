@@ -62,9 +62,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ? InkWell(
                   onTap: _togglePasswordView,
                   child: _isHidden
-                      ? const Icon(Icons.visibility_off)
+                      ? const Icon(Icons.visibility)
                       : Icon(
-                          Icons.visibility,
+                          Icons.visibility_off,
                           color: grey,
                         ))
               : const Text('')),

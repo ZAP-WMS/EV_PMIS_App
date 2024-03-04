@@ -456,7 +456,7 @@ class MonthlyDataSource extends DataGridSource {
             ?.toString() ??
         '';
 
-    newCellValue;
+    newCellValue = '';
 
     final bool isNumericType = column.columnName == 'OriginalDuration';
 

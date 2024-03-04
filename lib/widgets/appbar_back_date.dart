@@ -64,6 +64,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+       
         titleSpacing: 0,
         bottomOpacity: 3.0,
         backgroundColor: blue,

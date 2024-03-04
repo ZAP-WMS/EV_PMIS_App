@@ -136,10 +136,10 @@ class _CivilFieldState extends State<CivilField> {
     _fetchUserData();
 
     getTableData().whenComplete(() {
-      qualitylisttable1 = checkTable ? excavation_getData() : data;
-      _qualityExcavationDataSource = QualityExcavationDataSource(
-          qualitylisttable1, widget.depoName!, cityName!);
-      _dataGridController = DataGridController();
+      // qualitylisttable1 = checkTable ? excavation_getData() : data;
+      // _qualityExcavationDataSource = QualityExcavationDataSource(
+      //     qualitylisttable1, widget.depoName!, cityName!);
+      // _dataGridController = DataGridController();
 
       qualitylisttable1 = checkTable ? excavation_getData() : data;
       _qualityExcavationDataSource = QualityExcavationDataSource(
@@ -212,7 +212,7 @@ class _CivilFieldState extends State<CivilField> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(
-            depoName: '${widget.depoName!}',
+            depoName: widget.depoName!,
             text: '${widget.title}',
             haveCalender: true,
             haveSynced: true,
@@ -287,7 +287,7 @@ class _CivilFieldState extends State<CivilField> {
         preferredSize: const Size.fromHeight(60),
       ),
       body: isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('CivilChecklistField')
