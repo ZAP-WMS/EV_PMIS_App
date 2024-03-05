@@ -12,6 +12,8 @@ Color green = Color.fromARGB(255, 88, 221, 128);
 Color yellow = Colors.yellow;
 Color tabbarColor = Colors.grey;
 
+TextStyle appTextStyle = const TextStyle(fontSize: 12, color: Colors.black);
+
 TextStyle headline = GoogleFonts.ibmPlexSans(
     fontSize: 12, fontWeight: FontWeight.w400, color: black);
 

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
+import 'package:ev_pmis_app/provider/checkbox_provider.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
 import 'package:ev_pmis_app/provider/energy_provider_admin.dart';
@@ -170,6 +171,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => AllDepoSelectProvider()),
         ChangeNotifierProvider(create: (context) => ScrollProvider()),
         ChangeNotifierProvider(create: (context) => EnergyProviderAdmin()),
+        ChangeNotifierProvider(create: (context) => CheckboxProvider())
       ],
       child: OverlaySupport(
         child: GetMaterialApp(

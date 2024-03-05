@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
@@ -6,12 +5,16 @@ import 'package:ev_pmis_app/date_format.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:mailto/mailto.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
@@ -19,7 +22,9 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../datasource/energymanagement_datasource.dart';
+import '../../provider/checkbox_provider.dart';
 import '../../viewmodels/energy_management.dart';
 import '../../views/authentication/authservice.dart';
 import '../../components/Loading_page.dart';
@@ -85,11 +90,16 @@ class _ViewSummaryState extends State<ViewSummary> {
   var alldata;
   dynamic userId;
   final ScrollController _scrollController = ScrollController();
+  bool sendReport = true;
+  CheckboxProvider? _checkboxProvider;
 
   @override
   void initState() {
     super.initState();
     _summaryProvider = Provider.of<SummaryProvider>(context, listen: false);
+    _checkboxProvider = Provider.of<CheckboxProvider>(context, listen: false);
+    _checkboxProvider!.fetchCcMaidId();
+    _checkboxProvider!.fetchToMaidId();
     pr = ProgressDialog(context,
         customBody:
             Container(height: 200, width: 100, child: const LoadingPdf()));
@@ -113,6 +123,13 @@ class _ViewSummaryState extends State<ViewSummary> {
           isSync: false,
           isCentered: false,
           downloadFun: downloadPDF,
+          haveSend: true,
+          sendEmail: () {
+            setState(() {
+              sendReport = false;
+            });
+            _showCheckboxDialog(context, _checkboxProvider!, widget.depoName!);
+          },
         ),
         body: Column(
           children: [
@@ -2292,6 +2309,288 @@ class _ViewSummaryState extends State<ViewSummary> {
     await AuthService().getCurrentUserId().then((value) {
       userId = value;
     });
+  }
+
+  _showCheckboxDialog(BuildContext context, CheckboxProvider checkboxProvider,
+      String depoName) {
+    checkboxProvider.myCcBooleanValue.clear();
+    checkboxProvider.myToBooleanValue.clear();
+    checkboxProvider.myCcBooleanValue.add(false);
+    checkboxProvider.myToBooleanValue.add(false);
+    checkboxProvider.ccValue.clear();
+    checkboxProvider.toValue.clear();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Consumer<CheckboxProvider>(
+          builder: (context, value, child) {
+            return Container(
+              padding: const EdgeInsetsDirectional.all(0),
+              margin: const EdgeInsets.all(15),
+              width: MediaQuery.of(context).size.width,
+              child: AlertDialog(
+                title: Text('Choose Required Filled For Email',
+                    style: appTextStyle),
+                content: Column(mainAxisSize: MainAxisSize.max, children: [
+                  Expanded(
+                    child: Column(children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                          'Choose To',
+                          style: appTextStyle,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      ...List.generate(
+                        value.myToMailValue.length,
+                        (index) {
+                          // print('iji$index');
+
+                          for (int i = 0;
+                              i <= value.myToMailValue.length;
+                              i++) {
+                            checkboxProvider.defaultToBooleanValue.add(false);
+                          }
+
+                          return Flexible(
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  // title: Text(value.myCcMailValue[index]),
+                                  value: value.myToBooleanValue[index],
+                                  onChanged: (bool? newboolean) {
+                                    if (newboolean != null) {
+                                      checkboxProvider.setMyToBooleanValue(
+                                          index, newboolean);
+                                    }
+
+                                    if (value.myToBooleanValue[index] != null &&
+                                        value.myToBooleanValue[index] == true) {
+                                      print('index$index');
+                                      checkboxProvider.getCurrentToValue(
+                                          index, value.myToMailValue[index]);
+                                    } else {
+                                      value.toValue
+                                          .remove(value.myToMailValue[index]);
+                                    }
+                                    print(value.ccValue);
+                                  },
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    value.myToMailValue[index],
+                                    style: appTextStyle,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ]),
+                  ),
+                  Expanded(
+                    child: Column(children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(
+                          'Choose Cc',
+                          style: appTextStyle,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      ...List.generate(
+                        value.myCcMailValue.length,
+                        (index) {
+                          // print('iji$index');
+                          for (int i = 0;
+                              i <= value.myCcMailValue.length;
+                              i++) {
+                            checkboxProvider.defaultCcBooleanValue.add(false);
+                          }
+                          return Flexible(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  value: value.myCcBooleanValue[index],
+                                  onChanged: (bool? newboolean) {
+                                    if (newboolean != null) {
+                                      checkboxProvider.setMyCcBooleanValue(
+                                          index, newboolean);
+                                    }
+                                    if (value.myCcBooleanValue[index] != null &&
+                                        value.myCcBooleanValue[index] == true) {
+                                      print('index$index');
+                                      checkboxProvider.getCurrentCcValue(
+                                          index, value.myCcMailValue[index]);
+                                    } else {
+                                      value.ccValue
+                                          .remove(value.myCcMailValue[index]);
+                                    }
+                                  },
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    value.myCcMailValue[index],
+                                    style: appTextStyle,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ]),
+                  ),
+                ]),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Close'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // Do something with the checked items
+                      print(checkboxProvider.ccValue);
+                      widget.id == 'Daily Report'
+                          ? _generateDailyPDF().whenComplete(() {
+                              savePdfAndSendEmail(
+                                  pdfData!,
+                                  pdfPath!,
+                                  'Daily Project Details of $depoName',
+                                  'Todays+Daily+Report',
+                                  checkboxProvider.toValue,
+                                  checkboxProvider.ccValue);
+                              Navigator.pop(context);
+                            })
+                          : widget.id == 'Monthly Report'
+                              ? _generateMonthlyPdf().whenComplete(() {
+                                  savePdfAndSendEmail(
+                                      pdfData!,
+                                      pdfPath!,
+                                      'Daily Project Details of $depoName',
+                                      'Todays+Daily+Report',
+                                      checkboxProvider.toValue,
+                                      checkboxProvider.ccValue);
+                                })
+                              : _generateEnergyPDF().whenComplete(() {
+                                  savePdfAndSendEmail(
+                                      pdfData!,
+                                      pdfPath!,
+                                      'Daily Project Details of $depoName',
+                                      'Todays+Daily+Report',
+                                      checkboxProvider.toValue,
+                                      checkboxProvider.ccValue);
+                                });
+
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Send'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<String> uploadPdf(List<int> pdfData, String pdfPath) async {
+    // Upload the PDF data to Firebase Storage
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref('Downloaded File')
+        .child(widget.userId)
+        .child(widget.depoName!)
+        // .child(path)
+        .child(pdfPath);
+    await ref.putData(Uint8List.fromList(pdfData));
+
+    // Get the download URL for the uploaded PDF file
+    return await ref.getDownloadURL();
+  }
+
+  Future<void> savePdfAndSendEmail(
+      List<int> pdfData,
+      String pdfPath,
+      String subject,
+      String body,
+      List<String> toRecipients,
+      List<String> ccRecipients) async {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => const CupertinoAlertDialog(
+        content: SizedBox(
+          height: 50,
+          width: 50,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ), 
+    );
+    // Upload the PDF data to Firebase Storage
+    String pdfUrl = await uploadPdf(pdfData, pdfPath);
+
+    // Send email with the PDF URL as an attachment
+
+    sendEmail('subject', body, pdfUrl, toRecipients, ccRecipients);
+     Navigator.pop(context);
+  }
+
+  sendEmail(String subject, String body, String attachmentUrl,
+      List<String> toRecipients, List<String> ccRecipients) async {
+    // Construct the mailto URL
+    // String filePath = path.url.basename(attachmentUrl);
+    String encodedSubject = Uri.decodeComponent(subject);
+    String encodedBody = Uri.decodeComponent(body);
+    // String encodedAttachmentUrl = attachmentUrl;
+    String toParameter = toRecipients.map((cc) => cc).join(',');
+    String ccParameter = ccRecipients.map((cc) => cc).join(',');
+
+    funcOpenMailComposer(toRecipients, ccRecipients, encodedSubject,
+        'Attachment: $attachmentUrl');
+    // final Uri emailUri = Uri(
+    //   scheme: 'mailto',
+    //   path: '', // email address goes here
+    //   queryParameters: {
+    //     'subject': encodedSubject,
+    //     'body': 'Attachment: $attachmentUrl',
+    //     // 'attachment': attachmentUrl,
+    //     //encodedAttachmentUrl, // attachment url if needed
+    //     'to': toParameter,
+    //     'cc': ccParameter,
+    //   },
+    // );
+    // print('gfgfh&$ccParameter');
+    // print('Email$emailUri');
+    // if (await canLaunchUrl(emailUri)) {
+    //   await launchUrl(emailUri);
+    // } else {
+    //   // Handle the case where the email client cannot be launched
+    //   throw 'Could not launch email';
+    // }
+
+    // Encode and launch the mailto URL
+    // html.window.open(params.toString(), 'email');
+  }
+
+  void funcOpenMailComposer(List<String> toReceppients,
+      List<String> ccRecipients, String subject, String body) async {
+    final mailtoLink = Mailto(
+      to: toReceppients,
+      cc: ccRecipients,
+      subject: '',
+      body: body,
+    );
+    await launchUrl(Uri.parse(mailtoLink.toString()));
   }
 }
 
