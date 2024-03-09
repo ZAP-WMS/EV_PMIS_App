@@ -28,10 +28,19 @@ class NotificationService {
   Future<void> saveTokenToFirestore(String userId, String? token) async {
     final DocumentSnapshot<Object?> snapshot =
         await _tokensCollection.doc(userId).get();
+    Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+    String? fetchedToken = data?['token'];
 
     if (token != null) {
       if (!snapshot.exists) {
         await _tokensCollection.doc(userId).set({
+          'token': token,
+          'createdAt':
+              FieldValue.serverTimestamp(), // Optionally store a timestamp
+        });
+      }
+      if (fetchedToken != token) {
+        await _tokensCollection.doc(userId).update({
           'token': token,
           'createdAt':
               FieldValue.serverTimestamp(), // Optionally store a timestamp

@@ -31,7 +31,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'notiification/notification_service.dart';
 
 @pragma('vm:entry-point')
+late FirebaseMessaging _messaging;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  NotificationSettings settings = await _messaging.requestPermission(
+      alert: true, badge: true, provisional: true, sound: true);
   await Firebase.initializeApp();
   print("Handling background message:${message.messageId}");
   RemoteMessage? initializeMessage =

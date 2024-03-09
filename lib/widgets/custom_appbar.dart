@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../provider/checkbox_provider.dart';
 import '../provider/key_provider.dart';
 import '../views/authentication/login_register.dart';
@@ -317,7 +318,10 @@ Future<bool> onWillPop(BuildContext context) async {
                       ),
                       Expanded(
                           child: InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          // SharedPreferences prefs =
+                          //     await SharedPreferences.getInstance();
+                          // prefs.setString('employeeId', '');
                           a = true;
                           Navigator.pushReplacement(
                               context,

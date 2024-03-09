@@ -64,7 +64,7 @@ class _userListState extends State<userList> {
                   padding: const EdgeInsets.all(15),
                   child: Container(
                     height: 50,
-                    width: 250,
+                    width: 200,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
@@ -76,7 +76,10 @@ class _userListState extends State<userList> {
                           // value: selectedData,
                           value: value,
                           child: Text(value,
-                              style: TextStyle(fontSize: 12, color: black)),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: black,
+                                  fontWeight: FontWeight.bold)),
                         );
                       }).toList(),
                       value: selectedData,
@@ -87,9 +90,10 @@ class _userListState extends State<userList> {
                     ),
                   ),
                 ),
-                SizedBox(
+                Container(
+                  padding: EdgeInsets.all(5),
                   child: Text(
-                    'Users not updated in DPR table today',
+                    "Employees who have not uploaded today's work.",
                     style: normalboldtext,
                     textAlign: TextAlign.center,
                   ),
@@ -102,7 +106,7 @@ class _userListState extends State<userList> {
                     itemBuilder: (context, index) {
                       if (allDepots.isEmpty) {
                         return Text(
-                          'All users are fill today dpr rrport',
+                          'All users are fill today DPR rrport',
                           style: TextStyle(color: red),
                         );
                       } else {
