@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/style.dart';
@@ -82,7 +83,10 @@ class SplashScreenState extends State<SplashScreen>
                 // Add your action here
                 print('Notification tapped!');
                 // Navigate to the desired screen, for example
-                Navigator.pushReplacementNamed(context, '/user-list');
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/user-list',
+                );
               },
             );
           }));
@@ -167,11 +171,15 @@ class SplashScreenState extends State<SplashScreen>
     // }
   }
 
+  List<String> citiesList = [];
+
   @override
   void initState() {
     // _totalNotification = 0;
+    // _loadCities();
     registerNotification();
     checkforInitialMessage();
+    print(citiesList);
 
     //For handling notification app is in backgroung not terminated
 
@@ -183,7 +191,10 @@ class SplashScreenState extends State<SplashScreen>
         datBody: message.data['body'] ?? '',
       );
 
-      Navigator.pushReplacementNamed(context, '/user-list');
+      Navigator.pushReplacementNamed(
+        context,
+        '/user-list',
+      );
 
       // if (mounted) {
       //   setState(() {

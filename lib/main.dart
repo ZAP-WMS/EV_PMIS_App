@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/checkbox_provider.dart';
@@ -25,6 +27,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'notiification/notification_service.dart';
 
 @pragma('vm:entry-point')
@@ -100,6 +103,7 @@ class _MyAppState extends State<MyApp> {
   User? user;
   String? userId;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  List<String> citiesList = [];
 
   // This widget is the root of your application.
 
@@ -144,6 +148,12 @@ class _MyAppState extends State<MyApp> {
     for (int i = 0; i < tempList.length; i++) {
       print('userId${tempList[i]['userId'].toString()}');
       if (tempList[i]['userId'].toString() == userId.toString()) {
+        print('print${tempList[i]['cities'][0]}');
+        for (int j = 0; j < tempList[i]['cities'].length; j++) {
+          citiesList.add(tempList[i]['cities'][j]);
+          _saveCities(citiesList);
+        }
+
         _firebaseMessaging.getToken().then((value) {
           print("token::::$value");
           NotificationService().saveTokenToFirestore(userId!, value);
@@ -155,6 +165,12 @@ class _MyAppState extends State<MyApp> {
         });
       }
     }
+  }
+
+  _saveCities(List<String> data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String citiesString = jsonEncode(data);
+    prefs.setStringList('cities', data);
   }
 
   @override
@@ -176,7 +192,9 @@ class _MyAppState extends State<MyApp> {
       child: OverlaySupport(
         child: GetMaterialApp(
           // initialRoute: '/splash',
-          initialRoute: '/splash-screen',
+          initialRoute:
+              //'/user-list',
+              '/splash-screen',
           // all the pages of routes are declared here
           onGenerateRoute: RouteGenerator.generateRoute,
           debugShowCheckedModeBanner: false,

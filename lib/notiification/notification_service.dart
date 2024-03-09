@@ -26,16 +26,21 @@ class NotificationService {
   }
 
   Future<void> saveTokenToFirestore(String userId, String? token) async {
+    final DocumentSnapshot<Object?> snapshot =
+        await _tokensCollection.doc(userId).get();
+
     if (token != null) {
-      await _tokensCollection.doc(userId).set({
-        'token': token,
-        'createdAt':
-            FieldValue.serverTimestamp(), // Optionally store a timestamp
-      });
+      if (!snapshot.exists) {
+        await _tokensCollection.doc(userId).set({
+          'token': token,
+          'createdAt':
+              FieldValue.serverTimestamp(), // Optionally store a timestamp
+        });
+      }
     }
   }
 
   Future<void> backgroundHandler(RemoteMessage message) async {
     print('Handling a background message ${message.messageId}');
   }
- }
+}

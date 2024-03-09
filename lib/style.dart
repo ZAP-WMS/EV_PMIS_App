@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Color blue = const Color.fromARGB(255, 9, 83, 161);
+Color blue = Color(0xFF0953A1);
 Color lightblue = Colors.blue;
 Color white = Colors.white;
 Color black = Colors.black;
@@ -31,9 +31,10 @@ TextStyle bodytext = GoogleFonts.ibmPlexSans(
 
 TextStyle logoheadline = GoogleFonts.ibmPlexSans(
     fontSize: 35, fontWeight: FontWeight.w600, color: black);
+
 TextStyle captionWhite = GoogleFonts.ibmPlexSans(
     fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.bold,
     letterSpacing: 0.4,
     color: white);
 
