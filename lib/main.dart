@@ -36,6 +36,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   NotificationSettings settings = await _messaging.requestPermission(
       alert: true, badge: true, provisional: true, sound: true);
   await Firebase.initializeApp();
+  // intialize firebase messaging
+
   print("Handling background message:${message.messageId}");
   RemoteMessage? initializeMessage =
       await FirebaseMessaging.instance.getInitialMessage();
@@ -60,6 +62,8 @@ void main() async {
 // here i have initialize my firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await NotificationService.initialize();
+  FirebaseMessaging.instance.isAutoInitEnabled;
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: blue));
   SystemChrome.setPreferredOrientations([
@@ -74,6 +78,7 @@ void main() async {
   // NotificationService().getFCMToken();
 // To show file downloaded notification for pdf
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   const initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
   const initializationSettings =
@@ -116,18 +121,6 @@ class _MyAppState extends State<MyApp> {
     getUserId().whenComplete(() {
       verifyProjectManager();
     });
-
-    // getUserId().whenComplete(() {
-    //   _firebaseMessaging.getToken().then((value) {
-    //     print("token::::$value");
-    //     NotificationService().saveTokenToFirestore(userId!, value);
-    //     // sendNotificationToUser(value!, 'title', 'body');
-    //   });
-    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //     //handle incoming messages
-    //     print('receive message${message.notification?.body}');
-    //   });
-    // });
 
     super.initState();
   }

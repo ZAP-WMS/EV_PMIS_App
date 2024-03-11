@@ -319,9 +319,9 @@ Future<bool> onWillPop(BuildContext context) async {
                       Expanded(
                           child: InkWell(
                         onTap: () async {
-                          // SharedPreferences prefs =
-                          //     await SharedPreferences.getInstance();
-                          // prefs.setString('employeeId', '');
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.remove('employeeId');
                           a = true;
                           Navigator.pushReplacement(
                               context,

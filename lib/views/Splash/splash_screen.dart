@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/views/dailyreport/notification_userlist.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -108,28 +106,30 @@ class SplashScreenState extends State<SplashScreen>
     }
   }
 
-  // for handling  the notification in terminate state when app are terminated from background
+  // for handling  the notification in terminate state when app are terminated not in the background
   checkforInitialMessage() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
 
-    RemoteMessage? initialMessage =
+    RemoteMessage? message =
         await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
+    if (message != null) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, '/user-list');
       PushNotification notification = PushNotification(
-        title: initialMessage.notification!.title ?? '',
-        body: initialMessage.notification!.body ?? '',
-        dataTitle: initialMessage.data['title'] ?? '',
-        datBody: initialMessage.data['body'] ?? '',
+        title: message.notification!.title ?? '',
+        body: message.notification!.body ?? '',
+        dataTitle: message.data['title'] ?? '',
+        datBody: message.data['body'] ?? '',
       );
-      if (initialMessage != null) {
-        Navigator.pushReplacementNamed(context, '/user-list');
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => userList()
-        //         // NotificationPage(notification: notification),
-        //         ));
-      }
+      //  if (message != null) {
+
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => userList()
+      //         // NotificationPage(notification: notification),
+      //         ));
+//      }
       //    sendNotificationToUser(notification.title!, notification.body!);
       // if (mounted) {
       //   setState(() {
@@ -181,28 +181,44 @@ class SplashScreenState extends State<SplashScreen>
     checkforInitialMessage();
     print(citiesList);
 
-    //For handling notification app is in backgroung not terminated
+    //For handling notification app is in backgroung
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message != null) {
+        PushNotification notification = PushNotification(
+          title: message.notification!.title ?? '',
+          body: message.notification!.body ?? '',
+          dataTitle: message.data['title'] ?? '',
+          datBody: message.data['body'] ?? '',
+        );
+        // save the current context
+        BuildContext? currentContext = context;
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      PushNotification notification = PushNotification(
-        title: message.notification!.title ?? '',
-        body: message.notification!.body ?? '',
-        dataTitle: message.data['title'] ?? '',
-        datBody: message.data['body'] ?? '',
-      );
-
-      Navigator.pushReplacementNamed(
-        context,
-        '/user-list',
-      );
-
-      // if (mounted) {
-      //   setState(() {
-      //     _notificationInfo = notification;
-      //     _totalNotification++;
-      //   });
-      // }
+        Navigator.pushReplacementNamed(
+          currentContext,
+          '/user-list',
+        );
+      }
     });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   PushNotification notification = PushNotification(
+    //     title: message.notification!.title ?? '',
+    //     body: message.notification!.body ?? '',
+    //     dataTitle: message.data['title'] ?? '',
+    //     datBody: message.data['body'] ?? '',
+    //   );
+
+    //   Navigator.pushReplacementNamed(
+    //     context,
+    //     '/user-list',
+    //   );
+
+    //   // if (mounted) {
+    //   //   setState(() {
+    //   //     _notificationInfo = notification;
+    //   //     _totalNotification++;
+    //   //   });
+    //   // }
+    // });
     super.initState();
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
