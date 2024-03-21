@@ -9,6 +9,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../viewmodels/push_notification.dart';
+import '../dailyreport/notification_userlist.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -39,6 +40,7 @@ class SplashScreenState extends State<SplashScreen>
   dynamic userId = '';
   bool user = false;
   String role = '';
+  bool _isNotificationPage = false;
   late SharedPreferences sharedPreferences;
 
   late FirebaseMessaging _messaging;
@@ -122,53 +124,10 @@ class SplashScreenState extends State<SplashScreen>
         dataTitle: message.data['title'] ?? '',
         datBody: message.data['body'] ?? '',
       );
-      //  if (message != null) {
-
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => userList()
-      //         // NotificationPage(notification: notification),
-      //         ));
-//      }
-      //    sendNotificationToUser(notification.title!, notification.body!);
-      // if (mounted) {
-      //   setState(() {
-      //     _notificationInfo = notification;
-      //     _totalNotification++;
-      //   });
-      // }
+      setState(() {
+        _isNotificationPage = true;
+      });
     }
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    // NotificationSettings settings = await _messaging.requestPermission(
-    //     alert: true, badge: true, provisional: true, sound: true);
-    // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //     print('Message Title:${message.notification!.title}');
-
-    //     PushNotification notification = PushNotification(
-    //       title: message.notification!.title ?? '',
-    //       body: message.notification!.body ?? '',
-    //       dataTitle: message.data['title'] ?? '',
-    //       datBody: message.data['body'] ?? '',
-    //     );
-
-    //     setState(() {
-    //       _notificationInfo = notification;
-    //       _totalNotification++;
-    //     });
-    //     if (notification != null) {
-    //       // For Display the notificatio in Overlay
-    //       showSimpleNotification(
-    //         Text(_notificationInfo.title!),
-    //         subtitle: Text(_notificationInfo.body ?? ''),
-    //         background: blue,
-    //         duration: Duration(seconds: 2),
-    //       );
-    //     }
-    //   });
-    // } else {
-    //   print('user has decline permission');
-    // }
   }
 
   List<String> citiesList = [];
@@ -184,6 +143,12 @@ class SplashScreenState extends State<SplashScreen>
     //For handling notification app is in backgroung
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => userList(),
+            ));
+
         PushNotification notification = PushNotification(
           title: message.notification!.title ?? '',
           body: message.notification!.body ?? '',
@@ -192,11 +157,13 @@ class SplashScreenState extends State<SplashScreen>
         );
         // save the current context
         BuildContext? currentContext = context;
-
         Navigator.pushReplacementNamed(
           currentContext,
           '/user-list',
         );
+        setState(() {
+          _isNotificationPage = true;
+        });
       }
     });
     // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -228,20 +195,6 @@ class SplashScreenState extends State<SplashScreen>
 
     _getCurrentUser();
     // user = FirebaseAuth.instance.currentUser == null;
-    Timer(
-        const Duration(milliseconds: 2000),
-        () => Navigator.pushNamedAndRemoveUntil(
-            context,
-            user ? '/splitDashboard' : '/login-page',
-            arguments: role,
-            (route) => false)
-
-        //  Navigator.of(context).pushReplacement(MaterialPageRoute(
-        //     builder: (BuildContext context) =>
-        //         user ? GalleryPage() : const LoginRegister())),
-
-        );
-    // user ? const LoginRegister() : const HomePage())));
   }
 
   @override
@@ -250,8 +203,25 @@ class SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  navigatePage() async {
+    if (!_isNotificationPage) {
+      // Add a delay before navigating to the main page
+      await Future.delayed(const Duration(milliseconds: 2000));
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        user ? '/splitDashboard' : '/login-page',
+        arguments: role,
+        (route) => false,
+      );
+    } else {
+      Navigator.pushNamed(context, '/user-list');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    navigatePage();
     return Scaffold(
       backgroundColor: Colors.white,
       body: FadeTransition(

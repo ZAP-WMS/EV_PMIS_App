@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:ev_pmis_app/style.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomAlertBox {
   Future<bool> customLogOut(BuildContext context, String title, String pushName,
@@ -53,12 +54,16 @@ class CustomAlertBox {
                         ),
                         Expanded(
                             child: InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.remove('cities');
                             a = true;
                             isExitingApp
                                 ? exit(0)
                                 : Navigator.pushNamedAndRemoveUntil(
                                     context, pushName, (route) => false);
+
                             // exit(0);
                           },
                           child: Container(

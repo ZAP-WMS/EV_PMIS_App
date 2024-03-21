@@ -484,7 +484,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                           gridLineColor: blue),
                                       child: SfDataGrid(
                                           source: _dailyDataSource,
-                                          allowEditing: true,
+                                          allowEditing: false,
                                           frozenColumnsCount: 2,
                                           gridLinesVisibility:
                                               GridLinesVisibility.both,
@@ -1246,7 +1246,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                       .collection('SafetyChecklistTable2')
                                       .doc(widget.depoName!)
                                       .collection('userId')
-                                      .doc(userId)
+                                      .doc(widget.userId)
                                       .collection('date')
                                       .doc(DateFormat.yMMMMd()
                                           .format(startdate!))
@@ -1289,7 +1289,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                           //key: key,
 
                                           allowEditing: true,
-                                          frozenColumnsCount: 2,
+                                          frozenColumnsCount: 1,
                                           gridLinesVisibility:
                                               GridLinesVisibility.both,
                                           headerGridLinesVisibility:
@@ -2534,7 +2534,7 @@ class _ViewSummaryState extends State<ViewSummary> {
             ),
           ),
         ),
-      ), 
+      ),
     );
     // Upload the PDF data to Firebase Storage
     String pdfUrl = await uploadPdf(pdfData, pdfPath);
@@ -2542,7 +2542,7 @@ class _ViewSummaryState extends State<ViewSummary> {
     // Send email with the PDF URL as an attachment
 
     sendEmail('subject', body, pdfUrl, toRecipients, ccRecipients);
-     Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   sendEmail(String subject, String body, String attachmentUrl,

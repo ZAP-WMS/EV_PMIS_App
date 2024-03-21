@@ -147,7 +147,7 @@ class _MyAppState extends State<MyApp> {
         print('print${tempList[i]['cities'][0]}');
         for (int j = 0; j < tempList[i]['cities'].length; j++) {
           citiesList.add(tempList[i]['cities'][j]);
-          _saveCities(citiesList);
+          await _saveCities(citiesList);
         }
 
         _firebaseMessaging.getToken().then((value) {
@@ -166,7 +166,7 @@ class _MyAppState extends State<MyApp> {
   _saveCities(List<String> data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // String citiesString = jsonEncode(data);
-    prefs.setStringList('cities', data);
+    await prefs.setStringList('cities', data);
   }
 
   @override

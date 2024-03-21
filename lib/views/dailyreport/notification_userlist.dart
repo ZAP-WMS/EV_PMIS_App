@@ -23,6 +23,7 @@ class _userListState extends State<userList> {
   List<String>? citiesList = [];
   List<String> allDepots = [];
   List<Map<String, dynamic>> userMapList = [];
+  List<Map<String, dynamic>> userDepoList = [];
 
   @override
   void initState() {
@@ -40,7 +41,6 @@ class _userListState extends State<userList> {
       });
     });
 
-    // TODO: implement initState
     super.initState();
   }
 
@@ -57,7 +57,7 @@ class _userListState extends State<userList> {
         ),
       ),
       body: _isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(
               children: [
                 Padding(
@@ -91,7 +91,7 @@ class _userListState extends State<userList> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: Text(
                     "Employees who have not uploaded today's work.",
                     style: normalboldtext,
@@ -100,86 +100,256 @@ class _userListState extends State<userList> {
                 ),
                 Expanded(
                   // height: 500,
-                  child: ListView.builder(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                    scrollDirection: Axis.vertical,
                     padding: const EdgeInsets.all(10),
                     itemCount: allDepots.length,
                     itemBuilder: (context, index) {
                       if (allDepots.isEmpty) {
                         return Text(
                           'All users are fill today DPR rrport',
-                          style: TextStyle(color: red),
+                          style: TextStyle(color: blue),
                         );
                       } else {
                         String depoName = allDepots[index];
                         String? selectedDate =
                             DateFormat.yMMMMd().format(DateTime.now());
                         return StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('DailyProject3')
-                              .doc(depoName)
-                              .collection(selectedDate)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return LoadingPage();
-                            }
-                            if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            }
-
-                            if (!snapshot.hasData ||
-                                snapshot.data!.docs.isEmpty) {
-                              List<Widget> columnwidgets = [];
-                              for (int i = 0; i < userMapList.length; i++) {
-                                columnwidgets.add(Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                        color: blue,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: blue)),
-                                    child: Text(
-                                      userMapList[i]['name'],
-                                      style: captionWhite,
-                                      textAlign: TextAlign.center,
-                                    )));
+                            stream: FirebaseFirestore.instance
+                                .collection('DailyProject3')
+                                .doc(depoName)
+                                .collection(selectedDate)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const LoadingPage();
                               }
-                              return Wrap(
-                                alignment: WrapAlignment.center,
-                                children: columnwidgets,
-                              );
-                            } else {
-                              List<DocumentSnapshot<Map<String, dynamic>>>
-                                  depoData = snapshot.data!.docs;
+                              if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              }
 
-                              List<Widget> widgets = [];
+                              // Iterate over the documents in the QuerySnapshot and print their IDs
+
+                              if (!snapshot.hasData ||
+                                  snapshot.data!.docs.isEmpty) {
+                                List<Widget> columnwidgets = [];
+
+                                for (int i = 0; i < userMapList.length; i++) {
+                                  if (userMapList[i]['depots'] != null) {
+                                    List depots = userMapList[i]['depots'];
+
+                                    for (int j = 0; j < depots.length; j++) {
+                                      if (depots[j] == depoName) {
+                                        columnwidgets.add(
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            margin: const EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(color: red),
+                                            ),
+                                            child: Text(
+                                              userMapList[i]['name'],
+                                              style: TextStyle(color: red),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        );
+
+                                        break; // Exit the inner loop once a match is found
+                                      }
+                                    }
+                                  }
+                                }
+
+                                return Column(
+                                  children: [
+                                    Container(
+                                        padding: const EdgeInsets.all(5),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        decoration: BoxDecoration(
+                                            color: lightblue,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: blue, width: 2)),
+                                        child: Text(
+                                          depoName,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(color: white),
+                                        )),
+                                    Wrap(
+                                        alignment: WrapAlignment.center,
+                                        children: columnwidgets.isNotEmpty
+                                            ? columnwidgets
+                                            : [
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  margin:
+                                                      const EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    border:
+                                                        Border.all(color: red),
+                                                  ),
+                                                  child: const Text(
+                                                      "User Not Assigned"),
+                                                )
+                                              ]),
+                                  ],
+                                );
+                              }
+
                               for (int i = 0; i < userMapList.length; i++) {
-                                // Comparing userId from userMapList with the ID of the first document in depoData
-                                if (userMapList[i]['userId'] !=
-                                    depoData.first.id) {
-                                  widgets.add(Container(
-                                      padding: const EdgeInsets.all(10),
-                                      margin: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          color: blue,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(color: blue)),
-                                      child: Text(
-                                        userMapList[i]['name'],
-                                        style: captionWhite,
-                                        textAlign: TextAlign.center,
-                                      )));
+                                if (userMapList[i]['depots'] != null) {
+                                  List<String> userList = [];
+                                  String? avlbId;
+                                  List<String> docIds = [];
+                                  List depots = userMapList[i]['depots'];
+                                  String userId = userMapList[i]['userId'];
+                                  String? userName;
+
+                                  for (int j = 0; j < depots.length; j++) {
+                                    // for (var doc in snapshot.data!.docs) {
+                                    if (depots[j] == depoName) {
+                                      for (Map<String, dynamic> userMap
+                                          in userMapList) {
+                                        // Check if the dictionary contains the value 'depoName'
+                                        if (userMap['depots'][j] == depoName) {
+                                          // If it does, add the dictionary to userList
+                                          userList.add(userMap['userId']);
+                                        }
+                                      }
+
+                                      for (var doc in snapshot.data!.docs) {
+                                        docIds.add(doc.id);
+                                      }
+                                      for (int k = 0;
+                                          k < userList.length;
+                                          k++) {
+                                        print('stored Id  :${userList[k]}');
+                                        bool conditionNotSatisfied = false;
+
+                                        for (String docId in userList) {
+                                          if (!docIds.contains(docId)) {
+                                            avlbId = docId;
+                                            conditionNotSatisfied = true;
+
+                                            for (var userMap in userMapList) {
+                                              if (userMap['userId'] == avlbId) {
+                                                userName = userMap['name'];
+                                                break; // Break out of the loop once a match is found
+                                              }
+                                            }
+                                            break;
+                                          }
+                                        }
+
+                                        if (conditionNotSatisfied) {
+                                          // Your code when doc.id does not contain userList[k]
+
+                                          List<Widget> columnwidget = [];
+                                          columnwidget.add(
+                                            Container(
+                                              padding: const EdgeInsets.all(10),
+                                              margin: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(color: red),
+                                              ),
+                                              child: Text(
+                                                userName!,
+                                                style: TextStyle(color: red),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          );
+
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                  padding:
+                                                      const EdgeInsets.all(5),
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.4,
+                                                  decoration: BoxDecoration(
+                                                      color: lightblue,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      border: Border.all(
+                                                          color: blue,
+                                                          width: 2)),
+                                                  child: Text(
+                                                    depoName,
+                                                    textAlign: TextAlign.center,
+                                                    style:
+                                                        TextStyle(color: white),
+                                                  )),
+                                              Wrap(
+                                                children: columnwidget,
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                      }
+                                      break;
+                                    }
+                                  }
                                 }
                               }
-                              return Wrap(
-                                alignment: WrapAlignment.center,
-                                children: widgets,
+                              return Column(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.all(5),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                          color: lightblue,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: blue, width: 2)),
+                                      child: Text(
+                                        depoName,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color: white),
+                                      )),
+                                  Wrap(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 5),
+                                        margin: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(color: blue),
+                                        ),
+                                        child: Text(
+                                          'Depots are updated',
+                                          style: TextStyle(color: black),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               );
-                            }
-                          },
-                        );
+                            });
                       }
                     },
                   ),
@@ -207,6 +377,7 @@ class _userListState extends State<userList> {
   }
 
   Future<void> fetchAllUserIds() async {
+    userMapList.clear();
     // Reference to the subcollection
     CollectionReference collectionRef = FirebaseFirestore.instance
         .collection('roleManagement')
@@ -221,6 +392,7 @@ class _userListState extends State<userList> {
       // Iterate through each document
       querySnapshot.docs.forEach((doc) {
         print(doc['allUserId'][0]['name']);
+        String? userName = doc['allUserId'][0]['name'];
         // Extract the 'alluserId' array from each document data
         List<dynamic> allUserId = doc['allUserId'] ?? [];
         List<dynamic> allDepotsName = doc['depots'] ?? [];
@@ -228,11 +400,10 @@ class _userListState extends State<userList> {
         //  print(allUserId);
         if (allUserId != null) {
           // Iterate through each map in the array and add the user IDs to the list
-          allUserId.forEach((userMap) {
+          allUserId.forEach((userMap) async {
             if (userMap is Map<String, dynamic>) {
               userMapList.add(userMap);
             }
-            //    print('fetched all userId ${userMapList}');
           });
         }
         if (allDepotsName != null) {
