@@ -31,7 +31,7 @@ class _DepotPageState extends State<DepotPage> {
   void initState() {
     getUserId();
     // TODO: implement initState
-    getToken();
+
     super.initState();
     print('depotPage - UserId- ${userId}');
   }
@@ -163,37 +163,44 @@ class _DepotPageState extends State<DepotPage> {
   }
 
   Widget depolist(String image, String text) {
-    return Column(children: [
-      Container(
-          padding: const EdgeInsets.all(20),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(
+            20,
+          ),
           width: 90,
           height: 90,
           decoration: BoxDecoration(
-              border: Border.all(color: grey),
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    image,
-                  ),
-                  //  NetworkImage(image),
-                  fit: BoxFit.cover))),
-      Expanded(
-        child: Text(
-          text,
-          softWrap: true,
-          textAlign: TextAlign.center,
-          style:
-              TextStyle(color: blue, fontWeight: FontWeight.bold, fontSize: 11),
+            border: Border.all(color: grey),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(
+                image,
+              ),
+              //  NetworkImage(image),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
-      ),
-    ]);
+        Expanded(
+          child: Text(
+            text,
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: blue, fontWeight: FontWeight.bold, fontSize: 11),
+          ),
+        ),
+      ],
+    );
   }
 
-  void getToken() async {
-    String? token = await NotificationService().getFCMToken();
-    // Now you can use the token variable here
-    NotificationService().saveTokenToFirestore(userId, token);
+  // void getToken() async {
+  //   String? token = await NotificationService().getFCMToken();
+  //   // Now you can use the token variable here
+  //   NotificationService().saveTokenToFirestore(userId, token);
 
-    print('FCM Token: $token');
-  }
+  //   print('FCM Token: $token');
+  // }
 }
