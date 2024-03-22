@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/dailyreport/notification_userlist.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,11 @@ class NavbarDrawer extends StatefulWidget {
 
 class _NavbarDrawerState extends State<NavbarDrawer> {
   String userId = '';
+  bool isProjectManager = false;
   @override
   void initState() {
     getUserId();
+    verifyProjectManager();
     super.initState();
   }
 
@@ -67,43 +70,24 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                   ),
                 );
               }),
-          ListTile(
-              leading: Icon(
-                Icons.home,
-                color: blue,
-              ),
-              title: const Text(
-                'Notifications',
-              ),
-              onTap: () {
-                // SystemChrome.setPreferredOrientations([
-                //   DeviceOrientation.portraitUp,
-                //   DeviceOrientation.portraitDown,
-                //   // DeviceOrientation.landscapeLeft,
-                // ]);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => userList(),
+          isProjectManager
+              ? ListTile(
+                  leading: Icon(
+                    Icons.home,
+                    color: blue,
                   ),
-                );
-              }),
-          // ListTile(
-          //     leading: const Icon(Icons.mood),
-          //     title: const Text('Mood'),
-          //     onTap: () {
-          //       // SystemChrome.setPreferredOrientations([
-          //       //   DeviceOrientation.portraitUp,
-          //       //   DeviceOrientation.portraitDown,
-          //       //   // DeviceOrientation.landscapeLeft,
-          //       // ]);
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (_) => const CitiesHome(),
-          //         ),
-          //       );
-          //     }),
+                  title: const Text(
+                    'Notifications',
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => userList(),
+                      ),
+                    );
+                  })
+              : Container(),
           ListTile(
               leading: Icon(
                 Icons.note_add,
@@ -113,33 +97,6 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               onTap: () {
                 Navigator.pushNamed(context, '/chat-page');
               }),
-
-          // ListTile(
-          //     leading: Icon(
-          //       Icons.supervised_user_circle,
-          //       color: blue,
-          //     ),
-          //     title: const Text('User Manual'),
-          //     onTap: () {}),
-
-          // const Divider(),
-          // ListTile(
-          //     leading: const Icon(Icons.settings),
-          //     title: const Text('Settings'),
-          //     onTap: () {
-          //       // SystemChrome.setPreferredOrientations([
-          //       //   DeviceOrientation.portraitUp,
-          //       //   DeviceOrientation.portraitDown,
-          //       //   // DeviceOrientation.landscapeLeft,
-          //       // ]);
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (_) => CitiesHome(),
-          //         ),
-          //       );
-          //     }),
-          // const Divider(),
           ListTile(
               leading: Icon(
                 Icons.logout_rounded,
@@ -246,5 +203,21 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               ),
             ));
     return a;
+  }
+
+  Future<void> verifyProjectManager() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .where('roles', arrayContains: 'Project Manager')
+        .get();
+
+    List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
+
+    for (int i = 0; i < tempList.length; i++) {
+      if (tempList[i]['userId'].toString() == userId.toString()) {
+        isProjectManager = true;
+        setState(() {});
+      }
+    }
   }
 }
