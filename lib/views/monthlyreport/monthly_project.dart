@@ -177,7 +177,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
-                                      child: Text("SI No.",
+                                      child: Text("Sr No.",
                                           // 'Activities SI. No as per Gant Chart',
                                           overflow: TextOverflow.values.first,
                                           textAlign: TextAlign.center,
@@ -368,7 +368,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                     label: Container(
                                       padding: tablepadding,
                                       alignment: Alignment.center,
-                                      child: Text("SI No.",
+                                      child: Text("Sr No.",
                                           // 'Activities SI. No as per Gant Chart',
                                           overflow: TextOverflow.values.first,
                                           textAlign: TextAlign.center,

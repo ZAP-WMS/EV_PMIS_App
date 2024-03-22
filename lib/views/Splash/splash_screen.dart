@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/views/dailyreport/notification_userlist.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../viewmodels/push_notification.dart';
+import '../dailyreport/notification_userlist.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -40,11 +40,12 @@ class SplashScreenState extends State<SplashScreen>
   dynamic userId = '';
   bool user = false;
   String role = '';
+  bool _isNotificationPage = false;
   late SharedPreferences sharedPreferences;
 
   late FirebaseMessaging _messaging;
-  int _totalNotification = 0;
-  PushNotification? _notificationInfo;
+  // int _totalNotification = 0;
+  // PushNotification? _notificationInfo;
 
 // WHEN APP IS OPENED
   void registerNotification() async {
@@ -64,27 +65,42 @@ class SplashScreenState extends State<SplashScreen>
           dataTitle: message.data['title'] ?? '',
           datBody: message.data['body'] ?? '',
         );
-        if (mounted) {
-          setState(() {
-            _notificationInfo = notification;
-            _totalNotification++;
-          });
-        }
         if (notification != null) {
           // For Display the notification in Overlay
           print(notification.title!);
           //   sendNotificationToUser(notification.title!, notification.body!);
-          showSimpleNotification(
-            Text(notification.title!),
-            subtitle: Text(notification.body ?? ''),
-            background: blue,
-            duration: const Duration(seconds: 2),
-          );
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => userList()
-                  // NotificationPage(notification: notification),
-                  ));
+          showSimpleNotification(Text(notification.title!),
+              subtitle: Text(notification.body ?? ''),
+              background: blue,
+              duration: const Duration(seconds: 2),
+              trailing: Builder(builder: (context) {
+            return TextButton(
+              child: Text(
+                'See User',
+                style: TextStyle(color: white, fontSize: 16),
+              ),
+              onPressed: () {
+                // Add your action here
+                print('Notification tapped!');
+                // Navigate to the desired screen, for example
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/user-list',
+                );
+              },
+            );
+          }));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => userList()
+          //         // NotificationPage(notification: notification),
+          //         ));
+
+          // if (mounted) {
+          //   setState(() {
+          //     _notificationInfo = notification;
+          //     _totalNotification++;
+          //   });
         }
       });
     } else {
@@ -92,96 +108,84 @@ class SplashScreenState extends State<SplashScreen>
     }
   }
 
-  // for handling  the notification in terminate state
+  // for handling  the notification in terminate state when app are terminated not in the background
   checkforInitialMessage() async {
     await Firebase.initializeApp();
     _messaging = FirebaseMessaging.instance;
 
-    RemoteMessage? initialMessage =
+    RemoteMessage? message =
         await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      PushNotification notification = PushNotification(
-        title: initialMessage.notification!.title ?? '',
-        body: initialMessage.notification!.body ?? '',
-        dataTitle: initialMessage.data['title'] ?? '',
-        datBody: initialMessage.data['body'] ?? '',
-      );
-      if (initialMessage != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => userList()
-                // NotificationPage(notification: notification),
-                ));
-      }
-      //    sendNotificationToUser(notification.title!, notification.body!);
-      if (mounted) {
-        setState(() {
-          _notificationInfo = notification;
-          _totalNotification++;
-        });
-      }
-    }
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    // NotificationSettings settings = await _messaging.requestPermission(
-    //     alert: true, badge: true, provisional: true, sound: true);
-    // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //     print('Message Title:${message.notification!.title}');
-
-    //     PushNotification notification = PushNotification(
-    //       title: message.notification!.title ?? '',
-    //       body: message.notification!.body ?? '',
-    //       dataTitle: message.data['title'] ?? '',
-    //       datBody: message.data['body'] ?? '',
-    //     );
-
-    //     setState(() {
-    //       _notificationInfo = notification;
-    //       _totalNotification++;
-    //     });
-    //     if (notification != null) {
-    //       // For Display the notificatio in Overlay
-    //       showSimpleNotification(
-    //         Text(_notificationInfo.title!),
-    //         subtitle: Text(_notificationInfo.body ?? ''),
-    //         background: blue,
-    //         duration: Duration(seconds: 2),
-    //       );
-    //     }
-    //   });
-    // } else {
-    //   print('user has decline permission');
-    // }
-  }
-
-  @override
-  void initState() {
-    _totalNotification = 0;
-    registerNotification();
-    checkforInitialMessage();
-
-    //For handling notification app is in backgroung not terminated
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message != null) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, '/user-list');
       PushNotification notification = PushNotification(
         title: message.notification!.title ?? '',
         body: message.notification!.body ?? '',
         dataTitle: message.data['title'] ?? '',
         datBody: message.data['body'] ?? '',
       );
-      
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => userList()),
-      // );
+      setState(() {
+        _isNotificationPage = true;
+      });
+    }
+  }
 
-      if (mounted) {
+  List<String> citiesList = [];
+
+  @override
+  void initState() {
+    // _totalNotification = 0;
+    // _loadCities();
+    registerNotification();
+    checkforInitialMessage();
+    print(citiesList);
+
+    //For handling notification app is in backgroung
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => userList(),
+            ));
+
+        PushNotification notification = PushNotification(
+          title: message.notification!.title ?? '',
+          body: message.notification!.body ?? '',
+          dataTitle: message.data['title'] ?? '',
+          datBody: message.data['body'] ?? '',
+        );
+        // save the current context
+        BuildContext? currentContext = context;
+        Navigator.pushReplacementNamed(
+          currentContext,
+          '/user-list',
+        );
         setState(() {
-          _notificationInfo = notification;
-          _totalNotification++;
+          _isNotificationPage = true;
         });
       }
     });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   PushNotification notification = PushNotification(
+    //     title: message.notification!.title ?? '',
+    //     body: message.notification!.body ?? '',
+    //     dataTitle: message.data['title'] ?? '',
+    //     datBody: message.data['body'] ?? '',
+    //   );
+
+    //   Navigator.pushReplacementNamed(
+    //     context,
+    //     '/user-list',
+    //   );
+
+    //   // if (mounted) {
+    //   //   setState(() {
+    //   //     _notificationInfo = notification;
+    //   //     _totalNotification++;
+    //   //   });
+    //   // }
+    // });
     super.initState();
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
@@ -191,20 +195,6 @@ class SplashScreenState extends State<SplashScreen>
 
     _getCurrentUser();
     // user = FirebaseAuth.instance.currentUser == null;
-    Timer(
-        const Duration(milliseconds: 2000),
-        () => Navigator.pushNamedAndRemoveUntil(
-            context,
-            user ? '/splitDashboard' : '/login-page',
-            arguments: role,
-            (route) => false)
-
-        //  Navigator.of(context).pushReplacement(MaterialPageRoute(
-        //     builder: (BuildContext context) =>
-        //         user ? GalleryPage() : const LoginRegister())),
-
-        );
-    // user ? const LoginRegister() : const HomePage())));
   }
 
   @override
@@ -213,8 +203,25 @@ class SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  navigatePage() async {
+    if (!_isNotificationPage) {
+      // Add a delay before navigating to the main page
+      await Future.delayed(const Duration(milliseconds: 2000));
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        user ? '/splitDashboard' : '/login-page',
+        arguments: role,
+        (route) => false,
+      );
+    } else {
+      Navigator.pushNamed(context, '/user-list');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    navigatePage();
     return Scaffold(
       backgroundColor: Colors.white,
       body: FadeTransition(

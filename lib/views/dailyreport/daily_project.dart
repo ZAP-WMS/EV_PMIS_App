@@ -50,12 +50,7 @@ class _DailyProjectState extends State<DailyProject> {
     _dataGridController = DataGridController();
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
-    _stream = FirebaseFirestore.instance
-        .collection('DailyProject3')
-        .doc('${widget.depoName}')
-        .collection(selectedDate!)
-        .doc(userId)
-        .snapshots();
+
     getTableData().whenComplete(() {
       _dailyDataSource = DailyDataSource(dailyproject, context,
           widget.cityName!, widget.depoName!, userId, selectedDate!);
@@ -67,6 +62,12 @@ class _DailyProjectState extends State<DailyProject> {
 
   @override
   Widget build(BuildContext context) {
+    _stream = FirebaseFirestore.instance
+        .collection('DailyProject3')
+        .doc('${widget.depoName}')
+        .collection(selectedDate!)
+        .doc(userId)
+        .snapshots();
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: PreferredSize(
@@ -107,6 +108,9 @@ class _DailyProjectState extends State<DailyProject> {
                   stream: _stream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.exists == false) {
+                      dailyproject.clear();
+                      _dailyDataSource.buildDataGridRows();
+                      _dailyDataSource.updateDatagridSource();
                       return SfDataGridTheme(
                         data: SfDataGridThemeData(
                             gridLineColor: blue,
@@ -359,8 +363,10 @@ class _DailyProjectState extends State<DailyProject> {
                             widget.depoName!,
                             userId,
                             selectedDate!);
-                        _dataGridController = DataGridController();
                       });
+                      _dataGridController = DataGridController();
+                      _dailyDataSource.buildDataGridRows();
+                      _dailyDataSource.updateDatagridSource();
                       return SfDataGridTheme(
                           data: SfDataGridThemeData(
                               gridLineColor: blue,
@@ -660,23 +666,25 @@ class _DailyProjectState extends State<DailyProject> {
                       setState(() {
                         checkTable = true;
                         dailyproject.clear();
-                        getTableData().whenComplete(() {
-                          _stream = FirebaseFirestore.instance
-                              .collection('DailyProject3')
-                              .doc('${widget.depoName}')
-                              .collection(selectedDate!)
-                              .doc(userId)
-                              .snapshots();
-                          _dailyDataSource = DailyDataSource(
-                              dailyproject,
-                              context,
-                              widget.cityName!,
-                              widget.depoName!,
-                              userId,
-                              selectedDate!);
-                          _dataGridController = DataGridController();
-                        });
+                        // getTableData().whenComplete(() {
+                        // _stream = FirebaseFirestore.instance
+                        //     .collection('DailyProject3')
+                        //     .doc('${widget.depoName}')
+                        //     .collection(selectedDate!)
+                        //     .doc(userId)
+                        //     .snapshots();
+                        // _dailyDataSource = DailyDataSource(
+                        //     dailyproject,
+                        //     context,
+                        //     widget.cityName!,
+                        //     widget.depoName!,
+                        //     userId,
+                        //     selectedDate!);
+                        // _dataGridController = DataGridController();
+                        // _dailyDataSource.buildDataGridRows();
+                        // _dailyDataSource.updateDatagridSource();
                       });
+                      //  });
                     }),
                     onCancel: () {
                       Navigator.pop(context);

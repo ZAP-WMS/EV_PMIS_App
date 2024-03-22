@@ -120,7 +120,7 @@ class _SafetyFieldState extends State<SafetyField> {
           depoName: '${widget.depoName!}',
           text: 'SafetyChecklist',
           // / ${DateFormat.yMMMMd().format(DateTime.now() )}',
-          haveSummary: false,
+          haveSummary: true,
 
           onTap: () => Navigator.push(
               context,

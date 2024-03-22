@@ -43,11 +43,13 @@ class _LoginPageState extends State<LoginPage> {
                       labeltext: 'Employee ID',
                       // validator: checkFieldEmpty(
                       //     empIdController.text, 'Employee Id is required'),
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       isSuffixIcon: false,
+
                       validatortext: (value) {
-                        return checkFieldEmpty(value!, 'Email is Required');
+                        return checkFieldEmpty(
+                            value!, 'Employee ID is Required');
                       },
                     ),
                     _space(16),

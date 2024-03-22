@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../provider/checkbox_provider.dart';
 import '../provider/key_provider.dart';
 import '../views/authentication/login_register.dart';
 
@@ -17,6 +19,9 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   bool isDownload;
   void Function()? downloadFun;
   final void Function()? store;
+  final bool haveSend;
+  final void Function()? sendEmail;
+
   CustomAppBar(
       {super.key,
       required this.title,
@@ -28,7 +33,9 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
       this.store,
       this.depoName,
       this.isDownload = false,
-      this.downloadFun});
+      this.downloadFun,
+      this.sendEmail,
+      this.haveSend = false});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -60,6 +67,35 @@ class _CustomAppBarState extends State<CustomAppBar> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
       actions: [
+        widget.haveSend
+            ? Consumer<CheckboxProvider>(
+                builder: (context, value, child) {
+                  // print(value.myBooleanValue);
+                  return Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: IconButton(
+                        onPressed: widget.sendEmail,
+                        icon: Icon(
+                          Icons.share,
+                          color: white,
+                        ),
+                      )
+                      //  ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(backgroundColor: white),
+                      //     onPressed: widget.sendEmail,
+                      //     child: Icon(
+                      //       Icons.share,
+                      //       color: white,
+                      //     )
+                      //     //  Text(
+                      //     //   'Send Report',
+                      //     //   style: TextStyle(color: white, fontSize: 12),
+                      //     // )
+                      //     ),
+                      );
+                },
+              )
+            : Container(),
         widget.isprogress
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -282,7 +318,10 @@ Future<bool> onWillPop(BuildContext context) async {
                       ),
                       Expanded(
                           child: InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.remove('employeeId');
                           a = true;
                           Navigator.pushReplacement(
                               context,

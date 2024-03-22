@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import '../provider/checkbox_provider.dart';
 import '../style.dart';
 import '../views/authentication/authservice.dart';
 import '../views/authentication/login_register.dart';
@@ -25,24 +27,25 @@ class CustomAppBarBackDate extends StatefulWidget {
   bool isDownload;
   Function()? downloadFun;
 
-  CustomAppBarBackDate(
-      {super.key,
-      this.text,
-      this.showDate,
-      this.appbardate,
-      this.haveSynced = false,
-      this.haveSummary = false,
-      this.haveCalender = false,
-      this.store,
-      this.onTap,
-      this.choosedate,
-      this.havedropdown = false,
-      this.havebottom = false,
-      this.isdetailedTab = false,
-      this.tabBar,
-      required this.depoName,
-      this.isDownload = false,
-      this.downloadFun});
+  CustomAppBarBackDate({
+    super.key,
+    this.text,
+    this.showDate,
+    this.appbardate,
+    this.haveSynced = false,
+    this.haveSummary = false,
+    this.haveCalender = false,
+    this.store,
+    this.onTap,
+    this.choosedate,
+    this.havedropdown = false,
+    this.havebottom = false,
+    this.isdetailedTab = false,
+    this.tabBar,
+    required this.depoName,
+    this.isDownload = false,
+    this.downloadFun,
+  });
 
   @override
   State<CustomAppBarBackDate> createState() => _CustomAppBarState();

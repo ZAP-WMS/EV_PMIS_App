@@ -304,7 +304,7 @@ class MaterialDatasource extends DataGridSource {
     // The new cell value must be reset.
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
-    newCellValue = null;
+    newCellValue = '';
 
     final bool isNumericType =
         // column.columnName == 'OriginalDuration' ||

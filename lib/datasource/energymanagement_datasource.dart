@@ -34,12 +34,10 @@ class EnergyManagementDatasource extends DataGridSource {
 
   /// Help to control the editable text in [TextField] widget.
   TextEditingController editingController = TextEditingController();
-  final DataGridController _dataGridController = DataGridController();
 
   @override
   List<DataGridRow> get rows => dataGridRows;
 
-  final DateRangePickerController _controller = DateRangePickerController();
   int? balnceQtyValue;
   double? perc;
   // String? startformattedTime = '12:30';
@@ -92,13 +90,13 @@ class EnergyManagementDatasource extends DataGridSource {
       }
     }
 
-    final int dataRowIndex = dataGridRows.indexOf(row);
+    final int rowIndex = dataGridRows.indexOf(row);
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       DateTime startDate = DateFormat('dd-MM-yyyy HH:mm')
-          .parse(_energyManagement[dataRowIndex].startDate);
+          .parse(_energyManagement[rowIndex].startDate);
       DateTime endDate = DateFormat('dd-MM-yyyy HH:mm')
-          .parse(_energyManagement[dataRowIndex].endDate);
+          .parse(_energyManagement[rowIndex].endDate);
 
       difference = endDate.difference(startDate);
 
@@ -111,12 +109,12 @@ class EnergyManagementDatasource extends DataGridSource {
                     IconButton(
                       onPressed: () async {
                         _selectDateTime(mainContext).whenComplete(() {
-                          _energyManagement[dataRowIndex].startDate =
+                          _energyManagement[rowIndex].startDate =
                               DateFormat('dd-MM-yyyy HH:mm')
                                   .format(selectedDateTime);
                           //   // print(startformattedTime); //output 14:59:00
                           // print(selectedDateTime);
-                          _energyManagement[dataRowIndex].timeInterval =
+                          _energyManagement[rowIndex].timeInterval =
                               '${selectedDateTime.hour}:${selectedDateTime.minute} - ${selectedDateTime.add(const Duration(hours: 6)).hour}:${selectedDateTime.add(const Duration(hours: 6)).minute}';
 
                           buildDataGridRows();
@@ -136,7 +134,7 @@ class EnergyManagementDatasource extends DataGridSource {
                         IconButton(
                           onPressed: () async {
                             _selectDateTime(mainContext).whenComplete(() {
-                              _energyManagement[dataRowIndex].endDate =
+                              _energyManagement[rowIndex].endDate =
                                   DateFormat('dd-MM-yyyy HH:mm')
                                       .format(selectedDateTime);
                               //   // print(startformattedTime); //output 14:59:00
@@ -158,9 +156,9 @@ class EnergyManagementDatasource extends DataGridSource {
                           ? ElevatedButton(
                               onPressed: () {
                                 addRowAtIndex(
-                                    dataRowIndex + 1,
+                                    rowIndex + 1,
                                     EnergyManagementModel(
-                                        srNo: dataRowIndex + 2,
+                                        srNo: rowIndex + 2,
                                         depotName: depoName!,
                                         vehicleNo: 'vehicleNo',
                                         pssNo: 1,
@@ -183,7 +181,7 @@ class EnergyManagementDatasource extends DataGridSource {
                           : (dataGridCell.columnName == 'Delete')
                               ? IconButton(
                                   onPressed: () {
-                                    removeRowAtIndex(dataRowIndex);
+                                    removeRowAtIndex(rowIndex);
                                   },
                                   icon: Icon(
                                     Icons.delete,
@@ -263,7 +261,7 @@ class EnergyManagementDatasource extends DataGridSource {
     } else if (column.columnName == 'energyConsumed') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<double>(
-              columnName: 'energyConsumed', value: newCellValue);
+              columnName: 'energyConsumed', value: newCellValue as double);
       _energyManagement[dataRowIndex].energyConsumed = newCellValue as double;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -299,7 +297,6 @@ class EnergyManagementDatasource extends DataGridSource {
 
     final bool isNumericType = column.columnName == 'pssNo' ||
         column.columnName == 'chargerId' ||
-        // column.columnName == 'EndDate' ||
         column.columnName == 'energyConsumed' ||
         column.columnName == 'endSoc' ||
         column.columnName == 'startSoc';
@@ -329,17 +326,23 @@ class EnergyManagementDatasource extends DataGridSource {
                 : TextInputType.text,
         onChanged: (String value) {
           if (value.isNotEmpty) {
-            if (isNumericType) {
+            if (column.columnName == 'energyConsumed') {
               newCellValue = double.parse(value);
+            }
+            if (isNumericType) {
+              newCellValue = int.parse(value);
+              print(newCellValue);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {
               newCellValue = value;
             }
+          } else {
+            newCellValue = null;
           }
         },
         onSubmitted: (String value) {
-          newCellValue = value;
+          //     newCellValue = value;
 
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.

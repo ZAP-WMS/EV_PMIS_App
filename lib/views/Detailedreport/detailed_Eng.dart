@@ -226,7 +226,8 @@ class _DetailedEngtState extends State<DetailedEng>
                 color:
                     blue, // Set the background color of the selected tab label
               ),
-              labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              labelStyle:
+                  const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               tabs: const [
                 Tab(
                   text: "RFC Drawings of Civil Activities",

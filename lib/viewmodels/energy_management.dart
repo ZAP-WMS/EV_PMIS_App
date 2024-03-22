@@ -26,7 +26,7 @@ class EnergyManagementModel {
   String startDate;
   String endDate;
   String totalTime;
-  dynamic energyConsumed;
+  double energyConsumed;
   dynamic timeInterval;
 
   factory EnergyManagementModel.fromJson(Map<String, dynamic> json) {
@@ -59,8 +59,7 @@ class EnergyManagementModel {
       DataGridCell<String>(columnName: 'startDate', value: startDate),
       DataGridCell<String>(columnName: 'endDate', value: endDate),
       DataGridCell<String>(columnName: 'totalTime', value: totalTime),
-      DataGridCell<dynamic>(
-          columnName: 'energyConsumed', value: energyConsumed),
+      DataGridCell<double>(columnName: 'energyConsumed', value: energyConsumed),
       DataGridCell<dynamic>(columnName: 'timeInterval', value: timeInterval),
       const DataGridCell(columnName: 'Add', value: null),
       const DataGridCell(columnName: 'Delete', value: null)

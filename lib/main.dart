@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
+import 'package:ev_pmis_app/provider/checkbox_provider.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
 import 'package:ev_pmis_app/provider/energy_provider_admin.dart';
@@ -24,11 +27,17 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'notiification/notification_service.dart';
 
 @pragma('vm:entry-point')
+late FirebaseMessaging _messaging;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  NotificationSettings settings = await _messaging.requestPermission(
+      alert: true, badge: true, provisional: true, sound: true);
   await Firebase.initializeApp();
+  // intialize firebase messaging
+
   print("Handling background message:${message.messageId}");
   RemoteMessage? initializeMessage =
       await FirebaseMessaging.instance.getInitialMessage();
@@ -53,6 +62,8 @@ void main() async {
 // here i have initialize my firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await NotificationService.initialize();
+  FirebaseMessaging.instance.isAutoInitEnabled;
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: blue));
   SystemChrome.setPreferredOrientations([
@@ -67,6 +78,7 @@ void main() async {
   // NotificationService().getFCMToken();
 // To show file downloaded notification for pdf
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   const initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
   const initializationSettings =
@@ -99,6 +111,7 @@ class _MyAppState extends State<MyApp> {
   User? user;
   String? userId;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  List<String> citiesList = [];
 
   // This widget is the root of your application.
 
@@ -108,18 +121,6 @@ class _MyAppState extends State<MyApp> {
     getUserId().whenComplete(() {
       verifyProjectManager();
     });
-
-    // getUserId().whenComplete(() {
-    //   _firebaseMessaging.getToken().then((value) {
-    //     print("token::::$value");
-    //     NotificationService().saveTokenToFirestore(userId!, value);
-    //     // sendNotificationToUser(value!, 'title', 'body');
-    //   });
-    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //     //handle incoming messages
-    //     print('receive message${message.notification?.body}');
-    //   });
-    // });
 
     super.initState();
   }
@@ -141,7 +142,14 @@ class _MyAppState extends State<MyApp> {
     List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
 
     for (int i = 0; i < tempList.length; i++) {
+      print('userId${tempList[i]['userId'].toString()}');
       if (tempList[i]['userId'].toString() == userId.toString()) {
+        print('print${tempList[i]['cities'][0]}');
+        for (int j = 0; j < tempList[i]['cities'].length; j++) {
+          citiesList.add(tempList[i]['cities'][j]);
+          await _saveCities(citiesList);
+        }
+
         _firebaseMessaging.getToken().then((value) {
           print("token::::$value");
           NotificationService().saveTokenToFirestore(userId!, value);
@@ -153,6 +161,12 @@ class _MyAppState extends State<MyApp> {
         });
       }
     }
+  }
+
+  _saveCities(List<String> data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String citiesString = jsonEncode(data);
+    await prefs.setStringList('cities', data);
   }
 
   @override
@@ -169,11 +183,14 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => AllDepoSelectProvider()),
         ChangeNotifierProvider(create: (context) => ScrollProvider()),
         ChangeNotifierProvider(create: (context) => EnergyProviderAdmin()),
+        ChangeNotifierProvider(create: (context) => CheckboxProvider())
       ],
       child: OverlaySupport(
         child: GetMaterialApp(
           // initialRoute: '/splash',
-          initialRoute: '/splash-screen',
+          initialRoute:
+              //'/user-list',
+              '/splash-screen',
           // all the pages of routes are declared here
           onGenerateRoute: RouteGenerator.generateRoute,
           debugShowCheckedModeBanner: false,

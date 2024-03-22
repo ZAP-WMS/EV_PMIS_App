@@ -142,14 +142,14 @@ class _CivilFieldState extends State<CivilField> {
     pr = ProgressDialog(context,
         customBody:
             Container(height: 200, width: 100, child: const LoadingPdf()));
-    _stream = FirebaseFirestore.instance
-        .collection('CivilQualityChecklist')
-        .doc('${widget.depoName}')
-        .collection('userId')
-        .doc(userId)
-        .collection(widget.fieldclnName)
-        .doc(selectedDate)
-        .snapshots();
+    // _stream = FirebaseFirestore.instance
+    //     .collection('CivilQualityChecklist')
+    //     .doc('${widget.depoName}')
+    //     .collection('userId')
+    //     .doc(userId)
+    //     .collection(widget.fieldclnName)
+    //     .doc(selectedDate)
+    //     .snapshots();
 
     initializeController();
     _fetchUserData();
@@ -225,6 +225,66 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   Widget build(BuildContext context) {
+    qualitylisttable1 = checkTable ? excavation_getData() : data;
+    _qualityExcavationDataSource = QualityExcavationDataSource(
+        qualitylisttable1, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable2 = checkTable ? backfilling_getData() : data;
+    _qualityBackFillingDataSource = QualityBackFillingDataSource(
+      qualitylisttable2,
+      cityName!,
+      widget.depoName!,
+    );
+    _dataGridController = DataGridController();
+    qualitylisttable3 = checkTable ? massonary_getData() : data;
+    _qualityMassonaryDataSource = QualityMassonaryDataSource(
+      qualitylisttable3,
+      cityName!,
+      widget.depoName!,
+    );
+    _dataGridController = DataGridController();
+    qualitylisttable4 = checkTable ? glazzing_getData() : data;
+    _qualityGlazzingDataSource = QualityGlazzingDataSource(
+      qualitylisttable4,
+      cityName!,
+      widget.depoName!,
+    );
+    _dataGridController = DataGridController();
+    qualitylisttable5 = checkTable ? ceilling_getData() : data;
+    _qualityCeillingDataSource = QualityCeillingDataSource(
+        qualitylisttable5, cityName!, widget.depoName!);
+    qualitylisttable6 = checkTable ? florring_getData() : data;
+    _qualityflooringDataSource = QualityflooringDataSource(
+      qualitylisttable6,
+      cityName!,
+      widget.depoName!,
+    );
+    _dataGridController = DataGridController();
+    qualitylisttable7 = checkTable ? inspection_getData() : data;
+    _qualityInspectionDataSource = QualityInspectionDataSource(
+        qualitylisttable7, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+    qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
+    _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
+        qualitylisttable8, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+    qualitylisttable9 = checkTable ? painting_getData() : data;
+    _qualityPaintingDataSource = QualityPaintingDataSource(
+        qualitylisttable9, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+    qualitylisttable10 = checkTable ? paving_getData() : data;
+    _qualityPavingDataSource = QualityPavingDataSource(
+        qualitylisttable10, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+    qualitylisttable11 = checkTable ? roofing_getData() : data;
+    _qualityRoofingDataSource = QualityRoofingDataSource(
+        qualitylisttable11, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+    qualitylisttable12 = checkTable ? proofing_getData() : data;
+    _qualityProofingDataSource = QualityProofingDataSource(
+        qualitylisttable12, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
     return Scaffold(
       drawer: const NavbarDrawer(),
       appBar: PreferredSize(
@@ -339,14 +399,21 @@ class _CivilFieldState extends State<CivilField> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: StreamBuilder(
-                          stream: _stream,
+                          stream: FirebaseFirestore.instance
+                              .collection('CivilQualityChecklist')
+                              .doc('${widget.depoName}')
+                              .collection('userId')
+                              .doc(userId)
+                              .collection(widget.fieldclnName)
+                              .doc(selectedDate)
+                              .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return LoadingPage();
+                              return const LoadingPage();
                             }
                             if (!snapshot.hasData ||
-                                snapshot.data.exists == false) {
+                                snapshot.data!.exists == false) {
                               return SfDataGridTheme(
                                 data: SfDataGridThemeData(
                                     gridLineColor: blue,

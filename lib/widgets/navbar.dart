@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
+import 'package:ev_pmis_app/views/dailyreport/notification_userlist.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../style.dart';
@@ -63,6 +64,27 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => CitiesHome(),
+                  ),
+                );
+              }),
+          ListTile(
+              leading: Icon(
+                Icons.home,
+                color: blue,
+              ),
+              title: const Text(
+                'Notifications',
+              ),
+              onTap: () {
+                // SystemChrome.setPreferredOrientations([
+                //   DeviceOrientation.portraitUp,
+                //   DeviceOrientation.portraitDown,
+                //   // DeviceOrientation.landscapeLeft,
+                // ]);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => userList(),
                   ),
                 );
               }),
