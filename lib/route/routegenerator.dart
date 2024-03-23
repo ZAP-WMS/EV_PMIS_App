@@ -219,6 +219,16 @@ class RouteGenerator {
             role: argument['role'],
           );
 
+        // case '/split-screen':
+        //   Map<String, dynamic> argument =
+        //       settings.arguments as Map<String, dynamic>;
+        //   return SplitScreen(role: '');
+        // DemandActionScreen(
+        //   cityName: argument['cityName'],
+        //   depoName: argument['depoName'],
+        //   role: argument['role'],
+        // );
+
         case '/user-list':
           // List<String> argument = [];
           // settings.arguments as Map<String, dynamic>;

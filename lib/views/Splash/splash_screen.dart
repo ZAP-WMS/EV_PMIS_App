@@ -7,13 +7,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../viewmodels/push_notification.dart';
 import '../dailyreport/notification_userlist.dart';
 
+late FirebaseMessaging _messaging;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  NotificationSettings settings = await _messaging.requestPermission(
+      alert: true, badge: true, provisional: true, sound: true);
   await Firebase.initializeApp();
-  print("Handling background message:${message.messageId}");
+
   RemoteMessage? initializeMessage =
       await FirebaseMessaging.instance.getInitialMessage();
   if (initializeMessage != null) {

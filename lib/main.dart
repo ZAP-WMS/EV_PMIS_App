@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     user = FirebaseAuth.instance.currentUser;
     getUserId().whenComplete(() {
-      verifyProjectManager();
+      verifyAndSaveCities();
     });
 
     super.initState();
@@ -112,6 +112,10 @@ class _MyAppState extends State<MyApp> {
       print('UserId - $value');
       // setState(() {});
     });
+  }
+
+  verifyAndSaveCities() async {
+    await verifyProjectManager();
   }
 
   Future<void> verifyProjectManager() async {
@@ -128,7 +132,8 @@ class _MyAppState extends State<MyApp> {
         print('print${tempList[i]['cities'][0]}');
         for (int j = 0; j < tempList[i]['cities'].length; j++) {
           citiesList.add(tempList[i]['cities'][j]);
-          await _saveCities(citiesList);
+          _saveCities(citiesList);
+          print('rtretrtretret');
         }
 
         _firebaseMessaging.getToken().then((value) {
