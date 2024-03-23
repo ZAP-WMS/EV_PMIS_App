@@ -19,11 +19,6 @@ import '../../widgets/upload.dart';
 import '../keyevents/Grid_DataTableA2.dart';
 import '../overviewpage/view_AllFiles.dart';
 
-void main() {
-  runApp(KeyEvents());
-  initializeDateFormatting();
-}
-
 /// The application that contains datagrid on it.
 
 /// The home page of the application which hosts the datagrid.
@@ -31,7 +26,10 @@ class KeyEvents extends StatefulWidget {
   /// Creates the home page.
   String? depoName;
   String? cityName;
-  KeyEvents({Key? key, this.depoName, this.cityName}) : super(key: key);
+  String role;
+  String? userId;
+  KeyEvents({Key? key,this.userId, this.depoName, this.cityName, required this.role})
+      : super(key: key);
 
   @override
   _KeyEventsState createState() => _KeyEventsState();

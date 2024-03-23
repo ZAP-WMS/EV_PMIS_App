@@ -1,20 +1,17 @@
 import 'dart:io';
-
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/views/authentication/login_register.dart';
 import 'package:ev_pmis_app/widgets/custom_alert_box.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SplitScreen extends StatelessWidget {
   String? role;
-  SplitScreen({super.key, required this.role});
+  String? userId;
+  SplitScreen({super.key, required this.role, this.userId});
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: () async {
         CustomAlertBox()
@@ -58,7 +55,7 @@ class SplitScreen extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, '/evDashboard',
-                            arguments: role);
+                            arguments: {"role": role, "userId": userId,},);
                       },
                       child: Card(
                         elevation: 10,
@@ -80,7 +77,7 @@ class SplitScreen extends StatelessWidget {
                               backgroundColor: MaterialStatePropertyAll(blue)),
                           onPressed: () {
                             Navigator.pushNamed(context, '/evDashboard',
-                                arguments: role);
+                                arguments: {"role": role, "userId": userId});
                           },
                           child: const Text(
                             'EV Bus Project Analysis Dashboard',
@@ -103,7 +100,8 @@ class SplitScreen extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, '/demand');
+                        Navigator.pushNamed(context, '/demand',
+                            arguments: {"role": role, "userId": userId});
                       },
                       child: Card(
                         elevation: 10,
@@ -124,7 +122,8 @@ class SplitScreen extends StatelessWidget {
                           style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(blue)),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/demand');
+                            Navigator.pushNamed(context, '/demand',
+                                arguments: {"role": role, "userId": userId});
                           },
                           child: const Text(
                             'EV Bus Depot Management System',
@@ -141,7 +140,8 @@ class SplitScreen extends StatelessWidget {
         floatingActionButton: ElevatedButton(
             style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(blue)),
             onPressed: () {
-              Navigator.pushNamed(context, '/cities-page');
+              Navigator.pushNamed(context, '/cities-page',
+                  arguments: {"userId": userId, "role": role});
             },
             child: const Text(
               'Proceed to cities',

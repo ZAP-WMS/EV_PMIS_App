@@ -3,6 +3,7 @@ import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/datasource_admin/dailyproject_datasource.dart';
 import 'package:ev_pmis_app/model_admin/daily_projectModel.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
@@ -13,18 +14,20 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../../../views/dailyreport/summary.dart';
 
 class DailyProjectAdmin extends StatefulWidget {
   String? userId;
   String? cityName;
   String? depoName;
+  String role;
+
   DailyProjectAdmin({
     super.key,
     this.userId,
     this.cityName,
     required this.depoName,
+    required this.role
   });
 
   @override
@@ -36,7 +39,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   DateTime? enddate = DateTime.now();
   DateTime? rangestartDate;
   DateTime? rangeEndDate;
-  List<DailyProjectModelAdmin> DailyProject = <DailyProjectModelAdmin>[];
+  List<DailyProjectModelAdmin> dailyProject = <DailyProjectModelAdmin>[];
   late DailyDataSource _dailyDataSource;
   late DataGridController _dataGridController;
   List<dynamic> tabledata2 = [];
@@ -55,40 +58,36 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
     // getmonthlyReport();
     // DailyProject = getmonthlyReport();
     _dailyDataSource = DailyDataSource(
-        DailyProject, context, widget.cityName!, widget.depoName!);
+        dailyProject, context, widget.cityName!, widget.depoName!);
     _dataGridController = DataGridController();
-
-    // _stream = FirebaseFirestore.instance
-    //     .collection('DailyProjectReport')
-    //     .doc('${widget.depoName}')
-    //     // .collection(widget.userId!)
-    //     // .doc(DateFormat.yMMMMd().format(DateTime.now()))
-    //     .snapshots();
-
     super.initState();
     getAllData();
   }
 
   getAllData() {
-    DailyProject.clear();
+    dailyProject.clear();
     id.clear();
     getTableData().whenComplete(() {
       nestedTableData(id, context).whenComplete(() {
         _dailyDataSource = DailyDataSource(
-            DailyProject, context, widget.cityName!, widget.depoName!);
+            dailyProject, context, widget.cityName!, widget.depoName!);
         _dataGridController = DataGridController();
         _isLoading = false;
         setState(() {});
-      });
-    });
+      },);
+    },);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          // ignore: sort_child_properties_last
+          preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            isProjectManager: widget.role == "projectManager" ? true : false,
+            makeAnEntryPage: DailyProject(
+          cityName: widget.cityName,
+          role: widget.role, depoName: widget.depoName),
             showDepoBar: true,
             toDaily: true,
             depoName: widget.depoName,
@@ -112,8 +111,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
             store: () {
               storeData();
             },
-          ),
-          preferredSize: const Size.fromHeight(50)),
+          )),
       body: _isLoading
           ? const LoadingPage()
           : Column(children: [
@@ -811,9 +809,8 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
             .then((value) {
           if (value.data() != null) {
             for (int j = 0; j < value.data()!['data'].length; j++) {
-              DailyProject.add(
+              dailyProject.add(
                   DailyProjectModelAdmin.fromjson(value.data()!['data'][j]));
-              print(DailyProject);
             }
           }
         });

@@ -88,6 +88,7 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            isProjectManager: false,
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,

@@ -6,6 +6,7 @@ import 'package:ev_pmis_app/provider/energy_provider_admin.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/viewmodels/energy_management.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
+import 'package:ev_pmis_app/views/energy_management/energy_management.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -19,19 +20,20 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:printing/printing.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 class EnergyManagementAdmin extends StatefulWidget {
   // String? userId;
   String? cityName;
   String? depoName;
   String? userId;
+  String role;
   EnergyManagementAdmin({
     super.key,
     // this.userId,
     this.cityName,
     required this.depoName,
+    required this.role,
+     this.userId
   });
 
   @override
@@ -115,8 +117,14 @@ class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
         DateTime.parse(enddate.toString()));
     return Scaffold(
       appBar: PreferredSize(
-          // ignore: sort_child_properties_last
+          preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            isProjectManager: widget.role == 'projectManager' ? true : false,
+            makeAnEntryPage: EnergyManagement(
+          depoName: widget.depoName,
+          cityName: widget.cityName,
+          userId: widget.userId,
+        ),
             userId: widget.userId ?? "",
             showDepoBar: true,
             // donwloadFun: _generatePDF,
@@ -129,11 +137,7 @@ class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
             //specificUser ? true : false,
             isdownload: false,
             haveSummary: false,
-            // store: () {
-            //   storeData();
-            // },
-          ),
-          preferredSize: const Size.fromHeight(50)),
+          )),
       body: _isLoading
           ? LoadingPage()
           : Column(children: [

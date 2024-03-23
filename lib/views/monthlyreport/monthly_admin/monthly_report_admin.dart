@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
+import 'package:ev_pmis_app/views/monthlyreport/monthly_project.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,8 +19,10 @@ class MonthlySummary extends StatefulWidget {
   final String? cityName;
   final String? depoName;
   final String? id;
-  const MonthlySummary(
-      {super.key, this.userId, this.cityName, required this.depoName, this.id});
+  String role;
+  
+ MonthlySummary(
+      {super.key, this.userId, this.cityName, required this.depoName, this.id,required this.role});
   @override
   State<MonthlySummary> createState() => _MonthlySummaryState();
 }
@@ -62,6 +65,8 @@ class _MonthlySummaryState extends State<MonthlySummary> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(
+          isProjectManager: widget.role == 'projectManager' ? true : false,
+          makeAnEntryPage: MonthlyProject(depoName: widget.depoName),
           toMonthly: true,
           showDepoBar: true,
           cityName: widget.cityName,

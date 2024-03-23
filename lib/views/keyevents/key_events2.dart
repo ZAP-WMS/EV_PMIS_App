@@ -22,11 +22,6 @@ import '../../widgets/keyboard_listener.dart';
 import '../authentication/authservice.dart';
 import '../overviewpage/view_AllFiles.dart';
 
-void main() {
-  runApp(KeyEvents2());
-  initializeDateFormatting();
-}
-
 /// The application that contains datagrid on it.
 
 /// The home page of the application which hosts the datagrid.
@@ -35,11 +30,14 @@ class KeyEvents2 extends StatefulWidget {
   String? role;
   String? depoName;
   String? cityName;
-  KeyEvents2({Key? key, this.role, this.depoName, this.cityName})
+  String? userId;
+
+  KeyEvents2({Key? key, this.userId, this.role, this.depoName, this.cityName})
       : super(key: key);
 
   @override
   _KeyEvents2State createState() => _KeyEvents2State();
+
 }
 
 class _KeyEvents2State extends State<KeyEvents2> {
@@ -259,9 +257,13 @@ class _KeyEvents2State extends State<KeyEvents2> {
   // final ScrollController _ganttChartController = ScrollController();
   double totalperc = 0.0;
   KeyProvider? _keyProvider;
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
 
   @override
   void initState() {
+    getAssignedDepots();
     _keyProvider = Provider.of<KeyProvider>(context, listen: false);
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
@@ -323,60 +325,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
 
   @override
   Widget build(BuildContext context) {
-    // menuwidget = [
-    //   StatutoryAprovalA2(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //     keyEvents: '',
-    //   ),
-    //   StatutoryAprovalA3(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //   ),
-    //   StatutoryAprovalA4(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //   ),
-    //   StatutoryAproval(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   // StatutoryAprovalA5(
-    //   //   userid: userId,
-    //   //   cityName: widget.cityName,
-    //   //   depoName: widget.depoName,
-    //   // ),
-    //   StatutoryAprovalA6(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA7(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA8(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA9(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA10(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    // ];
-
+  
     return _isLoading
         ? const LoadingPage()
         : keyBoardArrow(
@@ -390,7 +339,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                       title: '$cityName/${widget.depoName}',
                       height: 50,
                       isCentered: false,
-                      isSync: true,
+                      isSync: isFieldEditable ? true : false,
                       store: () {
                         _showDialog(context);
                         FirebaseApi().defaultKeyEventsField(
@@ -450,7 +399,8 @@ class _KeyEvents2State extends State<KeyEvents2> {
                         return SingleChildScrollView(
                           child: SizedBox(
                               height: MediaQuery.of(context).size.height * 0.85,
-                              child: Row(children: [
+                              child: Row(
+                                children: [
                                 Expanded(
                                   child: SfDataGridTheme(
                                     data: SfDataGridThemeData(
@@ -482,7 +432,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                           }));
                                         }
                                       },
-                                      allowEditing: true,
+                                      allowEditing: isFieldEditable,
                                       frozenColumnsCount: 2,
                                       editingGestureType:
                                           EditingGestureType.tap,
@@ -1867,7 +1817,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                           }));
                                         }
                                       },
-                                      allowEditing: true,
+                                      allowEditing: isFieldEditable,
                                       frozenColumnsCount: 2,
                                       editingGestureType:
                                           EditingGestureType.tap,
@@ -2777,6 +2727,13 @@ class _KeyEvents2State extends State<KeyEvents2> {
       ),
     );
   }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+  }
+  
 }
 
 class ChartData {

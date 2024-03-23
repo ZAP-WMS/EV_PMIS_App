@@ -92,6 +92,7 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            isProjectManager: false,
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,

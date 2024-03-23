@@ -14,10 +14,12 @@ String userId = '';
 class DepotPage extends StatefulWidget {
   String? role;
   String? cityName;
+  String? userId;
   DepotPage({
     super.key,
     this.cityName,
     this.role,
+    this.userId
   });
 
   @override
@@ -30,10 +32,8 @@ class _DepotPageState extends State<DepotPage> {
   @override
   void initState() {
     getUserId();
-    // TODO: implement initState
-
     super.initState();
-    print('depotPage - UserId- ${userId}');
+    print('depotPage - UserId- $userId');
   }
 
   @override

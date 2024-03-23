@@ -5,6 +5,7 @@ import 'package:ev_pmis_app/datasource_admin/detailedengShed_datasource.dart';
 import 'package:ev_pmis_app/datasource_admin/detailedeng_datasource.dart';
 import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/Detailedreport/detailed_Eng.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +85,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
               widget.depoName.toString(),
               widget.role);
           _dataGridController = DataGridController();
-
-          // DetailedProjectev = getmonthlyReportEv();
           _detailedEngSourceev = DetailedEngSourceEV(
               DetailedProjectev,
               context,
@@ -93,8 +92,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
               widget.depoName.toString(),
               widget.role);
           _dataGridController = DataGridController();
-
-          // DetailedProjectshed = getmonthlyReportEv();
           _detailedEngSourceShed = DetailedEngSourceShed(
               DetailedProjectshed,
               context,
@@ -102,56 +99,12 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
               widget.depoName.toString(),
               widget.role);
           _dataGridController = DataGridController();
-
-          // _stream = FirebaseFirestore.instance
-          //     .collection('DetailEngineering')
-          //     .doc('${widget.depoName}')
-          //     .collection('RFC LAYOUT DRAWING')
-          //     .doc(id[0])
-          //     .snapshots();
-
-          // _stream1 = FirebaseFirestore.instance
-          //     .collection('DetailEngineering')
-          //     .doc('${widget.depoName}')
-          //     .collection('EV LAYOUT DRAWING')
-          //     .doc(id[0])
-          //     .snapshots();
-
-          // _stream2 = FirebaseFirestore.instance
-          //     .collection('DetailEngineering')
-          //     .doc('${widget.depoName}')
-          //     .collection('Shed LAYOUT DRAWING')
-          //     .doc(id[0])
-          //     .snapshots();
           _isloading = false;
           setState(() {});
         });
       },
     );
-
-    // });
-
     super.initState();
-    // FirebaseApi.getAllId().then((value) {
-    //   num_id = dataList.length;
-    //   getTableData().whenComplete(() {
-    //     // detailedProject = getmonthlyReport();
-    //     _detailedDataSource = DetailedEngSource(DetailedProject, context,
-    //         widget.cityName.toString(), widget.depoName.toString());
-    //     _dataGridController = DataGridController();
-
-    //     // DetailedProjectev = getmonthlyReportEv();
-    //     _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
-    //         widget.cityName.toString(), widget.depoName.toString());
-    //     _dataGridController = DataGridController();
-
-    //     // DetailedProjectshed = getmonthlyReportEv();
-    //     _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
-    //         context, widget.cityName.toString(), widget.depoName.toString());
-    //     _dataGridController = DataGridController();
-    //     _controller = TabController(length: 3, vsync: this);
-    //   });
-    // });
   }
 
   @override
@@ -171,17 +124,33 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
             backgroundColor: blue,
             title: Column(
               children: [
-                Text(
+                const Text(
                   'Detailed Engineering',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.depoName ?? '',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 11, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             actions: [
+             widget.role == "projectManager" ? Container(
+              margin: const EdgeInsets.all(8.0),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DetailedEng(
+                                  depoName: widget.depoName,
+                                  role: 'user',
+                                )),
+                      );
+                    },
+                    icon: const Icon(Icons.add)),
+              ) : Container(),
               Padding(
                   padding: const EdgeInsets.only(right: 15, left: 15),
                   child: GestureDetector(

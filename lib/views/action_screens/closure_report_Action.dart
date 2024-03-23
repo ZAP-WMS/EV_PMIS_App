@@ -39,12 +39,26 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
       case 'user':
         selectedUi = ClosureField(
           depoName: widget.depoName,
-          userId: widget.userId,
+          userId: widget.userId,role: widget.role,
         );
         break;
+
       case 'admin':
         selectedUi = ClosureSummaryTable(
-            cityName: widget.cityName, depoName: widget.depoName);
+          userId: widget.userId,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          role: widget.role!,
+        );
+        break;
+
+      case "projectManager":
+        selectedUi = ClosureSummaryTable(
+            userId: widget.userId,
+            cityName: widget.cityName,
+            depoName: widget.depoName,
+            role: widget.role!);
+        break;
     }
 
     return selectedUi;

@@ -55,6 +55,57 @@ class AuthService {
     return true;
   }
 
+    Future<String> getCurrentCompanyName() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final String data = sharedPreferences.getString('companyName').toString();
+    return data;
+  }
+
+  Future storeCompanyName(String companyName) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('companyName', companyName);
+  }
+
+  Future storeEmployeeId(String employeeId) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('employeeId', employeeId);
+  }
+
+   Future storeUserRole(String role) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('role', role);
+  }
+
+  Future<String> getUserRole() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final String data = sharedPreferences.getString('role').toString();
+    return data;
+  }
+
+  Future storeDepoList(List<String> depotList) async {
+    try {
+      final shared = await SharedPreferences.getInstance();
+      shared.setStringList("depotList", depotList);
+      print("depotList Stored - $depotList");
+    } catch (e) {
+      print("Error While Storing AssginedDepots - $e");
+    }
+  }
+
+  bool verifyAssignedDepot(String depotName, List<String> assignedDepots) {
+    bool isEligibleUser = false;
+    if (assignedDepots.contains(depotName)) {
+      isEligibleUser = true;
+    }
+    return isEligibleUser;
+  }
+
+  Future<List<String>> getDepotList() async {
+    final shared = await SharedPreferences.getInstance();
+    List<String> depotList = shared.getStringList("depotList")!;
+    return depotList;
+  }
+
   Future<String> getCurrentUserId() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final String data = sharedPreferences.getString('employeeId').toString();

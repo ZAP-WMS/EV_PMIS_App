@@ -22,13 +22,17 @@ class DepotOverview extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
-  DepotOverview({super.key, required this.depoName, this.role});
+  String? userId;
+  DepotOverview({super.key, required this.depoName, this.role, this.userId});
 
   @override
   State<DepotOverview> createState() => _DepotOverviewState();
 }
 
 class _DepotOverviewState extends State<DepotOverview> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   String? cityName;
   String userId = '';
   bool isProjectManager = false;
@@ -81,19 +85,12 @@ class _DepotOverviewState extends State<DepotOverview> {
 
   @override
   void initState() {
-    print('DepotOverview page');
+    getAssignedDepots();
     super.initState();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     initializeController();
     verifyProjectManager().whenComplete(() {
       getTableData().whenComplete(() {
-        // _stream = FirebaseFirestore.instance
-        //     .collection('OverviewCollectionTable')
-        //     .doc(widget.depoName)
-        //     .collection("OverviewTabledData")
-        //     .doc(projectManagerId)
-        //     .snapshots();
-
         _employeeDataSource = DepotOverviewDatasource(_employees, context);
         _dataGridController = DataGridController();
       });
@@ -1319,54 +1316,6 @@ class _DepotOverviewState extends State<DepotOverview> {
     _fetchUserData(projectManagerId.toString());
   }
 
-  // Future<void> verifyProjectManager() async {
-  //   // await getUserId();
-  //   if (widget.role == 'admin') {
-  //     QuerySnapshot getProjectManager = await FirebaseFirestore.instance
-  //         .collection('AssignedRole')
-  //         .where('roles', arrayContains: 'Project Manager')
-  //         .get();
-
-  //     getProjectManager.docs.forEach((element) {
-  //       final selectedCity = (element.data() as dynamic)['cities'] ?? '';
-  //       if (selectedCity[0] == cityName) {
-  //         userId = (element.data() as dynamic)['userId'] ?? '';
-  //       }
-  //     });
-
-  //     isProjectManager = true;
-  //     setState(() {});
-  //   } else {
-  //     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //         .collection('AssignedRole')
-  //         .where('roles', arrayContains: 'Project Manager')
-  //         .get();
-
-  //     List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
-
-  //     for (int i = 0; i < tempList.length; i++) {
-  //       if (tempList[i]['userId'].toString() == userId.toString()) {
-  //         for (int j = 0; j < tempList[i]['depots'].length; j++) {
-  //           List<dynamic> depot = tempList[i]['depots'];
-  //           userId = tempList[i]['userId'];
-
-  //           if (depot[j].toString() == widget.depoName) {
-  //             isProjectManager = true;
-  //             // projectManagerId = tempList[i]['userId'].toString();
-  //             // setState(() {});
-  //             break;
-  //           }
-  //         }
-  //       }
-  //       projectManagerId = tempList[i]['userId'].toString();
-  //       setState(() {});
-  //       print('ID$projectManagerId');
-  //     }
-  //   }
-  //   print('Project Manager Logged In - $isProjectManager');
-  //   _fetchUserData(projectManagerId!);
-  // }
-
   Future<void> getTableData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('OverviewCollectionTable')
@@ -1388,5 +1337,11 @@ class _DepotOverviewState extends State<DepotOverview> {
 
     isLoading = false;
     setState(() {});
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

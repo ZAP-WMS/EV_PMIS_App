@@ -5,7 +5,6 @@ import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../components/Loading_page.dart';
 import '../../../style.dart';
 import 'jmr_fields.dart';
@@ -13,13 +12,20 @@ import 'jmr_fields.dart';
 class JmrUserPage extends StatefulWidget {
   String? cityName;
   String? depoName;
-  JmrUserPage({super.key, this.cityName, this.depoName});
+  String? userId;
+  String? role;
+
+  JmrUserPage(
+      {super.key, this.cityName, this.role, this.depoName, this.userId});
 
   @override
   State<JmrUserPage> createState() => _JmrUserPageState();
 }
 
 class _JmrUserPageState extends State<JmrUserPage> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   String fileName = '';
   List currentTabList = [];
   String selectedDepot = '';
@@ -34,6 +40,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
 
   @override
   void initState() {
+    getAssignedDepots();
     getUserId().whenComplete(() => {
           getJmrLen(5),
         });
@@ -44,7 +51,9 @@ class _JmrUserPageState extends State<JmrUserPage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      animationDuration: const Duration(milliseconds: 200),
+      animationDuration: const Duration(
+        milliseconds: 200,
+      ),
       initialIndex: 0,
       child: SafeArea(
           child: Scaffold(
@@ -54,14 +63,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
               labelColor: white,
               labelStyle: buttonWhite,
               unselectedLabelColor: Colors.black,
-              //indicatorSize: TabBarIndicatorSize.label,
               indicator: BoxDecoration(color: blue),
-              // MaterialIndicator(
-              //     horizontalPadding: 24,
-              //     bottomLeftRadius: 8,
-              //     bottomRightRadius: 8,
-              //     color: white,
-              //     paintingStyle: PaintingStyle.fill),
               onTap: (value) {
                 _selectedIndex = value;
                 getJmrLen(5);
@@ -166,7 +168,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                 Container(
                   height: 30,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: isFieldEditable == false ? null : () {
                       index != 0
                           ? currentTabList[index - 1] == 0
                               ? showDialog(
@@ -318,7 +320,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.blue),
                       ),
-                      onPressed: () async {
+                      onPressed: isFieldEditable == false ? null : () async {
                         FilePickerResult? result =
                             await FilePicker.platform.pickFiles(
                           withData: true,
@@ -349,7 +351,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                       child: Text(
                         'Upload',
                         style: TextStyle(color: white, fontSize: 10),
-                      )),
+                      ),),
                 ),
                 InkWell(
                   onTap: () {
@@ -421,5 +423,11 @@ class _JmrUserPageState extends State<JmrUserPage> {
     await AuthService().getCurrentUserId().then((value) {
       userId = value;
     });
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

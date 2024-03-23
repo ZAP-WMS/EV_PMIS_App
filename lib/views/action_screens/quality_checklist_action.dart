@@ -7,8 +7,15 @@ class QualityChecklistAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
+  String userId;
 
-  QualityChecklistAction({super.key, this.cityName, this.role, this.depoName});
+  QualityChecklistAction({
+    super.key,
+    this.cityName,
+    this.role,
+    this.depoName,
+    required this.userId
+  });
 
   @override
   State<QualityChecklistAction> createState() => _QualityChecklistActionState();
@@ -31,11 +38,22 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = QualityHome(depoName: widget.depoName);
+        selectedUi = QualityHome(depoName: widget.depoName,role: widget.role,
+        userId: widget.userId,);
         break;
       case 'admin':
         selectedUi = QualityHomeAdmin(
-            cityName: widget.cityName, depoName: widget.depoName);
+            role: widget.role!,
+            cityName: widget.cityName,userId: widget.userId,
+            depoName: widget.depoName);
+        break;
+      case 'projectManager':
+        selectedUi = QualityHomeAdmin(
+            role: widget.role!,
+            userId: widget.userId,
+            cityName: widget.cityName,
+            depoName: widget.depoName);
+        break;
     }
     return selectedUi;
   }

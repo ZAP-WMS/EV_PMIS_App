@@ -22,6 +22,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool haveSend;
   final void Function()? sendEmail;
 
+
   CustomAppBar(
       {super.key,
       required this.title,
@@ -35,7 +36,8 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
       this.isDownload = false,
       this.downloadFun,
       this.sendEmail,
-      this.haveSend = false});
+      this.haveSend = false,
+      });
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -67,6 +69,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
       actions: [
+
         widget.haveSend
             ? Consumer<CheckboxProvider>(
                 builder: (context, value, child) {

@@ -6,8 +6,10 @@ class DetailEngineeringAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
+  String userId;
 
-  DetailEngineeringAction({super.key, this.cityName, this.role, this.depoName});
+  DetailEngineeringAction({super.key,
+  required this.userId, this.cityName, this.role, this.depoName});
 
   @override
   State<DetailEngineeringAction> createState() =>
@@ -20,7 +22,6 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -34,15 +35,26 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
       case 'user':
         selectedUi = DetailedEng(
           depoName: widget.depoName,
+          userId: widget.userId,
           role: 'user',
         );
         break;
       case 'admin':
         selectedUi = DetailedEngAdmin(
+          userId: widget.userId,
           cityName: widget.cityName,
           depoName: widget.depoName,
           role: 'admin',
         );
+        break;
+      case 'projectManager':
+        selectedUi = DetailedEngAdmin(
+          cityName: widget.cityName,
+          userId: widget.userId,
+          depoName: widget.depoName,
+          role: widget.role,
+        );
+        break;
     }
 
     return selectedUi;

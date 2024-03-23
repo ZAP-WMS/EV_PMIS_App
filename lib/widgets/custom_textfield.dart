@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../style.dart';
 
@@ -9,6 +8,7 @@ class CustomTextField extends StatefulWidget {
   String labeltext;
   bool isSuffixIcon;
   bool isProjectManager;
+  bool isFieldEditable;
   final String? Function(String?)? validatortext;
 
   final TextInputType? keyboardType;
@@ -23,7 +23,8 @@ class CustomTextField extends StatefulWidget {
       required this.textInputAction,
       this.role,
       this.isProjectManager = true,
-      this.isObscure = false});
+      this.isObscure = false,
+      this.isFieldEditable = false});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -34,7 +35,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: widget.isProjectManager ? false : true,
+      readOnly: widget.isFieldEditable ? widget.isProjectManager ? false : true : false,
       autofocus: false,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,

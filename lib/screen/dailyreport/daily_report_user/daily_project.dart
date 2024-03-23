@@ -23,8 +23,10 @@ List<int> globalItemLengthList = [];
 class DailyProject extends StatefulWidget {
   String? cityName;
   String? depoName;
+  String? role;
 
-  DailyProject({super.key, this.cityName, required this.depoName});
+  DailyProject({super.key, this.cityName, required this.depoName,
+  this.role});
 
   @override
   State<DailyProject> createState() => _DailyProjectState();

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/common_pdf_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,9 @@ class SafetySummary extends StatefulWidget {
   final String? userId;
   String? cityName;
   final String? depoName;
+  String role;
   SafetySummary(
-      {super.key, this.userId, required this.depoName, required this.cityName});
+      {super.key, this.userId, required this.depoName, required this.cityName,required this.role});
 
   @override
   State<SafetySummary> createState() => _SafetySummaryState();
@@ -59,6 +61,8 @@ class _SafetySummaryState extends State<SafetySummary> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            isProjectManager: widget.role == "projectManager" ? true : false,
+            makeAnEntryPage: SafetyField(depoName: widget.depoName),
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,
@@ -67,12 +71,12 @@ class _SafetySummaryState extends State<SafetySummary> {
             userId: widget.userId,
           )),
       body: enableLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : FutureBuilder<List<List<dynamic>>>(
               future: fetchData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return LoadingPage();
+                  return const LoadingPage();
                 } else if (snapshot.hasError) {
                   return const Center(
                     child: Text('Error fetching data'),

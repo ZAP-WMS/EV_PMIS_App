@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ev_pmis_app/views/Splash/splash_screen.dart';
 import 'package:ev_pmis_app/views/action_screens/closure_report_Action.dart';
 import 'package:ev_pmis_app/views/action_screens/daily_progress_action.dart';
@@ -9,20 +7,18 @@ import 'package:ev_pmis_app/views/action_screens/detail_eng_action.dart';
 import 'package:ev_pmis_app/views/action_screens/ev_dashboard_action.dart';
 import 'package:ev_pmis_app/views/action_screens/material_procurement_action.dart';
 import 'package:ev_pmis_app/views/action_screens/monthly_report_action.dart';
+import 'package:ev_pmis_app/views/action_screens/project_planning_action.dart';
 import 'package:ev_pmis_app/views/action_screens/quality_checklist_action.dart';
 import 'package:ev_pmis_app/views/action_screens/safety_checklist_action.dart';
 import 'package:ev_pmis_app/views/authentication/login_register.dart';
 import 'package:ev_pmis_app/provider/internet_provider.dart';
 import 'package:ev_pmis_app/screen/demand_energy/demandScreen.dart';
-import 'package:ev_pmis_app/screen/ev_dashboard/ev_dashboard_user/ev_dashboard_user.dart';
 import 'package:ev_pmis_app/screen/otp_verification/send_otp.dart';
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/quality_home_admin.dart';
 import 'package:ev_pmis_app/screen/split_dashboard/split_screen.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-
 import 'package:ev_pmis_app/widgets/upload.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../views/action_screens/jmr_action_screen.dart';
 import 'package:ev_pmis_app/widgets/no_internet.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
@@ -45,23 +41,34 @@ class RouteGenerator {
       switch (settings.name) {
         case '/verifyPage':
           return const OtpVerificationScreen();
+
         case '/splash-screen':
           return const SplashScreen();
+
         case '/login-page':
           return const LoginRegister();
+
         case '/cities-page':
-          return CitiesHome();
+          final args = settings.arguments as Map<String, dynamic>;
+          return CitiesHome(
+            userId: args["userId"],
+          );
+
         case '/depot-inside-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
+
           return UploadDocument(
               pagetitle: 'Depot Insights',
               cityName: argument['cityName'],
               depoName: argument['depoName'],
               userId: userId,
-              fldrName: 'DepotImages');
+              fldrName: 'DepotImages',
+              );
+
         case '/chat-page':
           return FeedbackPage();
+
         case '/overview page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -75,13 +82,15 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DepotOverviewAction(
+            userId: argument['userId'],
             depoName: argument['depoName'],
             role: argument['role'],
           );
         case '/planning-page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
-          return KeyEvents2(
+          return ProjectPlanningAction(
+            role: argument['role'], userId: argument["userId"],
             depoName: argument['depoName'],
             // role: argument['role'],
           );
@@ -90,6 +99,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MaterialProcurementAction(
+            userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
@@ -99,6 +109,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DailyProjectAction(
+            userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
@@ -108,6 +119,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MonthlyReportAction(
+            userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
@@ -117,6 +129,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DetailEngineeringAction(
+            userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
@@ -126,6 +139,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return JmrActionScreen(
+            userId: argument['userId'],
             depoName: argument['depoName'],
             role: argument['role'],
             cityName: argument['cityName'],
@@ -135,6 +149,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return SafetyChecklistAction(
+            userId: argument['userId'],
             depoName: argument['depoName'],
             cityName: argument['cityName'],
             role: argument['role'],
@@ -144,6 +159,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return QualityChecklistAction(
+            userId: argument['userId'],
             depoName: argument['depoName'],
             role: argument['role'],
             cityName: argument['cityName'],
@@ -163,6 +179,8 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return QualityHomeAdmin(
+            userId: argument['userId'],
+            role: argument['role'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
           );
@@ -174,8 +192,9 @@ class RouteGenerator {
             mobileNumber: argument[' mobileNumber'],
           );
         case '/evDashboard':
-          final role = settings.arguments as String;
-          // CustomPageRoute(page: page)
+          final args = settings.arguments as Map<String, dynamic>;
+          final userId = args["userId"];
+          final role = args["role"];
           return EVDashboardAction(
             role: role,
           );
@@ -184,15 +203,17 @@ class RouteGenerator {
           return DemandEnergyScreen();
 
         case '/splitDashboard':
-          final args = settings.arguments as String;
+          final args = settings.arguments as Map<String, dynamic>;
           return SplitScreen(
-            role: args,
+            role: args["role"],
+            userId: args["userId"],
           );
 
         case '/depot-energy':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DemandActionScreen(
+            userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],

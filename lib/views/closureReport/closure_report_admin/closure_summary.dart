@@ -1,12 +1,11 @@
 import 'package:ev_pmis_app/FirebaseApi/firebase_api.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
+import 'package:ev_pmis_app/screen/closureReport/closure_report_user/closurefield.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-
 import '../../overviewpage/image_page.dart';
-import '../image_view.dart';
 
 class ClosureSummary extends StatefulWidget {
   final String? userId;
@@ -15,15 +14,17 @@ class ClosureSummary extends StatefulWidget {
   final String? id;
   final String? date;
   final String? user_id;
+  String role;
 
-  const ClosureSummary(
+   ClosureSummary(
       {super.key,
       this.userId,
       this.cityName,
       required this.depoName,
       this.id,
       this.date,
-      this.user_id});
+      this.user_id,
+      required this.role});
 
   @override
   State<ClosureSummary> createState() => _ClosureSummaryState();
@@ -96,6 +97,11 @@ class _ClosureSummaryState extends State<ClosureSummary> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+              isProjectManager: widget.role == "projectManager"? true : false,
+            makeAnEntryPage: ClosureField(
+          depoName: widget.depoName,
+          userId: widget.userId!,
+        ),
             toClosure: true,
             showDepoBar: true,
             cityName: widget.cityName,

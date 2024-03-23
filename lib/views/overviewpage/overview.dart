@@ -1,4 +1,3 @@
-import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +30,10 @@ class _OverviewPageState extends State<OverviewPage> {
     '/safety-page',
     '/quality-page',
     '/depot-inside-page',
-    // '/depotOverview',
     '/closure-page',
-    // '/closure-page',
     '/depot-energy',
   ];
+
   List imagedata = [
     'assets/overview_image/overview.png',
     'assets/overview_image/project_planning.png',
@@ -77,20 +75,7 @@ class _OverviewPageState extends State<OverviewPage> {
       'Closure Report',
       'Depot Demand Energy Management',
     ];
-    // List<String> desription = [
-    //   'Overview of Project Progress Status of ${widget.depoName} Bus Charging Infra',
-    //   'Project Planning & Scheduling Bus Depot Wise [Gant Chart] ',
-    //   'Material Procurement & Vendor Finalization Status',
-    //   'Submission of Daily Progress Report for Individual Project',
-    //   'Monthly Project Monitoring & Review',
-    //   'Detailed Engineering Of Project Documents like GTP, GA Drawing',
-    //   'Online JMR verification for projects',
-    //   'Safety check list & observation',
-    //   'FQP Checklist for Civil,Electrical work & Quality Checklist',
-    //   'Depot Insides',
-    //   'Closure Report',
-    //   'Depot Demand Energy Management',
-    // ];
+    
     return Scaffold(
         drawer: const NavbarDrawer(),
         appBar: CustomAppBar(

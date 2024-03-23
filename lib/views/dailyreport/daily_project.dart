@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/viewmodels/daily_projectModel.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/dailyreport/summary.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,14 +21,24 @@ import '../../../widgets/navbar.dart';
 class DailyProject extends StatefulWidget {
   String? cityName;
   String? depoName;
+  String role;
+  String? userId;
 
-  DailyProject({super.key, this.cityName, required this.depoName});
+  DailyProject(
+      {super.key,
+      this.cityName,
+      required this.depoName,
+      required this.role,
+      this.userId});
 
   @override
   State<DailyProject> createState() => _DailyProjectState();
 }
 
 class _DailyProjectState extends State<DailyProject> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   bool isLoading = true;
   bool checkTable = true;
   List<DailyProjectModel> dailyproject = <DailyProjectModel>[];
@@ -48,6 +59,7 @@ class _DailyProjectState extends State<DailyProject> {
     _dailyDataSource = DailyDataSource(dailyproject, context, widget.cityName!,
         widget.depoName!, userId, selectedDate!);
     _dataGridController = DataGridController();
+    getAssignedDepots();
     getmonthlyReport();
     // dailyproject = getmonthlyReport();
 
@@ -76,7 +88,7 @@ class _DailyProjectState extends State<DailyProject> {
               depoName: widget.depoName ?? '',
               text: 'Daily Report',
               //  ${DateFormat.yMMMMd().format(DateTime.now())}',
-              haveSynced: true,
+              haveSynced: isFieldEditable ? true : false,
               haveSummary: true,
               haveCalender: true,
               onTap: () => Navigator.push(
@@ -119,7 +131,7 @@ class _DailyProjectState extends State<DailyProject> {
                             frozenPaneLineWidth: 2),
                         child: SfDataGrid(
                             source: _dailyDataSource,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -150,7 +162,6 @@ class _DailyProjectState extends State<DailyProject> {
                                       ),
                                 ),
                               ),
-
                               GridColumn(
                                 columnName: 'SiNo',
                                 visible: false,
@@ -168,65 +179,6 @@ class _DailyProjectState extends State<DailyProject> {
                                       ),
                                 ),
                               ),
-                              // GridColumn(
-                              //   columnName: 'Date',
-                              //   autoFitPadding:
-                              //       tablepadding,
-                              //   allowEditing: false,
-                              //   width: 160,
-                              //   label: Container(
-                              //     //Padding: tablepadding,
-                              //     alignment: Alignment.center,
-                              //     child: Text('Date',
-                              //         textAlign: TextAlign.center,
-                              //         overflow: TextOverflow.values.first,
-                              //         style: TextStyle(
-                              //             fontWeight: FontWeight.bold,
-                              //             fontSize: 16,
-                              //             color: white)),
-                              //   ),
-                              // ),
-                              // GridColumn(
-                              //   visible: false,
-                              //   columnName: 'State',
-                              //   autoFitPadding:
-                              //       tablepadding,
-                              //   allowEditing: true,
-                              //   width: 120,
-                              //   label: Container(
-                              //     //Padding: tablepadding,
-                              //     alignment: Alignment.center,
-                              //     child: Text('State',
-                              //         textAlign: TextAlign.center,
-                              //         overflow: TextOverflow.values.first,
-                              //         style: TextStyle(
-                              //             fontWeight: FontWeight.bold,
-                              //             fontSize: 16,
-                              //             color: white)
-                              //         //    textAlign: TextAlign.center,
-                              //         ),
-                              //   ),
-                              // ),
-                              // GridColumn(
-                              //   visible: false,
-                              //   columnName: 'DepotName',
-                              //   autoFitPadding:
-                              //       tablepadding,
-                              //   allowEditing: true,
-                              //   width: 150,
-                              //   label: Container(
-                              //     //Padding: tablepadding,
-                              //     alignment: Alignment.center,
-                              //     child: Text('Depot Name',
-                              //         overflow: TextOverflow.values.first,
-                              //         style: TextStyle(
-                              //             fontWeight: FontWeight.bold,
-                              //             fontSize: 16,
-                              //             color: white)
-                              //         //    textAlign: TextAlign.center,
-                              //         ),
-                              //   ),
-                              // ),
                               GridColumn(
                                 columnName: 'TypeOfActivity',
                                 //autoFit//Padding: tablepadding,
@@ -375,7 +327,7 @@ class _DailyProjectState extends State<DailyProject> {
                               frozenPaneLineWidth: 2),
                           child: SfDataGrid(
                               source: _dailyDataSource,
-                              allowEditing: true,
+                              allowEditing: isFieldEditable,
                               frozenColumnsCount: 2,
                               gridLinesVisibility: GridLinesVisibility.both,
                               headerGridLinesVisibility:
@@ -549,24 +501,29 @@ class _DailyProjectState extends State<DailyProject> {
                 ),
               )
             ]),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: (() {
-            dailyproject.add(DailyProjectModel(
-                siNo: _dailyDataSource.rows.length + 1,
-                // date: DateFormat().add_yMd(storeData()).format(DateTime.now()),
-                // state: "Maharashtra",
-                // depotName: 'depotName',
-                typeOfActivity: '',
-                activityDetails: "",
-                progress: '',
-                status: ''));
-            print(_dailyDataSource.rows.length + 1);
-            _dataGridController = DataGridController();
+      floatingActionButton: isFieldEditable
+          ? FloatingActionButton(
+              onPressed: (() {
+                dailyproject.add(DailyProjectModel(
+                    siNo: _dailyDataSource.rows.length + 1,
+                    // date: DateFormat().add_yMd(storeData()).format(DateTime.now()),
+                    // state: "Maharashtra",
+                    // depotName: 'depotName',
+                    typeOfActivity: '',
+                    activityDetails: "",
+                    progress: '',
+                    status: ''));
+                print(_dailyDataSource.rows.length + 1);
+                _dataGridController = DataGridController();
 
-            _dailyDataSource.buildDataGridRows();
-            _dailyDataSource.updateDatagridSource();
-          })),
+                _dailyDataSource.buildDataGridRows();
+                _dailyDataSource.updateDatagridSource();
+              }),
+              child: const Icon(
+                Icons.add,
+              ),
+            )
+          : Container(),
     );
   }
 
@@ -714,5 +671,11 @@ class _DailyProjectState extends State<DailyProject> {
 
     isLoading = false;
     setState(() {});
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

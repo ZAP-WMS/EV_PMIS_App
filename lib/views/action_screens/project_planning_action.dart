@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/screen/planning/planning_admin/planning_summary.dart';
+import 'package:ev_pmis_app/views/keyevents/key_events2.dart';
 import 'package:flutter/material.dart';
 
 import '../planning/project_planning.dart';
@@ -7,7 +8,14 @@ class ProjectPlanningAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
-  ProjectPlanningAction({super.key, this.cityName, this.role, this.depoName});
+  String userId;
+
+  ProjectPlanningAction(
+      {super.key,
+      this.cityName,
+      this.role,
+      this.depoName,
+      required this.userId});
 
   @override
   State<ProjectPlanningAction> createState() => _ProjectPlanningActionState();
@@ -19,7 +27,6 @@ class _ProjectPlanningActionState extends State<ProjectPlanningAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -31,14 +38,29 @@ class _ProjectPlanningActionState extends State<ProjectPlanningAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi =
-            KeyEvents(cityName: widget.cityName, depoName: widget.depoName);
+        selectedUi = KeyEvents2(
+          role: widget.role!,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          userId: widget.userId,
+        );
         break;
       case 'admin':
         selectedUi = PlanningTable(
           depoName: widget.depoName,
           cityName: widget.cityName,
+          role: widget.role!,
+          userId: widget.userId,
         );
+        break;
+      case 'projectManager':
+        selectedUi = PlanningTable(
+          userId: widget.userId,
+          depoName: widget.depoName,
+          cityName: widget.cityName,
+          role: widget.role!,
+        );
+        break;
     }
 
     return selectedUi;

@@ -6,7 +6,9 @@ class JmrActionScreen extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
-  JmrActionScreen({super.key, this.cityName, this.role, this.depoName});
+  String? userId;
+  JmrActionScreen(
+      {super.key, this.userId, this.cityName, this.role, this.depoName});
 
   @override
   State<JmrActionScreen> createState() => _JmrActionScreenState();
@@ -18,7 +20,6 @@ class _JmrActionScreenState extends State<JmrActionScreen> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -30,14 +31,31 @@ class _JmrActionScreenState extends State<JmrActionScreen> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi =
-            JmrUserPage(cityName: widget.cityName, depoName: widget.depoName);
+        selectedUi = JmrUserPage(
+          userId: widget.userId,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          role: widget.role,
+        );
         break;
+
       case 'admin':
         selectedUi = Jmr(
+          userId: widget.userId,
+          role: widget.role!,
           depoName: widget.depoName,
           cityName: widget.cityName,
         );
+        break;
+
+      case 'projectManager':
+        selectedUi = Jmr(
+          userId: widget.userId,
+          role: widget.role!,
+          depoName: widget.depoName,
+          cityName: widget.cityName,
+        );
+        break;
     }
 
     return selectedUi;

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
+import 'package:ev_pmis_app/screen/closureReport/closure_report_user/closurefield.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +11,9 @@ class ClosureSummaryTable extends StatefulWidget {
   final String? cityName;
   final String? depoName;
   final String? id;
-  const ClosureSummaryTable(
-      {super.key, this.userId, this.cityName, required this.depoName, this.id});
+  final String role;
+ ClosureSummaryTable(
+      {super.key, this.userId, this.cityName, required this.depoName, this.id,required this.role});
 
   @override
   State<ClosureSummaryTable> createState() => _ClosureSummaryTableState();
@@ -35,6 +37,11 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
           // ignore: sort_child_properties_last
           child: CustomAppBar(
             showDepoBar: true,
+            isProjectManager: widget.role == "projectManager"? true : false,
+            makeAnEntryPage: ClosureField(
+          depoName: widget.depoName,
+          userId: widget.userId!,
+        ),
             toClosure: true,
             depoName: widget.depoName,
             cityName: widget.cityName,
@@ -116,6 +123,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
                                     MaterialPageRoute(
                                       builder: (context) => ClosureSummary(
                                         depoName: widget.depoName,
+                                        role: widget.role,
                                         cityName: widget.cityName,
                                         id: 'Closure Summary',
                                         user_id: rowData[0],
