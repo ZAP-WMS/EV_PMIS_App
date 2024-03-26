@@ -102,22 +102,10 @@ class DetailedEngSource extends DataGridSource {
     DateTime? endDate1;
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      // Color getcolor() {
-      //   if (dataGridCell.columnName == 'Title' &&
-      //           dataGridCell.value == 'RFC Drawings of Civil Activities' ||
-      //       dataGridCell.value ==
-      //           'EV Layout Drawings of Electrical Activities' ||
-      //       dataGridCell.value == 'Shed Lighting Drawings & Specification') {
-      //     return green;
-      //   }
-
-      //   return Colors.transparent;
-      // }
-
       return Container(
         // color: getcolor(),
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: (dataGridCell.columnName == 'Delete')
             ? IconButton(
                 onPressed: () {
@@ -132,37 +120,23 @@ class DetailedEngSource extends DataGridSource {
                 ? LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
                     return ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: blue),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              // userId: userId,
-                              title: 'DetailedEngRFC',
-                              cityName: cityName,
-                              depoName: depoName,
-                              fldrName: row.getCells()[4].value.toString(),
-                              userId: userId,
-                            ),
-                          ));
-                          // showDialog(
-                          //     context: context,
-                          //     builder: (context) => AlertDialog(
-                          //         content: SizedBox(
-                          //             height: 100,
-                          //             child: Column(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.spaceBetween,
-                          //               children: [
-                          //                 Text(
-                          //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                          //                 Text(
-                          //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                          //                 Text(
-                          //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                          //               ],
-                          //             ))));
-                        },
-                        child: const Text('Upload'));
+                      style: ElevatedButton.styleFrom(backgroundColor: blue),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UploadDocument(
+                            // userId: userId,
+                            title: 'DetailedEngRFC',
+                            cityName: cityName,
+                            depoName: depoName,
+                            fldrName: row.getCells()[4].value.toString(),
+                            userId: userId,
+                          ),
+                        ));
+                      },
+                      child: const Text(
+                        'Upload',
+                      ),
+                    );
                   })
                 : dataGridCell.columnName == 'ViewDrawing'
                     ? LayoutBuilder(builder:

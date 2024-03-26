@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
@@ -43,10 +44,12 @@ class ElectricalField extends StatefulWidget {
   String? title;
   String? fielClnName;
   int? titleIndex;
+  String? role;
   ElectricalField(
       {super.key,
       required this.depoName,
       required this.title,
+      this.role,
       required this.fielClnName,
       required this.titleIndex});
 
@@ -55,8 +58,10 @@ class ElectricalField extends StatefulWidget {
 }
 
 class _ElectricalFieldState extends State<ElectricalField> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   String pathToOpenFile = '';
-
   List<QualitychecklistModel> data = [];
   bool checkTable = true;
   bool isLoading = true;
@@ -125,6 +130,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
   @override
   void initState() {
+    getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     _stream = FirebaseFirestore.instance
         .collection('ElectricalQualityChecklist')
@@ -251,14 +257,14 @@ class _ElectricalFieldState extends State<ElectricalField> {
     return Scaffold(
         drawer: const NavbarDrawer(),
         appBar: PreferredSize(
-            // ignore: sort_child_properties_last
+            preferredSize: const Size.fromHeight(55),
             child: CustomAppBarBackDate(
                 isDownload: true,
                 downloadFun: downloadPDF,
                 depoName: widget.depoName!,
                 text: '${widget.title}',
                 haveSummary: false,
-                haveSynced: true,
+                haveSynced: isFieldEditable ? true : false,
                 haveCalender: true,
                 store: () {
                   _showDialog(context);
@@ -307,21 +313,10 @@ class _ElectricalFieldState extends State<ElectricalField> {
                 showDate: visDate,
                 choosedate: () {
                   chooseDate(context);
-                }),
-            preferredSize: const Size.fromHeight(55)),
+                })),
         body: isLoading
-            ? LoadingPage()
-            :
-            // StreamBuilder(
-            //   stream: FirebaseFirestore.instance
-            //       .collection('CivilQualityChecklistCollection')
-            //       .doc('${widget.depoName}')
-            //       .collection('userId')
-            //       .doc('widget.currentDate')
-            //       .snapshots(),
-            //   builder: (context, snapshot) {
-            //     return
-            SingleChildScrollView(
+            ? const LoadingPage()
+            : SingleChildScrollView(
                 child: Column(
                   children: [
                     electricalField(nameController, 'Employee Name'),
@@ -336,34 +331,10 @@ class _ElectricalFieldState extends State<ElectricalField> {
                       height: MediaQuery.of(context).size.height * 0.8,
                       child: StreamBuilder(
                         stream: _stream,
-                        //  widget.titleIndex! == 0
-                        //     ? _stream
-                        //     : widget.titleIndex! == 1
-                        //         ? _stream1
-                        //         : widget.titleIndex! == 2
-                        //             ? _stream2
-                        //             : widget.titleIndex! == 3
-                        //                 ? _stream3
-                        //                 : widget.titleIndex! == 4
-                        //                     ? _stream4
-                        //                     : widget.titleIndex! == 5
-                        //                         ? _stream5
-                        //                         : widget.titleIndex! == 6
-                        //                             ? _stream6
-                        //                             : widget.titleIndex! == 7
-                        //                                 ? _stream7
-                        //                                 : widget.titleIndex! == 8
-                        //                                     ? _stream8
-                        //                                     : widget.titleIndex! == 9
-                        //                                         ? _stream9
-                        //                                         : widget.titleIndex! ==
-                        //                                                 10
-                        //                                             ? _stream10
-                        //                                             : _stream11,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return LoadingPage();
+                            return const LoadingPage();
                           }
                           if (!snapshot.hasData ||
                               snapshot.data.exists == false) {
@@ -403,7 +374,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                 //     : _qualityPROOFINGDataSource,
 
                                 //key: key,
-                                allowEditing: true,
+                                allowEditing: isFieldEditable,
                                 frozenColumnsCount: 1,
                                 gridLinesVisibility: GridLinesVisibility.both,
                                 headerGridLinesVisibility:
@@ -462,8 +433,8 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                     allowEditing: true,
                                     width: 250,
                                     label: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('DOCUMENT REFERENCE',
                                           overflow: TextOverflow.values.first,
@@ -560,67 +531,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
                             //     ),
                             //   );
                           } else if (snapshot.hasData) {
-                            // alldata = '';
-                            // alldata = snapshot.data['data'] as List<dynamic>;
-                            // qualitylisttable1.clear();
-                            // alldata.forEach((element) {
-                            //   qualitylisttable1
-                            //       .add(QualitychecklistModel.fromJson(element));
-                            //   if (widget.fielClnName! == 'PSS') {
-                            //     _qualityPSSDataSource = QualityPSSDataSource(
-                            //         qualitylisttable1, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'RMU') {
-                            //     _qualityrmuDataSource = QualityrmuDataSource(
-                            //         qualitylisttable2, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'CT') {
-                            //     _qualityctDataSource = QualityctDataSource(
-                            //         qualitylisttable3, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'CMU') {
-                            //     _qualitycmuDataSource = QualitycmuDataSource(
-                            //         qualitylisttable4, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'ACDB') {
-                            //     _qualityacdDataSource = QualityacdDataSource(
-                            //         qualitylisttable5, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'CI') {
-                            //     _qualityCIDataSource = QualityCIDataSource(
-                            //         qualitylisttable6, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'CDI') {
-                            //     _qualityCDIDataSource = QualityCDIDataSource(
-                            //         qualitylisttable7, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'MSP') {
-                            //     _qualityMSPDataSource = QualityMSPDataSource(
-                            //         qualitylisttable8, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'CHARGER') {
-                            //     _qualityChargerDataSource = QualityChargerDataSource(
-                            //         qualitylisttable9, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   } else if (widget.fielClnName == 'EARTH PIT') {
-                            //     _qualityEPDataSource = QualityEPDataSource(
-                            //         qualitylisttable10, cityName!, widget.depoName!);
-                            //     _dataGridController = DataGridController();
-                            //   }
-                            //   //  else if (widget.titleIndex! == 10) {
-                            //   //   _qualityRoofingDataSource = QualityWCRDataSource(
-                            //   //       qualitylisttable1,
-                            //   //       widget.depoName!,
-                            //   //       cityName!);
-                            //   //   _dataGridController = DataGridController();
-                            //   // } else if (widget.titleIndex! == 11) {
-                            //   //   _qualityPROOFINGDataSource =
-                            //   //       QualityPROOFINGDataSource(qualitylisttable1,
-                            //   //           widget.depoName!, cityName!);
-                            //   //   _dataGridController = DataGridController();
-                            //   // }
-                            // });
-
                             return SfDataGridTheme(
                               data: SfDataGridThemeData(
                                   gridLineColor: blue,
@@ -655,7 +565,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                 // : _qualityPROOFINGDataSource,
 
                                 //key: key,
-                                allowEditing: true,
+                                allowEditing: isFieldEditable,
                                 frozenColumnsCount: 1,
                                 gridLinesVisibility: GridLinesVisibility.both,
                                 headerGridLinesVisibility:
@@ -762,29 +672,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                           style: tableheaderwhitecolor),
                                     ),
                                   ),
-                                  // GridColumn(
-                                  //   columnName: 'Delete',
-                                  //   autoFitPadding:
-                                  //       const EdgeInsets.symmetric(
-                                  //           horizontal: 16),
-                                  //   allowEditing: false,
-                                  //   visible: true,
-                                  //   width: 120,
-                                  //   label: Container(
-                                  //     padding: const EdgeInsets.symmetric(
-                                  //         horizontal: 8.0),
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Delete Row',
-                                  //         overflow:
-                                  //             TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)
-                                  //         //    textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
                                 ],
 
                                 // stackedHeaderRows: [
@@ -798,7 +685,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                             );
                           } else {
                             // here w3e have to put Nodata page
-                            return LoadingPage();
+                            return const LoadingPage();
                           }
                         },
                       ),
@@ -829,6 +716,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          isFieldEditable: isFieldEditable,
           controller: controller,
           labeltext: title,
           // validatortext: '$title is Required',
@@ -1508,5 +1396,11 @@ class _ElectricalFieldState extends State<ElectricalField> {
       // }
     }
     return File('');
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

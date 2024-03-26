@@ -34,6 +34,8 @@ class CustomAppBar extends StatefulWidget {
   bool toClosure;
   bool toEasyMonitoring;
   bool toDaily;
+  bool? isProjectManager;
+  Widget? makeAnEntryPage;
 
   CustomAppBar(
       {super.key,
@@ -63,7 +65,9 @@ class CustomAppBar extends StatefulWidget {
       this.toEasyMonitoring = false,
       this.toDaily = false,
       this.toMainOverview = false,
-      required this.depoName});
+      required this.depoName,
+      this.isProjectManager,
+      this.makeAnEntryPage});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -92,15 +96,33 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   widget.text ?? '',
                   // maxLines: 2,
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                      fontSize: 12, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.depoName ?? '',
-                  style: TextStyle(fontSize: 11),
+                  style: const TextStyle(fontSize: 11),
+                  textAlign: TextAlign.center,
                 )
               ],
             ),
             actions: [
+              widget.isProjectManager!
+                  ? Container(
+                      margin: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => widget.makeAnEntryPage!),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.add,
+                        ),
+                      ),
+                    )
+                  : Container(),
               widget.toMainOverview
                   ? Container(
                       padding: const EdgeInsets.all(5.0),
@@ -189,13 +211,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         children: [
                           Image.asset(
                             'assets/logout.png',
-                            height: 20,
-                            width: 20,
+                            height: 10,
+                            width: 10,
                           ),
                           const SizedBox(width: 5),
                           Text(
                             widget.userId ?? '',
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 12),
                           )
                         ],
                       ))),

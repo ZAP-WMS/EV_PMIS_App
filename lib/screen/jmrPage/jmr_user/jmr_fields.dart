@@ -132,7 +132,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
           ? LoadingPage()
           : Scaffold(
               appBar: PreferredSize(
-                // ignore: sort_child_properties_last
+                preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
                   depoName: '${widget.depoName} / ${widget.title.toString()}',
                   store: () {
@@ -143,7 +143,6 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                   isSync: false,
                   title: 'JMR',
                 ),
-                preferredSize: const Size.fromHeight(50),
               ),
               body: SingleChildScrollView(
                 child: Container(

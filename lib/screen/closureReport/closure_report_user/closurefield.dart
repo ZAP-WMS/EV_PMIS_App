@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/viewmodels/closer_report.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
@@ -18,13 +19,19 @@ import '../../../widgets/custom_textfield.dart';
 class ClosureField extends StatefulWidget {
   String? depoName;
   String userId;
-  ClosureField({super.key, required this.depoName, required this.userId});
+  String? role;
+  ClosureField(
+      {super.key, this.role, required this.depoName, required this.userId});
 
   @override
   State<ClosureField> createState() => _ClosureFieldState();
 }
 
 class _ClosureFieldState extends State<ClosureField> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
+
   Stream? _stream;
   List<CloserReportModel> closereport = <CloserReportModel>[];
   late CloseReportDataSource _closeReportDataSource;
@@ -47,6 +54,7 @@ class _ClosureFieldState extends State<ClosureField> {
 
   @override
   void initState() {
+    getAssignedDepots();
     _fetchUserData();
     initializeController();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
@@ -71,7 +79,7 @@ class _ClosureFieldState extends State<ClosureField> {
           depoName: '${widget.depoName}',
           title: 'Closure Report',
           height: 50,
-          isSync: true,
+          isSync: isFieldEditable ? true : false,
           store: () {
             FirebaseFirestore.instance
                 .collection('ClosureReport')
@@ -120,7 +128,7 @@ class _ClosureFieldState extends State<ClosureField> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return LoadingPage();
+                              return const LoadingPage();
                             }
                             if (!snapshot.hasData ||
                                 snapshot.data.exists == false) {
@@ -133,7 +141,7 @@ class _ClosureFieldState extends State<ClosureField> {
                                 child: SfDataGrid(
                                   source: _closeReportDataSource,
                                   //key: key,
-                                  allowEditing: true,
+                                  allowEditing: isFieldEditable,
                                   frozenColumnsCount: 1,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
@@ -201,22 +209,6 @@ class _ClosureFieldState extends State<ClosureField> {
                                       ),
                                     ),
                                   ],
-
-                                  // stackedHeaderRows: [
-                                  //   StackedHeaderRow(cells: [
-                                  //     StackedHeaderCell(
-                                  //         columnNames: ['Upload', 'View'],
-                                  //         child: Container(
-                                  //           padding: EdgeInsets.all(10),
-                                  //           child: Text(
-                                  //             'Attachment Details',
-                                  //             style:
-                                  //                 TextStyle(color: white, fontSize: 18),
-                                  //             textAlign: TextAlign.center,
-                                  //           ),
-                                  //         ))
-                                  //   ])
-                                  // ],
                                 ),
                               );
                             } else if (snapshot.hasData) {
@@ -233,7 +225,7 @@ class _ClosureFieldState extends State<ClosureField> {
                                 child: SfDataGrid(
                                   source: _closeReportDataSource,
                                   //key: key,
-                                  allowEditing: true,
+                                  allowEditing: isFieldEditable,
                                   frozenColumnsCount: 1,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
@@ -305,7 +297,7 @@ class _ClosureFieldState extends State<ClosureField> {
                               );
                             } else {
                               // here w3e have to put Nodata page
-                              return LoadingPage();
+                              return const LoadingPage();
                             }
                           },
                         );
@@ -317,22 +309,6 @@ class _ClosureFieldState extends State<ClosureField> {
             );
           },
         ));
-    // floatingActionButton: FloatingActionButton.extended(
-    //   onPressed: () {
-    //     Navigator.pushNamed(context, '/closure-table',
-    //         arguments: widget.depoName);
-    //     // Navigator.push(
-    //     //     context,
-    //     //     MaterialPageRoute(
-    //     //       builder: (context) => CivilTable(
-    //     //         depoName: widget.depoName,
-    //     //         title: widget.title,
-    //     //         titleIndex: widget.index,
-    //     //       ),
-    //     //     ));
-    //   },
-    //   label: const Text('Proceed to Sync'),
-    // ));
   }
 
   Widget closureField(TextEditingController controller, String title) {
@@ -340,6 +316,7 @@ class _ClosureFieldState extends State<ClosureField> {
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          isFieldEditable: isFieldEditable,
           controller: controller,
           labeltext: title,
           // validatortext: '$title is Required',
@@ -433,6 +410,12 @@ class _ClosureFieldState extends State<ClosureField> {
       ));
     });
   }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+  }
 }
 
 void _showDialog(BuildContext context) {
@@ -451,21 +434,3 @@ void _showDialog(BuildContext context) {
     ),
   );
 }
-
-// closureField(String depoName) {
-//   FirebaseFirestore.instance
-//       .collection('ClosureReport')
-//       .doc(depoName)
-//       .collection("ClosureData")
-//       .doc(userId)
-//       .set(
-//     {
-//       'DepotName': depotController.text,
-//       'Longitude': loaController.text,
-//       'Latitude': latitudeController.text,
-//       'State': stateController.text,
-//       'Buses': busesController.text,
-//       'LaoNo': loaController.text,
-//     },
-//   );
-// }

@@ -21,7 +21,9 @@ import '../authentication/authservice.dart';
 class DetailedEng extends StatefulWidget {
   String? depoName;
   String? role;
-  DetailedEng({super.key, required this.depoName, required this.role});
+  String? userId;
+  DetailedEng(
+      {super.key, this.userId, required this.depoName, required this.role});
 
   @override
   State<DetailedEng> createState() => _DetailedEngtState();
@@ -29,6 +31,9 @@ class DetailedEng extends StatefulWidget {
 
 class _DetailedEngtState extends State<DetailedEng>
     with TickerProviderStateMixin {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   List<DetailedEngModel> DetailedProject = <DetailedEngModel>[];
   List<DetailedEngModel> DetailedProjectev = <DetailedEngModel>[];
   List<DetailedEngModel> DetailedProjectshed = <DetailedEngModel>[];
@@ -51,19 +56,10 @@ class _DetailedEngtState extends State<DetailedEng>
 
   @override
   void initState() {
+    getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    // getmonthlyReport();
-    // getmonthlyReportEv();
-
     getTableDataRfc().whenComplete(() {
-      // _stream = FirebaseFirestore.instance
-      //     .collection('DetailEngineering')
-      //     .doc('${widget.depoName}')
-      //     .collection('RFC LAYOUT DRAWING')
-      //     .doc(userId)
-      //     .snapshots();
-
       _detailedDataSource = DetailedEngSource(DetailedProject, context,
           cityName!, widget.depoName!, userId, widget.role!);
       _dataGridController = DataGridController();
@@ -157,154 +153,128 @@ class _DetailedEngtState extends State<DetailedEng>
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: white,
-            title: Column(
-              children: [
-                const Text(
-                  'Detailed Engineering',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  widget.depoName ?? '',
-                  style: const TextStyle(
-                    fontSize: 11,
-                  ),
-                ),
-              ],
-            ),
-            flexibleSpace: Container(
-              height: 100,
-              color: blue,
-            ),
-            actions: [
-              InkWell(
-                onTap: () {
-                  _showDialog(context);
-                  StoreData();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.asset(
-                    'assets/appbar/sync.jpeg',
-                    height: 35,
-                    width: 35,
-                  ),
+          centerTitle: true,
+          backgroundColor: white,
+          title: Column(
+            children: [
+              const Text(
+                'Detailed Engineering',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              // Padding(
-              //     padding: const EdgeInsets.only(right: 140),
-              //     child: GestureDetector(
-              //         onTap: () {
-              //           onWillPop(context);
-              //         },
-              //         child: Image.asset(
-              //           'assets/logout.png',
-              //           height: 20,
-              //           width: 20,
-              //         ))
-              //     //  IconButton(
-              //     //   icon: Icon(
-              //     //     Icons.logout_rounded,
-              //     //     size: 25,
-              //     //     color: white,
-              //     //   ),
-              //     //   onPressed: () {
-              //     //     onWillPop(context);
-              //     //   },
-              //     // )
-              //     )
+              Text(
+                widget.depoName ?? '',
+                style: const TextStyle(
+                  fontSize: 11,
+                ),
+              ),
             ],
-            bottom: TabBar(
-              unselectedLabelColor: tabbarColor,
-              labelColor:
-                  _selectedIndex == _selectedIndex ? white : tabbarColor,
-              onTap: (value) {
-                _selectedIndex = value;
-              },
-              indicator: BoxDecoration(
-                color:
-                    blue, // Set the background color of the selected tab label
+          ),
+          flexibleSpace: Container(
+            height: 140,
+            color: blue,
+          ),
+          actions: [
+            isFieldEditable
+                ? InkWell(
+                    onTap: () {
+                      _showDialog(context);
+                      StoreData();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: Image.asset(
+                        'assets/appbar/sync.jpeg',
+                        height: 35,
+                        width: 35,
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
+          bottom: TabBar(
+            unselectedLabelColor: tabbarColor,
+            labelColor: _selectedIndex == _selectedIndex ? white : tabbarColor,
+            onTap: (value) {
+              _selectedIndex = value;
+            },
+            indicator: BoxDecoration(
+              color: blue, // Set the background color of the selected tab label
+            ),
+            labelStyle: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+            tabs: const [
+              Tab(
+                text: "RFC Drawings of Civil Activities",
               ),
-              labelStyle:
-                  const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              tabs: const [
-                Tab(
-                  text: "RFC Drawings of Civil Activities",
-                ),
-                Tab(text: "EV Layout Drawings of Electrical Activities"),
-                Tab(text: "Shed Lighting Drawings & Specification"),
-              ],
-            )),
+              Tab(
+                text: "EV Layout Drawings of Electrical Activities",
+              ),
+              Tab(
+                text: "Shed Lighting Drawings & Specification",
+              ),
+            ],
+          ),
+        ),
         drawer: const NavbarDrawer(),
-
         body: TabBarView(children: [
           tabScreen(),
           tabScreen1(),
           tabScreen2(),
         ]),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: blue,
-          child: Icon(Icons.add),
-          onPressed: (() {
-            if (_selectedIndex == 0) {
-              DetailedProject.add(DetailedEngModel(
-                siNo: _detailedDataSource.dataGridRows.length + 1,
-                title: '',
-                number: 'null',
-                preparationDate:
-                    DateFormat('dd-MM-yyyy').format(DateTime.now()),
-                submissionDate: dmy,
-                approveDate: dmy,
-                releaseDate: dmy,
-              ));
-              _detailedDataSource.buildDataGridRows();
-              _detailedDataSource.updateDatagridSource();
-            }
-            if (_selectedIndex == 1) {
-              DetailedProjectev.add(DetailedEngModel(
-                siNo: _detailedEngSourceev.dataGridRows.length + 1,
-                title: '',
-                number: 'null',
-                preparationDate: dmy,
-                submissionDate: dmy,
-                approveDate: dmy,
-                releaseDate: dmy,
-              ));
-              _detailedEngSourceev.buildDataGridRowsEV();
-              _detailedEngSourceev.updateDatagridSource();
-            } else {
-              DetailedProjectshed.add(DetailedEngModel(
-                siNo: _detailedEngSourceShed.dataGridRows.length + 1,
-                title: '',
-                number: 'null',
-                preparationDate: dmy,
-                submissionDate: dmy,
-                approveDate: dmy,
-                releaseDate: dmy,
-              ));
-              _detailedEngSourceShed.buildDataGridRowsShed();
-              _detailedEngSourceShed.updateDatagridSource();
-            }
-          }),
-        ),
-
-        // floatingActionButton: FloatingActionButton(
-        //   child: Icon(Icons.add),
-        //   onPressed: (() {
-        //     DetailedProject.add(DetailedEngModel(
-        //       siNo: 1,
-        //       title: '',
-        //       number: 12345,
-        //       preparationDate: dmy,
-        //       submissionDate: dmy,
-        //       approveDate: dmy,
-        //       releaseDate: dmy,
-        //     ));
-        //     _detailedDataSource.buildDataGridRows();
-        //     _detailedDataSource.updateDatagridSource();
-        //   }),
-        // ),
+        floatingActionButton: isFieldEditable
+            ? FloatingActionButton(
+                backgroundColor: blue,
+                onPressed: (() {
+                  if (_selectedIndex == 0) {
+                    DetailedProject.add(DetailedEngModel(
+                      siNo: _detailedDataSource.dataGridRows.length + 1,
+                      title: '',
+                      number: 'null',
+                      preparationDate:
+                          DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                      submissionDate: dmy,
+                      approveDate: dmy,
+                      releaseDate: dmy,
+                    ));
+                    _detailedDataSource.buildDataGridRows();
+                    _detailedDataSource.updateDatagridSource();
+                  }
+                  if (_selectedIndex == 1) {
+                    DetailedProjectev.add(DetailedEngModel(
+                      siNo: _detailedEngSourceev.dataGridRows.length + 1,
+                      title: '',
+                      number: 'null',
+                      preparationDate: dmy,
+                      submissionDate: dmy,
+                      approveDate: dmy,
+                      releaseDate: dmy,
+                    ));
+                    _detailedEngSourceev.buildDataGridRowsEV();
+                    _detailedEngSourceev.updateDatagridSource();
+                  } else {
+                    DetailedProjectshed.add(DetailedEngModel(
+                      siNo: _detailedEngSourceShed.dataGridRows.length + 1,
+                      title: '',
+                      number: 'null',
+                      preparationDate: dmy,
+                      submissionDate: dmy,
+                      approveDate: dmy,
+                      releaseDate: dmy,
+                    ));
+                    _detailedEngSourceShed.buildDataGridRowsShed();
+                    _detailedEngSourceShed.updateDatagridSource();
+                  }
+                }),
+                child: const Icon(Icons.add),
+              )
+            : Container(),
       ),
     );
   }
@@ -333,9 +303,9 @@ class _DetailedEngtState extends State<DetailedEng>
   }
 
   void StoreData() {
-    Map<String, dynamic> tableData = Map();
-    Map<String, dynamic> evTableData = Map();
-    Map<String, dynamic> shedTableData = Map();
+    Map<String, dynamic> tableData = {};
+    Map<String, dynamic> evTableData = {};
+    Map<String, dynamic> shedTableData = {};
 
     for (var i in _detailedDataSource.dataGridRows) {
       for (var data in i.getCells()) {
@@ -507,7 +477,7 @@ class _DetailedEngtState extends State<DetailedEng>
   tabScreen() {
     return Scaffold(
       body: _isloading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(children: [
               SfDataGridTheme(
                 data: SfDataGridThemeData(
@@ -523,7 +493,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -610,11 +580,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,
@@ -724,7 +692,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -811,11 +779,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                // autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,
@@ -928,7 +894,7 @@ class _DetailedEngtState extends State<DetailedEng>
   tabScreen1() {
     return Scaffold(
       body: _isloading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(children: [
               SfDataGridTheme(
                 data: SfDataGridThemeData(
@@ -944,7 +910,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -962,7 +928,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 visible: false,
                                 columnName: 'SiNo',
                                 autoFitPadding: tablepadding,
-                                allowEditing: true,
+                                allowEditing: isFieldEditable,
                                 width: 80,
                                 label: Container(
                                   padding: tablepadding,
@@ -1143,7 +1109,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1378,7 +1344,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceShed,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1465,11 +1431,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,
@@ -1577,7 +1541,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceShed,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1664,11 +1628,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,
@@ -1845,5 +1807,11 @@ class _DetailedEngtState extends State<DetailedEng>
 
     _isloading = false;
     setState(() {});
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

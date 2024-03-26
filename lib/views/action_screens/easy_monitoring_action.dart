@@ -1,3 +1,5 @@
+import 'package:ev_pmis_app/screen/planning/planning_admin/planning_summary.dart';
+import 'package:ev_pmis_app/views/keyevents/key_events2.dart';
 import 'package:flutter/material.dart';
 import '../planning/project_planning.dart';
 
@@ -5,6 +7,7 @@ class EasyMonitoringAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
+  String? userId;
 
   EasyMonitoringAction({super.key, this.cityName, this.role, this.depoName});
 
@@ -18,7 +21,6 @@ class _EasyMonitoringActionState extends State<EasyMonitoringAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -30,10 +32,24 @@ class _EasyMonitoringActionState extends State<EasyMonitoringAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = KeyEvents(depoName: widget.depoName);
+        selectedUi = KeyEvents2(
+          role: widget.role!,
+          depoName: widget.depoName,
+          userId: widget.userId,
+        );
         break;
       case 'admin':
-        selectedUi = KeyEvents(depoName: widget.depoName);
+        selectedUi = PlanningTable(
+          role: widget.role!,
+          depoName: widget.depoName,
+        );
+        break;
+      case 'projectManager':
+        selectedUi = PlanningTable(
+          role: widget.role!,
+          depoName: widget.depoName,
+        );
+        break;
     }
 
     return selectedUi;

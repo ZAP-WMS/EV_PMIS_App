@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -19,9 +20,11 @@ class EnergyManagement extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
+  String? role;
   EnergyManagement(
       {super.key,
       required this.cityName,
+      this.role,
       required this.depoName,
       required this.userId});
 
@@ -30,6 +33,9 @@ class EnergyManagement extends StatefulWidget {
 }
 
 class _EnergyManagementState extends State<EnergyManagement> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   final ScrollController _scrollController = ScrollController();
   late EnergyManagementDatasource _energyManagementdatasource;
   late DataGridController _dataGridController;
@@ -47,9 +53,8 @@ class _EnergyManagementState extends State<EnergyManagement> {
 
   @override
   void initState() {
-    print(widget.userId);
+    getAssignedDepots();
     _energyProvider = Provider.of<EnergyProvider>(context, listen: false);
-
     String monthName = DateFormat('MMMM').format(DateTime.now());
     _stream = FirebaseFirestore.instance
         .collection('EnergyManagementTable')
@@ -72,22 +77,9 @@ class _EnergyManagementState extends State<EnergyManagement> {
 
     setState(() {});
 
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.landscapeLeft,
-    //   DeviceOrientation.landscapeLeft,
-    // ]);
     _isloading = false;
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.portraitUp,
-  //     DeviceOrientation.portraitDown,
-  //   ]);
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +107,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                   userId: widget.userId,
                 ),
               )),
-          haveSynced: true,
+          haveSynced: isFieldEditable ? true : false,
           store: () {
             FirebaseApi().defaultKeyEventsField(
                 'EnergyManagementTable', widget.cityName!);
@@ -182,15 +174,10 @@ class _EnergyManagementState extends State<EnergyManagement> {
                         _dataGridController = DataGridController();
                         return SfDataGrid(
                           source: _energyManagementdatasource,
-                          allowEditing: true,
+                          allowEditing: isFieldEditable,
                           frozenColumnsCount: 1,
                           gridLinesVisibility: GridLinesVisibility.both,
                           headerGridLinesVisibility: GridLinesVisibility.both,
-                          // checkboxColumnSettings:
-                          //     DataGridCheckboxColumnSettings(
-                          //         showCheckboxOnHeader: false),
-
-                          // showCheckboxColumn: true,
                           selectionMode: SelectionMode.multiple,
                           navigationMode: GridNavigationMode.cell,
                           columnWidthMode: ColumnWidthMode.auto,
@@ -399,7 +386,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                         });
                         return SfDataGrid(
                           source: _energyManagementdatasource,
-                          allowEditing: true,
+                          allowEditing: isFieldEditable,
                           frozenColumnsCount: 1,
                           gridLinesVisibility: GridLinesVisibility.both,
                           headerGridLinesVisibility: GridLinesVisibility.both,
@@ -709,28 +696,34 @@ class _EnergyManagementState extends State<EnergyManagement> {
                 })
               ],
             ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: (() {
-            _energyManagement.add(EnergyManagementModel(
-                srNo: _energyManagement.length + 1,
-                depotName: widget.depoName.toString(),
-                vehicleNo: '',
-                pssNo: 1,
-                chargerId: 1,
-                startSoc: 1,
-                endSoc: 1,
-                startDate:
-                    DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
-                endDate: DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
-                totalTime:
-                    DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
-                energyConsumed: 1500.0,
-                timeInterval:
-                    '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
-            _energyManagementdatasource.buildDataGridRows();
-            _energyManagementdatasource.updateDatagridSource();
-          })),
+      floatingActionButton: isFieldEditable
+          ? FloatingActionButton(
+              onPressed: (() {
+                _energyManagement.add(EnergyManagementModel(
+                    srNo: _energyManagement.length + 1,
+                    depotName: widget.depoName.toString(),
+                    vehicleNo: '',
+                    pssNo: 1,
+                    chargerId: 1,
+                    startSoc: 1,
+                    endSoc: 1,
+                    startDate:
+                        DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+                    endDate:
+                        DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+                    totalTime:
+                        DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+                    energyConsumed: 1500.0,
+                    timeInterval:
+                        '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
+                _energyManagementdatasource.buildDataGridRows();
+                _energyManagementdatasource.updateDatagridSource();
+              }),
+              child: const Icon(
+                Icons.add,
+              ),
+            )
+          : Container(),
     );
   }
 
@@ -771,6 +764,12 @@ class _EnergyManagementState extends State<EnergyManagement> {
         backgroundColor: blue,
       ));
     });
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 
   List<BarChartGroupData> barChartGroupData(List<dynamic> data) {

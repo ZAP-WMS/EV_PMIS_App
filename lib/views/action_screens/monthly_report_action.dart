@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../monthlyreport/monthly_admin/monthly_report_admin.dart';
 import '../monthlyreport/monthly_project.dart';
 
-
 class MonthlyReportAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
-  MonthlyReportAction({super.key, this.cityName, this.role, this.depoName});
+  String userId;
+  MonthlyReportAction({super.key, this.cityName, this.role, this.depoName, required this.userId});
 
   @override
   State<MonthlyReportAction> createState() => _MonthlyReportActionState();
@@ -31,14 +31,30 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
 
   Widget selectWidget() {
     switch (widget.role) {
+      
       case 'user':
-        selectedUi = MonthlyProject(depoName: widget.depoName);
+        selectedUi = MonthlyProject(depoName: widget.depoName,
+        role: widget.role,
+        userId: widget.userId,);
         break;
+
       case 'admin':
         selectedUi = MonthlySummary(
           cityName: widget.cityName,
           depoName: widget.depoName,
+          role: widget.role!,
+          userId: widget.userId,
         );
+        break;
+
+      case 'projectManager':
+        selectedUi = MonthlySummary(
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          role: widget.role!,
+          userId: widget.userId,
+        );
+        break;
     }
 
     return selectedUi;

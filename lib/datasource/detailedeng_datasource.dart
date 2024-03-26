@@ -130,7 +130,7 @@ class DetailedEngSource extends DataGridSource {
       return Container(
         // color: getcolor(),
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: (dataGridCell.columnName == 'Add')
             ? ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: blue),

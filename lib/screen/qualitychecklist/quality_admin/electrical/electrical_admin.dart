@@ -88,6 +88,7 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            isProjectManager: false,
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,
@@ -352,8 +353,9 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
     final headerStyle =
         pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold);
 
-    final fontData1 = await rootBundle.load('fonts/IBMPlexSans-Medium.ttf');
-    final fontData2 = await rootBundle.load('fonts/IBMPlexSans-Bold.ttf');
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
 
     const cellStyle = pw.TextStyle(
       color: PdfColors.black,

@@ -129,7 +129,7 @@ class DetailedEngSourceEV extends DataGridSource {
 
       return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: (dataGridCell.columnName == 'Add')
             ? ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: blue),
@@ -509,7 +509,7 @@ class DetailedEngSourceEV extends DataGridSource {
                                       ),
                                       Text(
                                         dataGridCell.value.toString(),
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   )
@@ -841,7 +841,7 @@ class DetailedEngSourceEV extends DataGridSource {
                                         : Text(
                                             dataGridCell.value.toString(),
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 12),
+                                            style: const TextStyle(fontSize: 12),
                                           ),
       );
     }).toList());
@@ -955,7 +955,7 @@ class DetailedEngSourceEV extends DataGridSource {
       padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
-        style: TextStyle(fontSize: 12),
+        style: const TextStyle(fontSize: 12),
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,

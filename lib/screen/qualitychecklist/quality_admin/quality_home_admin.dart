@@ -1,6 +1,7 @@
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/civil/civil_admin.dart';
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/electrical/electrical_admin.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/qualitychecklist/quality_home.dart';
 import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,14 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 class QualityHomeAdmin extends StatefulWidget {
   String? depoName;
   String? cityName;
-  QualityHomeAdmin({super.key, this.depoName, this.cityName});
+  String role;
+  String? userId;
+  QualityHomeAdmin(
+      {super.key,
+      this.depoName,
+      this.cityName,
+      required this.role,
+      this.userId});
 
   @override
   State<QualityHomeAdmin> createState() => _QualityHomeAdminState();
@@ -83,8 +91,6 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
       child: DefaultTabController(
           length: 2,
           child: Scaffold(
-            // key: scaffoldKey,
-
             appBar: AppBar(
               centerTitle: true,
               backgroundColor: blue,
@@ -97,11 +103,27 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                   ),
                   Text(
                     widget.depoName ?? '',
-                    style: TextStyle(fontSize: 11),
+                    style: const TextStyle(fontSize: 11),
                   )
                 ],
               ),
-              actions: const [],
+              actions: [
+              widget.role == "projectManager" ?  Container(
+                  margin: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QualityHome(
+                              depoName: widget.depoName,
+                            ),
+                          ),
+                        );
+                      },
+                      icon:const Icon(Icons.add)),
+                ) : Container()
+              ],
               // leading:
               bottom: PreferredSize(
                 preferredSize: const Size(double.infinity, 50),
@@ -140,7 +162,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => CivilReportAdmin(
-                              cityName: cityName,
+                              cityName: cityName,userId: widget.userId,
                               selectedIndex: index,
                               depoName: widget.depoName,
                             ),
@@ -156,6 +178,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ElectricalReportAdmin(
+                                userId: widget.userId,
                                 cityName: cityName,
                                 selectedIndex: index,
                                 depoName: widget.depoName,

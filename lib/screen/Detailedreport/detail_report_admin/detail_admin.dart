@@ -5,6 +5,7 @@ import 'package:ev_pmis_app/datasource_admin/detailedengShed_datasource.dart';
 import 'package:ev_pmis_app/datasource_admin/detailedeng_datasource.dart';
 import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/Detailedreport/detailed_Eng.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -59,19 +60,19 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
 
   @override
   void initState() {
+    
     _detailedDataSource = DetailedEngSource(detailedProject, context,
         widget.cityName.toString(), widget.depoName.toString(), widget.role);
     _dataGridController = DataGridController();
 
-    // DetailedProjectev = getmonthlyReportEv();
     _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
         widget.cityName.toString(), widget.depoName.toString(), widget.role);
     _dataGridController = DataGridController();
 
-    // DetailedProjectshed = getmonthlyReportEv();
     _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed, context,
         widget.cityName.toString(), widget.depoName.toString(), widget.role);
     _dataGridController = DataGridController();
+
     _controller = TabController(length: 3, vsync: this);
 
     getFieldUserId().whenComplete(
@@ -84,8 +85,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
               widget.depoName.toString(),
               widget.role);
           _dataGridController = DataGridController();
-
-          // DetailedProjectev = getmonthlyReportEv();
           _detailedEngSourceev = DetailedEngSourceEV(
               DetailedProjectev,
               context,
@@ -93,8 +92,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
               widget.depoName.toString(),
               widget.role);
           _dataGridController = DataGridController();
-
-          // DetailedProjectshed = getmonthlyReportEv();
           _detailedEngSourceShed = DetailedEngSourceShed(
               DetailedProjectshed,
               context,
@@ -102,56 +99,12 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
               widget.depoName.toString(),
               widget.role);
           _dataGridController = DataGridController();
-
-          // _stream = FirebaseFirestore.instance
-          //     .collection('DetailEngineering')
-          //     .doc('${widget.depoName}')
-          //     .collection('RFC LAYOUT DRAWING')
-          //     .doc(id[0])
-          //     .snapshots();
-
-          // _stream1 = FirebaseFirestore.instance
-          //     .collection('DetailEngineering')
-          //     .doc('${widget.depoName}')
-          //     .collection('EV LAYOUT DRAWING')
-          //     .doc(id[0])
-          //     .snapshots();
-
-          // _stream2 = FirebaseFirestore.instance
-          //     .collection('DetailEngineering')
-          //     .doc('${widget.depoName}')
-          //     .collection('Shed LAYOUT DRAWING')
-          //     .doc(id[0])
-          //     .snapshots();
           _isloading = false;
           setState(() {});
         });
       },
     );
-
-    // });
-
     super.initState();
-    // FirebaseApi.getAllId().then((value) {
-    //   num_id = dataList.length;
-    //   getTableData().whenComplete(() {
-    //     // detailedProject = getmonthlyReport();
-    //     _detailedDataSource = DetailedEngSource(DetailedProject, context,
-    //         widget.cityName.toString(), widget.depoName.toString());
-    //     _dataGridController = DataGridController();
-
-    //     // DetailedProjectev = getmonthlyReportEv();
-    //     _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
-    //         widget.cityName.toString(), widget.depoName.toString());
-    //     _dataGridController = DataGridController();
-
-    //     // DetailedProjectshed = getmonthlyReportEv();
-    //     _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
-    //         context, widget.cityName.toString(), widget.depoName.toString());
-    //     _dataGridController = DataGridController();
-    //     _controller = TabController(length: 3, vsync: this);
-    //   });
-    // });
   }
 
   @override
@@ -171,17 +124,35 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
             backgroundColor: blue,
             title: Column(
               children: [
-                Text(
+                const Text(
                   'Detailed Engineering',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.depoName ?? '',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 11, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             actions: [
+              widget.role == "projectManager"
+                  ? Container(
+                      margin: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DetailedEng(
+                                        depoName: widget.depoName,
+                                        role: 'user',
+                                      )),
+                            );
+                          },
+                          icon: const Icon(Icons.add)),
+                    )
+                  : Container(),
               Padding(
                   padding: const EdgeInsets.only(right: 15, left: 15),
                   child: GestureDetector(
@@ -192,13 +163,13 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         children: [
                           Image.asset(
                             'assets/logout.png',
-                            height: 20,
-                            width: 20,
+                            height: 10,
+                            width: 10,
                           ),
                           const SizedBox(width: 5),
                           Text(
                             widget.userId ?? '',
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 12),
                           ),
                         ],
                       ))),
@@ -213,18 +184,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                 Tab(text: "Shed Lighting Drawings & Specification"),
               ],
             )),
-        // PreferredSize(
-        //     // ignore: sort_child_properties_last
-        //     child: CustomAppBar(
-        //       text:
-        //           'Detailed Engineering/ ${widget.cityName}/ ${widget.depoName}',
-        //       haveSynced: true,
-        //       havebottom: false,
-        //       store: () {
-        //         StoreData();
-        //       },
-        //     ),
-        //     preferredSize: Size.fromHeight(100)),
 
         body: _isloading
             ? const LoadingPage()
@@ -233,22 +192,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                 tabScreen1(),
                 tabScreen2(),
               ]),
-        // floatingActionButton: FloatingActionButton(
-        //   child: Icon(Icons.add),
-        //   onPressed: (() {
-        //     DetailedProject.add(DetailedEngModel(
-        //       siNo: 1,
-        //       title: 'EV Layout',
-        //       number: 12345,
-        //       preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-        //       submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-        //       approveDate: DateFormat().add_yMd().format(DateTime.now()),
-        //       releaseDate: DateFormat().add_yMd().format(DateTime.now()),
-        //     ));
-        //     _detailedDataSource.buildDataGridRows();
-        //     _detailedDataSource.updateDatagridSource();
-        //   }),
-        // ),
+
       ),
     );
   }
@@ -369,15 +313,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
 
   List<DetailedEngModelAdmin> getmonthlyReport() {
     return [
-      // DetailedEngModel(
-      //   siNo: 1,
-      //   title: 'RFC Drawings of Civil Activities',
-      //   number: 0,
-      //   preparationDate: '',
-      //   submissionDate: '',
-      //   approveDate: '',
-      //   releaseDate: '',
-      // ),
       DetailedEngModelAdmin(
         siNo: 1,
         title: 'EV Layout',
@@ -387,42 +322,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
         approveDate: DateFormat().add_yMd().format(DateTime.now()),
         releaseDate: DateFormat().add_yMd().format(DateTime.now()),
       ),
-      // DetailedEngModel(
-      //   siNo: 3,
-      //   title: 'EV Layout Drawings of Electrical Activities',
-      //   number: 0,
-      //   preparationDate: '',
-      //   submissionDate: '',
-      //   approveDate: '',
-      //   releaseDate: '',
-      // ),
-      // DetailedEngModel(
-      //   siNo: 2,
-      //   title: 'Electrical Work',
-      //   number: 12345,
-      //   preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   releaseDate: DateFormat().add_yMd().format(DateTime.now()),
-      // ),
-      // DetailedEngModel(
-      //   siNo: 5,
-      //   title: 'Shed Lighting Drawings & Specification',
-      //   number: 0,
-      //   preparationDate: '',
-      //   submissionDate: '',
-      //   approveDate: '',
-      //   releaseDate: '',
-      // ),
-      // DetailedEngModel(
-      //   siNo: 3,
-      //   title: 'Illumination Design',
-      //   number: 12345,
-      //   preparationDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   submissionDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //   releaseDate: DateFormat().add_yMd().format(DateTime.now()),
-      // ),
     ];
   }
 
@@ -431,228 +330,10 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
       body: Column(children: [
         Expanded(
             child: SfDataGridTheme(
-          data: SfDataGridThemeData(headerColor: blue),
+          data: SfDataGridThemeData(headerColor: white, gridLineColor: blue),
           child: StreamBuilder(
             stream: _stream,
             builder: (context, snapshot) {
-              // if (!snapshot.hasData || snapshot.data.exists == false) {
-              //   return NodataAvailable();
-              //   // return SfDataGrid(
-              //   //     source: _selectedIndex == 0
-              //   //         ? _detailedDataSource
-              //   //         : _detailedEngSourceev,
-              //   //     allowEditing: true,
-              //   //     frozenColumnsCount: 2,
-              //   //     gridLinesVisibility: GridLinesVisibility.both,
-              //   //     headerGridLinesVisibility: GridLinesVisibility.both,
-              //   //     selectionMode: SelectionMode.single,
-              //   //     navigationMode: GridNavigationMode.cell,
-              //   //     columnWidthMode: ColumnWidthMode.auto,
-              //   //     editingGestureType: EditingGestureType.tap,
-              //   //     controller: _dataGridController,
-              //   //     columns: [
-              //   //       GridColumn(
-              //   //         columnName: 'SiNo',
-              //   //         visible: false,
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: true,
-              //   //         width: 80,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('SI No.',
-              //   //               overflow: TextOverflow.values.first,
-              //   //               textAlign: TextAlign.center,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)
-              //   //               //    textAlign: TextAlign.center,
-              //   //               ),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         visible: false,
-              //   //         columnName: 'button',
-              //   //         width: 130,
-              //   //         allowEditing: false,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.all(8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Upload Drawing ',
-              //   //               textAlign: TextAlign.center,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         columnName: 'ViewDrawing',
-              //   //         width: 130,
-              //   //         allowEditing: false,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.all(8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('View Drawing ',
-              //   //               textAlign: TextAlign.center,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         columnName: 'Title',
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: true,
-              //   //         width: 300,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Description',
-              //   //               textAlign: TextAlign.center,
-              //   //               overflow: TextOverflow.values.first,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         columnName: 'Number',
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: true,
-              //   //         width: 130,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Drawing Number',
-              //   //               textAlign: TextAlign.center,
-              //   //               overflow: TextOverflow.values.first,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)
-              //   //               //    textAlign: TextAlign.center,
-              //   //               ),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         columnName: 'PreparationDate',
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: false,
-              //   //         width: 170,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Preparation Date',
-              //   //               overflow: TextOverflow.values.first,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)
-              //   //               //    textAlign: TextAlign.center,
-              //   //               ),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         columnName: 'SubmissionDate',
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: false,
-              //   //         width: 170,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Submission Date',
-              //   //               overflow: TextOverflow.values.first,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)
-              //   //               //    textAlign: TextAlign.center,
-              //   //               ),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         columnName: 'ApproveDate',
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: false,
-              //   //         width: 170,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Approve Date',
-              //   //               overflow: TextOverflow.values.first,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)
-              //   //               //    textAlign: TextAlign.center,
-              //   //               ),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         columnName: 'ReleaseDate',
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: false,
-              //   //         width: 170,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Release Date',
-              //   //               overflow: TextOverflow.values.first,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)
-              //   //               //    textAlign: TextAlign.center,
-              //   //               ),
-              //   //         ),
-              //   //       ),
-              //   //       GridColumn(
-              //   //         visible: false,
-              //   //         columnName: 'Delete',
-              //   //         autoFitPadding:
-              //   //             const EdgeInsets.symmetric(horizontal: 16),
-              //   //         allowEditing: false,
-              //   //         width: 120,
-              //   //         label: Container(
-              //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //   //           alignment: Alignment.center,
-              //   //           child: Text('Delete Row',
-              //   //               overflow: TextOverflow.values.first,
-              //   //               style: TextStyle(
-              //   //                   fontWeight: FontWeight.bold,
-              //   //                   fontSize: 16,
-              //   //                   color: white)
-              //   //               //    textAlign: TextAlign.center,
-              //   //               ),
-              //   //         ),
-              //   //       ),
-              //   //     ]);
-              // } else {
-              //   alldata = '';
-              //   alldata = snapshot.data['data'] as List<dynamic>;
-              //   detailedProject.clear();
-              //   alldata.forEach((element) {
-              //     detailedProject.add(DetailedEngModel.fromjsaon(element));
-              //     _detailedDataSource = DetailedEngSource(
-              //       detailedProject,
-              //       context,
-              //       widget.cityName.toString(),
-              //       widget.depoName.toString(),
-              //     );
-              //     _dataGridController = DataGridController();
-              //   });
-
               return SfDataGrid(
                   source: _selectedIndex == 0
                       ? _detailedDataSource
@@ -683,7 +364,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -701,7 +382,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
-                                color: white)),
+                                color: blue)),
                       ),
                     ),
                     GridColumn(
@@ -716,7 +397,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)),
+                                color: blue)),
                       ),
                     ),
                     GridColumn(
@@ -734,7 +415,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)),
+                                color: blue)),
                       ),
                     ),
                     GridColumn(
@@ -752,7 +433,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -771,7 +452,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -790,7 +471,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -809,7 +490,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -828,7 +509,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -848,7 +529,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -859,26 +540,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
           ),
         )),
       ]),
-      // floatingActionButton: companyName == 'TATA POWER'
-      //     ? FloatingActionButton(
-      //         child: Icon(Icons.add),
-      //         onPressed: (() {
-      //           DetailedProject.add(DetailedEngModel(
-      //             siNo: 1,
-      //             title: 'EV Layout',
-      //             number: 12345,
-      //             preparationDate:
-      //                 DateFormat().add_yMd().format(DateTime.now()),
-      //             submissionDate:
-      //                 DateFormat().add_yMd().format(DateTime.now()),
-      //             approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //             releaseDate: DateFormat().add_yMd().format(DateTime.now()),
-      //           ));
-      //           _detailedDataSource.buildDataGridRows();
-      //           _detailedDataSource.updateDatagridSource();
-      //         }),
-      //       )
-      //     : Container()
     );
   }
 
@@ -887,228 +548,10 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
       body: Column(children: [
         Expanded(
             child: SfDataGridTheme(
-          data: SfDataGridThemeData(headerColor: blue),
+          data: SfDataGridThemeData(headerColor: white, gridLineColor: blue),
           child: StreamBuilder(
               stream: _stream1,
               builder: (context, snapshot) {
-                // if (!snapshot.hasData || snapshot.data.exists == false) {
-                //   return NodataAvailable();
-                //   // return SfDataGrid(
-                //   //     source: _selectedIndex == 0
-                //   //         ? _detailedDataSource
-                //   //         : _detailedEngSourceev,
-                //   //     allowEditing: true,
-                //   //     frozenColumnsCount: 2,
-                //   //     gridLinesVisibility: GridLinesVisibility.both,
-                //   //     headerGridLinesVisibility: GridLinesVisibility.both,
-                //   //     selectionMode: SelectionMode.single,
-                //   //     navigationMode: GridNavigationMode.cell,
-                //   //     columnWidthMode: ColumnWidthMode.auto,
-                //   //     editingGestureType: EditingGestureType.tap,
-                //   //     controller: _dataGridController,
-                //   //     columns: [
-                //   //       GridColumn(
-                //   //         visible: false,
-                //   //         columnName: 'SiNo',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: true,
-                //   //         width: 80,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('SI No.',
-                //   //               overflow: TextOverflow.values.first,
-                //   //               textAlign: TextAlign.center,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)
-                //   //               //    textAlign: TextAlign.center,
-                //   //               ),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         visible: false,
-                //   //         columnName: 'button',
-                //   //         width: 130,
-                //   //         allowEditing: false,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.all(8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Upload Drawing ',
-                //   //               textAlign: TextAlign.center,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         columnName: 'ViewDrawing',
-                //   //         width: 130,
-                //   //         allowEditing: false,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.all(8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('View Drawing ',
-                //   //               textAlign: TextAlign.center,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         columnName: 'Title',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: true,
-                //   //         width: 300,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Description',
-                //   //               textAlign: TextAlign.center,
-                //   //               overflow: TextOverflow.values.first,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         columnName: 'Number',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: true,
-                //   //         width: 130,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Drawing Number',
-                //   //               textAlign: TextAlign.center,
-                //   //               overflow: TextOverflow.values.first,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)
-                //   //               //    textAlign: TextAlign.center,
-                //   //               ),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         columnName: 'PreparationDate',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: false,
-                //   //         width: 170,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Preparation Date',
-                //   //               overflow: TextOverflow.values.first,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)
-                //   //               //    textAlign: TextAlign.center,
-                //   //               ),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         columnName: 'SubmissionDate',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: false,
-                //   //         width: 170,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Submission Date',
-                //   //               overflow: TextOverflow.values.first,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)
-                //   //               //    textAlign: TextAlign.center,
-                //   //               ),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         columnName: 'ApproveDate',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: false,
-                //   //         width: 170,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Approve Date',
-                //   //               overflow: TextOverflow.values.first,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)
-                //   //               //    textAlign: TextAlign.center,
-                //   //               ),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         columnName: 'ReleaseDate',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: false,
-                //   //         width: 170,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Release Date',
-                //   //               overflow: TextOverflow.values.first,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)
-                //   //               //    textAlign: TextAlign.center,
-                //   //               ),
-                //   //         ),
-                //   //       ),
-                //   //       GridColumn(
-                //   //         visible: false,
-                //   //         columnName: 'Delete',
-                //   //         autoFitPadding:
-                //   //             const EdgeInsets.symmetric(horizontal: 16),
-                //   //         allowEditing: false,
-                //   //         width: 120,
-                //   //         label: Container(
-                //   //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //   //           alignment: Alignment.center,
-                //   //           child: Text('Delete Row',
-                //   //               overflow: TextOverflow.values.first,
-                //   //               style: TextStyle(
-                //   //                   fontWeight: FontWeight.bold,
-                //   //                   fontSize: 16,
-                //   //                   color: white)
-                //   //               //    textAlign: TextAlign.center,
-                //   //               ),
-                //   //         ),
-                //   //       ),
-                //   //     ]);
-                // } else {
-                // alldata = '';
-                // alldata = snapshot.data['data'] as List<dynamic>;
-                // DetailedProjectev.clear();
-                // alldata.forEach((element) {
-                //   DetailedProjectev.add(DetailedEngModel.fromjsaon(element));
-                //   _detailedEngSourceev = DetailedEngSourceEV(
-                //     DetailedProjectev,
-                //     context,
-                //     widget.cityName.toString(),
-                //     widget.depoName.toString(),
-                //   );
-                //   _dataGridController = DataGridController();
-                // });
-
                 return SfDataGrid(
                     source: _selectedIndex == 0
                         ? _detailedDataSource
@@ -1137,9 +580,10 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               overflow: TextOverflow.values.first,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: white)
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: blue,
+                              )
                               //    textAlign: TextAlign.center,
                               ),
                         ),
@@ -1157,7 +601,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)),
+                                  color: blue)),
                         ),
                       ),
                       GridColumn(
@@ -1172,7 +616,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)),
+                                  color: blue)),
                         ),
                       ),
                       GridColumn(
@@ -1190,7 +634,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)),
+                                  color: blue)),
                         ),
                       ),
                       GridColumn(
@@ -1208,7 +652,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)
+                                  color: blue)
                               //    textAlign: TextAlign.center,
                               ),
                         ),
@@ -1227,7 +671,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)
+                                  color: blue)
                               //    textAlign: TextAlign.center,
                               ),
                         ),
@@ -1246,7 +690,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)
+                                  color: blue)
                               //    textAlign: TextAlign.center,
                               ),
                         ),
@@ -1265,7 +709,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)
+                                  color: blue)
                               //    textAlign: TextAlign.center,
                               ),
                         ),
@@ -1284,7 +728,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)
+                                  color: blue)
                               //    textAlign: TextAlign.center,
                               ),
                         ),
@@ -1304,7 +748,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
-                                  color: white)
+                                  color: blue)
                               //    textAlign: TextAlign.center,
                               ),
                         ),
@@ -1315,47 +759,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
               ),
         )),
       ]),
-      // floatingActionButton: companyName == 'TATA POWER'
-      //     ? FloatingActionButton(
-      //         child: Icon(Icons.add),
-      //         onPressed: (() {
-      //           if (_selectedIndex == 0) {
-      //             DetailedProjectev.add(DetailedEngModel(
-      //               siNo: 1,
-      //               title: 'EV Layout',
-      //               number: 123456878,
-      //               preparationDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //               submissionDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //               approveDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //               releaseDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //             ));
-      //             _detailedDataSource.buildDataGridRows();
-      //             _detailedDataSource.updateDatagridSource();
-      //           }
-      //           if (_selectedIndex == 1) {
-      //             DetailedProjectev.add(DetailedEngModel(
-      //               siNo: 1,
-      //               title: 'EV Layout',
-      //               number: 12345,
-      //               preparationDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //               submissionDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //               approveDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //               releaseDate:
-      //                   DateFormat().add_yMd().format(DateTime.now()),
-      //             ));
-      //             _detailedEngSourceev.buildDataGridRowsEV();
-      //             _detailedEngSourceev.updateDatagridSource();
-      //           }
-      //         }),
-      //       )
-      //     : Container()
     );
   }
 
@@ -1364,228 +767,10 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
       body: Column(children: [
         Expanded(
             child: SfDataGridTheme(
-          data: SfDataGridThemeData(headerColor: blue),
+          data: SfDataGridThemeData(headerColor: white, gridLineColor: blue),
           child: StreamBuilder(
             stream: _stream2,
             builder: (context, snapshot) {
-              // if (!snapshot.hasData || snapshot.data.exists == false) {
-              //   return NodataAvailable();
-              // return SfDataGrid(
-              //     source: _selectedIndex == 0
-              //         ? _detailedDataSource
-              //         : _detailedEngSourceShed,
-              //     allowEditing: true,
-              //     frozenColumnsCount: 2,
-              //     gridLinesVisibility: GridLinesVisibility.both,
-              //     headerGridLinesVisibility: GridLinesVisibility.both,
-              //     selectionMode: SelectionMode.single,
-              //     navigationMode: GridNavigationMode.cell,
-              //     columnWidthMode: ColumnWidthMode.auto,
-              //     editingGestureType: EditingGestureType.tap,
-              //     controller: _dataGridController,
-              //     columns: [
-              //       GridColumn(
-              //         visible: false,
-              //         columnName: 'SiNo',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: true,
-              //         width: 80,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('SI No.',
-              //               overflow: TextOverflow.values.first,
-              //               textAlign: TextAlign.center,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)
-              //               //    textAlign: TextAlign.center,
-              //               ),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         visible: false,
-              //         columnName: 'button',
-              //         width: 130,
-              //         allowEditing: false,
-              //         label: Container(
-              //           padding: const EdgeInsets.all(8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Upload Drawing ',
-              //               textAlign: TextAlign.center,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         columnName: 'ViewDrawing',
-              //         width: 130,
-              //         allowEditing: false,
-              //         label: Container(
-              //           padding: const EdgeInsets.all(8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('View Drawing ',
-              //               textAlign: TextAlign.center,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         columnName: 'Title',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: true,
-              //         width: 300,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Description',
-              //               textAlign: TextAlign.center,
-              //               overflow: TextOverflow.values.first,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         columnName: 'Number',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: true,
-              //         width: 130,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Drawing Number',
-              //               textAlign: TextAlign.center,
-              //               overflow: TextOverflow.values.first,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)
-              //               //    textAlign: TextAlign.center,
-              //               ),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         columnName: 'PreparationDate',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: false,
-              //         width: 170,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Preparation Date',
-              //               overflow: TextOverflow.values.first,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)
-              //               //    textAlign: TextAlign.center,
-              //               ),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         columnName: 'SubmissionDate',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: false,
-              //         width: 170,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Submission Date',
-              //               overflow: TextOverflow.values.first,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)
-              //               //    textAlign: TextAlign.center,
-              //               ),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         columnName: 'ApproveDate',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: false,
-              //         width: 170,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Approve Date',
-              //               overflow: TextOverflow.values.first,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)
-              //               //    textAlign: TextAlign.center,
-              //               ),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         columnName: 'ReleaseDate',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: false,
-              //         width: 170,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Release Date',
-              //               overflow: TextOverflow.values.first,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)
-              //               //    textAlign: TextAlign.center,
-              //               ),
-              //         ),
-              //       ),
-              //       GridColumn(
-              //         visible: false,
-              //         columnName: 'Delete',
-              //         autoFitPadding:
-              //             const EdgeInsets.symmetric(horizontal: 16),
-              //         allowEditing: false,
-              //         width: 120,
-              //         label: Container(
-              //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              //           alignment: Alignment.center,
-              //           child: Text('Delete Row',
-              //               overflow: TextOverflow.values.first,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 16,
-              //                   color: white)
-              //               //    textAlign: TextAlign.center,
-              //               ),
-              //         ),
-              //       ),
-              //     ]);
-              //  } else {
-              // alldata = '';
-              // alldata = snapshot.data['data'] as List<dynamic>;
-              // DetailedProjectshed.clear();
-              // alldata.forEach((element) {
-              //   DetailedProjectshed.add(DetailedEngModel.fromjsaon(element));
-              //   _detailedEngSourceShed = DetailedEngSourceShed(
-              //     DetailedProjectshed,
-              //     context,
-              //     widget.cityName.toString(),
-              //     widget.depoName.toString(),
-              //   );
-              //   _dataGridController = DataGridController();
-              // });
-
               return SfDataGrid(
                   source: _selectedIndex == 0
                       ? _detailedDataSource
@@ -1616,7 +801,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -1634,7 +819,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)),
+                                color: blue)),
                       ),
                     ),
                     GridColumn(
@@ -1649,7 +834,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)),
+                                color: blue)),
                       ),
                     ),
                     GridColumn(
@@ -1667,7 +852,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)),
+                                color: blue)),
                       ),
                     ),
                     GridColumn(
@@ -1685,7 +870,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -1704,7 +889,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -1723,7 +908,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -1742,7 +927,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -1761,7 +946,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -1781,7 +966,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: white)
+                                color: blue)
                             //    textAlign: TextAlign.center,
                             ),
                       ),
@@ -1792,26 +977,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
           ),
         )),
       ]),
-      // floatingActionButton: companyName == 'TATA POWER'
-      //     ? FloatingActionButton(
-      //         child: Icon(Icons.add),
-      //         onPressed: (() {
-      //           DetailedProject.add(DetailedEngModel(
-      //             siNo: 1,
-      //             title: 'EV Layout',
-      //             number: 12345,
-      //             preparationDate:
-      //                 DateFormat().add_yMd().format(DateTime.now()),
-      //             submissionDate:
-      //                 DateFormat().add_yMd().format(DateTime.now()),
-      //             approveDate: DateFormat().add_yMd().format(DateTime.now()),
-      //             releaseDate: DateFormat().add_yMd().format(DateTime.now()),
-      //           ));
-      //           _detailedDataSource.buildDataGridRows();
-      //           _detailedDataSource.updateDatagridSource();
-      //         }),
-      //       )
-      //     : Container()
     );
   }
 

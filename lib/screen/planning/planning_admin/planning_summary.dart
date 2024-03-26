@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/screen/planning/planning_admin/planning_page_admin.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/planning/project_planning.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
 
@@ -13,8 +14,10 @@ class PlanningTable extends StatefulWidget {
   final String? cityName;
   final String? depoName;
   final String? id;
-  const PlanningTable(
-      {super.key, this.userId, this.cityName, required this.depoName, this.id});
+  String role;
+   PlanningTable(
+      {super.key, this.userId, this.cityName, required this.depoName, this.id,
+      required this.role});
 
   @override
   State<PlanningTable> createState() => _PlanningTableState();
@@ -41,6 +44,10 @@ class _PlanningTableState extends State<PlanningTable> {
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
+            isProjectManager: widget.role == "projectManager" ? true : false,
+            makeAnEntryPage:  KeyEvents(
+              role: widget.role,
+              cityName: widget.cityName, depoName: widget.depoName),
             cityName: widget.cityName,
             showDepoBar: true,
             toPlanning: true,

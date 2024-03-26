@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/checkbox_provider.dart';
@@ -36,9 +35,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   NotificationSettings settings = await _messaging.requestPermission(
       alert: true, badge: true, provisional: true, sound: true);
   await Firebase.initializeApp();
-  // intialize firebase messaging
-
-  print("Handling background message:${message.messageId}");
   RemoteMessage? initializeMessage =
       await FirebaseMessaging.instance.getInitialMessage();
   if (initializeMessage != null) {
@@ -52,14 +48,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  // its used for status bar color
   Future.delayed(Duration.zero, () async {
-    //to run async code in initState
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-    // enables secure mode for app, disables screenshot, screen recording
   });
 
-// here i have initialize my firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await NotificationService.initialize();
@@ -73,10 +65,6 @@ void main() async {
   ]);
 
   await Firebase.initializeApp();
-
-  // NotificationService().initialize();
-  // NotificationService().getFCMToken();
-// To show file downloaded notification for pdf
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   const initializationSettingsAndroid =
@@ -89,14 +77,7 @@ void main() async {
       await OpenFile.open(details.payload!);
     },
   );
-
-// To request permission for notification and storage
-  // await [
-  //   Permission.notification,
-  //   Permission.storage,
-  // ].request();
   runApp(MyApp());
-  //for handling the notification in terminated state
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
 
@@ -195,7 +176,8 @@ class _MyAppState extends State<MyApp> {
           // initialRoute: '/splash',
           initialRoute:
               //'/user-list',
-              '/splash-screen',
+              "/login-page",
+          // '/splash-screen',
           // all the pages of routes are declared here
           onGenerateRoute: RouteGenerator.generateRoute,
           debugShowCheckedModeBanner: false,
@@ -205,15 +187,15 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Montserrat',
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: Colors.white,
-            dividerColor: const Color.fromARGB(255, 2, 42, 75),
+            dividerColor: const Color.fromARGB(255, 2, 42, 75,),
             inputDecorationTheme: InputDecorationTheme(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
-                borderSide: BorderSide(color: blue),
+                borderSide: BorderSide(color: blue,),
               ),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(3),
-                  borderSide: BorderSide(color: blue)),
+                  borderSide: BorderSide(color: blue,),),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               focusColor: black,
               // labelStyle: Colors.b

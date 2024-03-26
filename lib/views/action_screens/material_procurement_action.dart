@@ -7,8 +7,13 @@ class MaterialProcurementAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
+  String userId;
   MaterialProcurementAction(
-      {super.key, this.cityName, this.role, this.depoName});
+      {super.key,
+      required this.userId,
+      this.cityName,
+      this.role,
+      this.depoName});
 
   @override
   State<MaterialProcurementAction> createState() =>
@@ -21,7 +26,6 @@ class _MaterialProcurementActionState extends State<MaterialProcurementAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -33,13 +37,30 @@ class _MaterialProcurementActionState extends State<MaterialProcurementAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = MaterialProcurement(depoName: widget.depoName);
+        selectedUi = MaterialProcurement(
+          depoName: widget.depoName,
+          userId: widget.userId,
+          role: widget.role,
+        );
         break;
+
       case 'admin':
         selectedUi = MaterialProcurementAdmin(
           cityName: widget.cityName,
+          userId: widget.userId,
+          depoName: widget.depoName,
+          role: widget.role!,
+        );
+        break;
+
+      case 'projectManager':
+        selectedUi = MaterialProcurementAdmin(
+          role: widget.role!,
+          userId: widget.userId,
+          cityName: widget.cityName,
           depoName: widget.depoName,
         );
+        break;
     }
 
     return selectedUi;

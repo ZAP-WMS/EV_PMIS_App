@@ -5,6 +5,7 @@ import 'package:ev_pmis_app/model_admin/material_vendor.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/viewmodels/material_procurement.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
+import 'package:ev_pmis_app/views/materialprocurement/material_vendor.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +17,10 @@ class MaterialProcurementAdmin extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
+  String role;
+
   MaterialProcurementAdmin(
-      {super.key, required this.cityName, required this.depoName, this.userId});
+      {super.key, required this.cityName, required this.depoName, this.userId,required this.role});
 
   @override
   State<MaterialProcurementAdmin> createState() =>
@@ -50,16 +53,6 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
         setState(() {});
       },
     );
-    // getUserId().whenComplete(() {
-    //   _stream = FirebaseFirestore.instance
-    //       .collection('MaterialProcurement')
-    //       .doc('${widget.depoName}')
-    //       .collection('Material Data')
-    //       .doc(userId)
-    //       .snapshots();
-    //   _isloading = false;
-    //   setState(() {});
-    // });
     super.initState();
   }
 
@@ -67,8 +60,13 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-            // ignore: sort_child_properties_last
+            preferredSize: const Size.fromHeight(50),
             child: CustomAppBar(
+              isProjectManager: widget.role == 'projectManager' ? true : false,
+              makeAnEntryPage: MaterialProcurement(
+          depoName: widget.depoName,
+          userId: widget.userId,
+        ),
               showDepoBar: true,
               toMaterial: true,
               userId: widget.userId,
@@ -76,27 +74,12 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
               cityName: widget.cityName,
               text: 'Material Procurement',
               haveSummary: false,
-              // onTap: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => ViewSummary(
-              //         cityName: widget.cityName.toString(),
-              //         depoName: widget.depoName.toString(),
-              //         id: 'Monthly Report',
-              //         // userId: userId,
-              //       ),
-              //     )),
               haveSynced: false,
               store: () {
                 _showDialog(context);
-                // FirebaseApi().defaultKeyEventsField(
-                //     'MaterialProcurement', widget.depoName!);
-                // FirebaseApi().nestedKeyEventsField('MaterialProcurement',
-                //     widget.depoName!, 'Material Data', userId);
                 storeData();
               },
-            ),
-            preferredSize: const Size.fromHeight(50)),
+            )),
         body: _isloading
             ? const LoadingPage()
             : Column(children: [

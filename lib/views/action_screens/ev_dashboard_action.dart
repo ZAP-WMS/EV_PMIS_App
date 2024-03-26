@@ -6,8 +6,10 @@ class EVDashboardAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
+  String? userId;
 
-  EVDashboardAction({super.key, this.cityName, this.role, this.depoName});
+  EVDashboardAction(
+      {super.key, this.cityName, this.role, this.userId, this.depoName});
 
   @override
   State<EVDashboardAction> createState() => _EVDashboardActionState();
@@ -31,10 +33,20 @@ class _EVDashboardActionState extends State<EVDashboardAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = const EVDashboardUser();
+        selectedUi = EVDashboardUser(
+          userId: widget.userId,
+        );
         break;
       case 'admin':
-        selectedUi = const EVDashboardAdmin();
+        selectedUi = EVDashboardAdmin(
+          role: widget.role!,
+        );
+        break;
+      case 'projectManager':
+        selectedUi = EVDashboardAdmin(
+          role: widget.role!,
+        );
+        break;
     }
     return selectedUi;
   }

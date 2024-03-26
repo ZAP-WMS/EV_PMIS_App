@@ -22,8 +22,10 @@ import '../dailyreport/summary.dart';
 
 class SafetyField extends StatefulWidget {
   String? depoName;
+  String? userId;
+  String? role;
 
-  SafetyField({super.key, required this.depoName});
+  SafetyField({super.key, this.role, this.userId, required this.depoName});
 
   @override
   State<SafetyField> createState() => _SafetyFieldState();
@@ -69,6 +71,9 @@ late TextEditingController tpController,
     conductedController;
 
 class _SafetyFieldState extends State<SafetyField> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   void initializeController() {
     installationController = TextEditingController();
     engizationController = TextEditingController();
@@ -86,7 +91,7 @@ class _SafetyFieldState extends State<SafetyField> {
 
   @override
   void initState() {
-    // _fetchSafetyField();
+    getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
     initializeController();
@@ -115,13 +120,12 @@ class _SafetyFieldState extends State<SafetyField> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        // ignore: sort_child_properties_last
+        preferredSize: const Size.fromHeight(50),
         child: CustomAppBarBackDate(
-          depoName: '${widget.depoName!}',
+          depoName: widget.depoName!,
           text: 'SafetyChecklist',
           // / ${DateFormat.yMMMMd().format(DateTime.now() )}',
           haveSummary: true,
-
           onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -132,7 +136,7 @@ class _SafetyFieldState extends State<SafetyField> {
                   userId: userId,
                 ),
               )),
-          haveSynced: true,
+          haveSynced: isFieldEditable ? true : false,
           store: () {
             FirebaseFirestore.instance
                 .collection('SafetyFieldData2')
@@ -165,12 +169,10 @@ class _SafetyFieldState extends State<SafetyField> {
             chooseDate(context);
           },
         ),
-
-        preferredSize: const Size.fromHeight(50),
       ),
       drawer: const NavbarDrawer(),
       body: isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('SafetyFieldData2')
@@ -470,7 +472,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                       frozenPaneLineWidth: 3),
                                   child: SfDataGrid(
                                     source: _safetyChecklistDataSource,
-                                    allowEditing: true,
+                                    allowEditing: isFieldEditable,
                                     frozenColumnsCount: 1,
                                     gridLinesVisibility:
                                         GridLinesVisibility.both,
@@ -602,7 +604,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                     child: SfDataGrid(
                                       source: _safetyChecklistDataSource,
                                       //key: key,
-                                      allowEditing: true,
+                                      allowEditing: isFieldEditable,
                                       frozenColumnsCount: 1,
                                       gridLinesVisibility:
                                           GridLinesVisibility.both,
@@ -718,7 +720,7 @@ class _SafetyFieldState extends State<SafetyField> {
                     ),
                   );
                 } else {
-                  return LoadingPage();
+                  return const LoadingPage();
                 }
               }),
       // floatingActionButton: FloatingActionButton.extended(
@@ -1174,6 +1176,7 @@ class _SafetyFieldState extends State<SafetyField> {
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          isFieldEditable: isFieldEditable,
           controller: controller,
           labeltext: title,
           // validatortext: '$title is Required',
@@ -1307,30 +1310,10 @@ class _SafetyFieldState extends State<SafetyField> {
     isLoading = false;
     setState(() {});
   }
-}
 
-// civilField(String depoName) {
-//   FirebaseFirestore.instance
-//       .collection('SafetyFieldData2')
-//       .doc(depoName)
-//       .collection('userId')
-//       .doc(userId)
-//       .collection('date')
-//       .doc(selectedDate)
-//       .set({
-//     'TPNo': tpController.text,
-//     'Rev': revController.text,
-//     'DepotLocation': locationContoller.text,
-//     'Address': addressController.text,
-//     'ContactNo': contactController.text,
-//     'Latitude': latitudeController.text,
-//     'State': stateController.text,
-//     'ChargerType': chargerController.text,
-//     'ConductedBy': conductedController.text,
-//     'InstallationDate': date.toString(),
-//     'EnegizationDate': date1.toString(),
-//     'BoardingDate': date2.toString(),
-//   });
-//   FirebaseApi()
-//       .nestedKeyEventsField('SafetyFieldData2', depoName, 'userId', userId!);
-// }
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+  }
+}

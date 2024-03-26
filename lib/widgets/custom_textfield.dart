@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../style.dart';
 
@@ -9,6 +8,7 @@ class CustomTextField extends StatefulWidget {
   String labeltext;
   bool isSuffixIcon;
   bool isProjectManager;
+  bool isFieldEditable;
   final String? Function(String?)? validatortext;
 
   final TextInputType? keyboardType;
@@ -23,51 +23,57 @@ class CustomTextField extends StatefulWidget {
       required this.textInputAction,
       this.role,
       this.isProjectManager = true,
-      this.isObscure = false});
+      this.isObscure = false,
+      this.isFieldEditable = false});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool _isHidden = false;
+  bool _isHidden = true;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: widget.isProjectManager ? false : true,
+      readOnly: widget.isFieldEditable
+          ? widget.isProjectManager
+              ? true
+              : false
+          : false,
       autofocus: false,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,
       style: const TextStyle(fontSize: 13),
       decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          labelText: widget.labeltext,
-          border: OutlineInputBorder(
+        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        labelText: widget.labeltext,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue),
+        ),
+        enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.blue),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.red),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.blue),
-          ),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.grey)),
-          suffixIcon: widget.isSuffixIcon
-              ? InkWell(
-                  onTap: _togglePasswordView,
-                  child: _isHidden
-                      ? const Icon(Icons.visibility)
-                      : Icon(
-                          Icons.visibility_off,
-                          color: grey,
-                        ))
-              : const Text('')),
+            borderSide: const BorderSide(color: Colors.grey)),
+        suffixIcon: widget.isSuffixIcon
+            ? InkWell(
+                onTap: _togglePasswordView,
+                child: _isHidden
+                    ? const Icon(Icons.visibility)
+                    : const Icon(
+                        Icons.visibility_off,
+                      ))
+            : const Text(
+                '',
+              ),
+      ),
       validator: widget.validatortext,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,

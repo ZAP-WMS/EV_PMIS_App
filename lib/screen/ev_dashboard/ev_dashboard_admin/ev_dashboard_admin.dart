@@ -19,7 +19,8 @@ List<dynamic> cityList = [];
 class EVDashboardAdmin extends StatefulWidget {
   final bool showAppBar;
   final Function? callbackFun;
-  const EVDashboardAdmin({Key? key, this.callbackFun, this.showAppBar = false})
+  String role;
+ EVDashboardAdmin({Key? key, this.callbackFun, this.showAppBar = false,required this.role})
       : super(key: key);
 
   static const String id = 'admin-page';

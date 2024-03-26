@@ -69,6 +69,7 @@ class _ClosureFieldState extends State<ClosureField> {
     return Scaffold(
         drawer: const NavbarDrawer(),
         appBar: CustomAppBar(
+          
           depoName: widget.depoName ?? '',
           title: 'Closure Report',
           height: 50,

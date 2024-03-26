@@ -82,7 +82,6 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
   @override
   void initState() {
     super.initState();
-    Permission.notification.request();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
 
@@ -92,11 +91,12 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
+            isProjectManager: false,
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,
             cityName: cityName,
-            text: '${widget.depoName} / Quality Checklist',
+            text: 'Quality Checklist',
             userId: widget.userId,
           )),
       body: FutureBuilder<List<List<dynamic>>>(
@@ -152,13 +152,13 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
                                     fontSize: 11,
                                   ))),
                           DataColumn(
-                              label: Text('Safety Report',
+                              label: Text('Safety\nReport',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 11,
                                   ))),
                           DataColumn(
-                              label: Text('PDF Download',
+                              label: Text('PDF\nDownload',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 11,
@@ -358,8 +358,9 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
     final headerStyle =
         pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold);
 
-    final fontData1 = await rootBundle.load('fonts/IBMPlexSans-Medium.ttf');
-    final fontData2 = await rootBundle.load('fonts/IBMPlexSans-Bold.ttf');
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
 
     const cellStyle = pw.TextStyle(
       color: PdfColors.black,

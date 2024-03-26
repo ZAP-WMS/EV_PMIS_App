@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/QualityDatasource/qualityCivilDatasource/quality_paving.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/qualitychecklist/quality_checklist.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
@@ -49,22 +50,26 @@ class CivilField extends StatefulWidget {
   String fieldclnName;
   bool isloading = true;
   String? currentDate;
+  String? role;
 
   CivilField(
       {super.key,
       required this.depoName,
       required this.title,
       required this.fieldclnName,
-      required this.index});
+      required this.index,
+      this.role});
 
   @override
   State<CivilField> createState() => _CivilFieldState();
 }
 
 class _CivilFieldState extends State<CivilField> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   String pathToOpenFile = '';
   ProgressDialog? pr;
-
   String? cityName;
   Stream? _stream;
   late TextEditingController projectController,
@@ -142,14 +147,6 @@ class _CivilFieldState extends State<CivilField> {
     pr = ProgressDialog(context,
         customBody:
             Container(height: 200, width: 100, child: const LoadingPdf()));
-    // _stream = FirebaseFirestore.instance
-    //     .collection('CivilQualityChecklist')
-    //     .doc('${widget.depoName}')
-    //     .collection('userId')
-    //     .doc(userId)
-    //     .collection(widget.fieldclnName)
-    //     .doc(selectedDate)
-    //     .snapshots();
 
     initializeController();
     _fetchUserData();
@@ -294,7 +291,7 @@ class _CivilFieldState extends State<CivilField> {
             depoName: widget.depoName!,
             text: '${widget.title}',
             haveCalender: true,
-            haveSynced: true,
+            haveSynced: isFieldEditable ? true : false,
             isDownload: true,
             haveSummary: false,
             onTap: () => Navigator.push(
@@ -452,7 +449,7 @@ class _CivilFieldState extends State<CivilField> {
                                                                               ? _qualityRoofingDataSource
                                                                               : _qualityProofingDataSource,
 
-                                  allowEditing: true,
+                                  allowEditing: isFieldEditable,
                                   frozenColumnsCount: 1,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
@@ -567,29 +564,8 @@ class _CivilFieldState extends State<CivilField> {
                                       ),
                                     ),
                                   ],
-
-                                  // stackedHeaderRows: [
-                                  //   StackedHeaderRow(cells: [
-                                  //     StackedHeaderCell(
-                                  //         columnNames: ['SrNo'],
-                                  //         child: Container(child: Text('Project')))
-                                  //   ])
-                                  // ],
                                 ),
                               );
-                              // : Center(
-                              //     child: Container(
-                              //       padding: EdgeInsets.all(25),
-                              //       decoration: BoxDecoration(
-                              //           borderRadius: BorderRadius.circular(20),
-                              //           border: Border.all(color: blue)),
-                              //       child: const Text(
-                              //         '     No data available yet \n Please wait for admin process',
-                              //         style: TextStyle(
-                              //             fontSize: 30, fontWeight: FontWeight.bold),
-                              //       ),
-                              //     ),
-                              //   );
                             } else if (snapshot.hasData) {
                               return SfDataGridTheme(
                                 data: SfDataGridThemeData(
@@ -625,7 +601,7 @@ class _CivilFieldState extends State<CivilField> {
                                                                           : widget.fieldclnName == 'Roofing'
                                                                               ? _qualityRoofingDataSource
                                                                               : _qualityProofingDataSource,
-                                  allowEditing: true,
+                                  allowEditing: isFieldEditable,
                                   frozenColumnsCount: 1,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
@@ -775,6 +751,7 @@ class _CivilFieldState extends State<CivilField> {
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+        isFieldEditable: isFieldEditable,
         controller: controller,
         labeltext: title,
         // validatortext: '$title is Required',
@@ -1415,5 +1392,11 @@ class _CivilFieldState extends State<CivilField> {
       // }
     }
     return File('');
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

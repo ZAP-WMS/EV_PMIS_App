@@ -6,7 +6,9 @@ import '../../style.dart';
 
 class QualityHome extends StatefulWidget {
   String? depoName;
-  QualityHome({super.key, this.depoName});
+  String? userId;
+  String? role;
+  QualityHome({super.key,this.userId,this.role, this.depoName});
 
   @override
   State<QualityHome> createState() => _QualityHomeState();
@@ -143,6 +145,7 @@ class _QualityHomeState extends State<QualityHome> {
                           MaterialPageRoute(
                             builder: (context) => CivilField(
                               depoName: widget.depoName,
+                              role: widget.role,
                               title: civillist[index],
                               fieldclnName: civilClnName[index],
                               index: index,
@@ -160,6 +163,7 @@ class _QualityHomeState extends State<QualityHome> {
                             MaterialPageRoute(
                               builder: (context) => ElectricalField(
                                 depoName: widget.depoName,
+                                role: widget.role,
                                 title: electricallist[index],
                                 fielClnName: eleClnName[index],
                                 titleIndex: index,
@@ -190,4 +194,6 @@ class _QualityHomeState extends State<QualityHome> {
       ),
     );
   }
+
+  
 }

@@ -1,5 +1,3 @@
-import 'package:ev_pmis_app/views/authentication/authservice.dart';
-import 'package:ev_pmis_app/widgets/internet_checker.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +7,8 @@ import 'depot.dart';
 
 class CitiesHome extends StatefulWidget {
   String? role;
-  CitiesHome({super.key, this.role});
+  String? userId;
+  CitiesHome({super.key, this.role, this.userId});
 
   @override
   State<CitiesHome> createState() => _CitiesHomeState();
@@ -37,7 +36,7 @@ class _CitiesHomeState extends State<CitiesHome> {
         children: [
           const CitiesPage(),
           DepotPage(
-            role: widget.role,
+            role: widget.role, 
           ),
         ],
       ),

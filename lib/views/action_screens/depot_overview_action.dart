@@ -2,10 +2,12 @@ import 'package:ev_pmis_app/screen/overviewpage/depot_overview.dart';
 import 'package:flutter/material.dart';
 
 class DepotOverviewAction extends StatefulWidget {
-  String? role;
+  String role;
   String? cityName;
   String? depoName;
-  DepotOverviewAction({super.key, this.cityName, this.role, this.depoName});
+  String? userId;
+  DepotOverviewAction(
+      {super.key, this.cityName, required this.role, this.depoName,this.userId});
 
   @override
   State<DepotOverviewAction> createState() => _DepotOverviewActionState();
@@ -17,7 +19,6 @@ class _DepotOverviewActionState extends State<DepotOverviewAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -30,15 +31,23 @@ class _DepotOverviewActionState extends State<DepotOverviewAction> {
     switch (widget.role) {
       case 'user':
         selectedUi = DepotOverview(
-          depoName: widget.depoName,
+          depoName: widget.depoName,userId: widget.userId,
           role: widget.role,
         );
         break;
       case 'admin':
         selectedUi = DepotOverview(
           role: widget.role,
+          userId: widget.userId,
           depoName: widget.depoName,
         );
+        break;
+      case 'projectManager':
+        selectedUi = DepotOverview(
+          role: widget.role,userId: widget.userId,
+          depoName: widget.depoName,
+        );
+        break;
     }
 
     return selectedUi;

@@ -14,10 +14,12 @@ String userId = '';
 class DepotPage extends StatefulWidget {
   String? role;
   String? cityName;
+  String? userId;
   DepotPage({
     super.key,
     this.cityName,
     this.role,
+    this.userId
   });
 
   @override
@@ -30,10 +32,8 @@ class _DepotPageState extends State<DepotPage> {
   @override
   void initState() {
     getUserId();
-    // TODO: implement initState
-
     super.initState();
-    print('depotPage - UserId- ${userId}');
+    print('depotPage - UserId- $userId');
   }
 
   @override
@@ -163,30 +163,37 @@ class _DepotPageState extends State<DepotPage> {
   }
 
   Widget depolist(String image, String text) {
-    return Column(children: [
-      Container(
-          padding: const EdgeInsets.all(20),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(
+            20,
+          ),
           width: 90,
           height: 90,
           decoration: BoxDecoration(
-              border: Border.all(color: grey),
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                    image,
-                  ),
-                  //  NetworkImage(image),
-                  fit: BoxFit.cover))),
-      Expanded(
-        child: Text(
-          text,
-          softWrap: true,
-          textAlign: TextAlign.center,
-          style:
-              TextStyle(color: blue, fontWeight: FontWeight.bold, fontSize: 11),
+            border: Border.all(color: grey),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(
+                image,
+              ),
+              //  NetworkImage(image),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
-      ),
-    ]);
+        Expanded(
+          child: Text(
+            text,
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: blue, fontWeight: FontWeight.bold, fontSize: 11),
+          ),
+        ),
+      ],
+    );
   }
 
   // void getToken() async {

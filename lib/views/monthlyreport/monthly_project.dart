@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,14 +21,24 @@ import '../dailyreport/summary.dart';
 class MonthlyProject extends StatefulWidget {
   String? cityName;
   String? depoName;
+  String? userId;
+  String? role;
 
-  MonthlyProject({super.key, this.cityName, required this.depoName});
+  MonthlyProject(
+      {super.key,
+      this.cityName,
+      required this.depoName,
+      this.role,
+      this.userId});
 
   @override
   State<MonthlyProject> createState() => _MonthlyProjectState();
 }
 
 class _MonthlyProjectState extends State<MonthlyProject> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   List<MonthlyProjectModel> monthlyProject = <MonthlyProjectModel>[];
   late MonthlyDataSource monthlyDataSource;
   late DataGridController _dataGridController;
@@ -40,19 +51,16 @@ class _MonthlyProjectState extends State<MonthlyProject> {
 
   @override
   void initState() {
-    // getUserId().whenComplete(() {
+    getAssignedDepots();
     widget.cityName =
         Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    // getTableData().whenComplete(() {
     _stream = FirebaseFirestore.instance
         .collection('MonthlyProjectReport2')
         .doc('${widget.depoName}')
-        // .collection('AllMonthData')
         .collection('userId')
         .doc(userId)
         .collection('Monthly Data')
-        // .collection('MonthData')
         .doc(DateFormat.yMMM().format(DateTime.now()))
         .snapshots();
 
@@ -61,10 +69,6 @@ class _MonthlyProjectState extends State<MonthlyProject> {
     setState(() {
       isLoading = false;
     });
-    //});
-
-    // });
-
     super.initState();
   }
 
@@ -80,7 +84,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
 
             //  ${DateFormat.yMMMMd().format(DateTime.now())}',
             haveCalender: false,
-            haveSynced: true,
+            haveSynced: isFieldEditable ? true : false,
             haveSummary: true,
             onTap: () => Navigator.push(
                 context,
@@ -98,36 +102,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                   'MonthlyProjectReport2', widget.depoName!, 'userId', userId);
               storeData();
             },
-            //  choosedate: ('') {
-            // chooseDate(context);
-            // }
           ),
-          // CustomAppBar(
-          //   title:
-          //       ' ${widget.cityName}/ ${widget.depoName} / Monthly Report / ${DateFormat('MMMM').format(DateTime.now())}',
-          //   isSync: true,
-          //   height: 50,
-          //   // onTap: () => Navigator.push(
-          //   //     context,
-          //   //     MaterialPageRoute(
-          //   //       builder: (context) => ViewSummary(
-          //   //         cityName: widget.cityName.toString(),
-          //   //         depoName: widget.depoName.toString(),
-          //   //         id: 'Monthly Report',
-          //   //         userId: userId,
-          //   //       ),
-          //   //     )),
-          //   // haveSynced: true,
-          //   store: () {
-          //     // _showDialog(context);
-          //     // FirebaseApi().defaultKeyEventsField(
-          //     //     'MonthlyProjectReport', widget.depoName!);
-          //     FirebaseApi().nestedKeyEventsField(
-          //         'MonthlyProjectReport2', widget.depoName!, 'userId', userId!);
-          //     storeData();
-          //   },
-          // ),
-
           preferredSize: const Size.fromHeight(50)),
       body: isLoading
           ? const LoadingPage()
@@ -154,7 +129,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 gridLineStrokeWidth: 2),
                             child: SfDataGrid(
                                 source: monthlyDataSource,
-                                allowEditing: true,
+                                allowEditing: isFieldEditable,
                                 frozenColumnsCount: 1,
                                 gridLinesVisibility: GridLinesVisibility.both,
                                 headerGridLinesVisibility:
@@ -171,11 +146,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 columns: [
                                   GridColumn(
                                     columnName: 'ActivityNo',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 65,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text("Sr No.",
                                           // 'Activities SI. No as per Gant Chart',
@@ -188,11 +161,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'ActivityDetails',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 250,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Activities Details',
                                           textAlign: TextAlign.center,
@@ -200,94 +171,11 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                           style: tableheaderwhitecolor),
                                     ),
                                   ),
-
-                                  // GridColumn(
-                                  //   columnName: 'Months',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 200,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Months',
-                                  //         textAlign: TextAlign.center,
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'Duration',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 120,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Duration in Days',
-                                  //         textAlign: TextAlign.center,
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)
-                                  //         //    textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'StartDate',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 160,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Start Date',
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)
-                                  //         //    textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'EndDate',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 120,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('End Date',
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)
-                                  //         //    textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
                                   GridColumn(
                                     columnName: 'Progress',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Progress',
                                           overflow: TextOverflow.values.first,
@@ -298,11 +186,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Status',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Remark/Status',
                                           overflow: TextOverflow.values.first,
@@ -313,11 +199,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Action',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Next Month Action Plan',
                                           overflow: TextOverflow.values.first,
@@ -345,7 +229,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 gridLineStrokeWidth: 2),
                             child: SfDataGrid(
                                 source: monthlyDataSource,
-                                allowEditing: true,
+                                allowEditing: isFieldEditable,
                                 frozenColumnsCount: 1,
                                 gridLinesVisibility: GridLinesVisibility.both,
                                 headerGridLinesVisibility:
@@ -362,11 +246,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 columns: [
                                   GridColumn(
                                     columnName: 'ActivityNo',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 65,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text("Sr No.",
                                           // 'Activities SI. No as per Gant Chart',
@@ -379,11 +261,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'ActivityDetails',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 250,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Activities Details',
                                           textAlign: TextAlign.center,
@@ -391,94 +271,11 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                           style: tableheaderwhitecolor),
                                     ),
                                   ),
-
-                                  // GridColumn(
-                                  //   columnName: 'Months',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 200,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Months',
-                                  //         textAlign: TextAlign.center,
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'Duration',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 120,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Duration in Days',
-                                  //         textAlign: TextAlign.center,
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)
-                                  //         //    textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'StartDate',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 160,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Start Date',
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)
-                                  //         //    textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'EndDate',
-                                  //   autoFitPadding:
-                                  //       tablepadding,
-                                  //   allowEditing: false,
-                                  //   width: 120,
-                                  //   label: Container(
-                                  //     padding:
-                                  //         tablepadding,
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('End Date',
-                                  //         overflow: TextOverflow.values.first,
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.bold,
-                                  //             fontSize: 16,
-                                  //             color: white)
-                                  //         //    textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
                                   GridColumn(
                                     columnName: 'Progress',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Progress',
                                           overflow: TextOverflow.values.first,
@@ -489,11 +286,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Status',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Remark/Status',
                                           overflow: TextOverflow.values.first,
@@ -504,11 +299,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Action',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Next Month Action Plan',
@@ -711,5 +504,11 @@ class _MonthlyProjectState extends State<MonthlyProject> {
 
     isLoading = false;
     setState(() {});
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/authentication/reset_password.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,11 +20,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isUser = false;
   String role = "";
+  String projectManagerName = '';
+  String adminName = '';
+  bool isProjectManager = false;
+  bool isAdmin = false;
   late SharedPreferences _sharedPreferences;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final TextEditingController empIdController = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
   bool _isHidden = true;
+  AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +59,16 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     _space(16),
                     CustomTextField(
-                        controller: passwordcontroller,
-                        labeltext: 'Password',
-                        validatortext: (value) {
-                          return checkFieldEmpty(
-                              passwordcontroller.text, 'Password is Required');
-                        },
-                        isSuffixIcon: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.done),
+                      controller: passwordcontroller,
+                      labeltext: 'Password',
+                      validatortext: (value) {
+                        return checkFieldEmpty(
+                            passwordcontroller.text, 'Password is Required');
+                      },
+                      isSuffixIcon: true,
+                      keyboardType: TextInputType.visiblePassword,
+                      textInputAction: TextInputAction.done,
+                    ),
                     _space(16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -94,9 +100,6 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                             onPressed: () {
                               login();
-                              // Navigator.pushNamedAndRemoveUntil(
-                              //     context, '/gallery', (route) => false);
-                              // Navigator.pushNamed(context, '/first');
                             },
                             child: const Text('Sign In'))),
 
@@ -131,71 +134,200 @@ class _LoginPageState extends State<LoginPage> {
 
   login() async {
     if (_formkey.currentState!.validate()) {
+      String companyName = '';
+
       showCupertinoDialog(
         context: context,
-        builder: (context) => const CupertinoAlertDialog(
-          content: SizedBox(
-            height: 50,
-            width: 50,
-            child: Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
+        builder: (context) => CupertinoAlertDialog(
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+                width: 50,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: blue,
+                  ),
+                ),
               ),
-            ),
+              Text(
+                'Verifying..',
+                style: TextStyle(color: blue, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              )
+            ],
           ),
         ),
       );
 
-      await checkRole();
-      await StoredDataPreferences.saveString('role', role);
+      try {
+        isProjectManager = await verifyProjectManager(empIdController.text);
 
-      QuerySnapshot snap = isUser
-          ? await FirebaseFirestore.instance
-              .collection('User')
-              .where('Employee Id', isEqualTo: empIdController.text)
-              .get()
-          : await FirebaseFirestore.instance
-              .collection('Admin')
-              .where('Employee Id', isEqualTo: empIdController.text)
+        if (isProjectManager == true) {
+          QuerySnapshot pmData = await FirebaseFirestore.instance
+              .collection('AssignedRole')
+              .where("userId", isEqualTo: empIdController.text)
               .get();
 
-      try {
-        if (passwordcontroller.text == snap.docs[0]['Password'] &&
-            empIdController.text == snap.docs[0]['Employee Id']) {
-          _sharedPreferences = await SharedPreferences.getInstance();
-          _sharedPreferences
-              .setString('employeeId', empIdController.text)
-              .then((_) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/splitDashboard', arguments: role, (route) => false);
-          });
+          //Search project Manager On User Collection
+
+          if (pmData.docs.isNotEmpty) {
+            List<dynamic> userData = pmData.docs.map((e) => e.data()).toList();
+            companyName = 'TATA POWER';
+            if (passwordcontroller.text == userData[0]['password'] &&
+                empIdController.text == userData[0]['userId']) {
+              List<dynamic> assignedDepots = pmData.docs[0]["depots"];
+
+              List<String> depots =
+                  assignedDepots.map((e) => e.toString()).toList();
+              // print('ProjectManager here ${passWord}');
+              authService.storeUserRole("projectManager");
+              await authService.storeDepoList(depots);
+              authService.storeEmployeeId(empIdController.text.trim());
+              authService.storeCompanyName(companyName).then((_) {
+                Navigator.pushReplacementNamed(context, '/splitDashboard',
+                    arguments: {
+                      'userId': empIdController.text,
+                      "role": "projectManager"
+                    });
+              });
+            }
+          }
         } else {
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
-          // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Password is not correct')));
+          isAdmin = await verifyAdmin(empIdController.text);
+          //Login as an admin
+
+          if (!isAdmin) {
+            //Login as a user
+
+            QuerySnapshot userQuery = await FirebaseFirestore.instance
+                .collection('AssignedRole')
+                .where('userId', isEqualTo: empIdController.text)
+                .get();
+
+            if (passwordcontroller.text == userQuery.docs[0]['password'] &&
+                empIdController.text == userQuery.docs[0]['userId'] &&
+                userQuery.docs.isNotEmpty) {
+              List<dynamic> assignedDepots = userQuery.docs[0]["depots"];
+              List<String> depots =
+                  assignedDepots.map((e) => e.toString()).toList();
+              await authService.storeUserRole("user");
+              await authService.storeCompanyName(companyName);
+              await authService.storeDepoList(depots);
+              authService.storeEmployeeId(empIdController.text).then((_) {
+                Navigator.pushReplacementNamed(context, '/splitDashboard',
+                    arguments: {
+                      'userId': empIdController.text,
+                      "role": "user"
+                    });
+              });
+            } else {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                      'Password is not Correct or no roles are assigned to this user'),
+                ),
+              );
+            }
+          }
         }
       } catch (e) {
         // ignore: use_build_context_synchronously
         String error = '';
         if (e.toString() ==
             'RangeError (index): Invalid value: Valid value range is empty: 0') {
-          setState(() {
-            error = 'Employee Id does not exist! ${e.toString()}';
-          });
+          error = 'Employee Id does not exist!';
         } else {
-          setState(() {
-            error = 'Error occured!';
-          });
+          error = e.toString();
         }
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(error),
+          backgroundColor: blue,
+        ));
       }
     }
+  }
+
+  Future<bool> verifyAdmin(String userId) async {
+    bool userIsAdmin = false;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    List<dynamic> dataList = querySnapshot.docs.map((e) => e.data()).toList();
+
+    if (dataList.isNotEmpty) {
+      adminName = dataList[0]['username'];
+      List<dynamic> rolesList = dataList[0]['roles'];
+
+      if (rolesList.contains("Admin")) {
+        userIsAdmin = true;
+      }
+
+      if (userIsAdmin) {
+        String companyName = dataList[0]['companyName'];
+        if (passwordcontroller.text.trim() == dataList[0]['password'] &&
+            empIdController.text.trim() == dataList[0]['userId'] &&
+            dataList[0]['companyName'] == 'TATA POWER') {
+          List<dynamic> assignedDepots = querySnapshot.docs[0]["depots"];
+          List<String> depots =
+              assignedDepots.map((e) => e.toString()).toList();
+          authService.storeUserRole("admin");
+          await authService.storeDepoList(depots);
+
+          authService.storeCompanyName(companyName);
+          authService.storeEmployeeId(empIdController.text.trim()).then((_) {
+            Navigator.pushReplacementNamed(context, '/splitDashboard',
+                arguments: {
+                  'userId': empIdController.text.trim(),
+                  "role": "admin"
+                });
+          });
+        } else if (passwordcontroller.text == dataList[0]['password'] &&
+            empIdController.text.trim() == dataList[0]['userId'] &&
+            dataList[0]['companyName'] == 'TATA MOTOR') {
+          authService.storeCompanyName(companyName);
+          authService.storeEmployeeId(empIdController.text.trim()).then((_) {
+            Navigator.pushReplacementNamed(context, '/splitDashboard',
+                arguments: {
+                  'userId': empIdController.text.trim(),
+                  "role": "admin"
+                });
+          });
+        }
+      }
+    }
+    return userIsAdmin;
+  }
+
+  Future<bool> verifyProjectManager(String userId) async {
+    bool userIsProjectManager = false;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    List<dynamic> dataList = querySnapshot.docs.map((e) => e.data()).toList();
+
+    if (dataList.isNotEmpty) {
+      projectManagerName = dataList[0]['username'];
+      List<dynamic> rolesList = dataList[0]['roles'];
+
+      rolesList.every(
+        (element) {
+          if (element == 'Project Manager') {
+            userIsProjectManager = true;
+          }
+          return false;
+        },
+      );
+    }
+
+    return userIsProjectManager;
   }
 
   Future<String> checkRole() async {

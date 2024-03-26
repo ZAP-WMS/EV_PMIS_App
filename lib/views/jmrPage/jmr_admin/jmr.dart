@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/screen/jmrPage/jmr_user/jmr.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
@@ -11,7 +12,13 @@ class Jmr extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
-  Jmr({super.key, this.cityName, this.depoName, this.userId});
+  String role;
+  Jmr(
+      {super.key,
+      this.cityName,
+      this.depoName,
+      this.userId,
+      required this.role});
 
   @override
   State<Jmr> createState() => _JmrState();
@@ -29,7 +36,6 @@ class _JmrState extends State<Jmr> {
 
   @override
   void initState() {
-    print('This jmr is working');
     generateAllJmrList();
     super.initState();
   }
@@ -51,7 +57,7 @@ class _JmrState extends State<Jmr> {
                 const Text(
                   'JMR',
                   // maxLines: 2,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.depoName ?? '',
@@ -61,6 +67,24 @@ class _JmrState extends State<Jmr> {
             ),
             backgroundColor: blue,
             actions: [
+              widget.role == "projectManager"
+                  ? Container(
+                      margin: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => JmrUserPage(
+                                  cityName: widget.cityName,
+                                  depoName: widget.depoName,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.add)),
+                    )
+                  : Container(),
               Padding(
                   padding: const EdgeInsets.only(right: 15, left: 15),
                   child: GestureDetector(
@@ -71,13 +95,13 @@ class _JmrState extends State<Jmr> {
                         children: [
                           Image.asset(
                             'assets/logout.png',
-                            height: 20,
-                            width: 20,
+                            height: 10,
+                            width: 10,
                           ),
                           const SizedBox(width: 5),
                           Text(
                             widget.userId ?? '',
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 12),
                           )
                         ],
                       ))),

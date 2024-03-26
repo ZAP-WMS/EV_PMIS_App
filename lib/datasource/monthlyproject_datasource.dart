@@ -476,8 +476,6 @@ class MonthlyDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-            isDense: true, contentPadding: EdgeInsets.zero),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
@@ -497,9 +495,8 @@ class MonthlyDataSource extends DataGridSource {
             }
           }
         },
-        onTapOutside: (value) {
-          submitCell();
-          newCellValue = '';
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
         },
         onSubmitted: (String value) {
           newCellValue = value;

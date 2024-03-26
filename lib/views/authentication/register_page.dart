@@ -35,7 +35,9 @@ class _RegisterPgeState extends State<RegisterPge> {
                 key: _formkey,
                 child: Column(
                   children: [
-                    _space(16),
+                    _space(
+                      16,
+                    ),
                     CustomTextField(
                       controller: firstNamecontroller,
                       labeltext: 'First Name',
@@ -43,11 +45,13 @@ class _RegisterPgeState extends State<RegisterPge> {
                       isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(
-                            firstNamecontroller.text, 'First Name is Required');
+                            firstNamecontroller.text, 'First Name is Required',);
                       },
                       textInputAction: TextInputAction.next,
                     ),
-                    _space(16),
+                    _space(
+                      16,
+                    ),
                     CustomTextField(
                       controller: lastNameController,
                       labeltext: 'Last Name',
@@ -55,7 +59,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                       isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(
-                            lastNameController.text, 'Last Name is Required');
+                            lastNameController.text, 'Last Name is Required',);
                       },
                       textInputAction: TextInputAction.next,
                     ),
