@@ -20,9 +20,14 @@ class MonthlySummary extends StatefulWidget {
   final String? depoName;
   final String? id;
   String role;
-  
- MonthlySummary(
-      {super.key, this.userId, this.cityName, required this.depoName, this.id,required this.role});
+
+  MonthlySummary(
+      {super.key,
+      this.userId,
+      this.cityName,
+      required this.depoName,
+      this.id,
+      required this.role});
   @override
   State<MonthlySummary> createState() => _MonthlySummaryState();
 }
@@ -146,7 +151,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Monthly Report',
+                                  'Monthly\nReport',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 11,
@@ -155,7 +160,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'PDF Download',
+                                  'PDF\nDownload',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 11,
@@ -171,48 +176,61 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                       Text(rowData[0]),
                                     ),
                                     DataCell(Text(rowData[2])),
-                                    DataCell(ElevatedButton(
-                                      onPressed: () {
-                                        _generatePDF(rowData[0], rowData[2], 1);
-                                      },
-                                      child: const Text('View'),
+                                    DataCell(SizedBox(
+                                      height: 30,
+                                      width: 60,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          _generatePDF(
+                                              rowData[0], rowData[2], 1);
+                                        },
+                                        child: const Text(
+                                          'View',
+                                          style: TextStyle(fontSize: 10),
+                                        ),
+                                      ),
                                     )),
                                     DataCell(
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          downloadPDF(rowData[0], rowData[2], 2)
-                                              .whenComplete(() {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    actionsAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    actionsPadding:
-                                                        const EdgeInsets.only(
-                                                            top: 20,
-                                                            bottom: 20),
-                                                    actions: [
-                                                      const Image(
-                                                        image: AssetImage(
-                                                            'assets/downloaded_logo.png'),
-                                                        height: 40,
-                                                        width: 40,
-                                                      ),
-                                                      Text(
-                                                        'Pdf Downloaded',
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            color: Colors
-                                                                .blue[900]!),
-                                                      )
-                                                    ],
-                                                  );
-                                                });
-                                          });
-                                        },
-                                        child: const Icon(Icons.download),
+                                      SizedBox(
+                                        height: 30,
+                                        width: 60,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            downloadPDF(
+                                                    rowData[0], rowData[2], 2)
+                                                .whenComplete(() {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      actionsAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      actionsPadding:
+                                                          const EdgeInsets.only(
+                                                              top: 20,
+                                                              bottom: 20),
+                                                      actions: [
+                                                        const Image(
+                                                          image: AssetImage(
+                                                              'assets/downloaded_logo.png'),
+                                                          height: 40,
+                                                          width: 40,
+                                                        ),
+                                                        Text(
+                                                          'Pdf Downloaded',
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              color: Colors
+                                                                  .blue[900]!),
+                                                        )
+                                                      ],
+                                                    );
+                                                  });
+                                            });
+                                          },
+                                          child: const Icon(Icons.download),
+                                        ),
                                       ),
                                     ),
                                   ],

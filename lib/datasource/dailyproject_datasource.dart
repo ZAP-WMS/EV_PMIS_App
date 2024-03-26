@@ -308,19 +308,6 @@ class DailyDataSource extends DataGridSource {
     newCellValue = '';
 
     final bool isNumericType = column.columnName == 'SiNo';
-    //  ||
-    // column.columnName == 'StartDate' ||
-    // column.columnName == 'EndDate' ||
-    // column.columnName == 'ActualStart' ||
-    // column.columnName == 'ActualEnd' ||
-    // column.columnName == 'ActualDuration' ||
-    // column.columnName == 'Delay' ||
-    // column.columnName == 'Unit' ||
-    // column.columnName == 'QtyScope' ||
-    // column.columnName == 'QtyExecuted' ||
-    // column.columnName == 'BalancedQty' ||
-    // column.columnName == 'Progress' ||
-    // column.columnName == 'Weightage';
 
     final bool isDateTimeType = column.columnName == 'StartDate' ||
         column.columnName == 'EndDate' ||
@@ -339,16 +326,19 @@ class DailyDataSource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
         keyboardType: isNumericType
-            ? TextInputType.numberWithOptions()
+            ? const TextInputType.numberWithOptions()
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

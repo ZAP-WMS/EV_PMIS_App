@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/viewmodels/jmr.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
@@ -95,7 +94,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
   List<JMRModel> jmrtable = <JMRModel>[];
   int _excelRowNextIndex = 0;
   late JmrDataSource _jmrDataSource;
-  late List<dynamic> jmrSyncList;
+  List<dynamic> jmrSyncList = [];
   late DataGridController _dataGridController;
   bool _isLoading = true;
   List<dynamic> tabledata2 = [];
@@ -157,7 +156,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
           ? const LoadingPage()
           : Scaffold(
               appBar: PreferredSize(
-                // ignore: sort_child_properties_last
+                preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
                   isDownload: true,
                   downloadFun: downloadPDF,
@@ -170,7 +169,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
                   isSync: widget.showTable ? false : true,
                   title: 'JMR',
                 ),
-                preferredSize: const Size.fromHeight(50),
               ),
               body: _isLoading
                   ? const LoadingPage()

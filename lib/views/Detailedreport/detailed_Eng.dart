@@ -160,7 +160,7 @@ class _DetailedEngtState extends State<DetailedEng>
               const Text(
                 'Detailed Engineering',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -173,26 +173,28 @@ class _DetailedEngtState extends State<DetailedEng>
             ],
           ),
           flexibleSpace: Container(
-            height: 120,
+            height: 140,
             color: blue,
           ),
           actions: [
-          isFieldEditable ?  InkWell(
-              onTap: () {
-                _showDialog(context);
-                StoreData();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(
-                  10.0,
-                ),
-                child: Image.asset(
-                  'assets/appbar/sync.jpeg',
-                  height: 35,
-                  width: 35,
-                ),
-              ),
-            ) : Container(),
+            isFieldEditable
+                ? InkWell(
+                    onTap: () {
+                      _showDialog(context);
+                      StoreData();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: Image.asset(
+                        'assets/appbar/sync.jpeg',
+                        height: 35,
+                        width: 35,
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
           bottom: TabBar(
             unselectedLabelColor: tabbarColor,
@@ -221,59 +223,58 @@ class _DetailedEngtState extends State<DetailedEng>
           ),
         ),
         drawer: const NavbarDrawer(),
-
-        body: TabBarView(
-          children: [
+        body: TabBarView(children: [
           tabScreen(),
           tabScreen1(),
           tabScreen2(),
-        ]
-        ),
-        floatingActionButton: isFieldEditable ? FloatingActionButton(
-          backgroundColor: blue,
-          onPressed: (() {
-            if (_selectedIndex == 0) {
-              DetailedProject.add(DetailedEngModel(
-                siNo: _detailedDataSource.dataGridRows.length + 1,
-                title: '',
-                number: 'null',
-                preparationDate:
-                    DateFormat('dd-MM-yyyy').format(DateTime.now()),
-                submissionDate: dmy,
-                approveDate: dmy,
-                releaseDate: dmy,
-              ));
-              _detailedDataSource.buildDataGridRows();
-              _detailedDataSource.updateDatagridSource();
-            }
-            if (_selectedIndex == 1) {
-              DetailedProjectev.add(DetailedEngModel(
-                siNo: _detailedEngSourceev.dataGridRows.length + 1,
-                title: '',
-                number: 'null',
-                preparationDate: dmy,
-                submissionDate: dmy,
-                approveDate: dmy,
-                releaseDate: dmy,
-              ));
-              _detailedEngSourceev.buildDataGridRowsEV();
-              _detailedEngSourceev.updateDatagridSource();
-            } else {
-              DetailedProjectshed.add(DetailedEngModel(
-                siNo: _detailedEngSourceShed.dataGridRows.length + 1,
-                title: '',
-                number: 'null',
-                preparationDate: dmy,
-                submissionDate: dmy,
-                approveDate: dmy,
-                releaseDate: dmy,
-              ));
-              _detailedEngSourceShed.buildDataGridRowsShed();
-              _detailedEngSourceShed.updateDatagridSource();
-            }
-          }),
-          child: const Icon(Icons.add),
-        ) : Container(),
+        ]),
+        floatingActionButton: isFieldEditable
+            ? FloatingActionButton(
+                backgroundColor: blue,
+                onPressed: (() {
+                  if (_selectedIndex == 0) {
+                    DetailedProject.add(DetailedEngModel(
+                      siNo: _detailedDataSource.dataGridRows.length + 1,
+                      title: '',
+                      number: 'null',
+                      preparationDate:
+                          DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                      submissionDate: dmy,
+                      approveDate: dmy,
+                      releaseDate: dmy,
+                    ));
+                    _detailedDataSource.buildDataGridRows();
+                    _detailedDataSource.updateDatagridSource();
+                  }
+                  if (_selectedIndex == 1) {
+                    DetailedProjectev.add(DetailedEngModel(
+                      siNo: _detailedEngSourceev.dataGridRows.length + 1,
+                      title: '',
+                      number: 'null',
+                      preparationDate: dmy,
+                      submissionDate: dmy,
+                      approveDate: dmy,
+                      releaseDate: dmy,
+                    ));
+                    _detailedEngSourceev.buildDataGridRowsEV();
+                    _detailedEngSourceev.updateDatagridSource();
+                  } else {
+                    DetailedProjectshed.add(DetailedEngModel(
+                      siNo: _detailedEngSourceShed.dataGridRows.length + 1,
+                      title: '',
+                      number: 'null',
+                      preparationDate: dmy,
+                      submissionDate: dmy,
+                      approveDate: dmy,
+                      releaseDate: dmy,
+                    ));
+                    _detailedEngSourceShed.buildDataGridRowsShed();
+                    _detailedEngSourceShed.updateDatagridSource();
+                  }
+                }),
+                child: const Icon(Icons.add),
+              )
+            : Container(),
       ),
     );
   }
@@ -579,11 +580,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,
@@ -780,11 +779,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                // autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,
@@ -1434,11 +1431,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,
@@ -1633,11 +1628,9 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'PreparationDate',
-                                autoFitPadding: tablepadding,
                                 allowEditing: false,
                                 width: 152,
                                 label: Container(
-                                  padding: tablepadding,
                                   alignment: Alignment.center,
                                   child: Text('Preparation Date',
                                       overflow: TextOverflow.values.first,

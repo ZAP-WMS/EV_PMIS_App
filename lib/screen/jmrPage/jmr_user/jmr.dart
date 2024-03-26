@@ -80,7 +80,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
             children: [
               const Text(
                 'JMR',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               ),
               Text(
                 widget.depoName ?? '',
@@ -168,76 +168,78 @@ class _JmrUserPageState extends State<JmrUserPage> {
                 Container(
                   height: 30,
                   child: ElevatedButton(
-                    onPressed: isFieldEditable == false ? null : () {
-                      index != 0
-                          ? currentTabList[index - 1] == 0
-                              ? showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      icon: Icon(
-                                        Icons.warning_amber,
-                                        size: 40,
-                                        color: Colors.blue[900],
-                                      ),
-                                      title: const Text(
-                                        'Please Create Jmr Orderly',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 13,
+                    onPressed: isFieldEditable == false
+                        ? null
+                        : () {
+                            index != 0
+                                ? currentTabList[index - 1] == 0
+                                    ? showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            icon: Icon(
+                                              Icons.warning_amber,
+                                              size: 40,
+                                              color: Colors.blue[900],
+                                            ),
+                                            title: const Text(
+                                              'Please Create Jmr Orderly',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                            actions: [
+                                              Center(
+                                                child: ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text('OK')),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    : Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => JmrFieldPage(
+                                            showTable: false,
+                                            title: '$Designation-$title',
+                                            jmrTab: title,
+                                            cityName: widget.cityName,
+                                            depoName: widget.depoName,
+                                            jmrIndex: index + 1,
+                                            tabName: tabsForJmr[_selectedIndex],
+                                          ),
                                         ),
+                                      ).then((_) {
+                                        setState(() {
+                                          currentTabList.clear();
+                                          getJmrLen(5);
+                                        });
+                                      })
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => JmrFieldPage(
+                                        showTable: false,
+                                        title: '$Designation-$title',
+                                        jmrTab: title,
+                                        cityName: widget.cityName,
+                                        depoName: widget.depoName,
+                                        jmrIndex: index + 1,
+                                        tabName: tabsForJmr[_selectedIndex],
                                       ),
-                                      actions: [
-                                        Center(
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('OK')),
-                                        )
-                                      ],
-                                    );
-                                  },
-                                )
-                              : Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => JmrFieldPage(
-                                      showTable: false,
-                                      title: '$Designation-$title',
-                                      jmrTab: title,
-                                      cityName: widget.cityName,
-                                      depoName: widget.depoName,
-                                      jmrIndex: index + 1,
-                                      tabName: tabsForJmr[_selectedIndex],
                                     ),
-                                  ),
-                                ).then((_) {
-                                  setState(() {
-                                    currentTabList.clear();
-                                    getJmrLen(5);
+                                  ).then((_) {
+                                    setState(() {
+                                      currentTabList.clear();
+                                      getJmrLen(5);
+                                    });
                                   });
-                                })
-                          : Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JmrFieldPage(
-                                  showTable: false,
-                                  title: '$Designation-$title',
-                                  jmrTab: title,
-                                  cityName: widget.cityName,
-                                  depoName: widget.depoName,
-                                  jmrIndex: index + 1,
-                                  tabName: tabsForJmr[_selectedIndex],
-                                ),
-                              ),
-                            ).then((_) {
-                              setState(() {
-                                currentTabList.clear();
-                                getJmrLen(5);
-                              });
-                            });
-                    },
+                          },
                     style: ElevatedButton.styleFrom(backgroundColor: blue),
                     child: const Text(
                       'Create New',
@@ -316,42 +318,46 @@ class _JmrUserPageState extends State<JmrUserPage> {
                   height: MediaQuery.of(context).size.height * 0.03,
                   width: MediaQuery.of(context).size.width * 0.2,
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                      ),
-                      onPressed: isFieldEditable == false ? null : () async {
-                        FilePickerResult? result =
-                            await FilePicker.platform.pickFiles(
-                          withData: true,
-                          type: FileType.any,
-                          allowMultiple: false,
-                          // allowedExtensions: ['pdf']
-                        );
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: isFieldEditable == false
+                        ? null
+                        : () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              withData: true,
+                              type: FileType.any,
+                              allowMultiple: false,
+                              // allowedExtensions: ['pdf']
+                            );
 
-                        if (result != null) {
-                          Uint8List? fileBytes = result.files.first.bytes;
-                          fileName = result.files.single.name;
-                          final storage = FirebaseStorage.instance;
-                          await storage
-                              .ref()
-                              .child(
-                                  'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}/$fileName')
-                              .putData(fileBytes!);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: Colors.green,
-                              content: Text(
-                                'File Uploaded',
-                                style: TextStyle(color: white),
-                              )));
-                        } else {
-                          // User canceled the picker
-                        }
-                      },
-                      child: Text(
-                        'Upload',
-                        style: TextStyle(color: white, fontSize: 10),
-                      ),),
+                            if (result != null) {
+                              Uint8List? fileBytes = result.files.first.bytes;
+                              fileName = result.files.single.name;
+                              final storage = FirebaseStorage.instance;
+                              await storage
+                                  .ref()
+                                  .child(
+                                      'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}/$fileName')
+                                  .putData(fileBytes!);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text(
+                                        'File Uploaded',
+                                        style: TextStyle(color: white),
+                                      )));
+                            } else {
+                              // User canceled the picker
+                            }
+                          },
+                    child: Text(
+                      'Upload',
+                      style: TextStyle(color: white, fontSize: 10),
+                    ),
+                  ),
                 ),
                 InkWell(
                   onTap: () {

@@ -31,44 +31,49 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool _isHidden = false;
+  bool _isHidden = true;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: widget.isFieldEditable ? widget.isProjectManager ? false : true : false,
+      readOnly: widget.isFieldEditable
+          ? widget.isProjectManager
+              ? true
+              : false
+          : false,
       autofocus: false,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,
       style: const TextStyle(fontSize: 13),
       decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          labelText: widget.labeltext,
-          border: OutlineInputBorder(
+        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        labelText: widget.labeltext,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.blue),
+        ),
+        enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.blue),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.red),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.blue),
-          ),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.grey)),
-          suffixIcon: widget.isSuffixIcon
-              ? InkWell(
-                  onTap: _togglePasswordView,
-                  child: _isHidden
-                      ? const Icon(Icons.visibility)
-                      : Icon(
-                          Icons.visibility_off,
-                          color: grey,
-                        ))
-              : const Text('')),
+            borderSide: const BorderSide(color: Colors.grey)),
+        suffixIcon: widget.isSuffixIcon
+            ? InkWell(
+                onTap: _togglePasswordView,
+                child: _isHidden
+                    ? const Icon(Icons.visibility)
+                    : const Icon(
+                        Icons.visibility_off,
+                      ))
+            : const Text(
+                '',
+              ),
+      ),
       validator: widget.validatortext,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,

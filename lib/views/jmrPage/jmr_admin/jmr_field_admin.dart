@@ -84,7 +84,6 @@ class _JmrFieldPageAdminState extends State<JmrFieldPageAdmin> {
         .doc(widget.userId)
         .snapshots();
     if (widget.showTable == true) {
-      print('Running');
       _fetchDataFromFirestore().then((value) => {
             setState(() {
               for (dynamic item in jmrSyncList) {
@@ -137,7 +136,7 @@ class _JmrFieldPageAdminState extends State<JmrFieldPageAdmin> {
           preferredSize: const Size.fromHeight(50),
         ),
         body: _isLoading
-            ? LoadingPage()
+            ? const LoadingPage()
             : SingleChildScrollView(
                 child: Column(
                   children: [
@@ -214,20 +213,6 @@ class _JmrFieldPageAdminState extends State<JmrFieldPageAdmin> {
                             tabName: widget.tabName,
                           )));
 
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => JmrTablePageAdmin(
-              //               userId: widget.userId,
-              //               dataFetchingIndex: widget.dataFetchingIndex,
-              //               showTable: widget.showTable,
-              //               title: widget.title,
-              //               jmrTab: widget.jmrTab,
-              //               cityName: widget.cityName,
-              //               depoName: widget.depoName,
-              //               jmrIndex: widget.jmrIndex,
-              //               tabName: widget.tabName,
-              //             )));
             },
             label: widget.showTable
                 ? Row(

@@ -6,12 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../style.dart';
-
 import 'package:ev_pmis_app/widgets/upload.dart';
-import '../viewmodels/daily_projectModel.dart';
-import '../viewmodels/detailed_engModel.dart';
 import '../views/overviewpage/view_AllFiles.dart';
 
 class DetailedEngSourceShed extends DataGridSource {
@@ -122,7 +118,7 @@ class DetailedEngSourceShed extends DataGridSource {
       return Container(
         // color: getcolor(),
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: (dataGridCell.columnName == 'Delete')
             ? IconButton(
                 onPressed: () {
@@ -215,7 +211,7 @@ class DetailedEngSourceShed extends DataGridSource {
                       })
                     : dataGridCell.columnName == 'Number' &&
                             dataGridCell.value == 0
-                        ? Text('')
+                        ? const Text('')
                         : (dataGridCell.columnName == 'PreparationDate') &&
                                 dataGridCell.value != ''
                             ? Row(

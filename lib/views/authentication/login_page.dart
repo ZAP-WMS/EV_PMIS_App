@@ -8,8 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
 
 class LoginPage extends StatefulWidget {
@@ -164,7 +162,6 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       try {
-
         isProjectManager = await verifyProjectManager(empIdController.text);
 
         if (isProjectManager == true) {
@@ -180,12 +177,16 @@ class _LoginPageState extends State<LoginPage> {
             companyName = 'TATA POWER';
             if (passwordcontroller.text == userData[0]['password'] &&
                 empIdController.text == userData[0]['userId']) {
+              List<dynamic> assignedDepots = pmData.docs[0]["depots"];
+
+              List<String> depots =
+                  assignedDepots.map((e) => e.toString()).toList();
               // print('ProjectManager here ${passWord}');
               authService.storeUserRole("projectManager");
+              await authService.storeDepoList(depots);
               authService.storeEmployeeId(empIdController.text.trim());
               authService.storeCompanyName(companyName).then((_) {
-                Navigator.pushReplacementNamed(
-                  context, '/splitDashboard',
+                Navigator.pushReplacementNamed(context, '/splitDashboard',
                     arguments: {
                       'userId': empIdController.text,
                       "role": "projectManager"
@@ -194,7 +195,6 @@ class _LoginPageState extends State<LoginPage> {
             }
           }
         } else {
-          
           isAdmin = await verifyAdmin(empIdController.text);
           //Login as an admin
 
@@ -261,7 +261,6 @@ class _LoginPageState extends State<LoginPage> {
     List<dynamic> dataList = querySnapshot.docs.map((e) => e.data()).toList();
 
     if (dataList.isNotEmpty) {
-
       adminName = dataList[0]['username'];
       List<dynamic> rolesList = dataList[0]['roles'];
 
@@ -274,23 +273,30 @@ class _LoginPageState extends State<LoginPage> {
         if (passwordcontroller.text.trim() == dataList[0]['password'] &&
             empIdController.text.trim() == dataList[0]['userId'] &&
             dataList[0]['companyName'] == 'TATA POWER') {
+          List<dynamic> assignedDepots = querySnapshot.docs[0]["depots"];
+          List<String> depots =
+              assignedDepots.map((e) => e.toString()).toList();
           authService.storeUserRole("admin");
+          await authService.storeDepoList(depots);
+
           authService.storeCompanyName(companyName);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
-            Navigator.pushReplacementNamed(context, '/splitDashboard', arguments: {
-              'userId': empIdController.text.trim(),
-              "role": "admin"
-            });
+            Navigator.pushReplacementNamed(context, '/splitDashboard',
+                arguments: {
+                  'userId': empIdController.text.trim(),
+                  "role": "admin"
+                });
           });
         } else if (passwordcontroller.text == dataList[0]['password'] &&
             empIdController.text.trim() == dataList[0]['userId'] &&
             dataList[0]['companyName'] == 'TATA MOTOR') {
           authService.storeCompanyName(companyName);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
-            Navigator.pushReplacementNamed(context, '/splitDashboard', arguments: {
-              'userId': empIdController.text.trim(),
-              "role": "admin"
-            });
+            Navigator.pushReplacementNamed(context, '/splitDashboard',
+                arguments: {
+                  'userId': empIdController.text.trim(),
+                  "role": "admin"
+                });
           });
         }
       }

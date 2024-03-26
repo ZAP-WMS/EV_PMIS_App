@@ -225,7 +225,7 @@ class _userListState extends State<userList> {
                                       for (Map<String, dynamic> userMap
                                           in userMapList) {
                                         // Check if the dictionary contains the value 'depoName'
-                                        if (userMap['depots'][j] == depoName) {
+                                        if (userMap['depots'] == depoName) {
                                           // If it does, add the dictionary to userList
                                           userList.add(userMap['userId']);
                                         }

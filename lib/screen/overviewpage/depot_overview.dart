@@ -34,7 +34,6 @@ class _DepotOverviewState extends State<DepotOverview> {
   List<String> assignedDepots = [];
   bool isFieldEditable = false;
   String? cityName;
-  String userId = '';
   bool isProjectManager = false;
   bool checkTable = true;
   bool isLoading = true;
@@ -274,7 +273,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                         cityName: cityName!,
                                                         depoName:
                                                             widget.depoName!,
-                                                        userId: userId,
+                                                        userId: widget.userId,
                                                         docId: 'survey')));
                                       },
                                       icon: Icon(
@@ -382,7 +381,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                         cityName: cityName!,
                                                         depoName:
                                                             widget.depoName!,
-                                                        userId: userId,
+                                                        userId: widget.userId,
                                                         docId: 'electrical')));
                                       },
                                       icon: Icon(
@@ -487,7 +486,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                         cityName: cityName!,
                                                         depoName:
                                                             widget.depoName!,
-                                                        userId: userId,
+                                                        userId: widget.userId,
                                                         docId: 'civil')));
                                       },
                                       icon: Icon(
@@ -1085,6 +1084,7 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          isFieldEditable: isFieldEditable,
           isProjectManager: isPManager,
           role: widget.role,
           controller: controller,
@@ -1134,7 +1134,7 @@ class _DepotOverviewState extends State<DepotOverview> {
         .collection('OverviewCollection')
         .doc(widget.cityName)
         .collection("OverviewFieldData")
-        .doc(userId)
+        .doc(widget.userId)
         .set({
       'address': _addressController.text,
       'scope': _scopeController.text,
@@ -1154,7 +1154,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     if (bytes != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQSurvey/$cityName/${widget.depoName}/$userId/survey/${res!.files.first.name}')
+              'BOQSurvey/$cityName/${widget.depoName}/${widget.userId}/survey/${res!.files.first.name}')
           .putData(
             bytes!,
             //  SettableMetadata(contentType: 'application/pdf')
@@ -1162,14 +1162,14 @@ class _DepotOverviewState extends State<DepotOverview> {
     } else if (fileBytes1 != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQElectrical/$cityName/${widget.depoName}/$userId/electrical/${result1!.files.first.name}')
+              'BOQElectrical/$cityName/${widget.depoName}/${widget.userId}/electrical/${result1!.files.first.name}')
           .putData(
             fileBytes1!,
           );
     } else if (fileBytes2 != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQCivil/$cityName/${widget.depoName}/$userId/civil/${result2!.files.first.name}')
+              'BOQCivil/$cityName/${widget.depoName}/${widget.userId}/civil/${result2!.files.first.name}')
           .putData(
             fileBytes2!,
             //  SettableMetadata(contentType: 'application/pdf')
@@ -1195,7 +1195,7 @@ class _DepotOverviewState extends State<DepotOverview> {
         .collection('OverviewCollectionTable')
         .doc(depoName)
         .collection("OverviewTabledData")
-        .doc(userId)
+        .doc(widget.userId)
         .set({
       'data': tabledata2,
     }).whenComplete(() {
@@ -1207,19 +1207,12 @@ class _DepotOverviewState extends State<DepotOverview> {
     });
   }
 
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-      setState(() {});
-    });
-  }
-
   overviewFieldstore(String cityName, String depoName) async {
     FirebaseFirestore.instance
         .collection('OverviewCollection')
         .doc(depoName)
         .collection("OverviewFieldData")
-        .doc(userId)
+        .doc(widget.userId)
         .set({
       'address': _addressController.text,
       'scope': _scopeController.text,
@@ -1237,7 +1230,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     if (bytes != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQSurvey/$cityName/$depoName/$userId/survey/${res!.files.first.name}')
+              'BOQSurvey/$cityName/$depoName/${widget.userId}/survey/${res!.files.first.name}')
           .putData(
             bytes!,
             //  SettableMetadata(contentType: 'application/pdf')
@@ -1246,7 +1239,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     if (fileBytes1 != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQElectrical/$cityName/$depoName/$userId/electrical/${result1!.files.first.name}')
+              'BOQElectrical/$cityName/$depoName/${widget.userId}/electrical/${result1!.files.first.name}')
           .putData(
             fileBytes1!,
           );
@@ -1254,7 +1247,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     if (fileBytes2 != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQCivil/$cityName/$depoName/$userId/civil/${result2!.files.first.name}')
+              'BOQCivil/$cityName/$depoName/${widget.userId}/civil/${result2!.files.first.name}')
           .putData(
             fileBytes2!,
             //  SettableMetadata(contentType: 'application/pdf')
@@ -1289,7 +1282,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     List<dynamic> tempList = querySnapshot.docs.map((e) => e.data()).toList();
 
     for (int i = 0; i < tempList.length; i++) {
-      if (tempList[i]['userId'].toString() == userId.toString()) {
+      if (tempList[i]['userId'].toString() == widget.userId) {
         for (int j = 0; j < tempList[i]['depots'].length; j++) {
           List<dynamic> depot = tempList[i]['depots'];
 
@@ -1312,6 +1305,7 @@ class _DepotOverviewState extends State<DepotOverview> {
         }
       }
     }
+    print("isProjectManager: $isProjectManager");
 
     _fetchUserData(projectManagerId.toString());
   }
@@ -1343,5 +1337,6 @@ class _DepotOverviewState extends State<DepotOverview> {
     assignedDepots = await authService.getDepotList();
     isFieldEditable =
         authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+    print("isFieldEditable: $isFieldEditable");
   }
 }

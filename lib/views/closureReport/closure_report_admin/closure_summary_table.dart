@@ -12,8 +12,13 @@ class ClosureSummaryTable extends StatefulWidget {
   final String? depoName;
   final String? id;
   final String role;
- ClosureSummaryTable(
-      {super.key, this.userId, this.cityName, required this.depoName, this.id,required this.role});
+  ClosureSummaryTable(
+      {super.key,
+      this.userId,
+      this.cityName,
+      required this.depoName,
+      this.id,
+      required this.role});
 
   @override
   State<ClosureSummaryTable> createState() => _ClosureSummaryTableState();
@@ -24,7 +29,6 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
   List<List<dynamic>> rowList = [];
   TextEditingController selectedDepoController = TextEditingController();
   TextEditingController selectedCityController = TextEditingController();
-
   Future<List<List<dynamic>>> fetchData() async {
     await getRowsForFutureBuilder();
     return rowList;
@@ -37,11 +41,11 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
           // ignore: sort_child_properties_last
           child: CustomAppBar(
             showDepoBar: true,
-            isProjectManager: widget.role == "projectManager"? true : false,
+            isProjectManager: widget.role == "projectManager" ? true : false,
             makeAnEntryPage: ClosureField(
-          depoName: widget.depoName,
-          userId: widget.userId!,
-        ),
+              depoName: widget.depoName,
+              userId: widget.userId!,
+            ),
             toClosure: true,
             depoName: widget.depoName,
             cityName: widget.cityName,
@@ -53,7 +57,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
         future: fetchData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: LoadingPage());
+            return const Center(child: LoadingPage());
           } else if (snapshot.hasError) {
             return const Center(
               child: Text('Error fetching data'),
@@ -105,7 +109,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
                           ),
                         )),
                         DataColumn(
-                            label: Text('Closure Report',
+                            label: Text('Closure\nReport',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -127,11 +131,16 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
                                         cityName: widget.cityName,
                                         id: 'Closure Summary',
                                         user_id: rowData[0],
+                                        userId: widget.userId,
                                       ),
                                     ),
                                   );
                                 },
-                                child: const Text('View Report'),
+                                child: const Text(
+                                  'View',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 11),
+                                ),
                               )),
                             ],
                           );

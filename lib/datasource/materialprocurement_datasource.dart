@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -306,20 +305,7 @@ class MaterialDatasource extends DataGridSource {
     // into the current non-modified [DataGridCell].
     newCellValue = '';
 
-    final bool isNumericType =
-        // column.columnName == 'OriginalDuration' ||
-        column.columnName == 'qty';
-    // column.columnName == 'EndDate' ||
-    // column.columnName == 'ActualStart' ||
-    // column.columnName == 'ActualEnd' ||
-    // column.columnName == 'ActualDuration' ||
-    // column.columnName == 'Delay' ||
-    // column.columnName == 'Unit' ||
-    // column.columnName == 'QtyScope' ||
-    // column.columnName == 'QtyExecuted' ||
-    // column.columnName == 'BalancedQty' ||
-    // column.columnName == 'Progress' ||
-    // column.columnName == 'Weightage';
+    final bool isNumericType = column.columnName == 'qty';
 
     final bool isDateTimeType = column.columnName == 'StartDate' ||
         column.columnName == 'EndDate' ||
@@ -348,6 +334,9 @@ class MaterialDatasource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
@@ -361,9 +350,6 @@ class MaterialDatasource extends DataGridSource {
         },
         onSubmitted: (String value) {
           newCellValue = value;
-
-          /// Call [CellSubmit] callback to fire the canSubmitCell and
-          /// onCellSubmit to commit the new value in single place.
           submitCell();
         },
       ),

@@ -22,13 +22,12 @@ class DailyProjectAdmin extends StatefulWidget {
   String? depoName;
   String role;
 
-  DailyProjectAdmin({
-    super.key,
-    this.userId,
-    this.cityName,
-    required this.depoName,
-    required this.role
-  });
+  DailyProjectAdmin(
+      {super.key,
+      this.userId,
+      this.cityName,
+      required this.depoName,
+      required this.role});
 
   @override
   State<DailyProjectAdmin> createState() => _DailyProjectAdminState();
@@ -55,8 +54,6 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   void initState() {
     getUserId();
     identifyUser();
-    // getmonthlyReport();
-    // DailyProject = getmonthlyReport();
     _dailyDataSource = DailyDataSource(
         dailyProject, context, widget.cityName!, widget.depoName!);
     _dataGridController = DataGridController();
@@ -67,15 +64,19 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   getAllData() {
     dailyProject.clear();
     id.clear();
-    getTableData().whenComplete(() {
-      nestedTableData(id, context).whenComplete(() {
-        _dailyDataSource = DailyDataSource(
-            dailyProject, context, widget.cityName!, widget.depoName!);
-        _dataGridController = DataGridController();
-        _isLoading = false;
-        setState(() {});
-      },);
-    },);
+    getTableData().whenComplete(
+      () {
+        nestedTableData(id, context).whenComplete(
+          () {
+            _dailyDataSource = DailyDataSource(
+                dailyProject, context, widget.cityName!, widget.depoName!);
+            _dataGridController = DataGridController();
+            _isLoading = false;
+            setState(() {});
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -86,8 +87,9 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
           child: CustomAppBar(
             isProjectManager: widget.role == "projectManager" ? true : false,
             makeAnEntryPage: DailyProject(
-          cityName: widget.cityName,
-          role: widget.role, depoName: widget.depoName),
+                cityName: widget.cityName,
+                role: widget.role,
+                depoName: widget.depoName),
             showDepoBar: true,
             toDaily: true,
             depoName: widget.depoName,
@@ -124,7 +126,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 170,
+                        width: 180,
                         height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
@@ -700,10 +702,10 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
     }
 
     FirebaseFirestore.instance
-        .collection('DailyProjectReport')
+        .collection('DailyProject3')
         .doc('${widget.depoName}')
-        .collection(widget.userId!)
-        .doc(DateFormat.yMMMMd().format(DateTime.now()))
+        .collection(DateFormat.yMMMMd().format(DateTime.now()))
+        .doc(widget.userId)
         .set({
       'data': tabledata2,
     }).whenComplete(() {
@@ -715,20 +717,6 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
       ));
     });
   }
-
-  // List<DailyProjectModel> getmonthlyReport() {
-  //   return [
-  //     DailyProjectModel(
-  //         siNo: 1,
-  //         // date: DateFormat().add_yMd().format(DateTime.now()),
-  //         // state: "Maharashtra",
-  //         // depotName: 'depotName',
-  //         typeOfActivity: 'Electrical Infra',
-  //         activityDetails: "Initial Survey of DEpot",
-  //         progress: '',
-  //         status: '')
-  //   ];
-  // }
 
   Future<void> getUserId() async {
     await AuthService().getCurrentUserId().then((value) {
@@ -751,15 +739,14 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
 
   Future getTableData() async {
     await FirebaseFirestore.instance
-        .collection('DailyProjectReport2')
+        .collection('DailyProject3')
         .doc(widget.depoName!)
-        .collection('userId')
+        .collection(DateFormat.yMMMMd().format(DateTime.now()))
         .get()
         .then((value) {
       value.docs.forEach((element) {
         String documentId = element.id;
         id.add(documentId);
-        print('$id');
         // nestedTableData(docss);
       });
     });
@@ -783,28 +770,16 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
 
     await pr.show();
 
-    // showCupertinoDialog(
-    //   context: context,
-    //   builder: (context) => const CupertinoAlertDialog(
-    //     content: SizedBox(
-    //       // height: 50,
-    //       // width: 50,
-    //       child: Center(child: LoadingPage()),
-    //     ),
-    //   ),
-    // );
     for (int i = 0; i < docss.length; i++) {
       for (DateTime initialdate = startdate!;
           initialdate.isBefore(enddate!.add(const Duration(days: 1)));
           initialdate = initialdate.add(const Duration(days: 1))) {
         String temp = DateFormat.yMMMMd().format(initialdate);
         await FirebaseFirestore.instance
-            .collection('DailyProjectReport2')
+            .collection('DailyProject3')
             .doc(widget.depoName!)
-            .collection('userId')
+            .collection(temp)
             .doc(docss[i])
-            .collection('date')
-            .doc(temp)
             .get()
             .then((value) {
           if (value.data() != null) {
@@ -817,18 +792,5 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
       }
     }
     pr.hide();
-
-    // Navigator.pop(context);
   }
-  // value.docs.forEach((element) {
-  //   print('after');
-  //   // if (element.id == '${widget.depoName}${widget.events}') {
-  //   print('${element.data()['data'].length}');
-  //   for (int i = 0; i < element.data()['data'].length; i++) {
-  //     DailyProject.add(
-  //         DailyProjectModel.fromjson(element.data()['data'][i]));
-  //     print(DailyProject);
-  //     //   }
-  //   }
-  // });
 }

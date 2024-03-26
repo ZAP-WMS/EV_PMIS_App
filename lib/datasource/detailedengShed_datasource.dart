@@ -130,7 +130,7 @@ class DetailedEngSourceShed extends DataGridSource {
       return Container(
         // color: getcolor(),
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: (dataGridCell.columnName == 'Add')
             ? ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: blue),
@@ -305,8 +305,10 @@ class DetailedEngSourceShed extends DataGridSource {
                         : (dataGridCell.columnName == 'PreparationDate') &&
                                 dataGridCell.value != ''
                             ? Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   IconButton(
+                                    alignment: Alignment.centerLeft,
                                     onPressed: () {
                                       showDialog(
                                           context: mainContext,
@@ -396,7 +398,8 @@ class DetailedEngSourceShed extends DataGridSource {
                                                     )),
                                               ));
                                     },
-                                    icon: const Icon(Icons.calendar_today),
+                                    icon: const Icon(Icons.calendar_today,
+                                        size: 20),
                                   ),
                                   Text(
                                     dataGridCell.value.toString(),
@@ -512,7 +515,7 @@ class DetailedEngSourceShed extends DataGridSource {
                                       ),
                                       Text(
                                         dataGridCell.value.toString(),
-                                        style: TextStyle(fontSize: 12),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   )
@@ -964,9 +967,6 @@ class DetailedEngSourceShed extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],

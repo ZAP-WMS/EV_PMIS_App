@@ -146,11 +146,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 columns: [
                                   GridColumn(
                                     columnName: 'ActivityNo',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 65,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text("Sr No.",
                                           // 'Activities SI. No as per Gant Chart',
@@ -163,11 +161,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'ActivityDetails',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 250,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Activities Details',
                                           textAlign: TextAlign.center,
@@ -177,11 +173,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Progress',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Progress',
                                           overflow: TextOverflow.values.first,
@@ -192,11 +186,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Status',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Remark/Status',
                                           overflow: TextOverflow.values.first,
@@ -207,11 +199,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Action',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Next Month Action Plan',
                                           overflow: TextOverflow.values.first,
@@ -256,11 +246,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                 columns: [
                                   GridColumn(
                                     columnName: 'ActivityNo',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 65,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text("Sr No.",
                                           // 'Activities SI. No as per Gant Chart',
@@ -273,11 +261,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'ActivityDetails',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: false,
                                     width: 250,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Activities Details',
                                           textAlign: TextAlign.center,
@@ -287,11 +273,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Progress',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Progress',
                                           overflow: TextOverflow.values.first,
@@ -302,11 +286,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Status',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text('Remark/Status',
                                           overflow: TextOverflow.values.first,
@@ -317,11 +299,9 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                                   ),
                                   GridColumn(
                                     columnName: 'Action',
-                                    autoFitPadding: tablepadding,
                                     allowEditing: true,
                                     width: 150,
                                     label: Container(
-                                      padding: tablepadding,
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Next Month Action Plan',

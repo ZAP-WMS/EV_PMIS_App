@@ -66,8 +66,8 @@ class CustomAppBar extends StatefulWidget {
       this.toDaily = false,
       this.toMainOverview = false,
       required this.depoName,
-       this.isProjectManager,
-       this.makeAnEntryPage});
+      this.isProjectManager,
+      this.makeAnEntryPage});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -96,11 +96,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   widget.text ?? '',
                   // maxLines: 2,
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                      fontSize: 12, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.depoName ?? '',
-                  style: TextStyle(fontSize: 11),
+                  style: const TextStyle(fontSize: 11),
+                  textAlign: TextAlign.center,
                 )
               ],
             ),
@@ -210,13 +211,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         children: [
                           Image.asset(
                             'assets/logout.png',
-                            height: 20,
-                            width: 20,
+                            height: 10,
+                            width: 10,
                           ),
                           const SizedBox(width: 5),
                           Text(
                             widget.userId ?? '',
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 12),
                           )
                         ],
                       ))),

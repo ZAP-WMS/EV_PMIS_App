@@ -25,7 +25,6 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 

@@ -38,12 +38,13 @@ class _DepotOverviewActionState extends State<DepotOverviewAction> {
       case 'admin':
         selectedUi = DepotOverview(
           role: widget.role,
+          userId: widget.userId,
           depoName: widget.depoName,
         );
         break;
       case 'projectManager':
         selectedUi = DepotOverview(
-          role: widget.role,
+          role: widget.role,userId: widget.userId,
           depoName: widget.depoName,
         );
         break;
