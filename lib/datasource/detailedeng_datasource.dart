@@ -361,6 +361,9 @@ class DetailedEngSource extends DataGridSource {
                                                           DateRangePickerSelectionMode
                                                               .single,
                                                       showActionButtons: true,
+                                                      onCancel: () {
+                                                        Navigator.pop(context);
+                                                      },
                                                       onSubmit: ((value) {
                                                         date = DateTime.parse(
                                                             value.toString());
@@ -422,6 +425,8 @@ class DetailedEngSource extends DataGridSource {
                                           showDialog(
                                               context: mainContext,
                                               builder: (context) => AlertDialog(
+                                                    insetPadding:
+                                                        const EdgeInsets.all(0),
                                                     title:
                                                         const Text('All Date'),
                                                     content: Container(
@@ -437,6 +442,8 @@ class DetailedEngSource extends DataGridSource {
                                                             0.8,
                                                         child:
                                                             SfDateRangePicker(
+                                                          headerHeight: 15,
+                                                          viewSpacing: 20,
                                                           selectionShape:
                                                               DateRangePickerSelectionShape
                                                                   .rectangle,
@@ -468,6 +475,10 @@ class DetailedEngSource extends DataGridSource {
                                                                   .single,
                                                           showActionButtons:
                                                               true,
+                                                          onCancel: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
                                                           onSubmit: ((value) {
                                                             date = DateTime
                                                                 .parse(value
@@ -535,6 +546,9 @@ class DetailedEngSource extends DataGridSource {
                                                   context: mainContext,
                                                   builder:
                                                       (context) => AlertDialog(
+                                                            insetPadding:
+                                                                EdgeInsets.all(
+                                                                    0),
                                                             title: const Text(
                                                                 'All Date'),
                                                             content: Container(
@@ -550,6 +564,10 @@ class DetailedEngSource extends DataGridSource {
                                                                     0.8,
                                                                 child:
                                                                     SfDateRangePicker(
+                                                                  headerHeight:
+                                                                      15,
+                                                                  viewSpacing:
+                                                                      20,
                                                                   selectionShape:
                                                                       DateRangePickerSelectionShape
                                                                           .rectangle,
@@ -573,6 +591,10 @@ class DetailedEngSource extends DataGridSource {
                                                                           .single,
                                                                   showActionButtons:
                                                                       true,
+                                                                  onCancel: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
                                                                   onSubmit:
                                                                       ((value) {
                                                                     date = DateTime
@@ -637,6 +659,9 @@ class DetailedEngSource extends DataGridSource {
                                                       builder:
                                                           (context) =>
                                                               AlertDialog(
+                                                                insetPadding:
+                                                                    const EdgeInsets
+                                                                        .all(0),
                                                                 title: const Text(
                                                                     'All Date'),
                                                                 content:
@@ -647,6 +672,10 @@ class DetailedEngSource extends DataGridSource {
                                                                             0.8,
                                                                         child:
                                                                             SfDateRangePicker(
+                                                                          headerHeight:
+                                                                              15,
+                                                                          viewSpacing:
+                                                                              20,
                                                                           selectionShape:
                                                                               DateRangePickerSelectionShape.rectangle,
                                                                           view:
@@ -667,6 +696,10 @@ class DetailedEngSource extends DataGridSource {
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
                                                                               true,
+                                                                          onCancel:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
                                                                           onSubmit:
                                                                               ((value) {
                                                                             date =

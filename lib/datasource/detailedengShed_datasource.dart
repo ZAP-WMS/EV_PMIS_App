@@ -354,6 +354,9 @@ class DetailedEngSourceShed extends DataGridSource {
                                                           DateRangePickerSelectionMode
                                                               .single,
                                                       showActionButtons: true,
+                                                      onCancel: () {
+                                                        Navigator.pop(context);
+                                                      },
                                                       onSubmit: ((value) {
                                                         date = DateTime.parse(
                                                             value.toString());
@@ -462,6 +465,10 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                   .single,
                                                           showActionButtons:
                                                               true,
+                                                          onCancel: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
                                                           onSubmit: ((value) {
                                                             date = DateTime
                                                                 .parse(value
@@ -567,6 +574,10 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                           .single,
                                                                   showActionButtons:
                                                                       true,
+                                                                  onCancel: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
                                                                   onSubmit:
                                                                       ((value) {
                                                                     date = DateTime
@@ -662,6 +673,10 @@ class DetailedEngSourceShed extends DataGridSource {
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
                                                                               true,
+                                                                          onCancel:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
                                                                           onSubmit:
                                                                               ((value) {
                                                                             date =
