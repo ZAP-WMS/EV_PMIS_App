@@ -51,24 +51,26 @@ class _MonthlyProjectState extends State<MonthlyProject> {
 
   @override
   void initState() {
-    getAssignedDepots();
-    widget.cityName =
-        Provider.of<CitiesProvider>(context, listen: false).getName;
+    getAssignedDepots().whenComplete(() {
+      widget.cityName =
+          Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    _stream = FirebaseFirestore.instance
-        .collection('MonthlyProjectReport2')
-        .doc('${widget.depoName}')
-        .collection('userId')
-        .doc(userId)
-        .collection('Monthly Data')
-        .doc(DateFormat.yMMM().format(DateTime.now()))
-        .snapshots();
+      _stream = FirebaseFirestore.instance
+          .collection('MonthlyProjectReport2')
+          .doc('${widget.depoName}')
+          .collection('userId')
+          .doc(userId)
+          .collection('Monthly Data')
+          .doc(DateFormat.yMMM().format(DateTime.now()))
+          .snapshots();
 
-    monthlyDataSource = MonthlyDataSource(monthlyProject, context);
-    _dataGridController = DataGridController();
-    setState(() {
-      isLoading = false;
+      monthlyDataSource = MonthlyDataSource(monthlyProject, context);
+      _dataGridController = DataGridController();
+      setState(() {
+        isLoading = false;
+      });
     });
+
     super.initState();
   }
 

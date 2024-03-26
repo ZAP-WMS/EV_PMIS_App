@@ -117,6 +117,8 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                           MaterialPageRoute(
                             builder: (context) => QualityHome(
                               depoName: widget.depoName,
+                              userId: widget.userId,
+                              role: widget.role,
                             ),
                           ),
                         );
@@ -166,7 +168,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                               selectedIndex: index,
                               depoName: widget.depoName,
                             ),
-                          )),
+                          ),),
                       child: tabbarlist(civillist, index));
                 },
               ),

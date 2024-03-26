@@ -60,7 +60,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
 
   @override
   void initState() {
-    
     _detailedDataSource = DetailedEngSource(detailedProject, context,
         widget.cityName.toString(), widget.depoName.toString(), widget.role);
     _dataGridController = DataGridController();
@@ -138,41 +137,47 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
             actions: [
               widget.role == "projectManager"
                   ? Container(
-                      margin: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(
+                        8.0,
+                      ),
                       child: IconButton(
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailedEng(
-                                        depoName: widget.depoName,
-                                        role: 'user',
-                                      )),
+                                builder: (context) => DetailedEng(
+                                  depoName: widget.depoName,
+                                  role: 'user',
+                                  userId: widget.userId,
+                                ),
+                              ),
                             );
                           },
                           icon: const Icon(Icons.add)),
                     )
                   : Container(),
               Padding(
-                  padding: const EdgeInsets.only(right: 15, left: 15),
-                  child: GestureDetector(
-                      onTap: () {
-                        onWillPop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/logout.png',
-                            height: 10,
-                            width: 10,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            widget.userId ?? '',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ))),
+                padding: const EdgeInsets.only(right: 15, left: 15),
+                child: GestureDetector(
+                  onTap: () {
+                    onWillPop(context);
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/logout.png',
+                        height: 10,
+                        width: 10,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        widget.userId ?? '',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
             bottom: TabBar(
               onTap: (value) {
@@ -184,7 +189,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                 Tab(text: "Shed Lighting Drawings & Specification"),
               ],
             )),
-
         body: _isloading
             ? const LoadingPage()
             : TabBarView(children: [
@@ -192,7 +196,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                 tabScreen1(),
                 tabScreen2(),
               ]),
-
       ),
     );
   }

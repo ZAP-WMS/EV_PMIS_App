@@ -112,7 +112,7 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
             height: 50,
             isSync: false,
             isCentered: true,
-          )),
+          ),),
       //  AppBar(
       //   title: const Text('File List'),
       //   backgroundColor: blue,

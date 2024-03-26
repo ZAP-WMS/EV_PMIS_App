@@ -58,7 +58,9 @@ class ImagePage extends StatelessWidget {
                           fontWeight: FontWeight.w600));
 
                   pr.show();
+
                   await FirebaseApi.downloadFile(file.ref).whenComplete(() {
+                    
                     pr.hide();
                     showDialog(
                         context: context,

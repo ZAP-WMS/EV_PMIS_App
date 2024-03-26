@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/monthlyreport/monthly_project.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,10 @@ class MonthlySummary extends StatefulWidget {
 }
 
 class _MonthlySummaryState extends State<MonthlySummary> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
+
   bool enableLoading = false;
   String pathToOpenFile = '';
 
@@ -71,7 +76,10 @@ class _MonthlySummaryState extends State<MonthlySummary> {
         // ignore: sort_child_properties_last
         child: CustomAppBar(
           isProjectManager: widget.role == 'projectManager' ? true : false,
-          makeAnEntryPage: MonthlyProject(depoName: widget.depoName),
+          makeAnEntryPage: MonthlyProject(
+              depoName: widget.depoName,
+              userId: widget.userId,
+              role: widget.role),
           toMonthly: true,
           showDepoBar: true,
           cityName: widget.cityName,
@@ -543,5 +551,11 @@ class _MonthlySummaryState extends State<MonthlySummary> {
     }
 
     return pdfData;
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

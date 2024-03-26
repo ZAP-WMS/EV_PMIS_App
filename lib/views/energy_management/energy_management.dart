@@ -53,31 +53,33 @@ class _EnergyManagementState extends State<EnergyManagement> {
 
   @override
   void initState() {
-    getAssignedDepots();
-    _energyProvider = Provider.of<EnergyProvider>(context, listen: false);
-    String monthName = DateFormat('MMMM').format(DateTime.now());
-    _stream = FirebaseFirestore.instance
-        .collection('EnergyManagementTable')
-        .doc(widget.cityName)
-        .collection('Depots')
-        .doc(widget.depoName)
-        .collection('Year')
-        .doc(DateTime.now().year.toString())
-        .collection('Months')
-        .doc(monthName)
-        .collection('Date')
-        .doc(DateFormat.yMMMMd().format(DateTime.now()))
-        .collection('UserId')
-        .doc(widget.userId)
-        .snapshots();
-
-    _energyManagementdatasource = EnergyManagementDatasource(_energyManagement,
-        context, widget.userId!, widget.cityName, widget.depoName);
-    _dataGridController = DataGridController();
-
-    setState(() {});
-
-    _isloading = false;
+    getAssignedDepots().whenComplete(() {
+      _energyProvider = Provider.of<EnergyProvider>(context, listen: false);
+      String monthName = DateFormat('MMMM').format(DateTime.now());
+      _stream = FirebaseFirestore.instance
+          .collection('EnergyManagementTable')
+          .doc(widget.cityName)
+          .collection('Depots')
+          .doc(widget.depoName)
+          .collection('Year')
+          .doc(DateTime.now().year.toString())
+          .collection('Months')
+          .doc(monthName)
+          .collection('Date')
+          .doc(DateFormat.yMMMMd().format(DateTime.now()))
+          .collection('UserId')
+          .doc(widget.userId)
+          .snapshots();
+      _energyManagementdatasource = EnergyManagementDatasource(
+          _energyManagement,
+          context,
+          widget.userId!,
+          widget.cityName,
+          widget.depoName);
+      _dataGridController = DataGridController();
+      setState(() {});
+      _isloading = false;
+    });
     super.initState();
   }
 

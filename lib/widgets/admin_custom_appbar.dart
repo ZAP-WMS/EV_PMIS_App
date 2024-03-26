@@ -220,7 +220,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             style: const TextStyle(fontSize: 12),
                           )
                         ],
-                      ))),
+                      ),),),
             ],
             bottom: widget.havebottom
                 ? TabBar(

@@ -65,6 +65,7 @@ class CivilField extends StatefulWidget {
 }
 
 class _CivilFieldState extends State<CivilField> {
+
   final AuthService authService = AuthService();
   List<String> assignedDepots = [];
   bool isFieldEditable = false;
@@ -80,6 +81,7 @@ class _CivilFieldState extends State<CivilField> {
       componentController,
       gridController,
       fillingController;
+
   void initializeController() {
     projectController = TextEditingController();
     locationController = TextEditingController();
@@ -143,6 +145,7 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
+    getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     pr = ProgressDialog(context,
         customBody:
@@ -390,9 +393,9 @@ class _CivilFieldState extends State<CivilField> {
                       safetyField(componentController,
                           'Component of the Structure', TextInputAction.next),
                       safetyField(gridController, 'Grid / Axis Level',
-                          TextInputAction.next),
+                          TextInputAction.next,),
                       safetyField(fillingController, 'Type of Filling',
-                          TextInputAction.done),
+                          TextInputAction.done,),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: StreamBuilder(
@@ -745,7 +748,7 @@ class _CivilFieldState extends State<CivilField> {
   }
 
   Widget safetyField(TextEditingController controller, String title,
-      TextInputAction inputType) {
+      TextInputAction inputType){
     return Container(
       height: 45,
       padding: const EdgeInsets.all(5),

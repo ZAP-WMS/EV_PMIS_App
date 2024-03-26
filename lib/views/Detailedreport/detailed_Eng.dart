@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +32,6 @@ class DetailedEng extends StatefulWidget {
 
 class _DetailedEngtState extends State<DetailedEng>
     with TickerProviderStateMixin {
-  final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
-  bool isFieldEditable = false;
   List<DetailedEngModel> DetailedProject = <DetailedEngModel>[];
   List<DetailedEngModel> DetailedProjectev = <DetailedEngModel>[];
   List<DetailedEngModel> DetailedProjectshed = <DetailedEngModel>[];
@@ -56,7 +54,6 @@ class _DetailedEngtState extends State<DetailedEng>
 
   @override
   void initState() {
-    getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
     getTableDataRfc().whenComplete(() {
@@ -173,28 +170,48 @@ class _DetailedEngtState extends State<DetailedEng>
             ],
           ),
           flexibleSpace: Container(
-            height: 140,
+            height: 170,
             color: blue,
           ),
           actions: [
-            isFieldEditable
-                ? InkWell(
-                    onTap: () {
-                      _showDialog(context);
-                      StoreData();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(
-                        10.0,
-                      ),
-                      child: Image.asset(
-                        'assets/appbar/sync.jpeg',
-                        height: 35,
-                        width: 35,
-                      ),
+            InkWell(
+              onTap: () {
+                _showDialog(context);
+                StoreData();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(
+                  10.0,
+                ),
+                child: Image.asset(
+                  'assets/appbar/sync.jpeg',
+                  height: 35,
+                  width: 35,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 15, left: 15),
+              child: GestureDetector(
+                onTap: () {
+                  onWillPop(context);
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/logout.png',
+                      height: 10,
+                      width: 10,
                     ),
-                  )
-                : Container(),
+                    const SizedBox(width: 5),
+                    Text(
+                      widget.userId ?? '',
+                      style: const TextStyle(fontSize: 12),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ],
           bottom: TabBar(
             unselectedLabelColor: tabbarColor,
@@ -228,53 +245,51 @@ class _DetailedEngtState extends State<DetailedEng>
           tabScreen1(),
           tabScreen2(),
         ]),
-        floatingActionButton: isFieldEditable
-            ? FloatingActionButton(
-                backgroundColor: blue,
-                onPressed: (() {
-                  if (_selectedIndex == 0) {
-                    DetailedProject.add(DetailedEngModel(
-                      siNo: _detailedDataSource.dataGridRows.length + 1,
-                      title: '',
-                      number: 'null',
-                      preparationDate:
-                          DateFormat('dd-MM-yyyy').format(DateTime.now()),
-                      submissionDate: dmy,
-                      approveDate: dmy,
-                      releaseDate: dmy,
-                    ));
-                    _detailedDataSource.buildDataGridRows();
-                    _detailedDataSource.updateDatagridSource();
-                  }
-                  if (_selectedIndex == 1) {
-                    DetailedProjectev.add(DetailedEngModel(
-                      siNo: _detailedEngSourceev.dataGridRows.length + 1,
-                      title: '',
-                      number: 'null',
-                      preparationDate: dmy,
-                      submissionDate: dmy,
-                      approveDate: dmy,
-                      releaseDate: dmy,
-                    ));
-                    _detailedEngSourceev.buildDataGridRowsEV();
-                    _detailedEngSourceev.updateDatagridSource();
-                  } else {
-                    DetailedProjectshed.add(DetailedEngModel(
-                      siNo: _detailedEngSourceShed.dataGridRows.length + 1,
-                      title: '',
-                      number: 'null',
-                      preparationDate: dmy,
-                      submissionDate: dmy,
-                      approveDate: dmy,
-                      releaseDate: dmy,
-                    ));
-                    _detailedEngSourceShed.buildDataGridRowsShed();
-                    _detailedEngSourceShed.updateDatagridSource();
-                  }
-                }),
-                child: const Icon(Icons.add),
-              )
-            : Container(),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: blue,
+          onPressed: (() {
+            if (_selectedIndex == 0) {
+              DetailedProject.add(DetailedEngModel(
+                siNo: _detailedDataSource.dataGridRows.length + 1,
+                title: '',
+                number: 'null',
+                preparationDate:
+                    DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                submissionDate: dmy,
+                approveDate: dmy,
+                releaseDate: dmy,
+              ));
+              _detailedDataSource.buildDataGridRows();
+              _detailedDataSource.updateDatagridSource();
+            }
+            if (_selectedIndex == 1) {
+              DetailedProjectev.add(DetailedEngModel(
+                siNo: _detailedEngSourceev.dataGridRows.length + 1,
+                title: '',
+                number: 'null',
+                preparationDate: dmy,
+                submissionDate: dmy,
+                approveDate: dmy,
+                releaseDate: dmy,
+              ));
+              _detailedEngSourceev.buildDataGridRowsEV();
+              _detailedEngSourceev.updateDatagridSource();
+            } else {
+              DetailedProjectshed.add(DetailedEngModel(
+                siNo: _detailedEngSourceShed.dataGridRows.length + 1,
+                title: '',
+                number: 'null',
+                preparationDate: dmy,
+                submissionDate: dmy,
+                approveDate: dmy,
+                releaseDate: dmy,
+              ));
+              _detailedEngSourceShed.buildDataGridRowsShed();
+              _detailedEngSourceShed.updateDatagridSource();
+            }
+          }),
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
@@ -493,7 +508,6 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -692,7 +706,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: isFieldEditable,
+                            allowEditing: true,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -910,7 +924,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: isFieldEditable,
+                            allowEditing: true,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -928,7 +942,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 visible: false,
                                 columnName: 'SiNo',
                                 autoFitPadding: tablepadding,
-                                allowEditing: isFieldEditable,
+                                allowEditing: true,
                                 width: 80,
                                 label: Container(
                                   padding: tablepadding,
@@ -1109,7 +1123,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: isFieldEditable,
+                            allowEditing: true,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1344,7 +1358,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceShed,
-                            allowEditing: isFieldEditable,
+                            allowEditing: true,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1541,7 +1555,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceShed,
-                            allowEditing: isFieldEditable,
+                            allowEditing: true,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1807,11 +1821,5 @@ class _DetailedEngtState extends State<DetailedEng>
 
     _isloading = false;
     setState(() {});
-  }
-
-  Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
-    isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

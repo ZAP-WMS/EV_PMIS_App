@@ -37,9 +37,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       readOnly: widget.isFieldEditable
           ? widget.isProjectManager
-              ? true
-              : false
-          : false,
+              ? false
+              : true
+          : true,
       autofocus: false,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,
@@ -49,7 +49,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         labelText: widget.labeltext,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue),
+          borderSide: const BorderSide(
+            color: Colors.blue,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

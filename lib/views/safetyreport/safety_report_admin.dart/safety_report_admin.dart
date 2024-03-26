@@ -66,7 +66,11 @@ class _SafetySummaryState extends State<SafetySummary> {
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
             isProjectManager: widget.role == "projectManager" ? true : false,
-            makeAnEntryPage: SafetyField(depoName: widget.depoName),
+            makeAnEntryPage: SafetyField(
+              depoName: widget.depoName,
+              userId: widget.userId,
+              role: widget.role,
+            ),
             depoName: widget.depoName,
             toSafety: true,
             showDepoBar: true,

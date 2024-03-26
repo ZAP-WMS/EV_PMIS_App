@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: empIdController,
                       labeltext: 'Employee ID',
                       // validator: checkFieldEmpty(
@@ -59,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: passwordcontroller,
                       labeltext: 'Password',
                       validatortext: (value) {

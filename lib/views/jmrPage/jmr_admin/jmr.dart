@@ -25,7 +25,9 @@ class Jmr extends StatefulWidget {
 }
 
 class _JmrState extends State<Jmr> {
-  List<List<int>> jmrTabLen = [];
+  List<List<int>> jmrCivilTabLen = [];
+  List<List<int>> jmrElectricalTabLen = [];
+
   int _selectedIndex = 0;
   bool isConnected = false;
 
@@ -78,6 +80,7 @@ class _JmrState extends State<Jmr> {
                                 builder: (context) => JmrUserPage(
                                   cityName: widget.cityName,
                                   depoName: widget.depoName,
+                                  userId: widget.userId,
                                 ),
                               ),
                             );
@@ -150,7 +153,7 @@ class _JmrState extends State<Jmr> {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return LoadingPage();
+          return const LoadingPage();
         } else if (!snapshot.hasData) {
           return const Center(
               child: Text(
@@ -166,7 +169,7 @@ class _JmrState extends State<Jmr> {
           List<dynamic> userList = data.docs.map((e) => e.id).toList();
 
           return isLoading
-              ? LoadingPage()
+              ? const LoadingPage()
               : ListView.builder(
                   shrinkWrap: true,
                   itemCount: userList.length, //Length of user ID
@@ -250,11 +253,10 @@ class _JmrState extends State<Jmr> {
   }
 
   jmrTabList(String currentUserId, int secondIndex, int firstIndex) {
-    bool showDots = false;
-    List<int> currentTabList = jmrTabLen[firstIndex];
-    if (currentTabList[secondIndex] >= 4) {
-      showDots = true;
-    }
+    List<int> currentTabList = tabName[_selectedIndex] == "Civil"
+        ? jmrCivilTabLen[firstIndex]
+        : jmrElectricalTabLen[firstIndex];
+
     return SizedBox(
       height: 30,
       child: Row(
@@ -328,7 +330,7 @@ class _JmrState extends State<Jmr> {
                       cityName: widget.cityName!,
                       depoName: widget.depoName!,
                       fldrName:
-                          '/jmrFiles/${widget.cityName}/${widget.depoName}/$currentUserId/${secondIndex + 1}'),
+                          '/jmrFiles/${tabName[_selectedIndex]}/${widget.cityName}/${widget.depoName}/$currentUserId/${secondIndex + 1}'),
                 ),
               );
             },
@@ -398,14 +400,20 @@ class _JmrState extends State<Jmr> {
           tempList.add(0);
         }
       }
-      jmrTabLen.add(tempList);
+      if (tabName[_selectedIndex] == 'Civil') {
+        jmrCivilTabLen.add(tempList);
+      } else {
+        jmrElectricalTabLen.add(tempList);
+      }
     }
 
     setState(() {
       isLoading = false;
     });
 
-    return jmrTabLen;
+    return tabName[_selectedIndex] == "Civil"
+        ? jmrCivilTabLen
+        : jmrElectricalTabLen;
   }
 
   Future<List<dynamic>> getDepoList(String pattern) async {

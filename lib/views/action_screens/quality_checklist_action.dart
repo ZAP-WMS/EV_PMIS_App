@@ -38,8 +38,10 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = QualityHome(depoName: widget.depoName,role: widget.role,
-        userId: widget.userId,);
+        selectedUi = QualityHome(
+          depoName: widget.depoName,role: widget.role,
+        userId: widget.userId,
+        );
         break;
       case 'admin':
         selectedUi = QualityHomeAdmin(
