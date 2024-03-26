@@ -27,14 +27,13 @@ class EnergyManagementAdmin extends StatefulWidget {
   String? depoName;
   String? userId;
   String role;
-  EnergyManagementAdmin({
-    super.key,
-    // this.userId,
-    this.cityName,
-    required this.depoName,
-    required this.role,
-     this.userId
-  });
+  EnergyManagementAdmin(
+      {super.key,
+      // this.userId,
+      this.cityName,
+      required this.depoName,
+      required this.role,
+      this.userId});
 
   @override
   State<EnergyManagementAdmin> createState() => _EnergyManagementAdminState();
@@ -121,10 +120,10 @@ class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
           child: CustomAppBar(
             isProjectManager: widget.role == 'projectManager' ? true : false,
             makeAnEntryPage: EnergyManagement(
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-          userId: widget.userId,
-        ),
+              depoName: widget.depoName,
+              cityName: widget.cityName,
+              userId: widget.userId,
+            ),
             userId: widget.userId ?? "",
             showDepoBar: true,
             // donwloadFun: _generatePDF,
@@ -255,11 +254,15 @@ class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
                 stream: _stream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return LoadingPage();
+                    return const LoadingPage();
                   } else if (!snapshot.hasData ||
                       snapshot.data.exists == false) {
                     return SfDataGridTheme(
-                        data: SfDataGridThemeData(headerColor: blue),
+                        data: SfDataGridThemeData(
+                            gridLineColor: blue,
+                            gridLineStrokeWidth: 2,
+                            frozenPaneLineColor: blue,
+                            frozenPaneLineWidth: 2),
                         child: SfDataGrid(
                           source: _energydatasource,
                           allowEditing: true,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/common_pdf_view.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
@@ -132,9 +133,9 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
                             width: 1.0,
                           ),
                         ),
-                        headingRowColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.blue[800]!),
-                        headingTextStyle: const TextStyle(color: Colors.white),
+                        headingRowColor:
+                            MaterialStateColor.resolveWith((states) => white),
+                        headingTextStyle: TextStyle(color: blue),
                         columns: const [
                           DataColumn(
                               label: Text(

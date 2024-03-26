@@ -70,7 +70,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(
-          isProjectManager: widget.role == 'projectManager' ? true : false,
+          isProjectManager: widget.role == 'projectManager' ? false : true,
           makeAnEntryPage: MonthlyProject(depoName: widget.depoName),
           toMonthly: true,
           showDepoBar: true,
