@@ -71,7 +71,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(
@@ -323,7 +323,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
-                                      allowEditing: true,
+                                      allowEditing: false,
                                       width: 250,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -594,7 +594,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     columnName: 'materialSite',
                                     autoFitPadding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    allowEditing: true,
+                                    allowEditing: false,
                                     width: 250,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(

@@ -271,7 +271,7 @@ class _KeyEventsState extends State<KeyEvents> {
         //     scrollController: scrollController,
         //     myScaffold:
         Scaffold(
-            drawer: const NavbarDrawer(),
+            drawer:  NavbarDrawer(role: widget.role,),
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(

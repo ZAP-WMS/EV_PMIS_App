@@ -255,7 +255,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
     _dataGridController = DataGridController();
 
     return Scaffold(
-        drawer: const NavbarDrawer(),
+        drawer:  NavbarDrawer(role: widget.role),
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(55),
             child: CustomAppBarBackDate(

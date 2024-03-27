@@ -149,7 +149,7 @@ class _ElectricalTableState extends State<ElectricalTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      // drawer: const NavbarDrawer(),
       appBar: CustomAppBar(
           depoName: widget.depoName ?? '',
           title: 'Electrical Checklist /${widget.title}',

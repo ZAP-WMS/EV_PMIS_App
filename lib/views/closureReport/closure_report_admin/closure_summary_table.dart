@@ -4,6 +4,7 @@ import 'package:ev_pmis_app/screen/closureReport/closure_report_user/closurefiel
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../widgets/navbar.dart';
 import 'closure_summary.dart';
 
 class ClosureSummaryTable extends StatefulWidget {
@@ -37,6 +38,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavbarDrawer(role: widget.role,),
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(

@@ -58,9 +58,11 @@ class CustomAlertBox {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             await prefs.remove('cities');
+                            await prefs.remove('role');
                             a = true;
                             isExitingApp
                                 ? exit(0)
+                                // ignore: use_build_context_synchronously
                                 : Navigator.pushNamedAndRemoveUntil(
                                     context, pushName, (route) => false);
 

@@ -56,7 +56,7 @@ class _UploadMaterialState extends State<UploadMaterial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      // drawer:  NavbarDrawer(role: widget.),
       appBar: CustomAppBar(
           depoName: widget.depoName ?? '',
           title: 'Material Procurement',

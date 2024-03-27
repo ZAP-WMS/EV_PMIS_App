@@ -170,7 +170,9 @@ class _SafetyFieldState extends State<SafetyField> {
           },
         ),
       ),
-      drawer: const NavbarDrawer(),
+      drawer: NavbarDrawer(
+        role: widget.role,
+      ),
       body: isLoading
           ? const LoadingPage()
           : StreamBuilder(
@@ -447,8 +449,8 @@ class _SafetyFieldState extends State<SafetyField> {
                             'Contact are Required'),
                         safetyField(latitudeController, 'Longitude & Latitude',
                             'Rev are Required'),
-                        safetyField(stateController, 'Maharashtra',
-                            'State are Required'),
+                        safetyField(
+                            stateController, 'State', 'State are Required'),
                         safetyField(
                             chargerController, 'Charger Type', 'Charger Type'),
                         safetyField(conductedController, 'Conducted By',

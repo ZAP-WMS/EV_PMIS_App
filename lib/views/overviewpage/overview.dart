@@ -77,7 +77,7 @@ class _OverviewPageState extends State<OverviewPage> {
     ];
 
     return Scaffold(
-        drawer: const NavbarDrawer(),
+        drawer: NavbarDrawer(role: widget.role),
         appBar: CustomAppBar(
           isCentered: true,
           title: 'Overview Page',

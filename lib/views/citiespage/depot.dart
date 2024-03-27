@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
-import 'package:ev_pmis_app/notiification/notification_service.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../notiification/messaging_service.dart';
 import '../../style.dart';
 
 String userId = '';
@@ -15,12 +13,7 @@ class DepotPage extends StatefulWidget {
   String? role;
   String? cityName;
   String? userId;
-  DepotPage({
-    super.key,
-    this.cityName,
-    this.role,
-    this.userId
-  });
+  DepotPage({super.key, this.cityName, this.role, this.userId});
 
   @override
   State<DepotPage> createState() => _DepotPageState();

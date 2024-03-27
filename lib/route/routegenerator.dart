@@ -27,7 +27,6 @@ import '../views/authentication/change_password.dart';
 import '../views/chatPage/feedback.dart';
 import '../views/citiespage/cities_home.dart';
 import '../views/dailyreport/notification_userlist.dart';
-import '../views/keyevents/key_events2.dart';
 import '../views/overviewpage/overview.dart';
 
 class RouteGenerator {
@@ -52,6 +51,7 @@ class RouteGenerator {
           final args = settings.arguments as Map<String, dynamic>;
           return CitiesHome(
             userId: args["userId"],
+            role: args['role'],
           );
 
         case '/depot-inside-page':
@@ -59,12 +59,12 @@ class RouteGenerator {
               settings.arguments as Map<String, dynamic>;
 
           return UploadDocument(
-              pagetitle: 'Depot Insights',
-              cityName: argument['cityName'],
-              depoName: argument['depoName'],
-              userId: userId,
-              fldrName: 'DepotImages',
-              );
+            pagetitle: 'Depot Insights',
+            cityName: argument['cityName'],
+            depoName: argument['depoName'],
+            userId: userId,
+            fldrName: 'DepotImages',
+          );
 
         case '/chat-page':
           return FeedbackPage();
@@ -91,6 +91,7 @@ class RouteGenerator {
               settings.arguments as Map<String, dynamic>;
           return ProjectPlanningAction(
             role: argument['role'], userId: argument["userId"],
+            cityName: argument['cityName'],
             depoName: argument['depoName'],
             // role: argument['role'],
           );

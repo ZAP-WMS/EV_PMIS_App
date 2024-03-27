@@ -116,7 +116,7 @@ class _DepotOverviewState extends State<DepotOverview> {
             storeData(widget.depoName!, context);
           },
         ),
-        drawer: const NavbarDrawer(),
+        drawer:  NavbarDrawer(role: widget.role),
         body: isLoading
             ? const LoadingPage()
             // : isProjectManager == false

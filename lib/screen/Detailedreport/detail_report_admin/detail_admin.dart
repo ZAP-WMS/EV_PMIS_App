@@ -13,6 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../widgets/navbar.dart';
+
 class DetailedEngAdmin extends StatefulWidget {
   String? cityName;
   String? depoName;
@@ -118,6 +120,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
       length: 3,
       initialIndex: 0,
       child: Scaffold(
+        drawer: NavbarDrawer(role: widget.role),
         appBar: AppBar(
             centerTitle: true,
             backgroundColor: blue,

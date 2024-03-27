@@ -8,7 +8,11 @@ import '../views/authentication/login_register.dart';
 import '../views/citiespage/cities_home.dart';
 
 class NavbarDrawer extends StatefulWidget {
-  const NavbarDrawer({super.key});
+  String? role;
+  NavbarDrawer({
+    required this.role,
+    super.key,
+  });
 
   @override
   State<NavbarDrawer> createState() => _NavbarDrawerState();
@@ -17,11 +21,22 @@ class NavbarDrawer extends StatefulWidget {
 class _NavbarDrawerState extends State<NavbarDrawer> {
   String userId = '';
   bool isProjectManager = false;
+  String? role;
+  SharedPreferences? sharedPreferences;
+
   @override
   void initState() {
     getUserId();
-    verifyProjectManager();
+    initializeData();
     super.initState();
+  }
+
+  Future<void> initializeData() async {
+    await verifyProjectManager();
+
+    setState(() {
+      // Update UI after verifying project manager status
+    });
   }
 
   @override
@@ -70,10 +85,10 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                   ),
                 );
               }),
-          isProjectManager
+          widget.role == 'projectManager'
               ? ListTile(
                   leading: Icon(
-                    Icons.home,
+                    Icons.notification_important,
                     color: blue,
                   ),
                   title: const Text(
@@ -129,77 +144,75 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                   borderRadius: BorderRadius.circular(12)),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
-              content: Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Close TATA POWER?",
-                      style: subtitle1White,
-                    ),
-                    const SizedBox(
-                      height: 36,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                            child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: blue),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            //color: blue,
-                            child: Center(
-                                child: Text(
-                              "No",
-                              style: button.copyWith(color: blue),
-                            )),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Close TATA POWER?",
+                    style: subtitle1White,
+                  ),
+                  const SizedBox(
+                    height: 36,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                          child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: blue),
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                        )),
-                        const SizedBox(
-                          width: 5,
+                          //color: blue,
+                          child: Center(
+                              child: Text(
+                            "No",
+                            style: button.copyWith(color: blue),
+                          )),
                         ),
-                        Expanded(
-                            child: InkWell(
-                          onTap: () async {
-                            a = true;
-                            SharedPreferences preferences =
-                                await SharedPreferences.getInstance();
-                            await preferences.clear();
-                            // ignore: use_build_context_synchronously
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginRegister(),
-                                ),
-                                (Route<dynamic> route) => false);
+                      )),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                          child: InkWell(
+                        onTap: () async {
+                          a = true;
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
+                          await preferences.remove('role');
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginRegister(),
+                              ),
+                              (Route<dynamic> route) => false);
 
-                            // exit(0);
-                          },
-                          child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: blue,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            //color: blue,
-                            child: Center(
-                                child: Text(
-                              "Yes",
-                              style: button,
-                            )),
+                          // exit(0);
+                        },
+                        child: Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: blue,
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                        ))
-                      ],
-                    )
-                  ],
-                ),
+                          //color: blue,
+                          child: Center(
+                              child: Text(
+                            "Yes",
+                            style: button,
+                          )),
+                        ),
+                      ))
+                    ],
+                  )
+                ],
               ),
             ));
     return a;

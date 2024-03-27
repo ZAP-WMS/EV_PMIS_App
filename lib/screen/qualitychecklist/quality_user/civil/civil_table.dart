@@ -160,7 +160,7 @@ class _CivilTableState extends State<CivilTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      // drawer:  NavbarDrawer(role: widget.),
       appBar: CustomAppBar(
           depoName: '${widget.title}',
           title: 'ChecklistTable',

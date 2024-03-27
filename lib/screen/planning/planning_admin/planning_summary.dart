@@ -136,6 +136,7 @@ class _PlanningTableState extends State<PlanningTable> {
                                               builder: (context) =>
                                                   PlanningPageAdmin(
                                                 userId: rowData[0],
+                                                role: widget.role,
                                                 cityName: widget.cityName,
                                                 depoName: widget.depoName,
                                               ),

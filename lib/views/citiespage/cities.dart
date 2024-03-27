@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CitiesPage extends StatefulWidget {
-  const CitiesPage({super.key});
+  String role;
+  CitiesPage({super.key, required this.role});
 
   @override
   State<CitiesPage> createState() => _CitiesPageState();

@@ -65,7 +65,6 @@ class CivilField extends StatefulWidget {
 }
 
 class _CivilFieldState extends State<CivilField> {
-
   final AuthService authService = AuthService();
   List<String> assignedDepots = [];
   bool isFieldEditable = false;
@@ -286,7 +285,7 @@ class _CivilFieldState extends State<CivilField> {
         qualitylisttable12, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(
@@ -294,7 +293,7 @@ class _CivilFieldState extends State<CivilField> {
             depoName: widget.depoName!,
             text: '${widget.title}',
             haveCalender: true,
-            haveSynced: isFieldEditable ? false : true,
+            haveSynced: isFieldEditable ? true : false,
             isDownload: true,
             haveSummary: false,
             onTap: () => Navigator.push(
@@ -392,10 +391,16 @@ class _CivilFieldState extends State<CivilField> {
                       safetyField(dateController, 'Date', TextInputAction.next),
                       safetyField(componentController,
                           'Component of the Structure', TextInputAction.next),
-                      safetyField(gridController, 'Grid / Axis Level',
-                          TextInputAction.next,),
-                      safetyField(fillingController, 'Type of Filling',
-                          TextInputAction.done,),
+                      safetyField(
+                        gridController,
+                        'Grid / Axis Level',
+                        TextInputAction.next,
+                      ),
+                      safetyField(
+                        fillingController,
+                        'Type of Filling',
+                        TextInputAction.done,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: StreamBuilder(
@@ -748,7 +753,7 @@ class _CivilFieldState extends State<CivilField> {
   }
 
   Widget safetyField(TextEditingController controller, String title,
-      TextInputAction inputType){
+      TextInputAction inputType) {
     return Container(
       height: 45,
       padding: const EdgeInsets.all(5),
