@@ -62,7 +62,9 @@ class MaterialProcurementModelAdmin {
         croVendor: json['croVendor'],
         croNumber: json['croNumber'],
         unit: json['unit'],
-        qty: json['qty'],
+        qty: int.parse(
+          json['qty'].toString(),
+        ),
         materialSite: json['materialSite']);
   }
 

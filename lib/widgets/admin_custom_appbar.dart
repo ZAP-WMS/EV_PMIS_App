@@ -12,6 +12,7 @@ class CustomAppBar extends StatefulWidget {
   final bool haveSynced;
   final bool haveSummary;
   final void Function()? store;
+  VoidCallback? downloadFun;
   VoidCallback? onTap;
   bool havebottom;
   bool isdetailedTab;
@@ -67,7 +68,8 @@ class CustomAppBar extends StatefulWidget {
       this.toMainOverview = false,
       required this.depoName,
       this.isProjectManager,
-      this.makeAnEntryPage});
+      this.makeAnEntryPage,
+      this.downloadFun});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -158,9 +160,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     )
                   : Container(),
               widget.isdownload
-                  ? const Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.download),
+                  ? Container(
+                      margin: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        onPressed: widget.downloadFun,
+                        icon: const Icon(
+                          Icons.download,
+                        ),
+                      ),
                     )
                   : widget.haveSummary
                       ? Padding(
@@ -172,11 +179,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.blue),
                             child: TextButton(
-                                onPressed: widget.onTap,
-                                child: Text(
-                                  'View Summary',
-                                  style: TextStyle(color: white, fontSize: 20),
-                                )),
+                              onPressed: widget.onTap,
+                              child: Text(
+                                'View Summary',
+                                style: TextStyle(
+                                  color: white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
                           ),
                         )
                       : Container(),
@@ -200,26 +211,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ),
                     )
                   : Container(),
-              Padding(
-                  padding: const EdgeInsets.only(right: 15, left: 15),
-                  child: GestureDetector(
-                      onTap: () {
-                        onWillPop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/logout.png',
-                            height: 10,
-                            width: 10,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            widget.userId ?? '',
-                            style: const TextStyle(fontSize: 12),
-                          )
-                        ],
-                      ))),
             ],
             bottom: widget.havebottom
                 ? TabBar(

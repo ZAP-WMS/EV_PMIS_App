@@ -100,8 +100,8 @@ class _SafetyFieldState extends State<SafetyField> {
 
     getTableData().whenComplete(() {
       safetylisttable = checkTable ? getData() : safetylisttable;
-      _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,
-          cityName!, 'widget.depoName!', userId, selectedDate!);
+      _safetyChecklistDataSource = SafetyChecklistDataSource(
+          safetylisttable, cityName!, widget.depoName!, userId, selectedDate!);
       _dataGridController = DataGridController();
 
       _stream = FirebaseFirestore.instance
@@ -170,7 +170,9 @@ class _SafetyFieldState extends State<SafetyField> {
           },
         ),
       ),
-      drawer:  NavbarDrawer(role: widget.role,),
+      drawer: NavbarDrawer(
+        role: widget.role,
+      ),
       body: isLoading
           ? const LoadingPage()
           : StreamBuilder(
@@ -447,8 +449,8 @@ class _SafetyFieldState extends State<SafetyField> {
                             'Contact are Required'),
                         safetyField(latitudeController, 'Longitude & Latitude',
                             'Rev are Required'),
-                        safetyField(stateController, 'Maharashtra',
-                            'State are Required'),
+                        safetyField(
+                            stateController, 'State', 'State are Required'),
                         safetyField(
                             chargerController, 'Charger Type', 'Charger Type'),
                         safetyField(conductedController, 'Conducted By',
@@ -489,14 +491,9 @@ class _SafetyFieldState extends State<SafetyField> {
                                     columns: [
                                       GridColumn(
                                         columnName: 'srNo',
-                                        autoFitPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 16),
                                         allowEditing: false,
                                         width: 65,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
                                           alignment: Alignment.center,
                                           child: Text('Sr No',
                                               overflow:
@@ -509,8 +506,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         width: 300,
                                         allowEditing: false,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
                                           alignment: Alignment.center,
                                           child: Text('Details of Enclosure ',
                                               overflow:
@@ -523,7 +518,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         allowEditing: false,
                                         width: 180,
                                         label: Container(
-                                          padding: const EdgeInsets.all(8.0),
                                           alignment: Alignment.center,
                                           child: Text(
                                               'Status of Submission of information/ documents ',
@@ -536,8 +530,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         allowEditing: true,
                                         width: 250,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
                                           alignment: Alignment.center,
                                           child: Text('Remarks',
                                               overflow:
@@ -550,8 +542,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         allowEditing: false,
                                         width: 120,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
                                           alignment: Alignment.center,
                                           child: Text('Upload Photo',
                                               overflow:
@@ -564,8 +554,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                         allowEditing: false,
                                         width: 120,
                                         label: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
                                           alignment: Alignment.center,
                                           child: Text('View Photo',
                                               overflow:
@@ -624,14 +612,9 @@ class _SafetyFieldState extends State<SafetyField> {
                                       columns: [
                                         GridColumn(
                                           columnName: 'srNo',
-                                          autoFitPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 16),
                                           allowEditing: false,
                                           width: 65,
                                           label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
                                             alignment: Alignment.center,
                                             child: Text('Sr No',
                                                 overflow:
@@ -644,8 +627,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                           width: 300,
                                           allowEditing: false,
                                           label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
                                             alignment: Alignment.center,
                                             child: Text('Details of Enclosure ',
                                                 overflow:
@@ -658,7 +639,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                           allowEditing: false,
                                           width: 180,
                                           label: Container(
-                                            padding: const EdgeInsets.all(8.0),
                                             alignment: Alignment.center,
                                             child: Text(
                                                 'Status of Submission of information/ documents ',
@@ -671,8 +651,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                           allowEditing: true,
                                           width: 250,
                                           label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
                                             alignment: Alignment.center,
                                             child: Text('Remarks',
                                                 overflow:
@@ -685,8 +663,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                           allowEditing: false,
                                           width: 120,
                                           label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
                                             alignment: Alignment.center,
                                             child: Text('Upload Photo',
                                                 overflow:
@@ -699,8 +675,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                           allowEditing: false,
                                           width: 120,
                                           label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
                                             alignment: Alignment.center,
                                             child: Text('View Photo',
                                                 overflow:

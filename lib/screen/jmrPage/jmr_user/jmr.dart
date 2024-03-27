@@ -340,15 +340,26 @@ class _JmrUserPageState extends State<JmrUserPage> {
                               await storage
                                   .ref()
                                   .child(
-                                      'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}/$fileName')
+                                      'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/${widget.userId}/${index + 1}/$fileName')
                                   .putData(fileBytes!);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.green,
-                                      content: Text(
-                                        'File Uploaded',
-                                        style: TextStyle(color: white),
-                                      )));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text(
+                                    'File Uploaded',
+                                    style: TextStyle(color: white),
+                                  ),
+                                ),
+                              );
+
+                              await FirebaseFirestore.instance
+                                  .collection('JMRCollection')
+                                  .doc(widget.depoName)
+                                  .collection('Table')
+                                  .doc('${tabsForJmr[_selectedIndex]}JmrTable')
+                                  .collection('userId')
+                                  .doc(userId)
+                                  .set({"isFileUploaded": true});
                             } else {
                               // User canceled the picker
                             }
@@ -370,7 +381,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                           title: 'jmr',
                           userId: userId,
                           fldrName:
-                              'jmrFiles/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
+                              'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
                         ),
                       ),
                     );

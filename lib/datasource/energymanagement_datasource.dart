@@ -224,7 +224,7 @@ class EnergyManagementDatasource extends DataGridSource {
       _energyManagement[dataRowIndex].srNo = newCellValue;
     } else if (column.columnName == 'DepotName') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(columnName: 'DepotName', value: newCellValue);
+          DataGridCell<String>(columnName: 'DepotName', value: newCellValue);
       _energyManagement[dataRowIndex].depotName = newCellValue.toString();
     } else if (column.columnName == 'VehicleNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -324,6 +324,9 @@ class EnergyManagementDatasource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (column.columnName == 'energyConsumed') {
@@ -342,7 +345,7 @@ class EnergyManagementDatasource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
-          //     newCellValue = value;
+          newCellValue = value;
 
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.

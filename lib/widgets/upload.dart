@@ -82,8 +82,9 @@ class _UploadDocumentState extends State<UploadDocument> {
                               child: Text(
                                 'Selected file:',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold,
-                                    ),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             ListView.builder(
@@ -244,6 +245,7 @@ class _UploadDocumentState extends State<UploadDocument> {
 
   Future getAssignedDepots() async {
     assignedDepots = await authService.getDepotList();
+    print("assignedDepots : $assignedDepots");
     isFieldEditable =
         authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
     print("isFieldEditable : $isFieldEditable");

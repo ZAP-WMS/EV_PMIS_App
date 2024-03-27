@@ -122,6 +122,8 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                                 MaterialPageRoute(
                                   builder: (context) => QualityHome(
                                     depoName: widget.depoName,
+                                    userId: widget.userId,
+                                    role: widget.role,
                                   ),
                                 ),
                               );
@@ -165,16 +167,17 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CivilReportAdmin(
-                              cityName: cityName,
-                              userId: widget.userId,
-                              selectedIndex: index,
-                              depoName: widget.depoName,
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CivilReportAdmin(
+                                cityName: cityName,
+                                userId: widget.userId,
+                                selectedIndex: index,
+                                depoName: widget.depoName,
+                              ),
                             ),
-                          )),
-                      child: tabbarlist(civillist, index));
+                          ),
+                      child: tabbarlist(civillist, index,),);
                 },
               ),
               ListView.builder(

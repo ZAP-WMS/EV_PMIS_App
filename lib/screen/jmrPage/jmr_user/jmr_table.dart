@@ -78,17 +78,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
 
   List nextJmrIndex = [];
   List<List<dynamic>> data = [
-    [
-      '1',
-      'Supply and Laying',
-      'onboarding one no. of EV charger of 200kw',
-      '8.31 (Additional)',
-      'abstract of JMR sheet No 1 & Item Sr No 1',
-      'Mtr',
-      500.00,
-      110,
-      55000.00
-    ],
+    ['', '', '', '', '', '', 0, 0, 0],
   ];
 
   List<JMRModel> jmrtable = <JMRModel>[];
@@ -158,7 +148,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
-                  isDownload: true,
+                  isDownload: widget.showTable,
                   downloadFun: downloadPDF,
                   depoName: widget.depoName ?? '',
                   store: () {
@@ -639,14 +629,14 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                     onPressed: () {
                                       data.add([
                                         data.length + 1,
-                                        'Supply and Laying',
-                                        'onboarding one no. of EV charger of 200kw',
-                                        '8.31 (Additional)',
-                                        'abstract of JMR sheet No 1 & Item Sr No 1',
-                                        'Mtr',
-                                        500.00,
-                                        110,
-                                        55000.00
+                                        '',
+                                        '',
+                                        '',
+                                        '',
+                                        '',
+                                        0,
+                                        0,
+                                        0
                                       ]);
                                       setState(() {});
                                     },

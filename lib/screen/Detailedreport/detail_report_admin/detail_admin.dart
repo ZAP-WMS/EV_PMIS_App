@@ -140,41 +140,25 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
             actions: [
               widget.role == "projectManager"
                   ? Container(
-                      margin: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(
+                        8.0,
+                      ),
                       child: IconButton(
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DetailedEng(
-                                        depoName: widget.depoName,
-                                        role: 'user',
-                                      )),
+                                builder: (context) => DetailedEng(
+                                  depoName: widget.depoName,
+                                  role: 'user',
+                                  userId: widget.userId,
+                                ),
+                              ),
                             );
                           },
                           icon: const Icon(Icons.add)),
                     )
                   : Container(),
-              Padding(
-                  padding: const EdgeInsets.only(right: 15, left: 15),
-                  child: GestureDetector(
-                      onTap: () {
-                        onWillPop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/logout.png',
-                            height: 10,
-                            width: 10,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            widget.userId ?? '',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ))),
             ],
             bottom: TabBar(
               onTap: (value) {

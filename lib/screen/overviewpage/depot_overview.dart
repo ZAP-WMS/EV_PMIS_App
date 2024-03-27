@@ -1091,7 +1091,8 @@ class _DepotOverviewState extends State<DepotOverview> {
           labeltext: title,
           // validatortext: '$title is Required',
           keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.next),
+          textInputAction: TextInputAction.next,
+          ),
     );
   }
 

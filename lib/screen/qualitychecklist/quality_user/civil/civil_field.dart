@@ -80,6 +80,7 @@ class _CivilFieldState extends State<CivilField> {
       componentController,
       gridController,
       fillingController;
+
   void initializeController() {
     projectController = TextEditingController();
     locationController = TextEditingController();
@@ -143,6 +144,7 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
+    getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     pr = ProgressDialog(context,
         customBody:
@@ -291,7 +293,7 @@ class _CivilFieldState extends State<CivilField> {
             depoName: widget.depoName!,
             text: '${widget.title}',
             haveCalender: true,
-            haveSynced: isFieldEditable ? false : true,
+            haveSynced: isFieldEditable ? true : false,
             isDownload: true,
             haveSummary: false,
             onTap: () => Navigator.push(
@@ -389,10 +391,16 @@ class _CivilFieldState extends State<CivilField> {
                       safetyField(dateController, 'Date', TextInputAction.next),
                       safetyField(componentController,
                           'Component of the Structure', TextInputAction.next),
-                      safetyField(gridController, 'Grid / Axis Level',
-                          TextInputAction.next),
-                      safetyField(fillingController, 'Type of Filling',
-                          TextInputAction.done),
+                      safetyField(
+                        gridController,
+                        'Grid / Axis Level',
+                        TextInputAction.next,
+                      ),
+                      safetyField(
+                        fillingController,
+                        'Type of Filling',
+                        TextInputAction.done,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: StreamBuilder(

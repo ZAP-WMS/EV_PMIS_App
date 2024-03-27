@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../provider/cities_provider.dart';
 import '../../shared_preferences/shared_preferences.dart';
@@ -51,11 +54,8 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   void initState() {
-    print('userId - ${widget.userId}');
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-    print('Overview page - ${widget.role}');
     getData();
-
     super.initState();
   }
 

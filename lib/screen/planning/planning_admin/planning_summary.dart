@@ -33,11 +33,6 @@ class _PlanningTableState extends State<PlanningTable> {
   List<List<dynamic>> rowList = [];
   bool enableLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<List<List<dynamic>>> fetchData() async {
     await getRowsForFutureBuilder();
     return rowList;
@@ -47,21 +42,21 @@ class _PlanningTableState extends State<PlanningTable> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          // ignore: sort_child_properties_last
+          preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
             isProjectManager: widget.role == "projectManager" ? true : false,
             makeAnEntryPage: KeyEvents2(
-                role: widget.role,
-                cityName: widget.cityName,
-                depoName: widget.depoName),
+              role: widget.role,
+              cityName: widget.cityName,
+              depoName: widget.depoName,
+            ),
             cityName: widget.cityName,
             showDepoBar: true,
             toPlanning: true,
             depoName: widget.depoName,
-            text: ' ${widget.cityName} / ${widget.depoName}',
+            text: 'Planning Page',
             userId: widget.userId,
-          ),
-          preferredSize: const Size.fromHeight(50)),
+          )),
       body: enableLoading
           ? const LoadingPage()
           : FutureBuilder<List<List<dynamic>>>(

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/monthlyreport/monthly_project.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,16 @@ class MonthlySummary extends StatefulWidget {
       required this.depoName,
       this.id,
       required this.role});
+
   @override
   State<MonthlySummary> createState() => _MonthlySummaryState();
 }
 
 class _MonthlySummaryState extends State<MonthlySummary> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
+
   bool enableLoading = false;
   String pathToOpenFile = '';
 
@@ -54,12 +60,6 @@ class _MonthlySummaryState extends State<MonthlySummary> {
   // Daily Project data according to entry date
   List<dynamic> dailyProjectData = [];
 
-  @override
-  void initState() {
-    setState(() {});
-    super.initState();
-  }
-
   Future<List<List<dynamic>>> fetchData() async {
     await getMonthlyData();
     return rowList;
@@ -70,10 +70,16 @@ class _MonthlySummaryState extends State<MonthlySummary> {
     return Scaffold(
       drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
-        // ignore: sort_child_properties_last
+        preferredSize: const Size.fromHeight(
+          50,
+        ),
         child: CustomAppBar(
-          isProjectManager: widget.role == 'projectManager' ? false : true,
-          makeAnEntryPage: MonthlyProject(depoName: widget.depoName),
+          isProjectManager: widget.role == 'projectManager' ? true : false,
+          makeAnEntryPage: MonthlyProject(
+            depoName: widget.depoName,
+            userId: widget.userId,
+            role: widget.role,
+          ),
           toMonthly: true,
           showDepoBar: true,
           cityName: widget.cityName,
@@ -81,7 +87,6 @@ class _MonthlySummaryState extends State<MonthlySummary> {
           depoName: widget.depoName,
           text: 'Monthly Report',
         ),
-        preferredSize: const Size.fromHeight(50),
       ),
       body: enableLoading
           ? const LoadingPage()
@@ -304,7 +309,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       final pr = ProgressDialog(context);
       pr.style(
           progressWidgetAlignment: Alignment.center,
@@ -545,5 +550,11 @@ class _MonthlySummaryState extends State<MonthlySummary> {
     }
 
     return pdfData;
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }
