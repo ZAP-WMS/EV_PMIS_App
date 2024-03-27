@@ -29,6 +29,7 @@ class MonthlySummary extends StatefulWidget {
       required this.depoName,
       this.id,
       required this.role});
+
   @override
   State<MonthlySummary> createState() => _MonthlySummaryState();
 }
@@ -58,12 +59,6 @@ class _MonthlySummaryState extends State<MonthlySummary> {
   // Daily Project data according to entry date
   List<dynamic> dailyProjectData = [];
 
-  @override
-  void initState() {
-    setState(() {});
-    super.initState();
-  }
-
   Future<List<List<dynamic>>> fetchData() async {
     await getMonthlyData();
     return rowList;
@@ -73,13 +68,16 @@ class _MonthlySummaryState extends State<MonthlySummary> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        // ignore: sort_child_properties_last
+        preferredSize: const Size.fromHeight(
+          50,
+        ),
         child: CustomAppBar(
           isProjectManager: widget.role == 'projectManager' ? true : false,
           makeAnEntryPage: MonthlyProject(
-              depoName: widget.depoName,
-              userId: widget.userId,
-              role: widget.role),
+            depoName: widget.depoName,
+            userId: widget.userId,
+            role: widget.role,
+          ),
           toMonthly: true,
           showDepoBar: true,
           cityName: widget.cityName,
@@ -87,7 +85,6 @@ class _MonthlySummaryState extends State<MonthlySummary> {
           depoName: widget.depoName,
           text: 'Monthly Report',
         ),
-        preferredSize: const Size.fromHeight(50),
       ),
       body: enableLoading
           ? const LoadingPage()
@@ -310,7 +307,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       final pr = ProgressDialog(context);
       pr.style(
           progressWidgetAlignment: Alignment.center,

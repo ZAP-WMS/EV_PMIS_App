@@ -93,7 +93,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
           child: Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              backgroundColor: blue,
+              backgroundColor: white,
               title: Column(
                 children: [
                   const Text(
@@ -107,24 +107,30 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                   )
                 ],
               ),
+              flexibleSpace: Container(
+                height: 60,
+                color: blue,
+              ),
               actions: [
-              widget.role == "projectManager" ?  Container(
-                  margin: const EdgeInsets.all(8.0),
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => QualityHome(
-                              depoName: widget.depoName,
-                              userId: widget.userId,
-                              role: widget.role,
-                            ),
-                          ),
-                        );
-                      },
-                      icon:const Icon(Icons.add)),
-                ) : Container()
+                widget.role == "projectManager"
+                    ? Container(
+                        margin: const EdgeInsets.all(8.0),
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => QualityHome(
+                                    depoName: widget.depoName,
+                                    userId: widget.userId,
+                                    role: widget.role,
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.add)),
+                      )
+                    : Container()
               ],
               // leading:
               bottom: PreferredSize(
@@ -132,15 +138,15 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                 child: Column(
                   children: [
                     TabBar(
-                      labelColor: white,
+                      unselectedLabelColor: tabbarColor,
+                      labelColor: _selectedIndex == _selectedIndex
+                          ? white
+                          : tabbarColor,
                       labelStyle: buttonWhite,
-                      unselectedLabelColor: Colors.black,
-                      indicator: MaterialIndicator(
-                          horizontalPadding: 24,
-                          bottomLeftRadius: 8,
-                          bottomRightRadius: 8,
-                          color: white,
-                          paintingStyle: PaintingStyle.fill),
+                      indicator: BoxDecoration(
+                        color:
+                            blue, // Set the background color of the selected tab label
+                      ),
                       tabs: const [
                         Tab(text: 'Civil Engineer'),
                         Tab(text: 'Electrical Engineer'),
@@ -155,21 +161,24 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
               ),
             ),
             drawer: const NavbarDrawer(),
-            body: TabBarView(children: [
+            body: TabBarView(
+              children: [
               ListView.builder(
                 itemCount: civillist.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CivilReportAdmin(
-                              cityName: cityName,userId: widget.userId,
-                              selectedIndex: index,
-                              depoName: widget.depoName,
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CivilReportAdmin(
+                                cityName: cityName,
+                                userId: widget.userId,
+                                selectedIndex: index,
+                                depoName: widget.depoName,
+                              ),
                             ),
-                          ),),
-                      child: tabbarlist(civillist, index));
+                          ),
+                      child: tabbarlist(civillist, index,),);
                 },
               ),
               ListView.builder(
@@ -195,17 +204,18 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
 
   Widget tabbarlist(List<String> list, int index) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(8.0),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
+          border: Border.all(color: blue),
           borderRadius: BorderRadius.circular(10),
-          color: blue,
+          color: white,
         ),
         child: Text(
           list[index],
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 13, color: white),
+          style: TextStyle(fontSize: 13, color: blue),
         ),
       ),
     );

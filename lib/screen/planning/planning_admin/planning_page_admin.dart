@@ -16,6 +16,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import '../../../widgets/custom_appbar.dart';
+import '../../../widgets/keyEvents_data.dart';
 
 void main() {
   runApp(PlanningPageAdmin());
@@ -353,7 +354,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                 builder: (context, snapshot) {
                   ganttdata = [];
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return LoadingPage();
+                    return const LoadingPage();
                   }
                   if (snapshot.hasData) {
                     if (snapshot.data.docs.length != 0) {
@@ -740,7 +741,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                           //displayName: yAxis[i].toString()
                         ));
                       }
-                      _employees = getEmployeeData();
+                      _employees = getKeyEventsData();
                       _KeyDataSourceKeyEvents =
                           KeyDataSourceKeyEvents(_employees, context);
                       _dataGridController = DataGridController();
@@ -795,6 +796,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                     autoFitPadding: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     allowEditing: false,
+                                    width: 60,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
@@ -808,8 +810,8 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                   ),
                                   GridColumn(
                                     columnName: 'Activity',
-                                    allowEditing: false,
-                                    width: 100,
+                                    allowEditing: true,
+                                    width: 250,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
@@ -817,6 +819,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                       child: Text(
                                         'Activity',
                                         overflow: TextOverflow.values.first,
+                                        textAlign: TextAlign.center,
                                         style: tableheader,
                                       ),
                                     ),
@@ -838,12 +841,15 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                   GridColumn(
                                     columnName: 'StartDate',
                                     allowEditing: false,
-                                    width: 85,
+                                    width: 150,
                                     label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Start Date',
                                         overflow: TextOverflow.values.first,
+                                        textAlign: TextAlign.center,
                                         style: tableheader,
                                       ),
                                     ),
@@ -851,11 +857,13 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                   GridColumn(
                                     columnName: 'EndDate',
                                     allowEditing: false,
-                                    width: 85,
                                     label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
                                       alignment: Alignment.center,
                                       child: Text(
-                                        'End Date',
+                                        textAlign: TextAlign.center,
+                                        'End  Date',
                                         overflow: TextOverflow.values.first,
                                         style: tableheader,
                                       ),
@@ -864,8 +872,9 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                   GridColumn(
                                     columnName: 'ActualStart',
                                     allowEditing: false,
-                                    width: 85,
                                     label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
                                       alignment: Alignment.center,
                                       child: Text(
                                         'Actual Start',
@@ -878,7 +887,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                   GridColumn(
                                     columnName: 'ActualEnd',
                                     allowEditing: false,
-                                    width: 85,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
@@ -908,7 +916,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                   GridColumn(
                                     columnName: 'Delay',
                                     allowEditing: false,
-                                    width: 80,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
@@ -919,10 +926,68 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                       ),
                                     ),
                                   ),
+                                  // GridColumn(
+                                  //   columnName: 'ReasonDelay',
+                                  //   label: Container(
+                                  //     alignment: Alignment.center,
+                                  //     child: Text(
+                                  //       'ReasonDelay',
+                                  //       overflow:
+                                  //           TextOverflow.values.first,
+                                  //       style: tableheader,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  GridColumn(
+                                    columnName: 'Unit',
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Unit',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheader,
+                                      ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'QtyScope',
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Oty as per scope',
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheader,
+                                      ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'QtyExecuted',
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Qty executed',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheader,
+                                      ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'BalancedQty',
+                                    allowEditing: false,
+                                    label: Container(
+                                      width: 150,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Balanced Qty',
+                                        overflow: TextOverflow.values.first,
+                                        style: tableheader,
+                                      ),
+                                    ),
+                                  ),
                                   GridColumn(
                                     columnName: 'Progress',
                                     allowEditing: false,
-                                    width: 80,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(
@@ -935,8 +1000,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                   ),
                                   GridColumn(
                                     columnName: 'Weightage',
-                                    allowEditing: false,
-                                    width: 80,
+                                    allowEditing: true,
                                     label: Container(
                                       alignment: Alignment.center,
                                       child: Text(

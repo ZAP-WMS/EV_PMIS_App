@@ -7,7 +7,6 @@ import 'package:gantt_chart/gantt_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/key_datasource.dart';
 import '../../provider/cities_provider.dart';
@@ -15,7 +14,6 @@ import '../../style.dart';
 import '../../viewmodels/employee.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/navbar.dart';
-import '../../widgets/upload.dart';
 import '../keyevents/Grid_DataTableA2.dart';
 import '../overviewpage/view_AllFiles.dart';
 
@@ -28,7 +26,8 @@ class KeyEvents extends StatefulWidget {
   String? cityName;
   String role;
   String? userId;
-  KeyEvents({Key? key,this.userId, this.depoName, this.cityName, required this.role})
+  KeyEvents(
+      {Key? key, this.userId, this.depoName, this.cityName, required this.role})
       : super(key: key);
 
   @override
@@ -263,59 +262,7 @@ class _KeyEventsState extends State<KeyEvents> {
 
   @override
   Widget build(BuildContext context) {
-    // menuwidget = [
-    //   ViewFile(),
-    //   StatutoryAprovalA2(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //   ),
-    //   StatutoryAprovalA3(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //   ),
-    //   StatutoryAprovalA4(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //   ),
-    //   StatutoryAproval(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   // StatutoryAprovalA5(
-    //   //   userid: userId,
-    //   //   cityName: widget.cityName,
-    //   //   depoName: widget.depoName,
-    //   // ),
-    //   StatutoryAprovalA6(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA7(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA8(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA9(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA10(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    // ];
+ 
 
     return _isLoading
         ? LoadingPage()
@@ -1038,26 +985,24 @@ class _KeyEventsState extends State<KeyEvents> {
                               GridColumn(
                                 columnName: 'srNo',
                                 autoFitPadding:
-                                    EdgeInsets.symmetric(horizontal: 16),
-                                allowEditing: false,
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                allowEditing: true,
                                 label: Container(
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Sr No',
+                                    textAlign: TextAlign.center,
                                     overflow: TextOverflow.values.first,
                                     style: tableheader,
-
                                     //    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'Activity',
-                                allowEditing: false,
                                 width: 100,
+                                allowEditing: true,
                                 label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
                                   alignment: Alignment.center,
                                   child: Text(
                                     'Activity',
@@ -1068,16 +1013,16 @@ class _KeyEventsState extends State<KeyEvents> {
                               ),
                               GridColumn(
                                 columnName: 'OriginalDuration',
-                                allowEditing: false,
+                                allowEditing: true,
                                 width: 80,
+                                autoFitPadding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 label: Container(
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    'Original Duration',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('Original Duration',
+                                      overflow: TextOverflow.values.first,
+                                      textAlign: TextAlign.center,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
@@ -1086,11 +1031,9 @@ class _KeyEventsState extends State<KeyEvents> {
                                 width: 85,
                                 label: Container(
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    'Start Date',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('Start Date',
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
@@ -1098,26 +1041,27 @@ class _KeyEventsState extends State<KeyEvents> {
                                 allowEditing: false,
                                 width: 85,
                                 label: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    'End Date',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('End Date',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'ActualStart',
                                 allowEditing: false,
-                                width: 85,
+                                width: 140,
                                 label: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    'Actual Start',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('Actual Start',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
@@ -1126,42 +1070,82 @@ class _KeyEventsState extends State<KeyEvents> {
                                 width: 85,
                                 label: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
+                                      horizontal: 10.0),
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    'Actual End',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('Actual End',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'ActualDuration',
-                                allowEditing: false,
                                 width: 80,
+                                allowEditing: true,
                                 label: Container(
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    'Actual Duration',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('Actual Duration',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'Delay',
-                                allowEditing: false,
+                                allowEditing: true,
+                                label: Container(
+                                  alignment: Alignment.center,
+                                  child: Text('Delay',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'Unit',
+                                allowEditing: true,
+                                label: Container(
+                                  alignment: Alignment.center,
+                                  child: Text('Unit',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'QtyScope',
+                                allowEditing: true,
                                 width: 80,
                                 label: Container(
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    'Delay',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('Oty as per scope',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'QtyExecuted',
+                                allowEditing: true,
+                                width: 80,
+                                label: Container(
+                                  alignment: Alignment.center,
+                                  child: Text('Qty executed',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'BalancedQty',
+                                allowEditing: false,
+                                label: Container(
+                                  width: 80,
+                                  alignment: Alignment.center,
+                                  child: Text('Balanced Qty',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
@@ -1170,26 +1154,20 @@ class _KeyEventsState extends State<KeyEvents> {
                                 width: 80,
                                 label: Container(
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    '% of Progress',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('% of Progress',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                               GridColumn(
                                 columnName: 'Weightage',
-                                allowEditing: false,
-                                width: 80,
+                                allowEditing: true,
                                 label: Container(
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    'Weightage',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
+                                  child: Text('Weightage',
+                                      overflow: TextOverflow.values.first,
+                                      style: tableheader),
                                 ),
                               ),
                             ],

@@ -37,7 +37,6 @@ class KeyEvents2 extends StatefulWidget {
 
   @override
   _KeyEvents2State createState() => _KeyEvents2State();
-
 }
 
 class _KeyEvents2State extends State<KeyEvents2> {
@@ -325,7 +324,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
 
   @override
   Widget build(BuildContext context) {
-  
     return _isLoading
         ? const LoadingPage()
         : keyBoardArrow(
@@ -384,12 +382,12 @@ class _KeyEvents2State extends State<KeyEvents2> {
                         // dateTime = DateTime(year, month, day);
                         totalperc = 0.0;
                         // print(widget.depoName);
-                        // print(userId);
-                        _keyProvider!.fetchDelayData(widget.depoName!, userId);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Provider.of<KeyProvider>(context, listen: false)
-                              .saveProgressValue(totalperc);
-                        });
+                        // // print(userId);
+                        // _keyProvider!.fetchDelayData(widget.depoName!, userId);
+                        // WidgetsBinding.instance.addPostFrameCallback((_) {
+                        //   Provider.of<KeyProvider>(context, listen: false)
+                        //       .saveProgressValue(totalperc);
+                        // });
 
                         _employees = getKeyEventsData();
                         keyDataSourceKeyEvents =
@@ -399,8 +397,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                         return SingleChildScrollView(
                           child: SizedBox(
                               height: MediaQuery.of(context).size.height * 0.85,
-                              child: Row(
-                                children: [
+                              child: Row(children: [
                                 Expanded(
                                   child: SfDataGridTheme(
                                     data: SfDataGridThemeData(
@@ -466,8 +463,8 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                         ),
                                         GridColumn(
                                           columnName: 'Activity',
-                                          allowEditing: false,
-                                          width: 150,
+                                          allowEditing: true,
+                                          width: 250,
                                           label: Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16.0),
@@ -499,6 +496,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                         GridColumn(
                                           columnName: 'StartDate',
                                           allowEditing: false,
+                                          width: 150,
                                           label: Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16.0),
@@ -531,7 +529,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                         GridColumn(
                                           columnName: 'ActualStart',
                                           allowEditing: false,
-                                          width: 150,
                                           label: Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16.0),
@@ -669,7 +666,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                         ),
                                         GridColumn(
                                           columnName: 'Weightage',
-                                          allowEditing: false,
+                                          allowEditing: true,
                                           label: Container(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -1838,7 +1835,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                               const EdgeInsets.symmetric(
                                                   horizontal: 16),
                                           allowEditing: false,
-                                          width: 50,
+                                          width: 60,
                                           label: Container(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -1853,8 +1850,8 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                         ),
                                         GridColumn(
                                           columnName: 'Activity',
-                                          width: 150,
                                           allowEditing: false,
+                                          width: 250,
                                           label: Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16.0),
@@ -1870,8 +1867,8 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                         ),
                                         GridColumn(
                                           columnName: 'OriginalDuration',
-                                          width: 80,
                                           allowEditing: false,
+                                          width: 80,
                                           label: Container(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -1886,6 +1883,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                         GridColumn(
                                           columnName: 'StartDate',
                                           allowEditing: false,
+                                          width: 150,
                                           label: Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16.0),
@@ -2733,7 +2731,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
     isFieldEditable =
         authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
-  
 }
 
 class ChartData {

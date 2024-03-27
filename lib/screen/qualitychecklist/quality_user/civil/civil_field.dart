@@ -294,7 +294,7 @@ class _CivilFieldState extends State<CivilField> {
             depoName: widget.depoName!,
             text: '${widget.title}',
             haveCalender: true,
-            haveSynced: isFieldEditable ? true : false,
+            haveSynced: isFieldEditable ? false : true,
             isDownload: true,
             haveSummary: false,
             onTap: () => Navigator.push(
