@@ -12,7 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
-
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:mailto/mailto.dart';
 import 'package:pdf/pdf.dart';
@@ -45,6 +44,7 @@ class ViewSummary extends StatefulWidget {
   String? depoName;
   String? cityName;
   String? id;
+  String? role;
   String? selectedtab;
   bool isHeader;
   String? currentDate;
@@ -54,6 +54,7 @@ class ViewSummary extends StatefulWidget {
       required this.depoName,
       required this.cityName,
       required this.id,
+      this.role,
       this.userId,
       this.selectedtab,
       this.currentDate,
@@ -99,7 +100,7 @@ class _ViewSummaryState extends State<ViewSummary> {
     _summaryProvider = Provider.of<SummaryProvider>(context, listen: false);
     _checkboxProvider = Provider.of<CheckboxProvider>(context, listen: false);
     _checkboxProvider!.fetchCcMaidId();
-    _checkboxProvider!.fetchToMaidId();
+    _checkboxProvider!.fetchToMaidId(widget.cityName!);
     pr = ProgressDialog(context,
         customBody:
             Container(height: 200, width: 100, child: const LoadingPdf()));
@@ -2327,7 +2328,7 @@ class _ViewSummaryState extends State<ViewSummary> {
           builder: (context, value, child) {
             return Container(
               padding: const EdgeInsetsDirectional.all(0),
-              margin: const EdgeInsets.all(15),
+              margin: const EdgeInsets.all(10),
               width: MediaQuery.of(context).size.width,
               child: AlertDialog(
                 title: Text('Choose Required Filled For Email',
@@ -2391,60 +2392,67 @@ class _ViewSummaryState extends State<ViewSummary> {
                       ),
                     ]),
                   ),
-                  Expanded(
-                    child: Column(children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          'Choose Cc',
-                          style: appTextStyle,
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      ...List.generate(
-                        value.myCcMailValue.length,
-                        (index) {
-                          // print('iji$index');
-                          for (int i = 0;
-                              i <= value.myCcMailValue.length;
-                              i++) {
-                            checkboxProvider.defaultCcBooleanValue.add(false);
-                          }
-                          return Flexible(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Checkbox(
-                                  value: value.myCcBooleanValue[index],
-                                  onChanged: (bool? newboolean) {
-                                    if (newboolean != null) {
-                                      checkboxProvider.setMyCcBooleanValue(
-                                          index, newboolean);
-                                    }
-                                    if (value.myCcBooleanValue[index] != null &&
-                                        value.myCcBooleanValue[index] == true) {
-                                      print('index$index');
-                                      checkboxProvider.getCurrentCcValue(
-                                          index, value.myCcMailValue[index]);
-                                    } else {
-                                      value.ccValue
-                                          .remove(value.myCcMailValue[index]);
-                                    }
-                                  },
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    value.myCcMailValue[index],
-                                    style: appTextStyle,
-                                  ),
-                                ),
-                              ],
+                  widget.role == 'projectManager'
+                      ? Expanded(
+                          child: Column(children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                'Choose Cc',
+                                style: appTextStyle,
+                                textAlign: TextAlign.start,
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                    ]),
-                  ),
+                            ...List.generate(
+                              value.myCcMailValue.length,
+                              (index) {
+                                // print('iji$index');
+                                for (int i = 0;
+                                    i <= value.myCcMailValue.length;
+                                    i++) {
+                                  checkboxProvider.defaultCcBooleanValue
+                                      .add(false);
+                                }
+                                return Flexible(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Checkbox(
+                                        value: value.myCcBooleanValue[index],
+                                        onChanged: (bool? newboolean) {
+                                          if (newboolean != null) {
+                                            checkboxProvider
+                                                .setMyCcBooleanValue(
+                                                    index, newboolean);
+                                          }
+                                          if (value.myCcBooleanValue[index] !=
+                                                  null &&
+                                              value.myCcBooleanValue[index] ==
+                                                  true) {
+                                            print('index$index');
+                                            checkboxProvider.getCurrentCcValue(
+                                                index,
+                                                value.myCcMailValue[index]);
+                                          } else {
+                                            value.ccValue.remove(
+                                                value.myCcMailValue[index]);
+                                          }
+                                        },
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          value.myCcMailValue[index],
+                                          style: appTextStyle,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ]),
+                        )
+                      : Container()
                 ]),
                 actions: <Widget>[
                   TextButton(

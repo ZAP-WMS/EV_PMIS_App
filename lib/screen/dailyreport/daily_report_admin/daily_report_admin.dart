@@ -108,6 +108,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                   builder: (context) => ViewSummary(
                     cityName: widget.cityName.toString(),
                     depoName: widget.depoName.toString(),
+                    role: widget.role,
                     id: 'Daily Report',
                     userId: widget.userId,
                   ),

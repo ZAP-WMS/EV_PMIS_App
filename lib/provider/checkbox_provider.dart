@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:flutter/foundation.dart';
 
 class CheckboxProvider extends ChangeNotifier {
@@ -56,21 +58,27 @@ class CheckboxProvider extends ChangeNotifier {
     });
   }
 
-  fetchToMaidId() async {
+  fetchToMaidId(String cityName) async {
     List<String> allId = [];
     allId.clear();
     await FirebaseFirestore.instance
-        .collection('UsersMailId')
-        .doc('ToMailId')
+        .collection('AssignedRole')
+        .where('roles', arrayContains: 'Project Manager')
         .get()
-        .then((value) {
-      if (value.data() != null) {
-        for (int i = 0; i < value.data()!['AllId'].length; i++) {
-          allId.add(value.data()!['AllId'][i]);
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) async {
+        if (doc != null && doc['cities'].contains(cityName)) {
+          await FirebaseFirestore.instance
+              .collection('User')
+              .doc(doc['username'])
+              .get()
+              .then((value) {
+            allId.add(value.data()!['Email']);
+          });
         }
         defaultToMailData = allId;
         notifyListeners();
-      }
+      });
     });
   }
 }

@@ -81,7 +81,9 @@ class _DailyProjectState extends State<DailyProject> {
         .doc(userId)
         .snapshots();
     return Scaffold(
-      drawer:  NavbarDrawer(role: widget.role,),
+      drawer: NavbarDrawer(
+        role: widget.role,
+      ),
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(
@@ -97,6 +99,7 @@ class _DailyProjectState extends State<DailyProject> {
                     builder: (context) => ViewSummary(
                       cityName: widget.cityName.toString(),
                       depoName: widget.depoName.toString(),
+                      role: widget.role,
                       id: 'Daily Report',
                       userId: userId,
                     ),

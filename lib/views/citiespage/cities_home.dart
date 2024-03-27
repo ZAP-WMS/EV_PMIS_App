@@ -33,7 +33,7 @@ class _CitiesHomeState extends State<CitiesHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavbarDrawer(role: widget.role),
+      drawer: NavbarDrawer(role: role),
       appBar: CustomAppBar(
         depoName: '',
         isCentered: true,
