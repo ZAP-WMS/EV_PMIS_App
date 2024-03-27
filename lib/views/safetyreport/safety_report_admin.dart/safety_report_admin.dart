@@ -55,7 +55,6 @@ class _SafetySummaryState extends State<SafetySummary> {
   @override
   void initState() {
     super.initState();
-    Permission.notification.request();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
 
@@ -279,7 +278,7 @@ class _SafetySummaryState extends State<SafetySummary> {
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       final documentDirectory =
           (await DownloadsPath.downloadsDirectory())?.path;
       final file = File('$documentDirectory/$fileName');
@@ -301,38 +300,36 @@ class _SafetySummaryState extends State<SafetySummary> {
         return file;
       }
     }
+
     return File('');
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    if (await Permission.storage.request().isGranted) {
-      final pr = ProgressDialog(context);
-      pr.style(
-          progressWidgetAlignment: Alignment.center,
-          message: 'Downloading file...',
-          borderRadius: 10.0,
-          backgroundColor: Colors.white,
-          progressWidget: const LoadingPdf(),
-          elevation: 10.0,
-          insetAnimCurve: Curves.easeInOut,
-          maxProgress: 100.0,
-          progressTextStyle: const TextStyle(
-              color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
-          messageTextStyle: const TextStyle(
-              color: Colors.black,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600));
+    final pr = ProgressDialog(context);
+    pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600));
 
-      pr.show();
+    pr.show();
 
-      final pdfData = await _generatePDF(userId, date, decision);
+    final pdfData = await _generatePDF(userId, date, decision);
 
-      await pr.hide();
+    pr.hide();
 
-      const fileName = 'SafetyReport.pdf';
-      final savedPDFFile = await savePDFToFile(pdfData, fileName);
-      print('File Created - ${savedPDFFile.path}');
-    }
+    const fileName = 'SafetyReport.pdf';
+    final savedPDFFile = await savePDFToFile(pdfData, fileName);
+    print('File Created - ${savedPDFFile.path}');
+
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
             'repeating channel id', 'repeating channel name',

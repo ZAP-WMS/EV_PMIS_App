@@ -293,7 +293,7 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       final pr = ProgressDialog(context);
       pr.style(
           progressWidgetAlignment: Alignment.center,

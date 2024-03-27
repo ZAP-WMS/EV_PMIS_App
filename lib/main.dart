@@ -25,6 +25,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'notiification/notification_service.dart';
@@ -51,7 +52,6 @@ void main() async {
   Future.delayed(Duration.zero, () async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   });
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await NotificationService.initialize();
@@ -66,23 +66,23 @@ void main() async {
 
   await Firebase.initializeApp();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
   const initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
   const initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
+
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse: (details) async {
       await OpenFile.open(details.payload!);
     },
   );
-  runApp(MyApp());
+  runApp(const MyApp());
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -187,15 +187,25 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Montserrat',
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: Colors.white,
-            dividerColor: const Color.fromARGB(255, 2, 42, 75,),
+            dividerColor: const Color.fromARGB(
+              255,
+              2,
+              42,
+              75,
+            ),
             inputDecorationTheme: InputDecorationTheme(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
-                borderSide: BorderSide(color: blue,),
+                borderSide: BorderSide(
+                  color: blue,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(3),
-                  borderSide: BorderSide(color: blue,),),
+                borderRadius: BorderRadius.circular(3),
+                borderSide: BorderSide(
+                  color: blue,
+                ),
+              ),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               focusColor: black,
               // labelStyle: Colors.b

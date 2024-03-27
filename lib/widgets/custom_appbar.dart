@@ -67,7 +67,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       backgroundColor: blue,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(2))),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(2,),),),
       actions: [
 
         widget.haveSend
@@ -75,7 +75,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 builder: (context, value, child) {
                   // print(value.myBooleanValue);
                   return Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8,),
                       child: IconButton(
                         onPressed: widget.sendEmail,
                         icon: Icon(

@@ -78,7 +78,6 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
   @override
   void initState() {
     super.initState();
-    Permission.notification.request();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
   }
 
@@ -93,7 +92,7 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
             toSafety: true,
             showDepoBar: true,
             cityName: cityName,
-            text: '${widget.depoName} / Quality Checklist',
+            text: 'Quality Checklist',
             userId: widget.userId,
           )),
       body: FutureBuilder<List<List<dynamic>>>(
@@ -287,7 +286,7 @@ class _ElectricalReportAdminState extends State<ElectricalReportAdmin> {
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       final pr = ProgressDialog(context);
       pr.style(
           progressWidgetAlignment: Alignment.center,

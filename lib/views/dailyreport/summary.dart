@@ -2593,18 +2593,7 @@ class _ViewSummaryState extends State<ViewSummary> {
 
       int counter = 1;
       String newFilePath = file.path;
-      // if (await File(newFilePath).exists()) {
-      //   final baseName = fileName.split('.').first;
-      //   final extension = fileName.split('.').last;
-      //   while (await File(newFilePath).exists()) {
-      //     counter++;
-      //     newFilePath =
-      //         '$documentDirectory/$baseName-${counter.toString()}.$extension';
-      //   }
-      //   pathToOpenFile = newFilePath.toString();
-      //   await file.copy(newFilePath);
-      //   await file.writeAsBytes(pdfData);
-      // } else {
+
       await file.writeAsBytes(pdfData);
       pathToOpenFile = newFilePath.toString();
       return file;
