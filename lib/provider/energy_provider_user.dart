@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EnergyProvider extends ChangeNotifier {
-  // List<EnergyManagementModel> _energydata = [];
   List<dynamic> intervalListData = [];
   List<dynamic> energyListData = [];
+  double _maxEnergyConsumed = 0.0;
+  double get maxEnergyConsumed => _maxEnergyConsumed;
 
   List<dynamic> get intervalData => intervalListData;
   List<dynamic> get energyData => energyListData;
@@ -16,7 +17,9 @@ class EnergyProvider extends ChangeNotifier {
 
     timeIntervalList.clear();
     energyConsumedList.clear();
-    String monthName = DateFormat('MMMM').format(DateTime.now());
+    String monthName = DateFormat('MMMM').format(
+      DateTime.now(),
+    );
 
     await FirebaseFirestore.instance
         .collection('EnergyManagementTable')
@@ -36,6 +39,9 @@ class EnergyProvider extends ChangeNotifier {
       var alldata = value.data();
       if (alldata != null) {
         for (int i = 0; i < alldata['data'].length; i++) {
+          if (_maxEnergyConsumed < alldata['data'][i]['energyConsumed']) {
+            _maxEnergyConsumed = alldata['data'][i]['energyConsumed'];
+          }
           // fetchedData.add(EnergyManagementModel.fromJson(alldata));
           timeIntervalList.add(alldata['data'][i]['timeInterval']);
           energyConsumedList.add(alldata['data'][i]['energyConsumed']);
