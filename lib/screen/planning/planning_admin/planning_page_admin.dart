@@ -19,7 +19,6 @@ import '../../../widgets/custom_appbar.dart';
 import '../../../widgets/keyEvents_data.dart';
 
 void main() {
-  runApp(PlanningPageAdmin());
   initializeDateFormatting();
 }
 
@@ -29,9 +28,11 @@ void main() {
 class PlanningPageAdmin extends StatefulWidget {
   /// Creates the home page.
   String? userId;
+  String? role;
   String? depoName;
   String? cityName;
-  PlanningPageAdmin({Key? key, this.depoName, this.cityName, this.userId})
+  PlanningPageAdmin(
+      {Key? key, this.depoName, this.cityName, this.userId, required this.role})
       : super(key: key);
 
   @override
@@ -327,7 +328,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         //     scrollController: scrollController,
         //     myScaffold:
         Scaffold(
-            drawer: const NavbarDrawer(),
+            drawer: NavbarDrawer(role: widget.role),
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(

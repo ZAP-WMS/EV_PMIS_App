@@ -158,7 +158,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                 ),
               ),
             ),
-            drawer: const NavbarDrawer(),
+            drawer:  NavbarDrawer(role: widget.role),
             body: TabBarView(children: [
               ListView.builder(
                 itemCount: civillist.length,

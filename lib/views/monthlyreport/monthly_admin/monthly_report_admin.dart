@@ -13,6 +13,7 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import '../../../components/Loading_page.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../../widgets/common_pdf_view.dart';
+import '../../../widgets/navbar.dart';
 
 class MonthlySummary extends StatefulWidget {
   final String? userId;
@@ -67,6 +68,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBar(

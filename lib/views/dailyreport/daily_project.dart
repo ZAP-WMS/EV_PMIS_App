@@ -81,7 +81,7 @@ class _DailyProjectState extends State<DailyProject> {
         .doc(userId)
         .snapshots();
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      drawer:  NavbarDrawer(role: widget.role,),
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(

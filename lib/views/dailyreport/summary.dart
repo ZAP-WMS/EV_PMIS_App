@@ -369,13 +369,13 @@ class _ViewSummaryState extends State<ViewSummary> {
                                           columnName: 'ActivityNo',
                                           autoFitPadding: tablepadding,
                                           allowEditing: true,
-                                          width: 160,
+                                          width: 80,
                                           label: Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             alignment: Alignment.center,
                                             child: Text(
-                                              'Activities SI. No as per Gant Chart',
+                                              'Sr. No ',
                                               overflow:
                                                   TextOverflow.values.first,
                                               textAlign: TextAlign.center,

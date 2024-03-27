@@ -14,7 +14,7 @@ class _TestingPageState extends State<TestingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavbarDrawer(),
+      // drawer: NavbarDrawer(role: widget.role!),
       appBar: CustomAppBar(
           depoName: widget.depoName ?? '',
           title: 'Testing planning',

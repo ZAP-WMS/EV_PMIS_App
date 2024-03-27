@@ -185,7 +185,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const NavbarDrawer(),
+        // drawer: const NavbarDrawer(),
         appBar: PreferredSize(
             // ignore: sort_child_properties_last
             child: CustomAppBarBackDate(

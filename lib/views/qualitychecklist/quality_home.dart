@@ -134,7 +134,7 @@ class _QualityHomeState extends State<QualityHome> {
                 ),
               ),
             ),
-            drawer: const NavbarDrawer(),
+            drawer:  NavbarDrawer(role: widget.role,),
             body: TabBarView(children: [
               ListView.builder(
                 itemCount: civillist.length,

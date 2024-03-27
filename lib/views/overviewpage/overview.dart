@@ -75,9 +75,9 @@ class _OverviewPageState extends State<OverviewPage> {
       'Closure Report',
       'Depot Demand Energy Management',
     ];
-    
+
     return Scaffold(
-        drawer: const NavbarDrawer(),
+        drawer: NavbarDrawer(role: widget.role),
         appBar: CustomAppBar(
           isCentered: true,
           title: 'Overview Page',

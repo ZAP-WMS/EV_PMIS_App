@@ -283,7 +283,7 @@ class _CivilFieldState extends State<CivilField> {
         qualitylisttable12, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
         // ignore: sort_child_properties_last
         child: CustomAppBarBackDate(

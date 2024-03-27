@@ -13,6 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../widgets/navbar.dart';
+
 class DetailedEngAdmin extends StatefulWidget {
   String? cityName;
   String? depoName;
@@ -60,7 +62,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
 
   @override
   void initState() {
-    
     _detailedDataSource = DetailedEngSource(detailedProject, context,
         widget.cityName.toString(), widget.depoName.toString(), widget.role);
     _dataGridController = DataGridController();
@@ -119,6 +120,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
       length: 3,
       initialIndex: 0,
       child: Scaffold(
+        drawer: NavbarDrawer(role: widget.role),
         appBar: AppBar(
             centerTitle: true,
             backgroundColor: blue,
@@ -184,7 +186,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                 Tab(text: "Shed Lighting Drawings & Specification"),
               ],
             )),
-
         body: _isloading
             ? const LoadingPage()
             : TabBarView(children: [
@@ -192,7 +193,6 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                 tabScreen1(),
                 tabScreen2(),
               ]),
-
       ),
     );
   }

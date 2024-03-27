@@ -15,7 +15,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavbarDrawer(),
+      // drawer: NavbarDrawer(role: widget.role!),
       appBar: CustomAppBar(
           depoName: widget.depoName,
           title: 'Feedback Page',

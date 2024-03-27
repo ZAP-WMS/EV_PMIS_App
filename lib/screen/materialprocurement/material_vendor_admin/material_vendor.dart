@@ -13,6 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../widgets/navbar.dart';
+
 class MaterialProcurementAdmin extends StatefulWidget {
   String? cityName;
   String? depoName;
@@ -20,7 +22,11 @@ class MaterialProcurementAdmin extends StatefulWidget {
   String role;
 
   MaterialProcurementAdmin(
-      {super.key, required this.cityName, required this.depoName, this.userId,required this.role});
+      {super.key,
+      required this.cityName,
+      required this.depoName,
+      this.userId,
+      required this.role});
 
   @override
   State<MaterialProcurementAdmin> createState() =>
@@ -60,26 +66,28 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: CustomAppBar(
-              isProjectManager: widget.role == 'projectManager' ? true : false,
-              makeAnEntryPage: MaterialProcurement(
-          depoName: widget.depoName,
-          userId: widget.userId,
-        ),
-              showDepoBar: true,
-              toMaterial: true,
+          preferredSize: Size.fromHeight(50),
+          child: CustomAppBar(
+            isProjectManager: widget.role == 'projectManager' ? true : false,
+            makeAnEntryPage: MaterialProcurement(
+              depoName: widget.depoName,
               userId: widget.userId,
-              depoName: widget.depoName ?? '',
-              cityName: widget.cityName,
-              text: 'Material Procurement',
-              haveSummary: false,
-              haveSynced: false,
-              store: () {
-                _showDialog(context);
-                storeData();
-              },
-            )),
+            ),
+            showDepoBar: true,
+            toMaterial: true,
+            userId: widget.userId,
+            depoName: widget.depoName ?? '',
+            cityName: widget.cityName,
+            text: 'Material Procurement',
+            haveSummary: false,
+            haveSynced: false,
+            store: () {
+              _showDialog(context);
+              storeData();
+            },
+          ),
+        ),
+        drawer: NavbarDrawer(role: widget.role),
         body: _isloading
             ? const LoadingPage()
             : Column(children: [

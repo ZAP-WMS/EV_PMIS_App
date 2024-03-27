@@ -15,6 +15,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../views/dailyreport/summary.dart';
+import '../../../widgets/navbar.dart';
 
 class DailyProjectAdmin extends StatefulWidget {
   String? userId;
@@ -82,6 +83,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(

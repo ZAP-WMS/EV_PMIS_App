@@ -21,6 +21,8 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../../widgets/navbar.dart';
+
 class EnergyManagementAdmin extends StatefulWidget {
   // String? userId;
   String? cityName;
@@ -115,6 +117,7 @@ class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
         DateTime.parse(startdate.toString()),
         DateTime.parse(enddate.toString()));
     return Scaffold(
+      drawer: NavbarDrawer(role: widget.role,),
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(

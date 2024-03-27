@@ -71,7 +71,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBar(

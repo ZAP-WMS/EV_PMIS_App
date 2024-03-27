@@ -19,6 +19,7 @@ import '../../../components/Loading_page.dart';
 import '../../../components/loading_pdf.dart';
 import '../../../provider/cities_provider.dart';
 import '../../../widgets/admin_custom_appbar.dart';
+import '../../../widgets/navbar.dart';
 import '../../../widgets/nodata_available.dart';
 
 class SafetySummary extends StatefulWidget {
@@ -62,6 +63,7 @@ class _SafetySummaryState extends State<SafetySummary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavbarDrawer(role: widget.role,),
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(

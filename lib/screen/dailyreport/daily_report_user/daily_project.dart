@@ -25,8 +25,7 @@ class DailyProject extends StatefulWidget {
   String? depoName;
   String? role;
 
-  DailyProject({super.key, this.cityName, required this.depoName,
-  this.role});
+  DailyProject({super.key, this.cityName, required this.depoName, this.role});
 
   @override
   State<DailyProject> createState() => _DailyProjectState();
@@ -74,7 +73,7 @@ class _DailyProjectState extends State<DailyProject> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
           // ignore: sort_child_properties_last
           child: CustomAppBarBackDate(

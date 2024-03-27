@@ -49,7 +49,7 @@ class _ClosureTableState extends State<ClosureTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      // drawer:  NavbarDrawer(role: widget.role!),
       appBar: CustomAppBar(
         depoName: '${widget.depoName}',
         title: 'Closure Checklist',

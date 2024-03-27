@@ -74,7 +74,7 @@ class _ClosureFieldState extends State<ClosureField> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const NavbarDrawer(),
+        drawer: NavbarDrawer(role: widget.role,),
         appBar: CustomAppBar(
           depoName: '${widget.depoName}',
           title: 'Closure Report',

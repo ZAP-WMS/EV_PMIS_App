@@ -222,7 +222,7 @@ class _DetailedEngtState extends State<DetailedEng>
             ],
           ),
         ),
-        drawer: const NavbarDrawer(),
+        drawer: NavbarDrawer(role: widget.role,),
         body: TabBarView(children: [
           tabScreen(),
           tabScreen1(),

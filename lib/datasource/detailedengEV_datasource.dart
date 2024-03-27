@@ -459,10 +459,9 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                   .single,
                                                           showActionButtons:
                                                               true,
-                                                          onCancel: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
+                                                              onCancel: () {
+                                                        Navigator.pop(context);
+                                                      },
                                                           onSubmit: ((value) {
                                                             date = DateTime
                                                                 .parse(value
@@ -568,10 +567,9 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                           .single,
                                                                   showActionButtons:
                                                                       true,
-                                                                  onCancel: () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
+                                                                      onCancel: () {
+                                                        Navigator.pop(context);
+                                                      },
                                                                   onSubmit:
                                                                       ((value) {
                                                                     date = DateTime
@@ -667,10 +665,9 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
                                                                               true,
-                                                                          onCancel:
-                                                                              () {
-                                                                            Navigator.pop(context);
-                                                                          },
+                                                                              onCancel: () {
+                                                        Navigator.pop(context);
+                                                      },
                                                                           onSubmit:
                                                                               ((value) {
                                                                             date =
@@ -856,8 +853,7 @@ class DetailedEngSourceEV extends DataGridSource {
                                         : Text(
                                             dataGridCell.value.toString(),
                                             textAlign: TextAlign.center,
-                                            style:
-                                                const TextStyle(fontSize: 12),
+                                            style: const TextStyle(fontSize: 12),
                                           ),
       );
     }).toList());

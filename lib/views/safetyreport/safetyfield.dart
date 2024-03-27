@@ -170,7 +170,7 @@ class _SafetyFieldState extends State<SafetyField> {
           },
         ),
       ),
-      drawer: const NavbarDrawer(),
+      drawer:  NavbarDrawer(role: widget.role,),
       body: isLoading
           ? const LoadingPage()
           : StreamBuilder(

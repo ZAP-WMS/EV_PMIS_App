@@ -6,6 +6,7 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../components/Loading_page.dart';
 import '../../../style.dart';
 import '../../../widgets/custom_appbar.dart';
+import '../../../widgets/navbar.dart';
 import 'jmr_field_admin.dart';
 
 class Jmr extends StatefulWidget {
@@ -50,6 +51,7 @@ class _JmrState extends State<Jmr> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
+          drawer: NavbarDrawer(role: widget.role,),
           appBar: AppBar(
             centerTitle: true,
             title: Column(

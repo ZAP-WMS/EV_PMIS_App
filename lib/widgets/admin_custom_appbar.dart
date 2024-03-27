@@ -86,8 +86,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
+    return  AppBar(
             centerTitle: true,
             backgroundColor: blue,
             title: Column(
@@ -272,7 +271,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           Tab(text: "Shed Lighting Drawings & Specification"),
                         ],
                       )
-                    : widget.tabBar));
+                    : widget.tabBar);
   }
 
   Future<bool> onWillPop(BuildContext context) async {

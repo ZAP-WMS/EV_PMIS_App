@@ -187,15 +187,25 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Montserrat',
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: Colors.white,
-            dividerColor: const Color.fromARGB(255, 2, 42, 75,),
+            dividerColor: const Color.fromARGB(
+              255,
+              2,
+              42,
+              75,
+            ),
             inputDecorationTheme: InputDecorationTheme(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
-                borderSide: BorderSide(color: blue,),
+                borderSide: BorderSide(
+                  color: blue,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(3),
-                  borderSide: BorderSide(color: blue,),),
+                borderRadius: BorderRadius.circular(3),
+                borderSide: BorderSide(
+                  color: blue,
+                ),
+              ),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               focusColor: black,
               // labelStyle: Colors.b
