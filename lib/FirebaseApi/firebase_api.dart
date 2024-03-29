@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -30,12 +31,23 @@ class FirebaseApi extends ChangeNotifier {
   }
 
   static Future downloadFile(Reference ref) async {
-    final dir = (await DownloadsPath.downloadsDirectory())?.path;
-    final file = File('$dir/${ref.name}');
-    await ref.writeToFile(file);
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      final dir = (await DownloadsPath.downloadsDirectory())?.path;
+      final file = File('$dir/${ref.name}');
+      await ref.writeToFile(file);
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails(
+              'repeating channel id', 'repeating channel name',
+              channelDescription: 'repeating description');
+      const NotificationDetails notificationDetails =
+          NotificationDetails(android: androidNotificationDetails);
+      await FlutterLocalNotificationsPlugin().show(
+          0, 'File Downloaded', '', notificationDetails,
+          payload: file.path);
+    }
   }
 
- energydefaultKeyEventsField(
+  energydefaultKeyEventsField(
       String collectionName,
       String cityName,
       String collectionName2,

@@ -9,7 +9,6 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../viewmodels/material_procurement.dart';
 
-
 class MaterialDatasource extends DataGridSource {
   BuildContext mainContext;
   String? cityName;
@@ -87,6 +86,9 @@ class MaterialDatasource extends DataGridSource {
                                           // final List<PickerDateRange>
                                           //     selectedRanges = args.value;
                                         }
+                                      },
+                                      onCancel: () {
+                                        Navigator.pop(context);
                                       },
                                       selectionMode:
                                           DateRangePickerSelectionMode.single,

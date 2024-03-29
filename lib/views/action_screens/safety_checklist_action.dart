@@ -56,7 +56,7 @@ class _SafetyChecklistActionState extends State<SafetyChecklistAction> {
           cityName: widget.cityName,
           depoName: widget.depoName,
         );
-        break;
+        break; 
     }
 
     return selectedUi;

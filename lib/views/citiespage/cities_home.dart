@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,8 @@ import 'cities.dart';
 import 'depot.dart';
 
 class CitiesHome extends StatefulWidget {
-  String? role;
   String? userId;
+  String? role;
   CitiesHome({super.key, this.role, this.userId});
 
   @override
@@ -17,14 +18,16 @@ class CitiesHome extends StatefulWidget {
 }
 
 class _CitiesHomeState extends State<CitiesHome> {
-  String? role;
+  String role = '';
+  bool isLoading = true;
   SharedPreferences? sharedPreferences;
 
   @override
   void initState() {
     getUserRole().whenComplete(() async {
       sharedPreferences = await SharedPreferences.getInstance();
-      role = sharedPreferences!.getString('role');
+      role = sharedPreferences!.getString('role') ?? '';
+      isLoading = false;
       setState(() {});
     });
     super.initState();
@@ -42,14 +45,16 @@ class _CitiesHomeState extends State<CitiesHome> {
         isSync: false,
         // haveupload: true,
       ),
-      body: Row(
-        children: [
-          CitiesPage(role: role!),
-          DepotPage(
-            role: role,
-          ),
-        ],
-      ),
+      body: isLoading
+          ? const LoadingPage()
+          : Row(
+              children: [
+                CitiesPage(role: role),
+                DepotPage(
+                  role: role,
+                ),
+              ],
+            ),
     );
   }
 

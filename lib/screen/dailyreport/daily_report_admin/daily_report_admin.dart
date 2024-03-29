@@ -447,7 +447,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
     await FirebaseFirestore.instance
         .collection('DailyProject3')
         .doc(widget.depoName!)
-        .collection(DateFormat.yMMMMd().format(DateTime.now()))
+        .collection(DateFormat.yMMMMd().format(DateTime.now(),),)
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -541,7 +541,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    {
+    
       final documentDirectory =
           (await DownloadsPath.downloadsDirectory())?.path;
       final file = File('$documentDirectory/$fileName');
@@ -563,7 +563,6 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
         return file;
       }
       return File('');
-    }
     
   }
 

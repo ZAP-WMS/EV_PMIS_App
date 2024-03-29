@@ -48,7 +48,7 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
     if ((widget.title == 'DetailedEngRFC' ||
             widget.title == 'DetailedEngEV' ||
             widget.title == 'DetailedEngShed') &&
-        (widget.role == 'admin')) {
+        (widget.role == 'admin' || widget.role == 'projectManager')) {
       getrefdata().whenComplete(() {
         for (int i = 0; i < drawingRef.length; i++) {
           for (int j = 0; j < drawingfullpath.length; j++) {
@@ -105,14 +105,15 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: CustomAppBar(
-            depoName: widget.depoName ?? '',
-            title: 'File List',
-            height: 50,
-            isSync: false,
-            isCentered: true,
-          ),),
+        preferredSize: const Size.fromHeight(50),
+        child: CustomAppBar(
+          depoName: widget.depoName ?? '',
+          title: 'File List',
+          height: 50,
+          isSync: false,
+          isCentered: true,
+        ),
+      ),
       //  AppBar(
       //   title: const Text('File List'),
       //   backgroundColor: blue,
