@@ -82,17 +82,19 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
           : widget.title == 'ClosureReport'
               ? FirebaseApi.listAll(
                   '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
-              : widget.title == '/BOQSurvey' ||
-                      widget.title == '/BOQElectrical' ||
-                      widget.title == '/BOQCivil' ||
-                      widget.title == 'Key Events'
+              : widget.title == 'Key Events' || widget.title == 'Overview Page'
                   ? FirebaseApi.listAll(
-                      '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
-                  : widget.title == 'Depot Insights'
+                      '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}')
+                  : widget.title == '/BOQSurvey' ||
+                          widget.title == '/BOQElectrical' ||
+                          widget.title == '/BOQCivil'
                       ? FirebaseApi.listAll(
                           '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
-                      : FirebaseApi.listAll(
-                          '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
+                      : widget.title == 'Depot Insights'
+                          ? FirebaseApi.listAll(
+                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
+                          : FirebaseApi.listAll(
+                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
       _isload = false;
       setState(() {});
     }
@@ -105,14 +107,15 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: CustomAppBar(
-            depoName: widget.depoName ?? '',
-            title: 'File List',
-            height: 50,
-            isSync: false,
-            isCentered: true,
-          ),),
+        preferredSize: const Size.fromHeight(50),
+        child: CustomAppBar(
+          depoName: widget.depoName ?? '',
+          title: 'File List',
+          height: 50,
+          isSync: false,
+          isCentered: true,
+        ),
+      ),
       //  AppBar(
       //   title: const Text('File List'),
       //   backgroundColor: blue,

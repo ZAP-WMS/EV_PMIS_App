@@ -231,59 +231,58 @@ class _CivilFieldState extends State<CivilField> {
 
     qualitylisttable2 = checkTable ? backfilling_getData() : data;
     _qualityBackFillingDataSource = QualityBackFillingDataSource(
-      qualitylisttable2,
-      cityName!,
-      widget.depoName!,
-    );
+        qualitylisttable2, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable3 = checkTable ? massonary_getData() : data;
     _qualityMassonaryDataSource = QualityMassonaryDataSource(
-      qualitylisttable3,
-      cityName!,
-      widget.depoName!,
-    );
+        qualitylisttable3, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable4 = checkTable ? glazzing_getData() : data;
     _qualityGlazzingDataSource = QualityGlazzingDataSource(
-      qualitylisttable4,
-      cityName!,
-      widget.depoName!,
-    );
+        qualitylisttable4, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable5 = checkTable ? ceilling_getData() : data;
     _qualityCeillingDataSource = QualityCeillingDataSource(
         qualitylisttable5, cityName!, widget.depoName!);
+
     qualitylisttable6 = checkTable ? florring_getData() : data;
     _qualityflooringDataSource = QualityflooringDataSource(
-      qualitylisttable6,
-      cityName!,
-      widget.depoName!,
-    );
+        qualitylisttable6, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable7 = checkTable ? inspection_getData() : data;
     _qualityInspectionDataSource = QualityInspectionDataSource(
         qualitylisttable7, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
     _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
         qualitylisttable8, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable9 = checkTable ? painting_getData() : data;
     _qualityPaintingDataSource = QualityPaintingDataSource(
         qualitylisttable9, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable10 = checkTable ? paving_getData() : data;
     _qualityPavingDataSource = QualityPavingDataSource(
         qualitylisttable10, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable11 = checkTable ? roofing_getData() : data;
     _qualityRoofingDataSource = QualityRoofingDataSource(
         qualitylisttable11, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     qualitylisttable12 = checkTable ? proofing_getData() : data;
     _qualityProofingDataSource = QualityProofingDataSource(
         qualitylisttable12, cityName!, widget.depoName!);
     _dataGridController = DataGridController();
+
     return Scaffold(
       drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
@@ -367,18 +366,18 @@ class _CivilFieldState extends State<CivilField> {
       ),
       body: isLoading
           ? const LoadingPage()
-          : StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('CivilChecklistField')
-                  .doc('${widget.depoName}')
-                  .collection('userId')
-                  .doc(userId)
-                  .collection(widget.fieldclnName)
-                  .doc(selectedDate)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                return SingleChildScrollView(
-                  child: Column(
+          : SingleChildScrollView(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('CivilChecklistField')
+                    .doc('${widget.depoName}')
+                    .collection('userId')
+                    .doc(userId)
+                    .collection(widget.fieldclnName)
+                    .doc(selectedDate)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  return Column(
                     children: [
                       safetyField(projectController, 'Project Name',
                           TextInputAction.next),
@@ -391,16 +390,10 @@ class _CivilFieldState extends State<CivilField> {
                       safetyField(dateController, 'Date', TextInputAction.next),
                       safetyField(componentController,
                           'Component of the Structure', TextInputAction.next),
-                      safetyField(
-                        gridController,
-                        'Grid / Axis Level',
-                        TextInputAction.next,
-                      ),
-                      safetyField(
-                        fillingController,
-                        'Type of Filling',
-                        TextInputAction.done,
-                      ),
+                      safetyField(gridController, 'Grid / Axis Level',
+                          TextInputAction.next),
+                      safetyField(fillingController, 'Type of Filling',
+                          TextInputAction.done),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: StreamBuilder(
@@ -731,9 +724,9 @@ class _CivilFieldState extends State<CivilField> {
                         ),
                       ),
                     ],
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
       // floatingActionButton: FloatingActionButton.extended(
       //   onPressed: () {
