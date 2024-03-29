@@ -280,27 +280,24 @@ class _SafetySummaryState extends State<SafetySummary> {
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    if (await Permission.manageExternalStorage.request().isGranted) {
-      final documentDirectory =
-          (await DownloadsPath.downloadsDirectory())?.path;
-      final file = File('$documentDirectory/$fileName');
+    final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
+    final file = File('$documentDirectory/$fileName');
 
-      int counter = 1;
-      String newFilePath = file.path;
+    int counter = 1;
+    String newFilePath = file.path;
+    pathToOpenFile = newFilePath.toString();
+    if (await File(newFilePath).exists()) {
+      final baseName = fileName.split('.').first;
+      final extension = fileName.split('.').last;
+      newFilePath =
+          '$documentDirectory/$baseName-${counter.toString()}.$extension';
+      counter++;
       pathToOpenFile = newFilePath.toString();
-      if (await File(newFilePath).exists()) {
-        final baseName = fileName.split('.').first;
-        final extension = fileName.split('.').last;
-        newFilePath =
-            '$documentDirectory/$baseName-${counter.toString()}.$extension';
-        counter++;
-        pathToOpenFile = newFilePath.toString();
-        await file.copy(newFilePath);
-        counter++;
-      } else {
-        await file.writeAsBytes(pdfData);
-        return file;
-      }
+      await file.copy(newFilePath);
+      counter++;
+    } else {
+      await file.writeAsBytes(pdfData);
+      return file;
     }
 
     return File('');

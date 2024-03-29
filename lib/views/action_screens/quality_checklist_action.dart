@@ -47,7 +47,7 @@ class _QualityChecklistActionState extends State<QualityChecklistAction> {
         selectedUi = QualityHomeAdmin(
             role: widget.role!,
             cityName: widget.cityName,userId: widget.userId,
-            depoName: widget.depoName);
+            depoName: widget.depoName);    
         break;
       case 'projectManager':
         selectedUi = QualityHomeAdmin(

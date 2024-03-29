@@ -124,15 +124,32 @@ class JmrDataSource extends DataGridSource {
       _JMRModels[dataRowIndex].Uom = newCellValue;
     } else if (column.columnName == 'Rate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<double>(columnName: 'Rate', value: newCellValue);
+          DataGridCell<double>(
+              columnName: 'Rate',
+              value: double.parse(
+                newCellValue.toString().isEmpty
+                    ? '0.0'
+                    : newCellValue.toString(),
+              ),);
       _JMRModels[dataRowIndex].rate = newCellValue;
     } else if (column.columnName == 'TotalQty') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'TotalQty', value: newCellValue);
+          DataGridCell<int>(
+        columnName: 'TotalQty',
+        value: int.parse(
+          newCellValue.toString().isEmpty ? '0' : newCellValue.toString(),
+        ),
+      );
       _JMRModels[dataRowIndex].TotalQty = newCellValue;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<double>(columnName: 'TotalAmount', value: newCellValue);
+          DataGridCell<double>(
+              columnName: 'TotalAmount',
+              value: double.parse(
+                newCellValue.toString().isEmpty
+                    ? '0.0'
+                    : newCellValue.toString(),
+              ));
       _JMRModels[dataRowIndex].TotalAmount = newCellValue;
     }
   }

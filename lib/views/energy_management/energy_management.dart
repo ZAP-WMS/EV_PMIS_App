@@ -46,7 +46,6 @@ class _EnergyManagementState extends State<EnergyManagement> {
   List<dynamic> tabledata2 = [];
   int currentMonth = DateTime.now().month;
   final double candleWidth = 8;
-  EnergyProvider? _energyProvider;
   final List<dynamic> timeIntervalList = [];
   String monthName = DateFormat('MMMM').format(DateTime.now());
   dynamic alldata;
@@ -54,7 +53,6 @@ class _EnergyManagementState extends State<EnergyManagement> {
   @override
   void initState() {
     getAssignedDepots().whenComplete(() {
-      _energyProvider = Provider.of<EnergyProvider>(context, listen: false);
       String monthName = DateFormat('MMMM').format(DateTime.now());
       _stream = FirebaseFirestore.instance
           .collection('EnergyManagementTable')
@@ -85,18 +83,16 @@ class _EnergyManagementState extends State<EnergyManagement> {
 
   @override
   Widget build(BuildContext context) {
-    _energyProvider!
-        .fetchGraphData(widget.cityName!, widget.depoName!, widget.userId);
+    final _energyProvider = Provider.of<EnergyProvider>(context, listen: false);
+    _energyProvider.fetchGraphData(
+        widget.cityName!, widget.depoName!, widget.userId);
     return Scaffold(
       appBar: PreferredSize(
-        // ignore: sort_child_properties_last
+        preferredSize: const Size.fromHeight(
+          50,
+        ),
         child: CustomAppBarBackDate(
           depoName: widget.depoName,
-          // showDepoBar: true,
-          // toOverview: true,
-          // cityName: widget.cityName,
-          // depoName: widget.depoName,
-          // userId: userId,
           text: 'Depot Energy Management',
           haveSummary: true,
           onTap: () => Navigator.push(
@@ -146,9 +142,6 @@ class _EnergyManagementState extends State<EnergyManagement> {
 
             storeData();
           },
-        ),
-        preferredSize: const Size.fromHeight(
-          50,
         ),
       ),
       body: _isloading
@@ -625,9 +618,10 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                         .dataGridRows.length *
                                     110,
                                 child: BarChart(
-                                  swapAnimationCurve: Curves.linear,
-                                  swapAnimationDuration:
-                                      const Duration(milliseconds: 1000),
+                                  swapAnimationCurve: Curves.decelerate,
+                                  swapAnimationDuration: const Duration(
+                                    milliseconds: 1000,
+                                  ),
                                   BarChartData(
                                     backgroundColor: white,
                                     barTouchData: BarTouchData(
@@ -646,8 +640,8 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                           showTitles: true,
                                           getTitlesWidget: (data1, meta) {
                                             return Text(
-                                              value.intervalData[
-                                                      data1.toInt()] ??
+                                              value.intervalData[data1.toInt()]
+                                                      .toString() ??
                                                   '',
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -684,7 +678,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                         bottom: BorderSide(),
                                       ),
                                     ),
-                                    maxY: 10000,
+                                    maxY: value.maxEnergyConsumed + 1000.0,
                                     barGroups: barChartGroupData(
                                       value.energyData,
                                     ),
@@ -781,21 +775,26 @@ class _EnergyManagementState extends State<EnergyManagement> {
         showingTooltipIndicators: [0],
         barRods: [
           BarChartRodData(
-              borderSide: BorderSide(color: white),
-              backDrawRodData: BackgroundBarChartRodData(
-                toY: 0,
-                fromY: 0,
-                show: true,
-              ),
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 16, 81, 231),
-                  Color.fromARGB(255, 190, 207, 252)
-                ],
-              ),
-              width: candleWidth,
-              borderRadius: BorderRadius.circular(2),
-              toY: double.parse(data[index].toString())),
+            borderSide: BorderSide(
+              color: white,
+            ),
+            backDrawRodData: BackgroundBarChartRodData(
+              toY: 0,
+              fromY: 0,
+              show: true,
+            ),
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromARGB(255, 16, 81, 231),
+                Color.fromARGB(255, 190, 207, 252)
+              ],
+            ),
+            width: candleWidth,
+            borderRadius: BorderRadius.circular(2),
+            toY: double.parse(
+              data[index].toString(),
+            ),
+          ),
         ],
       );
     }));

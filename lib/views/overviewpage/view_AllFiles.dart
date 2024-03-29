@@ -48,7 +48,7 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
     if ((widget.title == 'DetailedEngRFC' ||
             widget.title == 'DetailedEngEV' ||
             widget.title == 'DetailedEngShed') &&
-        (widget.role == 'admin')) {
+        (widget.role == 'admin' || widget.role == 'projectManager')) {
       getrefdata().whenComplete(() {
         for (int i = 0; i < drawingRef.length; i++) {
           for (int j = 0; j < drawingfullpath.length; j++) {

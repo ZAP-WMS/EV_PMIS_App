@@ -173,12 +173,14 @@ class DetailedEngSourceShed extends DataGridSource {
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
-                                      role: role,
-                                      title: 'DetailedEngShed',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      userId: userId,
-                                      docId: row.getCells()[4].value.toString())
+                                        role: role,
+                                        title: 'DetailedEngShed',
+                                        cityName: cityName,
+                                        depoName: depoName,
+                                        userId: userId,
+                                        docId:
+                                            '${row.getCells()[4].value.toString()}/${row.getCells()[0].value.toString()}',
+                                      )
                                   // ViewFile()
                                   // UploadDocument(
                                   //     title: 'DetailedEngRFC',
@@ -186,23 +188,6 @@ class DetailedEngSourceShed extends DataGridSource {
                                   //     depoName: depoName,
                                   //     activity: '${row.getCells()[1].value.toString()}'),
                                   ));
-                              // showDialog(
-                              //     context: context,
-                              //     builder: (context) => AlertDialog(
-                              //         content: SizedBox(
-                              //             height: 100,
-                              //             child: Column(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.spaceBetween,
-                              //               children: [
-                              //                 Text(
-                              //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                              //               ],
-                              //             ))));
                             },
                             child: const Text(
                               'View',

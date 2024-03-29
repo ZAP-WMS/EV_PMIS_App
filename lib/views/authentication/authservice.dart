@@ -55,7 +55,7 @@ class AuthService {
     return true;
   }
 
-    Future<String> getCurrentCompanyName() async {
+  Future<String> getCurrentCompanyName() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final String data = sharedPreferences.getString('companyName').toString();
     return data;
@@ -71,14 +71,14 @@ class AuthService {
     await sharedPreferences.setString('employeeId', employeeId);
   }
 
-   Future storeUserRole(String role) async {
+  Future storeUserRole(String role) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('role', role);
   }
 
   Future<String> getUserRole() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    final String data = sharedPreferences.getString('role').toString();
+    final String data = sharedPreferences.getString('role') ?? "";
     return data;
   }
 

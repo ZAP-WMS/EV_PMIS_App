@@ -29,6 +29,8 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../views/dailyreport/summary.dart';
 import '../../../widgets/navbar.dart';
 
+List<int> globalRowIndex = [];
+
 class DailyProjectAdmin extends StatefulWidget {
   String? userId;
   String? cityName;
@@ -445,7 +447,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
     await FirebaseFirestore.instance
         .collection('DailyProject3')
         .doc(widget.depoName!)
-        .collection(DateFormat.yMMMMd().format(DateTime.now()))
+        .collection(DateFormat.yMMMMd().format(DateTime.now(),),)
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -488,9 +490,10 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
             .then((value) {
           if (value.data() != null) {
             for (int j = 0; j < value.data()!['data'].length; j++) {
+              globalRowIndex.add(i + 1);
+              globalItemLengthList.add(0);
               dailyProject.add(
                   DailyProjectModelAdmin.fromjson(value.data()!['data'][j]));
-              print(value.data()!['data'][j]['Date']);
             }
           }
         });
@@ -538,31 +541,29 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    {
-      if (await Permission.manageExternalStorage.request().isGranted) {
-        final documentDirectory =
-            (await DownloadsPath.downloadsDirectory())?.path;
-        final file = File('$documentDirectory/$fileName');
+    
+      final documentDirectory =
+          (await DownloadsPath.downloadsDirectory())?.path;
+      final file = File('$documentDirectory/$fileName');
 
-        int counter = 1;
-        String newFilePath = file.path;
+      int counter = 1;
+      String newFilePath = file.path;
+      pathToOpenFile = newFilePath.toString();
+      if (await File(newFilePath).exists()) {
+        final baseName = fileName.split('.').first;
+        final extension = fileName.split('.').last;
+        newFilePath =
+            '$documentDirectory/$baseName-${counter.toString()}.$extension';
+        counter++;
         pathToOpenFile = newFilePath.toString();
-        if (await File(newFilePath).exists()) {
-          final baseName = fileName.split('.').first;
-          final extension = fileName.split('.').last;
-          newFilePath =
-              '$documentDirectory/$baseName-${counter.toString()}.$extension';
-          counter++;
-          pathToOpenFile = newFilePath.toString();
-          await file.copy(newFilePath);
-          counter++;
-        } else {
-          await file.writeAsBytes(pdfData);
-          return file;
-        }
+        await file.copy(newFilePath);
+        counter++;
+      } else {
+        await file.writeAsBytes(pdfData);
+        return file;
       }
       return File('');
-    }
+    
   }
 
   Future<Uint8List> _generateDailyPDF() async {

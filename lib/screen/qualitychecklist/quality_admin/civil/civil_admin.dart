@@ -265,62 +265,59 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    if (await Permission.storage.request().isGranted) {
-      final documentDirectory =
-          (await DownloadsPath.downloadsDirectory())?.path;
-      final file = File('$documentDirectory/$fileName');
+    // if (await Permission.storage.request().isGranted) {
+    final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
+    final file = File('$documentDirectory/$fileName');
 
-      int counter = 1;
-      String newFilePath = file.path;
+    int counter = 1;
+    String newFilePath = file.path;
+    pathTpoOpenFile = newFilePath;
+
+    if (await File(newFilePath).exists()) {
+      final baseName = fileName.split('.').first;
+      final extension = fileName.split('.').last;
+      newFilePath =
+          '$documentDirectory/$baseName-${counter.toString()}.$extension';
+      counter++;
+
+      await file.copy(newFilePath);
       pathTpoOpenFile = newFilePath;
-
-      if (await File(newFilePath).exists()) {
-        final baseName = fileName.split('.').first;
-        final extension = fileName.split('.').last;
-        newFilePath =
-            '$documentDirectory/$baseName-${counter.toString()}.$extension';
-        counter++;
-
-        await file.copy(newFilePath);
-        pathTpoOpenFile = newFilePath;
-        counter++;
-      } else {
-        await file.writeAsBytes(pdfData);
-        return file;
-      }
+      counter++;
+    } else {
+      await file.writeAsBytes(pdfData);
+      return file;
     }
+    // }
     return File('');
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    if (await Permission.manageExternalStorage.request().isGranted) {
-      final pr = ProgressDialog(context);
-      pr.style(
-          progressWidgetAlignment: Alignment.center,
-          message: 'Downloading file...',
-          borderRadius: 10.0,
-          backgroundColor: Colors.white,
-          progressWidget: const LoadingPdf(),
-          elevation: 10.0,
-          insetAnimCurve: Curves.easeInOut,
-          maxProgress: 100.0,
-          progressTextStyle: const TextStyle(
-              color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
-          messageTextStyle: const TextStyle(
-              color: Colors.black,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600));
+    // if (await Permission.manageExternalStorage.request().isGranted) {
+    final pr = ProgressDialog(context);
+    pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600));
 
-      pr.show();
+    pr.show();
 
-      final pdfData = await _generatePDF(userId, date, decision);
+    final pdfData = await _generatePDF(userId, date, decision);
 
-      await pr.hide();
+    await pr.hide();
 
-      var fileName = 'Civil_Checklist_$userId.pdf';
-      final savedPDFFile = await savePDFToFile(pdfData, fileName);
-      print('File Created - ${savedPDFFile.path}');
-    }
+    var fileName = 'Civil_Checklist_$userId.pdf';
+    final savedPDFFile = await savePDFToFile(pdfData, fileName);
+    print('File Created - ${savedPDFFile.path}');
+    // }
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
             'repeating channel id', 'repeating channel name',

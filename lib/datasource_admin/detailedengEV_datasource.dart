@@ -178,7 +178,8 @@ class DetailedEngSourceEV extends DataGridSource {
                                       cityName: cityName,
                                       depoName: depoName,
                                       userId: userId,
-                                      docId: row.getCells()[4].value.toString())
+                                      docId:
+                                          '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}')
                                   // ViewFile()
                                   // UploadDocument(
                                   //     title: 'DetailedEngRFC',
