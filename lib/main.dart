@@ -176,8 +176,8 @@ class _MyAppState extends State<MyApp> {
           // initialRoute: '/splash',
           initialRoute:
               //'/user-list',
-              "/login-page",
-          // '/splash-screen',
+              // "/login-page",
+              '/splash-screen',
           // all the pages of routes are declared here
           onGenerateRoute: RouteGenerator.generateRoute,
           debugShowCheckedModeBanner: false,

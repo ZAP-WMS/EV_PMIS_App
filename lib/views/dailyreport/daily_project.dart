@@ -67,9 +67,10 @@ class _DailyProjectState extends State<DailyProject> {
       _dailyDataSource = DailyDataSource(dailyproject, context,
           widget.cityName!, widget.depoName!, userId, selectedDate!);
       _dataGridController = DataGridController();
-    });
+    },);
 
     super.initState();
+    
   }
 
   @override
@@ -511,7 +512,6 @@ class _DailyProjectState extends State<DailyProject> {
                     activityDetails: "",
                     progress: '',
                     status: ''));
-                print(_dailyDataSource.rows.length + 1);
                 _dataGridController = DataGridController();
 
                 _dailyDataSource.buildDataGridRows();

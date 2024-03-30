@@ -73,7 +73,7 @@ class CheckboxProvider extends ChangeNotifier {
               .doc(doc['username'])
               .get()
               .then((value) {
-            allId.add(value.data()!['Email']);
+            allId.add(value.data()?['Email'] ?? '');
           });
         }
         defaultToMailData = allId;

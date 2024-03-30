@@ -89,7 +89,6 @@ class DepotOverviewDatasource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: (dataGridCell.columnName == 'Add')
               ? ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: blue),

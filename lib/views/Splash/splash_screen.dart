@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,6 @@ class SplashScreenState extends State<SplashScreen>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   dynamic userId = '';
-  bool user = false;
-  String role = '';
   bool _isNotificationPage = false;
   late SharedPreferences sharedPreferences;
 
@@ -168,26 +167,7 @@ class SplashScreenState extends State<SplashScreen>
         });
       }
     });
-    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //   PushNotification notification = PushNotification(
-    //     title: message.notification!.title ?? '',
-    //     body: message.notification!.body ?? '',
-    //     dataTitle: message.data['title'] ?? '',
-    //     datBody: message.data['body'] ?? '',
-    //   );
 
-    //   Navigator.pushReplacementNamed(
-    //     context,
-    //     '/user-list',
-    //   );
-
-    //   // if (mounted) {
-    //   //   setState(() {
-    //   //     _notificationInfo = notification;
-    //   //     _totalNotification++;
-    //   //   });
-    //   // }
-    // });
     super.initState();
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
@@ -205,25 +185,8 @@ class SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  navigatePage() async {
-    if (!_isNotificationPage) {
-      // Add a delay before navigating to the main page
-      await Future.delayed(const Duration(milliseconds: 2000));
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        user ? '/splitDashboard' : '/login-page',
-        arguments: role,
-        (route) => false,
-      );
-    } else {
-      Navigator.pushNamed(context, '/user-list');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    navigatePage();
     return Scaffold(
       backgroundColor: Colors.white,
       body: FadeTransition(
@@ -260,48 +223,34 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   void _getCurrentUser() async {
+    bool user = false;
+
     sharedPreferences = await SharedPreferences.getInstance();
     try {
       if (sharedPreferences.getString('employeeId') != null) {
-        if (mounted) {
-          setState(() {
-            userId = sharedPreferences.getString('employeeId');
-            user = true;
-          });
-        }
-        await checkRole(userId);
-        StoredDataPreferences.saveString('role', role);
+        userId = sharedPreferences.getString('employeeId');
+        user = true;
       }
-    } catch (e) {
-      user = false;
-    }
-  }
 
-  Future<String> checkRole(String id) async {
-    try {
-      QuerySnapshot checkAdmin = await FirebaseFirestore.instance
-          .collection('Admin')
-          .where('Employee Id', isEqualTo: id)
-          .get();
-
-      if (checkAdmin.docs.isNotEmpty) {
-        role = 'admin';
+      if (!_isNotificationPage) {
+        String role = await AuthService().getUserRole();
+        // Add a delay before navigating to the main page
+        await Future.delayed(
+          const Duration(milliseconds: 1500),
+          () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              user ? '/splitDashboard' : '/login-page',
+              arguments: {"role": role, "userId": userId},
+              (route) => false,
+            );
+          },
+        );
       } else {
-        QuerySnapshot checkUser = await FirebaseFirestore.instance
-            .collection('User')
-            .where('Employee Id', isEqualTo: id)
-            .get();
-
-        if (checkUser.docs.isNotEmpty) {
-          role = 'user';
-        }
+        Navigator.pushNamed(context, '/user-list');
       }
-      print(role);
-
-      return role;
     } catch (e) {
-      print('Error Occured while checking role - $e');
-      return role;
+      print("Error Occured on Spash Screen - $e");
     }
   }
 }

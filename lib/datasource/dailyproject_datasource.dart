@@ -76,6 +76,7 @@ class DailyDataSource extends DataGridSource {
           child: (dataGridCell.columnName == 'view')
               ? ElevatedButton(
                   onPressed: () {
+                    print("View button pressed");
                     Navigator.push(
                         mainContext,
                         MaterialPageRoute(
@@ -142,87 +143,6 @@ class DailyDataSource extends DataGridSource {
                                 Icons.delete,
                                 color: red,
                               ))
-                          // : (dataGridCell.columnName == 'Date')
-                          //     ? Row(
-                          //         children: [
-                          //           IconButton(
-                          //             onPressed: () {
-                          //               showDialog(
-                          //                   context: mainContext,
-                          //                   builder: (context) => AlertDialog(
-                          //                         title: const Text('All Date'),
-                          //                         content: SizedBox(
-                          //                             height: 400,
-                          //                             width: 500,
-                          //                             child: SfDateRangePicker(
-                          //                               view:
-                          //                                   DateRangePickerView
-                          //                                       .month,
-                          //                               showTodayButton: true,
-                          //                               onSelectionChanged:
-                          //                                   (DateRangePickerSelectionChangedArgs
-                          //                                       args) {
-                          //                                 if (args.value
-                          //                                     is PickerDateRange) {
-                          //                                   rangeEndDate = args
-                          //                                       .value.endDate;
-                          //                                 } else {
-                          //                                   final List<
-                          //                                           PickerDateRange>
-                          //                                       selectedRanges =
-                          //                                       args.value;
-                          //                                 }
-                          //                               },
-                          //                               selectionMode:
-                          //                                   DateRangePickerSelectionMode
-                          //                                       .single,
-                          //                               showActionButtons: true,
-                          //                               onSubmit: ((value) {
-                          //                                 date = DateTime.parse(
-                          //                                     value.toString());
-
-                          //                                 final int
-                          //                                     dataRowIndex =
-                          //                                     dataGridRows
-                          //                                         .indexOf(row);
-                          //                                 if (dataRowIndex !=
-                          //                                     null) {
-                          //                                   final int
-                          //                                       dataRowIndex =
-                          //                                       dataGridRows
-                          //                                           .indexOf(
-                          //                                               row);
-                          //                                   dataGridRows[
-                          //                                               dataRowIndex]
-                          //                                           .getCells()[
-                          //                                       1] = DataGridCell<
-                          //                                           String>(
-                          //                                       columnName:
-                          //                                           'Date',
-                          //                                       value: DateFormat(
-                          //                                               'dd-MM-yyyy')
-                          //                                           .format(
-                          //                                               date!));
-                          //                                   _dailyproject[
-                          //                                           dataRowIndex]
-                          //                                       .date = DateFormat(
-                          //                                           'dd-MM-yyyy')
-                          //                                       .format(date!);
-                          //                                   notifyListeners();
-
-                          //                                   Navigator.pop(
-                          //                                       context);
-                          //                                 }
-                          //                               }),
-                          //                             )),
-                          //                       ));
-                          //             },
-                          //             icon: const Icon(Icons.calendar_today),
-                          //           ),
-                          //           Text(dataGridCell.value.toString()),
-                          //         ],
-                          //       )
-
                           : Text(
                               dataGridCell.value.toString(),
                               textAlign: TextAlign.center,

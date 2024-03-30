@@ -165,7 +165,6 @@ class _LoginPageState extends State<LoginPage> {
 
       try {
         isProjectManager = await verifyProjectManager(empIdController.text);
-
         if (isProjectManager == true) {
           QuerySnapshot pmData = await FirebaseFirestore.instance
               .collection('AssignedRole')

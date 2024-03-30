@@ -1276,7 +1276,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                 widget.cityName!,
                                                 widget.depoName!,
                                                 userId,
-                                                monthYear);
+                                                DateFormat.yMMMMd()
+                                                    .format(startdate!));
                                         _dataGridController =
                                             DataGridController();
                                       });
@@ -1765,68 +1766,85 @@ class _ViewSummaryState extends State<ViewSummary> {
       ),
     );
 
-    if (alldata.isNotEmpty) {
-      List<pw.Widget> imageUrls = [];
+    List<pw.Widget> imageUrls = [];
 
-      for (SafetyChecklistModel mapData in safetylisttable) {
-        String selectedDate = DateFormat.yMMMMd().format(startdate!);
-        print(selectedDate);
-        String images_Path =
-            '/SafetyChecklist/${widget.cityName}/${widget.depoName}/$userId/$selectedDate/${mapData.srNo}';
-        print(images_Path);
-        ListResult result =
-            await FirebaseStorage.instance.ref().child(images_Path).listAll();
+    for (SafetyChecklistModel mapData in safetylisttable) {
+      print('Date - ${DateFormat.yMMMMd().format(startdate!)}');
 
-        if (result.items.isNotEmpty) {
-          for (var image in result.items) {
-            String downloadUrl = await image.getDownloadURL();
-            if (image.name.endsWith('.pdf')) {
-              imageUrls.add(
-                pw.Container(
-                  alignment: pw.Alignment.center,
-                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  width: 60,
-                  height: 100,
-                  child: pw.UrlLink(
-                    child: pw.Text(image.name,
-                        style: const pw.TextStyle(color: PdfColors.blue)),
-                    destination: downloadUrl,
-                  ),
-                ),
-              );
-            } else {
-              final myImage = await networkImage(downloadUrl);
-              imageUrls.add(
-                pw.Container(
+      String images_Path =
+          'SafetyChecklist/${widget.cityName}/${widget.depoName}/${widget.userId}/${DateFormat.yMMMMd().format(startdate!)}/${mapData.srNo}';
+
+      ListResult result =
+          await FirebaseStorage.instance.ref().child(images_Path).listAll();
+
+      if (result.items.isNotEmpty) {
+        for (var image in result.items) {
+          String downloadUrl = await image.getDownloadURL();
+          if (image.name.endsWith('.pdf')) {
+            imageUrls.add(
+              pw.Container(
+                alignment: pw.Alignment.center,
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                width: 60,
+                height: 100,
+                child: pw.UrlLink(
+                    child: pw.Text(
+                      image.name,
+                      style: const pw.TextStyle(
+                        color: PdfColors.blue,
+                      ),
+                    ),
+                    destination: downloadUrl),
+              ),
+            );
+          } else {
+            final myImage = await networkImage(
+              downloadUrl,
+            );
+            imageUrls.add(
+              pw.Container(
                   padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
                   width: 60,
                   height: 100,
                   child: pw.Center(
                     child: pw.Image(myImage),
-                  ),
-                ),
-              );
-            }
+                  )),
+            );
           }
-          if (imageUrls.length < 11) {
-            int imageLoop = 11 - imageUrls.length;
-            for (int i = 0; i < imageLoop; i++) {
-              imageUrls.add(
-                pw.Container(
-                    padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 60,
-                    height: 100,
-                    child: pw.Text('')),
-              );
-            }
-          }
-        } else {
-          isImageEmpty = true;
         }
-        result.items.clear();
 
-        //Text Rows of PDF Table
-        rows.add(pw.TableRow(children: [
+        if (imageUrls.length > 4) {
+          int imageLoop = 12 - imageUrls.length;
+          for (int i = 0; i < imageLoop; i++) {
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.Text('')),
+            );
+          }
+        } else if (imageUrls.length < 4) {
+          int imageLoop = 4 - imageUrls.length;
+          for (int i = 0; i < imageLoop; i++) {
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.Text('')),
+            );
+          }
+        }
+      } else {
+        isImageEmpty = true;
+      }
+
+      result.items.clear();
+
+      //Text Rows of PDF Table
+      rows.add(
+        pw.TableRow(children: [
           pw.Container(
               padding: const pw.EdgeInsets.all(3.0),
               child: pw.Center(
@@ -1835,51 +1853,72 @@ class _ViewSummaryState extends State<ViewSummary> {
           pw.Container(
               padding: const pw.EdgeInsets.all(5.0),
               child: pw.Center(
-                  child: pw.Text(mapData.details,
+                  child: pw.Text(mapData.details.toString(),
                       style: const pw.TextStyle(
                         fontSize: 13,
                       )))),
           pw.Container(
               padding: const pw.EdgeInsets.all(2.0),
               child: pw.Center(
-                  child: pw.Text(mapData.status.toString(),
+                  child: pw.Text(mapData.status,
                       style: const pw.TextStyle(fontSize: 13)))),
           pw.Container(
               padding: const pw.EdgeInsets.all(2.0),
               child: pw.Center(
                   child: pw.Text(mapData.remark.toString(),
                       style: const pw.TextStyle(fontSize: 13)))),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[0]),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[1]),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[2]),
-        ]));
+          isImageEmpty
+              ? pw.Container()
+              : pw.Center(
+                  child: imageUrls[0],
+                ),
+          isImageEmpty
+              ? pw.Container()
+              : pw.Center(
+                  child: imageUrls[1],
+                ),
+          isImageEmpty
+              ? pw.Container()
+              : pw.Center(
+                  child: imageUrls[2],
+                ),
+          isImageEmpty
+              ? pw.Container()
+              : pw.Center(
+                  child: imageUrls[3],
+                ),
+        ]),
+      );
 
-        if (imageUrls.isNotEmpty) {
-          //Image Rows of PDF Table
-          rows.add(pw.TableRow(children: [
-            pw.Container(
-                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: pw.Text('')),
-            pw.Container(
-                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                width: 60,
-                height: 100,
-                child: pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                    children: [
-                      imageUrls[3],
-                      imageUrls[4],
-                    ])),
-            imageUrls[5],
-            imageUrls[6],
-            imageUrls[7],
-            imageUrls[8],
-            imageUrls[9],
-            imageUrls[10],
-          ]));
-        }
-        imageUrls.clear();
+      if (imageUrls.length > 4) {
+        //Image Rows of PDF Table
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+            padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: pw.Text(
+              '',
+            ),
+          ),
+          pw.Container(
+              padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+              width: 60,
+              height: 100,
+              child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                  children: [
+                    imageUrls[4],
+                    imageUrls[5],
+                  ])),
+          imageUrls[6],
+          imageUrls[7],
+          imageUrls[8],
+          imageUrls[9],
+          imageUrls[10],
+          imageUrls[11],
+        ]));
       }
+
+      imageUrls.clear();
     }
 
     final pdf = pw.Document(
@@ -2587,27 +2626,21 @@ class _ViewSummaryState extends State<ViewSummary> {
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
     final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
-    final file = File('$documentDirectory/$fileName');
+    File file = File('$documentDirectory/$fileName');
 
     int counter = 1;
     String newFilePath = file.path;
     pathToOpenFile = newFilePath;
 
-    if (await File(newFilePath).exists()) {
-      final baseName = fileName.split('.').first;
-      final extension = fileName.split('.').last;
-      newFilePath =
-          '$documentDirectory/$baseName-${counter.toString()}.$extension';
+    while (await file.exists()) {
+      String newName =
+          '${fileName.substring(0, fileName.lastIndexOf('.'))}-$counter${fileName.substring(fileName.lastIndexOf('.'))}';
+      file = File('$documentDirectory/$newName');
+      pathToOpenFile = file.path;
       counter++;
-      pathToOpenFile = newFilePath;
-      await file.copy(newFilePath);
-      counter++;
-    } else {
-      await file.writeAsBytes(pdfData);
-      return file;
     }
-
-    return File('');
+    await file.writeAsBytes(pdfData);
+    return file;
   }
 
   Future<void> getUserId() async {

@@ -59,6 +59,7 @@ class CustomAlertBox {
                                 await SharedPreferences.getInstance();
                             await prefs.remove('cities');
                             await prefs.remove('role');
+                            await prefs.remove('employeeId');
                             a = true;
                             isExitingApp
                                 ? exit(0)

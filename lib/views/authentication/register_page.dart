@@ -39,13 +39,16 @@ class _RegisterPgeState extends State<RegisterPge> {
                       16,
                     ),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: firstNamecontroller,
                       labeltext: 'First Name',
                       keyboardType: TextInputType.emailAddress,
                       isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(
-                            firstNamecontroller.text, 'First Name is Required',);
+                          firstNamecontroller.text,
+                          'First Name is Required',
+                        );
                       },
                       textInputAction: TextInputAction.next,
                     ),
@@ -53,18 +56,22 @@ class _RegisterPgeState extends State<RegisterPge> {
                       16,
                     ),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: lastNameController,
                       labeltext: 'Last Name',
                       keyboardType: TextInputType.emailAddress,
                       isSuffixIcon: false,
                       validatortext: (value) {
                         return validateField(
-                            lastNameController.text, 'Last Name is Required',);
+                          lastNameController.text,
+                          'Last Name is Required',
+                        );
                       },
                       textInputAction: TextInputAction.next,
                     ),
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: numberController,
                       labeltext: 'Mobile Number',
                       keyboardType: TextInputType.emailAddress,
@@ -76,6 +83,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                     ),
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: emailIdController,
                       labeltext: 'Email ID',
                       keyboardType: TextInputType.emailAddress,
@@ -87,6 +95,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                     ),
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: designationController,
                       labeltext: 'Designation',
                       keyboardType: TextInputType.text,
@@ -98,6 +107,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                     ),
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: departmentController,
                       labeltext: 'Department',
                       keyboardType: TextInputType.text,
@@ -110,6 +120,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                     ),
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: passwordController,
                       labeltext: 'Password',
                       validatortext: (value) {
@@ -121,6 +132,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                     ),
                     _space(16),
                     CustomTextField(
+                      isFieldEditable: true,
                       controller: confController,
                       labeltext: 'Confirm Password',
                       validatortext: (value) {
@@ -139,7 +151,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                             onPressed: () {
                               register();
                             },
-                            child: const Text('Register'))),
+                            child: const Text('Register',),),),
                     _space(16),
                     Image.asset(
                       'assets/Tata-Power.jpeg',

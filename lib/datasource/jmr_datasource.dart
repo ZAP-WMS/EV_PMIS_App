@@ -99,7 +99,8 @@ class JmrDataSource extends DataGridSource {
     }
     if (column.columnName == 'srNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'srNo', value: newCellValue);
+          DataGridCell<int>(
+              columnName: 'srNo', value: int.parse(newCellValue.toString()));
       _JMRModels[dataRowIndex].srNo = newCellValue as int;
     } else if (column.columnName == 'Description') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -125,12 +126,11 @@ class JmrDataSource extends DataGridSource {
     } else if (column.columnName == 'Rate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<double>(
-              columnName: 'Rate',
-              value: double.parse(
-                newCellValue.toString().isEmpty
-                    ? '0.0'
-                    : newCellValue.toString(),
-              ),);
+        columnName: 'Rate',
+        value: double.parse(
+          newCellValue.toString().isEmpty ? '0.0' : newCellValue.toString(),
+        ),
+      );
       _JMRModels[dataRowIndex].rate = newCellValue;
     } else if (column.columnName == 'TotalQty') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =

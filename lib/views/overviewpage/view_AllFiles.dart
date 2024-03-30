@@ -125,7 +125,7 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
-                    return LoadingPage();
+                    return const LoadingPage();
                   default:
                     if (snapshot.hasError) {
                       return const Center(child: Text('Some error occurred!'));

@@ -627,18 +627,22 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                     hoverColor: Colors.blue[900],
                                     heroTag: "btn1",
                                     onPressed: () {
-                                      data.add([
-                                        data.length + 1,
-                                        '',
-                                        '',
-                                        '',
-                                        '',
-                                        '',
-                                        0,
-                                        0,
-                                        0
-                                      ]);
-                                      setState(() {});
+                                      jmrtable.add(
+                                        JMRModel(
+                                          srNo: jmrtable.length + 1,
+                                          Description: '',
+                                          Activity: '',
+                                          RefNo: '',
+                                          JmrAbstract: '',
+                                          Uom: '',
+                                          rate: 0,
+                                          TotalQty: 0,
+                                          TotalAmount: 0,),);
+                                      _dataGridController =
+                                          DataGridController();
+                                      _jmrDataSource.buildDataGridRows();
+                                      _jmrDataSource.updateDatagridSource();
+                                      // setState(() {});a
                                     },
                                     child: const Icon(Icons.add),
                                   ),
@@ -1023,31 +1027,22 @@ class _JmrTablePageState extends State<JmrTablePage> {
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    if (await Permission.storage.request().isGranted) {
-      final documentDirectory =
-          (await DownloadsPath.downloadsDirectory())?.path;
-      final file = File('$documentDirectory/$fileName');
+    final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
+    File file = File('$documentDirectory/$fileName');
 
-      int counter = 1;
-      String newFilePath = file.path;
-      // if (await File(newFilePath).exists()) {
-      //   final baseName = fileName.split('.').first;
-      //   final extension = fileName.split('.').last;
-      //   while (await File(newFilePath).exists()) {
-      //     counter++;
-      //     newFilePath =
-      //         '$documentDirectory/$baseName-${counter.toString()}.$extension';
-      //   }
-      //   pathToOpenFile = newFilePath.toString();
-      //   await file.copy(newFilePath);
-      //   await file.writeAsBytes(pdfData);
-      // } else {
-      await file.writeAsBytes(pdfData);
-      pathToOpenFile = newFilePath.toString();
-      return file;
-      // }
+    int counter = 1;
+    String newFilePath = file.path;
+    pathToOpenFile = newFilePath;
+
+    while (await file.exists()) {
+      String newName =
+          '${fileName.substring(0, fileName.lastIndexOf('.'))}-$counter${fileName.substring(fileName.lastIndexOf('.'))}';
+      file = File('$documentDirectory/$newName');
+      pathToOpenFile = file.path;
+      counter++;
     }
-    return File('');
+    await file.writeAsBytes(pdfData);
+    return file;
   }
 
   Future<Uint8List> _generatePDF() async {
