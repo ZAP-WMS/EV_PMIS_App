@@ -557,7 +557,7 @@ class QualityExcavationDataSource extends DataGridSource {
           contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         ),
         inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.allow(regExp),
+          FilteringTextInputFormatter.allow(regExp)
         ],
         keyboardType: isNumericType
             ? TextInputType.number

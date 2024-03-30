@@ -116,7 +116,7 @@ class _DepotOverviewState extends State<DepotOverview> {
             storeData(widget.depoName!, context);
           },
         ),
-        drawer:  NavbarDrawer(role: widget.role),
+        drawer: NavbarDrawer(role: widget.role),
         body: isLoading
             ? const LoadingPage()
             // : isProjectManager == false
@@ -720,6 +720,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   GridColumn(
                                     columnName: 'Add',
                                     allowEditing: false,
+                                    visible: false,
                                     width: 120,
                                     label: Container(
                                       alignment: Alignment.center,
@@ -734,6 +735,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   GridColumn(
                                     columnName: 'Delete',
                                     allowEditing: false,
+                                    visible: false,
                                     width: 120,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
@@ -1013,6 +1015,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   GridColumn(
                                     columnName: 'Add',
                                     allowEditing: false,
+                                    visible: false,
                                     width: 120,
                                     label: Container(
                                       alignment: Alignment.center,
@@ -1027,6 +1030,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   GridColumn(
                                     columnName: 'Delete',
                                     allowEditing: false,
+                                    visible: false,
                                     width: 120,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
@@ -1084,15 +1088,15 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
-          isFieldEditable: isFieldEditable,
-          isProjectManager: isPManager,
-          role: widget.role,
-          controller: controller,
-          labeltext: title,
-          // validatortext: '$title is Required',
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.next,
-          ),
+        isFieldEditable: isFieldEditable,
+        isProjectManager: isPManager,
+        role: widget.role,
+        controller: controller,
+        labeltext: title,
+        // validatortext: '$title is Required',
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
+      ),
     );
   }
 
@@ -1230,8 +1234,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     }, SetOptions(merge: true));
     if (bytes != null) {
       await FirebaseStorage.instance
-          .ref(
-              'BOQSurvey/$cityName/$depoName/${widget.userId}/survey/${res!.files.first.name}')
+          .ref('BOQSurvey/$cityName/$depoName/survey/${res!.files.first.name}')
           .putData(
             bytes!,
             //  SettableMetadata(contentType: 'application/pdf')
@@ -1240,7 +1243,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     if (fileBytes1 != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQElectrical/$cityName/$depoName/${widget.userId}/electrical/${result1!.files.first.name}')
+              'BOQElectrical/$cityName/$depoName/electrical/${result1!.files.first.name}')
           .putData(
             fileBytes1!,
           );
@@ -1248,7 +1251,7 @@ class _DepotOverviewState extends State<DepotOverview> {
     if (fileBytes2 != null) {
       await FirebaseStorage.instance
           .ref(
-              'BOQCivil/$cityName/$depoName/${widget.userId}/civil/${result2!.files.first.name}')
+              'BOQCivil/$cityName/$depoName/civil/${result2!.files.first.name}')
           .putData(
             fileBytes2!,
             //  SettableMetadata(contentType: 'application/pdf')

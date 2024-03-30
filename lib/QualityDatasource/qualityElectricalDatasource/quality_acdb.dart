@@ -544,7 +544,7 @@ class QualityacdDataSource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
@@ -559,6 +559,8 @@ class QualityacdDataSource extends DataGridSource {
             if (isNumericType) {
               newCellValue = int.parse(value);
             } else if (isDateTimeType) {
+              newCellValue = value;
+            } else {
               newCellValue = value;
             }
           }

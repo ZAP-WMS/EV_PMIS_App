@@ -82,17 +82,19 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
           : widget.title == 'ClosureReport'
               ? FirebaseApi.listAll(
                   '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
-              : widget.title == '/BOQSurvey' ||
-                      widget.title == '/BOQElectrical' ||
-                      widget.title == '/BOQCivil' ||
-                      widget.title == 'Key Events'
+              : widget.title == 'Key Events' || widget.title == 'Overview Page'
                   ? FirebaseApi.listAll(
-                      '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
-                  : widget.title == 'Depot Insights'
+                      '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}')
+                  : widget.title == '/BOQSurvey' ||
+                          widget.title == '/BOQElectrical' ||
+                          widget.title == '/BOQCivil'
                       ? FirebaseApi.listAll(
                           '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
-                      : FirebaseApi.listAll(
-                          '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
+                      : widget.title == 'Depot Insights'
+                          ? FirebaseApi.listAll(
+                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
+                          : FirebaseApi.listAll(
+                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
       _isload = false;
       setState(() {});
     }

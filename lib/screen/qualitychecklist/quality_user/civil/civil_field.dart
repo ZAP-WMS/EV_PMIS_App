@@ -305,18 +305,18 @@ class _CivilFieldState extends State<CivilField> {
       ),
       body: isLoading
           ? const LoadingPage()
-          : StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('CivilChecklistField')
-                  .doc('${widget.depoName}')
-                  .collection('userId')
-                  .doc(userId)
-                  .collection(widget.fieldclnName)
-                  .doc(selectedDate)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                return SingleChildScrollView(
-                  child: Column(
+          : SingleChildScrollView(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('CivilChecklistField')
+                    .doc('${widget.depoName}')
+                    .collection('userId')
+                    .doc(userId)
+                    .collection(widget.fieldclnName)
+                    .doc(selectedDate)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  return Column(
                     children: [
                       safetyField(projectController, 'Project Name',
                           TextInputAction.next),
@@ -329,16 +329,10 @@ class _CivilFieldState extends State<CivilField> {
                       safetyField(dateController, 'Date', TextInputAction.next),
                       safetyField(componentController,
                           'Component of the Structure', TextInputAction.next),
-                      safetyField(
-                        gridController,
-                        'Grid / Axis Level',
-                        TextInputAction.next,
-                      ),
-                      safetyField(
-                        fillingController,
-                        'Type of Filling',
-                        TextInputAction.done,
-                      ),
+                      safetyField(gridController, 'Grid / Axis Level',
+                          TextInputAction.next),
+                      safetyField(fillingController, 'Type of Filling',
+                          TextInputAction.done),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.8,
                         child: StreamBuilder(
@@ -664,9 +658,9 @@ class _CivilFieldState extends State<CivilField> {
                         ),
                       ),
                     ],
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
       // floatingActionButton: FloatingActionButton.extended(
       //   onPressed: () {
