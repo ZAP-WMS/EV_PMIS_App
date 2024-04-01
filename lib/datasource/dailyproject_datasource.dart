@@ -29,7 +29,6 @@ class DailyDataSource extends DataGridSource {
 
   @override
   List<DailyProjectModel> _dailyproject = [];
-
   List<DataGridRow> dataGridRows = [];
   final _dateFormatter = DateFormat.yMd();
 
@@ -56,44 +55,46 @@ class DailyDataSource extends DataGridSource {
     String Pagetitle = 'Daily Report';
 
     return DataGridRowAdapter(
-        cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, DailyProjectModel rowData) {
-        _dailyproject.insert(index, rowData);
-        buildDataGridRows();
-        notifyListeners();
-        // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
-      }
+      cells: row.getCells().map<Widget>((dataGridCell) {
+        void addRowAtIndex(int index, DailyProjectModel rowData) {
+          _dailyproject.insert(index, rowData);
+          buildDataGridRows();
+          notifyListeners();
+        }
 
-      void removeRowAtIndex(int index) {
-        _dailyproject.removeAt(index);
-        buildDataGridRows();
-        notifyListeners();
-      }
+        void removeRowAtIndex(int index) {
+          _dailyproject.removeAt(index);
+          buildDataGridRows();
+          notifyListeners();
+        }
 
-      return Container(
+        return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: (dataGridCell.columnName == 'view')
               ? ElevatedButton(
                   onPressed: () {
-                    print("View button pressed");
                     Navigator.push(
-                        mainContext,
-                        MaterialPageRoute(
-                          builder: (context) => ViewAllPdf(
-                            title: Pagetitle,
-                            cityName: cityName,
-                            depoName: depoName,
-                            userId: userId,
-                            date: row.getCells()[0].value.toString(),
-                            docId: row.getCells()[1].value.toString(),
-                          ),
-                        ));
+                      mainContext,
+                      MaterialPageRoute(
+                        builder: (context) => ViewAllPdf(
+                          title: Pagetitle,
+                          cityName: cityName,
+                          depoName: depoName,
+                          userId: userId,
+                          date: selectedDate,
+                          docId: row.getCells()[1].value.toString(),
+                        ),
+                      ),
+                    );
                   },
                   child: const Text(
                     'View',
-                    style: TextStyle(fontSize: 12),
-                  ))
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                )
               : (dataGridCell.columnName == 'upload')
                   ? ElevatedButton(
                       onPressed: () {
@@ -107,26 +108,24 @@ class DailyDataSource extends DataGridSource {
                                 userId: userId,
                                 date: row.getCells()[0].value.toString(),
                                 fldrName: row.getCells()[1].value.toString(),
-                                // title: 'Data Image',
-                                // fldrName: row.getCells()[1].value.toString(),
-                                // userId: userId,
-                                // cityName: cityName,
-                                // depoName: depoName,
                               ),
                             ));
                       },
-                      child: Text('Upload', style: TextStyle(fontSize: 12)))
+                      child:
+                          const Text('Upload', style: TextStyle(fontSize: 12)))
                   : (dataGridCell.columnName == 'Add')
                       ? ElevatedButton(
                           onPressed: () {
                             addRowAtIndex(
-                                dataRowIndex + 1,
-                                DailyProjectModel(
-                                    siNo: dataRowIndex + 2,
-                                    typeOfActivity: '',
-                                    activityDetails: '',
-                                    progress: '',
-                                    status: ''));
+                              dataRowIndex + 1,
+                              DailyProjectModel(
+                                siNo: dataRowIndex + 2,
+                                typeOfActivity: '',
+                                activityDetails: '',
+                                progress: '',
+                                status: '',
+                              ),
+                            );
                           },
                           child: const Text(
                             'Add',
@@ -142,13 +141,16 @@ class DailyDataSource extends DataGridSource {
                               icon: Icon(
                                 Icons.delete,
                                 color: red,
-                              ))
+                              ),
+                            )
                           : Text(
                               dataGridCell.value.toString(),
                               textAlign: TextAlign.center,
                               style: tablefontsize,
-                            ));
-    }).toList());
+                            ),
+        );
+      }).toList(),
+    );
   }
 
   void updateDatagridSource() {

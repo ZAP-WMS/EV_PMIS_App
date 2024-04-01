@@ -19,6 +19,7 @@ import '../../../widgets/appbar_back_date.dart';
 import '../../../widgets/navbar.dart';
 
 class DailyProject extends StatefulWidget {
+  
   String? cityName;
   String? depoName;
   String role;
@@ -33,6 +34,7 @@ class DailyProject extends StatefulWidget {
 
   @override
   State<DailyProject> createState() => _DailyProjectState();
+
 }
 
 class _DailyProjectState extends State<DailyProject> {
@@ -55,32 +57,29 @@ class _DailyProjectState extends State<DailyProject> {
   void initState() {
     widget.cityName =
         Provider.of<CitiesProvider>(context, listen: false).getName;
-
     _dailyDataSource = DailyDataSource(dailyproject, context, widget.cityName!,
         widget.depoName!, userId, selectedDate!);
     _dataGridController = DataGridController();
     getAssignedDepots();
-    getmonthlyReport();
-    // dailyproject = getmonthlyReport();
-
-    getTableData().whenComplete(() {
-      _dailyDataSource = DailyDataSource(dailyproject, context,
-          widget.cityName!, widget.depoName!, userId, selectedDate!);
-      _dataGridController = DataGridController();
-    },);
-
-    super.initState();
-    
-  }
-
-  @override
-  Widget build(BuildContext context) {
+    getTableData().whenComplete(
+      () {
+        _dailyDataSource = DailyDataSource(dailyproject, context,
+            widget.cityName!, widget.depoName!, userId, selectedDate!);
+        _dataGridController = DataGridController();
+      },
+    );
     _stream = FirebaseFirestore.instance
         .collection('DailyProject3')
         .doc('${widget.depoName}')
         .collection(selectedDate!)
         .doc(userId)
         .snapshots();
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavbarDrawer(
         role: widget.role,
@@ -496,7 +495,7 @@ class _DailyProjectState extends State<DailyProject> {
                                     ),
                               ),
                             ),
-                          ]));
+                          ]),);
                 }
               },
             ),
@@ -513,7 +512,6 @@ class _DailyProjectState extends State<DailyProject> {
                     progress: '',
                     status: ''));
                 _dataGridController = DataGridController();
-
                 _dailyDataSource.buildDataGridRows();
                 _dailyDataSource.updateDatagridSource();
               }),
@@ -556,19 +554,6 @@ class _DailyProjectState extends State<DailyProject> {
     });
   }
 
-  List<DailyProjectModel> getmonthlyReport() {
-    return [
-      DailyProjectModel(
-          siNo: 1,
-          // date: DateFormat().add_yMd().format(DateTime.now()),
-          // state: "Maharashtra",
-          // depotName: 'depotName',
-          typeOfActivity: '',
-          activityDetails: '',
-          progress: '',
-          status: '')
-    ];
-  }
 
   void _showDialog(BuildContext context) {
     showCupertinoDialog(

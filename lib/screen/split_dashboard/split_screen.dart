@@ -54,8 +54,14 @@ class SplitScreen extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, '/evDashboard',
-                            arguments: {"role": role, "userId": userId,},);
+                        Navigator.pushNamed(
+                          context,
+                          '/evDashboard',
+                          arguments: {
+                            "role": role,
+                            "userId": userId,
+                          },
+                        );
                       },
                       child: Card(
                         elevation: 10,

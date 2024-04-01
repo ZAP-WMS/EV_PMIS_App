@@ -23,7 +23,12 @@ class DepotOverview extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
-  DepotOverview({super.key, required this.depoName, this.role, this.userId});
+  DepotOverview({
+    super.key,
+    required this.depoName,
+    this.role,
+    this.userId,
+  });
 
   @override
   State<DepotOverview> createState() => _DepotOverviewState();
@@ -263,18 +268,22 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       )),
                                   IconButton(
                                       alignment: Alignment.bottomRight,
-                                      padding: const EdgeInsets.only(bottom: 5),
+                                      padding: const EdgeInsets.only(
+                                        bottom: 5,
+                                      ),
                                       onPressed: () {
                                         Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ViewAllPdf(
-                                                        title: '/BOQSurvey',
-                                                        cityName: cityName!,
-                                                        depoName:
-                                                            widget.depoName!,
-                                                        userId: widget.userId,
-                                                        docId: 'survey')));
+                                          MaterialPageRoute(
+                                            builder: (context) => ViewAllPdf(
+                                              isOverview: true,
+                                              title: '/BOQSurvey',
+                                              cityName: cityName!,
+                                              depoName: widget.depoName!,
+                                              userId: widget.userId,
+                                              docId: 'survey',
+                                            ),
+                                          ),
+                                        );
                                       },
                                       icon: Icon(
                                         Icons.folder,
@@ -377,6 +386,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewAllPdf(
+                                                        isOverview: true,
                                                         title: '/BOQElectrical',
                                                         cityName: cityName!,
                                                         depoName:
@@ -482,6 +492,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewAllPdf(
+                                                        isOverview: true,
                                                         title: '/BOQCivil',
                                                         cityName: cityName!,
                                                         depoName:
@@ -727,9 +738,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                       child: Text('Add Row',
                                           softWrap: true, // Allow text to wrap
                                           overflow: TextOverflow.clip,
-                                          style: tableheaderwhitecolor
-                                          //   //  textAlign: TextAlign.center,
-                                          ),
+                                          style: tableheaderwhitecolor),
                                     ),
                                   ),
                                   GridColumn(
@@ -747,58 +756,11 @@ class _DepotOverviewState extends State<DepotOverview> {
                                           style: tableheaderwhitecolor),
                                     ),
                                   ),
-                                  // GridColumn(
-                                  //   columnName: 'Add',
-                                  //   autoFitPadding:
-                                  //       const EdgeInsets.symmetric(
-                                  //           horizontal: 16),
-                                  //   allowEditing: false,
-                                  //   width: 120,
-                                  //   label: Container(
-                                  //     padding: const EdgeInsets.symmetric(
-                                  //         horizontal: 8.0),
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Add Row',
-                                  //         // overflow: TextOverflow.values.first,
-                                  //         style: tableheaderwhitecolor
-                                  //         //   //  textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
-                                  // GridColumn(
-                                  //   columnName: 'Delete',
-                                  //   autoFitPadding:
-                                  //       const EdgeInsets.symmetric(
-                                  //           horizontal: 16),
-                                  //   allowEditing: false,
-                                  //   width: 120,
-                                  //   label: Container(
-                                  //     padding: const EdgeInsets.symmetric(
-                                  //         horizontal: 8.0),
-                                  //     alignment: Alignment.center,
-                                  //     child: Text('Delete Row',
-                                  //         // overflow: TextOverflow.values.first,
-                                  //         style: tableheaderwhitecolor
-                                  //         //   //  textAlign: TextAlign.center,
-                                  //         ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
                           );
                         } else {
-                          // alldata = '';
-                          // alldata = snapshot.data['data'] as List<dynamic>;
-                          // _employees.clear();
-                          // alldata.forEach((element) {
-                          //   _employees
-                          //       .add(DepotOverviewModel.fromJson(element));
-                          //   _employeeDataSource =
-                          //       DepotOverviewDatasource(_employees, context);
-                          //   _dataGridController = DataGridController();
-                          // });
-
                           return SizedBox(
                             height: MediaQuery.of(context).size.height * 0.65,
                             child: SfDataGridTheme(

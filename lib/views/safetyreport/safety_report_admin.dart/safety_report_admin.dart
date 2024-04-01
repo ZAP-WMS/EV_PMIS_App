@@ -62,7 +62,9 @@ class _SafetySummaryState extends State<SafetySummary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavbarDrawer(role: widget.role,),
+      drawer: NavbarDrawer(
+        role: widget.role,
+      ),
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(

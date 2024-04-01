@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/authentication/reset_password.dart';
@@ -33,90 +35,96 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Form(
-                key: _formkey,
-                child: Column(
-                  children: [
-                    _space(16),
-                    CustomTextField(
-                      isFieldEditable: true,
-                      controller: empIdController,
-                      labeltext: 'Employee ID',
-                      // validator: checkFieldEmpty(
-                      //     empIdController.text, 'Employee Id is required'),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      isSuffixIcon: false,
+    return WillPopScope(
+      onWillPop: () async {
+        onWillPop(context);
+        return true;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Form(
+                  key: _formkey,
+                  child: Column(
+                    children: [
+                      _space(16),
+                      CustomTextField(
+                        isFieldEditable: true,
+                        controller: empIdController,
+                        labeltext: 'Employee ID',
+                        // validator: checkFieldEmpty(
+                        //     empIdController.text, 'Employee Id is required'),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        isSuffixIcon: false,
 
-                      validatortext: (value) {
-                        return checkFieldEmpty(
-                            value!, 'Employee ID is Required');
-                      },
-                    ),
-                    _space(16),
-                    CustomTextField(
-                      isFieldEditable: true,
-                      controller: passwordcontroller,
-                      labeltext: 'Password',
-                      validatortext: (value) {
-                        return checkFieldEmpty(
-                            passwordcontroller.text, 'Password is Required');
-                      },
-                      isSuffixIcon: true,
-                      keyboardType: TextInputType.visiblePassword,
-                      textInputAction: TextInputAction.done,
-                    ),
-                    _space(16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        RichText(
-                            text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: ' Forget Password ?',
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = (() => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ResetPass(
-                                              // email: FirebaseAuth
-                                              //     .instance
-                                              //     .currentUser!
-                                              //     .email!,
-                                              )))),
-                                style: const TextStyle(color: Colors.blue))
-                          ],
-                        )),
-                      ],
-                    ),
-                    _space(16),
-                    SizedBox(
+                        validatortext: (value) {
+                          return checkFieldEmpty(
+                              value!, 'Employee ID is Required');
+                        },
+                      ),
+                      _space(16),
+                      CustomTextField(
+                        isFieldEditable: true,
+                        controller: passwordcontroller,
+                        labeltext: 'Password',
+                        validatortext: (value) {
+                          return checkFieldEmpty(
+                              passwordcontroller.text, 'Password is Required');
+                        },
+                        isSuffixIcon: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.done,
+                      ),
+                      _space(16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          RichText(
+                              text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: ' Forget Password ?',
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = (() => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ResetPass(
+                                                // email: FirebaseAuth
+                                                //     .instance
+                                                //     .currentUser!
+                                                //     .email!,
+                                                )))),
+                                  style: const TextStyle(color: Colors.blue))
+                            ],
+                          )),
+                        ],
+                      ),
+                      _space(16),
+                      SizedBox(
+                          width: 200,
+                          height: 50,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                login();
+                              },
+                              child: const Text('Sign In'))),
+
+                      // Text("Project Management Information System",
+                      //     style: headlineBold),
+                      // Text(" EV Monitoring ", style: headlineBold),
+                      Image.asset(
+                        'assets/Tata-Power.jpeg',
+                        height: 150,
                         width: 200,
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              login();
-                            },
-                            child: const Text('Sign In'))),
-
-                    // Text("Project Management Information System",
-                    //     style: headlineBold),
-                    // Text(" EV Monitoring ", style: headlineBold),
-                    Image.asset(
-                      'assets/Tata-Power.jpeg',
-                      height: 150,
-                      width: 200,
-                    ),
-                    Text("Project Management Information System",
-                        textAlign: TextAlign.center, style: headlineBold),
-                  ],
-                )),
+                      ),
+                      Text("Project Management Information System",
+                          textAlign: TextAlign.center, style: headlineBold),
+                    ],
+                  )),
+            ),
           ),
         ),
       ),
@@ -193,6 +201,15 @@ class _LoginPageState extends State<LoginPage> {
                       "role": "projectManager"
                     });
               });
+            } else {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: blue,
+                  content: const Text(
+                      'Password is not Correct or no role is assigned to the user'),
+                ),
+              );
             }
           }
         } else {
@@ -217,25 +234,25 @@ class _LoginPageState extends State<LoginPage> {
               await authService.storeCompanyName(companyName);
               await authService.storeDepoList(depots);
               authService.storeEmployeeId(empIdController.text).then((_) {
-                Navigator.pushReplacementNamed(context, '/splitDashboard',
-                    arguments: {
-                      'userId': empIdController.text,
-                      "role": "user"
-                    });
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/splitDashboard',
+                  arguments: {'userId': empIdController.text, "role": "user"},
+                );
               });
             } else {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                      'Password is not Correct or no roles are assigned to this user'),
+                SnackBar(
+                  backgroundColor: blue,
+                  content: const Text(
+                      'Password is not Correct or no role is assigned to the user'),
                 ),
               );
             }
           }
         }
       } catch (e) {
-        // ignore: use_build_context_synchronously
         String error = '';
         if (e.toString() ==
             'RangeError (index): Invalid value: Valid value range is empty: 0') {

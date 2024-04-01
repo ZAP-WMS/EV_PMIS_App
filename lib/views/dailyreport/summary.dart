@@ -1290,8 +1290,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                         child: SfDataGrid(
                                           source: _safetyChecklistDataSource,
                                           //key: key,
-
-                                          allowEditing: true,
+                                          allowEditing: false,
                                           frozenColumnsCount: 1,
                                           gridLinesVisibility:
                                               GridLinesVisibility.both,

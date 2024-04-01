@@ -114,21 +114,30 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
               actions: [
                 widget.role == "projectManager"
                     ? Container(
-                        margin: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.all(6.0),
                         child: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => QualityHome(
-                                    depoName: widget.depoName,
-                                    userId: widget.userId,
-                                    role: widget.role,
-                                  ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QualityHome(
+                                  depoName: widget.depoName,
+                                  userId: widget.userId,
+                                  role: widget.role,
                                 ),
-                              );
-                            },
-                            icon: const Icon(Icons.add)),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                            color: blue,
+                          ),
+                        ),
                       )
                     : Container()
               ],
@@ -160,24 +169,28 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                 ),
               ),
             ),
-            drawer:  NavbarDrawer(role: widget.role),
+            drawer: NavbarDrawer(role: widget.role),
             body: TabBarView(children: [
               ListView.builder(
                 itemCount: civillist.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                      onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CivilReportAdmin(
-                                cityName: cityName,
-                                userId: widget.userId,
-                                selectedIndex: index,
-                                depoName: widget.depoName,
-                              ),
-                            ),
-                          ),
-                      child: tabbarlist(civillist, index,),);
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CivilReportAdmin(
+                          cityName: cityName,
+                          userId: widget.userId,
+                          selectedIndex: index,
+                          depoName: widget.depoName,
+                        ),
+                      ),
+                    ),
+                    child: tabbarlist(
+                      civillist,
+                      index,
+                    ),
+                  );
                 },
               ),
               ListView.builder(

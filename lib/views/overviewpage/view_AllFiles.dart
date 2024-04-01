@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../../FirebaseApi/firebase_api.dart';
@@ -7,6 +8,7 @@ import 'image_page.dart';
 
 class ViewAllPdf extends StatefulWidget {
   String? title;
+  bool isOverview;
   String? subtitle;
   String? cityName;
   String? depoName;
@@ -27,13 +29,18 @@ class ViewAllPdf extends StatefulWidget {
       this.date,
       this.srNo,
       this.docId,
-      this.role});
+      this.role,
+      this.isOverview = false});
 
   @override
   State<ViewAllPdf> createState() => _ViewAllPdfState();
 }
 
 class _ViewAllPdfState extends State<ViewAllPdf> {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
+  String role = '';
   Future<List<FirebaseFile>>? futureFiles;
   List<String> pdfFiles = [];
   bool _isload = true;
@@ -43,6 +50,9 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
 
   @override
   void initState() {
+    getCurrentUserRole();
+    getAssignedDepots();
+
     futureFiles = FirebaseApi.listAll(
         '${widget.title}/${widget.cityName}/${widget.depoName}/null/${widget.docId}');
     if ((widget.title == 'DetailedEngRFC' ||
@@ -94,12 +104,12 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                           ? FirebaseApi.listAll(
                               '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
                           : FirebaseApi.listAll(
-                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
+                              '${ widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
       _isload = false;
       setState(() {});
     }
-
     super.initState();
+    
   }
 
 // /DetailedEngRFC/Bengaluru/BMTC KR Puram-29/ ZW3210
@@ -147,7 +157,8 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                             itemCount: files.length,
                             itemBuilder: (context, index) {
                               final file = files[index];
-                              return buildFile(context, file);
+                              return buildFile(
+                                  context, file, role, widget.isOverview);
                             },
                           )
                               //  ListView.builder(
@@ -197,7 +208,8 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
     }
   }
 
-  Widget buildFile(BuildContext context, FirebaseFile file) {
+  Widget buildFile(
+      BuildContext context, FirebaseFile file, String role, bool isOverview) {
     final isImage = ['.jpeg', '.jpg', '.png'].any(file.name.contains);
     final isPdf = ['.pdf'].any(file.name.contains);
     final isexcel = ['.xlsx'].any(file.name.contains);
@@ -218,7 +230,15 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                   : Image.asset('assets/pdf_logo.png')),
           //PdfThumbnail.fromFile(file.ref.fullPath, currentPage: 2)),
           onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => ImagePage(file: file))),
+            MaterialPageRoute(
+              builder: (context) => ImagePage(
+                isOverview: isOverview,
+                isFieldEditable: isFieldEditable,
+                file: file,
+                role: role,
+              ),
+            ),
+          ),
         ),
         Expanded(child: Text(file.name))
       ],
@@ -244,4 +264,14 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
           ),
         ),
       );
+
+  getCurrentUserRole() async {
+    role = await authService.getUserRole();
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+  }
 }

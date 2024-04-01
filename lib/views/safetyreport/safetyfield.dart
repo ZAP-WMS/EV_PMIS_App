@@ -93,17 +93,14 @@ class _SafetyFieldState extends State<SafetyField> {
   void initState() {
     getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-
     initializeController();
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
     _fetchUserData();
-
     getTableData().whenComplete(() {
       safetylisttable = checkTable ? getData() : safetylisttable;
       _safetyChecklistDataSource = SafetyChecklistDataSource(
           safetylisttable, cityName!, widget.depoName!, userId, selectedDate!);
       _dataGridController = DataGridController();
-
       _stream = FirebaseFirestore.instance
           .collection('SafetyChecklistTable2')
           .doc(widget.depoName!)
@@ -124,7 +121,6 @@ class _SafetyFieldState extends State<SafetyField> {
         child: CustomAppBarBackDate(
           depoName: widget.depoName!,
           text: 'SafetyChecklist',
-          // / ${DateFormat.yMMMMd().format(DateTime.now() )}',
           haveSummary: true,
           onTap: () => Navigator.push(
               context,

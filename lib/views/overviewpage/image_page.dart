@@ -2,28 +2,30 @@ import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/views/overviewpage/viewFIle.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_excel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-
 import '../../FirebaseApi/firebase_api.dart';
 import '../../style.dart';
 
 class ImagePage extends StatelessWidget {
   final FirebaseFile file;
+  final String role;
+  final bool isFieldEditable;
+  final bool isOverview;
 
-  const ImagePage({
-    Key? key,
-    required this.file,
-  }) : super(key: key);
+  const ImagePage(
+      {Key? key,
+      required this.file,
+      required this.role,
+      required this.isFieldEditable,
+      this.isOverview = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final isImage = ['.jpeg', '.jpg', '.png'].any(file.name.contains);
     final isPdf = ['.pdf'].any(file.name.contains);
-    print('fileurl' + file.url);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -84,21 +86,37 @@ class ImagePage extends StatelessWidget {
                 });
               },
             ),
-            IconButton(
-                onPressed: () async {
-                  await FirebaseStorage.instance
-                      .refFromURL(file.url)
-                      .delete()
-                      // FirebaseStorage.instance
-                      //     .ref()
-                      //     .child(file.url)
-                      //     .delete()
-                      .then((value) {
-                    print('Delete Successfull');
-                    Navigator.pop(context);
-                  });
-                },
-                icon: const Icon(Icons.delete))
+            (role == "projectManager" && isFieldEditable && isOverview)
+                ? IconButton(
+                    onPressed: () async {
+                      await FirebaseStorage.instance
+                          .refFromURL(file.url)
+                          .delete()
+                          .then((value) {
+                        print('Delete Successfull');
+                        Navigator.pop(context);
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                    ),
+                  )
+                : (role == "user" && isFieldEditable && !isOverview)
+                    ? IconButton(
+                        onPressed: () async {
+                          await FirebaseStorage.instance
+                              .refFromURL(file.url)
+                              .delete()
+                              .then((value) {
+                            print('Delete Successfull');
+                            Navigator.pop(context);
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                        ),
+                      )
+                    : Container()
           ],
         ),
         body: isImage

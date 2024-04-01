@@ -53,7 +53,9 @@ class _JmrState extends State<Jmr> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
-          drawer: NavbarDrawer(role: widget.role,),
+          drawer: NavbarDrawer(
+            role: widget.role,
+          ),
           appBar: AppBar(
             centerTitle: true,
             title: Column(
@@ -73,21 +75,30 @@ class _JmrState extends State<Jmr> {
             actions: [
               widget.role == "projectManager"
                   ? Container(
-                      margin: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.all(6.0),
                       child: IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JmrUserPage(
-                                  cityName: widget.cityName,
-                                  depoName: widget.depoName,
-                                  userId: widget.userId,
-                                ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => JmrUserPage(
+                                cityName: widget.cityName,
+                                depoName: widget.depoName,
+                                userId: widget.userId,
                               ),
-                            );
-                          },
-                          icon: const Icon(Icons.add)),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: blue,
+                        ),
+                      ),
                     )
                   : Container(),
             ],

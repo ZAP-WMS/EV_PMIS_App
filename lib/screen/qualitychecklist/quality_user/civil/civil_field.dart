@@ -245,7 +245,7 @@ class _CivilFieldState extends State<CivilField> {
                     id: 'Quality Checklist',
                     userId: userId,
                   ),
-                )),
+                ),),
             store: () async {
               _showDialog(context);
               civilStoreData(
@@ -277,7 +277,7 @@ class _CivilFieldState extends State<CivilField> {
                                                               ? _qualityRoofingDataSource
                                                               : _qualityProofingDataSource,
                   widget.depoName!,
-                  selectedDate!);
+                  selectedDate!,);
               await FirebaseFirestore.instance
                   .collection('CivilChecklistField')
                   .doc('${widget.depoName}')

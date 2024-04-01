@@ -82,7 +82,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
   ];
 
   List<JMRModel> jmrtable = <JMRModel>[];
-  int _excelRowNextIndex = 0;
+  final int _excelRowNextIndex = 0;
   late JmrDataSource _jmrDataSource;
   List<dynamic> jmrSyncList = [];
   late DataGridController _dataGridController;
@@ -171,7 +171,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return LoadingPage();
+                                return const LoadingPage();
                               }
                               if (!snapshot.hasData) {
                                 jmrtable = getData();
@@ -180,7 +180,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                 _dataGridController = DataGridController();
                                 return SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.8,
+                                      MediaQuery.of(context).size.height * 0.85,
                                   width: MediaQuery.of(context).size.width,
                                   child: SingleChildScrollView(
                                     child: SfDataGridTheme(
@@ -199,6 +199,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                         selectionMode: SelectionMode.single,
                                         navigationMode: GridNavigationMode.cell,
                                         columnWidthMode: ColumnWidthMode.none,
+                                        headerRowHeight: 50,
                                         editingGestureType:
                                             EditingGestureType.tap,
                                         controller: _dataGridController,
@@ -408,7 +409,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
 
                                 return SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.8,
+                                      MediaQuery.of(context).size.height * 0.85,
                                   child: SfDataGridTheme(
                                     data: SfDataGridThemeData(
                                       headerColor: blue,
@@ -426,12 +427,13 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                       selectionMode: SelectionMode.single,
                                       navigationMode: GridNavigationMode.cell,
                                       columnWidthMode: ColumnWidthMode.auto,
+
                                       editingGestureType:
                                           EditingGestureType.tap,
                                       controller: _dataGridController,
                                       allowColumnsResizing: true,
 
-                                      headerRowHeight: 40,
+                                      headerRowHeight: 50,
                                       columns: [
                                         GridColumn(
                                           columnName: 'srNo',
@@ -637,7 +639,9 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                           Uom: '',
                                           rate: 0,
                                           TotalQty: 0,
-                                          TotalAmount: 0,),);
+                                          TotalAmount: 0,
+                                        ),
+                                      );
                                       _dataGridController =
                                           DataGridController();
                                       _jmrDataSource.buildDataGridRows();

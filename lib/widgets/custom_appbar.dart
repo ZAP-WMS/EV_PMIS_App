@@ -22,22 +22,21 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool haveSend;
   final void Function()? sendEmail;
 
-
-  CustomAppBar(
-      {super.key,
-      required this.title,
-      required this.height,
-      this.isprogress = false,
-      required this.isSync,
-      this.haveupload = false,
-      required this.isCentered,
-      this.store,
-      this.depoName,
-      this.isDownload = false,
-      this.downloadFun,
-      this.sendEmail,
-      this.haveSend = false,
-      });
+  CustomAppBar({
+    super.key,
+    required this.title,
+    required this.height,
+    this.isprogress = false,
+    required this.isSync,
+    this.haveupload = false,
+    required this.isCentered,
+    this.store,
+    this.depoName,
+    this.isDownload = false,
+    this.downloadFun,
+    this.sendEmail,
+    this.haveSend = false,
+  });
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -67,15 +66,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       backgroundColor: blue,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(2,),),),
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(
+            2,
+          ),
+        ),
+      ),
       actions: [
-
         widget.haveSend
             ? Consumer<CheckboxProvider>(
                 builder: (context, value, child) {
                   // print(value.myBooleanValue);
                   return Padding(
-                      padding: const EdgeInsets.all(8,),
+                      padding: const EdgeInsets.all(
+                        8,
+                      ),
                       child: IconButton(
                         onPressed: widget.sendEmail,
                         icon: Icon(
@@ -83,18 +88,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           color: white,
                         ),
                       )
-                      //  ElevatedButton(
-                      //     style: ElevatedButton.styleFrom(backgroundColor: white),
-                      //     onPressed: widget.sendEmail,
-                      //     child: Icon(
-                      //       Icons.share,
-                      //       color: white,
-                      //     )
-                      //     //  Text(
-                      //     //   'Send Report',
-                      //     //   style: TextStyle(color: white, fontSize: 12),
-                      //     // )
-                      //     ),
                       );
                 },
               )
@@ -324,13 +317,15 @@ Future<bool> onWillPop(BuildContext context) async {
                         onTap: () async {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
-                          prefs.remove('employeeId');
+                          await prefs.remove('cities');
+                          await prefs.remove('role');
+                          await prefs.remove('employeeId');
                           a = true;
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LoginRegister(),
-                              ));
+                              ),);
                           // exit(0);
                         },
                         child: Container(

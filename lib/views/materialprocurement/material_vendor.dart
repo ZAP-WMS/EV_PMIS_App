@@ -120,15 +120,17 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                   controller: _dataGridController,
                                   columns: [
                                     GridColumn(
-                                      columnName: 'cityName',
+                                      columnName: 'cityName', 
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
-                                              horizontal: 16),
+                                        horizontal: 16,
+                                      ),
                                       allowEditing: true,
                                       width: 100,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
+                                          horizontal: 8.0,
+                                        ),
                                         alignment: Alignment.center,
                                         child: Text(
                                           'City Name',
@@ -381,13 +383,12 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                             _materialprocurement.clear();
                             alldata.forEach((element) {
                               _materialprocurement.add(
-                                  MaterialProcurementModel.fromjson(element));
+                                  MaterialProcurementModel.fromjson(element,),);
                               _materialDatasource = MaterialDatasource(
                                   _materialprocurement,
                                   context,
                                   cityName,
                                   widget.depoName);
-                              _dataGridController = DataGridController();
                             });
                             return SfDataGrid(
                                 source: _materialDatasource,
@@ -652,7 +653,8 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
       floatingActionButton: isFieldEditable
           ? FloatingActionButton(
               onPressed: (() {
-                _materialprocurement.add(MaterialProcurementModel(
+                _materialprocurement.add(
+                  MaterialProcurementModel(
                     cityName: '',
                     details: '',
                     olaNo: '',
@@ -664,9 +666,11 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                     croNumber: '',
                     unit: '',
                     qty: 1,
-                    materialSite:
-                        DateFormat('dd-MM-yyyy').format(DateTime.now())));
-
+                    materialSite: DateFormat('dd-MM-yyyy').format(
+                      DateTime.now(),
+                    ),
+                  ),
+                );
                 _dataGridController = DataGridController();
                 _materialDatasource.buildDataGridRows();
                 _materialDatasource.updateDatagridSource();

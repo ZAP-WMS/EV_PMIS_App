@@ -16,7 +16,7 @@ class ClosureSummary extends StatefulWidget {
   final String? user_id;
   String role;
 
-   ClosureSummary(
+  ClosureSummary(
       {super.key,
       this.userId,
       this.cityName,
@@ -97,11 +97,11 @@ class _ClosureSummaryState extends State<ClosureSummary> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
-              isProjectManager: widget.role == "projectManager"? true : false,
+            isProjectManager: widget.role == "projectManager" ? true : false,
             makeAnEntryPage: ClosureField(
-          depoName: widget.depoName,
-          userId: widget.userId!,
-        ),
+              depoName: widget.depoName,
+              userId: widget.userId!,
+            ),
             toClosure: true,
             showDepoBar: true,
             cityName: widget.cityName,
@@ -259,16 +259,19 @@ class _ClosureSummaryState extends State<ClosureSummary> {
 
   openFile(FirebaseFile url) {
     Navigator.push(
-        context,
-        PageRouteBuilder(
-            transitionDuration: const Duration(milliseconds: 200),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            pageBuilder: (_, __, ___) => ImagePage(
-                  file: url,
-                )));
+      context,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        pageBuilder: (_, __, ___) => ImagePage(
+          isFieldEditable: true,
+          file: url,
+          role: widget.role,
+        ),
+      ),
+    );
   }
 
   customTableTextRow(String srNo, String row) {

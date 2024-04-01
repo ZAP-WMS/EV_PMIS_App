@@ -42,6 +42,7 @@ class JmrFieldPage extends StatefulWidget {
 }
 
 class _JmrFieldPageState extends State<JmrFieldPage> {
+
   final TextEditingController projectName = TextEditingController();
   final loiRefNum = TextEditingController();
   final siteLocation = TextEditingController();
@@ -52,6 +53,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
   final endDate = TextEditingController();
 
   List nextJmrIndex = [];
+  
   List<List<dynamic>> data = [
     [
       '1',
@@ -129,14 +131,14 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
         return true;
       },
       child: _isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Scaffold(
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
                   depoName: '${widget.depoName} / ${widget.title.toString()}',
                   store: () {
-                    nextIndex().then((value) => StoreData());
+                    nextIndex().then((value) => StoreData(),);
                   },
                   height: 30,
                   isCentered: true,

@@ -140,8 +140,12 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
             actions: [
               widget.role == "projectManager"
                   ? Container(
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       margin: const EdgeInsets.all(
-                        8.0,
+                        6.0,
                       ),
                       child: IconButton(
                           onPressed: () {
@@ -156,7 +160,10 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                               ),
                             );
                           },
-                          icon: const Icon(Icons.add)),
+                          icon: Icon(
+                            Icons.edit,
+                            color: blue,
+                          )),
                     )
                   : Container(),
             ],

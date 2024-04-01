@@ -55,15 +55,9 @@ class CustomAlertBox {
                         Expanded(
                             child: InkWell(
                           onTap: () async {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            await prefs.remove('cities');
-                            await prefs.remove('role');
-                            await prefs.remove('employeeId');
                             a = true;
                             isExitingApp
                                 ? exit(0)
-                                // ignore: use_build_context_synchronously
                                 : Navigator.pushNamedAndRemoveUntil(
                                     context, pushName, (route) => false);
 
