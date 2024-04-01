@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import '../../datasource/depot_overviewdatasource.dart';
-import '../../viewmodels/depot_overview.dart';
+import '../../models/depot_overview.dart';
 import '../../style.dart';
 import '../../widgets/custom_textfield.dart';
 import '../../widgets/navbar.dart';

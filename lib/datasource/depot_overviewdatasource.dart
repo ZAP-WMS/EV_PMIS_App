@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../viewmodels/depot_overview.dart';
+import '../models/depot_overview.dart';
 import '../style.dart';
 
 class DepotOverviewDatasource extends DataGridSource {
@@ -144,11 +144,11 @@ class DepotOverviewDatasource extends DataGridSource {
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .height *
-                                                  0.8,
+                                                  0.6,
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  0.8,
+                                                  0.6,
                                               child: SfDateRangePicker(
                                                 selectionShape:
                                                     DateRangePickerSelectionShape
@@ -156,7 +156,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                                 viewSpacing: 5,
                                                 headerHeight: 12,
                                                 view: DateRangePickerView.month,
-                                                showTodayButton: true,
+                                                showTodayButton: false,
                                                 onSelectionChanged:
                                                     (DateRangePickerSelectionChangedArgs
                                                         args) {
@@ -172,6 +172,9 @@ class DepotOverviewDatasource extends DataGridSource {
                                                     DateRangePickerSelectionMode
                                                         .single,
                                                 showActionButtons: true,
+                                                onCancel: () {
+                                                  Navigator.pop(context);
+                                                },
                                                 onSubmit: ((value) {
                                                   date = DateTime.parse(
                                                       value.toString());
@@ -226,11 +229,11 @@ class DepotOverviewDatasource extends DataGridSource {
                                                   height: MediaQuery.of(context)
                                                           .size
                                                           .height *
-                                                      0.8,
+                                                      0.6,
                                                   width: MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.8,
+                                                      0.6,
                                                   child: SfDateRangePicker(
                                                     selectionShape:
                                                         DateRangePickerSelectionShape
@@ -259,6 +262,9 @@ class DepotOverviewDatasource extends DataGridSource {
                                                         DateRangePickerSelectionMode
                                                             .single,
                                                     showActionButtons: true,
+                                                    onCancel: () {
+                                                      Navigator.pop(context);
+                                                    },
                                                     onSubmit: ((value) {
                                                       date = DateTime.parse(
                                                           value.toString());

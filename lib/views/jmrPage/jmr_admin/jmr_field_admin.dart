@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:ev_pmis_app/datasource/jmr_datasource.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 
-import '../../../viewmodels/jmr.dart';
+import '../../../models/jmr.dart';
 import 'jmr_table_admin.dart';
 
 class JmrFieldPageAdmin extends StatefulWidget {

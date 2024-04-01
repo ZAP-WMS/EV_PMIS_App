@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import '../viewmodels/employee.dart';
+import '../models/employee.dart';
 
 List<Employee> getEmployeeDataA2() {
   return [

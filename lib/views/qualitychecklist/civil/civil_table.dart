@@ -23,7 +23,7 @@ import '../../../../components/Loading_page.dart';
 import '../../../../provider/cities_provider.dart';
 import '../../../../style.dart';
 import '../../../../widgets/quality_list.dart';
-import '../../../viewmodels/quality_checklistModel.dart';
+import '../../../models/quality_checklistModel.dart';
 
 List<dynamic> excavationtabledatalist = [];
 List<dynamic> backfillingtabledatalist = [];

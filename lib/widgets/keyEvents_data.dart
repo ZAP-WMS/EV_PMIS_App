@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-import '../viewmodels/employee.dart';
+import '../models/employee.dart';
 
 String dmy = DateFormat('dd-MM-yyyy').format(DateTime.now());
 

@@ -13,7 +13,7 @@ import '../../components/Loading_page.dart';
 import '../../datasource/monthlyproject_datasource.dart';
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
-import '../../viewmodels/monthly_projectModel.dart';
+import '../../models/monthly_projectModel.dart';
 import '../../widgets/appbar_back_date.dart';
 
 import '../dailyreport/summary.dart';

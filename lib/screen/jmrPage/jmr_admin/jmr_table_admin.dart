@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:ev_pmis_app/viewmodels/jmr.dart';
+import 'package:ev_pmis_app/models/jmr.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../components/Loading_page.dart';
 import 'package:ev_pmis_app/style.dart';

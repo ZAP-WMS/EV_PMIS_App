@@ -8,7 +8,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../style.dart';
-import '../../viewmodels/quality_checklistModel.dart';
+import '../../models/quality_checklistModel.dart';
 import '../../views/overviewpage/view_AllFiles.dart';
 import '../../widgets/upload.dart';
 

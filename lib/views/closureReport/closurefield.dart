@@ -10,7 +10,7 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/closereport_datasource.dart';
-import '../../viewmodels/closer_report.dart';
+import '../../models/closer_report.dart';
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
 import '../../widgets/activity_headings.dart';

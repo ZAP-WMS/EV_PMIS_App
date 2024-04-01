@@ -16,7 +16,7 @@ import '../../date_format.dart';
 
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
-import '../../viewmodels/detailed_engModel.dart';
+import '../../models/detailed_engModel.dart';
 import '../authentication/authservice.dart';
 
 class DetailedEng extends StatefulWidget {
@@ -689,8 +689,7 @@ class _DetailedEngtState extends State<DetailedEng>
                         alldata = '';
                         alldata = snapshot.data['data'] as List<dynamic>;
                         DetailedProject.clear();
-                        _detailedDataSource.buildDataGridRows();
-                        _detailedDataSource.updateDatagridSource();
+
                         alldata.forEach((element) {
                           DetailedProject.add(
                               DetailedEngModel.fromjson(element));
@@ -702,6 +701,8 @@ class _DetailedEngtState extends State<DetailedEng>
                               userId,
                               widget.role!);
                           _dataGridController = DataGridController();
+                          _detailedDataSource.buildDataGridRows();
+                          _detailedDataSource.updateDatagridSource();
                         });
 
                         return SfDataGrid(
@@ -1106,8 +1107,7 @@ class _DetailedEngtState extends State<DetailedEng>
                         alldata = '';
                         alldata = snapshot.data['data'] as List<dynamic>;
                         DetailedProjectev.clear();
-                        _detailedEngSourceev.buildDataGridRowsEV();
-                        _detailedEngSourceev.updateDatagridSource();
+
                         alldata.forEach((element) {
                           DetailedProjectev.add(
                               DetailedEngModel.fromjson(element));
@@ -1118,6 +1118,8 @@ class _DetailedEngtState extends State<DetailedEng>
                               widget.depoName.toString(),
                               userId,
                               widget.role);
+                          _detailedEngSourceev.buildDataGridRowsEV();
+                          _detailedEngSourceev.updateDatagridSource();
                           _dataGridController = DataGridController();
                         });
 
@@ -1538,8 +1540,7 @@ class _DetailedEngtState extends State<DetailedEng>
                         alldata = '';
                         alldata = snapshot.data['data'] as List<dynamic>;
                         DetailedProjectshed.clear();
-                        _detailedEngSourceShed.buildDataGridRowsShed();
-                        _detailedEngSourceShed.updateDatagridSource();
+
                         alldata.forEach((element) {
                           DetailedProjectshed.add(
                               DetailedEngModel.fromjson(element));
@@ -1550,6 +1551,8 @@ class _DetailedEngtState extends State<DetailedEng>
                               widget.depoName.toString(),
                               userId,
                               widget.role);
+                          _detailedEngSourceShed.buildDataGridRowsShed();
+                          _detailedEngSourceShed.updateDatagridSource();
                           _dataGridController = DataGridController();
                         });
 

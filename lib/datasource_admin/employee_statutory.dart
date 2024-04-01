@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../viewmodels/employee_statutory.dart';
+import '../models/employee_statutory.dart';
 import '../views/overviewpage/viewFIle.dart';
 
 class EmployeeDataStatutory extends DataGridSource {

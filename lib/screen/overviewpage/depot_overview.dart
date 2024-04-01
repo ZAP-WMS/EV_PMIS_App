@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
-import 'package:ev_pmis_app/viewmodels/depot_overview.dart';
+import 'package:ev_pmis_app/models/depot_overview.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';

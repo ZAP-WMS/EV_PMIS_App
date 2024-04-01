@@ -4,7 +4,7 @@ import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/datasource/energymanagement_datasource.dart';
 import 'package:ev_pmis_app/provider/energy_provider_admin.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/viewmodels/energy_management.dart';
+import 'package:ev_pmis_app/models/energy_management.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/energy_management/energy_management.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';

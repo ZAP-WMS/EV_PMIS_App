@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class Employee {
@@ -11,7 +13,8 @@ class Employee {
     required this.actualendDate,
     required this.actualDuration,
     required this.delay,
-
+    //  required this.reasonDelay,
+    // this.dependency,
     required this.unit,
     required this.scope,
     required this.qtyExecuted,
@@ -31,12 +34,12 @@ class Employee {
   // String? reasonDelay;
   int delay;
   String? dependency;
-  int unit;
+  dynamic unit;
   int scope;
   int qtyExecuted;
   int balanceQty;
   dynamic percProgress;
-  dynamic weightage;
+  double weightage;
 
   factory Employee.fromJson(Map<String, dynamic> json) {
     return Employee(
@@ -49,6 +52,7 @@ class Employee {
         actualendDate: json['ActualEnd'],
         actualDuration: json['ActualDuration'],
         delay: json['Delay'],
+        // reasonDelay: json['ReasonDelay'],
         unit: json['Unit'],
         scope: json['QtyScope'],
         qtyExecuted: json['QtyExecuted'],
@@ -61,6 +65,8 @@ class Employee {
     return DataGridRow(cells: <DataGridCell>[
       DataGridCell<dynamic>(columnName: 'srNo', value: srNo),
       DataGridCell<String>(columnName: 'Activity', value: activity),
+      // const DataGridCell<Widget>(columnName: 'viewbutton', value: null),
+      // const DataGridCell<Widget>(columnName: 'uploadbutton', value: null),
       DataGridCell<int>(
           columnName: 'OriginalDuration', value: originalDuration),
       DataGridCell<String>(columnName: 'StartDate', value: startDate),
@@ -69,12 +75,13 @@ class Employee {
       DataGridCell<String>(columnName: 'ActualEnd', value: actualendDate),
       DataGridCell<int>(columnName: 'ActualDuration', value: actualDuration),
       DataGridCell<int>(columnName: 'Delay', value: delay),
-      DataGridCell<int>(columnName: 'Unit', value: unit),
+
+      DataGridCell<dynamic>(columnName: 'Unit', value: unit),
       DataGridCell<int>(columnName: 'QtyScope', value: scope),
       DataGridCell<int>(columnName: 'QtyExecuted', value: qtyExecuted),
       DataGridCell<int>(columnName: 'BalancedQty', value: balanceQty),
       DataGridCell<dynamic>(columnName: 'Progress', value: percProgress),
-      DataGridCell<dynamic>(columnName: 'Weightage', value: weightage),
+      DataGridCell<double>(columnName: 'Weightage', value: weightage),
     ]);
   }
 
@@ -82,6 +89,8 @@ class Employee {
     return DataGridRow(cells: <DataGridCell>[
       DataGridCell<dynamic>(columnName: 'srNo', value: srNo),
       DataGridCell<String>(columnName: 'Activity', value: activity),
+      // const DataGridCell<Widget>(columnName: 'viewbutton', value: null),
+      // const DataGridCell<Widget>(columnName: 'uploadbutton', value: null),
       DataGridCell<int>(
           columnName: 'OriginalDuration', value: originalDuration),
       DataGridCell<String>(columnName: 'StartDate', value: startDate),
@@ -96,7 +105,7 @@ class Employee {
       DataGridCell<int>(columnName: 'QtyExecuted', value: qtyExecuted),
       DataGridCell<int>(columnName: 'BalancedQty', value: balanceQty),
       DataGridCell<dynamic>(columnName: 'Progress', value: percProgress),
-      DataGridCell<dynamic>(columnName: 'Weightage', value: weightage),
+      DataGridCell<double>(columnName: 'Weightage', value: weightage),
     ]);
   }
 }

@@ -11,7 +11,7 @@ import 'package:ev_pmis_app/datasource/jmr_datasource.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:intl/intl.dart';
 
-import '../../viewmodels/jmr.dart';
+import '../../models/jmr.dart';
 import 'jmr_table.dart';
 
 class JmrFieldPage extends StatefulWidget {

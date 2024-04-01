@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
-import 'package:ev_pmis_app/viewmodels/employee_statutory.dart';
+import 'package:ev_pmis_app/models/employee_statutory.dart';
 import 'package:ev_pmis_app/views/overviewpage/viewFIle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
