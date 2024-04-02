@@ -8,7 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../viewmodels/push_notification.dart';
+import '../../models/push_notification.dart';
 import '../dailyreport/notification_userlist.dart';
 
 late FirebaseMessaging _messaging;

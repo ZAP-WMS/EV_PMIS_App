@@ -1,7 +1,7 @@
 import 'package:ev_pmis_app/screen/jmrPage/jmr_admin/jmr_table_admin.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/viewmodels/jmr.dart';
+import 'package:ev_pmis_app/models/jmr.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:ev_pmis_app/datasource/jmr_datasource.dart';

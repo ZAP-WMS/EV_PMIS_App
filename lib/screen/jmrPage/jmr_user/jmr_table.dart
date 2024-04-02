@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
-import 'package:ev_pmis_app/viewmodels/jmr.dart';
+import 'package:ev_pmis_app/models/jmr.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';

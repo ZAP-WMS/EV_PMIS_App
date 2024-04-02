@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../date_format.dart';
-import '../viewmodels/detailed_engModel.dart';
+import '../models/detailed_engModel.dart';
 import '../style.dart';
 import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';

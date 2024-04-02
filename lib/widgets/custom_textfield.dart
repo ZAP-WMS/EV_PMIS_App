@@ -39,8 +39,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ? widget.isProjectManager
               ? false
               : true
-          : true,
-      autofocus: false,
+          : false,
+      autofocus: true,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,
       style: const TextStyle(fontSize: 13),
@@ -68,9 +68,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ? InkWell(
                 onTap: _togglePasswordView,
                 child: _isHidden
-                    ? const Icon(Icons.visibility)
+                    ? const Icon(Icons.visibility_off)
                     : const Icon(
-                        Icons.visibility_off,
+                        Icons.visibility,
                       ))
             : const Text(
                 '',

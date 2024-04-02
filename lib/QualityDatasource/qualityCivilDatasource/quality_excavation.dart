@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../style.dart';
-import '../../viewmodels/quality_checklistModel.dart';
+import '../../models/quality_checklistModel.dart';
 import '../../views/overviewpage/view_AllFiles.dart';
 import '../../widgets/upload.dart';
 
@@ -55,23 +55,7 @@ class QualityExcavationDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-              //  (dataGridCell.columnName == 'srNo' ||
-              //         dataGridCell.columnName == 'Activity' ||
-              //         dataGridCell.columnName == 'OriginalDuration' ||
-              // dataGridCell.columnName == 'StartDate' ||
-              //         dataGridCell.columnName == 'EndDate' ||
-              //         dataGridCell.columnName == 'ActualStart' ||
-              //         dataGridCell.columnName == 'ActualEnd' ||
-              //         dataGridCell.columnName == 'ActualDuration' ||
-              //         dataGridCell.columnName == 'Delay' ||
-              //         dataGridCell.columnName == 'Unit' ||
-              //         dataGridCell.columnName == 'QtyScope' ||
-              //         dataGridCell.columnName == 'QtyExecuted' ||
-              //         dataGridCell.columnName == 'BalancedQty' ||
-              //         dataGridCell.columnName == 'Progress' ||
-              //         dataGridCell.columnName == 'Weightage')
-              Alignment.center,
+          alignment: Alignment.center,
           // : Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: dataGridCell.columnName == 'Upload'
@@ -92,10 +76,7 @@ class QualityExcavationDataSource extends DataGridSource {
                                 )));
                       },
                       child: const Text('Upload',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          )));
+                          style: TextStyle(fontSize: 12, color: Colors.white)));
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
@@ -478,7 +459,7 @@ class QualityExcavationDataSource extends DataGridSource {
         '';
 
     final int dataRowIndex = dataGridRows.indexOf(dataGridRow);
-    print(dataRowIndex);
+    print(dataRowIndex);   
     if (newCellValue == null || oldValue == newCellValue) {
       return;
     }

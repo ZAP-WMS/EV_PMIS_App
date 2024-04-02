@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../style.dart';
-import '../viewmodels/employee.dart';
+import '../models/employee.dart';
 
 class KeyDataSourceKeyEvents extends DataGridSource {
   BuildContext mainContext;

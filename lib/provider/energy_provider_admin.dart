@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/viewmodels/energy_management.dart';
+import 'package:ev_pmis_app/models/energy_management.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

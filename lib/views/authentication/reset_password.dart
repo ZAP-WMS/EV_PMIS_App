@@ -130,7 +130,7 @@ class _ResetPassState extends State<ResetPass> {
                                   ResetPass.verify = verificationId;
                                   print('verifycode${ResetPass.verify}');
                                   Navigator.pop(context);
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => CheckOtp(

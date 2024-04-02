@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../style.dart';
-import '../viewmodels/energy_management.dart';
+import '../models/energy_management.dart';
 
 class EnergyManagementDatasource extends DataGridSource {
   BuildContext mainContext;
@@ -232,7 +232,7 @@ class EnergyManagementDatasource extends DataGridSource {
       _energyManagement[dataRowIndex].vehicleNo = newCellValue;
     } else if (column.columnName == 'pssNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'pssNo', value: newCellValue);
+          DataGridCell<dynamic>(columnName: 'pssNo', value: newCellValue);
       _energyManagement[dataRowIndex].pssNo = newCellValue;
     } else if (column.columnName == 'chargerId') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -244,7 +244,7 @@ class EnergyManagementDatasource extends DataGridSource {
       _energyManagement[dataRowIndex].startSoc = newCellValue;
     } else if (column.columnName == 'endSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'endSoc', value: newCellValue);
+          DataGridCell<dynamic>(columnName: 'endSoc', value: newCellValue);
       _energyManagement[dataRowIndex].endSoc = newCellValue;
     } else if (column.columnName == 'SatrtDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -331,8 +331,7 @@ class EnergyManagementDatasource extends DataGridSource {
           if (value.isNotEmpty) {
             if (column.columnName == 'energyConsumed') {
               newCellValue = double.parse(value);
-            }
-            if (isNumericType) {
+            } else if (isNumericType) {
               newCellValue = int.parse(value);
               print(newCellValue);
             } else if (isDateTimeType) {
@@ -343,6 +342,8 @@ class EnergyManagementDatasource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

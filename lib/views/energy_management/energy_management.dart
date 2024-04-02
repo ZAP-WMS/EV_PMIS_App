@@ -13,7 +13,7 @@ import '../../components/Loading_page.dart';
 import '../../datasource/energymanagement_datasource.dart';
 import '../../provider/energy_provider_user.dart';
 import '../../style.dart';
-import '../../viewmodels/energy_management.dart';
+import '../../models/energy_management.dart';
 import '../dailyreport/summary.dart';
 
 class EnergyManagement extends StatefulWidget {
@@ -587,7 +587,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                   ),
                 ),
                 Consumer<EnergyProvider>(builder: (context, value, child) {
-                  _energyProvider!.fetchGraphData(
+                  _energyProvider.fetchGraphData(
                       widget.cityName!, widget.depoName!, widget.userId);
 
                   return Expanded(

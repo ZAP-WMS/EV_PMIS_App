@@ -28,11 +28,14 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-          title: 'Update Password',
-          height: 50,
-          isSync: false,
-          isCentered: true),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 50,
+        title: Text('Update Password',
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: blue,
+      ),
       // AppBar(
       //   title: Text('Update Password'),
       // ),

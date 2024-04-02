@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../viewmodels/closer_report.dart';
+import '../models/closer_report.dart';
 import '../style.dart';
 import '../views/overviewpage/view_AllFiles.dart';
 import '../widgets/upload.dart';

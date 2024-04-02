@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
-import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/models/quality_checklistModel.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
@@ -630,7 +630,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                               ),
                             );
                           } else {
-                            // here w3e have to put Nodata page
+                            // here we have to put Nodata page
                             return const LoadingPage();
                           }
                         },
@@ -639,21 +639,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                   ],
                 ),
               ));
-    //  },
-    //),
-    // floatingActionButton: FloatingActionButton.extended(
-    //   onPressed: () {
-    //     Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (context) => ElectricalTable(
-    //             depoName: widget.depoName,
-    //             title: widget.title,
-    //             titleIndex: widget.titleIndex,
-    //           ),
-    //         ));
-    //   },
-    //   label: const Text('Proceed to Sync'),
+
     // ),
   }
 

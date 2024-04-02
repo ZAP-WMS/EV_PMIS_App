@@ -3,8 +3,8 @@ import 'package:ev_pmis_app/screen/dailyreport/daily_report_user/daily_project.d
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../viewmodels/daily_projectModel.dart';
-import '../viewmodels/energy_management.dart';
+import '../models/daily_projectModel.dart';
+import '../models/energy_management.dart';
 
 List<int> globalRowIndex = [];
 

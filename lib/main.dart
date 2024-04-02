@@ -13,7 +13,7 @@ import 'package:ev_pmis_app/provider/selected_row_index.dart';
 import 'package:ev_pmis_app/provider/summary_provider.dart';
 import 'package:ev_pmis_app/route/routegenerator.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/viewmodels/push_notification.dart';
+import 'package:ev_pmis_app/models/push_notification.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

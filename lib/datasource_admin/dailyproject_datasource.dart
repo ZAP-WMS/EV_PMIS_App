@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../viewmodels/daily_projectModel.dart';
+import '../models/daily_projectModel.dart';
 
 class DailyDataSource extends DataGridSource {
   String cityName;

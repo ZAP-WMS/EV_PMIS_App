@@ -4,7 +4,7 @@ import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/datasource/safetychecklist_datasource.dart';
 import 'package:ev_pmis_app/provider/cities_provider.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/viewmodels/safety_checklistModel.dart';
+import 'package:ev_pmis_app/models/safety_checklistModel.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
@@ -36,6 +36,7 @@ late SafetyChecklistDataSource _safetyChecklistDataSource;
 late DataGridController _dataGridController;
 List<dynamic> tabledata2 = [];
 Stream? _stream;
+Stream? _stream2;
 bool checkTable = true;
 dynamic alldata;
 String? cityName;
@@ -109,6 +110,15 @@ class _SafetyFieldState extends State<SafetyField> {
           .collection('date')
           .doc(DateFormat.yMMMMd().format(DateTime.now()))
           .snapshots();
+
+      _stream2 = FirebaseFirestore.instance
+          .collection('SafetyFieldData2')
+          .doc('${widget.depoName}')
+          .collection('userId')
+          .doc(userId)
+          .collection('date')
+          .doc(DateFormat.yMMMMd().format(DateTime.now()))
+          .snapshots();
     });
 
     super.initState();
@@ -172,14 +182,7 @@ class _SafetyFieldState extends State<SafetyField> {
       body: isLoading
           ? const LoadingPage()
           : StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('SafetyFieldData2')
-                  .doc('${widget.depoName}')
-                  .collection('userId')
-                  .doc(userId)
-                  .collection('date')
-                  .doc(DateFormat.yMMMMd().format(DateTime.now()))
-                  .snapshots(),
+              stream: _stream2,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return SingleChildScrollView(
@@ -434,23 +437,27 @@ class _SafetyFieldState extends State<SafetyField> {
                             ),
                           ),
                         ),
-                        safetyField(tpController, 'TPNo', 'TP No are Required'),
+                        safetyField(tpController, 'TPNo', 'TP No are Required',
+                            TextInputAction.next),
                         safetyField(revController, 'Rev: Date:29.11.2022',
-                            'Rev are Required'),
-                        safetyField(locationContoller, 'Depot Location',
-                            'Depot location are Required'),
+                            'Rev are Required', TextInputAction.next),
+                        safetyField(
+                            locationContoller,
+                            'Depot Location',
+                            'Depot location are Required',
+                            TextInputAction.next),
                         safetyField(addressController, 'Address',
-                            'Address are Required'),
+                            'Address are Required', TextInputAction.next),
                         safetyField(contactController, 'contact/Mail Id',
-                            'Contact are Required'),
+                            'Contact are Required', TextInputAction.next),
                         safetyField(latitudeController, 'Longitude & Latitude',
-                            'Rev are Required'),
-                        safetyField(
-                            stateController, 'State', 'State are Required'),
-                        safetyField(
-                            chargerController, 'Charger Type', 'Charger Type'),
+                            'Rev are Required', TextInputAction.next),
+                        safetyField(stateController, 'State',
+                            'State are Required', TextInputAction.next),
+                        safetyField(chargerController, 'Charger Type',
+                            'Charger Type', TextInputAction.next),
                         safetyField(conductedController, 'Conducted By',
-                            'conducted By are required'),
+                            'conducted By are required', TextInputAction.done),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.8,
                           child: StreamBuilder(
@@ -1140,8 +1147,8 @@ class _SafetyFieldState extends State<SafetyField> {
             ));
   }
 
-  Widget safetyField(
-      TextEditingController controller, String title, String msg) {
+  Widget safetyField(TextEditingController controller, String title, String msg,
+      TextInputAction textInputAction) {
     return Container(
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
@@ -1152,7 +1159,7 @@ class _SafetyFieldState extends State<SafetyField> {
           // validatortext: '$title is Required',
           isSuffixIcon: false,
           keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.next),
+          textInputAction: textInputAction),
     );
   }
 

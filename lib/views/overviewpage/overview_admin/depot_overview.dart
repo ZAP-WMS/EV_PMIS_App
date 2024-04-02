@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../../../viewmodels/depot_overview.dart';
+import '../../../models/depot_overview.dart';
 
 class DepotOverview extends StatefulWidget {
   String? cityName;

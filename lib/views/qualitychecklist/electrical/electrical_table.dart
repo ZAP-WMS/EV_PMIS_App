@@ -21,7 +21,7 @@ import '../../../../components/Loading_page.dart';
 import '../../../../provider/cities_provider.dart';
 import '../../../../style.dart';
 import '../../../../widgets/quality_list.dart';
-import '../../../viewmodels/quality_checklistModel.dart';
+import '../../../models/quality_checklistModel.dart';
 
 late QualityPSSDataSource _qualityPSSDataSource;
 late QualityrmuDataSource _qualityrmuDataSource;

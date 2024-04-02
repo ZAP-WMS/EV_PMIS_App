@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../viewmodels/material_procurement.dart';
+import '../models/material_procurement.dart';
 
 class MaterialDatasource extends DataGridSource {
   BuildContext mainContext;

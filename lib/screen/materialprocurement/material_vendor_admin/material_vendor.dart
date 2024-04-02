@@ -3,7 +3,7 @@ import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/datasource_admin/materialprocurement_datasource.dart';
 import 'package:ev_pmis_app/model_admin/material_vendor.dart';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/viewmodels/material_procurement.dart';
+import 'package:ev_pmis_app/models/material_procurement.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/materialprocurement/material_vendor.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';

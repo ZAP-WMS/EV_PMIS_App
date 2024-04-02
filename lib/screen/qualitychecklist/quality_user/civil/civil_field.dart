@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/QualityDatasource/qualityCivilDatasource/quality_paving.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
-import 'package:ev_pmis_app/viewmodels/quality_checklistModel.dart';
+import 'package:ev_pmis_app/models/quality_checklistModel.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/qualitychecklist/quality_checklist.dart';
@@ -144,6 +144,14 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
+    _stream = FirebaseFirestore.instance
+        .collection('CivilQualityChecklist')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(userId)
+        .collection(widget.fieldclnName)
+        .doc(selectedDate)
+        .snapshots();
     getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     pr = ProgressDialog(context,
@@ -161,62 +169,62 @@ class _CivilFieldState extends State<CivilField> {
 
       qualitylisttable2 = checkTable ? backfilling_getData() : data;
       _qualityBackFillingDataSource = QualityBackFillingDataSource(
-        qualitylisttable2,
-        cityName!,
-        widget.depoName!,
-      );
+          qualitylisttable2, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable3 = checkTable ? massonary_getData() : data;
       _qualityMassonaryDataSource = QualityMassonaryDataSource(
-        qualitylisttable3,
-        cityName!,
-        widget.depoName!,
-      );
+          qualitylisttable3, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable4 = checkTable ? glazzing_getData() : data;
       _qualityGlazzingDataSource = QualityGlazzingDataSource(
-        qualitylisttable4,
-        cityName!,
-        widget.depoName!,
-      );
+          qualitylisttable4, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable5 = checkTable ? ceilling_getData() : data;
       _qualityCeillingDataSource = QualityCeillingDataSource(
           qualitylisttable5, cityName!, widget.depoName!);
       qualitylisttable6 = checkTable ? florring_getData() : data;
-      _qualityflooringDataSource = QualityflooringDataSource(
-        qualitylisttable6,
-        cityName!,
-        widget.depoName!,
-      );
       _dataGridController = DataGridController();
+
+      _qualityflooringDataSource = QualityflooringDataSource(
+          qualitylisttable6, cityName!, widget.depoName!);
+      _dataGridController = DataGridController();
+
       qualitylisttable7 = checkTable ? inspection_getData() : data;
       _qualityInspectionDataSource = QualityInspectionDataSource(
           qualitylisttable7, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
       _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
           qualitylisttable8, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable9 = checkTable ? painting_getData() : data;
       _qualityPaintingDataSource = QualityPaintingDataSource(
           qualitylisttable9, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable10 = checkTable ? paving_getData() : data;
       _qualityPavingDataSource = QualityPavingDataSource(
           qualitylisttable10, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable11 = checkTable ? roofing_getData() : data;
       _qualityRoofingDataSource = QualityRoofingDataSource(
           qualitylisttable11, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
+
       qualitylisttable12 = checkTable ? proofing_getData() : data;
       _qualityProofingDataSource = QualityProofingDataSource(
           qualitylisttable12, cityName!, widget.depoName!);
       _dataGridController = DataGridController();
 
-      isLoading = false;
-      setState(() {});
+      setState(() {
+        isLoading = false;
+      });
     });
 
     super.initState();
@@ -225,458 +233,439 @@ class _CivilFieldState extends State<CivilField> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavbarDrawer(role: widget.role),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: CustomAppBarBackDate(
-            downloadFun: downloadPDF,
-            depoName: widget.depoName!,
-            text: '${widget.title}',
-            haveCalender: true,
-            haveSynced: isFieldEditable ? true : false,
-            isDownload: true,
-            haveSummary: false,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewSummary(
-                    cityName: cityName,
-                    depoName: widget.depoName.toString(),
-                    id: 'Quality Checklist',
-                    userId: userId,
-                  ),
-                ),),
-            store: () async {
-              _showDialog(context);
-              civilStoreData(
+        drawer: NavbarDrawer(role: widget.role),
+        appBar: PreferredSize(
+          // ignore: sort_child_properties_last
+          child: CustomAppBarBackDate(
+              downloadFun: downloadPDF,
+              depoName: widget.depoName!,
+              text: '${widget.title}',
+              haveCalender: true,
+              haveSynced: isFieldEditable ? true : false,
+              isDownload: true,
+              haveSummary: false,
+              onTap: () => Navigator.push(
                   context,
-                  widget.fieldclnName == 'Exc'
-                      ? _qualityExcavationDataSource
-                      : widget.fieldclnName == 'BackFilling'
-                          ? _qualityBackFillingDataSource
-                          : widget.fieldclnName == 'Massonary'
-                              ? _qualityMassonaryDataSource
-                              : widget.fieldclnName == 'Glazzing'
-                                  ? _qualityGlazzingDataSource
-                                  : widget.fieldclnName == 'Ceilling'
-                                      ? _qualityCeillingDataSource
-                                      : widget.fieldclnName == 'Flooring'
-                                          ? _qualityflooringDataSource
-                                          : widget.fieldclnName == 'Inspection'
-                                              ? _qualityInspectionDataSource
-                                              : widget.fieldclnName == 'Ironite'
-                                                  ? _qualityIroniteflooringDataSource
-                                                  : widget.fieldclnName ==
-                                                          'Painting'
-                                                      ? _qualityPaintingDataSource
-                                                      : widget.fieldclnName ==
-                                                              'Paving'
-                                                          ? _qualityPavingDataSource
-                                                          : widget.fieldclnName ==
-                                                                  'Roofing'
-                                                              ? _qualityRoofingDataSource
-                                                              : _qualityProofingDataSource,
-                  widget.depoName!,
-                  selectedDate!,);
-              await FirebaseFirestore.instance
-                  .collection('CivilChecklistField')
-                  .doc('${widget.depoName}')
-                  .collection('userId')
-                  .doc(userId)
-                  .collection(widget.fieldclnName)
-                  .doc(selectedDate)
-                  .set({
-                'projectName': projectController.text,
-                'location': locationController.text,
-                'vendor': vendorController.text,
-                'drawing': drawingController.text,
-                'date': dateController.text,
-                'componentName': componentController.text,
-                'grid': gridController.text,
-                'filling': fillingController.text
-              });
-              FirebaseApi().nestedKeyEventsField(
-                  'CivilChecklistField', widget.depoName!, 'userId', userId);
-            },
-            showDate: visDate,
-            choosedate: () {
-              chooseDate(context);
-            }),
-      ),
-      body: isLoading
-          ? const LoadingPage()
-          : SingleChildScrollView(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
+                  MaterialPageRoute(
+                    builder: (context) => ViewSummary(
+                      cityName: cityName,
+                      depoName: widget.depoName.toString(),
+                      id: 'Quality Checklist',
+                      userId: userId,
+                    ),
+                  )),
+              store: () async {
+                _showDialog(context);
+                civilStoreData(
+                    context,
+                    widget.fieldclnName == 'Exc'
+                        ? _qualityExcavationDataSource
+                        : widget.fieldclnName == 'BackFilling'
+                            ? _qualityBackFillingDataSource
+                            : widget.fieldclnName == 'Massonary'
+                                ? _qualityMassonaryDataSource
+                                : widget.fieldclnName == 'Glazzing'
+                                    ? _qualityGlazzingDataSource
+                                    : widget.fieldclnName == 'Ceilling'
+                                        ? _qualityCeillingDataSource
+                                        : widget.fieldclnName == 'Flooring'
+                                            ? _qualityflooringDataSource
+                                            : widget.fieldclnName ==
+                                                    'Inspection'
+                                                ? _qualityInspectionDataSource
+                                                : widget.fieldclnName ==
+                                                        'Ironite'
+                                                    ? _qualityIroniteflooringDataSource
+                                                    : widget.fieldclnName ==
+                                                            'Painting'
+                                                        ? _qualityPaintingDataSource
+                                                        : widget.fieldclnName ==
+                                                                'Paving'
+                                                            ? _qualityPavingDataSource
+                                                            : widget.fieldclnName ==
+                                                                    'Roofing'
+                                                                ? _qualityRoofingDataSource
+                                                                : _qualityProofingDataSource,
+                    widget.depoName!,
+                    selectedDate!);
+                await FirebaseFirestore.instance
                     .collection('CivilChecklistField')
                     .doc('${widget.depoName}')
                     .collection('userId')
                     .doc(userId)
                     .collection(widget.fieldclnName)
                     .doc(selectedDate)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  return Column(
-                    children: [
-                      safetyField(projectController, 'Project Name',
-                          TextInputAction.next),
-                      safetyField(
-                          locationController, 'Location', TextInputAction.next),
-                      safetyField(vendorController, 'Vendor / SubVendor',
-                          TextInputAction.next),
-                      safetyField(drawingController, 'Drawing No.',
-                          TextInputAction.next),
-                      safetyField(dateController, 'Date', TextInputAction.next),
-                      safetyField(componentController,
-                          'Component of the Structure', TextInputAction.next),
-                      safetyField(gridController, 'Grid / Axis Level',
-                          TextInputAction.next),
-                      safetyField(fillingController, 'Type of Filling',
-                          TextInputAction.done),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('CivilQualityChecklist')
-                              .doc('${widget.depoName}')
-                              .collection('userId')
-                              .doc(userId)
-                              .collection(widget.fieldclnName)
-                              .doc(selectedDate)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData ||
-                                snapshot.data!.exists == false) {
-                              return SfDataGridTheme(
-                                data: SfDataGridThemeData(
-                                    gridLineColor: blue,
-                                    headerColor: white,
-                                    gridLineStrokeWidth: 2,
-                                    frozenPaneLineColor: blue),
-                                child: SfDataGrid(
-                                  source: widget.fieldclnName == 'Exc'
-                                      ? _qualityExcavationDataSource
-                                      : widget.fieldclnName == 'BackFilling'
-                                          ? _qualityBackFillingDataSource
-                                          : widget.fieldclnName == 'Massonary'
-                                              ? _qualityMassonaryDataSource
-                                              : widget.fieldclnName ==
-                                                      'Glazzing'
-                                                  ? _qualityGlazzingDataSource
-                                                  : widget.fieldclnName ==
-                                                          'Ceilling'
-                                                      ? _qualityCeillingDataSource
-                                                      : widget.fieldclnName ==
-                                                              'Flooring'
-                                                          ? _qualityflooringDataSource
-                                                          : widget.fieldclnName ==
-                                                                  'Inspection'
-                                                              ? _qualityInspectionDataSource
-                                                              : widget.fieldclnName ==
-                                                                      'Ironite'
-                                                                  ? _qualityIroniteflooringDataSource
-                                                                  : widget.fieldclnName ==
-                                                                          'Painting'
-                                                                      ? _qualityPaintingDataSource
-                                                                      : widget.fieldclnName ==
-                                                                              'Paving'
-                                                                          ? _qualityPavingDataSource
-                                                                          : widget.fieldclnName == 'Roofing'
-                                                                              ? _qualityRoofingDataSource
-                                                                              : _qualityProofingDataSource,
+                    .set({
+                  'projectName': projectController.text,
+                  'location': locationController.text,
+                  'vendor': vendorController.text,
+                  'drawing': drawingController.text,
+                  'date': dateController.text,
+                  'componentName': componentController.text,
+                  'grid': gridController.text,
+                  'filling': fillingController.text
+                });
+                FirebaseApi().nestedKeyEventsField(
+                    'CivilChecklistField', widget.depoName!, 'userId', userId);
+              },
+              showDate: visDate,
+              choosedate: () {
+                chooseDate(context);
+              }),
 
-                                  allowEditing: isFieldEditable,
-                                  frozenColumnsCount: 1,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerGridLinesVisibility:
-                                      GridLinesVisibility.both,
-                                  selectionMode: SelectionMode.single,
-                                  navigationMode: GridNavigationMode.cell,
-                                  columnWidthMode: ColumnWidthMode.auto,
-                                  editingGestureType: EditingGestureType.tap,
-                                  controller: _dataGridController,
-                                  onQueryRowHeight: (details) {
-                                    return details.getIntrinsicRowHeight(
-                                        details.rowIndex);
-                                  },
-                                  // onQueryRowHeight: (dwidget.index!etails) {
-                                  //   return details.rowIndex == 0 ? 60.0 : 49.0;
-                                  // },
-                                  columns: [
-                                    GridColumn(
-                                      columnName: 'srNo',
-                                      width: 80,
-                                      autoFitPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 16),
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Sr No',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      width: 350,
-                                      columnName: 'checklist',
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            'Checks(Before Start of Backfill Activity)',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'responsibility',
-                                      width: 250,
-                                      allowEditing: true,
-                                      label: Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            "Contractor’s Site Engineer",
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'Reference',
-                                      allowEditing: true,
-                                      width: 250,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text("Owner’s Site Engineer",
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'observation',
-                                      allowEditing: true,
-                                      width: 200,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            "Observation Comments by  Owner’s Engineer",
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'Upload',
-                                      allowEditing: false,
-                                      visible: true,
-                                      width: 150,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Upload',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                    GridColumn(
-                                      columnName: 'View',
-                                      allowEditing: false,
-                                      width: 150,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('View',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else if (snapshot.hasData) {
-                              return SfDataGridTheme(
-                                data: SfDataGridThemeData(
-                                    headerColor: white, gridLineColor: blue),
-                                child: SfDataGrid(
-                                  source: widget.fieldclnName == 'Exc'
-                                      ? _qualityExcavationDataSource
-                                      : widget.fieldclnName == 'BackFilling'
-                                          ? _qualityBackFillingDataSource
-                                          : widget.fieldclnName == 'Massonary'
-                                              ? _qualityMassonaryDataSource
-                                              : widget.fieldclnName ==
-                                                      'Glazzing'
-                                                  ? _qualityGlazzingDataSource
-                                                  : widget.fieldclnName ==
-                                                          'Ceilling'
-                                                      ? _qualityCeillingDataSource
-                                                      : widget.fieldclnName ==
-                                                              'Flooring'
-                                                          ? _qualityflooringDataSource
-                                                          : widget.fieldclnName ==
-                                                                  'Inspection'
-                                                              ? _qualityInspectionDataSource
-                                                              : widget.fieldclnName ==
-                                                                      'Ironite'
-                                                                  ? _qualityIroniteflooringDataSource
-                                                                  : widget.fieldclnName ==
-                                                                          'Painting'
-                                                                      ? _qualityPaintingDataSource
-                                                                      : widget.fieldclnName ==
-                                                                              'Paving'
-                                                                          ? _qualityPavingDataSource
-                                                                          : widget.fieldclnName == 'Roofing'
-                                                                              ? _qualityRoofingDataSource
-                                                                              : _qualityProofingDataSource,
-                                  allowEditing: isFieldEditable,
-                                  frozenColumnsCount: 1,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerGridLinesVisibility:
-                                      GridLinesVisibility.both,
-                                  selectionMode: SelectionMode.single,
-                                  navigationMode: GridNavigationMode.cell,
-                                  columnWidthMode: ColumnWidthMode.auto,
-                                  editingGestureType: EditingGestureType.tap,
-                                  controller: _dataGridController,
+          preferredSize: const Size.fromHeight(60),
+        ),
+        body: isLoading
+            ? const LoadingPage()
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    safetyField(projectController, 'Project Name',
+                        TextInputAction.next),
+                    safetyField(
+                        locationController, 'Location', TextInputAction.next),
+                    safetyField(vendorController, 'Vendor / SubVendor',
+                        TextInputAction.next),
+                    safetyField(
+                        drawingController, 'Drawing No.', TextInputAction.next),
+                    safetyField(dateController, 'Date', TextInputAction.next),
+                    safetyField(componentController,
+                        'Component of the Structure', TextInputAction.next),
+                    safetyField(gridController, 'Grid / Axis Level',
+                        TextInputAction.next),
+                    safetyField(fillingController, 'Type of Filling',
+                        TextInputAction.done),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: StreamBuilder(
+                        stream: _stream,
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data!.exists == false) {
+                            return SfDataGridTheme(
+                              data: SfDataGridThemeData(
+                                  gridLineColor: blue,
+                                  headerColor: white,
+                                  gridLineStrokeWidth: 2,
+                                  frozenPaneLineColor: blue),
+                              child: SfDataGrid(
+                                source: widget.fieldclnName == 'Exc'
+                                    ? _qualityExcavationDataSource
+                                    : widget.fieldclnName == 'BackFilling'
+                                        ? _qualityBackFillingDataSource
+                                        : widget.fieldclnName == 'Massonary'
+                                            ? _qualityMassonaryDataSource
+                                            : widget.fieldclnName == 'Glazzing'
+                                                ? _qualityGlazzingDataSource
+                                                : widget.fieldclnName ==
+                                                        'Ceilling'
+                                                    ? _qualityCeillingDataSource
+                                                    : widget.fieldclnName ==
+                                                            'Flooring'
+                                                        ? _qualityflooringDataSource
+                                                        : widget.fieldclnName ==
+                                                                'Inspection'
+                                                            ? _qualityInspectionDataSource
+                                                            : widget.fieldclnName ==
+                                                                    'Ironite'
+                                                                ? _qualityIroniteflooringDataSource
+                                                                : widget.fieldclnName ==
+                                                                        'Painting'
+                                                                    ? _qualityPaintingDataSource
+                                                                    : widget.fieldclnName ==
+                                                                            'Paving'
+                                                                        ? _qualityPavingDataSource
+                                                                        : widget.fieldclnName ==
+                                                                                'Roofing'
+                                                                            ? _qualityRoofingDataSource
+                                                                            : _qualityProofingDataSource,
 
-                                  // onQueryRowHeight: (details) {
-                                  //   return details.rowIndex == 0 ? 60.0 : 49.0;
-                                  // },
-                                  columns: [
-                                    GridColumn(
-                                      columnName: 'srNo',
-                                      width: 80,
-                                      autoFitPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 16),
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Sr No',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
+                                allowEditing: isFieldEditable,
+                                frozenColumnsCount: 1,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                selectionMode: SelectionMode.single,
+                                navigationMode: GridNavigationMode.cell,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                editingGestureType: EditingGestureType.tap,
+                                controller: _dataGridController,
+                                onQueryRowHeight: (details) {
+                                  return details
+                                      .getIntrinsicRowHeight(details.rowIndex);
+                                },
+                                // onQueryRowHeight: (dwidget.index!etails) {
+                                //   return details.rowIndex == 0 ? 60.0 : 49.0;
+                                // },
+                                columns: [
+                                  GridColumn(
+                                    columnName: 'srNo',
+                                    width: 55,
+                                    autoFitPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    allowEditing: false,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Sr No',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
                                     ),
-                                    GridColumn(
-                                      width: 350,
-                                      columnName: 'checklist',
-                                      allowEditing: false,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            'Checks(Before Start of Backfill Activity)',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
+                                  ),
+                                  GridColumn(
+                                    width: 300,
+                                    columnName: 'checklist',
+                                    allowEditing: false,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          'Checks(Before Start of Backfill Activity)',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
                                     ),
-                                    GridColumn(
-                                      columnName: 'responsibility',
-                                      width: 250,
-                                      allowEditing: true,
-                                      label: Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            "Contractor’s Site Engineer",
-                                            style: tableheaderwhitecolor),
-                                      ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'responsibility',
+                                    width: 250,
+                                    allowEditing: true,
+                                    label: Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      alignment: Alignment.center,
+                                      child: Text("Contractor’s Site Engineer",
+                                          style: tableheaderwhitecolor),
                                     ),
-                                    GridColumn(
-                                      columnName: 'Reference',
-                                      allowEditing: true,
-                                      width: 250,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text("Owner’s Site Engineer",
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Reference',
+                                    allowEditing: true,
+                                    width: 250,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text("Owner’s Site Engineer",
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
                                     ),
-                                    GridColumn(
-                                      columnName: 'observation',
-                                      allowEditing: true,
-                                      width: 200,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            "Observation Comments by  Owner’s Engineer",
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'observation',
+                                    allowEditing: true,
+                                    width: 200,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          "Observation Comments by  Owner’s Engineer",
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
                                     ),
-                                    GridColumn(
-                                      columnName: 'Upload',
-                                      allowEditing: false,
-                                      visible: true,
-                                      width: 150,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('Upload',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Upload',
+                                    allowEditing: false,
+                                    visible: true,
+                                    width: 110,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Upload',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
                                     ),
-                                    GridColumn(
-                                      columnName: 'View',
-                                      allowEditing: false,
-                                      width: 150,
-                                      label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        alignment: Alignment.center,
-                                        child: Text('View',
-                                            overflow: TextOverflow.values.first,
-                                            style: tableheaderwhitecolor),
-                                      ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'View',
+                                    allowEditing: false,
+                                    width: 110,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('View',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
                                     ),
-                                  ],
-                                ),
-                              );
-                            }
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else if (snapshot.hasData) {
+                            return SfDataGridTheme(
+                              data: SfDataGridThemeData(
+                                  headerColor: white, gridLineColor: blue),
+                              child: SfDataGrid(
+                                source: widget.fieldclnName == 'Exc'
+                                    ? _qualityExcavationDataSource
+                                    : widget.fieldclnName == 'BackFilling'
+                                        ? _qualityBackFillingDataSource
+                                        : widget.fieldclnName == 'Massonary'
+                                            ? _qualityMassonaryDataSource
+                                            : widget.fieldclnName == 'Glazzing'
+                                                ? _qualityGlazzingDataSource
+                                                : widget.fieldclnName ==
+                                                        'Ceilling'
+                                                    ? _qualityCeillingDataSource
+                                                    : widget.fieldclnName ==
+                                                            'Flooring'
+                                                        ? _qualityflooringDataSource
+                                                        : widget.fieldclnName ==
+                                                                'Inspection'
+                                                            ? _qualityInspectionDataSource
+                                                            : widget.fieldclnName ==
+                                                                    'Ironite'
+                                                                ? _qualityIroniteflooringDataSource
+                                                                : widget.fieldclnName ==
+                                                                        'Painting'
+                                                                    ? _qualityPaintingDataSource
+                                                                    : widget.fieldclnName ==
+                                                                            'Paving'
+                                                                        ? _qualityPavingDataSource
+                                                                        : widget.fieldclnName ==
+                                                                                'Roofing'
+                                                                            ? _qualityRoofingDataSource
+                                                                            : _qualityProofingDataSource,
+                                allowEditing: isFieldEditable,
+                                frozenColumnsCount: 1,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                selectionMode: SelectionMode.single,
+                                navigationMode: GridNavigationMode.cell,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                editingGestureType: EditingGestureType.tap,
+                                controller: _dataGridController,
 
-                            return Container();
-                          },
-                        ),
+                                // onQueryRowHeight: (details) {
+                                //   return details.rowIndex == 0 ? 60.0 : 49.0;
+                                // },
+                                columns: [
+                                  GridColumn(
+                                    columnName: 'srNo',
+                                    width: 55,
+                                    autoFitPadding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    allowEditing: false,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Sr No',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    width: 300,
+                                    columnName: 'checklist',
+                                    allowEditing: false,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          'Checks(Before Start of Backfill Activity)',
+                                          overflow: TextOverflow.values.first,
+                                          textAlign: TextAlign.center,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'responsibility',
+                                    width: 250,
+                                    allowEditing: true,
+                                    label: Container(
+                                      padding: const EdgeInsets.all(8.0),
+                                      alignment: Alignment.center,
+                                      child: Text("Contractor’s Site Engineer",
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Reference',
+                                    allowEditing: true,
+                                    width: 250,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text("Owner’s Site Engineer",
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'observation',
+                                    allowEditing: true,
+                                    width: 200,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          "Observation Comments by  Owner’s Engineer",
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Upload',
+                                    allowEditing: false,
+                                    visible: true,
+                                    width: 110,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('Upload',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'View',
+                                    allowEditing: false,
+                                    width: 110,
+                                    label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      alignment: Alignment.center,
+                                      child: Text('View',
+                                          overflow: TextOverflow.values.first,
+                                          style: tableheaderwhitecolor),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return Container();
+                        },
                       ),
-                    ],
-                  );
-                },
-              ),
-            ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) => CivilTable(
-      //             depoName: widget.depoName,
-      //             title: widget.title,
-      //             index: widget.index,
-      //           ),
-      //         ));
-      //   },
-      //   label: const Text('Proceed to Sync'),
-      // ),
-    );
+                    ),
+                  ],
+                ),
+
+                // floatingActionButton: FloatingActionButton.extended(
+                //   onPressed: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => CivilTable(
+                //             depoName: widget.depoName,
+                //             title: widget.title,
+                //             index: widget.index,
+                //           ),
+                //         ));
+                //   },
+                //   label: const Text('Proceed to Sync'),
+                // ),
+              ));
   }
 
   Widget safetyField(TextEditingController controller, String title,

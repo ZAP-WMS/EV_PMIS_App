@@ -13,7 +13,7 @@ import '../../datasource/materialprocurement_datasource.dart';
 
 import '../../provider/cities_provider.dart';
 import '../../style.dart';
-import '../../viewmodels/material_procurement.dart';
+import '../../models/material_procurement.dart';
 import '../../widgets/custom_appbar.dart';
 import '../authentication/authservice.dart';
 

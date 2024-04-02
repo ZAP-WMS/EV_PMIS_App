@@ -13,7 +13,7 @@ import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
 import 'package:intl/intl.dart';
 
-import '../../viewmodels/jmr.dart';
+import '../../models/jmr.dart';
 
 class JmrTablePage extends StatefulWidget {
   String? cityName;

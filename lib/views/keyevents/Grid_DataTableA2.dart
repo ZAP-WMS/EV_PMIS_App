@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../FirebaseApi/firebase_api.dart';
-import '../../viewmodels/employee.dart';
+import '../../models/employee.dart';
 import '../../views/authentication/authservice.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/employee_datasource.dart';
