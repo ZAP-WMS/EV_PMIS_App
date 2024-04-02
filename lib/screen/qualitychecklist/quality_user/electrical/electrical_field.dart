@@ -7,6 +7,7 @@ import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -217,7 +218,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                 haveSynced: isFieldEditable ? true : false,
                 haveCalender: true,
                 store: () {
-                  _showDialog(context);
+                  showProgressDilogue(context);
                   storeData(
                       context,
                       widget.fielClnName == 'PSS'
@@ -657,22 +658,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
     );
   }
 
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   storeData(BuildContext context, dynamic datasource, String depoName,
       String currentDate) {
@@ -1275,7 +1260,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
   }
 
   Future<void> downloadPDF() async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       final pr = ProgressDialog(context);
       pr.style(
         progressWidgetAlignment: Alignment.center,
@@ -1315,19 +1300,22 @@ class _ElectricalFieldState extends State<ElectricalField> {
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    if (await Permission.storage.request().isGranted) {
-      final documentDirectory =
-          (await DownloadsPath.downloadsDirectory())?.path;
-      final file = File('$documentDirectory/$fileName');
+    final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
+    File file = File('$documentDirectory/$fileName');
 
-      int counter = 1;
-      String newFilePath = file.path;
-      await file.writeAsBytes(pdfData);
-      pathToOpenFile = newFilePath.toString();
-      return file;
-      // }
+    int counter = 1;
+    String newFilePath = file.path;
+    pathToOpenFile = newFilePath;
+
+    while (await file.exists()) {
+      String newName =
+          '${fileName.substring(0, fileName.lastIndexOf('.'))}-$counter${fileName.substring(fileName.lastIndexOf('.'))}';
+      file = File('$documentDirectory/$newName');
+      pathToOpenFile = file.path;
+      counter++;
     }
-    return File('');
+    await file.writeAsBytes(pdfData);
+    return file;
   }
 
   Future getAssignedDepots() async {

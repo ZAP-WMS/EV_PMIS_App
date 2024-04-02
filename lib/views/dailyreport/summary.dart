@@ -327,7 +327,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return LoadingPage();
+                            return const LoadingPage();
                           } else if (!snapshot.hasData ||
                               snapshot.data!.exists == false) {
                             return const NodataAvailable();
@@ -1256,7 +1256,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
-                                      return LoadingPage();
+                                      return const LoadingPage();
                                     }
                                     if (!snapshot.hasData ||
                                         snapshot.data!.exists == false) {

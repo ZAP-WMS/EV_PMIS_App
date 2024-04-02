@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -99,7 +100,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
                   ),
                 )),
             store: () {
-              _showDialog(context);
+              showProgressDilogue(context);
               FirebaseApi().nestedKeyEventsField(
                   'MonthlyProjectReport2', widget.depoName!, 'userId', userId);
               storeData();
@@ -466,22 +467,6 @@ class _MonthlyProjectState extends State<MonthlyProject> {
     ];
   }
 
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Future<void> getTableData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance

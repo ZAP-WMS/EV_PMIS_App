@@ -42,7 +42,6 @@ class JmrFieldPage extends StatefulWidget {
 }
 
 class _JmrFieldPageState extends State<JmrFieldPage> {
-
   final TextEditingController projectName = TextEditingController();
   final loiRefNum = TextEditingController();
   final siteLocation = TextEditingController();
@@ -53,7 +52,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
   final endDate = TextEditingController();
 
   List nextJmrIndex = [];
-  
+
   List<List<dynamic>> data = [
     [
       '1',
@@ -138,7 +137,9 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                 child: CustomAppBar(
                   depoName: '${widget.depoName} / ${widget.title.toString()}',
                   store: () {
-                    nextIndex().then((value) => StoreData(),);
+                    nextIndex().then(
+                      (value) => StoreData(),
+                    );
                   },
                   height: 30,
                   isCentered: true,
@@ -581,6 +582,7 @@ HeaderValue(BuildContext context, bool isReadOnly, String title,
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,
           child: TextFormField(
+            textInputAction: TextInputAction.next,
             readOnly: isReadOnly,
             controller: fieldData,
             decoration: InputDecoration(

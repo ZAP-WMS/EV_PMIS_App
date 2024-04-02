@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -397,7 +398,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                       isCentered: false,
                       isSync: isFieldEditable ? false : true,
                       store: () {
-                        _showDialog(context);
+                        showProgressDilogue(context);
                         FirebaseApi().defaultKeyEventsField(
                             'KeyEventsTable', widget.depoName!);
                         FirebaseApi().nestedKeyEventsField(
@@ -2973,23 +2974,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
 
     tabledata2.clear();
     //   });
-  }
-
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   Future getAssignedDepots() async {

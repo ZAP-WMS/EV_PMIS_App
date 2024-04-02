@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/models/daily_projectModel.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/dailyreport/summary.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -95,7 +96,7 @@ class _DailyProjectState extends State<DailyProject> {
                     ),
                   )),
               store: () {
-                _showDialog(context);
+                showProgressDilogue(context);
                 FirebaseApi().nestedKeyEventsField(
                     'DailyProject3', widget.depoName!, 'userId', userId);
                 storeData();
@@ -614,23 +615,6 @@ class _DailyProjectState extends State<DailyProject> {
           progress: '',
           status: '')
     ];
-  }
-
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void chooseDate(BuildContext dialogueContext) {

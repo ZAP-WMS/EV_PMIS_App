@@ -10,6 +10,7 @@ import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -166,7 +167,7 @@ class _SafetyFieldState extends State<SafetyField> {
               'EnegizationDate': engizationController.text,
               'BoardingDate': bordingController.text,
             });
-            _showDialog(context);
+            showProgressDilogue(context);
             store();
             FirebaseApi().nestedKeyEventsField(
                 'SafetyFieldData2', widget.depoName!, 'userId', userId);
@@ -717,25 +718,9 @@ class _SafetyFieldState extends State<SafetyField> {
 
   Future<void> getUserId() async {
     await AuthService().getCurrentUserId().then((value) {
+      
       userId = value;
     });
-  }
-
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void store() {

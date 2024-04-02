@@ -25,7 +25,6 @@ class _DailyProjectActionState extends State<DailyProjectAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 

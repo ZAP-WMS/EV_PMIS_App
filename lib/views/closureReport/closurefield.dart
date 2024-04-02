@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +91,7 @@ class _ClosureFieldState extends State<ClosureField> {
                 'LaoNo': loaController.text,
               },
             );
-            _showDialog(context);
+            showProgressDilogue(context);
             store();
           },
           isCentered: false,
@@ -427,22 +428,6 @@ class _ClosureFieldState extends State<ClosureField> {
   }
 }
 
-void _showDialog(BuildContext context) {
-  showCupertinoDialog(
-    context: context,
-    builder: (context) => CupertinoAlertDialog(
-      content: SizedBox(
-        height: 50,
-        width: 50,
-        child: Center(
-          child: CircularProgressIndicator(
-            color: blue,
-          ),
-        ),
-      ),
-    ),
-  );
-}
 
 // closureField(String depoName) {
 //   FirebaseFirestore.instance
