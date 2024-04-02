@@ -480,7 +480,7 @@ class _MonthlyProjectState extends State<MonthlyProject> {
           ),
         ),
       ),
-    );
+    ); 
   }
 
   Future<void> getTableData() async {

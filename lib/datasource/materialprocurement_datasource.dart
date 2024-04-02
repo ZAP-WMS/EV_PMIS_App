@@ -32,7 +32,7 @@ class MaterialDatasource extends DataGridSource {
 
   /// Help to control the editable text in [TextField] widget.
   TextEditingController editingController = TextEditingController();
-  final DataGridController _dataGridController = DataGridController();
+  // final DataGridController _dataGridController = DataGridController();
 
   @override
   List<DataGridRow> get rows => dataGridRows;
@@ -271,14 +271,6 @@ class MaterialDatasource extends DataGridSource {
           DataGridCell<String>(columnName: 'materialSite', value: newCellValue);
       _material[dataRowIndex].materialSite = newCellValue;
     }
-    // Future storeData() async {
-    //   await FirebaseFirestore.instance.collection('A1').add({
-    //     'Weightage':
-    //         dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-    //             DataGridCell<int>(
-    //                 columnName: 'Weightage', value: newCellValue as int),
-    //   });
-    // }
   }
 
   @override
@@ -303,7 +295,7 @@ class MaterialDatasource extends DataGridSource {
     // The new cell value must be reset.
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
-    newCellValue = '';
+    newCellValue = null;
 
     final bool isNumericType = column.columnName == 'qty';
 
@@ -349,7 +341,6 @@ class MaterialDatasource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
-          newCellValue = value;
           submitCell();
         },
       ),

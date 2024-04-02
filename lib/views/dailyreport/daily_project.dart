@@ -19,7 +19,6 @@ import '../../../widgets/appbar_back_date.dart';
 import '../../../widgets/navbar.dart';
 
 class DailyProject extends StatefulWidget {
-  
   String? cityName;
   String? depoName;
   String role;
@@ -34,7 +33,6 @@ class DailyProject extends StatefulWidget {
 
   @override
   State<DailyProject> createState() => _DailyProjectState();
-
 }
 
 class _DailyProjectState extends State<DailyProject> {
@@ -149,7 +147,7 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'Date',
                             visible: false,
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: true,
                             width: 150,
                             label: Container(
@@ -166,7 +164,7 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'SiNo',
                             visible: false,
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: true,
                             width: 70,
                             label: Container(
@@ -182,7 +180,7 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'TypeOfActivity',
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: true,
                             width: 200,
                             label: Container(
@@ -197,7 +195,7 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'ActivityDetails',
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: true,
                             width: 220,
                             label: Container(
@@ -211,8 +209,7 @@ class _DailyProjectState extends State<DailyProject> {
                             ),
                           ),
                           GridColumn(
-                            columnName: 'Progress',
-                            //autoFit//Padding: tablepadding,
+                            columnName: 'Progress',                           
                             allowEditing: true,
                             columnWidthMode: ColumnWidthMode.fill,
                             width: 300,
@@ -228,7 +225,7 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Status',
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: true,
                             width: 280,
                             label: Container(
@@ -243,7 +240,7 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'upload',
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: false,
                             width: 150,
                             label: Container(
@@ -258,7 +255,7 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'view',
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: false,
                             width: 120,
                             label: Container(
@@ -273,7 +270,7 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Add',
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: false,
                             width: 120,
                             label: Container(
@@ -288,7 +285,7 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Delete',
-                            //autoFit//Padding: tablepadding,
+                            
                             allowEditing: false,
                             width: 120,
                             label: Container(
@@ -321,181 +318,182 @@ class _DailyProjectState extends State<DailyProject> {
                   _dailyDataSource.buildDataGridRows();
                   _dailyDataSource.updateDatagridSource();
                   return SfDataGridTheme(
-                      data: SfDataGridThemeData(
-                          gridLineColor: blue,
-                          gridLineStrokeWidth: 2,
-                          frozenPaneLineColor: blue,
-                          frozenPaneLineWidth: 2),
-                      child: SfDataGrid(
-                          source: _dailyDataSource,
-                          allowEditing: isFieldEditable,
-                          frozenColumnsCount: 2,
-                          gridLinesVisibility: GridLinesVisibility.both,
-                          headerGridLinesVisibility: GridLinesVisibility.both,
-                          selectionMode: SelectionMode.single,
-                          navigationMode: GridNavigationMode.cell,
-                          editingGestureType: EditingGestureType.tap,
-                          controller: _dataGridController,
-                          onQueryRowHeight: (details) {
-                            return details
-                                .getIntrinsicRowHeight(details.rowIndex);
-                          },
-                          columns: [
-                            GridColumn(
-                              columnName: 'Date',
-                              visible: false,
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: true,
-                              width: 70,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Date',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                    data: SfDataGridThemeData(
+                        gridLineColor: blue,
+                        gridLineStrokeWidth: 2,
+                        frozenPaneLineColor: blue,
+                        frozenPaneLineWidth: 2),
+                    child: SfDataGrid(
+                        source: _dailyDataSource,
+                        allowEditing: isFieldEditable,
+                        frozenColumnsCount: 2,
+                        gridLinesVisibility: GridLinesVisibility.both,
+                        headerGridLinesVisibility: GridLinesVisibility.both,
+                        selectionMode: SelectionMode.single,
+                        navigationMode: GridNavigationMode.cell,
+                        editingGestureType: EditingGestureType.tap,
+                        controller: _dataGridController,
+                        onQueryRowHeight: (details) {
+                          return details
+                              .getIntrinsicRowHeight(details.rowIndex);
+                        },
+                        columns: [
+                          GridColumn(
+                            columnName: 'Date',
+                            visible: false,
+                            
+                            allowEditing: true,
+                            width: 70,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Date',
+                                  overflow: TextOverflow.values.first,
+                                  textAlign: TextAlign.center,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'SiNo',
-                              visible: false,
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: true,
-                              width: 70,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('SI No.',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'SiNo',
+                            visible: false,
+                            
+                            allowEditing: true,
+                            width: 70,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('SI No.',
+                                  overflow: TextOverflow.values.first,
+                                  textAlign: TextAlign.center,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'TypeOfActivity',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: true,
-                              width: 200,
-                              label: Container(
-                                // //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Type of Activity',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'TypeOfActivity',
+                            
+                            allowEditing: true,
+                            width: 200,
+                            label: Container(
+                              // //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Type of Activity',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'ActivityDetails',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: true,
-                              width: 220,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Activity Details',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'ActivityDetails',
+                            
+                            allowEditing: true,
+                            width: 220,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Activity Details',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'Progress',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: true,
-                              width: 300,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Progress',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'Progress',
+                            
+                            allowEditing: true,
+                            width: 300,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Progress',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'Status',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: true,
-                              width: 280,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Remark / Status',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'Status',
+                            
+                            allowEditing: true,
+                            width: 280,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Remark / Status',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'upload',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: false,
-                              width: 150,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Upload Image',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'upload',
+                            
+                            allowEditing: false,
+                            width: 150,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Upload Image',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'view',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: false,
-                              width: 120,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('view Image',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'view',
+                            
+                            allowEditing: false,
+                            width: 120,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('view Image',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'Add',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: false,
-                              width: 120,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Add Row',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'Add',
+                            
+                            allowEditing: false,
+                            width: 120,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Add Row',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                            GridColumn(
-                              columnName: 'Delete',
-                              //autoFit//Padding: tablepadding,
-                              allowEditing: false,
-                              width: 120,
-                              label: Container(
-                                //Padding: tablepadding,
-                                alignment: Alignment.center,
-                                child: Text('Delete Row',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheaderwhitecolor
-                                    //    textAlign: TextAlign.center,
-                                    ),
-                              ),
+                          ),
+                          GridColumn(
+                            columnName: 'Delete',
+                            
+                            allowEditing: false,
+                            width: 120,
+                            label: Container(
+                              //Padding: tablepadding,
+                              alignment: Alignment.center,
+                              child: Text('Delete Row',
+                                  overflow: TextOverflow.values.first,
+                                  style: tableheaderwhitecolor
+                                  //    textAlign: TextAlign.center,
+                                  ),
                             ),
-                          ]),);
+                          ),
+                        ]),
+                  );
                 }
               },
             ),
@@ -553,7 +551,6 @@ class _DailyProjectState extends State<DailyProject> {
       ));
     });
   }
-
 
   void _showDialog(BuildContext context) {
     showCupertinoDialog(

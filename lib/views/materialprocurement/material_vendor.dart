@@ -120,7 +120,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                   controller: _dataGridController,
                                   columns: [
                                     GridColumn(
-                                      columnName: 'cityName', 
+                                      columnName: 'cityName',
                                       autoFitPadding:
                                           const EdgeInsets.symmetric(
                                         horizontal: 16,
@@ -383,13 +383,17 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                             _materialprocurement.clear();
                             alldata.forEach((element) {
                               _materialprocurement.add(
-                                  MaterialProcurementModel.fromjson(element,),);
+                                  MaterialProcurementModel.fromjson(element));
                               _materialDatasource = MaterialDatasource(
                                   _materialprocurement,
                                   context,
                                   cityName,
                                   widget.depoName);
                             });
+                            _dataGridController = DataGridController();
+                            _materialDatasource.buildDataGridRows();
+                            _materialDatasource.updateDatagridSource();
+
                             return SfDataGrid(
                                 source: _materialDatasource,
                                 allowEditing: isFieldEditable,
@@ -755,28 +759,28 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
     ];
   }
 
-  Future<void> getTableData() async {
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('MaterialProcurement')
-        .doc('${widget.depoName}')
-        .collection('Material Data')
-        .doc(userId)
-        .get();
+  // Future<void> getTableData() async {
+  //   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+  //       .collection('MaterialProcurement')
+  //       .doc('${widget.depoName}')
+  //       .collection('Material Data')
+  //       .doc(userId)
+  //       .get();
 
-    if (documentSnapshot.exists) {
-      Map<String, dynamic> tempData =
-          documentSnapshot.data() as Map<String, dynamic>;
+  //   if (documentSnapshot.exists) {
+  //     Map<String, dynamic> tempData =
+  //         documentSnapshot.data() as Map<String, dynamic>;
 
-      List<dynamic> mapData = tempData['data'];
+  //     List<dynamic> mapData = tempData['data'];
 
-      _materialprocurement =
-          mapData.map((map) => MaterialProcurementModel.fromjson(map)).toList();
-      checkTable = false;
-    }
+  //     _materialprocurement =
+  //         mapData.map((map) => MaterialProcurementModel.fromjson(map)).toList();
+  //     checkTable = false;
+  //   }
 
-    isLoading = false;
-    setState(() {});
-  }
+  //   isLoading = false;
+  //   setState(() {});
+  // }
 
   Future getAssignedDepots() async {
     assignedDepots = await authService.getDepotList();
