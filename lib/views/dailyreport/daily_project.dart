@@ -149,7 +149,6 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'Date',
                             visible: false,
-                            
                             allowEditing: true,
                             width: 150,
                             label: Container(
@@ -166,7 +165,6 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'SiNo',
                             visible: false,
-                            
                             allowEditing: true,
                             width: 70,
                             label: Container(
@@ -182,7 +180,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'TypeOfActivity',
-                            
                             allowEditing: true,
                             width: 200,
                             label: Container(
@@ -197,7 +194,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'ActivityDetails',
-                            
                             allowEditing: true,
                             width: 220,
                             label: Container(
@@ -211,7 +207,7 @@ class _DailyProjectState extends State<DailyProject> {
                             ),
                           ),
                           GridColumn(
-                            columnName: 'Progress',                           
+                            columnName: 'Progress',
                             allowEditing: true,
                             columnWidthMode: ColumnWidthMode.fill,
                             width: 300,
@@ -227,7 +223,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Status',
-                            
                             allowEditing: true,
                             width: 280,
                             label: Container(
@@ -242,7 +237,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'upload',
-                            
                             allowEditing: false,
                             width: 150,
                             label: Container(
@@ -257,7 +251,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'view',
-                            
                             allowEditing: false,
                             width: 120,
                             label: Container(
@@ -272,7 +265,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Add',
-                            
                             allowEditing: false,
                             width: 120,
                             label: Container(
@@ -287,7 +279,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Delete',
-                            
                             allowEditing: false,
                             width: 120,
                             label: Container(
