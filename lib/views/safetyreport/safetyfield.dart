@@ -718,7 +718,6 @@ class _SafetyFieldState extends State<SafetyField> {
 
   Future<void> getUserId() async {
     await AuthService().getCurrentUserId().then((value) {
-      
       userId = value;
     });
   }

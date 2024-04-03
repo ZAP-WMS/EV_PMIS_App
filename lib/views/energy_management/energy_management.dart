@@ -709,7 +709,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                         DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
                     totalTime:
                         DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
-                    energyConsumed: 1500.0,
+                    energyConsumed: 0.0,
                     timeInterval:
                         '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
                 _energyManagementdatasource.buildDataGridRows();

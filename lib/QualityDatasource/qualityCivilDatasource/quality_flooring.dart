@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,7 +87,7 @@ class QualityflooringDataSource extends DataGridSource {
                             cityName: cityName,
                             depoName: depoName,
                             userId: userId,
-                            fldrName: 'F&T Table',
+                            fldrName: 'Flooring Table',
                             date: currentDate,
                             srNo: row.getCells()[0].value,
                           ),
@@ -105,18 +106,18 @@ class QualityflooringDataSource extends DataGridSource {
                       (BuildContext context, BoxConstraints constraints) {
                       return ElevatedButton(
                           onPressed: () {
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (context) => ViewAllPdf(
-                            //     title: 'QualityChecklist',
-                            //     subtitle: 'civil_Engineer',
-                            //     cityName: cityName,
-                            //     depoName: depoName,
-                            //     userId: userId,
-                            //     fldrName: 'F&T Table',
-                            //     date: currentDate,
-                            //     srNo: row.getCells()[0].value,
-                            //   ),
-                            // ));
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ViewAllPdf(
+                                title: 'QualityChecklist',
+                                subtitle: 'civil_Engineer',
+                                cityName: cityName,
+                                depoName: depoName,
+                                userId: userId,
+                                fldrName: 'Flooring Table',
+                                date: currentDate,
+                                srNo: row.getCells()[0].value,
+                              ),
+                            ));
                           },
                           child: const Text(
                             'View',
@@ -570,6 +571,9 @@ class QualityflooringDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

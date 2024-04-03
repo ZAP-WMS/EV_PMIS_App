@@ -87,7 +87,7 @@ class QualityIroniteflooringDataSource extends DataGridSource {
                             cityName: cityName,
                             depoName: depoName,
                             userId: userId,
-                            fldrName: 'I.F Table',
+                            fldrName: 'Ironite Table',
                             date: currentDate,
                             srNo: row.getCells()[0].value,
                           ),
@@ -113,7 +113,7 @@ class QualityIroniteflooringDataSource extends DataGridSource {
                                       cityName: cityName,
                                       depoName: depoName,
                                       userId: userId,
-                                      fldrName: 'I.F Table',
+                                      fldrName: 'Ironite Table',
                                       date: currentDate,
                                       srNo: row.getCells()[0].value,
                                     )));
@@ -534,7 +534,7 @@ class QualityIroniteflooringDataSource extends DataGridSource {
     // The new cell value must be reset.
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
-    newCellValue= '';
+    newCellValue = '';
 
     final bool isNumericType = column.columnName == 'srNo' ||
         column.columnName == 'Rate' ||
@@ -570,6 +570,9 @@ class QualityIroniteflooringDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

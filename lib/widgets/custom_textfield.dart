@@ -40,7 +40,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ? false
               : true
           : false,
-      autofocus: true,
       controller: widget.controller,
       onChanged: (value) => widget.labeltext,
       style: const TextStyle(fontSize: 13),

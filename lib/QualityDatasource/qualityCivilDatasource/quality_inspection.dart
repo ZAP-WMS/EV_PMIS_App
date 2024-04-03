@@ -85,7 +85,7 @@ class QualityInspectionDataSource extends DataGridSource {
                             cityName: cityName,
                             depoName: depoName,
                             userId: userId,
-                            fldrName: 'G.I Table',
+                            fldrName: 'Inspection Table',
                             date: currentDate,
                             srNo: row.getCells()[0].value,
                           ),
@@ -111,7 +111,7 @@ class QualityInspectionDataSource extends DataGridSource {
                                       cityName: cityName,
                                       depoName: depoName,
                                       userId: userId,
-                                      fldrName: 'G.I Table',
+                                      fldrName: 'Inspection Table',
                                       date: currentDate,
                                       srNo: row.getCells()[0].value,
                                     )));
@@ -568,6 +568,9 @@ class QualityInspectionDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

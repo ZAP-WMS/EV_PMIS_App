@@ -658,7 +658,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
     );
   }
 
-
   storeData(BuildContext context, dynamic datasource, String depoName,
       String currentDate) {
     Map<String, dynamic> pssTableData = Map();

@@ -518,7 +518,7 @@ class QualitycmuDataSource extends DataGridSource {
     // The new cell value must be reset.
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
-    newCellValue='';
+    newCellValue = '';
 
     final bool isNumericType = column.columnName == 'srNo' ||
         column.columnName == 'Rate' ||
@@ -554,6 +554,9 @@ class QualitycmuDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

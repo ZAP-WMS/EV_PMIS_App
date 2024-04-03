@@ -86,7 +86,7 @@ class QualityCeillingDataSource extends DataGridSource {
                             cityName: cityName,
                             depoName: depoName,
                             userId: userId,
-                            fldrName: 'F.C Table',
+                            fldrName: 'Ceilling Table',
                             date: currentDate,
                             srNo: row.getCells()[0].value,
                           ),
@@ -112,7 +112,7 @@ class QualityCeillingDataSource extends DataGridSource {
                                 cityName: cityName,
                                 depoName: depoName,
                                 userId: userId,
-                                fldrName: 'F.C Table',
+                                fldrName: 'Ceilling Table',
                                 date: currentDate,
                                 srNo: row.getCells()[0].value,
                               ),
@@ -570,6 +570,9 @@ class QualityCeillingDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
