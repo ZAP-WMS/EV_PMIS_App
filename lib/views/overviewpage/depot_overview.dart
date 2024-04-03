@@ -1199,6 +1199,7 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          isProjectManager: isProjectManager,
           controller: controller,
           labeltext: title,
           isSuffixIcon: false,

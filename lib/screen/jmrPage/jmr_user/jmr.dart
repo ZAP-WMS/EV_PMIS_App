@@ -80,11 +80,11 @@ class _JmrUserPageState extends State<JmrUserPage> {
             children: [
               const Text(
                 'JMR',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,),
               ),
               Text(
                 widget.depoName ?? '',
-                style: const TextStyle(fontSize: 11),
+                style: const TextStyle(fontSize: 11,),
               ),
             ],
           ),
@@ -94,13 +94,14 @@ class _JmrUserPageState extends State<JmrUserPage> {
           ),
         ),
         body: _isLoading
-            ? LoadingPage()
+            ? const LoadingPage()
             : TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                     Container(
                       padding: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 10.0),
+                          left: 10.0, right: 10.0, top: 10.0,
+                          ),
                       child: GridView.builder(
                           itemCount: 5,
                           gridDelegate:

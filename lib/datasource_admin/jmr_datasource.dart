@@ -524,7 +524,7 @@ class JmrDataSource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.allow(regExp),
+          FilteringTextInputFormatter.allow(regExp,),
         ],
         keyboardType: isNumericType
             ? TextInputType.number

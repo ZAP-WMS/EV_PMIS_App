@@ -284,56 +284,59 @@ class _RegisterPgeState extends State<RegisterPge> {
         .doc(userFullName)
         .get();
 
-    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    Map<String, dynamic> mapData = data;
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> mapData = data;
 
-    if (mapData["Email"] == userEmail &&
-        mapData["fullName"] == userFullName &&
-        mapData["Phone Number"] == phoneNum) {
-      // ignore: use_build_context_synchronously
-      await showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                height: 100,
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 10.0),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "User Already Registered!",
-                        style: TextStyle(color: blue, fontSize: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Container(
-                      alignment: Alignment.center,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(blue),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+      if (mapData["Email"] == userEmail &&
+          mapData["fullName"] == userFullName &&
+          mapData["Phone Number"] == phoneNum) {
+        // ignore: use_build_context_synchronously
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  height: 100,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 10.0),
+                        alignment: Alignment.center,
                         child: Text(
-                          "OK",
-                          style: TextStyle(color: white),
+                          "User Already Registered!",
+                          style: TextStyle(color: blue, fontSize: 16),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 5),
+                      Container(
+                        alignment: Alignment.center,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(blue),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "OK",
+                            style: TextStyle(color: white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          });
+              );
+            });
+      }
     } else {
       register();
     }

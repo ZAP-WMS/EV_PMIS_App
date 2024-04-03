@@ -184,7 +184,8 @@ class _UploadDocumentState extends State<UploadDocument> {
 
                                           // String? fileName = result!.files.first.name;
 
-                                          await FirebaseStorage.instance
+                                          await FirebaseStorage.
+                                          instance
                                               .ref(refname)
                                               .putData(
                                                 fileBytes!,

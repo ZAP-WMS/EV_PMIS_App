@@ -89,16 +89,20 @@ class _DepotOverviewState extends State<DepotOverview> {
 
   @override
   void initState() {
-    getAssignedDepots();
-    super.initState();
-    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-    initializeController();
-    verifyProjectManager().whenComplete(() {
-      getTableData().whenComplete(() {
-        _employeeDataSource = DepotOverviewDatasource(_employees, context);
-        _dataGridController = DataGridController();
+    getAssignedDepots().whenComplete(() {
+      cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+      initializeController();
+      verifyProjectManager().whenComplete(() {
+        getTableData().whenComplete(() {
+          _employeeDataSource = DepotOverviewDatasource(_employees, context);
+          _dataGridController = DataGridController();
+
+          isLoading = false;
+          setState(() {});
+        });
       });
     });
+    super.initState();
   }
 
   @override
@@ -152,39 +156,39 @@ class _DepotOverviewState extends State<DepotOverview> {
                         'Password is required',
                         isProjectManager),
                     overviewField(_scopeController, 'No of Buses in Scope',
-                        'Password is required', isProjectManager),
+                        'Password is required', !isProjectManager),
                     overviewField(_chargerController, 'No of Charger Required',
-                        'Charger are required', isProjectManager),
+                        'Charger are required', !isProjectManager),
                     overviewField(_ratingController, 'Rating of Charger',
-                        'Rating of charger required', isProjectManager),
+                        'Rating of charger required', !isProjectManager),
                     overviewField(_loadController, 'Required Sanctioned Load',
-                        'Charger are required', isProjectManager),
+                        'Charger are required', !isProjectManager),
                     overviewField(
                         _powersourceController,
                         'Existing Utility of PowerSource',
                         'Rating of charger required',
-                        isProjectManager),
+                        !isProjectManager),
                     overviewField(
                         _electricalManagerNameController,
                         'Project Manager',
                         'Charger are required',
-                        isProjectManager),
+                        !isProjectManager),
                     overviewField(
                         _electricalEngineerController,
                         'Electrical Engineer',
                         'Rating of charger required',
-                        isProjectManager),
+                        !isProjectManager),
                     overviewField(
                         _electricalVendorController,
                         'Electrical Vendor',
                         'Charger are required',
-                        isProjectManager),
+                        !isProjectManager),
                     overviewField(_civilManagerNameController, 'Civil Manager',
-                        'Rating of charger required', isProjectManager),
+                        'Rating of charger required', !isProjectManager),
                     overviewField(_civilEngineerController, 'Civil Engineering',
-                        'Charger are required', isProjectManager),
+                        'Charger are required', !isProjectManager),
                     overviewField(_civilVendorController, 'Civil Vendor',
-                        'Rating of charger required', isProjectManager),
+                        'Rating of charger required', !isProjectManager),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -1294,9 +1298,6 @@ class _DepotOverviewState extends State<DepotOverview> {
           mapData.map((map) => DepotOverviewModel.fromJson(map)).toList();
       checkTable = false;
     }
-
-    isLoading = false;
-    setState(() {});
   }
 
   Future getAssignedDepots() async {

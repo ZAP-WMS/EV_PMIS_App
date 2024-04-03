@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   void initState() {
+    // createUserCollection();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     getData();
     super.initState();
@@ -172,5 +174,24 @@ class _OverviewPageState extends State<OverviewPage> {
   void getData() async {
     roles = await StoredDataPreferences.getSharedPreferences('role');
     print('Overview - $roles');
+  }
+
+  Future createUserCollection() async {
+    QuerySnapshot usersQuery =
+        await FirebaseFirestore.instance.collection('User').get();
+
+    List<dynamic> userNames = usersQuery.docs.map((e) => e.id).toList();
+
+    QuerySnapshot totalQuery =
+        await FirebaseFirestore.instance.collection("TotalUsers").get();
+
+    List<dynamic> totalUserNames = totalQuery.docs.map((e) => e.id).toList();
+
+    totalUserNames.every((element) {
+      if (!userNames.contains(element)) {
+        print("Missing Users - $element");
+      }
+      return true;
+    });
   }
 }

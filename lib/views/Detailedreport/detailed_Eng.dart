@@ -31,6 +31,9 @@ class DetailedEng extends StatefulWidget {
 
 class _DetailedEngtState extends State<DetailedEng>
     with TickerProviderStateMixin {
+  final AuthService authService = AuthService();
+  List<String> assignedDepots = [];
+  bool isFieldEditable = false;
   List<DetailedEngModel> DetailedProject = <DetailedEngModel>[];
   List<DetailedEngModel> DetailedProjectev = <DetailedEngModel>[];
   List<DetailedEngModel> DetailedProjectshed = <DetailedEngModel>[];
@@ -53,84 +56,91 @@ class _DetailedEngtState extends State<DetailedEng>
 
   @override
   void initState() {
-    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+    getAssignedDepots().whenComplete(() {
+      cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
-    getTableDataRfc().whenComplete(() {
-      _detailedDataSource = DetailedEngSource(DetailedProject, context,
-          cityName!, widget.depoName!, userId, widget.role!);
-      _dataGridController = DataGridController();
-    });
+      getTableDataRfc().whenComplete(() {
+        _detailedDataSource = DetailedEngSource(DetailedProject, context,
+            cityName!, widget.depoName!, userId, widget.role!);
+        _dataGridController = DataGridController();
+      });
 
-    getTableDataEv().whenComplete(() {
-      _stream1 = FirebaseFirestore.instance
-          .collection('DetailEngineering')
-          .doc('${widget.depoName}')
-          .collection('EV LAYOUT DRAWING')
-          .doc(userId)
-          .snapshots();
+      getTableDataEv().whenComplete(() {
+        _stream1 = FirebaseFirestore.instance
+            .collection('DetailEngineering')
+            .doc('${widget.depoName}')
+            .collection('EV LAYOUT DRAWING')
+            .doc(userId)
+            .snapshots();
 
-      _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
-          cityName!, widget.depoName!, userId, widget.role);
-      _dataGridController = DataGridController();
-    });
+        _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
+            cityName!, widget.depoName!, userId, widget.role);
+        _dataGridController = DataGridController();
+      });
 
-    getTableDataShed().whenComplete(() {
-      _stream2 = FirebaseFirestore.instance
-          .collection('DetailEngineering')
-          .doc('${widget.depoName}')
-          .collection('Shed LAYOUT DRAWING')
-          .doc(userId)
-          .snapshots();
+      getTableDataShed().whenComplete(() {
+        _stream2 = FirebaseFirestore.instance
+            .collection('DetailEngineering')
+            .doc('${widget.depoName}')
+            .collection('Shed LAYOUT DRAWING')
+            .doc(userId)
+            .snapshots();
 
-      _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
-          context, cityName!, widget.depoName!, userId, widget.role);
-    });
+        _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
+            context, cityName!, widget.depoName!, userId, widget.role);
+      });
 
-    getUserId().whenComplete(() {
-      // DetailedProject = getmonthlyReport();
-      _detailedDataSource = DetailedEngSource(
-          DetailedProject,
-          context,
-          cityName.toString(),
-          widget.depoName.toString(),
-          userId,
-          widget.role!);
-      _dataGridController = DataGridController();
+      getUserId().whenComplete(() {
+        // DetailedProject = getmonthlyReport();
+        _detailedDataSource = DetailedEngSource(
+            DetailedProject,
+            context,
+            cityName.toString(),
+            widget.depoName.toString(),
+            userId,
+            widget.role!);
+        _dataGridController = DataGridController();
 
-      // DetailedProjectev = getmonthlyReportEv();
-      _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
-          cityName!, widget.depoName.toString(), userId, widget.role);
-      _dataGridController = DataGridController();
+        // DetailedProjectev = getmonthlyReportEv();
+        _detailedEngSourceev = DetailedEngSourceEV(DetailedProjectev, context,
+            cityName!, widget.depoName.toString(), userId, widget.role);
+        _dataGridController = DataGridController();
 
-      // DetailedProjectshed = getmonthlyReportEv();
-      _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
-          context, cityName!, widget.depoName.toString(), userId, widget.role);
-      _dataGridController = DataGridController();
-      _controller = TabController(length: 3, vsync: this);
+        // DetailedProjectshed = getmonthlyReportEv();
+        _detailedEngSourceShed = DetailedEngSourceShed(
+            DetailedProjectshed,
+            context,
+            cityName!,
+            widget.depoName.toString(),
+            userId,
+            widget.role);
+        _dataGridController = DataGridController();
+        _controller = TabController(length: 3, vsync: this);
 
-      _stream = FirebaseFirestore.instance
-          .collection('DetailEngineering')
-          .doc('${widget.depoName}')
-          .collection('RFC LAYOUT DRAWING')
-          .doc(userId)
-          .snapshots();
+        _stream = FirebaseFirestore.instance
+            .collection('DetailEngineering')
+            .doc('${widget.depoName}')
+            .collection('RFC LAYOUT DRAWING')
+            .doc(userId)
+            .snapshots();
 
-      _stream1 = FirebaseFirestore.instance
-          .collection('DetailEngineering')
-          .doc('${widget.depoName}')
-          .collection('EV LAYOUT DRAWING')
-          .doc(userId)
-          .snapshots();
+        _stream1 = FirebaseFirestore.instance
+            .collection('DetailEngineering')
+            .doc('${widget.depoName}')
+            .collection('EV LAYOUT DRAWING')
+            .doc(userId)
+            .snapshots();
 
-      _stream2 = FirebaseFirestore.instance
-          .collection('DetailEngineering')
-          .doc('${widget.depoName}')
-          .collection('Shed LAYOUT DRAWING')
-          .doc(userId)
-          .snapshots();
+        _stream2 = FirebaseFirestore.instance
+            .collection('DetailEngineering')
+            .doc('${widget.depoName}')
+            .collection('Shed LAYOUT DRAWING')
+            .doc(userId)
+            .snapshots();
 
-      _isloading = false;
-      setState(() {});
+        _isloading = false;
+        setState(() {});
+      });
     });
 
     super.initState();
@@ -278,7 +288,6 @@ class _DetailedEngtState extends State<DetailedEng>
       userId = value;
     });
   }
-
 
   void StoreData() {
     Map<String, dynamic> tableData = {};
@@ -467,6 +476,7 @@ class _DetailedEngtState extends State<DetailedEng>
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data.exists == false) {
                         return SfDataGrid(
+                            allowEditing: isFieldEditable,
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
@@ -669,7 +679,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -871,7 +881,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1071,7 +1081,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceev,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1306,7 +1316,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceShed,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1504,7 +1514,7 @@ class _DetailedEngtState extends State<DetailedEng>
                             source: _selectedIndex == 0
                                 ? _detailedDataSource
                                 : _detailedEngSourceShed,
-                            allowEditing: true,
+                            allowEditing: isFieldEditable,
                             frozenColumnsCount: 2,
                             gridLinesVisibility: GridLinesVisibility.both,
                             headerGridLinesVisibility: GridLinesVisibility.both,
@@ -1770,5 +1780,11 @@ class _DetailedEngtState extends State<DetailedEng>
 
     _isloading = false;
     setState(() {});
+  }
+
+  Future getAssignedDepots() async {
+    assignedDepots = await authService.getDepotList();
+    isFieldEditable =
+        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
   }
 }

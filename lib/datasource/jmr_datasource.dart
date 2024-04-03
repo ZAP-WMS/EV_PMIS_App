@@ -43,7 +43,6 @@ class JmrDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment: Alignment.center,
-          // : Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: (dataGridCell.columnName == 'Delete')
               ? IconButton(
@@ -180,7 +179,6 @@ class JmrDataSource extends DataGridSource {
     return Container(
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
-        expands: true,
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
@@ -202,13 +200,9 @@ class JmrDataSource extends DataGridSource {
             } else {
               newCellValue = value;
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {
-          /// Call [CellSubmit] callback to fire the canSubmitCell and
-          /// onCellSubmit to commit the new value in single place.
           submitCell();
         },
       ),
@@ -227,4 +221,5 @@ class JmrDataSource extends DataGridSource {
   int getIndex(int rowIndex) {
     return rowIndex;
   }
+
 }

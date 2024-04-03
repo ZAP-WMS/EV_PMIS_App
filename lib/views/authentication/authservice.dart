@@ -40,8 +40,9 @@ class AuthService {
       String id) async {
     FirebaseFirestore.instance
         .collection("User")
-        .doc(firebaseauth.currentUser!.displayName)
+        .doc('${firstname.trim()} ${lastname.trim()}')
         .set({
+      "CompanyName": "TATA POWER",
       "FirstName": firstname,
       "LastName": lastname,
       "Phone Number": phone,
@@ -50,7 +51,8 @@ class AuthService {
       "Department": department,
       "Password": password,
       "ConfirmPassword": confirmpassword,
-      'Employee Id': id
+      'Employee Id': id,
+      "fullName": '${firstname.trim()} ${lastname.trim()}'
     });
     return true;
   }
