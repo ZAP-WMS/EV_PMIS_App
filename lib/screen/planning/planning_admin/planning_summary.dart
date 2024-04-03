@@ -152,7 +152,6 @@ class _PlanningTableState extends State<PlanningTable> {
                                           animation: true,
                                           lineHeight: 20.0,
                                           animationDuration: 2000,
-                                          percent: rowData[1] / 100,
                                           center: Text("${rowData[1]}%"),
                                           progressColor: Colors.green,
                                         ))),
@@ -184,13 +183,10 @@ class _PlanningTableState extends State<PlanningTable> {
     List<dynamic> userIdList = querySnapshot.docs.map((e) => e.id).toList();
 
     for (int i = 0; i < userIdList.length; i++) {
-      dynamic allweightage = 0;
-      dynamic allperScope = 0;
-      dynamic allExecuted = 0;
       dynamic weightage;
-      dynamic balanceQty = 0;
-      dynamic perscope;
+
       dynamic qtyExecuted;
+      double totalperc = 0.0;
       num percprogress = 0;
       await FirebaseFirestore.instance
           .collection('KeyEventsTable')
@@ -202,33 +198,24 @@ class _PlanningTableState extends State<PlanningTable> {
           .then((value) {
         value.docs.forEach((element) {
           var alldata = element.data()['data'];
+          List<int> indicesToSkip = [0, 2, 6, 13, 18, 28, 32, 38, 64, 76];
           for (int i = 0; i < alldata.length; i++) {
-            weightage = 0;
-            perscope = 0;
-            qtyExecuted = 0;
-            percprogress = 0;
+            print('skipe${indicesToSkip.contains(i)}');
 
-            // allweightage = 0;
-            // allperScope = 0;
-            // allExecuted = 0;
-            weightage = alldata[i]['Weightage'];
-            perscope = alldata[i]['QtyScope'];
-            qtyExecuted = alldata[i]['QtyExecuted'];
-            allperScope = allperScope + perscope;
-            allExecuted = allExecuted + qtyExecuted;
-            allweightage = allweightage + weightage;
+            if (!indicesToSkip.contains(i)) {
+              qtyExecuted = alldata[i]['QtyExecuted'];
+              weightage = alldata[i]['Weightage'];
+              int scope = alldata[i]['QtyScope'];
+
+              dynamic perc = ((qtyExecuted / scope) * weightage);
+              double value = perc.isNaN ? 0.0 : perc;
+              totalperc = totalperc + value;
+              print('perc progress${totalperc}');
+            }
           }
-          balanceQty = allperScope - allExecuted;
-          var calculatePercProgress = balanceQty / allperScope * allweightage;
-          percprogress = calculatePercProgress;
-          if (percprogress.isNaN || percprogress.isInfinite) {
-            percprogress = 0;
-          }
-          print(percprogress.toStringAsFixed(2));
         });
       });
-      rowList
-          .add([userIdList[i], double.parse(percprogress.toStringAsFixed(1))]);
+      rowList.add([userIdList[i], double.parse(totalperc.toStringAsFixed(1))]);
       print(rowList);
     }
   }

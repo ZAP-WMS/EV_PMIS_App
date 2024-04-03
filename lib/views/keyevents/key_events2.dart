@@ -272,6 +272,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
 
     _KeyDataSourceKeyEvents = KeyDataSourceKeyEvents(_employees, context);
     _dataGridController = DataGridController();
+
     getUserId().whenComplete(() {
       yourstream = FirebaseFirestore.instance
           .collection('KeyEventsTable')
@@ -282,6 +283,20 @@ class _KeyEvents2State extends State<KeyEvents2> {
           .doc('keyEvents')
           // .doc('${widget.depoName}')
           .snapshots();
+
+      FirebaseFirestore.instance
+          .collection('KeyEventsTable')
+          .doc(widget.depoName!)
+          .collection('KeyDataTable')
+          .doc(widget.userId)
+          .collection('ClosureDates')
+          .doc('keyEvents')
+          .get()
+          .then((value) {
+        String? date = value.data()!['ClosureDate'];
+        closureDate = DateFormat('dd-MM-yyyy').parse(date!);
+        print(closureDate);
+      });
 
       _verticalGridController.addListener(() {
         if (_dataGridScrollController.offset !=
@@ -461,7 +476,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                               return SingleChildScrollView(
                                 child: SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.93,
+                                        0.7,
                                     child: Row(children: [
                                       Expanded(
                                         child: SfDataGridTheme(

@@ -1,7 +1,7 @@
 import 'package:ev_pmis_app/screen/materialprocurement/material_vendor_admin/material_vendor.dart';
+import 'package:ev_pmis_app/views/materialprocurement/material_vendor.dart'
+    as mv;
 import 'package:flutter/material.dart';
-
-import '../materialprocurement/material_vendor.dart';
 
 class MaterialProcurementAction extends StatefulWidget {
   String? role;
@@ -37,7 +37,7 @@ class _MaterialProcurementActionState extends State<MaterialProcurementAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = MaterialProcurement(
+        selectedUi = mv.MaterialProcurement(
           depoName: widget.depoName,
           userId: widget.userId,
           role: widget.role,
