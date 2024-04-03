@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../style.dart';
 import '../../widgets/custom_textfield.dart';
@@ -23,6 +25,19 @@ class _RegisterPgeState extends State<RegisterPge> {
   final TextEditingController departmentController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confController = TextEditingController();
+
+  @override
+  void dispose() {
+    firstNamecontroller.dispose();
+    lastNameController.dispose();
+    numberController.dispose();
+    emailIdController.dispose();
+    designationController.dispose();
+    departmentController.dispose();
+    passwordController.dispose();
+    confController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,13 +160,21 @@ class _RegisterPgeState extends State<RegisterPge> {
                     ),
                     _space(16),
                     SizedBox(
-                        width: 200,
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              register();
-                            },
-                            child: const Text('Register',),),),
+                      width: 200,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // register();
+                          verifyAlreadyRegisteredUser(
+                              '${firstNamecontroller.text.trim()} ${lastNameController.text.trim()}',
+                              emailIdController.text.trim(),
+                              numberController.text.trim());
+                        },
+                        child: const Text(
+                          'Register',
+                        ),
+                      ),
+                    ),
                     _space(16),
                     Image.asset(
                       'assets/Tata-Power.jpeg',
@@ -190,14 +213,15 @@ class _RegisterPgeState extends State<RegisterPge> {
       );
       await AuthService()
           .registerUserWithEmailAndPassword(
-              firstNamecontroller.text,
-              lastNameController.text,
-              numberController.text,
-              emailIdController.text,
-              designationController.text,
-              departmentController.text,
-              passwordController.text,
-              confController.text)
+        firstNamecontroller.text,
+        lastNameController.text,
+        numberController.text,
+        emailIdController.text,
+        designationController.text,
+        departmentController.text,
+        passwordController.text,
+        confController.text,
+      )
           .then((value) {
         if (value == true) {
           AuthService()
@@ -215,24 +239,27 @@ class _RegisterPgeState extends State<RegisterPge> {
                       numberController.text.substring(6, 10))
               .then((value) {
             if (value == true) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: const Text('Registration Successfull Please Sign In'),
-                backgroundColor: blue,
-              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content:
+                      const Text('Registration Successfull Please Sign In'),
+                  backgroundColor: blue,
+                ),
+              );
 
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginRegister()),
               );
               _showRegistrationDialog(
-                  context,
-                  firstNamecontroller.text[0] +
-                      lastNameController.text[0] +
-                      numberController.text.substring(6, 10),
-                  confController.text);
+                context,
+                firstNamecontroller.text[0] +
+                    lastNameController.text[0] +
+                    numberController.text.substring(6, 10),
+                confController.text,
+              );
             } else {
               Navigator.pop(context);
-              //     authService.firebaseauth.signOut();
             }
           });
         } else {
@@ -247,6 +274,69 @@ class _RegisterPgeState extends State<RegisterPge> {
       return errMsg;
     }
     return null;
+  }
+
+  Future<void> verifyAlreadyRegisteredUser(
+      String userFullName, String userEmail, String phoneNum) async {
+    bool isUserRegistered = false;
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection("User")
+        .doc(userFullName)
+        .get();
+
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> mapData = data;
+
+    if (mapData["Email"] == userEmail &&
+        mapData["fullName"] == userFullName &&
+        mapData["Phone Number"] == phoneNum) {
+      // ignore: use_build_context_synchronously
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                height: 100,
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 10.0),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "User Already Registered!",
+                        style: TextStyle(color: blue, fontSize: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Container(
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(blue),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "OK",
+                          style: TextStyle(color: white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+    } else {
+      register();
+    }
   }
 }
 

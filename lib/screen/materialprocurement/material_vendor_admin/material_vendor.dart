@@ -7,6 +7,7 @@ import 'package:ev_pmis_app/models/material_procurement.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/materialprocurement/material_vendor.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -82,7 +83,7 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
           haveSummary: false,
           haveSynced: false,
           store: () {
-            _showDialog(context);
+           showProgressDilogue(context);
             storeData();
           },
         ),
@@ -677,23 +678,6 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
     await AuthService().getCurrentUserId().then((value) {
       userId = value;
     });
-  }
-
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   List<MaterialProcurementModel> getmonthlyReport() {

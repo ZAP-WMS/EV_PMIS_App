@@ -4,6 +4,7 @@ import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -195,7 +196,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                 haveSynced: true,
                 haveCalender: true,
                 store: () {
-                  _showDialog(context);
+                  showProgressDilogue(context);
                   storeData(
                       context,
                       widget.fielClnName == 'PSS'
@@ -771,23 +772,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
           // validatortext: '$title is Required',
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next),
-    );
-  }
-
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
     );
   }
 

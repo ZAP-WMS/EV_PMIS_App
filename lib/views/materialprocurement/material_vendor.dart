@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 
 import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -73,31 +74,28 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
     return Scaffold(
       drawer: NavbarDrawer(role: widget.role),
       appBar: PreferredSize(
-          // ignore: sort_child_properties_last
-          child: CustomAppBar(
-            depoName: widget.depoName ?? '',
-            isCentered: true,
-            title: 'Material Procurement',
-            height: 50,
-            isSync: isFieldEditable ? true : false,
-            store: () {
-              _showDialog(context);
-              // FirebaseApi().defaultKeyEventsField(
-              //     'MaterialProcurement', widget.depoName!);
-              // FirebaseApi().nestedKeyEventsField('MaterialProcurement',
-              //     widget.depoName!, 'Material Data', userId);
-              storeData();
-            },
-          ),
-          preferredSize: const Size.fromHeight(50)),
+        preferredSize: const Size.fromHeight(50),
+        child: CustomAppBar(
+          depoName: widget.depoName ?? '',
+          isCentered: true,
+          title: 'Material Procurement',
+          height: 50,
+          isSync: isFieldEditable ? true : false,
+          store: () {
+            showProgressDilogue(context);
+            storeData();
+          },
+        ),
+      ),
       body: isLoading
           ? const LoadingPage()
           : Column(children: [
               SfDataGridTheme(
                   data: SfDataGridThemeData(
-                      headerColor: white,
-                      gridLineColor: blue,
-                      gridLineStrokeWidth: 2),
+                    headerColor: white,
+                    gridLineColor: blue,
+                    gridLineStrokeWidth: 2,
+                  ),
                   child: Expanded(
                     child: StreamBuilder(
                         stream: _stream,
@@ -383,7 +381,10 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                             _materialprocurement.clear();
                             alldata.forEach((element) {
                               _materialprocurement.add(
-                                  MaterialProcurementModel.fromjson(element));
+                                MaterialProcurementModel.fromjson(
+                                  element,
+                                ),
+                              );
                               _materialDatasource = MaterialDatasource(
                                   _materialprocurement,
                                   context,
@@ -709,7 +710,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
       'data': tabledata2,
     }).whenComplete(() {
       tabledata2.clear();
-      Navigator.pop(context);
+      // Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text('Data are synced'),
         backgroundColor: blue,
@@ -722,23 +723,6 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
       userId = value;
       setState(() {});
     });
-  }
-
-  void _showDialog(BuildContext context) {
-    showCupertinoDialog(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        content: SizedBox(
-          height: 50,
-          width: 50,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: blue,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   List<MaterialProcurementModel> getmonthlyReport() {

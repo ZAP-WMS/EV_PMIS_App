@@ -50,7 +50,6 @@ class CheckboxProvider extends ChangeNotifier {
       if (value.data() != null) {
         for (int i = 0; i < value.data()!['ALLId'].length; i++) {
           allId.add(value.data()!['ALLId'][i]);
-          print(allId);
         }
         defaulyCcMailData = allId;
         notifyListeners();

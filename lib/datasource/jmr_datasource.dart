@@ -1,12 +1,9 @@
-import 'package:ev_pmis_app/widgets/upload.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../provider/summary_provider.dart';
 import 'package:ev_pmis_app/style.dart';
 
 import '../models/jmr.dart';
@@ -41,14 +38,6 @@ class JmrDataSource extends DataGridSource {
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
     final int dataIndex = dataGridRows.indexOf(row);
-    DateTime? rangeStartDate = DateTime.now();
-    DateTime? rangeEndDate = DateTime.now();
-    DateTime? date;
-    DateTime? endDate;
-    DateTime? rangeStartDate1 = DateTime.now();
-    DateTime? rangeEndDate1 = DateTime.now();
-    DateTime? date1;
-    DateTime? endDate1;
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
@@ -69,7 +58,6 @@ class JmrDataSource extends DataGridSource {
                   ))
               : Text(
                   dataGridCell.value.toString(),
-                  maxLines: 3,
                 ));
     }).toList());
   }
@@ -173,7 +161,7 @@ class JmrDataSource extends DataGridSource {
             ?.toString() ??
         '';
 
-    newCellValue = null;
+    newCellValue = '';
 
     final bool isNumericType = column.columnName == 'srNo' ||
         column.columnName == 'Rate' ||
@@ -192,6 +180,7 @@ class JmrDataSource extends DataGridSource {
     return Container(
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
+        expands: true,
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
@@ -204,9 +193,6 @@ class JmrDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
-        onTapOutside: (event) {
-          newCellValue = editingController.text;
-        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
@@ -216,6 +202,8 @@ class JmrDataSource extends DataGridSource {
             } else {
               newCellValue = value;
             }
+          } else {
+            newCellValue = null;
           }
         },
         onSubmitted: (String value) {

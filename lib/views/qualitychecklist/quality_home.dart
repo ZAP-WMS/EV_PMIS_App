@@ -151,7 +151,7 @@ class _QualityHomeState extends State<QualityHome> {
                               index: index,
                             ),
                           )),
-                      child: tabbarlist(civillist, index));
+                      child: tabbarlist(civillist, index,),);
                 },
               ),
               ListView.builder(
