@@ -484,9 +484,10 @@ class KeyDataSourceKeyEvents extends DataGridSource {
                                             ))
                                   : dataGridCell.columnName == 'QtyExecuted'
                                       ? Text(
-                                          indicesToSkip.contains(dataIndex)
-                                              ? ' '
-                                              : dataGridCell.value.toString(),
+                                          // indicesToSkip.contains(dataIndex)
+                                          //     ? ' '
+                                          //     :
+                                          dataGridCell.value.toString(),
                                           style:
                                               indicesToSkip.contains(dataIndex)
                                                   ? TextStyle(
@@ -497,10 +498,10 @@ class KeyDataSourceKeyEvents extends DataGridSource {
                                                     ))
                                       : dataGridCell.columnName == 'QtyScope'
                                           ? Text(
-                                              indicesToSkip.contains(dataIndex)
-                                                  ? ' '
-                                                  : dataGridCell.value
-                                                      .toString(),
+                                              // indicesToSkip.contains(dataIndex)
+                                              //     ? ' '
+                                              //     :
+                                              dataGridCell.value.toString(),
                                               style: indicesToSkip
                                                       .contains(dataIndex)
                                                   ? TextStyle(
@@ -515,12 +516,17 @@ class KeyDataSourceKeyEvents extends DataGridSource {
                                                   '${dataGridCell.value.toStringAsFixed(2)}%',
                                                   style: indicesToSkip
                                                           .contains(dataIndex)
-                                                      ? TextStyle(fontSize: 12, color: white)
+                                                      ? TextStyle(
+                                                          fontSize: 12,
+                                                          color: white)
                                                       : const TextStyle(
                                                           fontSize: 12,
                                                         ))
-                                              : dataGridCell.columnName == 'BalancedQty'
-                                                  ? Text(indicesToSkip.contains(dataIndex) ? ' ' : '${balnceQtyValue}',
+                                              : dataGridCell.columnName ==
+                                                      'BalancedQty'
+                                                  ? Text(
+                                                      // indicesToSkip.contains(dataIndex) ? ' ' :
+                                                      '$balnceQtyValue',
                                                       style: indicesToSkip.contains(dataIndex)
                                                           ? TextStyle(fontSize: 12, color: white)
                                                           : const TextStyle(
@@ -717,6 +723,7 @@ class KeyDataSourceKeyEvents extends DataGridSource {
                                                                               }),
                                                                               onCancel: () {
                                                                                 _controller.selectedRanges = null;
+                                                                                Navigator.pop(context);
                                                                               },
                                                                             ),
                                                                           )),
@@ -937,6 +944,7 @@ class KeyDataSourceKeyEvents extends DataGridSource {
                                                                               }),
                                                                               onCancel: () {
                                                                                 _controller.selectedRanges = null;
+                                                                                Navigator.pop(context);
                                                                               },
                                                                             ),
                                                                           )),
@@ -1187,8 +1195,6 @@ class KeyDataSourceKeyEvents extends DataGridSource {
             } else {
               newCellValue = value;
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {

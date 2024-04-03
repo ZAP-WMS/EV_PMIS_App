@@ -149,7 +149,6 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'Date',
                             visible: false,
-                            //autoFit//Padding: tablepadding,
                             allowEditing: true,
                             width: 150,
                             label: Container(
@@ -166,7 +165,6 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'SiNo',
                             visible: false,
-                            //autoFit//Padding: tablepadding,
                             allowEditing: true,
                             width: 70,
                             label: Container(
@@ -182,7 +180,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'TypeOfActivity',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: true,
                             width: 200,
                             label: Container(
@@ -197,7 +194,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'ActivityDetails',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: true,
                             width: 220,
                             label: Container(
@@ -212,7 +208,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Progress',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: true,
                             columnWidthMode: ColumnWidthMode.fill,
                             width: 300,
@@ -228,7 +223,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Status',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: true,
                             width: 280,
                             label: Container(
@@ -243,7 +237,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'upload',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: false,
                             width: 150,
                             label: Container(
@@ -258,7 +251,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'view',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: false,
                             width: 120,
                             label: Container(
@@ -273,7 +265,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Add',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: false,
                             width: 120,
                             label: Container(
@@ -288,7 +279,6 @@ class _DailyProjectState extends State<DailyProject> {
                           ),
                           GridColumn(
                             columnName: 'Delete',
-                            //autoFit//Padding: tablepadding,
                             allowEditing: false,
                             width: 120,
                             label: Container(

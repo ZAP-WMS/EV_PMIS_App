@@ -1827,29 +1827,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
                               _KeyDataSourceKeyEvents =
                                   KeyDataSourceKeyEvents(_employees, context);
                               _dataGridController = DataGridController();
-                              // _employees = getDefaultEmployeeData();
-                              // _employees.add(Employee(
-                              //     srNo: 1,
-                              //     activity: 'Letter of Award reveived  from TML',
-                              //     originalDuration: 0,
-                              //     startDate: sdate1,
-                              //     endDate: edate1,
-                              //     actualstartDate: asdate1,
-                              //     actualendDate: aedate1,
-                              //     actualDuration: 1,
-                              //     delay: 2,
-                              //   //  reasonDelay: '',
-                              //     unit: 1,
-                              //     scope: 2,
-                              //     qtyExecuted: 5,
-                              //     balanceQty: 2,
-                              //     percProgress: 0.5,
-                              //     weightage: 2));
-
-                              // _employees.add(KeyDataSourceKeyEvents.(element));
-                              //     _KeyDataSourceKeyEvents =
-                              //         KeyDataSourceKeyEvents(_employees, context);
-                              //     _dataGridController = DataGridController();
 
                               List<String> dateParts = sd!.split('-');
                               int day = int.parse(dateParts[0]);
@@ -1957,25 +1934,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                 }));
                                               }
                                             },
-                                            // onCellTap:
-                                            //     (DataGridCellTapDetails details) {
-                                            //   final DataGridRow row =
-                                            //       _KeyDataSourceKeyEvents
-                                            //           .effectiveRows[details
-                                            //               .rowColumnIndex.rowIndex -
-                                            //           1];
-
-                                            //   Navigator.of(context).push(
-                                            //       MaterialPageRoute(
-                                            //           builder: (context) {
-                                            //     if (row.getCells().first.value ==
-                                            //         'A1') {
-                                            //       return
-                                            //     }
-                                            //     // ignore: null_check_always_fails
-                                            //     return null!;
-                                            //   }));
-                                            // },
                                             allowEditing: true,
                                             frozenColumnsCount: 2,
                                             editingGestureType:
