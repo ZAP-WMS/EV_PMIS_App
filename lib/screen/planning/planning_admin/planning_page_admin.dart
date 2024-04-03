@@ -1,38 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/components/Loading_page.dart';
-import 'package:ev_pmis_app/datasource_admin/key_datasource.dart';
-import 'package:ev_pmis_app/provider/cities_provider.dart';
-import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/models/employee.dart';
-import 'package:ev_pmis_app/views/keyevents/Grid_DataTableA2.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
-import 'package:ev_pmis_app/widgets/upload.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gantt_chart/gantt_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import '../../../components/Loading_page.dart';
+import '../../../datasource/key_datasource.dart';
+import '../../../models/employee.dart';
+import '../../../provider/key_provider.dart';
+import '../../../style.dart';
+import '../../../views/overviewpage/view_AllFiles.dart';
 import '../../../widgets/custom_appbar.dart';
 import '../../../widgets/keyEvents_data.dart';
-
-void main() {
-  initializeDateFormatting();
-}
+import '../../../widgets/keyboard_listener.dart';
+import '../../../widgets/progress_loading.dart';
+import '../../../widgets/upload.dart';
 
 /// The application that contains datagrid on it.
 
 /// The home page of the application which hosts the datagrid.
 class PlanningPageAdmin extends StatefulWidget {
   /// Creates the home page.
-  String? userId;
+
   String? role;
+  String? userId;
   String? depoName;
   String? cityName;
   PlanningPageAdmin(
-      {Key? key, this.depoName, this.cityName, this.userId, required this.role})
+      {Key? key, this.role, this.userId, this.depoName, this.cityName})
       : super(key: key);
 
   @override
@@ -40,9 +38,13 @@ class PlanningPageAdmin extends StatefulWidget {
 }
 
 class _PlanningPageAdminState extends State<PlanningPageAdmin> {
+  // ignore: non_constant_identifier_names
   late KeyDataSourceKeyEvents _KeyDataSourceKeyEvents;
   List<Employee> _employees = <Employee>[];
   late DataGridController _dataGridController;
+  final ScrollController _verticalGridController = ScrollController();
+  final ScrollController _dataGridScrollController = ScrollController();
+
   //  List<DataGridRow> dataGridRows = [];
   DataGridRow? dataGridRow;
   RowColumnIndex? rowColumnIndex;
@@ -50,7 +52,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
   List<dynamic> tabledata2 = [];
   Stream? yourstream;
   Stream? yourstream1;
-  double totalweightage = 0;
+
   List<String> startdate = [];
   List<String> enddate = [];
   List<String> asstartdate = [];
@@ -64,19 +66,32 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
   String? edate;
   String? asdate;
   String? aedate;
+  // ignore: prefer_typing_uninitialized_variables
   var alldata;
-  bool _isLoading = false;
-  bool _isInit = true;
+  bool _isLoading = true;
+
   int? length;
-  final scrollController = ScrollController();
+  DateTime? closureDate = DateTime.now();
   List<GanttEventBase> ganttdata = [];
   List<String> startDate = [];
   List<String> endDate = [];
   List<String> actualstart = [];
   List<String> actualend = [];
-  List<int> srNo = [];
 
-  String? sdate2,
+  List<String>? graphStartDate = [];
+  List<String>? graphEndDate = [];
+  List<String>? graphactualStartDate = [];
+  List<String>? graphactualEndDate = [];
+  List<dynamic>? graphsrNo = [];
+  String? sd;
+  String? ed;
+  String? as;
+  String? ae;
+  List<int> srNo = [];
+  DateTime dateTime = DateTime.now();
+
+  String? sdate1,
+      sdate2,
       sdate3,
       sdate4,
       sdate5,
@@ -85,7 +100,8 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
       sdate8,
       sdate9,
       sdate10;
-  String? edate2,
+  String? edate1,
+      edate2,
       edate3,
       edate4,
       edate5,
@@ -94,7 +110,8 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
       edate8,
       edate9,
       edate10;
-  String? asdate2,
+  String? asdate1,
+      asdate2,
       asdate3,
       asdate4,
       asdate5,
@@ -103,7 +120,8 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
       asdate8,
       asdate9,
       asdate10;
-  String? aedate2,
+  String? aedate1,
+      aedate2,
       aedate3,
       aedate4,
       aedate5,
@@ -113,6 +131,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
       aedate9,
       aedate10;
 
+  List<double> weight1 = [];
   List<double> weight2 = [];
   List<double> weight3 = [];
   List<double> weight4 = [];
@@ -123,6 +142,12 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
   List<double> weight9 = [];
   List<double> weight10 = [];
 
+  String? startdate1,
+      enddate1,
+      asstartdate1,
+      asenddate1,
+      actualstartdate1,
+      actualenddate1;
   String? startdate2,
       enddate2,
       asstartdate2,
@@ -217,62 +242,97 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
       totalscope8 = 0,
       totalscope9 = 0,
       totalscope10 = 0;
+  String? activity;
+  List<String> allstartDate = [];
+  List<String> allendDate = [];
+  List<String> allactualstart = [];
+  List<String> allactualEnd = [];
+  List<String> allsrNo = [];
+  DateTime? rangestartDate;
+  double? totalPecProgress = 0.0;
+  List<int> indicesToSkip = [0, 2, 6, 13, 18, 28, 32, 38, 64, 76];
+  //[0, 2, 8, 12, 16, 27, 33, 39, 65, 76];
+  ScrollController _scrollController = ScrollController();
+  ScrollController _horizontalscrollController = ScrollController();
 
-  bool _isloading = true;
+  double totalperc = 0.0;
+  KeyProvider? _keyProvider;
+
   @override
   void initState() {
-    widget.cityName =
-        Provider.of<CitiesProvider>(context, listen: false).getName;
+    _keyProvider = Provider.of<KeyProvider>(context, listen: false);
+
+    _KeyDataSourceKeyEvents = KeyDataSourceKeyEvents(_employees, context);
+    _dataGridController = DataGridController();
+
     yourstream = FirebaseFirestore.instance
         .collection('KeyEventsTable')
         .doc(widget.depoName!)
         .collection('KeyDataTable')
         .doc(widget.userId)
         .collection('KeyAllEvents')
+        .doc('keyEvents')
         // .doc('${widget.depoName}')
         .snapshots();
 
-    _isLoading = false;
-    setState(() {});
+    FirebaseFirestore.instance
+        .collection('KeyEventsTable')
+        .doc(widget.depoName!)
+        .collection('KeyDataTable')
+        .doc(widget.userId)
+        .collection('ClosureDates')
+        .doc('keyEvents')
+        .get()
+        .then((value) {
+      String? date = value.data()!['ClosureDate'];
+      closureDate = DateFormat('dd-MM-yyyy').parse(date!);
+      _isLoading = false;
+      setState(() {});
+    });
+
+    _verticalGridController.addListener(() {
+      if (_dataGridScrollController.offset != _verticalGridController.offset) {
+        _dataGridScrollController.jumpTo(_verticalGridController.offset);
+      }
+    });
+
+    _dataGridScrollController.addListener(() {
+      if (_verticalGridController.offset != _dataGridScrollController.offset) {
+        _verticalGridController.jumpTo(_dataGridScrollController.offset);
+      }
+    });
+
+    _scrollController.addListener(() {
+      if (_horizontalscrollController.offset != _scrollController.offset) {
+        _horizontalscrollController.jumpTo(_scrollController.offset);
+      }
+    });
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeLeft,
     ]);
-    // getUserId().whenComplete(() {
-    //   yourstream = FirebaseFirestore.instance
-    //       .collection('KeyEventsTable')
-    //       .doc(widget.depoName!)
-    //       .collection('KeyDataTable')
-    //       .doc(userId)
-    //       .collection('KeyAllEvents')
-    //       // .doc('${widget.depoName}')
-    //       .snapshots();
-
-    //   _isLoading = false;
-    //   setState(() {});
-    // });
-
     super.initState();
   }
 
+  List<Widget> menuwidget = [];
   @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
     ]);
     super.dispose();
   }
 
-  // List<Widget> menuwidget = [];
-
   @override
   Widget build(BuildContext context) {
     // menuwidget = [
-    //   ViewFile(),
     //   StatutoryAprovalA2(
     //     userid: userId,
     //     depoName: widget.depoName,
     //     cityName: widget.cityName,
+    //     keyEvents: '',
     //   ),
     //   StatutoryAprovalA3(
     //     userid: userId,
@@ -323,981 +383,1982 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
 
     return _isLoading
         ? const LoadingPage()
-        :
-        // keyBoardArrow(
-        //     scrollController: scrollController,
-        //     myScaffold:
-        Scaffold(
-            drawer: NavbarDrawer(role: widget.role),
-            appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(50),
-                child: CustomAppBar(
-                  depoName: '',
-                  title: '${widget.depoName}/Project Planning',
-                  height: 50,
-                  isSync: false,
-                  isCentered: false,
-                  // showDepoBar: true,
-                  // toPlanning: true,
-                  // cityname: widget.cityName,
-                  // text:
-                  //     '${widget.cityName} / ${widget.depoName} / Key Events',
-                  // haveSynced: false,
-                )),
+        : keyBoardArrow(
+            scrollController: _scrollController,
+            myScaffold: Scaffold(
+                appBar: PreferredSize(
+                    preferredSize: const Size.fromHeight(50),
+                    child: CustomAppBar(
+                      depoName: widget.depoName ?? '',
+                      isprogress: true,
+                      title: '${widget.cityName}/${widget.depoName}',
+                      height: 50,
+                      isCentered: false,
+                      isSync: true,
+                      store: () {
+                        showProgressDilogue(context);
 
-            //  AppBar(
-            //   title: Text(
-            //       '${widget.cityName} / ${widget.depoName} / Key Events  '),
-            //   backgroundColor: blue,
-            // ),
-            body: StreamBuilder(
-                stream: yourstream,
-                builder: (context, snapshot) {
-                  ganttdata = [];
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const LoadingPage();
-                  }
-                  if (snapshot.hasData) {
-                    if (snapshot.data.docs.length != 0) {
-                      int length = snapshot.data.docs.length;
-                      startdate.clear();
-                      enddate.clear();
-                      asstartdate.clear();
-                      asenddate.clear();
-                      weight.clear();
-                      for (int i = 0; i < length; i++) {
-                        for (int j = 0; j < length; j++) {
-                          totalscope10 = 0;
-                          totalBalanceQty10 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A10') {
-                            var alldataA10 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate10 = alldataA10[0]['StartDate'];
-                            edate10 =
-                                alldataA10[alldataA10.length - 1]['EndDate'];
-                            asdate10 = alldataA10[0]['ActualStart'];
-                            aedate10 =
-                                alldataA10[alldataA10.length - 1]['ActualEnd'];
-
-                            for (int i = 0; i < alldataA10.length; i++) {
-                              perc10 = 0;
-                              scope10 = alldataA10[i]['QtyScope'];
-                              balanceQty10 = alldataA10[i]['QtyScope'] -
-                                  alldataA10[i]['QtyExecuted'];
-                              var weightage = alldataA10[i]['Weightage'];
-                              totalscope10 = scope10 + totalscope10;
-                              totalBalanceQty10 =
-                                  balanceQty10 + totalBalanceQty10;
-                              totalweightage = totalweightage + weightage;
+                        storeData();
+                      },
+                    )),
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      StreamBuilder(
+                          stream: yourstream,
+                          builder: (context, snapshot) {
+                            ganttdata = [];
+                            totalPecProgress = 0.0;
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const LoadingPage();
                             }
-                            perc10 = ((totalBalanceQty10 / totalscope10) *
-                                totalweightage);
-                            weight10.add(totalweightage);
-                          }
-                        }
+                            if (!snapshot.hasData ||
+                                snapshot.data.exists == false) {
+                              _keyProvider!.fetchDelayData(
+                                  widget.depoName!, widget.userId);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Provider.of<KeyProvider>(context, listen: false)
+                                    .saveProgressValue(totalperc);
+                              });
 
-                        for (int j = 0; j < length; j++) {
-                          totalscope2 = 0;
-                          totalBalanceQty2 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A2') {
-                            var alldataA2 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate2 = alldataA2[0]['StartDate'];
-                            edate2 = alldataA2[alldataA2.length - 1]['EndDate'];
-                            asdate2 = alldataA2[0]['ActualStart'];
-                            aedate2 =
-                                alldataA2[alldataA2.length - 1]['ActualEnd'];
+                              _employees = getKeyEventsData();
+                              _KeyDataSourceKeyEvents =
+                                  KeyDataSourceKeyEvents(_employees, context);
+                              _dataGridController = DataGridController();
 
-                            for (int i = 0; i < alldataA2.length; i++) {
-                              perc2 = 0;
-                              scope2 = alldataA2[i]['QtyScope'];
-                              balanceQty2 = alldataA2[i]['QtyScope'] -
-                                  alldataA2[i]['QtyExecuted'];
+                              return SingleChildScrollView(
+                                child: SizedBox(
+                                    height: MediaQuery.of(context).size.height,
+                                    child: Row(children: [
+                                      Expanded(
+                                        child: SfDataGridTheme(
+                                          data: SfDataGridThemeData(
+                                              rowHoverColor: yellow,
+                                              rowHoverTextStyle:
+                                                  const TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 14,
+                                              ),
+                                              gridLineColor: blue,
+                                              gridLineStrokeWidth: 2),
+                                          child: SfDataGrid(
+                                            source: _KeyDataSourceKeyEvents,
+                                            verticalScrollController:
+                                                _verticalGridController,
+                                            onSelectionChanged:
+                                                (addedRows, removedRows) {
+                                              if (addedRows.first
+                                                      .getCells()
+                                                      .first
+                                                      .value ==
+                                                  'A1') {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) {
+                                                  return ViewAllPdf(
+                                                      userId: widget.userId,
+                                                      cityName:
+                                                          widget.cityName!,
+                                                      depoName:
+                                                          widget.depoName!,
+                                                      title: 'Key Events',
+                                                      docId: addedRows.first
+                                                          .getCells()[1]
+                                                          .value);
+                                                }));
+                                              }
+                                            },
+                                            allowEditing: true,
+                                            frozenColumnsCount: 2,
+                                            editingGestureType:
+                                                EditingGestureType.tap,
+                                            headerGridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            gridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            selectionMode: SelectionMode.single,
+                                            navigationMode:
+                                                GridNavigationMode.cell,
+                                            columnWidthMode:
+                                                ColumnWidthMode.auto,
+                                            controller: _dataGridController,
+                                            columns: [
+                                              GridColumn(
+                                                columnName: 'srNo',
+                                                autoFitPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                allowEditing: false,
+                                                width: 60,
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Sr No',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    style: tableheader,
 
-                              var weightage = alldataA2[i]['Weightage'];
-                              totalweightage = totalweightage + weightage;
-                              totalscope2 = scope2 + totalscope2;
-                              totalBalanceQty2 = balanceQty2 + totalBalanceQty2;
-                            }
-                            perc2 = ((totalBalanceQty2 / totalscope2) *
-                                totalweightage);
-                            print(perc2);
-                            weight2.add(totalweightage);
-                          }
-                        }
+                                                    //    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'Activity',
+                                                allowEditing: true,
+                                                width: 250,
+                                                label: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16.0),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Activity',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'OriginalDuration',
+                                                allowEditing: false,
+                                                width: 80,
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Original Duration',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'StartDate',
+                                                allowEditing: false,
+                                                width: 150,
+                                                label: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16.0),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Start Date',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'EndDate',
+                                                allowEditing: false,
+                                                label: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16.0),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    textAlign: TextAlign.center,
+                                                    'End  Date',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'ActualStart',
+                                                width: 150,
+                                                allowEditing: false,
+                                                label: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16.0),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Actual Start',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'ActualEnd',
+                                                width: 150,
+                                                allowEditing: false,
+                                                label: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16.0),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    textAlign: TextAlign.center,
+                                                    'Actual End',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'ActualDuration',
+                                                allowEditing: false,
+                                                width: 80,
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Actual Duration',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'Delay',
+                                                allowEditing: false,
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Delay',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              // GridColumn(
+                                              //   columnName: 'ReasonDelay',
+                                              //   label: Container(
+                                              //     alignment: Alignment.center,
+                                              //     child: Text(
+                                              //       'ReasonDelay',
+                                              //       overflow:
+                                              //           TextOverflow.values.first,
+                                              //       style: tableheader,
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                              GridColumn(
+                                                columnName: 'Unit',
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Unit',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'QtyScope',
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Oty as per scope',
+                                                    textAlign: TextAlign.center,
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'QtyExecuted',
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Qty executed',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'BalancedQty',
+                                                allowEditing: false,
+                                                label: Container(
+                                                  width: 150,
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Balanced Qty',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'Progress',
+                                                allowEditing: false,
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    '% of Progress',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                              GridColumn(
+                                                columnName: 'Weightage',
+                                                allowEditing: true,
+                                                label: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    'Weightage',
+                                                    overflow: TextOverflow
+                                                        .values.first,
+                                                    textAlign: TextAlign.center,
+                                                    style: tableheader,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width: 250,
+                                          // height:
+                                          //     MediaQuery.of(context).size.height *
+                                          //         0.93,
+                                          child: GanttChartView(
+                                              scrollController:
+                                                  _scrollController,
+                                              maxDuration: null,
+                                              // const Duration(days: 30 * 2),
+                                              // optional, set to null for infinite horizontal scroll
+                                              startDate: dateTime, //required
+                                              dayWidth:
+                                                  35, //column width for each day
+                                              dayHeaderHeight: 35,
+                                              eventHeight:
+                                                  24, //row height for events
+                                              stickyAreaWidth:
+                                                  70, //sticky area width
+                                              showStickyArea:
+                                                  true, //show sticky area or not
+                                              showDays: true, //show days or not
+                                              startOfTheWeek: WeekDay
+                                                  .monday, //custom start of the week
+                                              weekHeaderHeight: 23,
+                                              weekEnds: const {
+                                                // WeekDay.saturday,
+                                                // WeekDay.sunday
+                                              }, //custom weekends
+                                              isExtraHoliday: (context, day) {
+                                                //define custom holiday logic for each day
+                                                return DateUtils.isSameDay(
+                                                    DateTime(2023, 7, 1), day);
+                                              },
+                                              events: ganttdata))
+                                    ])),
+                              );
+                            } else {
+                              _keyProvider!.fetchDelayData(
+                                  widget.depoName!, widget.userId);
+                              alldata = snapshot.data['data'] as List<dynamic>;
 
-                        for (int j = 0; j < length; j++) {
-                          totalscope3 = 0;
-                          totalBalanceQty3 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A3') {
-                            var alldataA3 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate3 = alldataA3[0]['StartDate'];
-                            edate3 = alldataA3[alldataA3.length - 1]['EndDate'];
-                            asdate3 = alldataA3[0]['ActualStart'];
-                            aedate3 =
-                                alldataA3[alldataA3.length - 1]['ActualEnd'];
+                              for (int i = 0; i < alldata.length; i++) {
+                                totalperc = 0.0;
+                                _employees.clear();
+                                allstartDate.clear();
+                                allactualEnd.clear();
+                                allsrNo.clear();
+                                // double totalWeightage = 0.0;
+                                // int totalScope = 0;
+                                // int totalExecuted = 0;
 
-                            for (int i = 0; i < alldataA3.length; i++) {
-                              perc3 = 0;
-                              scope3 = alldataA3[i]['QtyScope'];
-                              balanceQty3 = alldataA3[i]['QtyScope'] -
-                                  alldataA3[i]['QtyExecuted'];
-                              var weightage = alldataA3[i]['Weightage'];
-                              totalweightage = totalweightage + weightage;
-                              totalscope3 = scope3 + totalscope3;
-                              totalBalanceQty3 = balanceQty3 + totalBalanceQty3;
-                            }
-                            perc3 = ((totalBalanceQty3 / totalscope3) *
-                                totalweightage);
-                            print(perc3);
-                            weight3.add(totalweightage);
-                          }
-                        }
+                                double perc = 0.0;
+                                double percValue = 0.0;
+                                double progressValue = 0.0;
+                                graphStartDate!.clear();
+                                graphEndDate!.clear();
+                                graphactualStartDate!.clear();
+                                graphactualEndDate!.clear();
+                                alldata.asMap().forEach((index, element) {
+                                  graphStartDate!
+                                      .add(alldata[index]['StartDate']);
+                                  graphEndDate!.add(alldata[index]['EndDate']);
+                                  // allsrNo.add(alldata[i]['srNo']);
 
-                        for (int j = 0; j < length; j++) {
-                          totalscope4 = 0;
-                          totalBalanceQty4 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A4') {
-                            var alldataA4 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate4 = alldataA4[0]['StartDate'];
-                            edate4 = alldataA4[alldataA4.length - 1]['EndDate'];
-                            asdate4 = alldataA4[0]['ActualStart'];
-                            aedate4 =
-                                alldataA4[alldataA4.length - 1]['ActualEnd'];
+                                  graphactualStartDate!
+                                      .add(alldata[index]['ActualStart']);
+                                  graphactualEndDate!
+                                      .add(alldata[index]['ActualEnd']);
 
-                            for (int i = 0; i < alldataA4.length; i++) {
-                              perc4 = 0;
-                              scope4 = alldataA4[i]['QtyScope'];
-                              balanceQty4 = alldataA4[i]['QtyScope'] -
-                                  alldataA4[i]['QtyExecuted'];
-                              var weightage = alldataA4[i]['Weightage'];
-                              totalweightage = totalweightage + weightage;
-                              totalscope4 = scope4 + totalscope4;
-                              totalBalanceQty4 = balanceQty4 + totalBalanceQty4;
-                            }
-                            perc4 = ((totalBalanceQty4 / totalscope4) *
-                                totalweightage);
-                            weight4.add(totalweightage);
-                          }
-                        }
+                                  if (!indicesToSkip.contains(index)) {
+                                    int qtyExecuted =
+                                        alldata[index]['QtyExecuted'];
+                                    double weightage =
+                                        alldata[index]['Weightage'];
+                                    int scope = alldata[index]['QtyScope'];
+                                    allsrNo.add(alldata[index]['srNo']);
 
-                        for (int j = 0; j < length; j++) {
-                          totalscope5 = 0;
-                          totalBalanceQty5 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A5') {
-                            var alldataA5 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate5 = alldataA5[0]['StartDate'];
-                            edate5 = alldataA5[alldataA5.length - 1]['EndDate'];
-                            asdate5 = alldataA5[0]['ActualStart'];
-                            aedate5 =
-                                alldataA5[alldataA5.length - 1]['ActualEnd'];
-
-                            for (int i = 0; i < alldataA5.length; i++) {
-                              perc5 = 0;
-                              scope5 = alldataA5[i]['QtyScope'];
-                              balanceQty5 = alldataA5[i]['QtyScope'] -
-                                  alldataA5[i]['QtyExecuted'];
-                              var weightage = alldataA5[i]['Weightage'];
-                              totalscope5 = scope5 + totalscope5;
-                              totalBalanceQty5 = balanceQty5 + totalBalanceQty5;
-                              totalweightage = totalweightage + weightage;
-                            }
-                            perc5 = ((totalBalanceQty5 / totalscope5) *
-                                totalweightage);
-                            weight5.add(totalweightage);
-                          }
-                        }
-
-                        for (int j = 0; j < length; j++) {
-                          totalscope6 = 0;
-                          totalBalanceQty6 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A6') {
-                            var alldataA6 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate6 = alldataA6[0]['StartDate'];
-                            edate6 = alldataA6[alldataA6.length - 1]['EndDate'];
-                            asdate6 = alldataA6[0]['ActualStart'];
-                            aedate6 =
-                                alldataA6[alldataA6.length - 1]['ActualEnd'];
-
-                            for (int i = 0; i < alldataA6.length; i++) {
-                              perc6 = 0;
-                              scope6 = alldataA6[i]['QtyScope'];
-                              balanceQty6 = alldataA6[i]['QtyScope'] -
-                                  alldataA6[i]['QtyExecuted'];
-                              totalscope6 = scope6 + totalscope6;
-                              totalBalanceQty6 = balanceQty6 + totalBalanceQty6;
-                              var weightage = alldataA6[i]['Weightage'];
-                              totalweightage = totalweightage + weightage;
-                            }
-                            perc6 = ((totalBalanceQty6 / totalscope6) *
-                                totalweightage);
-                            weight6.add(totalweightage);
-                          }
-                        }
-
-                        for (int j = 0; j < length; j++) {
-                          totalscope7 = 0;
-                          totalBalanceQty7 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A7') {
-                            var alldataA7 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate7 = alldataA7[0]['StartDate'];
-                            edate7 = alldataA7[alldataA7.length - 1]['EndDate'];
-                            asdate7 = alldataA7[0]['ActualStart'];
-                            aedate7 =
-                                alldataA7[alldataA7.length - 1]['ActualEnd'];
-
-                            for (int i = 0; i < alldataA7.length; i++) {
-                              perc7 = 0;
-                              scope7 = alldataA7[i]['QtyScope'];
-                              balanceQty7 = alldataA7[i]['QtyScope'] -
-                                  alldataA7[i]['QtyExecuted'];
-                              totalscope7 = scope7 + totalscope7;
-                              totalBalanceQty7 = balanceQty7 + totalBalanceQty7;
-                              var weightage = alldataA7[i]['Weightage'];
-                              totalweightage = totalweightage + weightage;
-                            }
-                            perc7 = ((totalBalanceQty7 / totalscope7) *
-                                totalweightage);
-                            weight7.add(totalweightage);
-                          }
-                        }
-
-                        for (int j = 0; j < length; j++) {
-                          totalscope8 = 0;
-                          totalBalanceQty8 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A8') {
-                            var alldataA8 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate8 = alldataA8[0]['StartDate'];
-                            edate8 = alldataA8[alldataA8.length - 1]['EndDate'];
-                            asdate8 = alldataA8[0]['ActualStart'];
-                            aedate8 =
-                                alldataA8[alldataA8.length - 1]['ActualEnd'];
-
-                            for (int i = 0; i < alldataA8.length; i++) {
-                              perc8 = 0;
-                              scope8 = alldataA8[i]['QtyScope'];
-                              balanceQty8 = alldataA8[i]['QtyScope'] -
-                                  alldataA8[i]['QtyExecuted'];
-                              var weightage = alldataA8[i]['Weightage'];
-                              totalscope8 = scope8 + totalscope8;
-                              totalBalanceQty8 = balanceQty8 + totalBalanceQty8;
-                              totalweightage = totalweightage + weightage;
-                            }
-                            perc8 = ((totalBalanceQty8 / totalscope8) *
-                                totalweightage);
-                            weight8.add(totalweightage);
-                          }
-                        }
-
-                        for (int j = 0; j < length; j++) {
-                          totalscope9 = 0;
-                          totalBalanceQty9 = 0;
-                          totalweightage = 0;
-                          if (snapshot.data.docs[j].reference.id.toString() ==
-                              '${widget.depoName}A9') {
-                            var alldataA9 =
-                                snapshot.data.docs[j]['data'] as List<dynamic>;
-                            sdate9 = alldataA9[0]['StartDate'];
-                            edate9 = alldataA9[alldataA9.length - 1]['EndDate'];
-                            asdate9 = alldataA9[0]['ActualStart'];
-                            aedate9 =
-                                alldataA9[alldataA9.length - 1]['ActualEnd'];
-
-                            for (int i = 0; i < alldataA9.length; i++) {
-                              perc9 = 0;
-                              scope9 = alldataA9[i]['QtyScope'];
-                              balanceQty9 = alldataA9[i]['QtyScope'] -
-                                  alldataA9[i]['QtyExecuted'];
-                              totalscope9 = scope9 + totalscope9;
-                              totalBalanceQty9 = balanceQty9 + totalBalanceQty9;
-                              var weightage = alldataA9[i]['Weightage'];
-                              totalweightage = totalweightage + weightage;
-                            }
-                          }
-                          perc9 = ((totalBalanceQty9 / totalscope9) *
-                              totalweightage);
-                          weight9.add(totalweightage);
-                        }
-                      }
-                      startDate.clear();
-                      enddate.clear();
-                      actualstart.clear();
-                      actualend.clear();
-                      srNo.clear();
-                      for (int j = 0; j < length; j++) {
-                        // if (snapshot.data.docs[j].reference.id.toString() ==
-                        //     '${widget.depoName}A$j') {
-                        if (j != 0) {
-                          var startdate = '';
-                          var endDate = '';
-                          var actualDate = '';
-                          var actualEnd = '';
-                          var srno;
-
-                          var allchartdata =
-                              snapshot.data.docs[j]['data'] as List<dynamic>;
-                          startdate = allchartdata[0]['StartDate'];
-                          endDate =
-                              allchartdata[allchartdata.length - 1]['EndDate'];
-                          actualDate = allchartdata[0]['ActualStart'];
-                          actualEnd = allchartdata[allchartdata.length - 1]
-                              ['ActualEnd'];
-
-                          srno = j;
-
-                          startDate.add(startdate);
-                          enddate.add(endDate);
-                          actualstart.add(actualDate);
-                          actualend.add(actualEnd);
-                          srNo.add(srno);
-                        }
-                      }
-                      for (int j = 0; j < 1; j++) {
-                        // if (snapshot.data.docs[j].reference.id.toString() ==
-                        //     '${widget.depoName}A$j') {
-
-                        var startdate = '';
-                        var endDate = '';
-                        var actualDate = '';
-                        var actualEnd = '';
-                        var srno;
-
-                        var allchartdata =
-                            snapshot.data.docs[j]['data'] as List<dynamic>;
-                        startdate = allchartdata[0]['StartDate'];
-                        endDate =
-                            allchartdata[allchartdata.length - 1]['EndDate'];
-                        actualDate = allchartdata[0]['ActualStart'];
-                        actualEnd =
-                            allchartdata[allchartdata.length - 1]['ActualEnd'];
-
-                        srno = j;
-
-                        startDate.add(startdate);
-                        enddate.add(endDate);
-                        actualstart.add(actualDate);
-                        actualend.add(actualEnd);
-                        srNo.add(srno);
-                      }
-
-                      ganttdata.add(GanttAbsoluteEvent(
-                        displayNameBuilder: (context) {
-                          int sr = 1;
-                          return sr.toString();
-                        },
-                        startDate: DateTime.now(),
-                        endDate: DateTime.now(),
-                      ));
-
-                      ganttdata.add(GanttAbsoluteEvent(
-                        displayNameBuilder: (context) {
-                          return '';
-                        },
-                        startDate: DateTime.now(),
-                        endDate: DateTime.now(),
-                        //displayName: yAxis[i].toString()
-                      ));
-
-                      for (int i = 0; i < length; i++) {
-                        ganttdata.add(GanttAbsoluteEvent(
-                          displayNameBuilder: (context) {
-                            int sr = i + 2;
-                            // int ss = sr + 1;
-                            return sr.toString();
-                          },
-                          startDate:
-                              DateFormat('dd-MM-yyyy').parse(startDate[i]),
-                          endDate: DateFormat('dd-MM-yyyy').parse(enddate[i]),
-                        ));
-
-                        ganttdata.add(GanttAbsoluteEvent(
-                          displayNameBuilder: (context) {
-                            return '';
-                          },
-                          startDate:
-                              DateFormat('dd-MM-yyyy').parse(actualstart[i]),
-                          endDate: DateFormat('dd-MM-yyyy').parse(actualend[i]),
-                          //displayName: yAxis[i].toString()
-                        ));
-                      }
-                      _employees = getKeyEventsData();
-                      _KeyDataSourceKeyEvents =
-                          KeyDataSourceKeyEvents(_employees, context);
-                      _dataGridController = DataGridController();
-
-                      return SizedBox(
-                          height: 600,
-                          child: Row(children: [
-                            Expanded(
-                              child: SfDataGrid(
-                                source: _KeyDataSourceKeyEvents,
-                                onCellTap: (DataGridCellTapDetails details) {
-                                  final DataGridRow row =
-                                      _KeyDataSourceKeyEvents.effectiveRows[
-                                          details.rowColumnIndex.rowIndex - 1];
-
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) {
-                                    if (row.getCells()[0].value == 'A1') {
-                                      return UploadDocument(
-                                          userId: widget.userId,
-                                          cityName: widget.cityName,
-                                          depoName: widget.depoName,
-                                          title: 'Key Events',
-                                          fldrName: row.getCells()[1].value);
-                                    } else {
-                                      return StatutoryAprovalA2(
-                                        events: row.getCells().first.value,
-                                        depoName: widget.depoName,
-                                      );
-                                    }
+                                    perc = ((qtyExecuted / scope) * weightage);
+                                    // print('$index$perc');
+                                    double value = perc.isNaN ? 0.0 : perc;
+                                    totalperc = totalperc + value;
+                                    // print(totalperc);
                                   }
-                                      // menuwidget[
-                                      //     details.rowColumnIndex.rowIndex - 1]
-                                      ));
-                                },
-                                allowEditing: true,
-                                frozenColumnsCount: 2,
-                                editingGestureType: EditingGestureType.tap,
-                                headerGridLinesVisibility:
-                                    GridLinesVisibility.both,
-                                gridLinesVisibility: GridLinesVisibility.both,
-                                selectionMode: SelectionMode.single,
-                                navigationMode: GridNavigationMode.cell,
-                                columnWidthMode: ColumnWidthMode.auto,
-                                controller: _dataGridController,
-                                // onQueryRowHeight: (details) {
-                                //   return details.rowIndex == 0 ? 60.0 : 49.0;
-                                // },
-                                columns: [
-                                  GridColumn(
-                                    columnName: 'srNo',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    allowEditing: false,
-                                    width: 60,
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Sr No',
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheader,
 
-                                        //    textAlign: TextAlign.center,
+                                  if (!indicesToSkip.contains(index)) {
+                                    _employees.add(Employee.fromJson(element));
+                                    graphsrNo!.add(alldata[index]['srNo']);
+                                    // allstartDate.add(alldata[index]['StartDate']);
+                                    // allendDate.add(alldata[index]['EndDate']);
+                                    // allactualstart.add(alldata[index]['ActualStart']);
+                                    // allactualEnd.add(alldata[index]['ActualEnd']!);
+                                    // allsrNo.add(alldata[index]['srNo']);
+
+                                    // double weightage = alldata[index]['Weightage'];
+                                    // totalWeightage = totalWeightage + weightage;
+
+                                    // int scope = alldata[index]['QtyScope'];
+                                    // totalScope = totalScope + scope;
+
+                                    // int balncQty = alldata[index]['BalancedQty'];
+
+                                    // int qtyExecuted = alldata[index]['QtyExecuted'];
+                                    // totalExecuted = totalExecuted + qtyExecuted;
+
+                                    // totalPecProgress =
+                                    //     totalExecuted / totalScope * totalWeightage;
+
+                                    // totalbalanceQty = totalScope - totalExecuted;
+
+                                    // totalWeightage = totalWeightage + weightage;
+                                    // print('balanceQty$totalbalanceQty');
+                                    // print('totalScope$totalScope');
+                                  }
+                                  // }
+                                  else if (index == 0) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[1]['StartDate'];
+                                    // edate1 = alldata[1]['EndDate'];
+                                    // asdate1 = alldata[1]['ActualStart'];
+                                    // aedate1 = alldata[1]['ActualEnd'];
+                                    activity = alldata[index]['Activity'];
+
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+
+                                    double totalweightage = 0;
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+
+                                    for (int i = 1; i < 2; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      sd = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      totalweightage =
+                                          totalweightage + weightage;
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                    }
+
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: activity!,
+                                        originalDuration:
+                                            durationParse(sdate1!, edate1!),
+                                        startDate: sdate1,
+                                        endDate: edate1,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: ' ',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: 0.5,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                  } else if (index == 2) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[3]['StartDate'];
+                                    // edate1 = alldata[5]['EndDate'];
+                                    // asdate1 = alldata[3]['ActualStart'];
+                                    // aedate1 = alldata[5]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+                                    double totalweightage = 0;
+
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+
+                                    for (int i = 3; i < 6; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+
+                                      totalweightage =
+                                          totalweightage + weightage;
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      // print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+                                      // progressValue = percValue.isNaN
+                                      //     ? 0.0
+                                      //     : percValue + progressValue;
+                                      progressValue = progressValue + percValue;
+                                      // print(progressValue);
+                                    }
+
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 6) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[7]['StartDate'];
+                                    // edate1 = alldata[12]['EndDate'];
+                                    // asdate1 = alldata[7]['ActualStart'];
+                                    // aedate1 = alldata[12]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+
+                                    double totalweightage = 0;
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+
+                                    for (int i = 7; i < 13; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      totalweightage =
+                                          totalweightage + weightage;
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      // print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    allendDate.clear();
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 13) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[13]['StartDate'];
+                                    // edate1 = alldata[17]['EndDate'];
+                                    // asdate1 = alldata[13]['ActualStart'];
+                                    // aedate1 = alldata[17]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+
+                                    double totalweightage = 0;
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+                                    allendDate.clear();
+                                    for (int i = 14; i < 18; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      totalweightage =
+                                          totalweightage + weightage;
+
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      // print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    allendDate.clear();
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 18) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[17]['StartDate'];
+                                    // edate1 = alldata[26]['EndDate'];
+                                    // asdate1 = alldata[17]['ActualStart'];
+                                    // aedate1 = alldata[26]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+                                    double totalweightage = 0;
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+
+                                    for (int i = 19; i < 27; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      totalweightage =
+                                          totalweightage + weightage;
+
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      // print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 28) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[28]['StartDate'];
+                                    // edate1 = alldata[31]['EndDate'];
+                                    // asdate1 = alldata[28]['ActualStart'];
+                                    // aedate1 = alldata[31]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+                                    double totalweightage = 0;
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+                                    allendDate.clear();
+                                    for (int i = 29; i < 32; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      totalweightage =
+                                          totalweightage + weightage;
+
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      // print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 32) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    var acti = alldata[index]['Activity'];
+                                    double totalweightage = 0;
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+                                    for (int i = 33; i < 38; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+
+                                      totalweightage =
+                                          totalweightage + weightage;
+
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 38) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[40]['StartDate'];
+                                    // edate1 = alldata[63]['EndDate'];
+                                    // asdate1 = alldata[40]['ActualStart'];
+                                    // aedate1 = alldata[63]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+                                    double totalweightage = 0;
+
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+                                    allendDate.clear();
+                                    for (int i = 39; i < 64; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      totalweightage =
+                                          totalweightage + weightage;
+
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 64) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[66]['StartDate'];
+                                    // edate1 = alldata[75]['EndDate'];
+                                    // asdate1 = alldata[66]['ActualStart'];
+                                    // aedate1 = alldata[75]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+                                    double totalweightage = 0;
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+                                    allendDate.clear();
+                                    for (int i = 65; i < 76; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      totalweightage =
+                                          totalweightage + weightage;
+
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  } else if (index == 76) {
+                                    dynamic srNo = alldata[index]['srNo'];
+                                    // sdate1 = alldata[77]['StartDate'];
+                                    // edate1 = alldata[78]['EndDate'];
+                                    // asdate1 = alldata[77]['ActualStart'];
+                                    // aedate1 = alldata[78]['ActualEnd'];
+                                    var acti = alldata[index]['Activity'];
+                                    // allstartDate.add(sdate1!);
+                                    // allendDate.add(edate1!);
+                                    // allactualstart.add(asdate1!);
+                                    // allactualEnd.add(aedate1!);
+                                    // allsrNo.add(srNo);
+                                    double totalweightage = 0;
+
+                                    int totalScope = 0;
+                                    int totalExecuted = 0;
+                                    int totalbalanceQty = 0;
+                                    allendDate.clear();
+                                    for (int i = 77; i < 79; i++) {
+                                      sdate1 = alldata[i]['StartDate'];
+                                      edate1 = alldata[i]['EndDate'];
+                                      asdate1 = alldata[i]['ActualStart'];
+                                      aedate1 = alldata[i]['ActualEnd'];
+                                      int scope = alldata[i]['QtyScope'];
+                                      int executed = alldata[i]['QtyExecuted'];
+                                      double weightage =
+                                          alldata[i]['Weightage'];
+                                      totalweightage =
+                                          totalweightage + weightage;
+
+                                      allstartDate.add(sdate1!);
+                                      allendDate.add(edate1!);
+                                      allactualstart.add(asdate1!);
+                                      allactualEnd.add(aedate1!);
+                                      totalScope = totalScope + scope;
+                                      totalExecuted = totalExecuted + executed;
+                                      totalbalanceQty =
+                                          totalScope - totalExecuted;
+                                      percValue = 1 /
+                                          100 *
+                                          ((executed / scope) *
+                                              weightage *
+                                              100);
+
+                                      print(percValue);
+                                      percValue =
+                                          percValue.isNaN ? 0.0 : percValue;
+
+                                      progressValue = progressValue + percValue;
+                                    }
+                                    List<DateTime> startDates = allstartDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+                                    List<DateTime> dates = allendDate
+                                        .map((dateString) =>
+                                            DateFormat('dd-MM-yyyy')
+                                                .parse(dateString))
+                                        .toList();
+
+                                    dates.sort();
+                                    startDates.sort();
+
+                                    DateTime lastDate = dates.last;
+                                    DateTime startDate = startDates.first;
+                                    String formattedStartdDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(startDate);
+                                    String formatteEndDate =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(lastDate);
+
+                                    _employees.add(Employee(
+                                        srNo: srNo,
+                                        activity: acti!,
+                                        originalDuration: durationParse(
+                                            formattedStartdDate,
+                                            formatteEndDate),
+                                        startDate: formattedStartdDate,
+                                        endDate: formatteEndDate,
+                                        actualstartDate: asdate1,
+                                        actualendDate: aedate1,
+                                        actualDuration:
+                                            durationParse(asdate1!, aedate1!),
+                                        delay: durationParse(edate1!, aedate1!),
+                                        unit: '',
+                                        scope: totalScope,
+                                        qtyExecuted: totalExecuted,
+                                        balanceQty: totalbalanceQty,
+                                        percProgress: progressValue,
+                                        weightage: totalweightage));
+                                    allstartDate.clear();
+                                    allendDate.clear();
+                                    dates.clear();
+                                    progressValue = 0.0;
+                                  }
+                                });
+                              }
+                              print(totalperc);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Provider.of<KeyProvider>(context, listen: false)
+                                    .saveProgressValue(totalperc);
+                              });
+                              _KeyDataSourceKeyEvents =
+                                  KeyDataSourceKeyEvents(_employees, context);
+                              _dataGridController = DataGridController();
+                              // _employees = getDefaultEmployeeData();
+                              // _employees.add(Employee(
+                              //     srNo: 1,
+                              //     activity: 'Letter of Award reveived  from TML',
+                              //     originalDuration: 0,
+                              //     startDate: sdate1,
+                              //     endDate: edate1,
+                              //     actualstartDate: asdate1,
+                              //     actualendDate: aedate1,
+                              //     actualDuration: 1,
+                              //     delay: 2,
+                              //
+                              //     unit: 1,
+                              //     scope: 2,
+                              //     qtyExecuted: 5,
+                              //     balanceQty: 2,
+                              //     percProgress: 0.5,
+                              //     weightage: 2));
+
+                              // _employees.add(KeyDataSourceKeyEvents.(element));
+                              //     _KeyDataSourceKeyEvents =
+                              //         KeyDataSourceKeyEvents(_employees, context);
+                              //     _dataGridController = DataGridController();
+
+                              List<String> dateParts = sd!.split('-');
+                              int day = int.parse(dateParts[0]);
+                              int month = int.parse(dateParts[1]);
+                              int year = int.parse(dateParts[2]);
+
+                              dateTime = DateTime(year, month, day);
+
+                              // ganttdata.add(GanttAbsoluteEvent(
+                              //   extra: 'hd',
+                              //   suggestedColor: yellow,
+                              //   displayNameBuilder: (context) {
+                              //     int sr = 1;
+                              //     return sr.toString();
+                              //   },
+                              //   startDate: DateTime.now(),
+                              //   endDate: DateTime.now(),
+                              // ));
+
+                              // ganttdata.add(GanttAbsoluteEvent(
+                              //   suggestedColor: green,
+                              //   displayNameBuilder: (context) {
+                              //     return '';
+                              //   },
+                              //   startDate: DateTime.now(),
+                              //   endDate: DateTime.now(),
+                              //   //displayName: yAxis[i].toString()
+                              // ));
+                              int sr = 0;
+                              int gr = 0;
+                              int j = 0;
+                              int k = 0;
+                              for (int i = 0; i < graphStartDate!.length; i++) {
+                                if (indicesToSkip.contains(i)) {
+                                  ganttdata.add(GanttAbsoluteEvent(
+                                    suggestedColor: yellow,
+                                    displayNameBuilder: (context) {
+                                      j = sr++;
+                                      return allsrNo[j];
+                                    },
+                                    startDate: DateFormat('dd-MM-yyyy')
+                                        .parse(graphStartDate![i]),
+                                    endDate: DateFormat('dd-MM-yyyy')
+                                        .parse(graphEndDate![i]),
+                                  ));
+                                } else {
+                                  ganttdata.add(GanttAbsoluteEvent(
+                                    suggestedColor: DateFormat('dd-MM-yyyy')
+                                            .parse(graphactualEndDate![k])
+                                            .isBefore(DateFormat('dd-MM-yyyy')
+                                                .parse(graphEndDate![k]))
+                                        ? green
+                                        : red,
+                                    displayNameBuilder: (context) {
+                                      k = gr++;
+                                      return graphsrNo![k];
+                                    },
+                                    startDate: DateFormat('dd-MM-yyyy')
+                                        .parse(graphactualStartDate![k]),
+                                    endDate: DateFormat('dd-MM-yyyy')
+                                        .parse(graphactualEndDate![k]),
+                                    //displayName: yAxis[i].toString()
+                                  ));
+                                }
+                                k++;
+                              }
+
+                              return SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.68,
+                                  child: Row(children: [
+                                    Expanded(
+                                      child: SfDataGridTheme(
+                                        data: SfDataGridThemeData(
+                                            rowHoverColor: yellow,
+                                            rowHoverTextStyle: const TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 14,
+                                            ),
+                                            gridLineColor: blue,
+                                            gridLineStrokeWidth: 2),
+                                        child: SfDataGrid(
+                                          source: _KeyDataSourceKeyEvents,
+                                          onSelectionChanged:
+                                              (addedRows, removedRows) {
+                                            if (addedRows.first
+                                                    .getCells()
+                                                    .first
+                                                    .value ==
+                                                'A1') {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return UploadDocument(
+                                                  title: 'Key Events',
+                                                  fldrName: addedRows.first
+                                                      .getCells()[1]
+                                                      .value,
+                                                  cityName: widget.cityName,
+                                                  depoName: widget.depoName,
+                                                  userId: widget.userId,
+                                                );
+                                                //  ViewAllPdf(
+                                                //     userId: widget.userId,
+                                                //     cityName: widget.cityName!,
+                                                //     depoName: widget.depoName!,
+                                                //     title: 'Key Events',
+                                                //     docId: addedRows.first
+                                                //         .getCells()[1]
+                                                //         .value);
+                                              }));
+                                            }
+                                          },
+                                          // onCellTap:
+                                          //     (DataGridCellTapDetails details) {
+                                          //   final DataGridRow row =
+                                          //       _KeyDataSourceKeyEvents
+                                          //           .effectiveRows[details
+                                          //               .rowColumnIndex.rowIndex -
+                                          //           1];
+
+                                          //   Navigator.of(context).push(
+                                          //       MaterialPageRoute(
+                                          //           builder: (context) {
+                                          //     if (row.getCells().first.value ==
+                                          //         'A1') {
+                                          //       return
+                                          //     }
+                                          //     // ignore: null_check_always_fails
+                                          //     return null!;
+                                          //   }));
+                                          // },
+                                          allowEditing: true,
+                                          frozenColumnsCount: 2,
+                                          editingGestureType:
+                                              EditingGestureType.tap,
+                                          headerGridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          gridLinesVisibility:
+                                              GridLinesVisibility.both,
+                                          selectionMode: SelectionMode.single,
+                                          navigationMode:
+                                              GridNavigationMode.cell,
+                                          columnWidthMode: ColumnWidthMode.auto,
+                                          controller: _dataGridController,
+                                          verticalScrollController:
+                                              _verticalGridController,
+
+                                          rowHeight: 55,
+                                          columns: [
+                                            GridColumn(
+                                              columnName: 'srNo',
+                                              autoFitPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16),
+                                              allowEditing: false,
+                                              width: 60,
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Sr No',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  style: tableheader,
+
+                                                  //    textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'Activity',
+                                              width: 250,
+                                              allowEditing: false,
+                                              label: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Activity',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'OriginalDuration',
+                                              width: 80,
+                                              allowEditing: false,
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Original Duration',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'StartDate',
+                                              allowEditing: false,
+                                              width: 150,
+                                              label: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Start Date',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'EndDate',
+                                              allowEditing: false,
+                                              label: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  'End  Date',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'ActualStart',
+                                              width: 150,
+                                              allowEditing: false,
+                                              label: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Actual Start',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'ActualEnd',
+                                              width: 150,
+                                              allowEditing: false,
+                                              label: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  'Actual End',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'ActualDuration',
+                                              allowEditing: false,
+                                              width: 80,
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Actual Duration',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'Delay',
+                                              allowEditing: false,
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Delay',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            // GridColumn(
+                                            //   columnName: 'ReasonDelay',
+                                            //   label: Container(
+                                            //     alignment: Alignment.center,
+                                            //     child: Text(
+                                            //       'ReasonDelay',
+                                            //       overflow:
+                                            //           TextOverflow.values.first,
+                                            //       style: tableheader,
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            GridColumn(
+                                              columnName: 'Unit',
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Unit',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'QtyScope',
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Oty as per scope',
+                                                  textAlign: TextAlign.center,
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'QtyExecuted',
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Qty executed',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'BalancedQty',
+                                              allowEditing: false,
+                                              label: Container(
+                                                width: 150,
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Balanced Qty',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'Progress',
+                                              allowEditing: false,
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  '% of Progress',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                            GridColumn(
+                                              columnName: 'Weightage',
+                                              allowEditing: false,
+                                              label: Container(
+                                                alignment: Alignment.center,
+                                                child: Text(
+                                                  'Weightage',
+                                                  overflow:
+                                                      TextOverflow.values.first,
+                                                  textAlign: TextAlign.center,
+                                                  style: tableheader,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Activity',
-                                    allowEditing: true,
-                                    width: 250,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Activity',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
+                                    Column(
+                                      children: [
+                                        SizedBox(
+                                            width: 250,
+                                            height: 63,
+                                            child: SingleChildScrollView(
+                                              child: GanttChartView(
+                                                  scrollController:
+                                                      _horizontalscrollController,
+                                                  maxDuration: null,
+
+                                                  // const Duration(days: 30 * 2),
+                                                  // optional, set to null for infinite horizontal scroll
+                                                  startDate:
+                                                      dateTime, //required
+                                                  dayWidth:
+                                                      35, //column width for each day
+                                                  dayHeaderHeight: 37,
+                                                  eventHeight:
+                                                      55, //row height for events
+                                                  stickyAreaWidth:
+                                                      70, //sticky area width
+                                                  showStickyArea:
+                                                      false, //show sticky area or not
+                                                  showDays:
+                                                      true, //show days or not
+                                                  startOfTheWeek: WeekDay
+                                                      .monday, //custom start of the week
+                                                  weekHeaderHeight: 25,
+                                                  weekEnds: const {
+                                                    // WeekDay.saturday,
+                                                    // WeekDay.sunday
+                                                  }, //custom weekends
+                                                  // isExtraHoliday: (context, day) {
+                                                  //   //define custom holiday logic for each day
+                                                  //   return DateUtils.isSameDay(
+                                                  //       DateTime(2023, 7, 1), day);
+                                                  // },
+                                                  events: const []),
+                                            )),
+                                        SizedBox(
+                                            width: 250,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.48,
+                                            child: SingleChildScrollView(
+                                              controller:
+                                                  _dataGridScrollController,
+                                              child: GanttChartView(
+                                                  scrollController:
+                                                      _scrollController,
+                                                  maxDuration: null,
+
+                                                  // const Duration(days: 30 * 2),
+                                                  // optional, set to null for infinite horizontal scroll
+                                                  startDate:
+                                                      dateTime, //required
+                                                  dayWidth:
+                                                      35, //column width for each day
+                                                  dayHeaderHeight: 0,
+                                                  eventHeight:
+                                                      55, //row height for events
+                                                  stickyAreaWidth:
+                                                      70, //sticky area width
+                                                  showStickyArea:
+                                                      false, //show sticky area or not
+                                                  showDays:
+                                                      false, //show days or not
+                                                  startOfTheWeek: WeekDay
+                                                      .monday, //custom start of the week
+                                                  weekHeaderHeight: 0,
+                                                  weekEnds: const {
+                                                    // WeekDay.saturday,
+                                                    // WeekDay.sunday
+                                                  }, //custom weekends
+                                                  // isExtraHoliday: (context, day) {
+                                                  //   //define custom holiday logic for each day
+                                                  //   return DateUtils.isSameDay(
+                                                  //       DateTime(2023, 7, 1), day);
+                                                  // },
+                                                  events: ganttdata),
+                                            )),
+                                      ],
                                     ),
+                                  ]));
+                            }
+                          }),
+                      _isLoading
+                          ? Container()
+                          : Container(
+                              width: 450,
+                              alignment: Alignment.bottomCenter,
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(width: 2.0, color: blue),
+                                    right: BorderSide(width: 2.0, color: blue),
+                                    bottom: BorderSide(width: 2.0, color: blue),
+                                    left: BorderSide(width: 2.0, color: blue),
                                   ),
-                                  GridColumn(
-                                    columnName: 'OriginalDuration',
-                                    allowEditing: false,
-                                    width: 80,
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Original Duration',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
-                                    ),
+                                  shape: BoxShape.rectangle),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Select Project Closure Date :',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  GridColumn(
-                                    columnName: 'StartDate',
-                                    allowEditing: false,
-                                    width: 150,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Start Date',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'EndDate',
-                                    allowEditing: false,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        textAlign: TextAlign.center,
-                                        'End  Date',
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'ActualStart',
-                                    allowEditing: false,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Actual Start',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'ActualEnd',
-                                    allowEditing: false,
-                                    label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        textAlign: TextAlign.center,
-                                        'Actual End',
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'ActualDuration',
-                                    allowEditing: false,
-                                    width: 80,
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Actual Duration',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Delay',
-                                    allowEditing: false,
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Delay',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  // GridColumn(
-                                  //   columnName: 'ReasonDelay',
-                                  //   label: Container(
-                                  //     alignment: Alignment.center,
-                                  //     child: Text(
-                                  //       'ReasonDelay',
-                                  //       overflow:
-                                  //           TextOverflow.values.first,
-                                  //       style: tableheader,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  GridColumn(
-                                    columnName: 'Unit',
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Unit',
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'QtyScope',
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Oty as per scope',
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'QtyExecuted',
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Qty executed',
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'BalancedQty',
-                                    allowEditing: false,
-                                    label: Container(
-                                      width: 150,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Balanced Qty',
-                                        overflow: TextOverflow.values.first,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Progress',
-                                    allowEditing: false,
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '% of Progress',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    columnName: 'Weightage',
-                                    allowEditing: true,
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Weightage',
-                                        overflow: TextOverflow.values.first,
-                                        textAlign: TextAlign.center,
-                                        style: tableheader,
-                                      ),
-                                    ),
-                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text('choose Date'),
+                                            content: SizedBox(
+                                              width: 400,
+                                              height: 500,
+                                              child: SfDateRangePicker(
+                                                view: DateRangePickerView.month,
+                                                showTodayButton: false,
+                                                showActionButtons: true,
+                                                selectionMode:
+                                                    DateRangePickerSelectionMode
+                                                        .single,
+                                                onSelectionChanged:
+                                                    (DateRangePickerSelectionChangedArgs
+                                                        args) {
+                                                  if (args.value
+                                                      is PickerDateRange) {
+                                                    rangestartDate =
+                                                        args.value.startDate;
+                                                  }
+                                                },
+                                                onSubmit: (value) {
+                                                  setState(() {
+                                                    closureDate =
+                                                        DateTime.parse(
+                                                            value.toString());
+                                                    print(closureDate);
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                                onCancel: () {},
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.today)),
+                                  Text(
+                                    DateFormat('dd-MM-yyyy')
+                                        .format(closureDate!),
+                                    //  DateFormat.yMMMMd().format(closureDate!),
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )
                                 ],
                               ),
                             ),
-                            SizedBox(
-                                width: 300,
-                                height: _employees.length * 75,
-                                child: SingleChildScrollView(
-                                  child: GanttChartView(
-                                      scrollController: scrollController,
-                                      scrollPhysics:
-                                          const BouncingScrollPhysics(),
-                                      maxDuration: null,
-                                      // const Duration(days: 30 * 2),
-                                      // optional, set to null for infinite horizontal scroll
-                                      startDate:
-                                          DateTime(2023, 8, 1), //required
-                                      dayWidth: 40, //column width for each day
-                                      dayHeaderHeight: 35,
-                                      eventHeight: 25, //row height for events
-
-                                      stickyAreaWidth: 50, //sticky area width
-                                      showStickyArea:
-                                          true, //show sticky area or not
-                                      showDays: true, //show days or not
-                                      startOfTheWeek: WeekDay
-                                          .monday, //custom start of the week
-                                      weekHeaderHeight: 30,
-                                      weekEnds: const {
-                                        // WeekDay.saturday,
-                                        // WeekDay.sunday
-                                      }, //custom weekends
-                                      isExtraHoliday: (context, day) {
-                                        //define custom holiday logic for each day
-                                        return DateUtils.isSameDay(
-                                            DateTime(2023, 7, 1), day);
-                                      },
-                                      events: ganttdata),
-                                ))
-                          ]));
-                    }
-                  }
-                  _employees = getDefaultEmployeeData();
-                  _KeyDataSourceKeyEvents =
-                      KeyDataSourceKeyEvents(_employees, context);
-                  _dataGridController = DataGridController();
-
-                  return SizedBox(
-                      height: 580,
-                      child: Row(children: [
-                        Expanded(
-                          child: SfDataGrid(
-                            source: _KeyDataSourceKeyEvents,
-                            onCellTap: (DataGridCellTapDetails details) {
-                              final DataGridRow row =
-                                  _KeyDataSourceKeyEvents.effectiveRows[
-                                      details.rowColumnIndex.rowIndex - 1];
-
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) {
-                                if (row.getCells().first.value == 'A1') {
-                                  return UploadDocument(
-                                    fldrName: row.getCells()[1].value,
-                                    userId: widget.userId,
-                                    cityName: widget.cityName,
-                                    depoName: widget.depoName,
-                                    title: 'Key Events',
-                                  );
-                                } else {
-                                  return StatutoryAprovalA2(
-                                    events: row.getCells().first.value,
-                                    depoName: widget.depoName,
-                                  );
-                                }
-                              }
-                                  // menuwidget[
-                                  //     details.rowColumnIndex.rowIndex - 1]
-                                  ));
-                            },
-                            allowEditing: true,
-                            frozenColumnsCount: 2,
-                            editingGestureType: EditingGestureType.tap,
-                            headerGridLinesVisibility: GridLinesVisibility.both,
-                            gridLinesVisibility: GridLinesVisibility.both,
-                            selectionMode: SelectionMode.single,
-                            navigationMode: GridNavigationMode.cell,
-                            columnWidthMode: ColumnWidthMode.auto,
-                            controller: _dataGridController,
-                            // onQueryRowHeight: (details) {
-                            //   return details.rowIndex == 0 ? 60.0 : 49.0;
-                            // },
-                            columns: [
-                              GridColumn(
-                                columnName: 'srNo',
-                                autoFitPadding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                allowEditing: false,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Sr No',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-
-                                    //    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'Activity',
-                                allowEditing: false,
-                                width: 100,
-                                label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Activity',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'OriginalDuration',
-                                allowEditing: false,
-                                width: 80,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Original Duration',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'StartDate',
-                                allowEditing: false,
-                                width: 85,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Start Date',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'EndDate',
-                                allowEditing: false,
-                                width: 85,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'End Date',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'ActualStart',
-                                allowEditing: false,
-                                width: 85,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Actual Start',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'ActualEnd',
-                                allowEditing: false,
-                                width: 85,
-                                label: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    'Actual End',
-                                    overflow: TextOverflow.values.first,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'ActualDuration',
-                                allowEditing: false,
-                                width: 80,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Actual Duration',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'Delay',
-                                allowEditing: false,
-                                width: 80,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Delay',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'Progress',
-                                allowEditing: false,
-                                width: 80,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '% of Progress',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                columnName: 'Weightage',
-                                allowEditing: false,
-                                width: 80,
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Weightage',
-                                    overflow: TextOverflow.values.first,
-                                    textAlign: TextAlign.center,
-                                    style: tableheader,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                            width: 300,
-                            height: _employees.length * 75,
-                            child: SingleChildScrollView(
-                              child: GanttChartView(
-                                  scrollController: scrollController,
-                                  scrollPhysics: const BouncingScrollPhysics(),
-                                  maxDuration: null,
-                                  // const Duration(days: 30 * 2),
-                                  // optional, set to null for infinite horizontal scroll
-                                  startDate: DateTime(2023, 8, 1), //required
-                                  dayWidth: 40, //column width for each day
-                                  dayHeaderHeight: 35,
-                                  eventHeight: 25, //row height for events
-
-                                  stickyAreaWidth: 50, //sticky area width
-                                  showStickyArea:
-                                      true, //show sticky area or not
-                                  showDays: true, //show days or not
-                                  startOfTheWeek:
-                                      WeekDay.monday, //custom start of the week
-                                  weekHeaderHeight: 30,
-                                  weekEnds: const {
-                                    // WeekDay.saturday,
-                                    // WeekDay.sunday
-                                  }, //custom weekends
-                                  isExtraHoliday: (context, day) {
-                                    //define custom holiday logic for each day
-                                    return DateUtils.isSameDay(
-                                        DateTime(2023, 7, 1), day);
-                                  },
-                                  events: ganttdata),
-                            ))
-                      ]));
-                }));
+                    ],
+                  ),
+                )));
 
     //     ? LoadingPage()
     //     :
@@ -1309,6 +2370,28 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
   //     setState(() {});
   //   });
   // }
+
+  List<Employee> getDefaultData() {
+    return [
+      Employee(
+        srNo: 1,
+        activity: 'Initial Survey Of Depot With TML & STA Team.',
+        originalDuration: 1,
+        startDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+        endDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+        actualstartDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+        actualendDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+        actualDuration: 0,
+        delay: 0,
+        unit: 0,
+        scope: 0,
+        qtyExecuted: 0,
+        balanceQty: 0,
+        percProgress: 0,
+        weightage: 0.5,
+      ),
+    ];
+  }
 
   List<Employee> getDefaultEmployeeData() {
     return [
@@ -1482,7 +2565,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
   int durationParse(String fromtime, String todate) {
     DateTime startdate = DateFormat('dd-MM-yyyy').parse(fromtime);
     DateTime enddate = DateFormat('dd-MM-yyyy').parse(todate);
-    return enddate.difference(startdate).inDays;
+    return enddate.add(Duration(days: 1)).difference(startdate).inDays;
   }
 
   List<Employee> getEmployeeData() {
@@ -1502,7 +2585,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           qtyExecuted: 0,
           balanceQty: 0,
           percProgress: 100,
-          weightage: 10),
+          weightage: 0),
       Employee(
           srNo: 'A2',
           activity:
@@ -1526,7 +2609,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
           scope: 0,
           qtyExecuted: 0,
           balanceQty: 0,
-          percProgress: perc2!.toStringAsFixed(2),
+          percProgress: perc2!,
           weightage: weight2.isNotEmpty
               ? double.parse(weight2[0].toStringAsFixed(4))
               : 0.0),
@@ -1553,7 +2636,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc3!.toStringAsFixed(2),
+        percProgress: perc3!,
         weightage: weight3.isNotEmpty
             ? double.parse(weight3[0].toStringAsFixed(4))
             : 0.0,
@@ -1580,7 +2663,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc4!.toStringAsFixed(2),
+        percProgress: perc4!,
         weightage: weight4.isNotEmpty
             ? double.parse(weight4[0].toStringAsFixed(4))
             : 0.0,
@@ -1607,7 +2690,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc5!.toStringAsFixed(2),
+        percProgress: perc5!,
         weightage: weight5.isNotEmpty
             ? double.parse(weight5[0].toStringAsFixed(4))
             : 0.0,
@@ -1634,7 +2717,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc6!.toStringAsFixed(2),
+        percProgress: perc6!,
         weightage: weight6.isNotEmpty
             ? double.parse(weight6[0].toStringAsFixed(4))
             : 0.0,
@@ -1661,7 +2744,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc7!.toStringAsFixed(2),
+        percProgress: perc7!,
         weightage: weight7.isNotEmpty
             ? double.parse(weight7[0].toStringAsFixed(4))
             : 0.0,
@@ -1686,7 +2769,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc8!.toStringAsFixed(2),
+        percProgress: perc8!,
         weightage: weight8.isNotEmpty
             ? double.parse(weight8[0].toStringAsFixed(4))
             : 0.0,
@@ -1713,7 +2796,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc9!.toStringAsFixed(2),
+        percProgress: perc9!,
         weightage: weight9.isNotEmpty
             ? double.parse(weight9[0].toStringAsFixed(4))
             : 0.0,
@@ -1740,12 +2823,95 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
         scope: 0,
         qtyExecuted: 0,
         balanceQty: 0,
-        percProgress: perc10!.toStringAsFixed(2),
+        percProgress: perc10!,
         weightage: weight10.isNotEmpty
             ? double.parse(weight10[0].toStringAsFixed(4))
             : 0.0,
       ),
     ];
+  }
+
+  legends(Color color, String title) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+            width: 80,
+            height: 28,
+            color: color,
+            padding: const EdgeInsets.all(5),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.w900),
+            )),
+      ],
+    );
+  }
+
+  void storeData() {
+    FirebaseFirestore.instance
+        .collection('KeyEventsTable')
+        .doc(widget.depoName!)
+        .collection('KeyDataTable')
+        .doc(widget.userId)
+        .collection('ClosureDates')
+        .doc('keyEvents')
+        // .collection(widget.userid!)
+        // .doc('${widget.depoName}${widget.keyEvents}')
+        .set({'ClosureDate': DateFormat('dd-MM-yyyy').format(closureDate!)});
+    Map<String, dynamic> tableData = {};
+    for (var i in _KeyDataSourceKeyEvents.dataGridRows) {
+      for (var data in i.getCells()) {
+        tableData[data.columnName] = data.value;
+      }
+      tabledata2.add(tableData);
+      // print(tabledata2);
+      tableData = {};
+    }
+
+    FirebaseFirestore.instance
+        .collection('KeyEventsTable')
+        .doc(widget.depoName!)
+        .collection('KeyDataTable')
+        .doc(widget.userId)
+        .collection('KeyAllEvents')
+        .doc('keyEvents')
+        // .collection(widget.userid!)
+        // .doc('${widget.depoName}${widget.keyEvents}')
+        .set({
+      'data': tabledata2,
+      // })
+      // .whenComplete(() {
+      //   tabledata2.clear();
+      //   for (var i in _KeyDataSourceKeyEvents.dataGridRows) {
+      //     for (var data in i.getCells()) {
+      //       tableData[data.columnName] = data.value;
+      //     }
+      //     tabledata2.add(tableData);
+      //     // print(tabledata2);
+      //     tableData = {};
+      //   }
+      //   FirebaseFirestore.instance
+      //       .collection('KeyEventsTable')
+      //       .doc(widget.depoName!)
+      //       .collection('KeyDataTable')
+      //       .doc(widget.userId)
+      //       .collection('KeyAllEvents')
+      //       .doc('keyEvents')
+      //       // .collection(widget.userid!)
+      //       // .doc('${widget.depoName}${widget.keyEvents}')
+      //       .set({
+      //     'data': tabledata2,
+    }).whenComplete(() {
+      tabledata2.clear();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Data are synced'),
+        backgroundColor: blue,
+      ));
+    });
+    tabledata2.clear();
   }
 }
 
