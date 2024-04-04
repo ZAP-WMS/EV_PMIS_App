@@ -16,6 +16,7 @@ class RegisterPge extends StatefulWidget {
 }
 
 class _RegisterPgeState extends State<RegisterPge> {
+  String? selectedCompany;
   final _formkey = GlobalKey<FormState>();
   final TextEditingController firstNamecontroller = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -50,6 +51,44 @@ class _RegisterPgeState extends State<RegisterPge> {
                 key: _formkey,
                 child: Column(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 10.0, right: 5.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          isExpanded: true,
+                          value: selectedCompany,
+                          hint: const Text(
+                            "Select Company",
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                              value: "TATA MOTOM",
+                              child: Text(
+                                "TATA MOTOR",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: "TATA POWER",
+                              child: Text(
+                                "TATA POWER",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            )
+                          ],
+                          onChanged: (value) {
+                            selectedCompany = value;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ),
                     _space(
                       16,
                     ),
@@ -236,9 +275,10 @@ class _RegisterPgeState extends State<RegisterPge> {
                   confController.text,
                   firstNamecontroller.text[0] +
                       lastNameController.text[0] +
-                      numberController.text.substring(6, 10))
-              .then((value) {
-            if (value == true) {
+                      numberController.text.substring(6, 10),
+                      selectedCompany!)
+              .then((value){
+            if (value == true){
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content:

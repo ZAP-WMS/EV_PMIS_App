@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/shared_preferences/shared_preferences.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,9 +43,6 @@ class SplashScreenState extends State<SplashScreen>
   late SharedPreferences sharedPreferences;
 
   late FirebaseMessaging _messaging;
-  // int _totalNotification = 0;
-  // PushNotification? _notificationInfo;
-
 // WHEN APP IS OPENED
   void registerNotification() async {
     await Firebase.initializeApp();
@@ -81,9 +76,6 @@ class SplashScreenState extends State<SplashScreen>
                 style: TextStyle(color: white, fontSize: 16),
               ),
               onPressed: () {
-                // Add your action here
-                print('Notification tapped!');
-                // Navigate to the desired screen, for example
                 Navigator.pushReplacementNamed(
                   context,
                   '/user-list',
@@ -135,13 +127,8 @@ class SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
-    // _totalNotification = 0;
-    // _loadCities();
     registerNotification();
     checkforInitialMessage();
-    print(citiesList);
-
-    //For handling notification app is in backgroung
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message != null) {
         Navigator.push(
@@ -174,8 +161,6 @@ class SplashScreenState extends State<SplashScreen>
     _fadeAnimation = Tween<double>(begin: 1.0, end: 0.1)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _controller.repeat(reverse: true);
-
-    _getCurrentUser();
     // user = FirebaseAuth.instance.currentUser == null;
   }
 
@@ -187,6 +172,7 @@ class SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    _getCurrentUser();
     return Scaffold(
       backgroundColor: Colors.white,
       body: FadeTransition(

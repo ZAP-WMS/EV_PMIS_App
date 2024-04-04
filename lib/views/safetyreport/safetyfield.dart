@@ -11,7 +11,6 @@ import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:ev_pmis_app/widgets/progress_loading.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +36,6 @@ late SafetyChecklistDataSource _safetyChecklistDataSource;
 late DataGridController _dataGridController;
 List<dynamic> tabledata2 = [];
 Stream? _stream;
-Stream? _stream2;
 bool checkTable = true;
 dynamic alldata;
 String? cityName;
@@ -45,7 +43,7 @@ String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
 String? showDate = DateFormat.yMMMd().format(DateTime.now());
 
 bool isLoading = true;
-// ignore: prefer_typing_uninitialized_variables
+
 dynamic depotlocation,
     depotname,
     address,
@@ -92,6 +90,23 @@ class _SafetyFieldState extends State<SafetyField> {
   }
 
   @override
+  void dispose() {
+    installationController.dispose();
+    engizationController.dispose();
+    bordingController.dispose();
+    tpController.dispose();
+    revController.dispose();
+    locationContoller.dispose();
+    addressController.dispose();
+    contactController.dispose();
+    latitudeController.dispose();
+    stateController.dispose();
+    chargerController.dispose();
+    conductedController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
@@ -112,19 +127,14 @@ class _SafetyFieldState extends State<SafetyField> {
           .doc(DateFormat.yMMMMd().format(DateTime.now()))
           .snapshots();
 
-      _stream2 = FirebaseFirestore.instance
-          .collection('SafetyFieldData2')
-          .doc('${widget.depoName}')
-          .collection('userId')
-          .doc(userId)
-          .collection('date')
-          .doc(DateFormat.yMMMMd().format(DateTime.now()))
-          .snapshots();
+      isLoading = false;
+      setState(() {});
     });
 
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
@@ -168,9 +178,13 @@ class _SafetyFieldState extends State<SafetyField> {
               'BoardingDate': bordingController.text,
             });
             showProgressDilogue(context);
-            store();
             FirebaseApi().nestedKeyEventsField(
-                'SafetyFieldData2', widget.depoName!, 'userId', userId);
+              'SafetyFieldData2',
+              widget.depoName!,
+              'userId',
+              userId,
+            );
+            store();
           },
           choosedate: () {
             chooseDate(context);
@@ -183,7 +197,14 @@ class _SafetyFieldState extends State<SafetyField> {
       body: isLoading
           ? const LoadingPage()
           : StreamBuilder(
-              stream: _stream2,
+              stream: FirebaseFirestore.instance
+                  .collection('SafetyFieldData2')
+                  .doc('${widget.depoName}')
+                  .collection('userId')
+                  .doc(userId)
+                  .collection('date')
+                  .doc(DateFormat.yMMMMd().format(DateTime.now()))
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return SingleChildScrollView(
@@ -464,10 +485,6 @@ class _SafetyFieldState extends State<SafetyField> {
                           child: StreamBuilder(
                             stream: _stream,
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const LoadingPage();
-                              }
                               if (!snapshot.hasData ||
                                   snapshot.data.exists == false) {
                                 return SfDataGridTheme(
@@ -524,7 +541,7 @@ class _SafetyFieldState extends State<SafetyField> {
                                         label: Container(
                                           alignment: Alignment.center,
                                           child: Text(
-                                              'Status of Submission of information/ documents ',
+                                              'Status of Submission of information/documents ',
                                               textAlign: TextAlign.center,
                                               style: tableheaderwhitecolor),
                                         ),
@@ -569,22 +586,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                   ),
                                 );
                               } else {
-                                alldata = '';
-                                alldata =
-                                    snapshot.data['data'] as List<dynamic>;
-                                safetylisttable.clear();
-                                alldata.forEach((element) {
-                                  safetylisttable.add(
-                                      SafetyChecklistModel.fromJson(element));
-                                  _safetyChecklistDataSource =
-                                      SafetyChecklistDataSource(
-                                          safetylisttable,
-                                          cityName!,
-                                          widget.depoName!,
-                                          userId,
-                                          selectedDate!);
-                                  _dataGridController = DataGridController();
-                                });
                                 return SizedBox(
                                   height: MediaQuery.of(context).size.height,
                                   child: SfDataGridTheme(
@@ -723,7 +724,7 @@ class _SafetyFieldState extends State<SafetyField> {
   }
 
   void store() {
-    Map<String, dynamic> table_data = Map();
+    Map<String, dynamic> table_data = {};
     for (var i in _safetyChecklistDataSource.dataGridRows) {
       for (var data in i.getCells()) {
         if (data.columnName != 'Photo' && data.columnName != 'ViewPhoto') {

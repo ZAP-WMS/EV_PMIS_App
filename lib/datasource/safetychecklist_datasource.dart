@@ -53,56 +53,32 @@ class SafetyChecklistDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    // DateTime? rangeStartDate = DateTime.now();
-    // DateTime? rangeEndDate = DateTime.now();
-    // DateTime? date;
-    // DateTime? endDate;
-    // DateTime? rangeStartDate1 = DateTime.now();
-    // DateTime? rangeEndDate1 = DateTime.now();
-    // DateTime? date1;
-    // DateTime? endDate1;
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-              //  (dataGridCell.columnName == 'srNo' ||
-              //         dataGridCell.columnName == 'Activity' ||
-              //         dataGridCell.columnName == 'OriginalDuration' ||
-              // dataGridCell.columnName == 'StartDate' ||
-              //         dataGridCell.columnName == 'EndDate' ||
-              //         dataGridCell.columnName == 'ActualStart' ||
-              //         dataGridCell.columnName == 'ActualEnd' ||
-              //         dataGridCell.columnName == 'ActualDuration' ||
-              //         dataGridCell.columnName == 'Delay' ||
-              //         dataGridCell.columnName == 'Unit' ||
-              //         dataGridCell.columnName == 'QtyScope' ||
-              //         dataGridCell.columnName == 'QtyExecuted' ||
-              //         dataGridCell.columnName == 'BalancedQty' ||
-              //         dataGridCell.columnName == 'Progress' ||
-              //         dataGridCell.columnName == 'Weightage')
-              Alignment.center,
-          // : Alignment.center,
+          alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Photo'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                     return ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              pagetitle: 'SafetyChecklist',
-                              cityName: cityName,
-                              depoName: depoName,
-                              fldrName: row.getCells()[0].value.toString(),
-                              userId: userId,
-                              date: selectedDate,
-                            ),
-                          ));
-                        },
-                        child: const Text(
-                          'Upload',
-                          style: TextStyle(fontSize: 12),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UploadDocument(
+                            pagetitle: 'SafetyChecklist',
+                            cityName: cityName,
+                            depoName: depoName,
+                            fldrName: row.getCells()[0].value.toString(),
+                            userId: userId,
+                            date: selectedDate,
+                          ),
                         ));
+                      },
+                      child: const Text(
+                        'Upload',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    );
                   },
                 )
               : dataGridCell.columnName == 'ViewPhoto'
@@ -111,21 +87,18 @@ class SafetyChecklistDataSource extends DataGridSource {
                           (BuildContext context, BoxConstraints constraints) {
                         return ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
-                                      title: 'SafetyChecklist',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      userId: userId,
-                                      date: selectedDate,
-                                      docId:
-                                          row.getCells()[0].value.toString())));
-                              //     // ViewFile()
-                              //     // UploadDocument(
-                              //     //     title: 'SafetyChecklist',
-                              //     //     activity:
-                              //     //         '${row.getCells()[1].value.toString()}'),
-                              //     ));
+                                    title: 'SafetyChecklist',
+                                    cityName: cityName,
+                                    depoName: depoName,
+                                    userId: userId,
+                                    date: selectedDate,
+                                    docId: row.getCells()[0].value.toString(),
+                                  ),
+                                ),
+                              );
                             },
                             child: const Text(
                               'View',
@@ -136,7 +109,6 @@ class SafetyChecklistDataSource extends DataGridSource {
                   : dataGridCell.columnName == 'Status'
                       ? DropdownButton<String>(
                           value: dataGridCell.value,
-                          autofocus: true,
                           focusColor: Colors.transparent,
                           underline: const SizedBox.shrink(),
                           icon: const Icon(Icons.arrow_drop_down_sharp),
@@ -290,10 +262,6 @@ class SafetyChecklistDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
-          newCellValue = value;
-
-          /// Call [CellSubmit] callback to fire the canSubmitCell and
-          /// onCellSubmit to commit the new value in single place.
           submitCell();
         },
       ),

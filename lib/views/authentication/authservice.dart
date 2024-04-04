@@ -29,6 +29,7 @@ class AuthService {
   }
 
   Future<bool> storeDataInFirestore(
+      String companyName,
       String firstname,
       String lastname,
       String phone,
@@ -42,7 +43,7 @@ class AuthService {
         .collection("User")
         .doc('${firstname.trim()} ${lastname.trim()}')
         .set({
-      "CompanyName": "TATA POWER",
+      "CompanyName": companyName,
       "FirstName": firstname,
       "LastName": lastname,
       "Phone Number": phone,
