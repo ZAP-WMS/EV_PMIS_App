@@ -108,9 +108,10 @@ class _SafetyFieldState extends State<SafetyField> {
 
   @override
   void initState() {
+    initializeController();
     getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-    initializeController();
+
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
     _fetchUserData();
     getTableData().whenComplete(() {
@@ -131,6 +132,8 @@ class _SafetyFieldState extends State<SafetyField> {
       setState(() {});
     });
 
+    isLoading = false;
+    setState(() {});
     super.initState();
   }
 
@@ -212,7 +215,7 @@ class _SafetyFieldState extends State<SafetyField> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
+                          child: SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: 35,
                             child: Row(
@@ -1268,9 +1271,6 @@ class _SafetyFieldState extends State<SafetyField> {
           mapData.map((map) => SafetyChecklistModel.fromJson(map)).toList();
       checkTable = false;
     }
-
-    isLoading = false;
-    setState(() {});
   }
 
   Future getAssignedDepots() async {

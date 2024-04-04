@@ -52,20 +52,15 @@ class KeyDataSourceKeyEvents extends DataGridSource {
     Duration? originalDuration;
     Duration? actualDuration;
     int? balnceQtyValue;
-    double? perc;
     dynamic totalperc;
     List<int> indicesToSkip = [0, 2, 6, 13, 18, 28, 32, 38, 64, 76];
     //[0, 2, 8, 12, 16, 27, 33, 39, 65, 76];
 
     final int dataIndex = dataGridRows.indexOf(row);
     if (dataIndex != null) {
-      balnceQtyValue = _employees[dataIndex].balanceQty;
-      _employees[dataIndex].balanceQty =
+      balnceQtyValue =
           _employees[dataIndex].scope - _employees[dataIndex].qtyExecuted;
 
-      perc =
-          ((_employees[dataIndex].qtyExecuted / _employees[dataIndex].scope) *
-              _employees[dataIndex].weightage);
       totalperc =
           _employees[dataIndex].qtyExecuted / _employees[dataIndex].scope * 100;
       getStartDate = DateFormat("dd-MM-yyyy")
