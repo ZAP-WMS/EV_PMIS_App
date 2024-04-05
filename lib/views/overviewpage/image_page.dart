@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import '../../FirebaseApi/firebase_api.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 import '../../style.dart';
 
 class ImagePage extends StatelessWidget {
@@ -26,6 +28,19 @@ class ImagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final isImage = ['.jpeg', '.jpg', '.png'].any(file.name.contains);
     final isPdf = ['.pdf'].any(file.name.contains);
+    final isVideo = ['.mp4'].any((file.name.contains));
+    // Assuming file is a VideoFile object containing the video URL
+    ChewieController? _chewieController;
+    if (isVideo) {
+      VideoPlayerController _videoPlayerController =
+          // ignore: deprecated_member_use
+          VideoPlayerController.network(file.url);
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController,
+        autoPlay: true,
+        looping: true,
+      );
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -135,20 +150,13 @@ class ImagePage extends StatelessWidget {
                   )
                 ],
               )
-
-            // Center(
-            //     child: Image.network(
-            //       file.url,
-            //       height: MediaQuery.of(context).size.width,
-            //       width: MediaQuery.of(context).size.height,
-            //       fit: BoxFit.contain,
-            //     ),
-            //   )
             : isPdf
                 ? ViewFile(path: file.url)
-                : ViewExcel(
-                    path: file.ref,
-                  )
+                : isVideo
+                    ? Chewie(controller: _chewieController!)
+                    : ViewExcel(
+                        path: file.ref,
+                      )
         //  const Center(
         //     child: Text(
         //       'Cannot be displayed',

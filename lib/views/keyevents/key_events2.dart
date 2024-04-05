@@ -489,13 +489,10 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                               )),
                                           child: SfDataGrid(
                                             source: _KeyDataSourceKeyEvents,
-                                            onSelectionChanged:
-                                                (addedRows, removedRows) {
-                                              if (addedRows.first
-                                                      .getCells()
-                                                      .first
-                                                      .value ==
-                                                  'A1') {
+                                            onCellTap: (details) {
+                                              if (details.rowColumnIndex
+                                                      .rowIndex ==
+                                                  0) {
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) {
@@ -504,12 +501,35 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                       cityName: widget.cityName,
                                                       depoName: widget.depoName,
                                                       title: 'Key Events',
-                                                      docId: addedRows.first
-                                                          .getCells()[1]
-                                                          .value);
+                                                      docId: 'jke'
+                                                      // addedRows.first
+                                                      //     .getCells()[1]
+                                                      //     .value
+                                                      );
                                                 }));
                                               }
                                             },
+                                            // onSelectionChanged:
+                                            //     (addedRows, removedRows) {
+                                            //   if (addedRows.first
+                                            //           .getCells()
+                                            //           .first
+                                            //           .value ==
+                                            //       'A1') {
+                                            //     Navigator.of(context).push(
+                                            //         MaterialPageRoute(
+                                            //             builder: (context) {
+                                            //       return ViewAllPdf(
+                                            //           userId: userId,
+                                            //           cityName: widget.cityName,
+                                            //           depoName: widget.depoName,
+                                            //           title: 'Key Events',
+                                            //           docId: addedRows.first
+                                            //               .getCells()[1]
+                                            //               .value);
+                                            //     }));
+                                            //   }
+                                            // },
                                             allowEditing: true,
                                             frozenColumnsCount: 2,
                                             editingGestureType:
@@ -948,7 +968,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1048,7 +1068,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1145,7 +1165,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         // reasonDelay: 'reasonDelay',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1243,7 +1263,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         // reasonDelay: 'reasonDelay',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1339,7 +1359,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1435,7 +1455,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1531,7 +1551,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1628,7 +1648,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1724,7 +1744,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,
@@ -1821,7 +1841,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             durationParse(asdate1!, aedate1!),
                                         delay: durationParse(edate1!, aedate1!),
                                         //  reasonDelay: '',
-                                        unit: 1,
+                                        unit: '',
                                         scope: totalScope,
                                         qtyExecuted: totalExecuted,
                                         balanceQty: totalbalanceQty,

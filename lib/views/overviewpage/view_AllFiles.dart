@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -104,12 +105,11 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                           ? FirebaseApi.listAll(
                               '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
                           : FirebaseApi.listAll(
-                              '${ widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
+                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
       _isload = false;
       setState(() {});
     }
     super.initState();
-    
   }
 
 // /DetailedEngRFC/Bengaluru/BMTC KR Puram-29/ ZW3210
@@ -126,10 +126,6 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
           isCentered: true,
         ),
       ),
-      //  AppBar(
-      //   title: const Text('File List'),
-      //   backgroundColor: blue,
-      // ),
       body: _isload
           ? const LoadingPage()
           : FutureBuilder<List<FirebaseFile>>(
@@ -160,16 +156,7 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                               return buildFile(
                                   context, file, role, widget.isOverview);
                             },
-                          )
-                              //  ListView.builder(
-                              //   itemCount: files.length,
-                              //   itemBuilder: (context, index) {
-                              //     final file = files[index];
-
-                              //     return buildFile(context, file);
-                              //   },
-                              // ),
-                              ),
+                          )),
                         ],
                       );
                     }
@@ -213,6 +200,7 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
     final isImage = ['.jpeg', '.jpg', '.png'].any(file.name.contains);
     final isPdf = ['.pdf'].any(file.name.contains);
     final isexcel = ['.xlsx'].any(file.name.contains);
+    final isVideo = ['.mp4'].any(file.name.contains);
     return Column(
       children: [
         InkWell(
@@ -227,7 +215,9 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                       file.url,
                       fit: BoxFit.fill,
                     )
-                  : Image.asset('assets/pdf_logo.png')),
+                  : isVideo
+                      ? Image.asset('assets/video_image.jpg')
+                      : Image.asset('assets/pdf_logo.png')),
           //PdfThumbnail.fromFile(file.ref.fullPath, currentPage: 2)),
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
@@ -240,17 +230,22 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
             ),
           ),
         ),
-        Expanded(child: Text(file.name))
+        Expanded(
+            child: Text(
+          file.name,
+          textAlign: TextAlign.center,
+          style: appTextStyle,
+        ))
       ],
     );
   }
 
   Widget buildHeader(int length) => ListTile(
         tileColor: Colors.blue,
-        leading: Container(
+        leading:const SizedBox(
           width: 52,
           height: 52,
-          child: const Icon(
+          child:  Icon(
             Icons.file_copy,
             color: Colors.white,
           ),

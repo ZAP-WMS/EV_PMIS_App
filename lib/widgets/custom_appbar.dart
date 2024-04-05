@@ -99,7 +99,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 children: [
                   SizedBox(
                       width: 230,
-                      child: Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           legends(yellow, 'Base Line', black),
