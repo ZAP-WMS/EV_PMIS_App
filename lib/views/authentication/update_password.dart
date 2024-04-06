@@ -104,7 +104,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
       if (newPassword == confirmNewPassword) {
         // Perform password update action
         // For example, use FirebaseAuth.instance.currentUser.updatePassword(newPassword);
-        FirebaseFirestore.instance.collection('User').doc('ZAP WMS').update({
+        FirebaseFirestore.instance
+            .collection('User')
+            .doc(widget.docName)
+            .update({
           'Password': newPassword,
           'ConfirmPassword': confirmNewPassword,
         }).whenComplete(() {
@@ -116,6 +119,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
         print('Password updated successfully');
       } else {
         // Passwords do not match, show an error message
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text('New password and confirm new password do not match')));
+
         print('New password and confirm new password do not match');
       }
     }

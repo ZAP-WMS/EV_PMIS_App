@@ -43,13 +43,14 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(height);
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      toolbarHeight: widget.height,
       centerTitle: widget.isCentered ? true : false,
       title: Column(
         children: [
@@ -78,17 +79,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 builder: (context, value, child) {
                   // print(value.myBooleanValue);
                   return Padding(
-                      padding: const EdgeInsets.all(
-                        8,
-                      ),
+                      padding: const EdgeInsets.all(8),
                       child: IconButton(
                         onPressed: widget.sendEmail,
                         icon: Icon(
                           Icons.share,
                           color: white,
                         ),
-                      )
-                      );
+                      ));
                 },
               )
             : Container(),
@@ -97,16 +95,15 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                      width: 230,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          legends(yellow, 'Base Line', black),
-                          legends(green, 'On Time', black),
-                          legends(red, 'Delay', white),
-                        ],
-                      )),
+                  Column(
+                    //  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      legends(yellow, 'Base Line', black),
+                      legends(green, 'On Time', black),
+                      legends(red, 'Delay', white),
+                    ],
+                  ),
+                  SizedBox(width: 8),
                   Consumer<KeyProvider>(
                     builder: (context, value, child) {
                       return Padding(
@@ -114,54 +111,62 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             const EdgeInsets.only(bottom: 2, right: 5, left: 5),
                         child: Row(
                           children: [
-                            Container(
-                              width: 95,
-                              height: 40,
-                              color: green,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                    'Project Duration \n ${durationParse(value.startdate, value.endDate)} Days',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontSize: 10, color: black)),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Container(
-                              width: 95,
-                              height: 40,
-                              color: red,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                    'Project Delay \n ${durationParse(value.actualDate, value.endDate)}  Days ',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        TextStyle(fontSize: 10, color: white)),
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            const Text(
-                              '% Of Progress is ',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            SizedBox(
-                              height: 50.0,
-                              width: 40.0,
-                              child: CircularPercentIndicator(
-                                radius: 20.0,
-                                lineWidth: 4.0,
-                                percent: (value.perProgress.toInt()) / 100,
-                                center: Text(
-                                  // value.getName.toString(),
-                                  "${(value.perProgress.toInt())}% ",
-                                  textAlign: TextAlign.center,
-                                  style: captionWhite,
+                            Column(
+                              children: [
+                                Container(
+                                  width: 140,
+                                  height: 28,
+                                  color: green,
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                        'Project Duration ${durationParse(value.startdate, value.endDate)} Days',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 10, color: black)),
+                                  ),
                                 ),
-                                progressColor: green,
-                                backgroundColor: red,
-                              ),
+                                Container(
+                                  width: 140,
+                                  height: 27,
+                                  color: red,
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                        'Project Delay ${durationParse(value.actualDate, value.endDate)} Days ',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 10, color: white)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 8),
+                            Column(
+                              children: [
+                                const Text(
+                                  'Progress %',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                                SizedBox(height: 5),
+                                SizedBox(
+                                  height: 40.0,
+                                  width: 40.0,
+                                  child: CircularPercentIndicator(
+                                    radius: 20.0,
+                                    lineWidth: 4.0,
+                                    percent: (value.perProgress.toInt()) / 100,
+                                    center: Text(
+                                      // value.getName.toString(),
+                                      "${(value.perProgress.toInt())}% ",
+                                      textAlign: TextAlign.center,
+                                      style: captionWhite,
+                                    ),
+                                    progressColor: green,
+                                    backgroundColor: red,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -233,29 +238,22 @@ class _CustomAppBarState extends State<CustomAppBar> {
     );
   }
 
-  Size get preferredSize => Size.fromHeight(widget.height);
-
   legends(Color color, String title, Color textColor) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5, bottom: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-              width: 70,
-              height: 25,
-              color: color,
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    color: textColor,
-                    fontSize: 10),
-              )),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+            alignment: Alignment.center,
+            width: 70,
+            height: 18,
+            color: color,
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w900, color: textColor, fontSize: 10),
+            )),
+      ],
     );
   }
 
@@ -322,10 +320,11 @@ Future<bool> onWillPop(BuildContext context) async {
                           await prefs.remove('employeeId');
                           a = true;
                           Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginRegister(),
-                              ),);
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginRegister(),
+                            ),
+                          );
                           // exit(0);
                         },
                         child: Container(

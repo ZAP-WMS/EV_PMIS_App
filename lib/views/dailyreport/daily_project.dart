@@ -84,7 +84,7 @@ class _DailyProjectState extends State<DailyProject> {
         role: widget.role,
       ),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(70),
         child: CustomAppBarBackDate(
           depoName: widget.depoName ?? '',
           text: 'Daily Report',
