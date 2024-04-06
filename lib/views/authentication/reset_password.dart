@@ -134,7 +134,7 @@ class _ResetPassState extends State<ResetPass> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => CheckOtp(
-                                              name: name! + lastName!,
+                                              name: '${name!} ' '${lastName!}',
                                               mobileNumber:
                                                   int.parse(mobileNum!))));
                                 },

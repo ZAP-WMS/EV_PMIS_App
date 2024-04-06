@@ -403,29 +403,27 @@ class _KeyEvents2State extends State<KeyEvents2> {
         : keyBoardArrow(
             scrollController: _scrollController,
             myScaffold: Scaffold(
-                appBar: PreferredSize(
-                    preferredSize: const Size.fromHeight(50),
-                    child: CustomAppBar(
-                      depoName: widget.depoName ?? '',
-                      isprogress: true,
-                      title: '${widget.cityName}/${widget.depoName}',
-                      height: 50,
-                      isCentered: false,
-                      isSync: isFieldEditable ? false : true,
-                      store: () {
-                        showProgressDilogue(context);
-                        FirebaseApi().defaultKeyEventsField(
-                            'KeyEventsTable', widget.depoName!);
-                        FirebaseApi().nestedKeyEventsField(
-                          'KeyEventsTable',
-                          widget.depoName!,
-                          'KeyDataTable',
-                          userId,
-                        );
-                        storeData();
-                        // setState(() {});
-                      },
-                    )),
+                appBar: CustomAppBar(
+                  depoName: widget.depoName ?? '',
+                  isprogress: true,
+                  title: '${widget.cityName}/${widget.depoName}',
+                  height: 65,
+                  isCentered: false,
+                  isSync: isFieldEditable ? false : true,
+                  store: () {
+                    showProgressDilogue(context);
+                    FirebaseApi().defaultKeyEventsField(
+                        'KeyEventsTable', widget.depoName!);
+                    FirebaseApi().nestedKeyEventsField(
+                      'KeyEventsTable',
+                      widget.depoName!,
+                      'KeyDataTable',
+                      userId,
+                    );
+                    storeData();
+                    // setState(() {});
+                  },
+                ),
                 //  AppBar(
                 //   title: Text(
                 //       '${widget.cityName} / ${widget.depoName} / Key Events  '),
@@ -531,7 +529,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                             //   }
                                             // },
                                             allowEditing: true,
-                                            frozenColumnsCount: 2,
+                                            frozenColumnsCount: 1,
                                             editingGestureType:
                                                 EditingGestureType.tap,
                                             headerGridLinesVisibility:
@@ -1970,7 +1968,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                               }
                                             },
                                             allowEditing: true,
-                                            frozenColumnsCount: 2,
+                                            frozenColumnsCount: 1,
                                             editingGestureType:
                                                 EditingGestureType.tap,
                                             headerGridLinesVisibility:
