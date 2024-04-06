@@ -178,7 +178,7 @@ class DetailedEngSource extends DataGridSource {
                       })
                     : dataGridCell.columnName == 'Number' &&
                             dataGridCell.value == 0
-                        ? Text('')
+                        ? const Text('')
                         : (dataGridCell.columnName == 'PreparationDate') &&
                                 dataGridCell.value != ''
                             ? Row(

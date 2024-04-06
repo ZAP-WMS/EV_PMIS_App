@@ -179,7 +179,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => CivilReportAdmin(
-                          cityName: cityName,
+                          cityName: widget.cityName,
                           userId: widget.userId,
                           selectedIndex: index,
                           depoName: widget.depoName,
@@ -202,7 +202,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
                             MaterialPageRoute(
                               builder: (context) => ElectricalReportAdmin(
                                 userId: widget.userId,
-                                cityName: cityName,
+                                cityName: widget.cityName,
                                 selectedIndex: index,
                                 depoName: widget.depoName,
                               ),

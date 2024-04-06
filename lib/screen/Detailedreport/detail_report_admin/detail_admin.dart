@@ -6,14 +6,12 @@ import 'package:ev_pmis_app/datasource_admin/detailedeng_datasource.dart';
 import 'package:ev_pmis_app/model_admin/detailed_engModel.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/Detailedreport/detailed_Eng.dart';
-import 'package:ev_pmis_app/views/authentication/authservice.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:flutter/material.dart';
+import 'package:ev_pmis_app/views/authentication/authservice.dart';import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 import '../../../widgets/navbar.dart';
+
 
 class DetailedEngAdmin extends StatefulWidget {
   String? cityName;

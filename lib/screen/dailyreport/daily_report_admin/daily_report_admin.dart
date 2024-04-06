@@ -29,7 +29,8 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../views/dailyreport/summary.dart';
 import '../../../widgets/navbar.dart';
 
-List<int> globalRowIndex = [];
+List<dynamic> availableUserId = [];
+List<int> globalIndexList = [];
 
 class DailyProjectAdmin extends StatefulWidget {
   String? userId;
@@ -53,6 +54,8 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   String pathToOpenFile = '';
   Uint8List? pdfData;
   String? pdfPath;
+  List<dynamic> chosenDateList = [];
+  Map<String, dynamic> useridWithData = {};
 
   DateTime? startdate = DateTime.now();
   DateTime? enddate = DateTime.now();
@@ -447,7 +450,11 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
     await FirebaseFirestore.instance
         .collection('DailyProject3')
         .doc(widget.depoName!)
-        .collection(DateFormat.yMMMMd().format(DateTime.now(),),)
+        .collection(
+          DateFormat.yMMMMd().format(
+            DateTime.now(),
+          ),
+        )
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -459,6 +466,10 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
   }
 
   Future<void> nestedTableData(docss, BuildContext pageContext) async {
+    globalIndexList.clear();
+    availableUserId.clear();
+    chosenDateList.clear();
+
     final pr = ProgressDialog(pageContext);
     pr.style(
         progressWidgetAlignment: Alignment.center,
@@ -476,94 +487,118 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
 
     await pr.show();
 
-    for (int i = 0; i < docss.length; i++) {
-      for (DateTime initialdate = startdate!;
-          initialdate.isBefore(enddate!.add(const Duration(days: 1)));
-          initialdate = initialdate.add(const Duration(days: 1))) {
-        String temp = DateFormat.yMMMMd().format(initialdate);
+    setState(() {
+      _isLoading = true;
+    });
+
+    useridWithData.clear();
+    for (DateTime initialdate = startdate!;
+        initialdate.isBefore(enddate!.add(const Duration(days: 1)));
+        initialdate = initialdate.add(const Duration(days: 1))) {
+      useridWithData.clear();
+
+      String nextDate = DateFormat.yMMMMd().format(initialdate);
+
+      QuerySnapshot userIdQuery = await FirebaseFirestore.instance
+          .collection('DailyProject3')
+          .doc(widget.depoName!)
+          .collection(nextDate)
+          .get();
+
+      List<dynamic> userList = userIdQuery.docs.map((e) => e.id).toList();
+
+      for (int i = 0; i < userList.length; i++) {
         await FirebaseFirestore.instance
             .collection('DailyProject3')
             .doc(widget.depoName!)
-            .collection(temp)
-            .doc(docss[i])
+            .collection(nextDate)
+            .doc(userList[i])
             .get()
             .then((value) {
-          if (value.data() != null) {
-            for (int j = 0; j < value.data()!['data'].length; j++) {
-              globalRowIndex.add(i + 1);
-              globalItemLengthList.add(0);
-              dailyProject.add(
-                  DailyProjectModelAdmin.fromjson(value.data()!['data'][j]));
+          if (value.exists) {
+            List<dynamic> userData = value.data()!['data'];
+            useridWithData[userList[i]] = userData;
+            for (int j = 0; j < userData.length; j++) {
+              dailyProject.add(DailyProjectModelAdmin.fromjson(userData[j]));
+              globalIndexList.add(j + 1);
+              availableUserId.add(userList[i]);
+              chosenDateList.add(nextDate);
             }
           }
+          return value;
         });
       }
+
+      print('global indexes are - $globalIndexList');
     }
+
+    setState(() {
+      _isLoading = false;
+    });
     pr.hide();
   }
 
   Future<void> downloadPDF() async {
-    final pr = ProgressDialog(context);
-    pr.style(
-      progressWidgetAlignment: Alignment.center,
-      message: 'Downloading file...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      progressWidget: const LoadingPdf(),
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      maxProgress: 100.0,
-      progressTextStyle: const TextStyle(
-          color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
-      messageTextStyle: const TextStyle(
-          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
-    );
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
 
-    await pr.show();
+      await pr.show();
 
-    final pdfData = await _generateDailyPDF();
+      final pdfData = await _generateDailyPDF();
 
-    String fileName = 'Daily Report';
+      String fileName = 'Daily Report';
 
-    final savedPDFFile = await savePDFToFile(pdfData, fileName);
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
 
-    await pr.hide();
+      await pr.hide();
 
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'repeating channel id', 'repeating channel name',
-            channelDescription: 'repeating description');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin().show(
-        0, 'Pdf Downloaded', 'Tap to open', notificationDetails,
-        payload: pathToOpenFile);
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails(
+              'repeating channel id', 'repeating channel name',
+              channelDescription: 'repeating description');
+      const NotificationDetails notificationDetails =
+          NotificationDetails(android: androidNotificationDetails);
+      await FlutterLocalNotificationsPlugin().show(
+          0, 'Pdf Downloaded', 'Tap to open', notificationDetails,
+          payload: pathToOpenFile);
+    }
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
-    
-      final documentDirectory =
-          (await DownloadsPath.downloadsDirectory())?.path;
-      final file = File('$documentDirectory/$fileName');
+    final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
+    final file = File('$documentDirectory/$fileName');
 
-      int counter = 1;
-      String newFilePath = file.path;
+    int counter = 1;
+    String newFilePath = file.path;
+    pathToOpenFile = newFilePath.toString();
+    if (await File(newFilePath).exists()) {
+      final baseName = fileName.split('.').first;
+      final extension = fileName.split('.').last;
+      newFilePath =
+          '$documentDirectory/$baseName-${counter.toString()}.$extension';
+      counter++;
       pathToOpenFile = newFilePath.toString();
-      if (await File(newFilePath).exists()) {
-        final baseName = fileName.split('.').first;
-        final extension = fileName.split('.').last;
-        newFilePath =
-            '$documentDirectory/$baseName-${counter.toString()}.$extension';
-        counter++;
-        pathToOpenFile = newFilePath.toString();
-        await file.copy(newFilePath);
-        counter++;
-      } else {
-        await file.writeAsBytes(pdfData);
-        return file;
-      }
-      return File('');
-    
+      await file.copy(newFilePath);
+      counter++;
+    } else {
+      await file.writeAsBytes(pdfData);
+      return file;
+    }
+    return File('');
   }
 
   Future<Uint8List> _generateDailyPDF() async {
@@ -647,7 +682,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
 
     for (int i = 0; i < dailyProject.length; i++) {
       String imagesPath =
-          '/Daily Report/${widget.cityName}/${widget.depoName}/${widget.userId}/${dailyProject[i].date}/${globalRowIndex[i]}';
+          '/Daily Report/${widget.cityName}/${widget.depoName}/${availableUserId[i]}/${chosenDateList[i]}/${globalIndexList[i]}';
 
       ListResult result =
           await FirebaseStorage.instance.ref().child(imagesPath).listAll();

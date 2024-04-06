@@ -362,6 +362,7 @@ class _DetailedEngtState extends State<DetailedEng>
           'data': shed_tabledatalist,
         }).whenComplete(() {
           shed_tabledatalist.clear();
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('Data are synced'),
             backgroundColor: blue,

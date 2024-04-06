@@ -134,7 +134,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                     context: mainContext,
                                     builder: (context) => AlertDialog(
                                           insetPadding: const EdgeInsets.all(8),
-                                          buttonPadding: EdgeInsets.all(15),
+                                          buttonPadding: const EdgeInsets.all(15),
                                           title: const Text(
                                             'All Date',
                                             style: TextStyle(fontSize: 18),
@@ -211,7 +211,7 @@ class DepotOverviewDatasource extends DataGridSource {
                             ),
                             Text(
                               dataGridCell.value.toString(),
-                              style: TextStyle(fontSize: 12),
+                              style: const TextStyle(fontSize: 12),
                             ),
                           ],
                         )
@@ -310,7 +310,7 @@ class DepotOverviewDatasource extends DataGridSource {
                           : dataGridCell.columnName == 'TypeRisk'
                               ? DropdownButton<String>(
                                   value: dataGridCell.value,
-                                  autofocus: true,
+                                  autofocus: false,
                                   focusColor: Colors.transparent,
                                   underline: const SizedBox.shrink(),
                                   icon: const Icon(Icons.arrow_drop_down_sharp),
@@ -325,6 +325,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                                     dataGridCell.columnName)
                                             ?.value ??
                                         '';
+
                                     if (oldValue == value || value == null) {
                                       return;
                                     }
@@ -338,14 +339,16 @@ class DepotOverviewDatasource extends DataGridSource {
                                     _depotOverview[dataRowIndex].typeRisk =
                                         value.toString();
                                     notifyListeners();
+
                                   },
+
                                   items: typeRiskMenuItems
                                       .map<DropdownMenuItem<String>>(
                                           (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
                                       child: Text(value,
-                                          style: TextStyle(fontSize: 12)),
+                                          style: const TextStyle(fontSize: 12,),),
                                     );
                                   }).toList())
                               : dataGridCell.columnName == 'impactRisk'
@@ -441,7 +444,7 @@ class DepotOverviewDatasource extends DataGridSource {
                                           }).toList())
                                       : Text(
                                           dataGridCell.value.toString(),
-                                          style: TextStyle(fontSize: 12),
+                                          style: const TextStyle(fontSize: 12),
                                         ));
     }).toList());
   }

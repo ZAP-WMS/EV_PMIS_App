@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../provider/cities_provider.dart';
 import '../../shared_preferences/shared_preferences.dart';
@@ -21,8 +18,11 @@ class OverviewPage extends StatefulWidget {
 }
 
 class _OverviewPageState extends State<OverviewPage> {
+
   String? cityName;
+
   String roles = '';
+
   List<String> screens = [
     '/depotOverview',
     '/planning-page',

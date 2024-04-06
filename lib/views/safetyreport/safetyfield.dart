@@ -111,13 +111,13 @@ class _SafetyFieldState extends State<SafetyField> {
     initializeController();
     getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
     _fetchUserData();
     getTableData().whenComplete(() {
-      safetylisttable = checkTable ? getData() : safetylisttable;
       _safetyChecklistDataSource = SafetyChecklistDataSource(
           safetylisttable, cityName!, widget.depoName!, userId, selectedDate!);
+      safetylisttable = checkTable ? getData() : safetylisttable;
+
       _dataGridController = DataGridController();
       _stream = FirebaseFirestore.instance
           .collection('SafetyChecklistTable2')

@@ -54,23 +54,7 @@ class QualityctDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-              //  (dataGridCell.columnName == 'srNo' ||
-              //         dataGridCell.columnName == 'Activity' ||
-              //         dataGridCell.columnName == 'OriginalDuration' ||
-              // dataGridCell.columnName == 'StartDate' ||
-              //         dataGridCell.columnName == 'EndDate' ||
-              //         dataGridCell.columnName == 'ActualStart' ||
-              //         dataGridCell.columnName == 'ActualEnd' ||
-              //         dataGridCell.columnName == 'ActualDuration' ||
-              //         dataGridCell.columnName == 'Delay' ||
-              //         dataGridCell.columnName == 'Unit' ||
-              //         dataGridCell.columnName == 'QtyScope' ||
-              //         dataGridCell.columnName == 'QtyExecuted' ||
-              //         dataGridCell.columnName == 'BalancedQty' ||
-              //         dataGridCell.columnName == 'Progress' ||
-              //         dataGridCell.columnName == 'Weightage')
-              Alignment.center,
+          alignment: Alignment.center,
           // : Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: dataGridCell.columnName == 'Upload'
@@ -494,10 +478,9 @@ class QualityctDataSource extends DataGridSource {
           DataGridCell<String>(
               columnName: 'responsibility', value: newCellValue);
       _checklistModel[dataRowIndex].responsibility = newCellValue.toString();
-    } else if (column.columnName == 'reference') {
+    } else if (column.columnName == 'Reference') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(
-              columnName: 'reference', value: newCellValue as int);
+          DataGridCell<dynamic>(columnName: 'Reference', value: newCellValue);
       _checklistModel[dataRowIndex].reference = newCellValue as dynamic;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =

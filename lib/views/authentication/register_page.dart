@@ -276,9 +276,9 @@ class _RegisterPgeState extends State<RegisterPge> {
                   firstNamecontroller.text[0] +
                       lastNameController.text[0] +
                       numberController.text.substring(6, 10),
-                      selectedCompany!)
-              .then((value){
-            if (value == true){
+                  selectedCompany!)
+              .then((value) {
+            if (value == true) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content:

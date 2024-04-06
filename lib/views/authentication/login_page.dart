@@ -92,12 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ResetPass(
-                                                // email: FirebaseAuth
-                                                //     .instance
-                                                //     .currentUser!
-                                                //     .email!,
                                                 ),),)),
-                                  style: const TextStyle(color: Colors.blue))
+                                  style: const TextStyle(color: Colors.blue,),)
                             ],
                           ),),
                         ],

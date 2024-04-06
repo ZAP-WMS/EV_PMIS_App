@@ -712,6 +712,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                     energyConsumed: 0.0,
                     timeInterval:
                         '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
+                _dataGridController = DataGridController();
                 _energyManagementdatasource.buildDataGridRows();
                 _energyManagementdatasource.updateDatagridSource();
               }),

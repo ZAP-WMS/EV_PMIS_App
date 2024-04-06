@@ -27,7 +27,6 @@ class JmrFieldPage extends StatefulWidget {
   JmrFieldPage({
     super.key,
     this.title,
-    // this.img,
     this.cityName,
     this.depoName,
     this.jmrTab,

@@ -29,7 +29,6 @@ class AuthService {
   }
 
   Future<bool> storeDataInFirestore(
-      String companyName,
       String firstname,
       String lastname,
       String phone,
@@ -38,7 +37,8 @@ class AuthService {
       String department,
       String password,
       String confirmpassword,
-      String id) async {
+      String id,
+      String companyName) async {
     FirebaseFirestore.instance
         .collection("User")
         .doc('${firstname.trim()} ${lastname.trim()}')
@@ -55,6 +55,45 @@ class AuthService {
       'Employee Id': id,
       "fullName": '${firstname.trim()} ${lastname.trim()}'
     });
+
+    FirebaseFirestore.instance
+        .collection("unAssignedRole")
+        .doc('$firstname $lastname')
+        .set({
+      "alphabet": firstname[0].toUpperCase(),
+      "position": "unAssigned",
+      "FirstName": firstname.trim(),
+      "LastName": lastname.trim(),
+      "Phone Number": phone,
+      "Email": email,
+      "Designation": designation,
+      "Department": department,
+      "CompanyName": companyName,
+      "Password": password,
+      "ConfirmPassword": confirmpassword,
+      'Employee Id': id,
+      "fullName": "${firstname.trim()} ${lastname.trim()}"
+    });
+
+    FirebaseFirestore.instance
+        .collection("TotalUsers")
+        .doc('$firstname $lastname')
+        .set({
+      "alphabet": firstname[0].toUpperCase(),
+      "position": "unAssigned",
+      "FirstName": firstname,
+      "LastName": lastname,
+      "Phone Number": phone,
+      "Email": email,
+      "Designation": designation,
+      "Department": department,
+      "CompanyName": companyName,
+      "Password": password,
+      "ConfirmPassword": confirmpassword,
+      'Employee Id': id,
+      "fullName": "$firstname $lastname",
+    });
+
     return true;
   }
 

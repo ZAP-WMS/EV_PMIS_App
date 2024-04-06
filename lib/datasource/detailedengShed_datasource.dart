@@ -102,6 +102,7 @@ class DetailedEngSourceShed extends DataGridSource {
     DateTime? date2;
     DateTime? endDate1;
     final int dataRowIndex = dataGridRows.indexOf(row);
+    
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       void addRowAtIndex(int index, DetailedEngModel rowData) {

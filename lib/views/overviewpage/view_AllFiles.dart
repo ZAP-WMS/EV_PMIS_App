@@ -104,12 +104,11 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
                           ? FirebaseApi.listAll(
                               '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
                           : FirebaseApi.listAll(
-                              '${ widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
+                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
       _isload = false;
       setState(() {});
     }
     super.initState();
-    
   }
 
 // /DetailedEngRFC/Bengaluru/BMTC KR Puram-29/ ZW3210

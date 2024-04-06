@@ -20,6 +20,7 @@ class JmrUserPage extends StatefulWidget {
 
   @override
   State<JmrUserPage> createState() => _JmrUserPageState();
+  
 }
 
 class _JmrUserPageState extends State<JmrUserPage> {
@@ -67,7 +68,6 @@ class _JmrUserPageState extends State<JmrUserPage> {
               onTap: (value) {
                 _selectedIndex = value;
                 getJmrLen(5);
-                print(_selectedIndex);
               },
               tabs: const [
                 Tab(

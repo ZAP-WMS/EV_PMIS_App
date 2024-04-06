@@ -306,40 +306,43 @@ class _SafetySummaryState extends State<SafetySummary> {
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    final pr = ProgressDialog(context);
-    pr.style(
-        progressWidgetAlignment: Alignment.center,
-        message: 'Downloading file...',
-        borderRadius: 10.0,
-        backgroundColor: Colors.white,
-        progressWidget: const LoadingPdf(),
-        elevation: 10.0,
-        insetAnimCurve: Curves.easeInOut,
-        maxProgress: 100.0,
-        progressTextStyle: const TextStyle(
-            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
-        messageTextStyle: const TextStyle(
-            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600));
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+          progressWidgetAlignment: Alignment.center,
+          message: 'Downloading file...',
+          borderRadius: 10.0,
+          backgroundColor: Colors.white,
+          progressWidget: const LoadingPdf(),
+          elevation: 10.0,
+          insetAnimCurve: Curves.easeInOut,
+          maxProgress: 100.0,
+          progressTextStyle: const TextStyle(
+              color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+          messageTextStyle: const TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600));
 
-    pr.show();
+      pr.show();
 
-    final pdfData = await _generatePDF(userId, date, decision);
+      final pdfData = await _generatePDF(userId, date, decision);
 
-    pr.hide();
+      pr.hide();
 
-    const fileName = 'SafetyReport.pdf';
-    final savedPDFFile = await savePDFToFile(pdfData, fileName);
-    print('File Created - ${savedPDFFile.path}');
+      const fileName = 'SafetyReport.pdf';
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
 
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'repeating channel id', 'repeating channel name',
-            channelDescription: 'repeating description');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin().show(
-        0, 'Safety Report Downloaded', 'Tap to open', notificationDetails,
-        payload: pathToOpenFile);
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails(
+              'repeating channel id', 'repeating channel name',
+              channelDescription: 'repeating description');
+      const NotificationDetails notificationDetails =
+          NotificationDetails(android: androidNotificationDetails);
+      await FlutterLocalNotificationsPlugin().show(
+          0, 'Safety Report Downloaded', 'Tap to open', notificationDetails,
+          payload: pathToOpenFile);
+    }
   }
 
   Future<Uint8List> _generatePDF(
@@ -395,7 +398,6 @@ class _SafetySummaryState extends State<SafetySummary> {
 
     Map<String, dynamic> safetyMapData =
         safetyFieldDocSanpshot.data() as Map<String, dynamic>;
-    print(safetyFieldDocSanpshot.data());
 
     bool isDate1Empty = false;
     bool isDate2Empty = false;

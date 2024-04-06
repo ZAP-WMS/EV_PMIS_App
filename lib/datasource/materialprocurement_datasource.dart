@@ -264,8 +264,8 @@ class MaterialDatasource extends DataGridSource {
       _material[dataRowIndex].unit = newCellValue;
     } else if (column.columnName == 'qty') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'qty', value: int.parse(newCellValue));
-      _material[dataRowIndex].qty = int.parse(newCellValue);
+          DataGridCell<int>(columnName: 'qty', value: newCellValue);
+      _material[dataRowIndex].qty = newCellValue;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<String>(columnName: 'materialSite', value: newCellValue);
@@ -332,7 +332,7 @@ class MaterialDatasource extends DataGridSource {
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
-              newCellValue = double.parse(value);
+              newCellValue = int.parse(value);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {

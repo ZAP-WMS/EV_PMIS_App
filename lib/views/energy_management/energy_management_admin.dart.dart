@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/datasource/energymanagement_datasource.dart';
@@ -9,13 +8,9 @@ import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/energy_management/energy_management.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -39,6 +34,7 @@ class EnergyManagementAdmin extends StatefulWidget {
 
   @override
   State<EnergyManagementAdmin> createState() => _EnergyManagementAdminState();
+
 }
 
 class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
@@ -96,12 +92,9 @@ class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
   getAllData() {
     energyManagement.clear();
     id.clear();
-    // getTableData().whenComplete(() {
     nestedTableData(id).whenComplete(() {
       _energydatasource = EnergyManagementDatasource(
           energyManagement, context, '', widget.cityName!, widget.depoName!);
-      // DailyDataSource(
-      //     EnergyManagement, context, widget.cityName!, widget.depoName!);
       _dataGridController = DataGridController();
       _isLoading = false;
       setState(() {});
@@ -141,7 +134,7 @@ class _EnergyManagementAdminState extends State<EnergyManagementAdmin> {
             haveSummary: false,
           )),
       body: _isLoading
-          ? LoadingPage()
+          ? const LoadingPage()
           : Column(children: [
               Padding(
                 padding: const EdgeInsets.all(5.0),

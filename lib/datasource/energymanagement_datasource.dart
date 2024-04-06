@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../style.dart';
 import '../models/energy_management.dart';
@@ -18,6 +17,7 @@ class EnergyManagementDatasource extends DataGridSource {
       this.userId, this.cityName, this.depoName) {
     buildDataGridRows();
   }
+
   void buildDataGridRows() {
     dataGridRows = _energyManagement
         .map<DataGridRow>((dataGridRow) => dataGridRow.getDataGridRow())
@@ -101,97 +101,94 @@ class EnergyManagementDatasource extends DataGridSource {
       difference = endDate.difference(startDate);
 
       return Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: (dataGridCell.columnName == 'startDate')
-              ? Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        _selectDateTime(mainContext).whenComplete(() {
-                          _energyManagement[rowIndex].startDate =
-                              DateFormat('dd-MM-yyyy HH:mm')
-                                  .format(selectedDateTime);
-                          //   // print(startformattedTime); //output 14:59:00
-                          // print(selectedDateTime);
-                          _energyManagement[rowIndex].timeInterval =
-                              '${selectedDateTime.hour}:${selectedDateTime.minute} - ${selectedDateTime.add(const Duration(hours: 6)).hour}:${selectedDateTime.add(const Duration(hours: 6)).minute}';
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: (dataGridCell.columnName == 'startDate')
+            ? Row(
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      _selectDateTime(mainContext).whenComplete(() {
+                        _energyManagement[rowIndex].startDate =
+                            DateFormat('dd-MM-yyyy HH:mm')
+                                .format(selectedDateTime);
+                        //   // print(startformattedTime); //output 14:59:00
+                        // print(selectedDateTime);
+                        _energyManagement[rowIndex].timeInterval =
+                            '${selectedDateTime.hour}:${selectedDateTime.minute} - ${selectedDateTime.add(const Duration(hours: 6)).hour}:${selectedDateTime.add(const Duration(hours: 6)).minute}';
+                        buildDataGridRows();
+                        notifyListeners();
+                      });
 
-                          buildDataGridRows();
-                          notifyListeners();
-                        });
-
-                        // }
-                      },
-                      icon: const Icon(Icons.calendar_today),
-                    ),
-                    Text(dataGridCell.value.toString()),
-                  ],
-                )
-              : (dataGridCell.columnName == 'endDate')
-                  ? Row(
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            _selectDateTime(mainContext).whenComplete(() {
-                              _energyManagement[rowIndex].endDate =
-                                  DateFormat('dd-MM-yyyy HH:mm')
-                                      .format(selectedDateTime);
-                              //   // print(startformattedTime); //output 14:59:00
-                              // print(selectedDateTime);
-
-                              buildDataGridRows();
-                              notifyListeners();
-                            });
-                          },
-                          icon: const Icon(Icons.calendar_today),
-                        ),
-                        Text(dataGridCell.value.toString()),
-                      ],
-                    )
-                  : (dataGridCell.columnName == 'totalTime')
-                      ? Text(
-                          '${difference.inHours}:${difference.inMinutes % 60}:${difference.inSeconds % 60}')
-                      : (dataGridCell.columnName == 'Add')
-                          ? ElevatedButton(
-                              onPressed: () {
-                                addRowAtIndex(
-                                    rowIndex + 1,
-                                    EnergyManagementModel(
-                                        srNo: rowIndex + 2,
-                                        depotName: depoName!,
-                                        vehicleNo: 'vehicleNo',
-                                        pssNo: 1,
-                                        chargerId: 1,
-                                        startSoc: 1,
-                                        endSoc: 1,
-                                        startDate:
-                                            DateFormat('dd-MM-yyyy HH:mm')
-                                                .format(DateTime.now()),
-                                        endDate: DateFormat('dd-MM-yyyy HH:mm')
-                                            .format(DateTime.now()),
-                                        totalTime:
-                                            DateFormat('dd-MM-yyyy HH:mm')
-                                                .format(DateTime.now()),
-                                        energyConsumed: 1500,
-                                        timeInterval:
-                                            '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
-                              },
-                              child: const Text('Add'))
-                          : (dataGridCell.columnName == 'Delete')
-                              ? IconButton(
-                                  onPressed: () {
-                                    removeRowAtIndex(rowIndex);
-                                  },
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: red,
-                                  ))
-                              : Text(
-                                  dataGridCell.value.toString(),
-                                  textAlign: TextAlign.center,
-                                  style: tablefontsize,
-                                ));
+                      // }
+                    },
+                    icon: const Icon(Icons.calendar_today),
+                  ),
+                  Text(dataGridCell.value.toString()),
+                ],
+              )
+            : (dataGridCell.columnName == 'endDate')
+                ? Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          _selectDateTime(mainContext).whenComplete(() {
+                            _energyManagement[rowIndex].endDate =
+                                DateFormat('dd-MM-yyyy HH:mm')
+                                    .format(selectedDateTime);
+                            buildDataGridRows();
+                            notifyListeners();
+                          });
+                        },
+                        icon: const Icon(Icons.calendar_today),
+                      ),
+                      Text(dataGridCell.value.toString()),
+                    ],
+                  )
+                : (dataGridCell.columnName == 'totalTime')
+                    ? Text(
+                        '${difference.inHours}:${difference.inMinutes % 60}:${difference.inSeconds % 60}')
+                    : (dataGridCell.columnName == 'Add')
+                        ? ElevatedButton(
+                            onPressed: () {
+                              addRowAtIndex(
+                                  rowIndex + 1,
+                                  EnergyManagementModel(
+                                      srNo: rowIndex + 2,
+                                      depotName: depoName!,
+                                      vehicleNo: 'vehicleNo',
+                                      pssNo: 1,
+                                      chargerId: 1,
+                                      startSoc: 1,
+                                      endSoc: 1,
+                                      startDate: DateFormat('dd-MM-yyyy HH:mm')
+                                          .format(DateTime.now()),
+                                      endDate: DateFormat('dd-MM-yyyy HH:mm')
+                                          .format(DateTime.now()),
+                                      totalTime: DateFormat('dd-MM-yyyy HH:mm')
+                                          .format(DateTime.now()),
+                                      energyConsumed: 0.0,
+                                      timeInterval:
+                                          '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
+                            },
+                            child: const Text('Add'),
+                          )
+                        : (dataGridCell.columnName == 'Delete')
+                            ? IconButton(
+                                onPressed: () {
+                                  removeRowAtIndex(rowIndex);
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: red,
+                                ),
+                              )
+                            : Text(
+                                dataGridCell.value.toString(),
+                                textAlign: TextAlign.center,
+                                style: tablefontsize,
+                              ),
+      );
     }).toList());
   }
 
@@ -232,23 +229,25 @@ class EnergyManagementDatasource extends DataGridSource {
       _energyManagement[dataRowIndex].vehicleNo = newCellValue;
     } else if (column.columnName == 'pssNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(columnName: 'pssNo', value: newCellValue);
-      _energyManagement[dataRowIndex].pssNo = newCellValue;
+          DataGridCell<dynamic>(
+              columnName: 'pssNo', value: int.parse(newCellValue));
+      _energyManagement[dataRowIndex].pssNo = int.parse(newCellValue);
     } else if (column.columnName == 'chargerId') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(columnName: 'chargerId', value: newCellValue);
-      _energyManagement[dataRowIndex].chargerId = newCellValue;
+      _energyManagement[dataRowIndex].chargerId = int.parse(newCellValue);
     } else if (column.columnName == 'StartSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(columnName: 'StartSoc', value: newCellValue as int);
       _energyManagement[dataRowIndex].startSoc = newCellValue;
     } else if (column.columnName == 'endSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(columnName: 'endSoc', value: newCellValue);
-      _energyManagement[dataRowIndex].endSoc = newCellValue;
-    } else if (column.columnName == 'SatrtDate') {
+          DataGridCell<dynamic>(
+              columnName: 'endSoc', value: int.parse(newCellValue));
+      _energyManagement[dataRowIndex].endSoc = int.parse(newCellValue);
+    } else if (column.columnName == 'startDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<DateTime>(columnName: 'SatrtDate', value: newCellValue);
+          DataGridCell<DateTime>(columnName: 'startDate', value: newCellValue);
       _energyManagement[dataRowIndex].startDate = newCellValue;
     } else if (column.columnName == 'EndDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -261,8 +260,10 @@ class EnergyManagementDatasource extends DataGridSource {
     } else if (column.columnName == 'energyConsumed') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<double>(
-              columnName: 'energyConsumed', value: newCellValue as double);
-      _energyManagement[dataRowIndex].energyConsumed = newCellValue as double;
+              columnName: 'energyConsumed',
+              value: double.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].energyConsumed =
+          double.parse(newCellValue.toString());
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
@@ -312,6 +313,9 @@ class EnergyManagementDatasource extends DataGridSource {
     return Container(
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(0),
+        ),
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
@@ -333,7 +337,6 @@ class EnergyManagementDatasource extends DataGridSource {
               newCellValue = double.parse(value);
             } else if (isNumericType) {
               newCellValue = int.parse(value);
-              print(newCellValue);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {
@@ -343,9 +346,6 @@ class EnergyManagementDatasource extends DataGridSource {
         },
         onSubmitted: (String value) {
           newCellValue = value;
-
-          /// Call [CellSubmit] callback to fire the canSubmitCell and
-          /// onCellSubmit to commit the new value in single place.
           submitCell();
         },
       ),

@@ -1395,7 +1395,6 @@ class _DepotOverviewState extends State<DepotOverview> {
           List<dynamic> depot = tempList[i]['depots'];
 
           if (depot[j].toString() == widget.depoName) {
-            print(depot);
             isProjectManager = true;
             setState(() {});
           }
