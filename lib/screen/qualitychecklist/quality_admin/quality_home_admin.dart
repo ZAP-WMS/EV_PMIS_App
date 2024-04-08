@@ -2,10 +2,8 @@ import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/civil/civil_ad
 import 'package:ev_pmis_app/screen/qualitychecklist/quality_admin/electrical/electrical_admin.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/qualitychecklist/quality_home.dart';
-import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 class QualityHomeAdmin extends StatefulWidget {
   String? depoName;
@@ -68,6 +66,7 @@ class _QualityHomeAdminState extends State<QualityHomeAdmin> {
     'CHARGER',
     'EARTH PIT'
   ];
+  
   List<String> electricallist = [
     'CHECKLIST FOR INSTALLATION OF PSS',
     'CHECKLIST FOR INSTALLATION OF RMU',

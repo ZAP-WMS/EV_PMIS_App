@@ -185,23 +185,9 @@ class SplashScreenState extends State<SplashScreen>
                 "assets/Tata-Power.jpeg",
                 filterQuality: FilterQuality.high,
                 fit: BoxFit.cover,
+                height: 80,
               ),
             )),
-            // Positioned(
-            //   bottom: 70,
-            //   left: 0,
-            //   right: 0,
-            //   child: Text(
-            //     "TATA POWER",
-            //     style: GoogleFonts.workSans(
-            //       fontSize: 32.0,
-            //       color: Colors.white.withOpacity(0.87),
-            //       letterSpacing: -0.04,
-            //       height: 5.0,
-            //     ),
-            //     textAlign: TextAlign.center,
-            //   ),
-            // )
           ],
         ),
       ),

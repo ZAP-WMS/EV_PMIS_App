@@ -23,6 +23,7 @@ class JmrFieldPage extends StatefulWidget {
   String? tabName;
   bool showTable;
   int? dataFetchingIndex;
+  String userId;
 
   JmrFieldPage({
     super.key,
@@ -34,6 +35,7 @@ class JmrFieldPage extends StatefulWidget {
     this.tabName,
     required this.showTable,
     this.dataFetchingIndex,
+    required this.userId
   });
 
   @override
@@ -212,6 +214,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => JmrTablePage(
+                                  userId: widget.userId!,
                                   date: date.text,
                                   endDate: endDate.text,
                                   note: note.text,

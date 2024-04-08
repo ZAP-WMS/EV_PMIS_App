@@ -20,7 +20,6 @@ class JmrUserPage extends StatefulWidget {
 
   @override
   State<JmrUserPage> createState() => _JmrUserPageState();
-  
 }
 
 class _JmrUserPageState extends State<JmrUserPage> {
@@ -33,18 +32,16 @@ class _JmrUserPageState extends State<JmrUserPage> {
   int _selectedIndex = 0;
   bool _isLoading = true;
   List tabsForJmr = ['Civil', 'Electrical'];
-
-  dynamic userId;
   Widget selectedUI = Container();
 
   List<String> title = ['R1', 'R2', 'R3', 'R4', 'R5'];
 
   @override
   void initState() {
-    getAssignedDepots();
-    getUserId().whenComplete(() => {
-          getJmrLen(5),
-        });
+    getAssignedDepots().whenComplete(() {
+      getJmrLen(5);
+    });
+
     super.initState();
   }
 
@@ -80,11 +77,16 @@ class _JmrUserPageState extends State<JmrUserPage> {
             children: [
               const Text(
                 'JMR',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 widget.depoName ?? '',
-                style: const TextStyle(fontSize: 11,),
+                style: const TextStyle(
+                  fontSize: 11,
+                ),
               ),
             ],
           ),
@@ -100,8 +102,10 @@ class _JmrUserPageState extends State<JmrUserPage> {
                 children: [
                     Container(
                       padding: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 10.0,
-                          ),
+                        left: 10.0,
+                        right: 10.0,
+                        top: 10.0,
+                      ),
                       child: GridView.builder(
                           itemCount: 5,
                           gridDelegate:
@@ -213,6 +217,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                                             depoName: widget.depoName,
                                             jmrIndex: index + 1,
                                             tabName: tabsForJmr[_selectedIndex],
+                                            userId: widget.userId!,
                                           ),
                                         ),
                                       ).then((_) {
@@ -226,6 +231,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                                     MaterialPageRoute(
                                       builder: (context) => JmrFieldPage(
                                         showTable: false,
+                                        userId: widget.userId!,
                                         title: '$Designation-$title',
                                         jmrTab: title,
                                         cityName: widget.cityName,
@@ -281,6 +287,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => JmrFieldPage(
+                                    userId: widget.userId!,
                                     title:
                                         '$Designation-$title-JMR${index + 1}',
                                     jmrTab: title,
@@ -359,7 +366,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
                                   .collection('Table')
                                   .doc('${tabsForJmr[_selectedIndex]}JmrTable')
                                   .collection('userId')
-                                  .doc(userId)
+                                  .doc(widget.userId)
                                   .set({"isFileUploaded": true});
                             } else {
                               // User canceled the picker
@@ -380,9 +387,9 @@ class _JmrUserPageState extends State<JmrUserPage> {
                           cityName: widget.cityName,
                           depoName: widget.depoName,
                           title: 'jmr',
-                          userId: userId,
+                          userId: widget.userId,
                           fldrName:
-                              'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/$userId/${index + 1}',
+                              'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/${widget.userId}/${index + 1}',
                         ),
                       ),
                     );
@@ -423,7 +430,7 @@ class _JmrUserPageState extends State<JmrUserPage> {
           .collection('Table')
           .doc('${tabsForJmr[_selectedIndex]}JmrTable')
           .collection('userId')
-          .doc(userId)
+          .doc(widget.userId)
           .collection('jmrTabName')
           .doc(title[i])
           .collection('jmrTabIndex')
@@ -434,12 +441,6 @@ class _JmrUserPageState extends State<JmrUserPage> {
     currentTabList = eachTabJmrList;
     setState(() {
       _isLoading = false;
-    });
-  }
-
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
     });
   }
 

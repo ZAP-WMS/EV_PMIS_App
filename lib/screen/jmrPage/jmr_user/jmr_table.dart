@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/models/jmr.dart';
-import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -39,6 +38,7 @@ class JmrTablePage extends StatefulWidget {
   String? startDate;
   String? endDate;
   String? projectName;
+  String userId;
 
   JmrTablePage(
       {super.key,
@@ -58,7 +58,8 @@ class JmrTablePage extends StatefulWidget {
       this.projectName,
       this.refNo,
       this.siteLocation,
-      this.startDate});
+      this.startDate,
+      required this.userId});
 
   @override
   State<JmrTablePage> createState() => _JmrTablePageState();
@@ -82,57 +83,19 @@ class _JmrTablePageState extends State<JmrTablePage> {
   ];
 
   List<JMRModel> jmrtable = <JMRModel>[];
-  final int _excelRowNextIndex = 0;
   late JmrDataSource _jmrDataSource;
   List<dynamic> jmrSyncList = [];
   late DataGridController _dataGridController;
   bool _isLoading = true;
   List<dynamic> tabledata2 = [];
-  Stream? _stream;
   var alldata;
-  dynamic userId;
 
   @override
   void initState() {
     super.initState();
-    getUserId().whenComplete(() {
-      _stream = FirebaseFirestore.instance
-          .collection('JMRCollection')
-          .doc(widget.depoName)
-          .collection('userId')
-          .doc(userId)
-          .snapshots();
-      if (widget.showTable == true) {
-        _fetchDataFromFirestore().then((value) => {
-              setState(() {
-                for (dynamic item in jmrSyncList) {
-                  List<dynamic> tempData = [];
-                  if (item is List<dynamic>) {
-                    for (dynamic innerItem in item) {
-                      if (innerItem is Map<String, dynamic>) {
-                        tempData = [
-                          innerItem['srNo'],
-                          innerItem['Description'],
-                          innerItem['Activity'],
-                          innerItem['RefNo'],
-                          innerItem['Abstract'],
-                          innerItem['Uom'],
-                          innerItem['Rate'],
-                          innerItem['TotalQty'],
-                          innerItem['TotalAmount']
-                        ];
-                      }
-                      data.add(tempData);
-                    }
-                  }
-                }
-                _isLoading = false;
-              })
-            });
-      } else {
-        _isLoading = false;
-        setState(() {});
-      }
+    _fetchDataFromFirestore().whenComplete(() {
+      _isLoading = false;
+      setState(() {});
     });
   }
 
@@ -167,415 +130,179 @@ class _JmrTablePageState extends State<JmrTablePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          StreamBuilder(
-                            stream: _stream,
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                jmrtable = getData();
-                                _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow);
-                                _dataGridController = DataGridController();
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.85,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: SingleChildScrollView(
-                                    child: SfDataGridTheme(
-                                      data: SfDataGridThemeData(
-                                          headerColor: white,
-                                          gridLineColor: blue),
-                                      child: SfDataGrid(
-                                        source: _jmrDataSource,
-                                        //key: key,
-                                        allowEditing:
-                                            widget.showTable ? false : true,
-                                        frozenColumnsCount: 1,
-                                        gridLinesVisibility:
-                                            GridLinesVisibility.both,
-                                        headerGridLinesVisibility:
-                                            GridLinesVisibility.both,
-                                        selectionMode: SelectionMode.single,
-                                        navigationMode: GridNavigationMode.cell,
-                                        headerRowHeight: 60,
-                                        editingGestureType:
-                                            EditingGestureType.tap,
-                                        controller: _dataGridController,
-                                        columns: [
-                                          GridColumn(
-                                            columnName: 'srNo',
-                                            allowEditing: true,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Sr No',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Description',
-                                            allowEditing: true,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Description of items',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Activity',
-                                            allowEditing: true,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Activity Details',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'RefNo',
-                                            allowEditing: true,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'BOQ RefNo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Abstract',
-                                            allowEditing: true,
-                                            width: 180,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Abstract of JMR',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'UOM',
-                                            allowEditing: true,
-                                            width: 80,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'UOM',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Rate',
-                                            allowEditing: true,
-                                            width: 80,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Rate',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'TotalQty',
-                                            allowEditing: true,
-                                            width: 120,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Total Qty',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'TotalAmount',
-                                            allowEditing: true,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Amount',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: blue,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Delete',
-                                            allowEditing: false,
-                                            width: 120,
-                                            label: Container(
-                                              alignment: Alignment.center,
-                                              child: Text('Delete Row',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: blue,
-                                                  )
-                                                  //    textAlign: TextAlign.center,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.85,
+                            child: SfDataGridTheme(
+                              data: SfDataGridThemeData(
+                                  headerColor: white, gridLineColor: blue),
+                              child: SfDataGrid(
+                                source: _jmrDataSource,
+                                allowEditing: widget.showTable ? false : true,
+                                frozenColumnsCount: 1,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                selectionMode: SelectionMode.single,
+                                navigationMode: GridNavigationMode.cell,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                editingGestureType: EditingGestureType.tap,
+                                controller: _dataGridController,
+                                allowColumnsResizing: true,
+                                headerRowHeight: 60,
+                                columns: [
+                                  GridColumn(
+                                    columnName: 'srNo',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('SrNo',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    width: 150,
+                                    columnName: 'Description',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Description of items',
+                                          overflow: TextOverflow.values.first,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Activity',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Activity Details',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: blue,
+                                          )),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'RefNo',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('BOQ RefNo',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Abstract',
+                                    allowEditing: true,
+                                    width: 180,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Abstract of JMR',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'UOM',
+                                    allowEditing: true,
+                                    width: 80,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('UOM',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Rate',
+                                    allowEditing: true,
+                                    width: 80,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Rate',
+                                        overflow: TextOverflow.values.first,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: blue,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                );
-                              } else if (snapshot.hasData) {
-                                jmrtable = convertListToJmrModel(data);
-                                _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow);
-                                _dataGridController = DataGridController();
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.85,
-                                  child: SfDataGridTheme(
-                                    data: SfDataGridThemeData(
-                                        headerColor: white,
-                                        gridLineColor: blue),
-                                    child: SfDataGrid(
-                                      source: _jmrDataSource,
-                                      allowEditing:
-                                          widget.showTable ? false : true,
-                                      frozenColumnsCount: 1,
-                                      gridLinesVisibility:
-                                          GridLinesVisibility.both,
-                                      headerGridLinesVisibility:
-                                          GridLinesVisibility.both,
-                                      selectionMode: SelectionMode.single,
-                                      navigationMode: GridNavigationMode.cell,
-                                      columnWidthMode: ColumnWidthMode.auto,
-                                      editingGestureType:
-                                          EditingGestureType.tap,
-                                      controller: _dataGridController,
-                                      allowColumnsResizing: true,
-                                      headerRowHeight: 60,
-                                      columns: [
-                                        GridColumn(
-                                          columnName: 'srNo',
-                                          allowEditing: true,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text('SrNo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: blue)),
-                                          ),
+                                  GridColumn(
+                                    columnName: 'TotalQty',
+                                    allowEditing: true,
+                                    width: 120,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Total Qty',
+                                        overflow: TextOverflow.values.first,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: blue,
                                         ),
-                                        GridColumn(
-                                          width: 150,
-                                          columnName: 'Description',
-                                          allowEditing: true,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text('Description of items',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: blue)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Activity',
-                                          allowEditing: true,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text('Activity Details',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                  color: blue,
-                                                )),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'RefNo',
-                                          allowEditing: true,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text('BOQ RefNo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: blue)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Abstract',
-                                          allowEditing: true,
-                                          width: 180,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text('Abstract of JMR',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: blue)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'UOM',
-                                          allowEditing: true,
-                                          width: 80,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text('UOM',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: blue)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Rate',
-                                          allowEditing: true,
-                                          width: 80,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'Rate',
-                                              overflow:
-                                                  TextOverflow.values.first,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                                color: blue,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'TotalQty',
-                                          allowEditing: true,
-                                          width: 120,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'Total Qty',
-                                              overflow:
-                                                  TextOverflow.values.first,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                                color: blue,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'TotalAmount',
-                                          allowEditing: true,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'Amount',
-                                              overflow:
-                                                  TextOverflow.values.first,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                                color: blue,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Delete',
-                                          allowEditing: false,
-                                          width: 120,
-                                          label: Container(
-                                            alignment: Alignment.center,
-                                            child: Text('Delete Row',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
-                                                  color: blue,
-                                                )
-                                                //    textAlign: TextAlign.center,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                );
-                              } else {
-                                return const NodataAvailable();
-                              }
-                            },
-                          ),
+                                  GridColumn(
+                                    columnName: 'TotalAmount',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Amount',
+                                        overflow: TextOverflow.values.first,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: blue,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Delete',
+                                    allowEditing: false,
+                                    width: 120,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Delete Row',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: blue,
+                                          )
+                                          //    textAlign: TextAlign.center,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -660,19 +387,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
     } else {
       print('File is Empty');
     }
-    // final input = FileUploadInputElement()..accept = '.xlsx';
-    // input.click();
-
-    // await input.onChange.first;
-    // final files = input.files;
-
-    // if (files?.length == 1) {
-    //   final file = files?[0];
-    //   final reader = FileReader();
-
-    // reader.readAsArrayBuffer(file!);
-
-    // await reader.onLoadEnd.first;
 
     return data;
   }
@@ -690,12 +404,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
           TotalQty: list[7],
           TotalAmount: list[8]);
     }).toList();
-  }
-
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-    });
   }
 
   Future<void> StoreData() async {
@@ -716,7 +424,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -740,7 +448,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .set({'deponame': widget.depoName});
 
     FirebaseFirestore.instance
@@ -749,7 +457,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .set({'deponame': widget.depoName});
@@ -760,7 +468,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -777,7 +485,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -794,7 +502,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -818,7 +526,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .set({'deponame': widget.depoName});
 
     FirebaseFirestore.instance
@@ -827,7 +535,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .set({'deponame': widget.depoName});
@@ -838,7 +546,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -850,14 +558,14 @@ class _JmrTablePageState extends State<JmrTablePage> {
 
   Future<List<dynamic>> _fetchDataFromFirestore() async {
     data.clear();
-    getFieldData();
+    // getFieldData();
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('JMRCollection')
         .doc(widget.depoName)
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -874,7 +582,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
           .collection('Table')
           .doc('${widget.tabName}JmrTable')
           .collection('userId')
-          .doc(userId)
+          .doc(widget.userId)
           .collection('jmrTabName')
           .doc(widget.jmrTab)
           .collection('jmrTabIndex')
@@ -886,64 +594,37 @@ class _JmrTablePageState extends State<JmrTablePage> {
       if (documentSnapshot.exists) {
         Map<String, dynamic>? data1 =
             documentSnapshot.data() as Map<String, dynamic>?;
-
         jmrSyncList = data1!.entries.map((entry) => entry.value).toList();
-
-        return jmrSyncList;
+        if (widget.showTable) {
+          for (dynamic item in jmrSyncList) {
+            List<dynamic> tempData = [];
+            if (item is List<dynamic>) {
+              for (dynamic innerItem in item) {
+                if (innerItem is Map<String, dynamic>) {
+                  tempData = [
+                    innerItem['srNo'],
+                    innerItem['Description'],
+                    innerItem['Activity'],
+                    innerItem['RefNo'],
+                    innerItem['Abstract'],
+                    innerItem['Uom'],
+                    innerItem['Rate'],
+                    innerItem['TotalQty'],
+                    innerItem['TotalAmount']
+                  ];
+                }
+                data.add(tempData);
+              }
+            }
+          }
+        }
       }
     }
+    jmrtable = convertListToJmrModel(data);
+    _jmrDataSource = JmrDataSource(jmrtable, deleteRow);
+    _dataGridController = DataGridController();
 
     return jmrSyncList;
-  }
-
-  Future<void> getFieldData() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('JMRCollection')
-        .doc(widget.depoName)
-        .collection('Table')
-        .doc('${widget.tabName}JmrField')
-        .collection('userId')
-        .doc(userId)
-        .collection('jmrTabName')
-        .doc(widget.jmrTab)
-        .collection('jmrTabIndex')
-        .doc('jmr${widget.dataFetchingIndex}')
-        .collection('date')
-        .get();
-
-    List<dynamic> tempList = querySnapshot.docs.map((date) => date.id).toList();
-
-    for (int i = 0; i < tempList.length; i++) {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('JMRCollection')
-          .doc(widget.depoName)
-          .collection('Table')
-          .doc('${widget.tabName}JmrField')
-          .collection('userId')
-          .doc(userId)
-          .collection('jmrTabName')
-          .doc(widget.jmrTab)
-          .collection('jmrTabIndex')
-          .doc('jmr${widget.dataFetchingIndex}')
-          .collection('date')
-          .doc(tempList[i])
-          .get();
-
-      Map<String, dynamic> fieldData =
-          documentSnapshot.data() as Map<String, dynamic>;
-
-      projectName.text = fieldData['project'];
-      loiRefNum.text = fieldData['loiRefNum'];
-      siteLocation.text = fieldData['siteLocation'];
-      refNo.text = fieldData['refNo'];
-      date.text = fieldData['date'];
-      note.text = fieldData['note'];
-      startDate.text = fieldData['startDate'];
-      endDate.text = fieldData['endDate'];
-
-      print(
-          'FieldData - ${projectName.text},${loiRefNum.text},${siteLocation.text},${refNo.text},${endDate.text}');
-    }
   }
 
   Future<void> downloadPDF() async {
@@ -1197,7 +878,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('UserID - $userId',
+              child: pw.Text('UserID - ${widget.userId}',
                   textScaleFactor: 1.5,
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
@@ -1238,7 +919,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                         style:
                             pw.TextStyle(color: PdfColors.black, fontSize: 15)),
                     pw.TextSpan(
-                        text: '$userId',
+                        text: widget.userId,
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
@@ -1298,7 +979,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('User ID - $userId',
+              child: pw.Text('User ID - ${widget.userId}',
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
                       .defaultTextStyle
@@ -1361,14 +1042,14 @@ List<JMRModel> getData() {
   return [
     JMRModel(
         srNo: 1,
-        Description: 'Supply and Laying',
-        Activity: 'Software',
-        RefNo: '8.31 (Additional)',
-        JmrAbstract: 'Dumble Door',
-        Uom: 'Mtr',
-        rate: 500.00,
-        TotalQty: 110,
-        TotalAmount: 55000.00),
+        Description: '',
+        Activity: '',
+        RefNo: '',
+        JmrAbstract: '',
+        Uom: '',
+        rate: 0.0,
+        TotalQty: 0.0,
+        TotalAmount: 0.0),
   ];
 }
 
