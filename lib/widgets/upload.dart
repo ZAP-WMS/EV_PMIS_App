@@ -27,18 +27,19 @@ class UploadDocument extends StatefulWidget {
   String? pagetitle;
   String? role;
 
-  UploadDocument(
-      {super.key,
-      this.title,
-      this.subtitle,
-      required this.cityName,
-      required this.depoName,
-      required this.userId,
-      required this.fldrName,
-      this.date,
-      this.srNo,
-      this.pagetitle,
-      this.role});
+  UploadDocument({
+    super.key,
+    this.title,
+    this.subtitle,
+    required this.cityName,
+    required this.depoName,
+    required this.userId,
+    required this.fldrName,
+    this.date,
+    this.srNo,
+    this.pagetitle,
+    this.role,
+  });
 
   @override
   State<UploadDocument> createState() => _UploadDocumentState();
@@ -206,7 +207,7 @@ class _UploadDocumentState extends State<UploadDocument> {
                                 onPressed: isFieldEditable == false
                                     ? null
                                     : () async {
-                                        showPickerOptions();
+                                        showPickerOptions(widget.pagetitle!);
                                         // result =
                                         //     await FilePicker.platform.pickFiles(
                                         //   withData: true,
@@ -272,17 +273,17 @@ class _UploadDocumentState extends State<UploadDocument> {
 
                                             String refname = (widget.title ==
                                                     'QualityChecklist'
-                                                ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/${result!.files.first.name}'
+                                                ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/$imageName'
                                                 : widget.pagetitle ==
                                                         'ClosureReport'
-                                                    ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${result!.files.first.name}'
+                                                    ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName'
                                                     : widget.pagetitle ==
                                                             'KeyEvents'
-                                                        ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/${result!.files.first.name}'
+                                                        ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/$imageName'
                                                         : widget.pagetitle ==
                                                                 'Depot Insights'
                                                             ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.fldrName}/${imageName}'
-                                                            : '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/${result!.files.first.name}');
+                                                            : '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/$imageName');
 
                                             // String? fileName = result!.files.first.name;
 
@@ -302,9 +303,13 @@ class _UploadDocumentState extends State<UploadDocument> {
                                           Navigator.pop(context);
                                           // ignore: use_build_context_synchronously
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
+                                              .showSnackBar(SnackBar(
+                                                  backgroundColor: blue,
                                                   content: Text(
-                                                      'Files are Uploaded')));
+                                                    'Files are Uploaded',
+                                                    style:
+                                                        TextStyle(color: white),
+                                                  )));
                                         }
                                       },
                                 child: Text(

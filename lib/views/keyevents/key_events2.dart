@@ -2213,7 +2213,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                         true, //show days or not
                                                     startOfTheWeek: WeekDay
                                                         .monday, //custom start of the week
-                                                    weekHeaderHeight: 25,
+                                                    weekHeaderHeight: 20,
                                                     weekEnds: const {
                                                       // WeekDay.saturday,
                                                       // WeekDay.sunday

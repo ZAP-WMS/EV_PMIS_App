@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../widgets/image_picker.dart';
 
-void showPickerOptions() {
+void showPickerOptions(String pageTitle) {
   Get.defaultDialog(
     title: "Select Image",
     content: Column(
       children: [
         ListTile(
-          leading: Icon(Icons.photo_library),
+          leading: const Icon(Icons.photo_library),
           title: const Text("Pick from Gallery"),
           onTap: () {
             Get.back();
-            pickImageFromGallery();
+            pickImageFromGallery(pageTitle);
           },
         ),
         ListTile(

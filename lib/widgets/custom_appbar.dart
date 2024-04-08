@@ -221,8 +221,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ? InkWell(
                 onTap: widget.downloadFun,
                 child: Container(
-                  margin: const EdgeInsets.only(top: 8, bottom: 8, right: 5),
-                  width: 60,
+                  margin: const EdgeInsets.only(top: 10, bottom: 10, right: 5),
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: white,
                     borderRadius: BorderRadius.circular(5),
