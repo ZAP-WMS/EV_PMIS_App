@@ -8,9 +8,13 @@ final picker = ImagePicker();
 final ImagePickerController imagePickerController =
     Get.put(ImagePickerController());
 
-Future<void> pickImageFromGallery() async {
-  final pickedFile = await FilePicker.platform
-      .pickFiles(withData: true, type: FileType.any, allowMultiple: true);
+Future<void> pickImageFromGallery(String title) async {
+  final pickedFile = await FilePicker.platform.pickFiles(  
+      withData: true,
+      allowedExtensions:
+          title == 'ClosureReport' ? ['pdf'] : ['jpg', 'jpeg', 'png', 'pdf'],
+      type: FileType.custom,
+      allowMultiple: true);
 
   // imagePickerController.setPickedImagePath(pickedFile!.files.first.name);
 

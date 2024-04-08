@@ -117,7 +117,7 @@ class _ViewSummaryState extends State<ViewSummary> {
           isDownload: true,
           depoName: widget.depoName,
           title: widget.id.toString(),
-          height: 30,
+          height: 60,
           isSync: false,
           isCentered: false,
           downloadFun: downloadPDF,
@@ -466,12 +466,12 @@ class _ViewSummaryState extends State<ViewSummary> {
                                   if (value.dailydata.length != 0) {
                                     dailyproject = value.dailydata;
                                     _dailyDataSource = DailyDataSource(
-                                      dailyproject,
-                                      context,
-                                      widget.cityName!,
-                                      widget.depoName!,
-                                      widget.userId,selecteddate.toString()
-                                    );
+                                        dailyproject,
+                                        context,
+                                        widget.cityName!,
+                                        widget.depoName!,
+                                        widget.userId,
+                                        selecteddate.toString());
 
                                     _dataGridController = DataGridController();
 

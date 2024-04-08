@@ -171,7 +171,7 @@ class DetailedEngSourceEV extends DataGridSource {
                             onPressed: () {
                               String activitydata =
                                   row.getCells()[4].value.toString().trim();
-                              if (activitydata == "null" ||
+                              if (activitydata == "" ||
                                   activitydata.isEmpty) {
                                 showDialog(
                                   context: mainContext,

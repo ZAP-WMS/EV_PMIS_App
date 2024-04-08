@@ -62,7 +62,7 @@ TextStyle tableheadersubtitle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: red);
 
 TextStyle tableheaderwhitecolor =
-    TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: blue);
+    TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: blue);
 
 TextStyle tablefontsize = const TextStyle(fontSize: 12, color: Colors.black);
 TextStyle uploadViewStyle = const TextStyle(fontSize: 12, color: Colors.white);

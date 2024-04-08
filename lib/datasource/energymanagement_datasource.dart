@@ -236,7 +236,7 @@ class EnergyManagementDatasource extends DataGridSource {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(columnName: 'chargerId', value: newCellValue);
       _energyManagement[dataRowIndex].chargerId = newCellValue;
-    } else if (column.columnName == 'startSoc') {
+    } else if (column.columnName == 'StartSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(columnName: 'startSoc', value: newCellValue as int);
       _energyManagement[dataRowIndex].startSoc = newCellValue;
@@ -345,6 +345,8 @@ class EnergyManagementDatasource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

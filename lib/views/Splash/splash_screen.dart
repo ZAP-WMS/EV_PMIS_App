@@ -110,7 +110,7 @@ class SplashScreenState extends State<SplashScreen>
         await FirebaseMessaging.instance.getInitialMessage();
     if (message != null) {
       // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, '/user-list');
+      // Navigator.pushNamed(context, '/user-list');
       PushNotification notification = PushNotification(
         title: message.notification!.title ?? '',
         body: message.notification!.body ?? '',
@@ -128,6 +128,7 @@ class SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     registerNotification();
+
     checkforInitialMessage();
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message != null) {
@@ -145,9 +146,10 @@ class SplashScreenState extends State<SplashScreen>
         );
         // save the current context
         BuildContext? currentContext = context;
-        Navigator.pushReplacementNamed(
+        Navigator.pushNamedAndRemoveUntil(
           currentContext,
           '/user-list',
+          (route) => false,
         );
         setState(() {
           _isNotificationPage = true;
@@ -188,21 +190,6 @@ class SplashScreenState extends State<SplashScreen>
                 height: 80,
               ),
             )),
-            // Positioned(
-            //   bottom: 70,
-            //   left: 0,
-            //   right: 0,
-            //   child: Text(
-            //     "TATA POWER",
-            //     style: GoogleFonts.workSans(
-            //       fontSize: 32.0,
-            //       color: Colors.white.withOpacity(0.87),
-            //       letterSpacing: -0.04,
-            //       height: 5.0,
-            //     ),
-            //     textAlign: TextAlign.center,
-            //   ),
-            // )
           ],
         ),
       ),
@@ -234,6 +221,7 @@ class SplashScreenState extends State<SplashScreen>
           },
         );
       } else {
+        // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, '/user-list');
       }
     } catch (e) {
