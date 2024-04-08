@@ -89,16 +89,19 @@ class _DepotOverviewState extends State<DepotOverview> {
 
   @override
   void initState() {
-    getAssignedDepots();
-    super.initState();
-    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-    initializeController();
-    verifyProjectManager().whenComplete(() {
-      getTableData().whenComplete(() {
-        _employeeDataSource = DepotOverviewDatasource(_employees, context);
-        _dataGridController = DataGridController();
+    getAssignedDepots().whenComplete(() {
+      cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
+      initializeController();
+      verifyProjectManager().whenComplete(() {
+        getTableData().whenComplete(() {
+          _employeeDataSource = DepotOverviewDatasource(_employees, context);
+          _dataGridController = DataGridController();
+          isLoading = false;
+          setState(() {});
+        });
       });
     });
+    super.initState();
   }
 
   @override
@@ -116,7 +119,6 @@ class _DepotOverviewState extends State<DepotOverview> {
           height: 50,
           isSync: isProjectManager ? true : false,
           store: () async {
-            // overviewField(cityName!, widget.depoName!);
             overviewFieldstore(cityName!, widget.depoName!);
             storeData(widget.depoName!, context);
           },
@@ -124,25 +126,6 @@ class _DepotOverviewState extends State<DepotOverview> {
         drawer: NavbarDrawer(role: widget.role),
         body: isLoading
             ? const LoadingPage()
-            // : isProjectManager == false
-            //     ?
-            //      Center(
-            //         child: Column(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           SizedBox(
-            //               height: 200,
-            //               width: 200,
-            //               child: Image.asset(
-            //                 'assets/overview_image/depotOverview.webp',
-            //               )),
-            //           const Text(
-            //             'Only Project Manager Can Access This Page',
-            //             textAlign: TextAlign.center,
-            //             style: TextStyle(fontSize: 30),
-            //           )
-            //         ],
-            //       ))
             : SingleChildScrollView(
                 child: Column(
                   children: [
@@ -218,13 +201,10 @@ class _DepotOverviewState extends State<DepotOverview> {
 
                                               bytes = res!.files.first.bytes!;
                                               if (res == null) {
-                                                print("No file selected");
                                               } else {
                                                 setState(() {});
-                                                res!.files.forEach((element) {
-                                                  print(element.name);
-                                                  print(res!.files.first.name);
-                                                });
+                                                res!.files
+                                                    .forEach((element) {});
                                               }
                                             },
                                       child: const Text(
@@ -1089,11 +1069,6 @@ class _DepotOverviewState extends State<DepotOverview> {
         }
       });
     });
-
-    checkFieldEmpty(String fieldContent, String title) {
-      if (fieldContent.isEmpty) return title;
-      return '';
-    }
   }
 
   void storeField() async {
@@ -1240,6 +1215,7 @@ class _DepotOverviewState extends State<DepotOverview> {
   }
 
   Future<void> verifyProjectManager() async {
+    isProjectManager = false;
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('AssignedRole')
         .where('roles', arrayContains: 'Project Manager')
@@ -1253,7 +1229,6 @@ class _DepotOverviewState extends State<DepotOverview> {
           List<dynamic> depot = tempList[i]['depots'];
 
           if (depot[j].toString() == widget.depoName) {
-            print(depot);
             isProjectManager = true;
             projectManagerId = tempList[i]['userId'].toString();
             break;
@@ -1262,17 +1237,13 @@ class _DepotOverviewState extends State<DepotOverview> {
       } else {
         for (int j = 0; j < tempList[i]['depots'].length; j++) {
           List<dynamic> depot = tempList[i]['depots'];
-
           if (depot[j].toString() == widget.depoName) {
-            isProjectManager = false;
             projectManagerId = tempList[i]['userId'].toString();
             break;
           }
         }
       }
     }
-    print("isProjectManager: $isProjectManager");
-
     _fetchUserData(projectManagerId.toString());
   }
 
@@ -1294,9 +1265,6 @@ class _DepotOverviewState extends State<DepotOverview> {
           mapData.map((map) => DepotOverviewModel.fromJson(map)).toList();
       checkTable = false;
     }
-
-    isLoading = false;
-    setState(() {});
   }
 
   Future getAssignedDepots() async {

@@ -16,6 +16,7 @@ class RegisterPge extends StatefulWidget {
 }
 
 class _RegisterPgeState extends State<RegisterPge> {
+  String? selectedCompany;
   final _formkey = GlobalKey<FormState>();
   final TextEditingController firstNamecontroller = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -50,6 +51,44 @@ class _RegisterPgeState extends State<RegisterPge> {
                 key: _formkey,
                 child: Column(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 10.0, right: 5.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          isExpanded: true,
+                          value: selectedCompany,
+                          hint: const Text(
+                            "Select Company",
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                              value: "TATA MOTOM",
+                              child: Text(
+                                "TATA MOTOR",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: "TATA POWER",
+                              child: Text(
+                                "TATA POWER",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            )
+                          ],
+                          onChanged: (value) {
+                            selectedCompany = value;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ),
                     _space(
                       16,
                     ),
@@ -236,7 +275,8 @@ class _RegisterPgeState extends State<RegisterPge> {
                   confController.text,
                   firstNamecontroller.text[0] +
                       lastNameController.text[0] +
-                      numberController.text.substring(6, 10))
+                      numberController.text.substring(6, 10),
+                  selectedCompany!)
               .then((value) {
             if (value == true) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -284,56 +324,59 @@ class _RegisterPgeState extends State<RegisterPge> {
         .doc(userFullName)
         .get();
 
-    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    Map<String, dynamic> mapData = data;
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> mapData = data;
 
-    if (mapData["Email"] == userEmail &&
-        mapData["fullName"] == userFullName &&
-        mapData["Phone Number"] == phoneNum) {
-      // ignore: use_build_context_synchronously
-      await showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                height: 100,
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 10.0),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "User Already Registered!",
-                        style: TextStyle(color: blue, fontSize: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Container(
-                      alignment: Alignment.center,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(blue),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+      if (mapData["Email"] == userEmail &&
+          mapData["fullName"] == userFullName &&
+          mapData["Phone Number"] == phoneNum) {
+        // ignore: use_build_context_synchronously
+        await showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  height: 100,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 10.0),
+                        alignment: Alignment.center,
                         child: Text(
-                          "OK",
-                          style: TextStyle(color: white),
+                          "User Already Registered!",
+                          style: TextStyle(color: blue, fontSize: 16),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 5),
+                      Container(
+                        alignment: Alignment.center,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(blue),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "OK",
+                            style: TextStyle(color: white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          });
+              );
+            });
+      }
     } else {
       register();
     }

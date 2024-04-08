@@ -37,13 +37,19 @@ class FirebaseApi extends ChangeNotifier {
       await ref.writeToFile(file);
       const AndroidNotificationDetails androidNotificationDetails =
           AndroidNotificationDetails(
-              'repeating channel id', 'repeating channel name',
+              showProgress: true,
+              'repeating channel id',
+              'repeating channel name',
               channelDescription: 'repeating description');
       const NotificationDetails notificationDetails =
           NotificationDetails(android: androidNotificationDetails);
       await FlutterLocalNotificationsPlugin().show(
-          0, 'File Downloaded', '', notificationDetails,
-          payload: file.path);
+        0,
+        'File Downloaded',
+        'Saved to downloads folder',
+        notificationDetails,
+        payload: file.path.toString(),
+      );
     }
   }
 

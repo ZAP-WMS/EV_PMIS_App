@@ -1199,6 +1199,7 @@ class _DepotOverviewState extends State<DepotOverview> {
       padding: const EdgeInsets.all(5),
       // width: MediaQuery.of(context).size.width,
       child: CustomTextField(
+          isProjectManager: isProjectManager,
           controller: controller,
           labeltext: title,
           isSuffixIcon: false,
@@ -1394,7 +1395,6 @@ class _DepotOverviewState extends State<DepotOverview> {
           List<dynamic> depot = tempList[i]['depots'];
 
           if (depot[j].toString() == widget.depoName) {
-            print(depot);
             isProjectManager = true;
             setState(() {});
           }

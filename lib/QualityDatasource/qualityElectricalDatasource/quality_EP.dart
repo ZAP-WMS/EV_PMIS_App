@@ -484,10 +484,9 @@ class QualityEPDataSource extends DataGridSource {
           DataGridCell<String>(
               columnName: 'responsibility', value: newCellValue);
       _checklistModel[dataRowIndex].responsibility = newCellValue.toString();
-    } else if (column.columnName == 'reference') {
+    } else if (column.columnName == 'Reference') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(
-              columnName: 'reference', value: newCellValue as int);
+          DataGridCell<dynamic>(columnName: 'Reference', value: newCellValue);
       _checklistModel[dataRowIndex].reference = newCellValue as dynamic;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -554,6 +553,9 @@ class QualityEPDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
@@ -9,7 +8,6 @@ import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -68,7 +66,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
   bool isLoading = true;
   String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
   String? visDate = DateFormat.yMMMd().format(DateTime.now());
-
   String? cityName;
   Stream? _stream;
   dynamic alldata;
@@ -199,7 +196,6 @@ class _ElectricalFieldState extends State<ElectricalField> {
       isLoading = false;
       setState(() {});
     });
-
     super.initState();
   }
 
@@ -658,19 +654,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
     );
   }
 
-
   storeData(BuildContext context, dynamic datasource, String depoName,
       String currentDate) {
-    Map<String, dynamic> pssTableData = Map();
-    Map<String, dynamic> rmuTableData = Map();
-    Map<String, dynamic> ctTableData = Map();
-    Map<String, dynamic> cmuTableData = Map();
-    Map<String, dynamic> acdbTableData = Map();
-    Map<String, dynamic> ciTableData = Map();
-    Map<String, dynamic> cdiTableData = Map();
-    Map<String, dynamic> mspTableData = Map();
-    Map<String, dynamic> chargerTableData = Map();
-    Map<String, dynamic> epTableData = Map();
+    Map<String, dynamic> pssTableData = {};
 
     for (var i in datasource.dataGridRows) {
       for (var data in i.getCells()) {
@@ -700,6 +686,13 @@ class _ElectricalFieldState extends State<ElectricalField> {
         backgroundColor: blue,
       ));
     });
+
+    FirebaseFirestore.instance
+        .collection('ElectricalQualityChecklist')
+        .doc(depoName)
+        .collection('userId')
+        .doc(userId)
+        .set({"depotName": depoName});
   }
 
   void _fetchUserData() async {
@@ -852,6 +845,25 @@ class _ElectricalFieldState extends State<ElectricalField> {
   }
 
   Future<Uint8List> _generateElectricalPdf() async {
+    data = widget.fielClnName == 'PSS'
+        ? qualitylisttable1
+        : widget.fielClnName == 'RMU'
+            ? qualitylisttable2
+            : widget.fielClnName == 'CT'
+                ? qualitylisttable3
+                : widget.fielClnName == 'CMU'
+                    ? qualitylisttable4
+                    : widget.fielClnName == 'ACDB'
+                        ? qualitylisttable5
+                        : widget.fielClnName == 'CI'
+                            ? qualitylisttable6
+                            : widget.fielClnName == 'CDI'
+                                ? qualitylisttable7
+                                : widget.fielClnName == 'MSP'
+                                    ? qualitylisttable8
+                                    : widget.fielClnName == 'CHARGER'
+                                        ? qualitylisttable9
+                                        : qualitylisttable10;
     final headerStyle =
         pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
 
@@ -1046,15 +1058,17 @@ class _ElectricalFieldState extends State<ElectricalField> {
                 padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: pw.Text('')),
             pw.Container(
-                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                width: 60,
-                height: 100,
-                child: pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                    children: [
-                      imageUrls[3],
-                      imageUrls[4],
-                    ])),
+              padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+              width: 60,
+              height: 100,
+              child: pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                children: [
+                  imageUrls[3],
+                  imageUrls[4],
+                ],
+              ),
+            ),
             imageUrls[5],
             imageUrls[6],
             imageUrls[7],

@@ -68,6 +68,7 @@ class DetailedEngSourceEV extends DataGridSource {
     'Connection Diagram of meters installed at workshop building',
     'Connection Diagram of meters installed at washing bay',
   ];
+
   List<String> Specification = [
     'Illumination Design',
     'Shed Lighting SLD',
@@ -77,6 +78,7 @@ class DetailedEngSourceEV extends DataGridSource {
     'DTB Room Lighting Layout',
     'Compresser Rooms & Lube room  Lighting Layout',
   ];
+
   List<DataGridRow> dataGridRows = [];
   final _dateFormatter = DateFormat.yMd();
 
@@ -101,24 +103,13 @@ class DetailedEngSourceEV extends DataGridSource {
     DateTime? date1;
     DateTime? date2;
     DateTime? endDate1;
+
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      // Color getcolor() {
-      //   if (dataGridCell.columnName == 'Title' &&
-      //           dataGridCell.value == 'RFC Drawings of Civil Activities' ||
-      //       dataGridCell.value ==
-      //           'EV Layout Drawings of Electrical Activities' ||
-      //       dataGridCell.value == 'Shed Lighting Drawings & Specification') {
-      //     return green;
-      //   }
-
-      //   return Colors.transparent;
-      // }
-
       return Container(
         // color: getcolor(),
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: (dataGridCell.columnName == 'Delete')
             ? IconButton(
                 onPressed: () {
@@ -128,39 +119,25 @@ class DetailedEngSourceEV extends DataGridSource {
                 icon: Icon(
                   Icons.delete,
                   color: red,
-                ))
+                ),
+              )
             : dataGridCell.columnName == 'button'
                 ? LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
                     return ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: blue),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              title: '',
-                              cityName: cityName,
-                              depoName: depoName,
-                              fldrName: row.getCells()[1].value.toString(),
-                              userId: userId,
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => UploadDocument(
+                                title: '',
+                                cityName: cityName,
+                                depoName: depoName,
+                                fldrName: row.getCells()[1].value.toString(),
+                                userId: userId,
+                              ),
                             ),
-                          ));
-                          // showDialog(
-                          //     context: context,
-                          //     builder: (context) => AlertDialog(
-                          //         content: SizedBox(
-                          //             height: 100,
-                          //             child: Column(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.spaceBetween,
-                          //               children: [
-                          //                 Text(
-                          //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                          //                 Text(
-                          //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                          //                 Text(
-                          //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                          //               ],
-                          //             ))));
+                          );
                         },
                         child: const Text('Upload'));
                   })
@@ -168,48 +145,27 @@ class DetailedEngSourceEV extends DataGridSource {
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
                         return ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(backgroundColor: blue),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ViewAllPdf(
-                                      role: role,
-                                      title: 'DetailedEngEV',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      userId: userId,
-                                      docId:
-                                          '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}')
-                                  // ViewFile()
-                                  // UploadDocument(
-                                  //     title: 'DetailedEngRFC',
-                                  //     cityName: cityName,
-                                  //     depoName: depoName,
-                                  //     activity: '${row.getCells()[1].value.toString()}'),
-                                  ));
-                              // showDialog(
-                              //     context: context,
-                              //     builder: (context) => AlertDialog(
-                              //         content: SizedBox(
-                              //             height: 100,
-                              //             child: Column(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.spaceBetween,
-                              //               children: [
-                              //                 Text(
-                              //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                              //               ],
-                              //             ))));
-                            },
-                            child: const Text('View'));
+                          style:
+                              ElevatedButton.styleFrom(backgroundColor: blue),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAllPdf(
+                                    role: role,
+                                    title: 'DetailedEngEV',
+                                    cityName: cityName,
+                                    depoName: depoName,
+                                    userId: userId,
+                                    docId:
+                                        '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}')));
+                          },
+                          child: const Text(
+                            'View',
+                          ),
+                        );
                       })
                     : dataGridCell.columnName == 'Number' &&
                             dataGridCell.value == 0
-                        ? Text('')
+                        ? const Text('')
                         : (dataGridCell.columnName == 'PreparationDate') &&
                                 dataGridCell.value != ''
                             ? Row(
@@ -392,7 +348,6 @@ class DetailedEngSourceEV extends DataGridSource {
                                       ),
                                       Text(
                                         dataGridCell.value.toString(),
-                                        style: const TextStyle(fontSize: 10),
                                       ),
                                     ],
                                   )
@@ -446,11 +401,6 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                     date = DateTime
                                                                         .parse(value
                                                                             .toString());
-                                                                    // date1 =
-                                                                    //     DateTime.parse(value.toString());
-                                                                    // date2 =
-                                                                    //     DateTime.parse(value.toString());
-
                                                                     final int
                                                                         dataRowIndex =
                                                                         dataGridRows
@@ -548,7 +498,6 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                               dataGridRows[dataRowIndex].getCells()[7] = DataGridCell<String>(columnName: 'ReleaseDate', value: DateFormat('dd-MM-yyyy').format(date!));
                                                                               _detailedengev[dataRowIndex].releaseDate = DateFormat('dd-MM-yyyy').format(date!);
                                                                               notifyListeners();
-
                                                                               Navigator.pop(context);
                                                                             }
                                                                           }),
@@ -562,158 +511,9 @@ class DetailedEngSourceEV extends DataGridSource {
                                                   .toString()),
                                             ],
                                           )
-                                        // : dataGridCell.columnName == 'Title' &&
-                                        //         dataGridCell.value !=
-                                        //             'RFC Drawings of Civil Activities' &&
-                                        //         dataGridCell.value == 'EV Layout'
-                                        //     ? DropdownButton<String>(
-                                        //         value: dataGridCell.value,
-                                        //         autofocus: true,
-                                        //         focusColor: Colors.transparent,
-                                        //         underline: const SizedBox.shrink(),
-                                        //         icon: const Icon(
-                                        //             Icons.arrow_drop_down_sharp),
-                                        //         isExpanded: true,
-                                        //         style: textStyle,
-                                        //         onChanged: (String? value) {
-                                        //           final dynamic oldValue = row
-                                        //                   .getCells()
-                                        //                   .firstWhereOrNull(
-                                        //                       (DataGridCell dataCell) =>
-                                        //                           dataCell.columnName ==
-                                        //                           dataGridCell
-                                        //                               .columnName)
-                                        //                   ?.value ??
-                                        //               '';
-                                        //           if (oldValue == value ||
-                                        //               value == null) {
-                                        //             return;
-                                        //           }
-
-                                        //           final int dataRowIndex =
-                                        //               dataGridRows.indexOf(row);
-                                        //           dataGridRows[dataRowIndex]
-                                        //                   .getCells()[2] =
-                                        //               DataGridCell<String>(
-                                        //                   columnName: 'Title',
-                                        //                   value: value);
-                                        //           _detailedeng[dataRowIndex].title =
-                                        //               value.toString();
-                                        //           notifyListeners();
-                                        //         },
-                                        //         items: typeRiskMenuItems
-                                        //             .map<DropdownMenuItem<String>>(
-                                        //                 (String value) {
-                                        //           return DropdownMenuItem<String>(
-                                        //             value: value,
-                                        //             child: Text(value),
-                                        //           );
-                                        //         }).toList())
-                                        //     : dataGridCell.columnName == 'Title' &&
-                                        //             dataGridCell.value !=
-                                        //                 'EV Layout Drawings of Electrical Activities' &&
-                                        //             dataGridCell.value ==
-                                        //                 'Electrical Work'
-                                        //         ? DropdownButton<String>(
-                                        //             value: dataGridCell.value,
-                                        //             autofocus: true,
-                                        //             focusColor: Colors.transparent,
-                                        //             underline: const SizedBox.shrink(),
-                                        //             icon: const Icon(
-                                        //                 Icons.arrow_drop_down_sharp),
-                                        //             isExpanded: true,
-                                        //             style: textStyle,
-                                        //             onChanged: (String? value) {
-                                        //               final dynamic oldValue = row
-                                        //                       .getCells()
-                                        //                       .firstWhereOrNull(
-                                        //                           (DataGridCell
-                                        //                                   dataCell) =>
-                                        //                               dataCell
-                                        //                                   .columnName ==
-                                        //                               dataGridCell
-                                        //                                   .columnName)
-                                        //                       ?.value ??
-                                        //                   '';
-                                        //               if (oldValue == value ||
-                                        //                   value == null) {
-                                        //                 return;
-                                        //               }
-
-                                        //               final int dataRowIndex =
-                                        //                   dataGridRows.indexOf(row);
-                                        //               dataGridRows[dataRowIndex]
-                                        //                       .getCells()[2] =
-                                        //                   DataGridCell<String>(
-                                        //                       columnName: 'Title',
-                                        //                       value: value);
-                                        //               _detailedeng[dataRowIndex].title =
-                                        //                   value.toString();
-                                        //               notifyListeners();
-                                        //             },
-                                        //             items: ElectricalActivities.map<
-                                        //                     DropdownMenuItem<String>>(
-                                        //                 (String value) {
-                                        //               return DropdownMenuItem<String>(
-                                        //                 value: value,
-                                        //                 child: Text(value),
-                                        //               );
-                                        //             }).toList())
-                                        //         : dataGridCell.columnName == 'Title' &&
-                                        //                 dataGridCell.value !=
-                                        //                     'Shed Lighting Drawings & Specification' &&
-                                        //                 dataGridCell.value ==
-                                        //                     'Illumination Design'
-                                        //             ? DropdownButton<String>(
-                                        //                 value: dataGridCell.value,
-                                        //                 autofocus: true,
-                                        //                 focusColor: Colors.transparent,
-                                        //                 underline:
-                                        //                     const SizedBox.shrink(),
-                                        //                 icon:
-                                        //                     const Icon(Icons.arrow_drop_down_sharp),
-                                        //                 isExpanded: true,
-                                        //                 style: textStyle,
-                                        //                 onChanged: (String? value) {
-                                        //                   final dynamic oldValue = row
-                                        //                           .getCells()
-                                        //                           .firstWhereOrNull(
-                                        //                               (DataGridCell
-                                        //                                       dataCell) =>
-                                        //                                   dataCell
-                                        //                                       .columnName ==
-                                        //                                   dataGridCell
-                                        //                                       .columnName)
-                                        //                           ?.value ??
-                                        //                       '';
-                                        //                   if (oldValue == value ||
-                                        //                       value == null) {
-                                        //                     return;
-                                        //                   }
-
-                                        //                   final int dataRowIndex =
-                                        //                       dataGridRows.indexOf(row);
-                                        //                   dataGridRows[dataRowIndex]
-                                        //                           .getCells()[2] =
-                                        //                       DataGridCell<String>(
-                                        //                           columnName: 'Title',
-                                        //                           value: value);
-                                        //                   _detailedeng[dataRowIndex]
-                                        //                       .title = value.toString();
-                                        //                   notifyListeners();
-                                        //                 },
-                                        //                 items: Specification.map<DropdownMenuItem<String>>((String value) {
-                                        //                   return DropdownMenuItem<
-                                        //                       String>(
-                                        //                     value: value,
-                                        //                     child: Text(value),
-                                        //                   );
-                                        //                 }).toList())
                                         : Text(
                                             dataGridCell.value.toString(),
                                             textAlign: TextAlign.center,
-                                            style:
-                                                const TextStyle(fontSize: 10),
                                           ),
       );
     }).toList());

@@ -94,7 +94,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
               future: fetchData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return LoadingPage();
+                  return const LoadingPage();
                 } else if (snapshot.hasError) {
                   return const Center(
                     child: Text('Error fetching data'),
@@ -307,8 +307,9 @@ class _MonthlySummaryState extends State<MonthlySummary> {
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
-    final pr = ProgressDialog(context);
-    pr.style(
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
         progressWidgetAlignment: Alignment.center,
         message: 'Downloading file...',
         borderRadius: 10.0,
@@ -318,29 +319,36 @@ class _MonthlySummaryState extends State<MonthlySummary> {
         insetAnimCurve: Curves.easeInOut,
         maxProgress: 100.0,
         progressTextStyle: const TextStyle(
-            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+          color: Colors.black,
+          fontSize: 10.0,
+          fontWeight: FontWeight.w400,
+        ),
         messageTextStyle: const TextStyle(
-            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600));
+          color: Colors.black,
+          fontSize: 18.0,
+          fontWeight: FontWeight.w600,
+        ),
+      );
 
-    pr.show();
+      pr.show();
 
-    final pdfData = await _generatePDF(userId, date, decision);
+      final pdfData = await _generatePDF(userId, date, decision);
 
-    await pr.hide();
+      await pr.hide();
 
-    const fileName = 'Monthly Report.pdf';
-    final savedPDFFile = await savePDFToFile(pdfData, fileName);
-    print('File Created - ${savedPDFFile.path}');
+      const fileName = 'Monthly Report.pdf';
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
 
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'repeating channel id', 'repeating channel name',
-            channelDescription: 'repeating description');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin().show(
-        0, 'Monthly Report Pdf downloaded', 'Tap to open', notificationDetails,
-        payload: pathToOpenFile);
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails(
+              'repeating channel id', 'repeating channel name',
+              channelDescription: 'repeating description');
+      const NotificationDetails notificationDetails =
+          NotificationDetails(android: androidNotificationDetails);
+      await FlutterLocalNotificationsPlugin().show(0,
+          'Monthly Report Pdf downloaded', 'Tap to open', notificationDetails,
+          payload: pathToOpenFile);
+    }
   }
 
   Future<Uint8List> _generatePDF(

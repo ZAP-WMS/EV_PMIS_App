@@ -42,23 +42,23 @@ class JmrDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment: Alignment.center,
-          // : Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: (dataGridCell.columnName == 'Delete')
-              ? IconButton(
-                  onPressed: () async {
-                    dataGridRows.remove(row);
-                    notifyListeners();
-                    deleteRow(dataIndex);
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: red,
-                  ))
-              : Text(
-                  dataGridCell.value.toString(),
-                ));
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: (dataGridCell.columnName == 'Delete')
+            ? IconButton(
+                onPressed: () async {
+                  dataGridRows.remove(row);
+                  notifyListeners();
+                  deleteRow(dataIndex);
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: red,
+                ))
+            : Text(
+                dataGridCell.value.toString(),
+              ),
+      );
     }).toList());
   }
 
@@ -180,19 +180,22 @@ class JmrDataSource extends DataGridSource {
     return Container(
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
-        expands: true,
-        autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
+        decoration: const InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 5.0)),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
@@ -202,13 +205,9 @@ class JmrDataSource extends DataGridSource {
             } else {
               newCellValue = value;
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {
-          /// Call [CellSubmit] callback to fire the canSubmitCell and
-          /// onCellSubmit to commit the new value in single place.
           submitCell();
         },
       ),

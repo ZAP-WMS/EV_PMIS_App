@@ -473,19 +473,20 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
             if (image.name.endsWith('.pdf')) {
               imageUrls.add(
                 pw.Container(
+                    width: 60,
                     alignment: pw.Alignment.center,
                     padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 60,
-                    height: 100,
                     child: pw.UrlLink(
-                        child: pw.Text(image.name), destination: downloadUrl)),
+                        child: pw.Text(image.name,
+                            style: const pw.TextStyle(color: PdfColors.blue)),
+                        destination: downloadUrl)),
               );
             } else {
               final myImage = await networkImage(downloadUrl);
               imageUrls.add(
                 pw.Container(
                     padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    width: 100,
+                    width: 60,
                     height: 100,
                     child: pw.Center(
                       child: pw.Image(myImage),
@@ -493,8 +494,8 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
               );
             }
           }
-          if (imageUrls.length < 8) {
-            int imageLoop = 8 - imageUrls.length;
+          if (imageUrls.length < 3) {
+            int imageLoop = 3 - imageUrls.length;
             for (int i = 0; i < imageLoop; i++) {
               imageUrls.add(
                 pw.Container(
@@ -504,8 +505,33 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
                     child: pw.Text('')),
               );
             }
+          } else {
+            if (imageUrls.length > 3) {
+              int imageLoop = 11 - imageUrls.length;
+              for (int i = 0; i < imageLoop; i++) {
+                imageUrls.add(
+                  pw.Container(
+                      padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      width: 60,
+                      height: 100,
+                      child: pw.Text('')),
+                );
+              }
+            }
+          }
+        } else {
+          int imageLoop = 3;
+          for (int i = 0; i < imageLoop; i++) {
+            imageUrls.add(
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.Text('')),
+            );
           }
         }
+
         result.items.clear();
 
         //Text Rows of PDF Table
@@ -528,16 +554,25 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
           pw.Container(
               padding: const pw.EdgeInsets.all(2.0),
               child: pw.Center(
-                  child: pw.Text(mapData['reference'].toString(),
+                  child: pw.Text(mapData['Reference'].toString(),
                       style: const pw.TextStyle(fontSize: 14)))),
           pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(mapData['observation'].toString(),
-                      style: const pw.TextStyle(fontSize: 14)))),
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+              child: pw.Text(
+                mapData['observation'].toString(),
+                style: const pw.TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          imageUrls[0],
+          imageUrls[1],
+          imageUrls[2]
         ]));
 
-        if (imageUrls.isNotEmpty) {
+        if (imageUrls.length - 3 > 0) {
           //Image Rows of PDF Table
           rows.add(pw.TableRow(children: [
             pw.Container(
@@ -550,15 +585,15 @@ class _CivilReportAdminState extends State<CivilReportAdmin> {
                 child: pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                     children: [
-                      imageUrls[0],
-                      imageUrls[1],
+                      imageUrls[3],
+                      imageUrls[4],
                     ])),
-            imageUrls[2],
-            imageUrls[3],
-            imageUrls[4],
             imageUrls[5],
             imageUrls[6],
-            imageUrls[7]
+            imageUrls[7],
+            imageUrls[8],
+            imageUrls[9],
+            imageUrls[10],
           ]));
         }
         imageUrls.clear();

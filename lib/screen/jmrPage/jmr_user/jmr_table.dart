@@ -94,6 +94,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
 
   @override
   void initState() {
+    super.initState();
     getUserId().whenComplete(() {
       _stream = FirebaseFirestore.instance
           .collection('JMRCollection')
@@ -169,10 +170,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
                           StreamBuilder(
                             stream: _stream,
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const LoadingPage();
-                              }
                               if (!snapshot.hasData) {
                                 jmrtable = getData();
                                 _jmrDataSource =
@@ -185,7 +182,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                   child: SingleChildScrollView(
                                     child: SfDataGridTheme(
                                       data: SfDataGridThemeData(
-                                          headerColor: blue),
+                                          headerColor: white,
+                                          gridLineColor: blue),
                                       child: SfDataGrid(
                                         source: _jmrDataSource,
                                         //key: key,
@@ -198,8 +196,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             GridLinesVisibility.both,
                                         selectionMode: SelectionMode.single,
                                         navigationMode: GridNavigationMode.cell,
-                                        columnWidthMode: ColumnWidthMode.fill,
-                                        headerRowHeight: 50,
+                                        headerRowHeight: 60,
                                         editingGestureType:
                                             EditingGestureType.tap,
                                         controller: _dataGridController,
@@ -216,7 +213,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14,
-                                                  color: white,
+                                                  color: blue,
                                                 ),
                                               ),
                                             ),
@@ -233,7 +230,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14,
-                                                  color: white,
+                                                  color: blue,
                                                 ),
                                               ),
                                             ),
@@ -248,7 +245,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14,
-                                                  color: white,
+                                                  color: blue,
                                                 ),
                                               ),
                                             ),
@@ -258,14 +255,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             allowEditing: true,
                                             label: Container(
                                               alignment: Alignment.center,
-                                              child: Text('BOQ RefNo',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
+                                              child: Text(
+                                                'BOQ RefNo',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: blue,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           GridColumn(
@@ -274,14 +273,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             width: 180,
                                             label: Container(
                                               alignment: Alignment.center,
-                                              child: Text('Abstract of JMR',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
+                                              child: Text(
+                                                'Abstract of JMR',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: blue,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           GridColumn(
@@ -290,14 +291,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             width: 80,
                                             label: Container(
                                               alignment: Alignment.center,
-                                              child: Text('UOM',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
+                                              child: Text(
+                                                'UOM',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: blue,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           GridColumn(
@@ -306,14 +309,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             width: 80,
                                             label: Container(
                                               alignment: Alignment.center,
-                                              child: Text('Rate',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
+                                              child: Text(
+                                                'Rate',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: blue,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           GridColumn(
@@ -322,14 +327,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             width: 120,
                                             label: Container(
                                               alignment: Alignment.center,
-                                              child: Text('Total Qty',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
+                                              child: Text(
+                                                'Total Qty',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: blue,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           GridColumn(
@@ -337,14 +344,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             allowEditing: true,
                                             label: Container(
                                               alignment: Alignment.center,
-                                              child: Text('Amount',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
+                                              child: Text(
+                                                'Amount',
+                                                overflow:
+                                                    TextOverflow.values.first,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  color: blue,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           GridColumn(
@@ -357,10 +366,10 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                   overflow:
                                                       TextOverflow.values.first,
                                                   style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                    color: blue,
+                                                  )
                                                   //    textAlign: TextAlign.center,
                                                   ),
                                             ),
@@ -374,19 +383,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                 jmrtable = convertListToJmrModel(data);
                                 _jmrDataSource =
                                     JmrDataSource(jmrtable, deleteRow);
-
                                 _dataGridController = DataGridController();
-
                                 return SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.85,
                                   child: SfDataGridTheme(
                                     data: SfDataGridThemeData(
-                                      headerColor: blue,
-                                    ),
+                                        headerColor: white,
+                                        gridLineColor: blue),
                                     child: SfDataGrid(
                                       source: _jmrDataSource,
-                                      //key: key,
                                       allowEditing:
                                           widget.showTable ? false : true,
                                       frozenColumnsCount: 1,
@@ -397,19 +403,14 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                       selectionMode: SelectionMode.single,
                                       navigationMode: GridNavigationMode.cell,
                                       columnWidthMode: ColumnWidthMode.auto,
-
                                       editingGestureType:
                                           EditingGestureType.tap,
                                       controller: _dataGridController,
                                       allowColumnsResizing: true,
-
-                                      headerRowHeight: 50,
+                                      headerRowHeight: 60,
                                       columns: [
                                         GridColumn(
                                           columnName: 'srNo',
-                                          autoFitPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 9),
                                           allowEditing: true,
                                           label: Container(
                                             alignment: Alignment.center,
@@ -418,8 +419,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                     TextOverflow.values.first,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                                    fontSize: 12,
+                                                    color: blue)),
                                           ),
                                         ),
                                         GridColumn(
@@ -434,8 +435,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                                    fontSize: 12,
+                                                    color: blue)),
                                           ),
                                         ),
                                         GridColumn(
@@ -446,8 +447,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                             child: Text('Activity Details',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: white,
+                                                  fontSize: 12,
+                                                  color: blue,
                                                 )),
                                           ),
                                         ),
@@ -461,8 +462,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                     TextOverflow.values.first,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                                    fontSize: 12,
+                                                    color: blue)),
                                           ),
                                         ),
                                         GridColumn(
@@ -476,8 +477,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                     TextOverflow.values.first,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                                    fontSize: 12,
+                                                    color: blue)),
                                           ),
                                         ),
                                         GridColumn(
@@ -491,8 +492,8 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                     TextOverflow.values.first,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                                    fontSize: 12,
+                                                    color: blue)),
                                           ),
                                         ),
                                         GridColumn(
@@ -501,13 +502,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                           width: 80,
                                           label: Container(
                                             alignment: Alignment.center,
-                                            child: Text('Rate',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                            child: Text(
+                                              'Rate',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                                color: blue,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         GridColumn(
@@ -516,13 +520,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                           width: 120,
                                           label: Container(
                                             alignment: Alignment.center,
-                                            child: Text('Total Qty',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                            child: Text(
+                                              'Total Qty',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                                color: blue,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         GridColumn(
@@ -530,13 +537,16 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                           allowEditing: true,
                                           label: Container(
                                             alignment: Alignment.center,
-                                            child: Text('Amount',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
+                                            child: Text(
+                                              'Amount',
+                                              overflow:
+                                                  TextOverflow.values.first,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                                color: blue,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         GridColumn(
@@ -549,9 +559,10 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                                 overflow:
                                                     TextOverflow.values.first,
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                  color: blue,
+                                                )
                                                 //    textAlign: TextAlign.center,
                                                 ),
                                           ),
@@ -565,64 +576,61 @@ class _JmrTablePageState extends State<JmrTablePage> {
                               }
                             },
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5, bottom: 10),
-                                child: Visibility(
-                                  visible: widget.showTable ? false : true,
-                                  child: FloatingActionButton(
-                                    hoverColor: Colors.blue[900],
-                                    heroTag: "btn1",
-                                    onPressed: () {
-                                      jmrtable.add(
-                                        JMRModel(
-                                          srNo: jmrtable.length + 1,
-                                          Description: '',
-                                          Activity: '',
-                                          RefNo: '',
-                                          JmrAbstract: '',
-                                          Uom: '',
-                                          rate: 0,
-                                          TotalQty: 0,
-                                          TotalAmount: 0,
-                                        ),
-                                      );
-                                      _dataGridController =
-                                          DataGridController();
-                                      _jmrDataSource.buildDataGridRows();
-                                      _jmrDataSource.updateDatagridSource();
-                                      // setState(() {});a
-                                    },
-                                    child: const Icon(Icons.add),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5, bottom: 10),
-                                child: Visibility(
-                                  visible: widget.showTable ? false : true,
-                                  child: FloatingActionButton.extended(
-                                    hoverColor: Colors.blue[900],
-                                    heroTag: "btn2",
-                                    isExtended: true,
-                                    onPressed: () {
-                                      selectExcelFile().then((value) {
-                                        setState(() {});
-                                      });
-                                    },
-                                    label: const Text('Upload Excel'),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
                         ],
                       ),
                     ),
+              floatingActionButton: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5, bottom: 10),
+                    child: Visibility(
+                      visible: widget.showTable ? false : true,
+                      child: FloatingActionButton(
+                        hoverColor: Colors.blue[900],
+                        heroTag: "btn1",
+                        onPressed: () {
+                          jmrtable.add(
+                            JMRModel(
+                              srNo: jmrtable.length + 1,
+                              Description: '',
+                              Activity: '',
+                              RefNo: '',
+                              JmrAbstract: '',
+                              Uom: '',
+                              rate: 0,
+                              TotalQty: 0,
+                              TotalAmount: 0,
+                            ),
+                          );
+                          _dataGridController = DataGridController();
+                          _jmrDataSource.buildDataGridRows();
+                          _jmrDataSource.updateDatagridSource();
+                          // setState(() {});a
+                        },
+                        child: const Icon(Icons.add),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5, bottom: 10),
+                    child: Visibility(
+                      visible: widget.showTable ? false : true,
+                      child: FloatingActionButton.extended(
+                        hoverColor: Colors.blue[900],
+                        heroTag: "btn2",
+                        isExtended: true,
+                        onPressed: () {
+                          selectExcelFile().then((value) {
+                            setState(() {});
+                          });
+                        },
+                        label: const Text('Upload Excel'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }
@@ -1344,7 +1352,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
   }
 
   void deleteRow(dynamic removeIndex) async {
-    data.removeAt(removeIndex);
+    jmrtable.removeAt(removeIndex);
     print('Row Removed $removeIndex');
   }
 }

@@ -24,7 +24,7 @@ class PdfViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(pageName!),
+        title: Text(pageName),
         backgroundColor: Colors.blue[900],
         centerTitle: true,
         actions: [
@@ -36,13 +36,15 @@ class PdfViewScreen extends StatelessWidget {
         ],
       ),
       body: SfPdfViewer.memory(
+        enableDoubleTapZooming: true,
+        enableTextSelection: true,
         pdfData!,
       ),
     );
   }
 
   Future<void> downloadPDF(BuildContext context) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       final pr = ProgressDialog(getContext);
       pr.style(
           progressWidgetAlignment: Alignment.center,

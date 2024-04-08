@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:ev_pmis_app/model_admin/daily_projectModel.dart';
+import 'package:ev_pmis_app/screen/dailyreport/daily_report_admin/daily_report_admin.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:flutter/material.dart';
@@ -66,14 +67,14 @@ class DailyDataSource extends DataGridSource {
                         mainContext,
                         MaterialPageRoute(
                           builder: (context) => ViewAllPdf(
-                            userId: userId,
+                            userId: availableUserId[dataGridRows.indexOf(row)],
                             title: Pagetitle,
                             cityName: cityName,
                             depoName: depoName,
+                            date: "${row.getCells()[0].value}",
                             // userId: userId,
                             // date: row.getCells()[0].value.toString(),
-                            docId:
-                                '${row.getCells()[0].value}/${row.getCells()[1].value}',
+                            docId: '${row.getCells()[1].value}',
                           ),
                         ));
                   },

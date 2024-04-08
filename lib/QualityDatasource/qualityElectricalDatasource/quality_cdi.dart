@@ -485,10 +485,9 @@ class QualityCDIDataSource extends DataGridSource {
           DataGridCell<String>(
               columnName: 'responsibility', value: newCellValue);
       _checklistModel[dataRowIndex].responsibility = newCellValue.toString();
-    } else if (column.columnName == 'reference') {
+    } else if (column.columnName == 'Reference') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(
-              columnName: 'reference', value: newCellValue as int);
+          DataGridCell<dynamic>(columnName: 'Reference', value: newCellValue);
       _checklistModel[dataRowIndex].reference = newCellValue as dynamic;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
@@ -545,7 +544,7 @@ class QualityCDIDataSource extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding:  EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
@@ -555,6 +554,9 @@ class QualityCDIDataSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

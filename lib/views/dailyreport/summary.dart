@@ -70,7 +70,6 @@ class _ViewSummaryState extends State<ViewSummary> {
   SummaryProvider? _summaryProvider;
   Future<List<DailyProjectModel>>? _dailydata;
   Future<List<EnergyManagementModel>>? _energydata;
-
   DateTime? startdate = DateTime.now();
   DateTime? enddate = DateTime.now();
   DateTime? rangestartDate;
@@ -104,8 +103,6 @@ class _ViewSummaryState extends State<ViewSummary> {
     pr = ProgressDialog(context,
         customBody:
             Container(height: 200, width: 100, child: const LoadingPdf()));
-
-    getUserId().then((value) {});
   }
 
   @override
@@ -473,8 +470,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                       context,
                                       widget.cityName!,
                                       widget.depoName!,
-                                      widget.userId,
-                                      selecteddate.toString(),
+                                      widget.userId,selecteddate.toString()
                                     );
 
                                     _dataGridController = DataGridController();
@@ -2572,55 +2568,57 @@ class _ViewSummaryState extends State<ViewSummary> {
   }
 
   Future<void> downloadPDF() async {
-    final pr = ProgressDialog(context);
-    pr.style(
-      progressWidgetAlignment: Alignment.center,
-      message: 'Downloading file...',
-      borderRadius: 10.0,
-      backgroundColor: Colors.white,
-      progressWidget: const LoadingPdf(),
-      elevation: 10.0,
-      insetAnimCurve: Curves.easeInOut,
-      maxProgress: 100.0,
-      progressTextStyle: const TextStyle(
-          color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
-      messageTextStyle: const TextStyle(
-          color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
-    );
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
 
-    await pr.show();
+      await pr.show();
 
-    final pdfData = widget.id == 'Daily Report'
-        ? await _generateDailyPDF()
-        : widget.id == 'Monthly Report'
-            ? await _generateMonthlyPdf()
-            : widget.id == 'Safety Checklist Report'
-                ? await _generateSafetyPDF()
-                : await _generateEnergyPDF();
+      final pdfData = widget.id == 'Daily Report'
+          ? await _generateDailyPDF()
+          : widget.id == 'Monthly Report'
+              ? await _generateMonthlyPdf()
+              : widget.id == 'Safety Checklist Report'
+                  ? await _generateSafetyPDF()
+                  : await _generateEnergyPDF();
 
-    String fileName = widget.id == 'Daily Report'
-        ? 'DailyReport.pdf'
-        : widget.id == 'Monthly Report'
-            ? 'MonthlyReport.pdf'
-            : widget.id == 'Safety Checklist Report'
-                ? 'SafetyChecklist.pdf'
-                : widget.id == 'Energy Management'
-                    ? 'EnergyManagement.pdf'
-                    : '';
+      String fileName = widget.id == 'Daily Report'
+          ? 'DailyReport.pdf'
+          : widget.id == 'Monthly Report'
+              ? 'MonthlyReport.pdf'
+              : widget.id == 'Safety Checklist Report'
+                  ? 'SafetyChecklist.pdf'
+                  : widget.id == 'Energy Management'
+                      ? 'EnergyManagement.pdf'
+                      : '';
 
-    final savedPDFFile = await savePDFToFile(pdfData, fileName);
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
 
-    await pr.hide();
+      await pr.hide();
 
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'repeating channel id', 'repeating channel name',
-            channelDescription: 'repeating description');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await FlutterLocalNotificationsPlugin().show(
-        0, '${widget.id} Downloaded', 'Tap to open', notificationDetails,
-        payload: pathToOpenFile);
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails(
+              'repeating channel id', 'repeating channel name',
+              channelDescription: 'repeating description');
+      const NotificationDetails notificationDetails =
+          NotificationDetails(android: androidNotificationDetails);
+      await FlutterLocalNotificationsPlugin().show(
+          0, '${widget.id} Downloaded', 'Tap to open', notificationDetails,
+          payload: pathToOpenFile);
+    }
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {

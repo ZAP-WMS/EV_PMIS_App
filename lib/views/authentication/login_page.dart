@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/authentication/reset_password.dart';
+import 'package:ev_pmis_app/widgets/custom_alert_box.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../style.dart';
 
@@ -37,29 +37,29 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        onWillPop(context);
+        CustomAlertBox()
+            .customLogOut(context, 'Do you want to Exit ?', '', true);
         return true;
       },
       child: SafeArea(
         child: Scaffold(
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0,
+            ),
             child: SingleChildScrollView(
               child: Form(
                   key: _formkey,
                   child: Column(
                     children: [
-                      _space(16),
+                      _space(16,
+                      ),
                       CustomTextField(
                         isFieldEditable: true,
                         controller: empIdController,
                         labeltext: 'Employee ID',
-                        // validator: checkFieldEmpty(
-                        //     empIdController.text, 'Employee Id is required'),
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
                         isSuffixIcon: false,
-
                         validatortext: (value) {
                           return checkFieldEmpty(
                               value!, 'Employee ID is Required');
@@ -92,14 +92,10 @@ class _LoginPageState extends State<LoginPage> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ResetPass(
-                                                // email: FirebaseAuth
-                                                //     .instance
-                                                //     .currentUser!
-                                                //     .email!,
-                                                )))),
-                                  style: const TextStyle(color: Colors.blue))
+                                                ),),)),
+                                  style: const TextStyle(color: Colors.blue,),)
                             ],
-                          )),
+                          ),),
                         ],
                       ),
                       _space(16),

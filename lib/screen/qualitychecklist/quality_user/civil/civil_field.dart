@@ -226,6 +226,7 @@ class _CivilFieldState extends State<CivilField> {
       setState(() {
         isLoading = false;
       });
+      
     });
 
     super.initState();
@@ -818,6 +819,29 @@ class _CivilFieldState extends State<CivilField> {
   }
 
   Future<Uint8List> _generateCivilPdf() async {
+    data = widget.fieldclnName == 'Exc'
+        ? qualitylisttable1
+        : widget.fieldclnName == 'BackFilling'
+            ? qualitylisttable2
+            : widget.fieldclnName == 'Massonary'
+                ? qualitylisttable3
+                : widget.fieldclnName == 'Glazzing'
+                    ? qualitylisttable4
+                    : widget.fieldclnName == 'Ceilling'
+                        ? qualitylisttable5
+                        : widget.fieldclnName == 'Flooring'
+                            ? qualitylisttable6
+                            : widget.fieldclnName == 'Inspection'
+                                ? qualitylisttable7
+                                : widget.fieldclnName == 'Ironite'
+                                    ? qualitylisttable8
+                                    : widget.fieldclnName == 'Painting'
+                                        ? qualitylisttable9
+                                        : widget.fieldclnName == 'Paving'
+                                            ? qualitylisttable10
+                                            : widget.fieldclnName == 'Roofing'
+                                                ? qualitylisttable11
+                                                : qualitylisttable12;
     await pr!.show();
     final headerStyle =
         pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);

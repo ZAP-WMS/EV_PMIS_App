@@ -59,6 +59,7 @@ class _QualityHomeState extends State<QualityHome> {
     'CHARGER',
     'EARTH PIT',
   ];
+  
   List<String> electricallist = [
     'CHECKLIST FOR INSTALLATION OF PSS',
     'CHECKLIST FOR INSTALLATION OF RMU',

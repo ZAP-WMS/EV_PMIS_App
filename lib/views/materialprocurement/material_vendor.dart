@@ -710,7 +710,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
       'data': tabledata2,
     }).whenComplete(() {
       tabledata2.clear();
-      // Navigator.pop(context);
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text('Data are synced'),
         backgroundColor: blue,

@@ -106,7 +106,7 @@ class DailyDataSource extends DataGridSource {
                                 cityName: cityName,
                                 depoName: depoName,
                                 userId: userId,
-                                date: row.getCells()[0].value.toString(),
+                                date: selectedDate,
                                 fldrName: row.getCells()[1].value.toString(),
                               ),
                             ));
