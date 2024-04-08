@@ -175,7 +175,6 @@ class SplashScreenState extends State<SplashScreen>
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _controller.repeat(reverse: true);
 
-    _getCurrentUser();
     // user = FirebaseAuth.instance.currentUser == null;
   }
 
@@ -187,6 +186,7 @@ class SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    _getCurrentUser();
     return Scaffold(
       backgroundColor: Colors.white,
       body: FadeTransition(

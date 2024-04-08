@@ -474,7 +474,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                               return SingleChildScrollView(
                                 child: SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.7,
+                                        0.4,
                                     child: Row(children: [
                                       Expanded(
                                         child: SfDataGridTheme(
@@ -507,27 +507,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                 }));
                                               }
                                             },
-                                            // onSelectionChanged:
-                                            //     (addedRows, removedRows) {
-                                            //   if (addedRows.first
-                                            //           .getCells()
-                                            //           .first
-                                            //           .value ==
-                                            //       'A1') {
-                                            //     Navigator.of(context).push(
-                                            //         MaterialPageRoute(
-                                            //             builder: (context) {
-                                            //       return ViewAllPdf(
-                                            //           userId: userId,
-                                            //           cityName: widget.cityName,
-                                            //           depoName: widget.depoName,
-                                            //           title: 'Key Events',
-                                            //           docId: addedRows.first
-                                            //               .getCells()[1]
-                                            //               .value);
-                                            //     }));
-                                            //   }
-                                            // },
                                             allowEditing: true,
                                             frozenColumnsCount: 1,
                                             editingGestureType:
@@ -694,18 +673,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                   ),
                                                 ),
                                               ),
-                                              // GridColumn(
-                                              //   columnName: 'ReasonDelay',
-                                              //   label: Container(
-                                              //     alignment: Alignment.center,
-                                              //     child: Text(
-                                              //       'ReasonDelay',
-                                              //       overflow:
-                                              //           TextOverflow.values.first,
-                                              //       style: tableheader,
-                                              //     ),
-                                              //   ),
-                                              // ),
                                               GridColumn(
                                                 columnName: 'Unit',
                                                 label: Container(
@@ -1990,7 +1957,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 16),
                                                 allowEditing: false,
-                                                width: 60,
+                                                width: 50,
                                                 label: Container(
                                                   alignment: Alignment.center,
                                                   child: Text(
@@ -2135,18 +2102,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                   ),
                                                 ),
                                               ),
-                                              // GridColumn(
-                                              //   columnName: 'ReasonDelay',
-                                              //   label: Container(
-                                              //     alignment: Alignment.center,
-                                              //     child: Text(
-                                              //       'ReasonDelay',
-                                              //       overflow:
-                                              //           TextOverflow.values.first,
-                                              //       style: tableheader,
-                                              //     ),
-                                              //   ),
-                                              // ),
                                               GridColumn(
                                                 columnName: 'Unit',
                                                 label: Container(

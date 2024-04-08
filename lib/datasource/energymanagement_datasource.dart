@@ -333,7 +333,6 @@ class EnergyManagementDatasource extends DataGridSource {
               newCellValue = double.parse(value);
             } else if (isNumericType) {
               newCellValue = int.parse(value);
-              print(newCellValue);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {
