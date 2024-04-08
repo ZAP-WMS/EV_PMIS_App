@@ -772,7 +772,6 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                               _keyProvider!.fetchDelayData(
                                   widget.depoName!, widget.userId);
                               alldata = snapshot.data['data'] as List<dynamic>;
-
                               for (int i = 0; i < alldata.length; i++) {
                                 totalperc = 0.0;
                                 _employees.clear();
@@ -1890,15 +1889,32 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (context) {
-                                                return UploadDocument(
-                                                  title: 'Key Events',
-                                                  fldrName: addedRows.first
-                                                      .getCells()[1]
-                                                      .value,
-                                                  cityName: widget.cityName,
-                                                  depoName: widget.depoName,
-                                                  userId: widget.userId,
-                                                );
+                                                return widget.role ==
+                                                        'projectManager'
+                                                    ? UploadDocument(
+                                                        title: 'Key Events',
+                                                        fldrName: addedRows
+                                                            .first
+                                                            .getCells()[1]
+                                                            .value,
+                                                        cityName:
+                                                            widget.cityName,
+                                                        depoName:
+                                                            widget.depoName,
+                                                        userId: widget.userId,
+                                                      )
+                                                    : ViewAllPdf(
+                                                        userId: widget.userId,
+                                                        cityName:
+                                                            widget.cityName,
+                                                        depoName:
+                                                            widget.depoName,
+                                                        fldrName: addedRows
+                                                            .first
+                                                            .getCells()[1]
+                                                            .value,
+                                                        title: 'Key Events',
+                                                      );
                                                 //  ViewAllPdf(
                                                 //     userId: widget.userId,
                                                 //     cityName: widget.cityName!,

@@ -44,14 +44,16 @@ class _LoginPageState extends State<LoginPage> {
       child: SafeArea(
         child: Scaffold(
           body: Padding(
-            padding: const EdgeInsets.all(8.0,
+            padding: const EdgeInsets.all(
+              8.0,
             ),
             child: SingleChildScrollView(
               child: Form(
                   key: _formkey,
                   child: Column(
                     children: [
-                      _space(16,
+                      _space(
+                        16,
                       ),
                       CustomTextField(
                         isFieldEditable: true,
@@ -83,19 +85,24 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           RichText(
-                              text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
                                   text: ' Forget Password ?',
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = (() => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ResetPass(
-                                                ),),)),
-                                  style: const TextStyle(color: Colors.blue,),)
-                            ],
-                          ),),
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ResetPass(),
+                                          ),
+                                        )),
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       _space(16),
@@ -292,7 +299,6 @@ class _LoginPageState extends State<LoginPage> {
               assignedDepots.map((e) => e.toString()).toList();
           authService.storeUserRole("admin");
           await authService.storeDepoList(depots);
-
           authService.storeCompanyName(companyName);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
             Navigator.pushReplacementNamed(context, '/splitDashboard',
@@ -304,6 +310,11 @@ class _LoginPageState extends State<LoginPage> {
         } else if (passwordcontroller.text == dataList[0]['password'] &&
             empIdController.text.trim() == dataList[0]['userId'] &&
             dataList[0]['companyName'] == 'TATA MOTOR') {
+          List<dynamic> assignedDepots = querySnapshot.docs[0]["depots"];
+          List<String> depots =
+              assignedDepots.map((e) => e.toString()).toList();
+          authService.storeUserRole("admin");
+          await authService.storeDepoList(depots);
           authService.storeCompanyName(companyName);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
             Navigator.pushReplacementNamed(context, '/splitDashboard',

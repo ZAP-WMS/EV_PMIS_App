@@ -40,7 +40,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
     return Scaffold(
       drawer: NavbarDrawer(role: widget.role,),
       appBar: PreferredSize(
-          // ignore: sort_child_properties_last
+          preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
             showDepoBar: true,
             isProjectManager: widget.role == "projectManager" ? true : false,
@@ -53,8 +53,7 @@ class _ClosureSummaryTableState extends State<ClosureSummaryTable> {
             cityName: widget.cityName,
             text: 'Closure Report',
             userId: widget.userId,
-          ),
-          preferredSize: const Size.fromHeight(50)),
+          )),
       body: FutureBuilder(
         future: fetchData(),
         builder: (context, snapshot) {

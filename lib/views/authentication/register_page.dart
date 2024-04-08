@@ -9,7 +9,7 @@ import '../../widgets/custom_textfield.dart';
 import 'login_register.dart';
 
 class RegisterPge extends StatefulWidget {
-  RegisterPge({super.key});
+  const RegisterPge({super.key});
 
   @override
   State<RegisterPge> createState() => _RegisterPgeState();
@@ -68,7 +68,7 @@ class _RegisterPgeState extends State<RegisterPge> {
                           ),
                           items: const [
                             DropdownMenuItem(
-                              value: "TATA MOTOM",
+                              value: "TATA MOTOR",
                               child: Text(
                                 "TATA MOTOR",
                                 style: TextStyle(fontSize: 13),

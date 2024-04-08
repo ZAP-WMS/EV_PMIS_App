@@ -33,10 +33,11 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
 
   Future<void> initializeData() async {
     await verifyProjectManager();
-
-    setState(() {
-      // Update UI after verifying project manager status
-    });
+    if (mounted) {
+      setState(() {
+        // Update UI after verifying project manager status
+      });
+    }
   }
 
   @override
