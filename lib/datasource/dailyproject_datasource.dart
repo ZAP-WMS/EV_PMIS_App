@@ -102,7 +102,7 @@ class DailyDataSource extends DataGridSource {
                             mainContext,
                             MaterialPageRoute(
                               builder: (context) => UploadDocument(
-                                pagetitle: Pagetitle,
+                                title: Pagetitle,
                                 cityName: cityName,
                                 depoName: depoName,
                                 userId: userId,
@@ -111,8 +111,13 @@ class DailyDataSource extends DataGridSource {
                               ),
                             ));
                       },
-                      child:
-                          const Text('Upload', style: TextStyle(fontSize: 12)))
+                      child: const Text(
+                        'Upload',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    )
                   : (dataGridCell.columnName == 'Add')
                       ? ElevatedButton(
                           onPressed: () {
@@ -240,16 +245,15 @@ class DailyDataSource extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
+        style: const TextStyle(
+          fontSize: 12,
+        ),
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],

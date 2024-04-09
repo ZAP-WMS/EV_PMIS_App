@@ -283,26 +283,21 @@ class _SafetySummaryState extends State<SafetySummary> {
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
     final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
-    final file = File('$documentDirectory/$fileName');
+    File file = File('$documentDirectory/$fileName');
 
     int counter = 1;
     String newFilePath = file.path;
-    pathToOpenFile = newFilePath.toString();
-    if (await File(newFilePath).exists()) {
-      final baseName = fileName.split('.').first;
-      final extension = fileName.split('.').last;
-      newFilePath =
-          '$documentDirectory/$baseName-${counter.toString()}.$extension';
-      counter++;
-      pathToOpenFile = newFilePath.toString();
-      await file.copy(newFilePath);
-      counter++;
-    } else {
-      await file.writeAsBytes(pdfData);
-      return file;
-    }
+    pathToOpenFile = newFilePath;
 
-    return File('');
+    while (await file.exists()) {
+      String newName =
+          '${fileName.substring(0, fileName.lastIndexOf('.'))}-$counter${fileName.substring(fileName.lastIndexOf('.'))}';
+      file = File('$documentDirectory/$newName');
+      pathToOpenFile = file.path;
+      counter++;
+    }
+    await file.writeAsBytes(pdfData);
+    return file;
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {
@@ -612,7 +607,7 @@ class _SafetySummaryState extends State<SafetySummary> {
           isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[1]),
           isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[2]),
           isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[3]),
-        ]));
+        ]),);
 
         if (imageUrls.length > 4) {
           //Image Rows of PDF Table

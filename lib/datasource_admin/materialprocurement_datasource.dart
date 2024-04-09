@@ -60,7 +60,7 @@ class MaterialDatasource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: (dataGridCell.columnName == 'materialSite')
             ? Row(
                 children: [
@@ -126,11 +126,17 @@ class MaterialDatasource extends DataGridSource {
                     },
                     icon: const Icon(Icons.calendar_today),
                   ),
-                  Text(dataGridCell.value.toString())
+                  Text(
+                    dataGridCell.value.toString(),
+                    style: const TextStyle(fontSize: 12),
+                  )
                 ],
               )
             : Text(
                 dataGridCell.value.toString(),
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
               ),
       );
     }).toList());
@@ -266,17 +272,16 @@ class MaterialDatasource extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
+        style: const TextStyle(
+          fontSize: 12,
+        ),
         textInputAction: TextInputAction.done,
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
@@ -285,6 +290,9 @@ class MaterialDatasource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

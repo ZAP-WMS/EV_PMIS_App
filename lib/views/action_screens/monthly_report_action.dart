@@ -41,6 +41,7 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
         selectedUi = MonthlySummary(
           cityName: widget.cityName,
           depoName: widget.depoName,
+          
           role: widget.role!,
           userId: widget.userId,
         );

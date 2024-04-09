@@ -219,5 +219,4 @@ class _PlanningTableState extends State<PlanningTable> {
       print(rowList);
     }
   }
-
 }

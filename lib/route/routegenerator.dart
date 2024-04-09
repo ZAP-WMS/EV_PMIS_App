@@ -59,7 +59,7 @@ class RouteGenerator {
               settings.arguments as Map<String, dynamic>;
 
           return UploadDocument(
-            pagetitle: 'Depot Insights',
+            title: 'Depot Insights',
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             userId: userId,

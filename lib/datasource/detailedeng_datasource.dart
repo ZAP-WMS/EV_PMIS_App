@@ -218,7 +218,7 @@ class DetailedEngSource extends DataGridSource {
                               } else {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => UploadDocument(
-                                    pagetitle: 'DetailedEngRFC',
+                                    title: 'DetailedEngRFC',
                                     cityName: cityName,
                                     depoName: depoName,
                                     userId: userId,
@@ -1015,6 +1015,9 @@ class DetailedEngSource extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {

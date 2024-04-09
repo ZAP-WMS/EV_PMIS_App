@@ -20,7 +20,7 @@ class EnergyManagementModel {
   String depotName;
   dynamic vehicleNo;
   int pssNo;
-  dynamic chargerId;
+  int chargerId;
   int startSoc;
   int endSoc;
   String startDate;

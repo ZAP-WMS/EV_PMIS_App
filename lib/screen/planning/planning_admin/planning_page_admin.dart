@@ -387,17 +387,16 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
             scrollController: _scrollController,
             myScaffold: Scaffold(
                 appBar: PreferredSize(
-                    preferredSize: const Size.fromHeight(50),
+                    preferredSize: const Size.fromHeight(60),
                     child: CustomAppBar(
                       depoName: widget.depoName ?? '',
                       isprogress: true,
                       title: '${widget.cityName}/${widget.depoName}',
-                      height: 50,
+                      height: 60,
                       isCentered: false,
                       isSync: true,
                       store: () {
                         showProgressDilogue(context);
-
                         storeData();
                       },
                     )),

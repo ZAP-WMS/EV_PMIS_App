@@ -171,8 +171,7 @@ class DetailedEngSourceEV extends DataGridSource {
                             onPressed: () {
                               String activitydata =
                                   row.getCells()[4].value.toString().trim();
-                              if (activitydata == "" ||
-                                  activitydata.isEmpty) {
+                              if (activitydata == "" || activitydata.isEmpty) {
                                 showDialog(
                                   context: mainContext,
                                   builder: (context) {
@@ -217,7 +216,7 @@ class DetailedEngSourceEV extends DataGridSource {
                               } else {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => UploadDocument(
-                                    pagetitle: 'DetailedEngEV',
+                                    title: 'DetailedEngEV',
                                     cityName: cityName,
                                     depoName: depoName,
                                     userId: userId,
@@ -459,9 +458,10 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                   .single,
                                                           showActionButtons:
                                                               true,
-                                                              onCancel: () {
-                                                        Navigator.pop(context);
-                                                      },
+                                                          onCancel: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
                                                           onSubmit: ((value) {
                                                             date = DateTime
                                                                 .parse(value
@@ -567,9 +567,10 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                           .single,
                                                                   showActionButtons:
                                                                       true,
-                                                                      onCancel: () {
-                                                        Navigator.pop(context);
-                                                      },
+                                                                  onCancel: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
                                                                   onSubmit:
                                                                       ((value) {
                                                                     date = DateTime
@@ -665,9 +666,10 @@ class DetailedEngSourceEV extends DataGridSource {
                                                                               DateRangePickerSelectionMode.single,
                                                                           showActionButtons:
                                                                               true,
-                                                                              onCancel: () {
-                                                        Navigator.pop(context);
-                                                      },
+                                                                          onCancel:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
                                                                           onSubmit:
                                                                               ((value) {
                                                                             date =
@@ -853,7 +855,8 @@ class DetailedEngSourceEV extends DataGridSource {
                                         : Text(
                                             dataGridCell.value.toString(),
                                             textAlign: TextAlign.center,
-                                            style: const TextStyle(fontSize: 12),
+                                            style:
+                                                const TextStyle(fontSize: 12),
                                           ),
       );
     }).toList());
@@ -973,7 +976,7 @@ class DetailedEngSourceEV extends DataGridSource {
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
         decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
         ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
@@ -983,6 +986,9 @@ class DetailedEngSourceEV extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
@@ -992,8 +998,6 @@ class DetailedEngSourceEV extends DataGridSource {
             } else {
               newCellValue = value;
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {

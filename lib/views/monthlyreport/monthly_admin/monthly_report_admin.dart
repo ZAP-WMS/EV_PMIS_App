@@ -143,7 +143,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 11,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),
@@ -152,7 +152,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                   'Date',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 11,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),
@@ -161,7 +161,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                   'Monthly\nReport',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 11,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),
@@ -170,7 +170,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                   'PDF\nDownload',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 11,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),
@@ -180,9 +180,17 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                 return DataRow(
                                   cells: [
                                     DataCell(
-                                      Text(rowData[0]),
+                                      Text(
+                                        rowData[0],
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
                                     ),
-                                    DataCell(Text(rowData[2])),
+                                    DataCell(
+                                      Text(
+                                        rowData[2],
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ),
                                     DataCell(SizedBox(
                                       height: 30,
                                       width: 60,
@@ -193,7 +201,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                         },
                                         child: const Text(
                                           'View',
-                                          style: TextStyle(fontSize: 10),
+                                          style: TextStyle(fontSize: 11),
                                         ),
                                       ),
                                     )),
@@ -227,7 +235,7 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                                         Text(
                                                           'Pdf Downloaded',
                                                           style: TextStyle(
-                                                              fontSize: 15,
+                                                              fontSize: 12,
                                                               color: Colors
                                                                   .blue[900]!),
                                                         )
@@ -236,7 +244,9 @@ class _MonthlySummaryState extends State<MonthlySummary> {
                                                   });
                                             });
                                           },
-                                          child: const Icon(Icons.download),
+                                          child: const Icon(
+                                            Icons.download,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -283,27 +293,21 @@ class _MonthlySummaryState extends State<MonthlySummary> {
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
     final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
-    final file = File('$documentDirectory/$fileName');
+    File file = File('$documentDirectory/$fileName');
 
     int counter = 1;
     String newFilePath = file.path;
     pathToOpenFile = newFilePath;
 
-    if (await File(newFilePath).exists()) {
-      final baseName = fileName.split('.').first;
-      final extension = fileName.split('.').last;
-      newFilePath =
-          '$documentDirectory/$baseName-${counter.toString()}.$extension';
+    while (await file.exists()) {
+      String newName =
+          '${fileName.substring(0, fileName.lastIndexOf('.'))}-$counter${fileName.substring(fileName.lastIndexOf('.'))}';
+      file = File('$documentDirectory/$newName');
+      pathToOpenFile = file.path;
       counter++;
-      pathToOpenFile = newFilePath;
-      await file.copy(newFilePath);
-      counter++;
-    } else {
-      await file.writeAsBytes(pdfData);
-      return file;
     }
-
-    return File('');
+    await file.writeAsBytes(pdfData);
+    return file;
   }
 
   Future<void> downloadPDF(String userId, String date, int decision) async {

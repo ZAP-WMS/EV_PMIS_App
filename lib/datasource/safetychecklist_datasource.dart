@@ -65,7 +65,7 @@ class SafetyChecklistDataSource extends DataGridSource {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UploadDocument(
-                            pagetitle: 'SafetyChecklist',
+                            title: 'SafetyChecklist',
                             cityName: cityName,
                             depoName: depoName,
                             fldrName: row.getCells()[0].value.toString(),

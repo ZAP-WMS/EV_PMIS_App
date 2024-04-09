@@ -58,7 +58,7 @@ class CloseReportDataSource extends DataGridSource {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UploadDocument(
-                            pagetitle: 'ClosureReport',
+                            title: 'ClosureReport',
                             cityName: cityName,
                             depoName: depoName,
                             fldrName: row.getCells()[0].value.toString(),

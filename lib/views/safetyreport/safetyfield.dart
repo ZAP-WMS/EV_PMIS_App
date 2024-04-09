@@ -17,15 +17,20 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
 import '../dailyreport/summary.dart';
 
 class SafetyField extends StatefulWidget {
   String? depoName;
   String? userId;
   String? role;
+  String? cityName;
 
-  SafetyField({super.key, this.role, this.userId, required this.depoName});
+  SafetyField(
+      {super.key,
+      this.role,
+      this.userId,
+      required this.depoName,
+      this.cityName});
 
   @override
   State<SafetyField> createState() => _SafetyFieldState();
@@ -110,14 +115,16 @@ class _SafetyFieldState extends State<SafetyField> {
   void initState() {
     initializeController();
     getAssignedDepots();
+    _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,
+        widget.cityName!, widget.depoName!, widget.userId, selectedDate!);
+    _dataGridController = DataGridController();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
     _fetchUserData();
     getTableData().whenComplete(() {
-      _safetyChecklistDataSource = SafetyChecklistDataSource(
-          safetylisttable, cityName!, widget.depoName!, userId, selectedDate!);
       safetylisttable = checkTable ? getData() : safetylisttable;
-
+      _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,
+          widget.cityName!, widget.depoName!, widget.userId, selectedDate!);
       _dataGridController = DataGridController();
       _stream = FirebaseFirestore.instance
           .collection('SafetyChecklistTable2')
@@ -132,8 +139,6 @@ class _SafetyFieldState extends State<SafetyField> {
       setState(() {});
     });
 
-    isLoading = false;
-    setState(() {});
     super.initState();
   }
 
@@ -153,7 +158,7 @@ class _SafetyFieldState extends State<SafetyField> {
                   cityName: cityName,
                   depoName: widget.depoName.toString(),
                   id: 'Safety Checklist Report',
-                  userId: userId,
+                  userId: widget.userId,
                 ),
               )),
           haveSynced: isFieldEditable ? true : false,

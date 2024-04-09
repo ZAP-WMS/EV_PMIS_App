@@ -11,7 +11,7 @@ class CustomAlertBox {
         builder: (context) => AlertDialog(
               backgroundColor: white,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12,),),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
               content: Column(
@@ -78,7 +78,7 @@ class CustomAlertBox {
                   )
                 ],
               ),
-            ));
+            ),);
     return a;
   }
 }

@@ -70,7 +70,7 @@ class QualityExcavationDataSource extends DataGridSource {
                                   cityName: cityName,
                                   depoName: depoName,
                                   userId: userId,
-                                  fldrName: 'Exc Table',
+                                fldrName: 'Exc Table',
                                   date: currentDate,
                                   srNo: row.getCells()[0].value,
                                 )));

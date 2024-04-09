@@ -180,6 +180,7 @@ class JmrDataSource extends DataGridSource {
     return Container(
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
+        autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,

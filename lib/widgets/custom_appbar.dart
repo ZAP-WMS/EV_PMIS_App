@@ -9,14 +9,14 @@ import '../provider/key_provider.dart';
 import '../views/authentication/login_register.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  String title;
+  final String title;
   final double height;
-  bool isSync = false;
-  bool isCentered = true;
-  bool isprogress;
-  bool haveupload;
-  String? depoName;
-  bool isDownload;
+  final bool isSync;
+  final bool isCentered;
+  final bool isprogress;
+  final bool haveupload;
+  final String? depoName;
+  final bool isDownload;
   void Function()? downloadFun;
   final void Function()? store;
   final bool haveSend;
@@ -103,7 +103,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       legends(red, 'Delay', white),
                     ],
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Consumer<KeyProvider>(
                     builder: (context, value, child) {
                       return Padding(
@@ -133,10 +133,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   child: TextButton(
                                     onPressed: () {},
                                     child: Text(
-                                        'Project Delay ${durationParse(value.actualDate, value.endDate)} Days ',
+                                        'Project Delay ${durationParse(value.actualDate, value.endDate,)} Days ',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            fontSize: 10, color: white)),
+                                            fontSize: 10, color: white,),),
                                   ),
                                 ),
                               ],
@@ -148,7 +148,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   'Progress %',
                                   style: TextStyle(fontSize: 10),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 SizedBox(
                                   height: 40.0,
                                   width: 40.0,
@@ -280,7 +280,7 @@ Future<bool> onWillPop(BuildContext context) async {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Close TATA POWER?",
+                    "Logout TATA POWER?",
                     style: subtitleWhite,
                   ),
                   const SizedBox(
@@ -323,7 +323,7 @@ Future<bool> onWillPop(BuildContext context) async {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginRegister(),
+                              builder: (context) => const LoginRegister(),
                             ),
                           );
                           // exit(0);

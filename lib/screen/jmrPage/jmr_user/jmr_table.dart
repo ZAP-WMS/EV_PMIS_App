@@ -118,7 +118,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                   store: () {
                     nextIndex().then((value) => StoreData());
                   },
-                  height: 30,
+                  height: 50,
                   isCentered: true,
                   isSync: widget.showTable ? false : true,
                   title: 'JMR',
@@ -384,6 +384,9 @@ class _JmrTablePageState extends State<JmrTablePage> {
           data.add(rowData);
         }
       }
+      jmrtable = convertListToJmrModel(data);
+      _jmrDataSource = JmrDataSource(jmrtable, deleteRow);
+      _dataGridController = DataGridController();
     } else {
       print('File is Empty');
     }
@@ -623,7 +626,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
     jmrtable = convertListToJmrModel(data);
     _jmrDataSource = JmrDataSource(jmrtable, deleteRow);
     _dataGridController = DataGridController();
-
     return jmrSyncList;
   }
 
@@ -901,17 +903,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
-                  // pw.RichText(
-                  //     text: pw.TextSpan(children: [
-                  //   const pw.TextSpan(
-                  //       text: 'Date : ',
-                  //       style:
-                  //           pw.TextStyle(color: PdfColors.black, fontSize: 17)),
-                  //   pw.TextSpan(
-                  //       text: date.text,
-                  //       style: const pw.TextStyle(
-                  //           color: PdfColors.blue700, fontSize: 15))
-                  // ])),
                   pw.RichText(
                       text: pw.TextSpan(children: [
                     const pw.TextSpan(
@@ -924,17 +915,27 @@ class _JmrTablePageState extends State<JmrTablePage> {
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
                 ]),
-            pw.SizedBox(height: 20)
+            pw.SizedBox(
+              height: 20,
+            )
           ]),
-          pw.SizedBox(height: 10),
+          pw.SizedBox(
+            height: 10,
+          ),
           pw.Table.fromTextArray(
             columnWidths: {
-              0: const pw.FixedColumnWidth(100),
-              1: const pw.FixedColumnWidth(100),
+              0: const pw.FixedColumnWidth(
+                100,
+              ),
+              1: const pw.FixedColumnWidth(
+                100,
+              ),
             },
             headers: ['Details', 'Values'],
             headerStyle: headerStyle,
-            headerPadding: const pw.EdgeInsets.all(10.0),
+            headerPadding: const pw.EdgeInsets.all(
+              10.0,
+            ),
             data: fieldData,
             cellHeight: 35,
             cellStyle: cellStyle,

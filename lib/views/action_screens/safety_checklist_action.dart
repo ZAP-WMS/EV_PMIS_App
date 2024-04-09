@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../safetyreport/safety_report_admin.dart/safety_report_admin.dart';
 import '../safetyreport/safetyfield.dart';
 
@@ -39,7 +38,9 @@ class _SafetyChecklistActionState extends State<SafetyChecklistAction> {
     switch (widget.role) {
       case 'user':
         selectedUi = SafetyField(depoName: widget.depoName,
-        role: widget.role,userId: widget.userId,);
+        role: widget.role,userId: widget.userId,
+        cityName: widget.cityName,
+        );
         break;
       case 'admin':
         selectedUi = SafetySummary(

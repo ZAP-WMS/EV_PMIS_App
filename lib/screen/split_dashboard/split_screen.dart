@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/widgets/custom_alert_box.dart';
+import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +21,9 @@ class SplitScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(40),
+          preferredSize: const Size.fromHeight(
+            40,
+          ),
           child: AppBar(
             backgroundColor: blue,
             centerTitle: true,
@@ -31,8 +34,9 @@ class SplitScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 15),
                 child: InkWell(
                     onTap: () {
-                      CustomAlertBox().customLogOut(context,
-                          'Are you sure want to logout?', '/login-page', false);
+                      onWillPop(context);
+                      // CustomAlertBox().customLogOut(context,
+                      //     'Are you sure want to logout?', '/login-page', false);
                     },
                     child: const Icon(
                       Icons.logout_sharp,

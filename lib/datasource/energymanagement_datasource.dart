@@ -234,8 +234,9 @@ class EnergyManagementDatasource extends DataGridSource {
       _energyManagement[dataRowIndex].pssNo = int.parse(newCellValue);
     } else if (column.columnName == 'chargerId') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<dynamic>(columnName: 'chargerId', value: newCellValue);
-      _energyManagement[dataRowIndex].chargerId = newCellValue;
+          DataGridCell<dynamic>(
+              columnName: 'chargerId', value: int.parse(newCellValue));
+      _energyManagement[dataRowIndex].chargerId = int.parse(newCellValue);
     } else if (column.columnName == 'StartSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<int>(columnName: 'startSoc', value: newCellValue as int);

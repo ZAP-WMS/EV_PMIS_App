@@ -102,7 +102,7 @@ class DetailedEngSourceShed extends DataGridSource {
     DateTime? date2;
     DateTime? endDate1;
     final int dataRowIndex = dataGridRows.indexOf(row);
-    
+
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       void addRowAtIndex(int index, DetailedEngModel rowData) {
@@ -219,12 +219,12 @@ class DetailedEngSourceShed extends DataGridSource {
                               } else {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => UploadDocument(
-                                          pagetitle: 'DetailedEngShed',
+                                          title: 'DetailedEngShed',
+                                          
                                           cityName: cityName,
                                           depoName: depoName,
                                           userId: userId,
                                           date: activitydata,
-                                          
                                           fldrName: row
                                               .getCells()[0]
                                               .value
@@ -992,6 +992,9 @@ class DetailedEngSourceShed extends DataGridSource {
             : isDateTimeType
                 ? TextInputType.datetime
                 : TextInputType.text,
+        onTapOutside: (event) {
+          newCellValue = editingController.text;
+        },
         onChanged: (String value) {
           if (value.isNotEmpty) {
             if (isNumericType) {
@@ -1001,8 +1004,6 @@ class DetailedEngSourceShed extends DataGridSource {
             } else {
               newCellValue = value;
             }
-          } else {
-            newCellValue = null;
           }
         },
         onSubmitted: (String value) {

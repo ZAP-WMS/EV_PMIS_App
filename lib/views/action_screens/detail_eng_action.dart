@@ -36,8 +36,9 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
         selectedUi = DetailedEng(
           depoName: widget.depoName,
           userId: widget.userId,
-          role: 'user',
+        role: 'user',
         );
+
         break;
       case 'admin':
         selectedUi = DetailedEngAdmin(
@@ -46,6 +47,7 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
           depoName: widget.depoName,
           role: 'admin',
         );
+
         break;
       case 'projectManager':
         selectedUi = DetailedEngAdmin(

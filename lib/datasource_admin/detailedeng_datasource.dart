@@ -67,6 +67,7 @@ class DetailedEngSource extends DataGridSource {
     'Connection Diagram of meters installed at workshop building',
     'Connection Diagram of meters installed at washing bay',
   ];
+
   List<String> Specification = [
     'Illumination Design',
     'Shed Lighting SLD',
@@ -76,6 +77,7 @@ class DetailedEngSource extends DataGridSource {
     'DTB Room Lighting Layout',
     'Compresser Rooms & Lube room  Lighting Layout',
   ];
+
   List<DataGridRow> dataGridRows = [];
   final _dateFormatter = DateFormat.yMd();
 
@@ -115,7 +117,8 @@ class DetailedEngSource extends DataGridSource {
                 icon: Icon(
                   Icons.delete,
                   color: red,
-                ))
+                ),
+              )
             : dataGridCell.columnName == 'button'
                 ? LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
@@ -142,392 +145,59 @@ class DetailedEngSource extends DataGridSource {
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
                         return ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(backgroundColor: blue),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ViewAllPdf(
-                                        role: role,
-                                        title: 'DetailedEngRFC',
-                                        cityName: cityName,
-                                        depoName: depoName,
-                                        // userId: userId,
-                                        docId:
-                                            '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
-                                        userId: userId,
-                                      )));
-                              // showDialog(
-                              //     context: context,
-                              //     builder: (context) => AlertDialog(
-                              //         content: SizedBox(
-                              //             height: 100,
-                              //             child: Column(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.spaceBetween,
-                              //               children: [
-                              //                 Text(
-                              //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                              //               ],
-                              //             ))));
-                            },
-                            child: const Text('View'));
+                          style:
+                              ElevatedButton.styleFrom(backgroundColor: blue),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAllPdf(
+                                      role: role,
+                                      title: 'DetailedEngRFC',
+                                      cityName: cityName,
+                                      depoName: depoName,
+                                      // userId: userId,
+                                      docId:
+                                          '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
+                                      userId: userId,
+                                    )));
+                            // showDialog(
+                            //     context: context,
+                            //     builder: (context) => AlertDialog(
+                            //         content: SizedBox(
+                            //             height: 100,
+                            //             child: Column(
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.spaceBetween,
+                            //               children: [
+                            //                 Text(
+                            //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
+                            //                 Text(
+                            //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
+                            //                 Text(
+                            //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
+                            //               ],
+                            //             ))));
+                          },
+                          child: const Text(
+                            'View',
+                          ),
+                        );
                       })
                     : dataGridCell.columnName == 'Number' &&
                             dataGridCell.value == 0
                         ? const Text('')
                         : (dataGridCell.columnName == 'PreparationDate') &&
                                 dataGridCell.value != ''
-                            ? Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                          context: mainContext,
-                                          builder: (context) => AlertDialog(
-                                                title: const Text('All Date'),
-                                                content: Container(
-                                                    height: 400,
-                                                    width: 500,
-                                                    child: SfDateRangePicker(
-                                                      view: DateRangePickerView
-                                                          .month,
-                                                      showTodayButton: true,
-                                                      onSelectionChanged:
-                                                          (DateRangePickerSelectionChangedArgs
-                                                              args) {
-                                                        if (args.value
-                                                            is PickerDateRange) {
-                                                          rangeStartDate = args
-                                                              .value.startDate;
-                                                          rangeEndDate = args
-                                                              .value.endDate;
-                                                        } else {
-                                                          final List<
-                                                                  PickerDateRange>
-                                                              selectedRanges =
-                                                              args.value;
-                                                        }
-                                                      },
-                                                      selectionMode:
-                                                          DateRangePickerSelectionMode
-                                                              .single,
-                                                      showActionButtons: true,
-                                                      onSubmit: ((value) {
-                                                        date = DateTime.parse(
-                                                            value.toString());
-                                                        date1 = DateTime.parse(
-                                                            value.toString());
-                                                        date2 = DateTime.parse(
-                                                            value.toString());
-
-                                                        final int dataRowIndex =
-                                                            dataGridRows
-                                                                .indexOf(row);
-                                                        if (dataRowIndex !=
-                                                            null) {
-                                                          final int
-                                                              dataRowIndex =
-                                                              dataGridRows
-                                                                  .indexOf(row);
-                                                          dataGridRows[
-                                                                      dataRowIndex]
-                                                                  .getCells()[
-                                                              5] = DataGridCell<
-                                                                  String>(
-                                                              columnName:
-                                                                  'PreparationDate',
-                                                              value: DateFormat(
-                                                                      'dd-MM-yyyy')
-                                                                  .format(
-                                                                      date!));
-                                                          _detailedeng[
-                                                                      dataRowIndex]
-                                                                  .preparationDate =
-                                                              DateFormat(
-                                                                      'dd-MM-yyyy')
-                                                                  .format(
-                                                                      date!);
-                                                          notifyListeners();
-
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-                                                      }),
-                                                    )),
-                                              ));
-                                    },
-                                    icon: const Icon(Icons.calendar_today),
-                                  ),
-                                  Text(dataGridCell.value.toString()),
-                                ],
-                              )
+                            ? Text(dataGridCell.value.toString())
                             : (dataGridCell.columnName == 'SubmissionDate') &&
                                     dataGridCell.value != ''
-                                ? Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          showDialog(
-                                              context: mainContext,
-                                              builder: (context) => AlertDialog(
-                                                    title:
-                                                        const Text('All Date'),
-                                                    content: Container(
-                                                        height: 400,
-                                                        width: 500,
-                                                        child:
-                                                            SfDateRangePicker(
-                                                          view:
-                                                              DateRangePickerView
-                                                                  .month,
-                                                          showTodayButton: true,
-                                                          onSelectionChanged:
-                                                              (DateRangePickerSelectionChangedArgs
-                                                                  args) {
-                                                            if (args.value
-                                                                is PickerDateRange) {
-                                                              rangeStartDate =
-                                                                  args.value
-                                                                      .startDate;
-                                                              rangeEndDate =
-                                                                  args.value
-                                                                      .endDate;
-                                                            } else {
-                                                              final List<
-                                                                      PickerDateRange>
-                                                                  selectedRanges =
-                                                                  args.value;
-                                                            }
-                                                          },
-                                                          selectionMode:
-                                                              DateRangePickerSelectionMode
-                                                                  .single,
-                                                          showActionButtons:
-                                                              true,
-                                                          onSubmit: ((value) {
-                                                            date = DateTime
-                                                                .parse(value
-                                                                    .toString());
-                                                            date1 = DateTime
-                                                                .parse(value
-                                                                    .toString());
-                                                            date2 = DateTime
-                                                                .parse(value
-                                                                    .toString());
-
-                                                            final int
-                                                                dataRowIndex =
-                                                                dataGridRows
-                                                                    .indexOf(
-                                                                        row);
-                                                            if (dataRowIndex !=
-                                                                null) {
-                                                              final int
-                                                                  dataRowIndex =
-                                                                  dataGridRows
-                                                                      .indexOf(
-                                                                          row);
-                                                              dataGridRows[
-                                                                          dataRowIndex]
-                                                                      .getCells()[
-                                                                  6] = DataGridCell<
-                                                                      String>(
-                                                                  columnName:
-                                                                      'SubmissionDate',
-                                                                  value: DateFormat(
-                                                                          'dd-MM-yyyy')
-                                                                      .format(
-                                                                          date!));
-                                                              _detailedeng[
-                                                                      dataRowIndex]
-                                                                  .submissionDate = DateFormat(
-                                                                      'dd-MM-yyyy')
-                                                                  .format(
-                                                                      date!);
-                                                              notifyListeners();
-
-                                                              Navigator.pop(
-                                                                  context);
-                                                            }
-                                                          }),
-                                                        )),
-                                                  ));
-                                        },
-                                        icon: const Icon(Icons.calendar_today),
-                                      ),
-                                      Text(dataGridCell.value.toString()),
-                                    ],
-                                  )
+                                ? Text(dataGridCell.value.toString())
                                 : (dataGridCell.columnName == 'ApproveDate') &&
                                         dataGridCell.value != ''
-                                    ? Row(
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: mainContext,
-                                                  builder:
-                                                      (context) => AlertDialog(
-                                                            title: const Text(
-                                                                'All Date'),
-                                                            content: Container(
-                                                                height: 400,
-                                                                width: 500,
-                                                                child:
-                                                                    SfDateRangePicker(
-                                                                  view:
-                                                                      DateRangePickerView
-                                                                          .month,
-                                                                  showTodayButton:
-                                                                      true,
-                                                                  onSelectionChanged:
-                                                                      (DateRangePickerSelectionChangedArgs
-                                                                          args) {
-                                                                    if (args.value
-                                                                        is PickerDateRange) {
-                                                                      rangeStartDate = args
-                                                                          .value
-                                                                          .startDate;
-                                                                      rangeEndDate = args
-                                                                          .value
-                                                                          .endDate;
-                                                                    } else {
-                                                                      final List<
-                                                                              PickerDateRange>
-                                                                          selectedRanges =
-                                                                          args.value;
-                                                                    }
-                                                                  },
-                                                                  selectionMode:
-                                                                      DateRangePickerSelectionMode
-                                                                          .single,
-                                                                  showActionButtons:
-                                                                      true,
-                                                                  onSubmit:
-                                                                      ((value) {
-                                                                    date = DateTime
-                                                                        .parse(value
-                                                                            .toString());
-                                                                    // date1 =
-                                                                    //     DateTime.parse(value.toString());
-                                                                    // date2 =
-                                                                    //     DateTime.parse(value.toString());
-
-                                                                    final int
-                                                                        dataRowIndex =
-                                                                        dataGridRows
-                                                                            .indexOf(row);
-                                                                    if (dataRowIndex !=
-                                                                        null) {
-                                                                      final int
-                                                                          dataRowIndex =
-                                                                          dataGridRows
-                                                                              .indexOf(row);
-                                                                      dataGridRows[dataRowIndex]
-                                                                              .getCells()[
-                                                                          7] = DataGridCell<
-                                                                              String>(
-                                                                          columnName:
-                                                                              'ApproveDate',
-                                                                          value:
-                                                                              DateFormat('dd-MM-yyyy').format(date!));
-                                                                      _detailedeng[
-                                                                              dataRowIndex]
-                                                                          .approveDate = DateFormat(
-                                                                              'dd-MM-yyyy')
-                                                                          .format(
-                                                                              date!);
-                                                                      notifyListeners();
-
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    }
-                                                                  }),
-                                                                )),
-                                                          ));
-                                            },
-                                            icon: const Icon(
-                                                Icons.calendar_today),
-                                          ),
-                                          Text(dataGridCell.value.toString()),
-                                        ],
-                                      )
+                                    ? Text(dataGridCell.value.toString())
                                     : (dataGridCell.columnName ==
                                                 'ReleaseDate') &&
                                             dataGridCell.value != ''
-                                        ? Row(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: mainContext,
-                                                      builder:
-                                                          (context) =>
-                                                              AlertDialog(
-                                                                title: const Text(
-                                                                    'All Date'),
-                                                                content:
-                                                                    Container(
-                                                                        height:
-                                                                            400,
-                                                                        width:
-                                                                            500,
-                                                                        child:
-                                                                            SfDateRangePicker(
-                                                                          view:
-                                                                              DateRangePickerView.month,
-                                                                          showTodayButton:
-                                                                              true,
-                                                                          onSelectionChanged:
-                                                                              (DateRangePickerSelectionChangedArgs args) {
-                                                                            if (args.value
-                                                                                is PickerDateRange) {
-                                                                              rangeStartDate = args.value.startDate;
-                                                                              rangeEndDate = args.value.endDate;
-                                                                            } else {
-                                                                              final List<PickerDateRange> selectedRanges = args.value;
-                                                                            }
-                                                                          },
-                                                                          selectionMode:
-                                                                              DateRangePickerSelectionMode.single,
-                                                                          showActionButtons:
-                                                                              true,
-                                                                          onSubmit:
-                                                                              ((value) {
-                                                                            date =
-                                                                                DateTime.parse(value.toString());
-                                                                            // date1 =
-                                                                            //     DateTime.parse(value.toString());
-                                                                            // date2 =
-                                                                            //     DateTime.parse(value.toString());
-
-                                                                            final int
-                                                                                dataRowIndex =
-                                                                                dataGridRows.indexOf(row);
-                                                                            if (dataRowIndex !=
-                                                                                null) {
-                                                                              final int dataRowIndex = dataGridRows.indexOf(row);
-                                                                              dataGridRows[dataRowIndex].getCells()[8] = DataGridCell<String>(columnName: 'ReleaseDate', value: DateFormat('dd-MM-yyyy').format(date!));
-                                                                              _detailedeng[dataRowIndex].releaseDate = DateFormat('dd-MM-yyyy').format(date!);
-                                                                              notifyListeners();
-
-                                                                              Navigator.pop(context);
-                                                                            }
-                                                                          }),
-                                                                        )),
-                                                              ));
-                                                },
-                                                icon: const Icon(
-                                                    Icons.calendar_today),
-                                              ),
-                                              Text(dataGridCell.value
-                                                  .toString()),
-                                            ],
-                                          )
+                                        ? Text(dataGridCell.value.toString())
                                         // : dataGridCell.columnName == 'Title' &&
                                         //         dataGridCell.value !=
                                         //             'RFC Drawings of Civil Activities' &&

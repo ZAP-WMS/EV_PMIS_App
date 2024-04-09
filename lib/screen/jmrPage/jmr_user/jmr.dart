@@ -41,7 +41,6 @@ class _JmrUserPageState extends State<JmrUserPage> {
     getAssignedDepots().whenComplete(() {
       getJmrLen(5);
     });
-
     super.initState();
   }
 

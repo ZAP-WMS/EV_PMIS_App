@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:ev_pmis_app/components/Loading_page.dart';
+import 'package:ev_pmis_app/components/loading_pdf.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import '../style.dart';
 import '../views/controller/upload_image_controller.dart';
 import '../views/overviewpage/view_AllFiles.dart';
@@ -24,7 +25,6 @@ class UploadDocument extends StatefulWidget {
   String? fldrName;
   String? date;
   int? srNo;
-  String? pagetitle;
   String? role;
 
   UploadDocument({
@@ -37,7 +37,6 @@ class UploadDocument extends StatefulWidget {
     required this.fldrName,
     this.date,
     this.srNo,
-    this.pagetitle,
     this.role,
   });
 
@@ -207,7 +206,7 @@ class _UploadDocumentState extends State<UploadDocument> {
                                 onPressed: isFieldEditable == false
                                     ? null
                                     : () async {
-                                        showPickerOptions(widget.pagetitle!);
+                                        showPickerOptions(widget.title!);
                                         // result =
                                         //     await FilePicker.platform.pickFiles(
                                         //   withData: true,
@@ -238,24 +237,29 @@ class _UploadDocumentState extends State<UploadDocument> {
                                     ? null
                                     : () async {
                                         if (imagePickerController
-                                                .pickedImagePath !=
-                                            null) {
-                                          showCupertinoDialog(
-                                            context: context,
-                                            builder: (context) =>
-                                                CupertinoAlertDialog(
-                                              content: SizedBox(
-                                                height: 50,
-                                                width: 50,
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: blue,
-                                                  ),
-                                                ),
-                                              ),
+                                            .pickedImagePath.isNotEmpty) {
+                                          final pr = ProgressDialog(context);
+                                          pr.style(
+                                            progressWidgetAlignment:
+                                                Alignment.center,
+                                            message: 'Uploading...',
+                                            borderRadius: 10.0,
+                                            backgroundColor: Colors.white,
+                                            progressWidget: const LoadingPdf(),
+                                            elevation: 10.0,
+                                            insetAnimCurve: Curves.easeInOut,
+                                            maxProgress: 100.0,
+                                            progressTextStyle: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.w400),
+                                            messageTextStyle: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           );
+                                          pr.show();
                                           Uint8List? fileBytes;
                                           // Uint8List? fileBytes =
                                           //     result!.files.first.bytes;
@@ -274,16 +278,16 @@ class _UploadDocumentState extends State<UploadDocument> {
                                             String refname = (widget.title ==
                                                     'QualityChecklist'
                                                 ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/$imageName'
-                                                : widget.pagetitle ==
+                                                : widget.title ==
                                                         'ClosureReport'
-                                                    ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName'
-                                                    : widget.pagetitle ==
+                                                    ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName'
+                                                    : widget.title ==
                                                             'KeyEvents'
                                                         ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/$imageName'
-                                                        : widget.pagetitle ==
+                                                        : widget.title ==
                                                                 'Depot Insights'
-                                                            ? '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.fldrName}/${imageName}'
-                                                            : '${widget.pagetitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/$imageName');
+                                                            ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.fldrName}/${imageName}'
+                                                            : '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/$imageName');
 
                                             // String? fileName = result!.files.first.name;
 
@@ -291,25 +295,46 @@ class _UploadDocumentState extends State<UploadDocument> {
                                                 .ref(refname)
                                                 .putData(
                                                   fileBytes,
-                                                  // SettableMetadata(contentType: 'application/pdf')
                                                 );
-                                            // .whenComplete(() => ScaffoldMessenger
-                                            //         .of(context)
-                                            //     .showSnackBar(const SnackBar(
-                                            //         content: Text(
-                                            //             'Image is Uploaded'))));
                                           }
+
+                                          pr.hide();
+
                                           // ignore: use_build_context_synchronously
                                           Navigator.pop(context);
                                           // ignore: use_build_context_synchronously
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  backgroundColor: blue,
-                                                  content: Text(
-                                                    'Files are Uploaded',
-                                                    style:
-                                                        TextStyle(color: white),
-                                                  )));
+                                              .showSnackBar(
+                                            SnackBar(
+                                              backgroundColor: blue,
+                                              content: Text(
+                                                'Files are Uploaded',
+                                                style: TextStyle(color: white),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                    'No file selected'),
+                                                content: const Text(
+                                                    'Please select a file to upload'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text(
+                                                      'OK',
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                          );
                                         }
                                       },
                                 child: Text(
@@ -330,12 +355,12 @@ class _UploadDocumentState extends State<UploadDocument> {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              'Back to ${widget.title == 'QualityChecklist' ? 'Quality Checklist' : widget.pagetitle}',
+                              'Back to ${widget.title == 'QualityChecklist' ? 'Quality Checklist' : widget.title}',
                               style: uploadViewStyle,
                             )),
                       ),
                     ),
-                    widget.pagetitle == 'Depot Insights'
+                    widget.title == 'Depot Insights'
                         ? ElevatedButton(
                             onPressed: () {
                               Navigator.push(context, MaterialPageRoute(

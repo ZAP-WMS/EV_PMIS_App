@@ -25,7 +25,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../datasource/energymanagement_datasource.dart';
 import '../../provider/checkbox_provider.dart';
 import '../../models/energy_management.dart';
-import '../../views/authentication/authservice.dart';
 import '../../components/Loading_page.dart';
 import '../../datasource/dailyproject_datasource.dart';
 import '../../datasource/monthlyproject_datasource.dart';
@@ -88,7 +87,6 @@ class _ViewSummaryState extends State<ViewSummary> {
   late DailyDataSource _dailyDataSource;
   List<dynamic> tabledata2 = [];
   var alldata;
-  dynamic userId;
   final ScrollController _scrollController = ScrollController();
   bool sendReport = true;
   CheckboxProvider? _checkboxProvider;
@@ -838,7 +836,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                             alignment: Alignment
                                                                 .center,
                                                             child: Text(
-                                                                'Veghicle No',
+                                                                'Vehicle No',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -1271,7 +1269,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                 safetylisttable,
                                                 widget.cityName!,
                                                 widget.depoName!,
-                                                userId,
+                                                widget.userId,
                                                 DateFormat.yMMMMd()
                                                     .format(startdate!));
                                         _dataGridController =
@@ -1614,7 +1612,7 @@ class _ViewSummaryState extends State<ViewSummary> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('User ID - $userId',
+              child: pw.Text('User ID - ${widget.userId}',
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
                       .defaultTextStyle
@@ -1651,7 +1649,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                   pw.RichText(
                       text: pw.TextSpan(children: [
                     pw.TextSpan(
-                        text: 'UserID : $userId',
+                        text: 'UserID : ${widget.userId}',
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15)),
                   ])),
@@ -1706,6 +1704,66 @@ class _ViewSummaryState extends State<ViewSummary> {
     final profileImage = pw.MemoryImage(
       (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
     );
+
+    DocumentSnapshot safetyFieldDocSanpshot = await FirebaseFirestore.instance
+        .collection('SafetyFieldData2')
+        .doc('${widget.depoName}')
+        .collection('userId')
+        .doc(widget.userId)
+        .collection('date')
+        .doc(date)
+        .get();
+
+    Map<String, dynamic> safetyMapData =
+        safetyFieldDocSanpshot.data() as Map<String, dynamic>;
+
+    bool isDate1Empty = false;
+    bool isDate2Empty = false;
+    bool isDate3Empty = false;
+    if (safetyMapData['InstallationDate'].toString().trim().isEmpty) {
+      isDate1Empty = true;
+    }
+    if (safetyMapData['EnegizationDate'].toString().trim().isEmpty) {
+      isDate2Empty = true;
+    }
+    if (safetyMapData['BoardingDate'].toString().trim().isEmpty) {
+      isDate3Empty = true;
+    }
+
+    dynamic installationDateToDateTime =
+        isDate1Empty ? "" : safetyMapData['InstallationDate'].toDate();
+    String date1 = isDate1Empty
+        ? ""
+        : "${installationDateToDateTime.day}-${installationDateToDateTime.month}-${installationDateToDateTime.year}";
+
+    dynamic EnegizationDateToDateTime =
+        isDate2Empty ? "" : safetyMapData['EnegizationDate'].toDate();
+
+    String date2 = isDate2Empty
+        ? ""
+        : "${EnegizationDateToDateTime.day}-${EnegizationDateToDateTime.month}-${EnegizationDateToDateTime.year}";
+
+    dynamic BoardingDateToDateTime =
+        isDate3Empty ? "" : safetyMapData['BoardingDate'].toDate();
+
+    String date3 = isDate3Empty
+        ? ""
+        : "${BoardingDateToDateTime.day}-${BoardingDateToDateTime.month}-${BoardingDateToDateTime.year}";
+
+    List<List<dynamic>> fieldData = [
+      ['Installation Date', date1],
+      ['Enegization Date', date2],
+      ['On Boarding Date', date3],
+      ['TPNo : ', '${safetyMapData['TPNo']}'],
+      ['Rev :', '${safetyMapData['Rev']}'],
+      ['Bus Depot Location :', '${safetyMapData['DepotLocation']}'],
+      ['Address :', '${safetyMapData['Address']}'],
+      ['Contact no / Mail Id :', '${safetyMapData['ContactNo']}'],
+      ['Latitude & Longitude :', '${safetyMapData['Latitude']}'],
+      ['State :', '${safetyMapData['State']}'],
+      ['Charger Type : ', '${safetyMapData['ChargerType']}'],
+      ['Conducted By :', '${safetyMapData['ConductedBy']}']
+    ];
 
     List<pw.TableRow> rows = [];
 
@@ -1920,6 +1978,108 @@ class _ViewSummaryState extends State<ViewSummary> {
       pageMode: PdfPageMode.outlines,
     );
 
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.landscape,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        // mainAxisAlignment: pw.MainAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Safety Report',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('UserID - ${widget.userId}',
+                  textScaleFactor: 1.5,
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: date,
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'UserID : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: widget.userId,
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table.fromTextArray(
+            columnWidths: {
+              0: const pw.FixedColumnWidth(100),
+              1: const pw.FixedColumnWidth(100),
+            },
+            headers: ['Details', 'Values'],
+            headerStyle: headerStyle,
+            headerPadding: const pw.EdgeInsets.all(10.0),
+            data: fieldData,
+            cellHeight: 35,
+            cellStyle: cellStyle,
+          )
+        ],
+      ),
+    );
+
     //First Half Page
 
     pdf.addPage(
@@ -1958,7 +2118,7 @@ class _ViewSummaryState extends State<ViewSummary> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('User ID - $userId',
+              child: pw.Text('User ID - ${widget.userId}',
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
                       .defaultTextStyle
@@ -1995,7 +2155,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                   pw.RichText(
                       text: pw.TextSpan(children: [
                     pw.TextSpan(
-                        text: 'UserID : $userId',
+                        text: 'UserID : ${widget.userId}',
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15)),
                   ])),
@@ -2287,7 +2447,7 @@ class _ViewSummaryState extends State<ViewSummary> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('User ID - $userId',
+              child: pw.Text('User ID - ${widget.userId}',
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
                       .defaultTextStyle
@@ -2324,7 +2484,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                   pw.RichText(
                       text: pw.TextSpan(children: [
                     pw.TextSpan(
-                        text: 'UserID : $userId',
+                        text: 'UserID : ${widget.userId}',
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15)),
                   ])),
@@ -2491,7 +2651,7 @@ class _ViewSummaryState extends State<ViewSummary> {
           return pw.Container(
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
-              child: pw.Text('User ID - $userId',
+              child: pw.Text('User ID - ${widget.userId}',
                   // 'Page ${context.pageNumber} of ${context.pagesCount}',
                   style: pw.Theme.of(context)
                       .defaultTextStyle
@@ -2528,7 +2688,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                   pw.RichText(
                       text: pw.TextSpan(children: [
                     pw.TextSpan(
-                        text: 'UserID : $userId',
+                        text: 'UserID : ${widget.userId}',
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15)),
                   ])),
@@ -2570,6 +2730,7 @@ class _ViewSummaryState extends State<ViewSummary> {
   Future<void> downloadPDF() async {
     if (await Permission.manageExternalStorage.request().isGranted) {
       final pr = ProgressDialog(context);
+
       pr.style(
         progressWidgetAlignment: Alignment.center,
         message: 'Downloading file...',
@@ -2638,12 +2799,6 @@ class _ViewSummaryState extends State<ViewSummary> {
     }
     await file.writeAsBytes(pdfData);
     return file;
-  }
-
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-    });
   }
 
   _showCheckboxDialog(BuildContext context, CheckboxProvider checkboxProvider,
