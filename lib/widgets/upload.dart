@@ -238,23 +238,34 @@ class _UploadDocumentState extends State<UploadDocument> {
                                     ? null
                                     : () async {
                                         if (imagePickerController
-                                                .pickedImagePath !=
-                                            null) {
+                                            .pickedImagePath.isNotEmpty) {
+                                          print(imagePickerController
+                                              .pickedImagePath);
                                           showCupertinoDialog(
                                             context: context,
                                             builder: (context) =>
                                                 CupertinoAlertDialog(
-                                              content: SizedBox(
-                                                height: 50,
-                                                width: 50,
-                                                child: Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: blue,
-                                                  ),
-                                                ),
+                                                    content: Container(
+                                              color: Colors.white,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                      height: 70,
+                                                      width: 70,
+                                                      child: Image.asset(
+                                                        'animations/loading_animation.gif',
+                                                      )),
+                                                  const Text(
+                                                    'Loading...',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black),
+                                                  )
+                                                ],
                                               ),
-                                            ),
+                                            )),
                                           );
                                           Uint8List? fileBytes;
                                           // Uint8List? fileBytes =
@@ -292,24 +303,37 @@ class _UploadDocumentState extends State<UploadDocument> {
                                                 .putData(
                                                   fileBytes,
                                                   // SettableMetadata(contentType: 'application/pdf')
-                                                );
+                                                )
+                                                .whenComplete(() {
+                                              // ignore: use_build_context_synchronously
+                                              // Navigator.pop(context);
+                                              // ignore: use_build_context_synchronously
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      backgroundColor: blue,
+                                                      content: Text(
+                                                        'Files are Uploaded',
+                                                        style: TextStyle(
+                                                            color: white),
+                                                      )));
+                                            });
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.pop(context);
+                                            // ignore: use_build_context_synchronously
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    backgroundColor: red,
+                                                    content: Text(
+                                                      'No File Selected',
+                                                      style: TextStyle(
+                                                          color: white),
+                                                    )));
                                             // .whenComplete(() => ScaffoldMessenger
                                             //         .of(context)
                                             //     .showSnackBar(const SnackBar(
                                             //         content: Text(
                                             //             'Image is Uploaded'))));
                                           }
-                                          // ignore: use_build_context_synchronously
-                                          Navigator.pop(context);
-                                          // ignore: use_build_context_synchronously
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  backgroundColor: blue,
-                                                  content: Text(
-                                                    'Files are Uploaded',
-                                                    style:
-                                                        TextStyle(color: white),
-                                                  )));
                                         }
                                       },
                                 child: Text(

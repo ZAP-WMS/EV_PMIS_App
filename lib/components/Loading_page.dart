@@ -25,9 +25,6 @@ class LoadingPage extends StatelessWidget {
                   color: Colors.black),
             )
           ],
-        )
-        // Lottie.asset('animations/loading.json'),
-
-        );
+        ));
   }
 }
