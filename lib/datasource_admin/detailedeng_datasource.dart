@@ -122,63 +122,57 @@ class DetailedEngSource extends DataGridSource {
             : dataGridCell.columnName == 'button'
                 ? LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: blue),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadDocument(
-                            // userId: userId,
-                            title: 'DetailedEngRFC',
-                            cityName: cityName,
-                            depoName: depoName,
-                            fldrName: row.getCells()[4].value.toString(),
-                            userId: userId,
-                          ),
-                        ));
-                      },
-                      child: const Text(
-                        'Upload',
+                    return Container(
+                      width: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: blue,
+                        padding: const EdgeInsets.all(0.0)),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UploadDocument(
+                              // userId: userId,
+                              title: 'DetailedEngRFC',
+                              cityName: cityName,
+                              depoName: depoName,
+                              fldrName: row.getCells()[4].value.toString(),
+                              userId: userId,
+                            ),
+                          ));
+                        },
+                        child:  Text(
+                          'Upload',
+                          style: uploadViewStyle,
+                        ),
                       ),
                     );
                   })
                 : dataGridCell.columnName == 'ViewDrawing'
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
-                        return ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(backgroundColor: blue),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewAllPdf(
-                                      role: role,
-                                      title: 'DetailedEngRFC',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      // userId: userId,
-                                      docId:
-                                          '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
-                                      userId: userId,
-                                    )));
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (context) => AlertDialog(
-                            //         content: SizedBox(
-                            //             height: 100,
-                            //             child: Column(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.spaceBetween,
-                            //               children: [
-                            //                 Text(
-                            //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                            //                 Text(
-                            //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                            //                 Text(
-                            //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                            //               ],
-                            //             ))));
-                          },
-                          child: const Text(
-                            'View',
+                        return Container(
+                          width: 50,
+                          child: ElevatedButton(
+                            style:
+                                ElevatedButton.styleFrom(backgroundColor: blue,
+                                padding: const EdgeInsets.all(0.0,),),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewAllPdf(
+                                        role: role,
+                                        title: 'DetailedEngRFC',
+                                        cityName: cityName,
+                                        depoName: depoName,
+                                        // userId: userId,
+                                        docId:
+                                            '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
+                                        userId: userId,
+                                      )));
+        
+                            },
+                            child: Text(
+                              'View',
+                              style: uploadViewStyle,
+                            ),
                           ),
                         );
                       })

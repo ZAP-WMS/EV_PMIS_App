@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 
 import 'package:flutter/material.dart';
@@ -71,40 +72,32 @@ class QualityChecklistDataSource extends DataGridSource {
               //         dataGridCell.columnName == 'Weightage')
               Alignment.center,
           // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                  return ElevatedButton(
+                  return SizedBox(
+                    width: 50,
+                    child: ElevatedButton(
+                      style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UploadDocument(
                             cityName: cityName,
                             depoName: depoName,
                             title: '',
-                            fldrName: '${row.getCells()[1].value.toString()}',
+                            fldrName: row.getCells()[1].value.toString(),
                             userId: userId,
                           ),
                         ));
-                        //               // showDialog(
-                        //               //     context: context,
-                        //               //     builder: (context) => AlertDialog(
-                        //               //         content: SizedBox(
-                        //               //             height: 100,
-                        //               //             child: Column(
-                        //               //               mainAxisAlignment:
-                        //               //                   MainAxisAlignment.spaceBetween,
-                        //               //               children: [
-                        //               //                 Text(
-                        //               //                     'JMRModel ID: ${row.getCells()[0].value.toString()}'),
-                        //               //                 Text(
-                        //               //                     'JMRModel Name: ${row.getCells()[1].value.toString()}'),
-                        //               //                 Text(
-                        //               //                     'JMRModel Designation: ${row.getCells()[2].value.toString()}'),
-                        //               //               ],
-                        //               //             ))));
                       },
-                      child: const Text('Upload'));
+                      child: Text(
+                        'Upload',
+                        style: uploadViewStyle,
+                      ),
+                    ),
+                  );
                 })
               //     : dataGridCell.columnName == 'ActualStart' ||
               //             dataGridCell.columnName == 'ActualEnd'
@@ -501,16 +494,12 @@ class QualityChecklistDataSource extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         autofocus: true,
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],

@@ -149,30 +149,36 @@ class EnergyManagementDatasource extends DataGridSource {
                     ? Text(
                         '${difference.inHours}:${difference.inMinutes % 60}:${difference.inSeconds % 60}')
                     : (dataGridCell.columnName == 'Add')
-                        ? ElevatedButton(
-                            onPressed: () {
-                              addRowAtIndex(
-                                  rowIndex + 1,
-                                  EnergyManagementModel(
-                                      srNo: rowIndex + 2,
-                                      depotName: depoName!,
-                                      vehicleNo: 'vehicleNo',
-                                      pssNo: 1,
-                                      chargerId: 1,
-                                      startSoc: 1,
-                                      endSoc: 1,
-                                      startDate: DateFormat('dd-MM-yyyy HH:mm')
-                                          .format(DateTime.now()),
-                                      endDate: DateFormat('dd-MM-yyyy HH:mm')
-                                          .format(DateTime.now()),
-                                      totalTime: DateFormat('dd-MM-yyyy HH:mm')
-                                          .format(DateTime.now()),
-                                      energyConsumed: 0.0,
-                                      timeInterval:
-                                          '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
-                            },
-                            child: const Text('Add'),
-                          )
+                        ? SizedBox(width: 50,
+                          child: ElevatedButton(
+                              style: const ButtonStyle(
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero)
+                          ),
+                              onPressed: () {
+                                addRowAtIndex(
+                                    rowIndex + 1,
+                                    EnergyManagementModel(
+                                        srNo: rowIndex + 2,
+                                        depotName: depoName!,
+                                        vehicleNo: 'vehicleNo',
+                                        pssNo: 1,
+                                        chargerId: 1,
+                                        startSoc: 1,
+                                        endSoc: 1,
+                                        startDate: DateFormat('dd-MM-yyyy HH:mm')
+                                            .format(DateTime.now()),
+                                        endDate: DateFormat('dd-MM-yyyy HH:mm')
+                                            .format(DateTime.now()),
+                                        totalTime: DateFormat('dd-MM-yyyy HH:mm')
+                                            .format(DateTime.now()),
+                                        energyConsumed: 0.0,
+                                        timeInterval:
+                                            '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
+                              },
+                              child: Text('Add',
+                              style: uploadViewStyle,),
+                            ),
+                        )
                         : (dataGridCell.columnName == 'Delete')
                             ? IconButton(
                                 onPressed: () {

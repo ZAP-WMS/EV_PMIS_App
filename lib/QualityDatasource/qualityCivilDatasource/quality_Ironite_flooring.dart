@@ -57,49 +57,36 @@ class QualityIroniteflooringDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment:
-              //  (dataGridCell.columnName == 'srNo' ||
-              //         dataGridCell.columnName == 'Activity' ||
-              //         dataGridCell.columnName == 'OriginalDuration' ||
-              // dataGridCell.columnName == 'StartDate' ||
-              //         dataGridCell.columnName == 'EndDate' ||
-              //         dataGridCell.columnName == 'ActualStart' ||
-              //         dataGridCell.columnName == 'ActualEnd' ||
-              //         dataGridCell.columnName == 'ActualDuration' ||
-              //         dataGridCell.columnName == 'Delay' ||
-              //         dataGridCell.columnName == 'Unit' ||
-              //         dataGridCell.columnName == 'QtyScope' ||
-              //         dataGridCell.columnName == 'QtyExecuted' ||
-              //         dataGridCell.columnName == 'BalancedQty' ||
-              //         dataGridCell.columnName == 'Progress' ||
-              //         dataGridCell.columnName == 'Weightage')
               Alignment.center,
-          // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadDocument(
-                            title: 'QualityChecklist',
-                            subtitle: 'civil_Engineer',
-                            cityName: cityName,
-                            depoName: depoName,
-                            userId: userId,
-                            fldrName: 'Ironite Table',
-                            date: currentDate,
-                            srNo: row.getCells()[0].value,
-                          ),
-                        ));
-                      },
-                      child: const Text(
-                        'Upload',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
+                  return SizedBox(
+                    width: 50,
+                    child: ElevatedButton(
+                        style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
                         ),
-                      ));
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UploadDocument(
+                              title: 'QualityChecklist',
+                              subtitle: 'civil_Engineer',
+                              cityName: cityName,
+                              depoName: depoName,
+                              userId: userId,
+                              fldrName: 'Ironite Table',
+                              date: currentDate,
+                              srNo: row.getCells()[0].value,
+                            ),
+                          ));
+                        },
+                        child: Text(
+                          'Upload',
+                          style:uploadViewStyle
+                        )),
+                  );
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:

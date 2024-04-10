@@ -366,7 +366,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.all(8.0),
                         alignment: Alignment.center,
-                        child: Text('Upload Drawing ',
+                        child: Text('Upload\nDrawing ',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -381,7 +381,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.all(8.0),
                         alignment: Alignment.center,
-                        child: Text('View Drawing ',
+                        child: Text('View\nDrawing ',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -416,7 +416,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Drawing Number',
+                        child: Text('Drawing\nNumber',
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
@@ -436,7 +436,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Preparation Date',
+                        child: Text('Preparation\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -455,7 +455,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Submission Date',
+                        child: Text('Submission\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -474,7 +474,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Approve Date',
+                        child: Text('Approve\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -493,7 +493,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Release Date',
+                        child: Text('Release\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -513,7 +513,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Delete Row',
+                        child: Text('Delete\nRow',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -585,7 +585,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.all(8.0),
                           alignment: Alignment.center,
-                          child: Text('Upload Drawing ',
+                          child: Text('Upload\nDrawing ',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -600,7 +600,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.all(8.0),
                           alignment: Alignment.center,
-                          child: Text('View Drawing ',
+                          child: Text('View\nDrawing ',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -635,7 +635,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           alignment: Alignment.center,
-                          child: Text('Drawing Number',
+                          child: Text('Drawing\nNumber',
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.values.first,
                               style: TextStyle(
@@ -655,7 +655,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           alignment: Alignment.center,
-                          child: Text('Preparation Date',
+                          child: Text('Preparation\nDate',
                               overflow: TextOverflow.values.first,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -674,7 +674,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           alignment: Alignment.center,
-                          child: Text('Submission Date',
+                          child: Text('Submission\nDate',
                               overflow: TextOverflow.values.first,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -693,7 +693,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           alignment: Alignment.center,
-                          child: Text('Approve Date',
+                          child: Text('Approve\nDate',
                               overflow: TextOverflow.values.first,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -712,7 +712,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           alignment: Alignment.center,
-                          child: Text('Release Date',
+                          child: Text('Release\nDate',
                               overflow: TextOverflow.values.first,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -732,7 +732,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                         label: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           alignment: Alignment.center,
-                          child: Text('Delete Row',
+                          child: Text('Delete\nRow',
                               overflow: TextOverflow.values.first,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -803,7 +803,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.all(8.0),
                         alignment: Alignment.center,
-                        child: Text('Upload Drawing ',
+                        child: Text('Upload\nDrawing ',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -818,7 +818,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.all(8.0),
                         alignment: Alignment.center,
-                        child: Text('View Drawing ',
+                        child: Text('View\nDrawing ',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -853,7 +853,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Drawing Number',
+                        child: Text('Drawing\nNumber',
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
@@ -873,7 +873,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Preparation Date',
+                        child: Text('Preparation\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -892,7 +892,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Submission Date',
+                        child: Text('Submission\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -911,7 +911,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Approve Date',
+                        child: Text('Approve\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -930,7 +930,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Release Date',
+                        child: Text('Release\nDate',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -950,7 +950,7 @@ class _DetailedEngAdmintState extends State<DetailedEngAdmin>
                       label: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         alignment: Alignment.center,
-                        child: Text('Delete Row',
+                        child: Text('Delete\nRow',
                             overflow: TextOverflow.values.first,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,

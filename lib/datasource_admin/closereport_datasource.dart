@@ -57,82 +57,73 @@ class CloseReportDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                  return ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: blue),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadDocument(
-                            title: 'ClosureReport',
-                            cityName: cityName,
-                            depoName: depoName,
-                            fldrName: row.getCells()[0].value.toString(),
-                            userId: userId,
-                          ),
-                        ));
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (context) => AlertDialog(
-                        //         content: SizedBox(
-                        //             height: 100,
-                        //             child: Column(
-                        //               mainAxisAlignment:
-                        //                   MainAxisAlignment.spaceBetween,
-                        //               children: [
-                        //                 Text(
-                        //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                        //                 Text(
-                        //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                        //                 Text(
-                        //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                        //               ],
-                        //             ))));
-                      },
-                      child: const Text('Upload'));
+                  return Container(
+                    width: 50,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: blue,padding: const EdgeInsets.all(0.0)),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UploadDocument(
+                              title: 'ClosureReport',
+                              cityName: cityName,
+                              depoName: depoName,
+                              fldrName: row.getCells()[0].value.toString(),
+                              userId: userId,
+                            ),
+                          ));
+                        },
+                        child:  Text('Upload',
+                        style: uploadViewStyle,),),
+                  );
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
-                      return ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(backgroundColor: blue),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewAllPdf(
-                                    title: 'ClosureReport',
-                                    cityName: cityName,
-                                    depoName: depoName,
-                                    userId: userId,
-                                    docId:
-                                        '${row.getCells()[0].value.toString()}')
-                                // UploadDocument(
-                                //     title: 'DetailedEngRFC',
-                                //     cityName: cityName,
-                                //     depoName: depoName,
-                                //     activity: '${row.getCells()[1].value.toString()}'),
-                                ));
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (context) => AlertDialog(
-                            //         content: SizedBox(
-                            //             height: 100,
-                            //             child: Column(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.spaceBetween,
-                            //               children: [
-                            //                 Text(
-                            //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                            //                 Text(
-                            //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                            //                 Text(
-                            //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                            //               ],
-                            //             ))));
-                          },
-                          child: const Text('View'));
+                      return Container(
+                        width: 50,
+                        child: ElevatedButton(
+                            style:
+                                ElevatedButton.styleFrom(backgroundColor: blue,padding: const EdgeInsets.all(0.0)),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewAllPdf(
+                                      title: 'ClosureReport',
+                                      cityName: cityName,
+                                      depoName: depoName,
+                                      userId: userId,
+                                      docId:
+                                          '${row.getCells()[0].value.toString()}')
+                                  // UploadDocument(
+                                  //     title: 'DetailedEngRFC',
+                                  //     cityName: cityName,
+                                  //     depoName: depoName,
+                                  //     activity: '${row.getCells()[1].value.toString()}'),
+                                  ));
+                              // showDialog(
+                              //     context: context,
+                              //     builder: (context) => AlertDialog(
+                              //         content: SizedBox(
+                              //             height: 100,
+                              //             child: Column(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.spaceBetween,
+                              //               children: [
+                              //                 Text(
+                              //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
+                              //                 Text(
+                              //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
+                              //                 Text(
+                              //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
+                              //               ],
+                              //             ))));
+                            },
+                            child: Text('View',
+                            style: uploadViewStyle,)),
+                      );
                     })
                   // : (dataGridCell.columnName == 'Date')
                   //     ? Row(

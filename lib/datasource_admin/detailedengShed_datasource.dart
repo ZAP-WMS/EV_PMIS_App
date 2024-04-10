@@ -132,67 +132,53 @@ class DetailedEngSourceShed extends DataGridSource {
             : dataGridCell.columnName == 'button'
                 ? LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
-                    return ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: blue),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              title: '',
-                              cityName: cityName,
-                              depoName: depoName,
-                              fldrName: '${row.getCells()[1].value.toString()}',
-                              userId: userId,
+                    return SizedBox(width: 50,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: blue,
+                          padding: EdgeInsets.zero,),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => UploadDocument(
+                                title: '',
+                                cityName: cityName,
+                                depoName: depoName,
+                                fldrName: row.getCells()[1].value.toString(),
+                                userId: userId,
+                              ),
                             ),
-                          ));
-                          // showDialog(
-                          //     context: context,
-                          //     builder: (context) => AlertDialog(
-                          //         content: SizedBox(
-                          //             height: 100,
-                          //             child: Column(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.spaceBetween,
-                          //               children: [
-                          //                 Text(
-                          //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                          //                 Text(
-                          //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                          //                 Text(
-                          //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                          //               ],
-                          //             ))));
+                          );
                         },
-                        child: const Text('Upload'));
+                          child: Text('Upload',
+                          style: uploadViewStyle,),),
+                    );
                   })
                 : dataGridCell.columnName == 'ViewDrawing'
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
-                        return ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(backgroundColor: blue),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ViewAllPdf(
-                                        role: role,
-                                        title: 'DetailedEngShed',
-                                        cityName: cityName,
-                                        depoName: depoName,
-                                        userId: userId,
-                                        docId:
-                                            '${row.getCells()[4].value.toString()}/${row.getCells()[0].value.toString()}',
-                                      )
-                                  // ViewFile()
-                                  // UploadDocument(
-                                  //     title: 'DetailedEngRFC',
-                                  //     cityName: cityName,
-                                  //     depoName: depoName,
-                                  //     activity: '${row.getCells()[1].value.toString()}'),
-                                  ));
-                            },
-                            child: const Text(
-                              'View',
-                              style: TextStyle(fontSize: 12),
-                            ));
+                        return SizedBox(width: 50,
+                          child: ElevatedButton(
+                              style:
+                                  ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    backgroundColor: blue),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ViewAllPdf(
+                                          role: role,
+                                          title: 'DetailedEngShed',
+                                          cityName: cityName,
+                                          depoName: depoName,
+                                          userId: userId,
+                                          docId:
+                                              '${row.getCells()[4].value.toString()}/${row.getCells()[0].value.toString()}',
+                                        ),
+                                     ),);
+                              },
+                              child: Text(
+                                'View',
+                                style: uploadViewStyle,
+                              ),),
+                        );
                       })
                     : dataGridCell.columnName == 'Number' &&
                             dataGridCell.value == 0

@@ -52,10 +52,41 @@ class QualityPavingDataSource extends DataGridSource {
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
+                  return SizedBox(
+                    width: 50,
+                    child: ElevatedButton(
+                        style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => UploadDocument(
+                                    title: 'QualityChecklist',
+                                    subtitle: 'civil_Engineer',
+                                    cityName: cityName,
+                                    depoName: depoName,
+                                    userId: userId,
+                                    fldrName: 'Paving Table',
+                                    date: currentDate,
+                                    srNo: row.getCells()[0].value,
+                                  ),),);
+                        },
+                        child: Text('Upload',
+                            style: uploadViewStyle),),
+                  );
+                })
+              : dataGridCell.columnName == 'View'
+                  ? LayoutBuilder(builder:
+                      (BuildContext context, BoxConstraints constraints) {
+                      return SizedBox(
+                        width: 50,
+                        child: ElevatedButton(
+                            style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
+                        ),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAllPdf(
                                   title: 'QualityChecklist',
                                   subtitle: 'civil_Engineer',
                                   cityName: cityName,
@@ -64,36 +95,14 @@ class QualityPavingDataSource extends DataGridSource {
                                   fldrName: 'Paving Table',
                                   date: currentDate,
                                   srNo: row.getCells()[0].value,
-                                )));
-                      },
-                      child: const Text('Upload',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          )));
-                })
-              : dataGridCell.columnName == 'View'
-                  ? LayoutBuilder(builder:
-                      (BuildContext context, BoxConstraints constraints) {
-                      return ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ViewAllPdf(
-                                title: 'QualityChecklist',
-                                subtitle: 'civil_Engineer',
-                                cityName: cityName,
-                                depoName: depoName,
-                                userId: userId,
-                                fldrName: 'Paving Table',
-                                date: currentDate,
-                                srNo: row.getCells()[0].value,
-                              ),
-                            ));
-                          },
-                          child: const Text(
-                            'View',
-                            style: TextStyle(fontSize: 12, color: Colors.white),
-                          ));
+                                ),
+                              ));
+                            },
+                            child: Text(
+                              'View',
+                              style: uploadViewStyle,
+                            )),
+                      );
                     })
                   : Text(
                       '${dataGridCell.value}',
