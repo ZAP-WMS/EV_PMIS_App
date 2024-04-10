@@ -72,20 +72,20 @@ EdgeInsets tablepadding =
 TextStyle normaltext = GoogleFonts.ibmPlexSans(
   fontWeight: FontWeight.w600,
   letterSpacing: 0.5,
-  fontSize: 16,
+  fontSize: 12,
 );
 
 TextStyle normalboldtext =
     const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
 
 TextStyle buttonWhite = GoogleFonts.ibmPlexSans(
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: FontWeight.w500,
     letterSpacing: 1.25,
     color: black);
 
 TextStyle subtitle1White = GoogleFonts.ibmPlexSans(
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.15,
     color: black);

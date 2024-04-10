@@ -2228,43 +2228,43 @@ class _ViewSummaryState extends State<ViewSummary> {
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
               child: pw.Text('Sr No',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
       pw.Container(
           padding:
               const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
           child: pw.Center(
               child: pw.Text('Date',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
       pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
               child: pw.Text('Type of Activity',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
       pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
               child: pw.Text('Activity Details',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
       pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
               child: pw.Text('Progress',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
       pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
               child: pw.Text('Remark / Status',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
       pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
               child: pw.Text('Image1',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),)),
       pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
               child: pw.Text('Image2',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
     ]));
 
     List<pw.Widget> imageUrls = [];
@@ -2288,19 +2288,19 @@ class _ViewSummaryState extends State<ViewSummary> {
                   padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
                   child: pw.UrlLink(
                       child: pw.Text(image.name,
-                          style: const pw.TextStyle(color: PdfColors.blue)),
-                      destination: downloadUrl)),
+                          style: const pw.TextStyle(color: PdfColors.blue,),),
+                      destination: downloadUrl,),),
             );
           } else {
-            final myImage = await networkImage(downloadUrl);
+            final myImage = await networkImage(downloadUrl,);
             imageUrls.add(
               pw.Container(
-                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0,),
                   width: 60,
                   height: 80,
                   child: pw.Center(
-                    child: pw.Image(myImage),
-                  )),
+                    child: pw.Image(myImage,),
+                  ),),
             );
           }
         }

@@ -110,9 +110,7 @@ class SafetyChecklistDataSource extends DataGridSource {
                       ? DropdownButton<String>(
                           value: dataGridCell.value,
                           focusColor: Colors.transparent,
-                          underline: const SizedBox.shrink(),
                           icon: const Icon(Icons.arrow_drop_down_sharp),
-                          isExpanded: true,
                           style: textStyle,
                           onChanged: (String? value) {
                             final dynamic oldValue = row

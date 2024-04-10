@@ -13,7 +13,7 @@ class CustomTextField extends StatefulWidget {
 
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
-  CustomTextField(
+    CustomTextField(
       {super.key,
       required this.controller,
       required this.labeltext,

@@ -1161,14 +1161,32 @@ class _SafetyFieldState extends State<SafetyField> {
     return Container(
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
-      child: CustomTextField(
-          isFieldEditable: isFieldEditable,
-          controller: controller,
-          labeltext: title,
-          // validatortext: '$title is Required',
-          isSuffixIcon: false,
-          keyboardType: TextInputType.text,
-          textInputAction: textInputAction),
+      child: TextField(
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          hintText: title,
+          hintStyle: const TextStyle(fontSize: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.blue),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.grey)),
+        ),
+      ),
     );
   }
 

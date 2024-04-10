@@ -148,7 +148,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
                                 editingGestureType: EditingGestureType.tap,
                                 controller: _dataGridController,
                                 allowColumnsResizing: true,
-                                headerRowHeight: 60,
+                                headerRowHeight: 50,
                                 columns: [
                                   GridColumn(
                                     columnName: 'srNo',

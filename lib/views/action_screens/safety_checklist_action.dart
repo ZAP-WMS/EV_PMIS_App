@@ -17,6 +17,7 @@ class SafetyChecklistAction extends StatefulWidget {
 
   @override
   State<SafetyChecklistAction> createState() => _SafetyChecklistActionState();
+
 }
 
 class _SafetyChecklistActionState extends State<SafetyChecklistAction> {

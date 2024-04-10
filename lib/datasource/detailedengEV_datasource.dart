@@ -936,27 +936,9 @@ class DetailedEngSourceEV extends DataGridSource {
             ?.value
             ?.toString() ??
         '';
-
-    // The new cell value must be reset.
-    // To avoid committing the [DataGridCell] value that was previously edited
-    // into the current non-modified [DataGridCell].
-    newCellValue = null;
+    newCellValue = '';
 
     final bool isNumericType = column.columnName == 'SiNo';
-    //  || column.columnName == 'Number';
-    //  ||
-    // column.columnName == 'StartDate' ||
-    // column.columnName == 'EndDate' ||
-    // column.columnName == 'ActualStart' ||
-    // column.columnName == 'ActualEnd' ||
-    // column.columnName == 'ActualDuration' ||
-    // column.columnName == 'Delay' ||
-    // column.columnName == 'Unit' ||
-    // column.columnName == 'QtyScope' ||
-    // column.columnName == 'QtyExecuted' ||
-    // column.columnName == 'BalancedQty' ||
-    // column.columnName == 'Progress' ||
-    // column.columnName == 'Weightage';
 
     final bool isDateTimeType = column.columnName == 'StartDate' ||
         column.columnName == 'EndDate' ||
@@ -967,7 +949,6 @@ class DetailedEngSourceEV extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         style: const TextStyle(fontSize: 12),
@@ -975,9 +956,6 @@ class DetailedEngSourceEV extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 16.0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],

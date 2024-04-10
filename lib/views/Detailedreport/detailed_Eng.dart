@@ -55,6 +55,7 @@ class _DetailedEngtState extends State<DetailedEng>
 
   @override
   void initState() {
+    
     getAssignedDepots().whenComplete(() {
       cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
@@ -87,6 +88,7 @@ class _DetailedEngtState extends State<DetailedEng>
 
         _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
             context, cityName!, widget.depoName!, userId, widget.role);
+
       });
 
       getUserId().whenComplete(() {
