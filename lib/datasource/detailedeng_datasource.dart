@@ -149,7 +149,7 @@ class DetailedEngSource extends DataGridSource {
                 },
                 child: const Text(
                   'Add',
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 10),
                 ))
             : (dataGridCell.columnName == 'Delete')
                 ? IconButton(
@@ -166,142 +166,150 @@ class DetailedEngSource extends DataGridSource {
                 : dataGridCell.columnName == 'button'
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
-                        return ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(backgroundColor: blue),
-                            onPressed: () {
-                              String activitydata =
-                                  row.getCells()[4].value.toString().trim();
-                              if (activitydata == "null" ||
-                                  activitydata.isEmpty) {
-                                showDialog(
-                                  context: mainContext,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      actionsAlignment:
-                                          MainAxisAlignment.center,
-                                      elevation: 10,
-                                      backgroundColor: Colors.white,
-                                      icon: const Icon(
-                                        Icons.warning_amber,
-                                        size: 45,
-                                        color: Colors.red,
-                                      ),
-                                      title: const Text(
-                                        'Drawing Number is Required',
-                                        style: TextStyle(
-                                            color: Colors.blue,
-                                            fontSize: 14,
-                                            letterSpacing: 2,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          style: const ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStatePropertyAll(
-                                                      Colors.blue)),
-                                          child: const Text(
-                                            'OK',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
-                              } else {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => UploadDocument(
-                                    title: 'DetailedEngRFC',
-                                    cityName: cityName,
-                                    depoName: depoName,
-                                    userId: userId,
-                                    date: activitydata,
-                                    fldrName:
-                                        row.getCells()[0].value.toString(),
-                                  ),
-                                ));
-                              }
+                        return Container(
+                          width: 60,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(0),
+                                  backgroundColor: blue),
+                              onPressed: () {
+                                String activitydata =
+                                    row.getCells()[4].value.toString().trim();
+                                if (activitydata == "null" ||
+                                    activitydata.isEmpty) {
+                                  showDialog(
+                                    context: mainContext,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        actionsAlignment:
+                                            MainAxisAlignment.center,
+                                        elevation: 10,
+                                        backgroundColor: Colors.white,
+                                        icon: const Icon(
+                                          Icons.warning_amber,
+                                          size: 45,
+                                          color: Colors.red,
+                                        ),
+                                        title: const Text(
+                                          'Drawing Number is Required',
+                                          style: TextStyle(
+                                              color: Colors.blue,
+                                              fontSize: 14,
+                                              letterSpacing: 2,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            style: const ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStatePropertyAll(
+                                                        Colors.blue)),
+                                            child: const Text(
+                                              'OK',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => UploadDocument(
+                                      title: 'DetailedEngRFC',
+                                      cityName: cityName,
+                                      depoName: depoName,
+                                      userId: userId,
+                                      date: activitydata,
+                                      fldrName:
+                                          row.getCells()[0].value.toString(),
+                                    ),
+                                  ));
+                                }
 
-                              // showDialog(
-                              //     context: context,
-                              //     builder: (context) => AlertDialog(
-                              //         content: SizedBox(
-                              //             height: 100,
-                              //             child: Column(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.spaceBetween,
-                              //               children: [
-                              //                 Text(
-                              //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                              //                 Text(
-                              //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                              //               ],
-                              //             ))));
-                            },
-                            child: const Text(
-                              'Upload',
-                              style: TextStyle(fontSize: 12),
-                            ));
+                                // showDialog(
+                                //     context: context,
+                                //     builder: (context) => AlertDialog(
+                                //         content: SizedBox(
+                                //             height: 100,
+                                //             child: Column(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.spaceBetween,
+                                //               children: [
+                                //                 Text(
+                                //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
+                                //                 Text(
+                                //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
+                                //                 Text(
+                                //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
+                                //               ],
+                                //             ))));
+                              },
+                              child: const Text(
+                                'Upload',
+                                style: TextStyle(fontSize: 10),
+                              )),
+                        );
                       })
                     : dataGridCell.columnName == 'ViewDrawing'
                         ? LayoutBuilder(builder:
                             (BuildContext context, BoxConstraints constraints) {
-                            return ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: blue),
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => ViewAllPdf(
-                                            role: role,
-                                            title: 'DetailedEngRFC',
-                                            cityName: cityName,
-                                            depoName: depoName,
-                                            userId: userId,
-                                            date: row
-                                                .getCells()[4]
-                                                .value
-                                                .toString(),
-                                            docId:
-                                                '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
-                                          )
-                                      // ViewFile()
-                                      // UploadDocument(
-                                      //     title: 'DetailedEngRFC',
-                                      //     cityName: cityName,
-                                      //     depoName: depoName,
-                                      //     activity: '${row.getCells()[1].value.toString()}'),
-                                      ));
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (context) => AlertDialog(
-                                  //         content: SizedBox(
-                                  //             height: 100,
-                                  //             child: Column(
-                                  //               mainAxisAlignment:
-                                  //                   MainAxisAlignment.spaceBetween,
-                                  //               children: [
-                                  //                 Text(
-                                  //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                                  //                 Text(
-                                  //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                                  //                 Text(
-                                  //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                                  //               ],
-                                  //             ))));
-                                },
-                                child: const Text(
-                                  'View',
-                                  style: TextStyle(fontSize: 12),
-                                ));
+                            return Container(
+                              width: 50,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(0),
+                                      backgroundColor: blue),
+                                  onPressed: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => ViewAllPdf(
+                                              role: role,
+                                              title: 'DetailedEngRFC',
+                                              cityName: cityName,
+                                              depoName: depoName,
+                                              userId: userId,
+                                              date: row
+                                                  .getCells()[4]
+                                                  .value
+                                                  .toString(),
+                                              docId:
+                                                  '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
+                                            )
+                                        // ViewFile()
+                                        // UploadDocument(
+                                        //     title: 'DetailedEngRFC',
+                                        //     cityName: cityName,
+                                        //     depoName: depoName,
+                                        //     activity: '${row.getCells()[1].value.toString()}'),
+                                        ));
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (context) => AlertDialog(
+                                    //         content: SizedBox(
+                                    //             height: 100,
+                                    //             child: Column(
+                                    //               mainAxisAlignment:
+                                    //                   MainAxisAlignment.spaceBetween,
+                                    //               children: [
+                                    //                 Text(
+                                    //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
+                                    //                 Text(
+                                    //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
+                                    //                 Text(
+                                    //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
+                                    //               ],
+                                    //             ))));
+                                  },
+                                  child: const Text(
+                                    'View',
+                                    style: TextStyle(fontSize: 10),
+                                  )),
+                            );
                           })
                         : (dataGridCell.columnName == 'PreparationDate') &&
                                 dataGridCell.value != ''

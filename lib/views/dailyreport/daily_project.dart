@@ -97,7 +97,8 @@ class _DailyProjectState extends State<DailyProject> {
                   cityName: widget.cityName.toString(),
                   depoName: widget.depoName.toString(),
                   role: widget.role,
-                  id: 'Daily Report',currentDate: selectedDate,
+                  id: 'Daily Report',
+                  currentDate: selectedDate,
                   userId: userId,
                 ),
               )),
@@ -236,35 +237,37 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'upload',
                             allowEditing: false,
-                            width: 150,
+                            width: 100,
                             label: Container(
                               //Padding: tablepadding,
                               alignment: Alignment.center,
-                              child: Text('Upload Image',
-                                  overflow: TextOverflow.values.first,
-                                  style: tableheaderwhitecolor
-                                  //    textAlign: TextAlign.center,
-                                  ),
+                              child: Text(
+                                'Upload Image',
+                                overflow: TextOverflow.values.first,
+                                style: tableheaderwhitecolor,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                           GridColumn(
                             columnName: 'view',
                             allowEditing: false,
-                            width: 120,
+                            width: 50,
                             label: Container(
                               //Padding: tablepadding,
                               alignment: Alignment.center,
-                              child: Text('View Image',
-                                  overflow: TextOverflow.values.first,
-                                  style: tableheaderwhitecolor
-                                  //    textAlign: TextAlign.center,
-                                  ),
+                              child: Text(
+                                'View Image',
+                                overflow: TextOverflow.values.first,
+                                style: tableheaderwhitecolor,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                           GridColumn(
                             columnName: 'Add',
                             allowEditing: false,
-                            width: 120,
+                            width: 70,
                             label: Container(
                               //Padding: tablepadding,
                               alignment: Alignment.center,
@@ -427,45 +430,48 @@ class _DailyProjectState extends State<DailyProject> {
                             columnName: 'upload',
                             //autoFit//Padding: tablepadding,
                             allowEditing: false,
-                            width: 150,
+                            width: 100,
                             label: Container(
                               //Padding: tablepadding,
                               alignment: Alignment.center,
-                              child: Text('Upload Image',
-                                  overflow: TextOverflow.values.first,
-                                  style: tableheaderwhitecolor
-                                  //    textAlign: TextAlign.center,
-                                  ),
+                              child: Text(
+                                'Upload Image',
+                                overflow: TextOverflow.values.first,
+                                style: tableheaderwhitecolor,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                           GridColumn(
                             columnName: 'view',
                             //autoFit//Padding: tablepadding,
                             allowEditing: false,
-                            width: 120,
+                            width: 80,
                             label: Container(
                               //Padding: tablepadding,
                               alignment: Alignment.center,
-                              child: Text('view Image',
-                                  overflow: TextOverflow.values.first,
-                                  style: tableheaderwhitecolor
-                                  //    textAlign: TextAlign.center,
-                                  ),
+                              child: Text(
+                                'view Image',
+                                overflow: TextOverflow.values.first,
+                                style: tableheaderwhitecolor,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                           GridColumn(
                             columnName: 'Add',
                             //autoFit//Padding: tablepadding,
                             allowEditing: false,
-                            width: 120,
+                            width: 70,
                             label: Container(
                               //Padding: tablepadding,
                               alignment: Alignment.center,
-                              child: Text('Add Row',
-                                  overflow: TextOverflow.values.first,
-                                  style: tableheaderwhitecolor
-                                  //    textAlign: TextAlign.center,
-                                  ),
+                              child: Text(
+                                'Add Row',
+                                overflow: TextOverflow.values.first,
+                                style: tableheaderwhitecolor,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                           GridColumn(

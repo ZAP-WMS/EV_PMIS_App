@@ -75,22 +75,27 @@ class QualitycmuDataSource extends DataGridSource {
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadDocument(
-                            title: 'QualityChecklist',
-                            subtitle: 'Electrical_Engineer',
-                            cityName: cityName,
-                            depoName: depoName,
-                            userId: userId,
-                            fldrName: 'CMU Table',
-                            date: currentDate,
-                            srNo: row.getCells()[0].value,
-                          ),
-                        ));
-                      },
-                      child: Text('Upload', style: uploadViewStyle));
+                  return Container(
+                    width: 60,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: blue, padding: EdgeInsets.all(0)),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UploadDocument(
+                              title: 'QualityChecklist',
+                              subtitle: 'Electrical_Engineer',
+                              cityName: cityName,
+                              depoName: depoName,
+                              userId: userId,
+                              fldrName: 'CMU Table',
+                              date: currentDate,
+                              srNo: row.getCells()[0].value,
+                            ),
+                          ));
+                        },
+                        child: Text('Upload', style: uploadViewStyle)),
+                  );
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:

@@ -31,15 +31,18 @@ class SplitScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             actions: [
               Container(
-                padding: const EdgeInsets.only(right: 15,),
+                padding: const EdgeInsets.only(
+                  right: 15,
+                ),
                 child: InkWell(
-                    onTap: () {
-                      onWillPop(context);
-                       },
-                    child: const Icon(
-                      Icons.logout_sharp,
-                      size: 25,
-                    ),),
+                  onTap: () {
+                    onWillPop(context);
+                  },
+                  child: const Icon(
+                    Icons.logout_sharp,
+                    size: 25,
+                  ),
+                ),
               ),
             ],
           ),
@@ -90,7 +93,7 @@ class SplitScreen extends StatelessWidget {
                           child: const Text(
                             'EV Bus Project Analysis Dashboard',
                             style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                                fontSize: 10, fontWeight: FontWeight.bold),
                           )),
                     )
                   ],
@@ -136,7 +139,7 @@ class SplitScreen extends StatelessWidget {
                           child: const Text(
                             'EV Bus Depot Management System',
                             style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                                fontSize: 10, fontWeight: FontWeight.bold),
                           )),
                     )
                   ],
@@ -153,7 +156,7 @@ class SplitScreen extends StatelessWidget {
             },
             child: const Text(
               'Proceed to cities',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             )),
       ),
     );

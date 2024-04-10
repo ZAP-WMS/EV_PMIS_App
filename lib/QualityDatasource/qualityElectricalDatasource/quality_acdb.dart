@@ -72,45 +72,56 @@ class QualityacdDataSource extends DataGridSource {
               //         dataGridCell.columnName == 'Weightage')
               Alignment.center,
           // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadDocument(
-                            title: 'QualityChecklist',
-                            subtitle: 'Electrical_Engineer',
-                            cityName: cityName,
-                            depoName: depoName,
-                            userId: userId,
-                            fldrName: 'ACDB Table',
-                            date: currentDate,
-                            srNo: row.getCells()[0].value,
-                          ),
-                        ));
-                      },
-                      child: Text('Upload', style: uploadViewStyle));
+                  return Container(
+                    width: 60,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: blue, padding: EdgeInsets.all(0)),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UploadDocument(
+                              title: 'QualityChecklist',
+                              subtitle: 'Electrical_Engineer',
+                              cityName: cityName,
+                              depoName: depoName,
+                              userId: userId,
+                              fldrName: 'ACDB Table',
+                              date: currentDate,
+                              srNo: row.getCells()[0].value,
+                            ),
+                          ));
+                        },
+                        child: Text('Upload', style: uploadViewStyle)),
+                  );
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
-                      return ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewAllPdf(
-                                      title: 'QualityChecklist',
-                                      subtitle: 'Electrical_Engineer',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      userId: userId,
-                                      fldrName: 'ACDB Table',
-                                      date: currentDate,
-                                      srNo: row.getCells()[0].value,
-                                    )));
-                          },
-                          child: Text('View', style: uploadViewStyle));
+                      return Container(
+                        width: 50,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: blue,
+                                padding: EdgeInsets.all(0)),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewAllPdf(
+                                        title: 'QualityChecklist',
+                                        subtitle: 'Electrical_Engineer',
+                                        cityName: cityName,
+                                        depoName: depoName,
+                                        userId: userId,
+                                        fldrName: 'ACDB Table',
+                                        date: currentDate,
+                                        srNo: row.getCells()[0].value,
+                                      )));
+                            },
+                            child: Text('View', style: uploadViewStyle)),
+                      );
                     })
 
                   // dataGridCell.columnName == 'button'

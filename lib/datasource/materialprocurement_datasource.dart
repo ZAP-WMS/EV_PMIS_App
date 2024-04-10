@@ -73,27 +73,35 @@ class MaterialDatasource extends DataGridSource {
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: (dataGridCell.columnName == 'Add')
-            ? ElevatedButton(
-                onPressed: () {
-                  addRowAtIndex(
-                      dataRowIndex + 1,
-                      MaterialProcurementModel(
-                          cityName: '',
-                          details: '',
-                          olaNo: '',
-                          vendorName: '',
-                          oemApproval: '',
-                          oemClearance: '',
-                          croPlacement: '',
-                          croVendor: '',
-                          croNumber: '',
-                          unit: '',
-                          qty: 1,
-                          materialSite:
-                              DateFormat('dd-MM-yyyy').format(DateTime.now())));
-                  // DateFormat().add_yMd().format(DateTime.now())));
-                },
-                child: const Text('Add'))
+            ? Container(
+                width: 50,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: blue, padding: EdgeInsets.all(0)),
+                    onPressed: () {
+                      addRowAtIndex(
+                          dataRowIndex + 1,
+                          MaterialProcurementModel(
+                              cityName: '',
+                              details: '',
+                              olaNo: '',
+                              vendorName: '',
+                              oemApproval: '',
+                              oemClearance: '',
+                              croPlacement: '',
+                              croVendor: '',
+                              croNumber: '',
+                              unit: '',
+                              qty: 1,
+                              materialSite: DateFormat('dd-MM-yyyy')
+                                  .format(DateTime.now())));
+                      // DateFormat().add_yMd().format(DateTime.now())));
+                    },
+                    child: Text(
+                      'Add',
+                      style: uploadViewStyle,
+                    )),
+              )
             : (dataGridCell.columnName == 'Delete')
                 ? IconButton(
                     onPressed: () async {

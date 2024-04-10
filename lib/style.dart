@@ -65,7 +65,7 @@ TextStyle tableheaderwhitecolor =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: blue);
 
 TextStyle tablefontsize = const TextStyle(fontSize: 12, color: Colors.black);
-TextStyle uploadViewStyle = const TextStyle(fontSize: 12, color: Colors.white);
+TextStyle uploadViewStyle = const TextStyle(fontSize: 10, color: Colors.white);
 EdgeInsets tablepadding =
     const EdgeInsets.symmetric(horizontal: 5, vertical: 12);
 

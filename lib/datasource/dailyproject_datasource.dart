@@ -70,72 +70,78 @@ class DailyDataSource extends DataGridSource {
 
         return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: (dataGridCell.columnName == 'view')
-              ? ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      mainContext,
-                      MaterialPageRoute(
-                        builder: (context) => ViewAllPdf(
-                          title: Pagetitle,
-                          cityName: cityName,
-                          depoName: depoName,
-                          userId: userId,
-                          date: row.getCells()[0].value.toString(),
-                          docId: row.getCells()[1].value.toString(),
+              ? SizedBox(
+                  width: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: blue, padding: EdgeInsets.all(0)),
+                    onPressed: () {
+                      Navigator.push(
+                        mainContext,
+                        MaterialPageRoute(
+                          builder: (context) => ViewAllPdf(
+                            title: Pagetitle,
+                            cityName: cityName,
+                            depoName: depoName,
+                            userId: userId,
+                            date: row.getCells()[0].value.toString(),
+                            docId: row.getCells()[1].value.toString(),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'View',
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
+                      );
+                    },
+                    child: Text('View', style: uploadViewStyle),
                   ),
                 )
               : (dataGridCell.columnName == 'upload')
-                  ? ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            mainContext,
-                            MaterialPageRoute(
-                              builder: (context) => UploadDocument(
-                                title: Pagetitle,
-                                cityName: cityName,
-                                depoName: depoName,
-                                userId: userId,
-                                date: selectedDate,
-                                fldrName: row.getCells()[1].value.toString(),
-                              ),
-                            ));
-                      },
-                      child: const Text(
-                        'Upload',
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
+                  ? Container(
+                      width: 60,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: blue, padding: EdgeInsets.all(0)),
+                        onPressed: () {
+                          Navigator.push(
+                              mainContext,
+                              MaterialPageRoute(
+                                builder: (context) => UploadDocument(
+                                  title: Pagetitle,
+                                  cityName: cityName,
+                                  depoName: depoName,
+                                  userId: userId,
+                                  date: selectedDate,
+                                  fldrName: row.getCells()[1].value.toString(),
+                                ),
+                              ));
+                        },
+                        child: Text('Upload', style: uploadViewStyle),
                       ),
                     )
                   : (dataGridCell.columnName == 'Add')
-                      ? ElevatedButton(
-                          onPressed: () {
-                            addRowAtIndex(
-                              dataRowIndex + 1,
-                              DailyProjectModel(
-                                siNo: dataRowIndex + 2,
-                                typeOfActivity: '',
-                                activityDetails: '',
-                                progress: '',
-                                status: '',
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Add',
-                            style: TextStyle(fontSize: 12),
-                          ))
+                      ? Container(
+                          width: 50,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: blue,
+                                  padding: EdgeInsets.all(0)),
+                              onPressed: () {
+                                addRowAtIndex(
+                                  dataRowIndex + 1,
+                                  DailyProjectModel(
+                                    siNo: dataRowIndex + 2,
+                                    typeOfActivity: '',
+                                    activityDetails: '',
+                                    progress: '',
+                                    status: '',
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Add',
+                                style: uploadViewStyle,
+                              )),
+                        )
                       : (dataGridCell.columnName == 'Delete')
                           ? IconButton(
                               onPressed: () async {

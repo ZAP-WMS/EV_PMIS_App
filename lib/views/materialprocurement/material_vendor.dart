@@ -343,7 +343,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                           const EdgeInsets.symmetric(
                                               horizontal: 16),
                                       allowEditing: false,
-                                      width: 120,
+                                      width: 80,
                                       label: Container(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
@@ -619,7 +619,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     autoFitPadding: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     allowEditing: false,
-                                    width: 120,
+                                    width: 80,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
@@ -637,7 +637,7 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
                                     autoFitPadding: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     allowEditing: false,
-                                    width: 120,
+                                    width: 80,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),

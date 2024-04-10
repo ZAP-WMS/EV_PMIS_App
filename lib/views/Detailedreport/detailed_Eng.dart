@@ -55,7 +55,6 @@ class _DetailedEngtState extends State<DetailedEng>
 
   @override
   void initState() {
-    
     getAssignedDepots().whenComplete(() {
       cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
 
@@ -88,7 +87,6 @@ class _DetailedEngtState extends State<DetailedEng>
 
         _detailedEngSourceShed = DetailedEngSourceShed(DetailedProjectshed,
             context, cityName!, widget.depoName!, userId, widget.role);
-
       });
 
       getUserId().whenComplete(() {
@@ -514,7 +512,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -526,7 +524,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -628,7 +626,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'Add',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 100,
+                                width: 80,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -714,7 +712,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -726,7 +724,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -828,7 +826,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'Add',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 100,
+                                width: 80,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -916,7 +914,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -928,7 +926,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 100,
+                                width: 50,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1032,7 +1030,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'Add',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 120,
+                                width: 80,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1116,7 +1114,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1128,7 +1126,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1232,7 +1230,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'Add',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 120,
+                                width: 80,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1351,7 +1349,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1363,7 +1361,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1465,7 +1463,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'Add',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 100,
+                                width: 80,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,
@@ -1549,7 +1547,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'button',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1561,7 +1559,7 @@ class _DetailedEngtState extends State<DetailedEng>
                               ),
                               GridColumn(
                                 columnName: 'ViewDrawing',
-                                width: 100,
+                                width: 80,
                                 allowEditing: false,
                                 label: Container(
                                   padding: tablepadding,
@@ -1663,7 +1661,7 @@ class _DetailedEngtState extends State<DetailedEng>
                                 columnName: 'Add',
                                 autoFitPadding: tablepadding,
                                 allowEditing: false,
-                                width: 100,
+                                width: 80,
                                 label: Container(
                                   padding: tablepadding,
                                   alignment: Alignment.center,

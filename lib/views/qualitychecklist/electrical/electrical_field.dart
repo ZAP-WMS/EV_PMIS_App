@@ -423,7 +423,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                     columnName: 'Upload',
                                     allowEditing: false,
                                     visible: true,
-                                    width: 150,
+                                    width: 60,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
@@ -436,7 +436,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                   GridColumn(
                                     columnName: 'View',
                                     allowEditing: true,
-                                    width: 150,
+                                    width: 50,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
@@ -676,7 +676,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                     columnName: 'Upload',
                                     allowEditing: false,
                                     visible: true,
-                                    width: 150,
+                                    width: 60,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
@@ -689,7 +689,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                   GridColumn(
                                     columnName: 'View',
                                     allowEditing: true,
-                                    width: 150,
+                                    width: 50,
                                     label: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
@@ -768,7 +768,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
       child: CustomTextField(
           controller: controller,
           labeltext: title,
-           isSuffixIcon: false,
+          isSuffixIcon: false,
           // validatortext: '$title is Required',
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.next),
