@@ -320,9 +320,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
 
       _isLoading = false;
       setState(() {});
-
-      _isLoading = false;
-      setState(() {});
     });
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
@@ -429,10 +426,11 @@ class _KeyEvents2State extends State<KeyEvents2> {
                 //       '${widget.cityName} / ${widget.depoName} / Key Events  '),
                 //   backgroundColor: blue,
                 // ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      StreamBuilder(
+                body: Column(
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      child: StreamBuilder(
                           stream: yourstream,
                           builder: (context, snapshot) {
                             ganttdata = [];
@@ -474,7 +472,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                               return SingleChildScrollView(
                                 child: SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.4,
+                                        0.6,
                                     child: Row(children: [
                                       Expanded(
                                         child: SfDataGridTheme(
@@ -756,47 +754,43 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                           ),
                                         ),
                                       ),
-                                      SingleChildScrollView(
-                                        child: SizedBox(
-                                            width: 200,
-                                            height:
-                                                MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.93,
-                                            child: GanttChartView(
-                                                scrollController:
-                                                    _scrollController,
-                                                maxDuration: null,
-                                                // const Duration(days: 30 * 2),
-                                                // optional, set to null for infinite horizontal scroll
-                                                startDate: dateTime, //required
-                                                dayWidth:
-                                                    35, //column width for each day
-                                                dayHeaderHeight: 35,
-                                                eventHeight:
-                                                    24, //row height for events
-                                                stickyAreaWidth:
-                                                    70, //sticky area width
-                                                showStickyArea:
-                                                    false, //show sticky area or not
-                                                showDays:
-                                                    true, //show days or not
-                                                startOfTheWeek: WeekDay
-                                                    .monday, //custom start of the week
-                                                weekHeaderHeight: 23,
-                                                weekEnds: const {
-                                                  // WeekDay.saturday,
-                                                  // WeekDay.sunday
-                                                }, //custom weekends
-                                                isExtraHoliday: (context, day) {
-                                                  //define custom holiday logic for each day
-                                                  return DateUtils.isSameDay(
-                                                      DateTime(2023, 7, 1),
-                                                      day);
-                                                },
-                                                events: ganttdata)),
-                                      )
+                                      SizedBox(
+                                          width: 200,
+                                          height:
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.93,
+                                          child: GanttChartView(
+                                              scrollController:
+                                                  _horizontalscrollController,
+                                              maxDuration: null,
+                                              // const Duration(days: 30 * 2),
+                                              // optional, set to null for infinite horizontal scroll
+                                              startDate: dateTime, //required
+                                              dayWidth:
+                                                  35, //column width for each day
+                                              dayHeaderHeight: 35,
+                                              eventHeight:
+                                                  24, //row height for events
+                                              stickyAreaWidth:
+                                                  70, //sticky area width
+                                              showStickyArea:
+                                                  false, //show sticky area or not
+                                              showDays: true, //show days or not
+                                              startOfTheWeek: WeekDay
+                                                  .monday, //custom start of the week
+                                              weekHeaderHeight: 23,
+                                              weekEnds: const {
+                                                // WeekDay.saturday,
+                                                // WeekDay.sunday
+                                              }, //custom weekends
+                                              isExtraHoliday: (context, day) {
+                                                //define custom holiday logic for each day
+                                                return DateUtils.isSameDay(
+                                                    DateTime(2023, 7, 1), day);
+                                              },
+                                              events: ganttdata))
                                     ])),
                               );
                             } else {
@@ -1895,10 +1889,10 @@ class _KeyEvents2State extends State<KeyEvents2> {
                               }
 
                               return SingleChildScrollView(
-                                physics: const NeverScrollableScrollPhysics(),
+                                // physics: const NeverScrollableScrollPhysics(),
                                 child: SizedBox(
                                     height: MediaQuery.of(context).size.height *
-                                        0.80,
+                                        0.6,
                                     child: Row(children: [
                                       Expanded(
                                         child: SfDataGridTheme(
@@ -2041,7 +2035,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                               GridColumn(
                                                 columnName: 'ActualStart',
                                                 allowEditing: false,
-                                                width: 150,
+                                                width: 170,
                                                 label: Container(
                                                   padding: const EdgeInsets
                                                           .symmetric(
@@ -2202,7 +2196,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                         dateTime, //required
                                                     dayWidth:
                                                         35, //column width for each day
-                                                    dayHeaderHeight: 37,
+                                                    dayHeaderHeight: 50,
                                                     eventHeight:
                                                         55, //row height for events
                                                     stickyAreaWidth:
@@ -2230,7 +2224,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .height *
-                                                  0.60,
+                                                  0.4,
                                               child: SingleChildScrollView(
                                                 controller:
                                                     _dataGridScrollController,
@@ -2249,7 +2243,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                     eventHeight:
                                                         55, //row height for events
                                                     stickyAreaWidth:
-                                                        70, //sticky area width
+                                                        30, //sticky area width
                                                     showStickyArea:
                                                         false, //show sticky area or not
                                                     showDays:
@@ -2257,15 +2251,8 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                                     startOfTheWeek: WeekDay
                                                         .monday, //custom start of the week
                                                     weekHeaderHeight: 0,
-                                                    weekEnds: const {
-                                                      // WeekDay.saturday,
-                                                      // WeekDay.sunday
-                                                    }, //custom weekends
-                                                    // isExtraHoliday: (context, day) {
-                                                    //   //define custom holiday logic for each day
-                                                    //   return DateUtils.isSameDay(
-                                                    //       DateTime(2023, 7, 1), day);
-                                                    // },
+                                                    weekEnds: const {}, //custom weekends
+
                                                     events: ganttdata),
                                               )),
                                         ],
@@ -2274,75 +2261,83 @@ class _KeyEvents2State extends State<KeyEvents2> {
                               );
                             }
                           }),
-                      Container(
-                        width: 450,
-                        alignment: Alignment.bottomCenter,
-                        decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(width: 2.0, color: blue),
-                              right: BorderSide(width: 2.0, color: blue),
-                              bottom: BorderSide(width: 2.0, color: blue),
-                              left: BorderSide(width: 2.0, color: blue),
-                            ),
-                            shape: BoxShape.rectangle),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Select Project Closure Date :',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('choose Date'),
-                                      content: SizedBox(
-                                        width: 400,
-                                        height: 500,
-                                        child: SfDateRangePicker(
-                                          view: DateRangePickerView.month,
-                                          showTodayButton: false,
-                                          showActionButtons: true,
-                                          selectionMode:
-                                              DateRangePickerSelectionMode
-                                                  .single,
-                                          onSelectionChanged:
-                                              (DateRangePickerSelectionChangedArgs
-                                                  args) {
-                                            if (args.value is PickerDateRange) {
-                                              rangestartDate =
-                                                  args.value.startDate;
-                                            }
-                                          },
-                                          onSubmit: (value) {
-                                            setState(() {
-                                              closureDate = DateTime.parse(
-                                                  value.toString());
-                                              print(closureDate);
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          onCancel: () {},
-                                        ),
+                    ),
+                    Container(
+                      width: 480,
+                      height: 40,
+                      alignment: Alignment.bottomCenter,
+                      decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 2.0, color: blue),
+                            right: BorderSide(width: 2.0, color: blue),
+                            bottom: BorderSide(width: 2.0, color: blue),
+                            left: BorderSide(width: 2.0, color: blue),
+                          ),
+                          shape: BoxShape.rectangle),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Select Project Closure Date :',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    // title: const Text('choose Date'),
+                                    content: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.9,
+                                      child: SfDateRangePicker(
+                                        headerHeight: 15,
+                                        view: DateRangePickerView.month,
+                                        showTodayButton: false,
+                                        showActionButtons: true,
+                                        selectionMode:
+                                            DateRangePickerSelectionMode.single,
+                                        onSelectionChanged:
+                                            (DateRangePickerSelectionChangedArgs
+                                                args) {
+                                          if (args.value is PickerDateRange) {
+                                            rangestartDate =
+                                                args.value.startDate;
+                                          }
+                                        },
+                                        onSubmit: (value) {
+                                          setState(() {
+                                            closureDate = DateTime.parse(
+                                                value.toString());
+                                            print(closureDate);
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        onCancel: () {
+                                          Navigator.pop(context);
+                                        },
                                       ),
                                     ),
-                                  );
-                                },
-                                icon: const Icon(Icons.today)),
-                            Text(
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.today)),
+                          Expanded(
+                            child: Text(
                               DateFormat('dd-MM-yyyy').format(closureDate!),
                               //  DateFormat.yMMMMd().format(closureDate!),
                               style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+                                  fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 )));
 
     //     ? LoadingPage()

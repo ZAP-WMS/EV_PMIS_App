@@ -172,8 +172,8 @@ class _DepotOverviewState extends State<DepotOverview> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: 40,
+                            width: MediaQuery.of(context).size.width / 1.8,
+                            height: 50,
                             child: Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: Row(
@@ -188,7 +188,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                           color: black),
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  const SizedBox(width: 5),
                                   ElevatedButton(
                                       onPressed: isProjectManager == false
                                           ? null
@@ -207,11 +207,12 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                     .forEach((element) {});
                                               }
                                             },
-                                      child: const Text(
+                                      child: Text(
                                         'Pick file',
                                         textAlign: TextAlign.end,
+                                        style: appTextStyle,
                                       )),
-                                  const SizedBox(width: 10)
+                                  const SizedBox(width: 5)
                                 ],
                               ),
                             ),
@@ -224,7 +225,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   Container(
                                       width: MediaQuery.of(context).size.width /
                                               2 -
-                                          50,
+                                          70,
                                       height: 35,
                                       decoration: BoxDecoration(
                                           color: lightblue,
@@ -279,8 +280,8 @@ class _DepotOverviewState extends State<DepotOverview> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: 40,
+                            width: MediaQuery.of(context).size.width / 1.8,
+                            height: 50,
                             child: Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: Row(
@@ -319,11 +320,12 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                 });
                                               }
                                             },
-                                      child: const Text(
+                                      child: Text(
                                         'Pick file',
                                         textAlign: TextAlign.end,
+                                        style: appTextStyle,
                                       )),
-                                  const SizedBox(width: 10),
+                                  const SizedBox(width: 5),
                                 ],
                               ),
                             ),
@@ -336,7 +338,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   Container(
                                       width: MediaQuery.of(context).size.width /
                                               2 -
-                                          50,
+                                          70,
                                       height: 35,
                                       decoration: BoxDecoration(
                                           color: lightblue,
@@ -388,8 +390,8 @@ class _DepotOverviewState extends State<DepotOverview> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            height: 40,
+                            width: MediaQuery.of(context).size.width / 1.8,
+                            height: 50,
                             child: Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: Row(
@@ -426,11 +428,12 @@ class _DepotOverviewState extends State<DepotOverview> {
                                                     .forEach((element) {});
                                               }
                                             },
-                                      child: const Text(
+                                      child: Text(
                                         'Pick file',
                                         textAlign: TextAlign.end,
+                                        style: appTextStyle,
                                       )),
-                                  const SizedBox(width: 10),
+                                  const SizedBox(width: 5),
                                 ],
                               ),
                             ),
@@ -443,7 +446,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   Container(
                                       width: MediaQuery.of(context).size.width /
                                               2 -
-                                          50,
+                                          70,
                                       height: 35,
                                       decoration: BoxDecoration(
                                           color: lightblue,
@@ -537,7 +540,7 @@ class _DepotOverviewState extends State<DepotOverview> {
                                   ),
                                   GridColumn(
                                     columnName: 'Date',
-                                    width: 130,
+                                    width: 140,
                                     allowEditing: false,
                                     label: Container(
                                       alignment: Alignment.center,

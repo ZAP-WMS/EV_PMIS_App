@@ -53,8 +53,8 @@ class _DepotPageState extends State<DepotPage> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 1.0,
-                                mainAxisSpacing: 3,
+                                childAspectRatio: 0.9,
+                                mainAxisSpacing: 2,
                                 crossAxisCount: 2),
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -66,15 +66,6 @@ class _DepotPageState extends State<DepotPage> {
                                         'role': widget.role,
                                         'userId': userId
                                       }),
-                              // onTap: () => Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => OverviewPage(
-                              //         role: widget.role,
-                              //         depoName: snapshot.data!.docs[index]
-                              //             ['DepoName'],
-                              //       ),
-                              //     )),
                               child: cards(
                                 snapshot.data!.docs[index]['DepoName'],
                                 snapshot.data!.docs[index]['DepoUrl'],
@@ -159,11 +150,9 @@ class _DepotPageState extends State<DepotPage> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(
-            20,
-          ),
-          width: 90,
-          height: 90,
+          padding: const EdgeInsets.all(15),
+          width: MediaQuery.of(context).size.width * 90,
+          height: MediaQuery.of(context).size.width * 90,
           decoration: BoxDecoration(
             border: Border.all(color: grey),
             borderRadius: BorderRadius.circular(10),
@@ -171,7 +160,6 @@ class _DepotPageState extends State<DepotPage> {
               image: CachedNetworkImageProvider(
                 image,
               ),
-              //  NetworkImage(image),
               fit: BoxFit.cover,
             ),
           ),
