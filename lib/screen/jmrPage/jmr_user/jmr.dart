@@ -114,8 +114,141 @@ class _JmrUserPageState extends State<JmrUserPage> {
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10),
                           itemBuilder: (BuildContext context, int index) {
-                            return cardlist(title[index], index, title[index],
-                                'Civil', currentTabList[index]);
+                            return Column(
+                              children: [
+                                cardlist(title[index], index, title[index],
+                                    'Civil', currentTabList[index]),
+                                Container(
+                                  margin: const EdgeInsets.only(top: 5.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.035,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(
+                                              Colors.blue,
+                                            ),
+                                          ),
+                                          onPressed: isFieldEditable == false
+                                              ? null
+                                              : () async {
+                                                  FilePickerResult? result =
+                                                      await FilePicker.platform
+                                                          .pickFiles(
+                                                    withData: true,
+                                                    type: FileType.any,
+                                                    allowMultiple: false,
+                                                    // allowedExtensions: ['pdf']
+                                                  );
+
+                                                  if (result != null) {
+                                                    Uint8List? fileBytes =
+                                                        result
+                                                            .files.first.bytes;
+                                                    fileName = result
+                                                        .files.single.name;
+                                                    final storage =
+                                                        FirebaseStorage
+                                                            .instance;
+                                                    await storage
+                                                        .ref()
+                                                        .child(
+                                                            'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/${widget.userId}/${index + 1}/$fileName')
+                                                        .putData(fileBytes!);
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                        content: Text(
+                                                          'File Uploaded',
+                                                          style: TextStyle(
+                                                              color: white),
+                                                        ),
+                                                      ),
+                                                    );
+
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection(
+                                                            'JMRCollection')
+                                                        .doc(widget.depoName)
+                                                        .collection('Table')
+                                                        .doc(
+                                                            '${tabsForJmr[_selectedIndex]}JmrTable')
+                                                        .collection('userId')
+                                                        .doc(widget.userId)
+                                                        .set({
+                                                      "isFileUploaded": true
+                                                    });
+                                                  } else {
+                                                    // User canceled the picker
+                                                  }
+                                                },
+                                          child: Text(
+                                            'Upload',
+                                            style: TextStyle(
+                                                color: white, fontSize: 8),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ViewAllPdf(
+                                                cityName: widget.cityName,
+                                                depoName: widget.depoName,
+                                                title: 'jmr',
+                                                userId: widget.userId,
+                                                fldrName:
+                                                    'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/${widget.userId}/${index + 1}',
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.035,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.15,
+                                          margin:
+                                              const EdgeInsets.only(left: 5.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border:
+                                                Border.all(color: Colors.blue),
+                                          ),
+                                          child: const Text(
+                                            'View',
+                                            style: TextStyle(
+                                                color: Colors.blue,
+                                                fontSize: 8),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
                           }),
                     ),
                     Container(
@@ -130,8 +263,10 @@ class _JmrUserPageState extends State<JmrUserPage> {
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 10),
                           itemBuilder: (BuildContext context, int index) {
-                            return cardlist(title[index], index, title[index],
-                                'Electrical', currentTabList[index]);
+                            return Column(children: [
+                              cardlist(title[index], index, title[index],
+                                  'Electrical', currentTabList[index]),
+                            ]);
                           }),
                     ),
                   ]),
@@ -316,101 +451,6 @@ class _JmrUserPageState extends State<JmrUserPage> {
               },
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
-                    ),
-                    onPressed: isFieldEditable == false
-                        ? null
-                        : () async {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles(
-                              withData: true,
-                              type: FileType.any,
-                              allowMultiple: false,
-                              // allowedExtensions: ['pdf']
-                            );
-
-                            if (result != null) {
-                              Uint8List? fileBytes = result.files.first.bytes;
-                              fileName = result.files.single.name;
-                              final storage = FirebaseStorage.instance;
-                              await storage
-                                  .ref()
-                                  .child(
-                                      'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/${widget.userId}/${index + 1}/$fileName')
-                                  .putData(fileBytes!);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.green,
-                                  content: Text(
-                                    'File Uploaded',
-                                    style: TextStyle(color: white),
-                                  ),
-                                ),
-                              );
-
-                              await FirebaseFirestore.instance
-                                  .collection('JMRCollection')
-                                  .doc(widget.depoName)
-                                  .collection('Table')
-                                  .doc('${tabsForJmr[_selectedIndex]}JmrTable')
-                                  .collection('userId')
-                                  .doc(widget.userId)
-                                  .set({"isFileUploaded": true});
-                            } else {
-                              // User canceled the picker
-                            }
-                          },
-                    child: Text(
-                      'Upload',
-                      style: TextStyle(color: white, fontSize: 10),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewAllPdf(
-                          cityName: widget.cityName,
-                          depoName: widget.depoName,
-                          title: 'jmr',
-                          userId: widget.userId,
-                          fldrName:
-                              'jmrFiles/${tabsForJmr[_selectedIndex]}/${widget.cityName}/${widget.depoName}/${widget.userId}/${index + 1}',
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: MediaQuery.of(context).size.height * 0.03,
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    margin: const EdgeInsets.only(left: 5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.blue),
-                    ),
-                    child: const Text(
-                      'View',
-                      style: TextStyle(color: Colors.blue, fontSize: 10),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
         ],
       ),
     );

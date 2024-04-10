@@ -641,7 +641,7 @@ class _EnergyManagementState extends State<EnergyManagement> {
                                           getTitlesWidget: (data1, meta) {
                                             return Text(
                                               value.intervalData[data1.toInt()]
-                                                      .toString(),
+                                                  .toString(),
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12),

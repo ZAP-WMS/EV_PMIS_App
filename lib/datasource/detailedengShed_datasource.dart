@@ -116,17 +116,6 @@ class DetailedEngSourceShed extends DataGridSource {
         buildDataGridRowsShed();
         notifyListeners();
       }
-      // Color getcolor() {
-      //   if (dataGridCell.columnName == 'Title' &&
-      //           dataGridCell.value == 'RFC Drawings of Civil Activities' ||
-      //       dataGridCell.value ==
-      //           'EV Layout Drawings of Electrical Activities' ||
-      //       dataGridCell.value == 'Shed Lighting Drawings & Specification') {
-      //     return green;
-      //   }
-
-      //   return Colors.transparent;
-      // }
 
       return Container(
         // color: getcolor(),
@@ -220,7 +209,6 @@ class DetailedEngSourceShed extends DataGridSource {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => UploadDocument(
                                           title: 'DetailedEngShed',
-                                          
                                           cityName: cityName,
                                           depoName: depoName,
                                           userId: userId,
@@ -976,7 +964,6 @@ class DetailedEngSourceShed extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         style: const TextStyle(fontSize: 12),

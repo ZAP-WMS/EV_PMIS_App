@@ -38,6 +38,7 @@ class SafetyField extends StatefulWidget {
 
 List<SafetyChecklistModel> safetylisttable = <SafetyChecklistModel>[];
 late SafetyChecklistDataSource _safetyChecklistDataSource;
+String? installationDate, enegizationDate, boardingDate;
 late DataGridController _dataGridController;
 List<dynamic> tabledata2 = [];
 Stream? _stream;
@@ -64,9 +65,6 @@ DateTime? date1 = DateTime.now();
 DateTime? date2 = DateTime.now();
 late TextEditingController tpController,
     revController,
-    installationController,
-    engizationController,
-    bordingController,
     locationContoller,
     addressController,
     contactController,
@@ -80,9 +78,6 @@ class _SafetyFieldState extends State<SafetyField> {
   List<String> assignedDepots = [];
   bool isFieldEditable = false;
   void initializeController() {
-    installationController = TextEditingController();
-    engizationController = TextEditingController();
-    bordingController = TextEditingController();
     tpController = TextEditingController();
     revController = TextEditingController();
     locationContoller = TextEditingController();
@@ -96,9 +91,6 @@ class _SafetyFieldState extends State<SafetyField> {
 
   @override
   void dispose() {
-    installationController.dispose();
-    engizationController.dispose();
-    bordingController.dispose();
     tpController.dispose();
     revController.dispose();
     locationContoller.dispose();
@@ -115,13 +107,9 @@ class _SafetyFieldState extends State<SafetyField> {
   void initState() {
     initializeController();
     getAssignedDepots();
-    _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,
-        widget.cityName!, widget.depoName!, widget.userId, selectedDate!);
-    _dataGridController = DataGridController();
-    cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
-    _fetchUserData();
-    getTableData().whenComplete(() {
+    getTableData().whenComplete(() async {
+      _fetchUserData();
       safetylisttable = checkTable ? getData() : safetylisttable;
       _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,
           widget.cityName!, widget.depoName!, widget.userId, selectedDate!);
@@ -130,7 +118,7 @@ class _SafetyFieldState extends State<SafetyField> {
           .collection('SafetyChecklistTable2')
           .doc(widget.depoName!)
           .collection('userId')
-          .doc(userId)
+          .doc(widget.userId)
           .collection('date')
           .doc(DateFormat.yMMMMd().format(DateTime.now()))
           .snapshots();
@@ -167,7 +155,7 @@ class _SafetyFieldState extends State<SafetyField> {
                 .collection('SafetyFieldData2')
                 .doc('${widget.depoName}')
                 .collection('userId')
-                .doc(userId)
+                .doc(widget.userId)
                 .collection('date')
                 .doc(DateFormat.yMMMMd().format(DateTime.now()))
                 .set({
@@ -181,16 +169,16 @@ class _SafetyFieldState extends State<SafetyField> {
               'ChargerType': chargerController.text,
               'DepotName': locationContoller.text,
               'ConductedBy': conductedController.text,
-              'InstallationDate': installationController.text,
-              'EnegizationDate': engizationController.text,
-              'BoardingDate': bordingController.text,
+              'InstallationDate': DateFormat.yMMMMd().format(date),
+              'EnegizationDate': DateFormat.yMMMMd().format(date1!),
+              'BoardingDate': DateFormat.yMMMMd().format(date2!),
             });
             showProgressDilogue(context);
             FirebaseApi().nestedKeyEventsField(
               'SafetyFieldData2',
               widget.depoName!,
               'userId',
-              userId,
+              widget.userId!,
             );
             store();
           },
@@ -209,7 +197,7 @@ class _SafetyFieldState extends State<SafetyField> {
                   .collection('SafetyFieldData2')
                   .doc('${widget.depoName}')
                   .collection('userId')
-                  .doc(userId)
+                  .doc(widget.userId)
                   .collection('date')
                   .doc(DateFormat.yMMMMd().format(DateTime.now()))
                   .snapshots(),
@@ -262,7 +250,6 @@ class _SafetyFieldState extends State<SafetyField> {
                                                             is PickerDateRange) {
                                                           date = args
                                                               .value.startDate;
-                                                          print(date);
                                                         } else {
                                                           // final List<PickerDateRange>
                                                           //     selectedRanges =
@@ -291,7 +278,10 @@ class _SafetyFieldState extends State<SafetyField> {
                                             size: 20,
                                           )),
                                       Text(
-                                        DateFormat('dd-MM-yyyy').format(date),
+                                        installationDate == null
+                                            ? DateFormat('dd-MM-yyyy')
+                                                .format(date)
+                                            : installationDate!,
                                         style: normaltextbold,
                                         textAlign: TextAlign.center,
                                       ),
@@ -372,7 +362,10 @@ class _SafetyFieldState extends State<SafetyField> {
                                             size: 20,
                                           )),
                                       Text(
-                                        DateFormat('dd-MM-yyyy').format(date1!),
+                                        enegizationDate == null
+                                            ? DateFormat('dd-MM-yyyy')
+                                                .format(date1!)
+                                            : enegizationDate!,
                                         textAlign: TextAlign.center,
                                         style: normalboldtext,
                                       ),
@@ -456,7 +449,10 @@ class _SafetyFieldState extends State<SafetyField> {
                                             size: 20,
                                           )),
                                       Text(
-                                        DateFormat('dd-MM-yyyy').format(date2!),
+                                        boardingDate == null
+                                            ? DateFormat('dd-MM-yyyy')
+                                                .format(date2!)
+                                            : boardingDate!,
                                         textAlign: TextAlign.center,
                                         style: normalboldtext,
                                       ),
@@ -594,10 +590,10 @@ class _SafetyFieldState extends State<SafetyField> {
                                   ),
                                 );
                               } else {
-                                alldata = '';
-                                alldata =
-                                    snapshot.data['data'] as List<dynamic>;
-                                safetylisttable.clear();
+                                // alldata = '';
+                                // alldata =
+                                //     snapshot.data['data'] as List<dynamic>;
+                                // safetylisttable.clear();
                                 // alldata.forEach((element) {
                                 //   safetylisttable.add(
                                 //       SafetyChecklistModel.fromJson(element));
@@ -741,12 +737,6 @@ class _SafetyFieldState extends State<SafetyField> {
     );
   }
 
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-    });
-  }
-
   void store() {
     Map<String, dynamic> table_data = {};
     for (var i in _safetyChecklistDataSource.dataGridRows) {
@@ -754,7 +744,7 @@ class _SafetyFieldState extends State<SafetyField> {
         if (data.columnName != 'Photo' && data.columnName != 'ViewPhoto') {
           table_data[data.columnName] = data.value;
         }
-        table_data['User ID'] = userId;
+        table_data['User ID'] = widget.userId;
       }
 
       tabledata2.add(table_data);
@@ -765,7 +755,7 @@ class _SafetyFieldState extends State<SafetyField> {
         .collection('SafetyChecklistTable2')
         .doc(widget.depoName!)
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('date')
         .doc(selectedDate)
         .set(
@@ -773,7 +763,7 @@ class _SafetyFieldState extends State<SafetyField> {
       SetOptions(merge: true),
     ).whenComplete(() {
       FirebaseApi().nestedKeyEventsField(
-          'SafetyChecklistTable2', widget.depoName!, 'userId', userId!);
+          'SafetyChecklistTable2', widget.depoName!, 'userId', widget.userId!);
       tabledata2.clear();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -1161,14 +1151,33 @@ class _SafetyFieldState extends State<SafetyField> {
     return Container(
       padding: const EdgeInsets.all(5),
       width: MediaQuery.of(context).size.width,
-      child: CustomTextField(
-          isFieldEditable: isFieldEditable,
-          controller: controller,
-          labeltext: title,
-          // validatortext: '$title is Required',
-          isSuffixIcon: false,
-          keyboardType: TextInputType.text,
-          textInputAction: textInputAction),
+      child: TextField(
+        controller: controller,
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          hintText: title,
+          hintStyle: const TextStyle(fontSize: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Colors.blue,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.blue),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.grey)),
+        ),
+      ),
     );
   }
 
@@ -1245,30 +1254,31 @@ class _SafetyFieldState extends State<SafetyField> {
     );
   }
 
-  void _fetchUserData() async {
-    await FirebaseFirestore.instance
+  Future _fetchUserData() async {
+    FirebaseFirestore.instance
         .collection('SafetyFieldData2')
         .doc('${widget.depoName}')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('date')
         .doc(DateFormat.yMMMMd().format(DateTime.now()))
         .get()
         .then((ds) {
-      setState(() {
-        // managername = ds.data()!['ManagerName'];
-        if (ds.exists) {
-          tpController.text = ds.data()!['TPNo'];
-          revController.text = ds.data()!['Rev'];
-          locationContoller.text = ds.data()!['DepotLocation'];
-          addressController.text = ds.data()!['Address'];
-          contactController.text = ds.data()!['ContactNo'];
-          latitudeController.text = ds.data()!['Latitude'];
-          stateController.text = ds.data()!['State'];
-          chargerController.text = ds.data()!['ChargerType'];
-          conductedController.text = ds.data()!['ConductedBy'];
-        }
-      });
+      // managername = ds.data()!['ManagerName'];
+      if (ds.exists) {
+        tpController.text = ds.data()!['TPNo'];
+        revController.text = ds.data()!['Rev'];
+        locationContoller.text = ds.data()!['DepotLocation'];
+        addressController.text = ds.data()!['Address'];
+        contactController.text = ds.data()!['ContactNo'];
+        latitudeController.text = ds.data()!['Latitude'];
+        stateController.text = ds.data()!['State'];
+        chargerController.text = ds.data()!['ChargerType'];
+        conductedController.text = ds.data()!['ConductedBy'];
+        installationDate = ds.data()!['InstallationDate'];
+        enegizationDate = ds.data()!['EnegizationDate'];
+        boardingDate = ds.data()!['BoardingDate'];
+      }
     });
   }
 
@@ -1277,7 +1287,7 @@ class _SafetyFieldState extends State<SafetyField> {
         .collection('SafetyChecklistTable2')
         .doc(widget.depoName!)
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('date')
         .doc(DateFormat.yMMMMd().format(DateTime.now()))
         .get();

@@ -31,17 +31,15 @@ class SplitScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             actions: [
               Container(
-                padding: const EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 15,),
                 child: InkWell(
                     onTap: () {
                       onWillPop(context);
-                      // CustomAlertBox().customLogOut(context,
-                      //     'Are you sure want to logout?', '/login-page', false);
-                    },
+                       },
                     child: const Icon(
                       Icons.logout_sharp,
                       size: 25,
-                    )),
+                    ),),
               ),
             ],
           ),

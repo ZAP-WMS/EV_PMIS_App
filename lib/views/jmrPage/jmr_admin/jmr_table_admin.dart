@@ -167,7 +167,7 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return LoadingPage();
+                          return const LoadingPage();
                         }
                         if (!snapshot.hasData) {
                           jmrtable = getData();
@@ -178,7 +178,8 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                             width: MediaQuery.of(context).size.width,
                             child: SingleChildScrollView(
                               child: SfDataGridTheme(
-                                data: SfDataGridThemeData(headerColor: blue),
+                                data: SfDataGridThemeData(
+                                    headerColor: white, gridLineColor: blue),
                                 child: SfDataGrid(
                                   source: _jmrDataSource,
                                   //key: key,
@@ -187,6 +188,7 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
                                       GridLinesVisibility.both,
+                                  headerRowHeight: 50,
                                   selectionMode: SelectionMode.single,
                                   navigationMode: GridNavigationMode.cell,
                                   columnWidthMode: ColumnWidthMode.none,
@@ -195,64 +197,62 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                   columns: [
                                     GridColumn(
                                       columnName: 'srNo',
-                                      autoFitPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 8),
                                       allowEditing: true,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0),
                                         alignment: Alignment.center,
-                                        child: Text('Sr No',
-                                            overflow: TextOverflow.values.first,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                        child: Text(
+                                          'Sr No',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: blue,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     GridColumn(
                                       columnName: 'Description',
                                       allowEditing: true,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
-                                        child: Text('Description of items',
-                                            overflow: TextOverflow.values.first,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                        child: Text(
+                                          'Description of items',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: blue,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     GridColumn(
                                       columnName: 'Activity',
                                       allowEditing: true,
                                       label: Container(
-                                        padding: const EdgeInsets.all(8.0),
                                         alignment: Alignment.center,
-                                        child: Text('Activity Details',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white,
-                                            )),
+                                        child: Text(
+                                          'Activity Details',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: blue,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     GridColumn(
                                       columnName: 'RefNo',
                                       allowEditing: true,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
                                         child: Text('BOQ RefNo',
                                             overflow: TextOverflow.values.first,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                                fontSize: 12,
+                                                color: blue)),
                                       ),
                                     ),
                                     GridColumn(
@@ -260,15 +260,13 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                       allowEditing: true,
                                       width: 180,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
                                         child: Text('Abstract of JMR',
                                             overflow: TextOverflow.values.first,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                                fontSize: 12,
+                                                color: blue)),
                                       ),
                                     ),
                                     GridColumn(
@@ -276,15 +274,13 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                       allowEditing: true,
                                       width: 80,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
                                         child: Text('UOM',
                                             overflow: TextOverflow.values.first,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                                fontSize: 12,
+                                                color: blue)),
                                       ),
                                     ),
                                     GridColumn(
@@ -292,15 +288,13 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                       allowEditing: true,
                                       width: 80,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
                                         child: Text('Rate',
                                             overflow: TextOverflow.values.first,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                                fontSize: 12,
+                                                color: blue)),
                                       ),
                                     ),
                                     GridColumn(
@@ -308,49 +302,41 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                       allowEditing: true,
                                       width: 120,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
                                         child: Text('Total Qty',
                                             overflow: TextOverflow.values.first,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                                fontSize: 12,
+                                                color: blue)),
                                       ),
                                     ),
                                     GridColumn(
                                       columnName: 'TotalAmount',
                                       allowEditing: true,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
                                         child: Text('Amount',
                                             overflow: TextOverflow.values.first,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)),
+                                                fontSize: 12,
+                                                color: blue)),
                                       ),
                                     ),
                                     GridColumn(
                                       columnName: 'Delete',
-                                      autoFitPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 16),
                                       allowEditing: false,
                                       width: 120,
                                       label: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
                                         alignment: Alignment.center,
                                         child: Text('Delete Row',
                                             overflow: TextOverflow.values.first,
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                color: white)
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue,
+                                            )
                                             //    textAlign: TextAlign.center,
                                             ),
                                       ),
@@ -370,8 +356,7 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                             height: MediaQuery.of(context).size.height * 0.8,
                             child: SfDataGridTheme(
                               data: SfDataGridThemeData(
-                                headerColor: blue,
-                              ),
+                                  headerColor: white, gridLineColor: blue),
                               child: SfDataGrid(
                                 source: _jmrDataSource,
                                 //key: key,
@@ -386,24 +371,19 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                 editingGestureType: EditingGestureType.tap,
                                 controller: _dataGridController,
                                 allowColumnsResizing: true,
-
-                                headerRowHeight: 40,
+                                headerRowHeight: 50,
                                 columns: [
                                   GridColumn(
                                     columnName: 'srNo',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 9),
                                     allowEditing: true,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('SrNo',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
@@ -411,28 +391,25 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                     columnName: 'Description',
                                     allowEditing: true,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('Description of items',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'Activity',
                                     allowEditing: true,
                                     label: Container(
-                                      padding: const EdgeInsets.all(8.0),
                                       alignment: Alignment.center,
                                       child: Text('Activity Details',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                            color: white,
+                                            fontSize: 12,
+                                            color: blue,
                                           )),
                                     ),
                                   ),
@@ -440,15 +417,13 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                     columnName: 'RefNo',
                                     allowEditing: true,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('BOQ RefNo',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
@@ -456,15 +431,13 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                     allowEditing: true,
                                     width: 180,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('Abstract of JMR',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
@@ -472,15 +445,13 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                     allowEditing: true,
                                     width: 80,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('UOM',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
@@ -488,15 +459,13 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                     allowEditing: true,
                                     width: 80,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('Rate',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
@@ -504,48 +473,40 @@ class _JmrTablePageAdminState extends State<JmrTablePageAdmin> {
                                     allowEditing: true,
                                     width: 120,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('Total Qty',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'TotalAmount',
                                     allowEditing: true,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('Amount',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)),
+                                              fontSize: 12,
+                                              color: blue)),
                                     ),
                                   ),
                                   GridColumn(
                                     columnName: 'Delete',
-                                    autoFitPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
                                     allowEditing: false,
                                     width: 120,
                                     label: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
                                       alignment: Alignment.center,
                                       child: Text('Delete Row',
                                           overflow: TextOverflow.values.first,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                              color: white)
+                                              fontSize: 12,
+                                              color: blue)
                                           //    textAlign: TextAlign.center,
                                           ),
                                     ),

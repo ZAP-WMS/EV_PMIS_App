@@ -87,7 +87,6 @@ class _DailyProjectState extends State<DailyProject> {
         child: CustomAppBarBackDate(
           depoName: widget.depoName ?? '',
           text: 'Daily Report',
-          //  ${DateFormat.yMMMMd().format(DateTime.now())}',
           haveSynced: isFieldEditable ? true : false,
           haveSummary: true,
           haveCalender: true,

@@ -199,7 +199,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                                         contentPadding:
                                             EdgeInsets.only(left: 4, right: 4),
                                         border: OutlineInputBorder(),
-                                        hintText: 'To')))
+                                        hintText: 'To',),),)
                           ],
                         ),
                       ),
@@ -214,7 +214,7 @@ class _JmrFieldPageState extends State<JmrFieldPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => JmrTablePage(
-                                  userId: widget.userId!,
+                                  userId: widget.userId,
                                   date: date.text,
                                   endDate: endDate.text,
                                   note: note.text,

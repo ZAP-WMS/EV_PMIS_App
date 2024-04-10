@@ -57,24 +57,10 @@ class QualityflooringDataSource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment:
-              //  (dataGridCell.columnName == 'srNo' ||
-              //         dataGridCell.columnName == 'Activity' ||
-              //         dataGridCell.columnName == 'OriginalDuration' ||
-              // dataGridCell.columnName == 'StartDate' ||
-              //         dataGridCell.columnName == 'EndDate' ||
-              //         dataGridCell.columnName == 'ActualStart' ||
-              //         dataGridCell.columnName == 'ActualEnd' ||
-              //         dataGridCell.columnName == 'ActualDuration' ||
-              //         dataGridCell.columnName == 'Delay' ||
-              //         dataGridCell.columnName == 'Unit' ||
-              //         dataGridCell.columnName == 'QtyScope' ||
-              //         dataGridCell.columnName == 'QtyExecuted' ||
-              //         dataGridCell.columnName == 'BalancedQty' ||
-              //         dataGridCell.columnName == 'Progress' ||
-              //         dataGridCell.columnName == 'Weightage')
+
               Alignment.center,
           // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -552,7 +538,6 @@ class QualityflooringDataSource extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         style: tablefontsize,
@@ -560,9 +545,6 @@ class QualityflooringDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
@@ -586,8 +568,6 @@ class QualityflooringDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
-          newCellValue = value;
-
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

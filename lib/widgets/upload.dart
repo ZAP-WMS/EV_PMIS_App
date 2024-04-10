@@ -5,7 +5,6 @@ import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -78,60 +77,21 @@ class _UploadDocumentState extends State<UploadDocument> {
               isSync: false,
               isCentered: true,
               height: 50,
-            )),
+            ),),
         body: isLoading
             ? const LoadingPage()
             : Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // if (result != null)
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       const Center(
-                    //         child: Text(
-                    //           'Selected file:',
-                    //           style: TextStyle(
-                    //             fontSize: 16,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       ListView.builder(
-                    //           shrinkWrap: true,
-                    //           itemCount: result?.files.length ?? 0,
-                    //           itemBuilder: (context, index) {
-                    //             return Center(
-                    //               child: Container(
-                    //                 padding: const EdgeInsets.all(5),
-                    //                 margin: const EdgeInsets.all(5),
-                    //                 decoration: BoxDecoration(
-                    //                     border: Border.all(color: blue),
-                    //                     borderRadius:
-                    //                         BorderRadius.circular(5)),
-                    //                 child: Text(
-                    //                     result?.files[index].name ?? '',
-                    //                     style: const TextStyle(
-                    //                         fontSize: 14,
-                    //                         fontWeight: FontWeight.bold)),
-                    //               ),
-                    //             );
-                    //           })
-                    //     ],
-                    //   ),
-                    // ),
-
-                    Container(
+                    SizedBox(
                       height: 400,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Obx(() {
                           if (imagePickerController
                               .pickedImagePath.value.isNotEmpty) {
-                            print(imagePickerController.pickedImagePath);
+                     
                             return GridView.builder(
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
@@ -379,7 +339,7 @@ class _UploadDocumentState extends State<UploadDocument> {
                         : Container()
                   ],
                 ),
-              ));
+              ),);
   }
 
   Future getAssignedDepots() async {

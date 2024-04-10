@@ -71,6 +71,7 @@ class _SafetySummaryState extends State<SafetySummary> {
             isProjectManager: widget.role == "projectManager" ? true : false,
             makeAnEntryPage: SafetyField(
               depoName: widget.depoName,
+              cityName: widget.cityName,
               userId: widget.userId,
               role: widget.role,
             ),
@@ -580,34 +581,36 @@ class _SafetySummaryState extends State<SafetySummary> {
         result.items.clear();
 
         //Text Rows of PDF Table
-        rows.add(pw.TableRow(children: [
-          pw.Container(
-              padding: const pw.EdgeInsets.all(3.0),
-              child: pw.Center(
-                  child: pw.Text(mapData['srNo'].toString(),
-                      style: const pw.TextStyle(fontSize: 11)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(5.0),
-              child: pw.Center(
-                  child: pw.Text(mapData['Details'],
-                      style: const pw.TextStyle(
-                        fontSize: 11,
-                      )))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(mapData['Status'],
-                      style: const pw.TextStyle(fontSize: 11)))),
-          pw.Container(
-              padding: const pw.EdgeInsets.all(2.0),
-              child: pw.Center(
-                  child: pw.Text(mapData['Remark'].toString(),
-                      style: const pw.TextStyle(fontSize: 11)))),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[0]),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[1]),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[2]),
-          isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[3]),
-        ]),);
+        rows.add(
+          pw.TableRow(children: [
+            pw.Container(
+                padding: const pw.EdgeInsets.all(3.0),
+                child: pw.Center(
+                    child: pw.Text(mapData['srNo'].toString(),
+                        style: const pw.TextStyle(fontSize: 11)))),
+            pw.Container(
+                padding: const pw.EdgeInsets.all(5.0),
+                child: pw.Center(
+                    child: pw.Text(mapData['Details'],
+                        style: const pw.TextStyle(
+                          fontSize: 11,
+                        )))),
+            pw.Container(
+                padding: const pw.EdgeInsets.all(2.0),
+                child: pw.Center(
+                    child: pw.Text(mapData['Status'],
+                        style: const pw.TextStyle(fontSize: 11)))),
+            pw.Container(
+                padding: const pw.EdgeInsets.all(2.0),
+                child: pw.Center(
+                    child: pw.Text(mapData['Remark'].toString(),
+                        style: const pw.TextStyle(fontSize: 11)))),
+            isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[0]),
+            isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[1]),
+            isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[2]),
+            isImageEmpty ? pw.Container() : pw.Center(child: imageUrls[3]),
+          ]),
+        );
 
         if (imageUrls.length > 4) {
           //Image Rows of PDF Table

@@ -186,7 +186,10 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                           a = true;
                           SharedPreferences preferences =
                               await SharedPreferences.getInstance();
+                          await preferences.remove('cities');
                           await preferences.remove('role');
+                          await preferences.remove('employeeId');
+
                           // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
                               context,
@@ -194,8 +197,6 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                                 builder: (context) => const LoginRegister(),
                               ),
                               (Route<dynamic> route) => false);
-
-                          // exit(0);
                         },
                         child: Container(
                           height: 40,

@@ -45,7 +45,7 @@ class SafetyChecklistDataSource extends DataGridSource {
   List<String> statusMenuItems = [
     'Yes',
     'No',
-    'Not Applicable ',
+    'Not Applicable',
   ];
 
   @override
