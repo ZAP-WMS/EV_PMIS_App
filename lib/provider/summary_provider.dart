@@ -29,6 +29,7 @@ class SummaryProvider extends ChangeNotifier {
 
   fetchdailydata(
       String depoName, String userId, DateTime date, DateTime endDate) async {
+    globalRowIndex.clear();
     final List<DailyProjectModel> loadeddata = [];
     for (DateTime initialdate = date;
         initialdate.isBefore(endDate.add(const Duration(days: 1)));

@@ -159,8 +159,6 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                 context: context,
                                                 builder: (context) =>
                                                     AlertDialog(
-                                                  title:
-                                                      const Text('Choose Date'),
                                                   content: SizedBox(
                                                     width: 400,
                                                     height: 500,
@@ -263,7 +261,6 @@ class _ViewSummaryState extends State<ViewSummary> {
                                     showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                        title: const Text('choose Date'),
                                         content: SizedBox(
                                           width: 400,
                                           height: 500,
@@ -290,7 +287,9 @@ class _ViewSummaryState extends State<ViewSummary> {
                                               });
                                               Navigator.pop(context);
                                             },
-                                            onCancel: () {},
+                                            onCancel: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1705,55 +1704,24 @@ class _ViewSummaryState extends State<ViewSummary> {
       (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
     );
 
+    final selectedDate = DateFormat.yMMMMd().format(startdate!);
+
     DocumentSnapshot safetyFieldDocSanpshot = await FirebaseFirestore.instance
         .collection('SafetyFieldData2')
         .doc('${widget.depoName}')
         .collection('userId')
         .doc(widget.userId)
         .collection('date')
-        .doc(date)
+        .doc(selectedDate)
         .get();
 
     Map<String, dynamic> safetyMapData =
         safetyFieldDocSanpshot.data() as Map<String, dynamic>;
 
-    bool isDate1Empty = false;
-    bool isDate2Empty = false;
-    bool isDate3Empty = false;
-    if (safetyMapData['InstallationDate'].toString().trim().isEmpty) {
-      isDate1Empty = true;
-    }
-    if (safetyMapData['EnegizationDate'].toString().trim().isEmpty) {
-      isDate2Empty = true;
-    }
-    if (safetyMapData['BoardingDate'].toString().trim().isEmpty) {
-      isDate3Empty = true;
-    }
-
-    dynamic installationDateToDateTime =
-        isDate1Empty ? "" : safetyMapData['InstallationDate'].toDate();
-    String date1 = isDate1Empty
-        ? ""
-        : "${installationDateToDateTime.day}-${installationDateToDateTime.month}-${installationDateToDateTime.year}";
-
-    dynamic EnegizationDateToDateTime =
-        isDate2Empty ? "" : safetyMapData['EnegizationDate'].toDate();
-
-    String date2 = isDate2Empty
-        ? ""
-        : "${EnegizationDateToDateTime.day}-${EnegizationDateToDateTime.month}-${EnegizationDateToDateTime.year}";
-
-    dynamic BoardingDateToDateTime =
-        isDate3Empty ? "" : safetyMapData['BoardingDate'].toDate();
-
-    String date3 = isDate3Empty
-        ? ""
-        : "${BoardingDateToDateTime.day}-${BoardingDateToDateTime.month}-${BoardingDateToDateTime.year}";
-
     List<List<dynamic>> fieldData = [
-      ['Installation Date', date1],
-      ['Enegization Date', date2],
-      ['On Boarding Date', date3],
+      ['Installation Date', safetyMapData['InstallationDate']],
+      ['Enegization Date', safetyMapData['EnegizationDate']],
+      ['On Boarding Date', safetyMapData['BoardingDate']],
       ['TPNo : ', '${safetyMapData['TPNo']}'],
       ['Rev :', '${safetyMapData['Rev']}'],
       ['Bus Depot Location :', '${safetyMapData['DepotLocation']}'],
@@ -2225,46 +2193,92 @@ class _ViewSummaryState extends State<ViewSummary> {
 
     rows.add(pw.TableRow(children: [
       pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Sr No',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+        child: pw.Center(
+          child: pw.Text(
+            'Date',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Type of Activity',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Activity Details',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Progress',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Remark / Status',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
           padding: const pw.EdgeInsets.all(2.0),
           child: pw.Center(
-              child: pw.Text('Sr No',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
+            child: pw.Text(
+              'Image1',
+              style: pw.TextStyle(
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+          )),
       pw.Container(
-          padding:
-              const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
-          child: pw.Center(
-              child: pw.Text('Date',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Type of Activity',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Activity Details',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Progress',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Remark / Status',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Image1',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),)),
-      pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
-          child: pw.Center(
-              child: pw.Text('Image2',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold,),),),),
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Image2',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
     ]));
 
     List<pw.Widget> imageUrls = [];
@@ -2283,24 +2297,38 @@ class _ViewSummaryState extends State<ViewSummary> {
           if (image.name.endsWith('.pdf')) {
             imageUrls.add(
               pw.Container(
-                  width: 60,
-                  alignment: pw.Alignment.center,
-                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  child: pw.UrlLink(
-                      child: pw.Text(image.name,
-                          style: const pw.TextStyle(color: PdfColors.blue,),),
-                      destination: downloadUrl,),),
+                width: 60,
+                alignment: pw.Alignment.center,
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: pw.UrlLink(
+                  child: pw.Text(
+                    image.name,
+                    style: const pw.TextStyle(
+                      color: PdfColors.blue,
+                    ),
+                  ),
+                  destination: downloadUrl,
+                ),
+              ),
             );
           } else {
-            final myImage = await networkImage(downloadUrl,);
+            final myImage = await networkImage(
+              downloadUrl,
+            );
             imageUrls.add(
               pw.Container(
-                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0,),
-                  width: 60,
-                  height: 80,
-                  child: pw.Center(
-                    child: pw.Image(myImage,),
-                  ),),
+                padding: const pw.EdgeInsets.only(
+                  top: 8.0,
+                  bottom: 8.0,
+                ),
+                width: 60,
+                height: 80,
+                child: pw.Center(
+                  child: pw.Image(
+                    myImage,
+                  ),
+                ),
+              ),
             );
           }
         }
@@ -2332,10 +2360,13 @@ class _ViewSummaryState extends State<ViewSummary> {
         for (int i = 0; i < 2; i++) {
           imageUrls.add(
             pw.Container(
-                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-                width: 60,
-                height: 80,
-                child: pw.Text('')),
+              padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+              width: 60,
+              height: 80,
+              child: pw.Text(
+                '',
+              ),
+            ),
           );
         }
       }

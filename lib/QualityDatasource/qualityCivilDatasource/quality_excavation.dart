@@ -70,7 +70,7 @@ class QualityExcavationDataSource extends DataGridSource {
                                   cityName: cityName,
                                   depoName: depoName,
                                   userId: userId,
-                                fldrName: 'Exc Table',
+                                  fldrName: 'Exc Table',
                                   date: currentDate,
                                   srNo: row.getCells()[0].value,
                                 )));
@@ -459,7 +459,7 @@ class QualityExcavationDataSource extends DataGridSource {
         '';
 
     final int dataRowIndex = dataGridRows.indexOf(dataGridRow);
-    print(dataRowIndex);   
+    print(dataRowIndex);
     if (newCellValue == null || oldValue == newCellValue) {
       return;
     }
@@ -526,7 +526,6 @@ class QualityExcavationDataSource extends DataGridSource {
         _getRegExp(isNumericType, isDateTimeType, column.columnName);
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         style: tablefontsize,
@@ -534,9 +533,6 @@ class QualityExcavationDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        ),
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp)
         ],
@@ -560,7 +556,6 @@ class QualityExcavationDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
-          newCellValue = value;
           submitCell();
         },
       ),
