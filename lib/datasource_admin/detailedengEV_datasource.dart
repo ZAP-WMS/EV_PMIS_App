@@ -124,31 +124,39 @@ class DetailedEngSourceEV extends DataGridSource {
             : dataGridCell.columnName == 'button'
                 ? LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
-                    return ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: blue),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => UploadDocument(
-                                title: '',
-                                cityName: cityName,
-                                depoName: depoName,
-                                fldrName: row.getCells()[1].value.toString(),
-                                userId: userId,
+                    return SizedBox(
+                      width: 50,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            backgroundColor: blue),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => UploadDocument(
+                                  title: '',
+                                  cityName: cityName,
+                                  depoName: depoName,
+                                  fldrName: row.getCells()[1].value.toString(),
+                                  userId: userId,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        child: const Text('Upload'));
+                            );
+                          },
+                          child: Text('Upload',
+                          style: uploadViewStyle,),),
+                    );
                   })
                 : dataGridCell.columnName == 'ViewDrawing'
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
                         return ElevatedButton(
                           style:
-                              ElevatedButton.styleFrom(backgroundColor: blue),
+                              ElevatedButton.styleFrom(backgroundColor: blue,
+                              padding: const EdgeInsets.all(0.0)),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
                                 builder: (context) => ViewAllPdf(
                                     role: role,
                                     title: 'DetailedEngEV',
@@ -158,8 +166,9 @@ class DetailedEngSourceEV extends DataGridSource {
                                     docId:
                                         '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}')));
                           },
-                          child: const Text(
+                          child: Text(
                             'View',
+                            style: uploadViewStyle,
                           ),
                         );
                       })

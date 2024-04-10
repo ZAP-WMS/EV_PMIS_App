@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:ev_pmis_app/model_admin/daily_projectModel.dart';
 import 'package:ev_pmis_app/screen/dailyreport/daily_report_admin/daily_report_admin.dart';
+import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
 import 'package:flutter/material.dart';
@@ -61,24 +62,28 @@ class DailyDataSource extends DataGridSource {
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: (dataGridCell.columnName == 'View')
-              ? ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        mainContext,
-                        MaterialPageRoute(
-                          builder: (context) => ViewAllPdf(
-                            userId: availableUserId[dataGridRows.indexOf(row)],
-                            title: Pagetitle,
-                            cityName: cityName,
-                            depoName: depoName,
-                            date: "${row.getCells()[0].value}",
-                            // userId: userId,
-                            // date: row.getCells()[0].value.toString(),
-                            docId: '${row.getCells()[1].value}',
-                          ),
-                        ));
-                  },
-                  child: const Text('View'))
+              ? SizedBox(width: 50,
+                child: ElevatedButton(
+                  style: const ButtonStyle(padding: MaterialStatePropertyAll(EdgeInsets.all(0.0))),
+                    onPressed: () {
+                      Navigator.push(
+                          mainContext,
+                          MaterialPageRoute(
+                            builder: (context) => ViewAllPdf(
+                              userId: availableUserId[dataGridRows.indexOf(row)],
+                              title: Pagetitle,
+                              cityName: cityName,
+                              depoName: depoName,
+                              date: "${row.getCells()[0].value}",
+                              // userId: userId,
+                              // date: row.getCells()[0].value.toString(),
+                              docId: '${row.getCells()[1].value}',
+                            ),
+                          ));
+                    },
+                    child:  Text('View',
+                    style: uploadViewStyle)),
+              )
               //  (dataGridCell.columnName == 'Date')
               //     ? Row(
               //         children: [

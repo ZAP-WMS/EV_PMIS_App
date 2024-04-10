@@ -64,54 +64,59 @@ class QualityflooringDataSource extends DataGridSource {
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                  return ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadDocument(
-                            title: 'QualityChecklist',
-                            subtitle: 'civil_Engineer',
-                            cityName: cityName,
-                            depoName: depoName,
-                            userId: userId,
-                            fldrName: 'Flooring Table',
-                            date: currentDate,
-                            srNo: row.getCells()[0].value,
-                          ),
-                        ));
-                      },
-                      child: const Text(
-                        'Upload',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
+                  return SizedBox(
+                    width: 50,
+                    child: ElevatedButton(
+                        style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
                         ),
-                      ));
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UploadDocument(
+                              title: 'QualityChecklist',
+                              subtitle: 'civil_Engineer',
+                              cityName: cityName,
+                              depoName: depoName,
+                              userId: userId,
+                              fldrName: 'Flooring Table',
+                              date: currentDate,
+                              srNo: row.getCells()[0].value,
+                            ),
+                          ));
+                        },
+                        child: Text(
+                          'Upload',
+                          style:uploadViewStyle
+                        )),
+                  );
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
-                      return ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ViewAllPdf(
-                                title: 'QualityChecklist',
-                                subtitle: 'civil_Engineer',
-                                cityName: cityName,
-                                depoName: depoName,
-                                userId: userId,
-                                fldrName: 'Flooring Table',
-                                date: currentDate,
-                                srNo: row.getCells()[0].value,
-                              ),
-                            ));
-                          },
-                          child: const Text(
-                            'View',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                            ),
-                          ));
+                      return SizedBox(width: 50,
+                        child: ElevatedButton(
+                            style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
+                        ),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAllPdf(
+                                  title: 'QualityChecklist',
+                                  subtitle: 'civil_Engineer',
+                                  cityName: cityName,
+                                  depoName: depoName,
+                                  userId: userId,
+                                  fldrName: 'Flooring Table',
+                                  date: currentDate,
+                                  srNo: row.getCells()[0].value,
+                                ),
+                              ));
+                            },
+                            child: Text(
+                              'View',
+                              style:uploadViewStyle
+                            )),
+                      );
                     })
 
                   // dataGridCell.columnName == 'button'

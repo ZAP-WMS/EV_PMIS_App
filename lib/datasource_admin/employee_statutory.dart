@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -65,38 +66,25 @@ class EmployeeDataStatutory extends DataGridSource {
             //         dataGridCell.columnName == 'Weightage')
             Alignment.center,
         // : Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: dataGridCell.columnName == 'button'
             ? LayoutBuilder(
                 builder: (BuildContext ctx, BoxConstraints constraints) {
                 return ElevatedButton(
+                  style: const ButtonStyle(
+                    padding: MaterialStatePropertyAll(EdgeInsets.zero)
+                  ),
                     onPressed: () {
-                      Navigator.of(ctx).push(MaterialPageRoute(
+                      Navigator.of(ctx).push(
+                        MaterialPageRoute(
                         builder: (context) => ViewFile(
                             cityName: cityName,
                             depoName: depoName,
-                            activity: '${row.getCells()[1].value.toString()}'),
-                        // ViewFile(),
-                      ));
-                      // showDialog(
-                      //     context: context,
-                      //     builder: (context) => AlertDialog(
-                      //         content: SizedBox(
-                      //             height: 100,
-                      //             child: Column(
-                      //               mainAxisAlignment:
-                      //                   MainAxisAlignment.spaceBetween,
-                      //               children: [
-                      //                 Text(
-                      //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                      //                 Text(
-                      //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                      //                 Text(
-                      //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                      //               ],
-                      //             ))));
+                            activity: row.getCells()[1].value.toString(),),
+                      ),);
                     },
-                    child: const Text('View'));
+                    child: Text('View',
+                   style: uploadViewStyle),);
               })
             : (dataGridCell.columnName == 'ActualStart')
                 ? Row(

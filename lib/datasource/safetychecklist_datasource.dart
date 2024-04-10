@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:ev_pmis_app/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -61,22 +62,27 @@ class SafetyChecklistDataSource extends DataGridSource {
           child: dataGridCell.columnName == 'Photo'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => UploadDocument(
-                            title: 'SafetyChecklist',
-                            cityName: cityName,
-                            depoName: depoName,
-                            fldrName: row.getCells()[0].value.toString(),
-                            userId: userId,
-                            date: selectedDate,
-                          ),
-                        ));
-                      },
-                      child: const Text(
-                        'Upload',
-                        style: TextStyle(fontSize: 12),
+                    return SizedBox(
+                      width: 50,
+                      child: ElevatedButton(
+                        style: const ButtonStyle(
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => UploadDocument(
+                              title: 'SafetyChecklist',
+                              cityName: cityName,
+                              depoName: depoName,
+                              fldrName: row.getCells()[0].value.toString(),
+                              userId: userId,
+                              date: selectedDate,
+                            ),
+                          ));
+                        },
+                        child: Text(
+                          'Upload',
+                          style: uploadViewStyle,
+                        ),
                       ),
                     );
                   },
@@ -85,25 +91,31 @@ class SafetyChecklistDataSource extends DataGridSource {
                   ? LayoutBuilder(
                       builder:
                           (BuildContext context, BoxConstraints constraints) {
-                        return ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ViewAllPdf(
-                                    title: 'SafetyChecklist',
-                                    cityName: cityName,
-                                    depoName: depoName,
-                                    userId: userId,
-                                    date: selectedDate,
-                                    docId: row.getCells()[0].value.toString(),
+                        return SizedBox(
+                          width: 50,
+                          child: ElevatedButton(
+                              style: const ButtonStyle(
+                                  padding: MaterialStatePropertyAll(
+                                      EdgeInsets.zero)),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewAllPdf(
+                                      title: 'SafetyChecklist',
+                                      cityName: cityName,
+                                      depoName: depoName,
+                                      userId: userId,
+                                      date: selectedDate,
+                                      docId: row.getCells()[0].value.toString(),
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              'View',
-                              style: TextStyle(fontSize: 12),
-                            ));
+                                );
+                              },
+                              child: Text(
+                                'View',
+                                style: uploadViewStyle,
+                              )),
+                        );
                       },
                     )
                   : dataGridCell.columnName == 'Status'

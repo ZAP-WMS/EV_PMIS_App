@@ -26,7 +26,6 @@ class _SafetyChecklistActionState extends State<SafetyChecklistAction> {
   @override
   void initState() {
     selectWidget();
-    // TODO: implement initState
     super.initState();
   }
 
