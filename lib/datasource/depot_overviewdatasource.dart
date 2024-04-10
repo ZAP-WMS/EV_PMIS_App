@@ -134,7 +134,8 @@ class DepotOverviewDatasource extends DataGridSource {
                                     context: mainContext,
                                     builder: (context) => AlertDialog(
                                           insetPadding: const EdgeInsets.all(8),
-                                          buttonPadding: const EdgeInsets.all(15),
+                                          buttonPadding:
+                                              const EdgeInsets.all(15),
                                           title: const Text(
                                             'All Date',
                                             style: TextStyle(fontSize: 18),
@@ -211,7 +212,7 @@ class DepotOverviewDatasource extends DataGridSource {
                             ),
                             Text(
                               dataGridCell.value.toString(),
-                              style: const TextStyle(fontSize: 12),
+                              style: appTextStyle,
                             ),
                           ],
                         )
@@ -339,16 +340,13 @@ class DepotOverviewDatasource extends DataGridSource {
                                     _depotOverview[dataRowIndex].typeRisk =
                                         value.toString();
                                     notifyListeners();
-
                                   },
-
                                   items: typeRiskMenuItems
                                       .map<DropdownMenuItem<String>>(
                                           (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: Text(value,
-                                          style: const TextStyle(fontSize: 12,),),
+                                      child: Text(value, style: appTextStyle),
                                     );
                                   }).toList())
                               : dataGridCell.columnName == 'impactRisk'

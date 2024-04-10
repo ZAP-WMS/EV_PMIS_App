@@ -126,7 +126,7 @@ class _CitiesPageState extends State<CitiesPage> {
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: active ? blue : white,

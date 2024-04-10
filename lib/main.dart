@@ -180,6 +180,7 @@ class _MyAppState extends State<MyApp> {
               '/splash-screen',
           // all the pages of routes are declared here
           onGenerateRoute: RouteGenerator.generateRoute,
+
           debugShowCheckedModeBanner: false,
           title: 'TP-EV-PMIS',
           theme: ThemeData(
