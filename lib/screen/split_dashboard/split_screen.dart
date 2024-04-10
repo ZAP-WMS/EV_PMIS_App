@@ -156,8 +156,8 @@ class SplitScreen extends StatelessWidget {
             },
             child: const Text(
               'Proceed to cities',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            )),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,),
+            ),),
       ),
     );
   }
