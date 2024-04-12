@@ -300,7 +300,7 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
                             GridColumn(
                               columnName: 'materialSite',
                               allowEditing: false,
-                              width: 250,
+                              width: 150,
                               label: Container(
                                 alignment: Alignment.center,
                                 child: Text('Receipt of Material at site',
@@ -532,7 +532,7 @@ class _MaterialProcurementAdminState extends State<MaterialProcurementAdmin> {
                             GridColumn(
                               columnName: 'materialSite',
                               allowEditing: false,
-                              width: 250,
+                              width: 150,
                               label: Container(
                                 alignment: Alignment.center,
                                 child: Text('Receipt of Material at site',

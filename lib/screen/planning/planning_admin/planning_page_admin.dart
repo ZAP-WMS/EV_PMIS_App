@@ -469,7 +469,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                               }
                                             },
                                             allowEditing: true,
-                                            frozenColumnsCount: 2,
+                                            frozenColumnsCount: 1,
                                             editingGestureType:
                                                 EditingGestureType.tap,
                                             headerGridLinesVisibility:
@@ -1945,7 +1945,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                                           //   }));
                                           // },
                                           allowEditing: true,
-                                          frozenColumnsCount: 2,
+                                          frozenColumnsCount: 1,
                                           editingGestureType:
                                               EditingGestureType.tap,
                                           headerGridLinesVisibility:
