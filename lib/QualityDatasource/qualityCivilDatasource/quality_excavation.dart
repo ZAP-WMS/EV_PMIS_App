@@ -51,13 +51,13 @@ class QualityExcavationDataSource extends DataGridSource {
     // DateTime? rangeEndDate1 = DateTime.now();
     // DateTime? date1;
     // DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    String currentDate = DateFormat.yMMMMd().format(DateTime.now(),);
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
           alignment: Alignment.center,
           // : Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -550,6 +550,11 @@ class QualityExcavationDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp)
         ],
+         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
+        ),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType

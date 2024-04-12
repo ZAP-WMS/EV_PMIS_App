@@ -73,7 +73,7 @@ class QualityMSPDataSource extends DataGridSource {
               //         dataGridCell.columnName == 'Weightage')
               Alignment.center,
           // : Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -221,6 +221,11 @@ class QualityMSPDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
+         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
+        ),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType
@@ -242,9 +247,6 @@ class QualityMSPDataSource extends DataGridSource {
         },
         onSubmitted: (String value) {
           newCellValue = value;
-
-          /// Call [CellSubmit] callback to fire the canSubmitCell and
-          /// onCellSubmit to commit the new value in single place.
           submitCell();
         },
       ),

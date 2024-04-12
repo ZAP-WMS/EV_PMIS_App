@@ -133,7 +133,7 @@ class _ViewSummaryState extends State<ViewSummary> {
               padding: const EdgeInsets.all(2.0),
               child: widget.id == 'Daily Report' ||
                       widget.id == 'Energy Management'
-                  ? Container(
+                  ? SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

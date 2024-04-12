@@ -190,7 +190,7 @@ class JmrDataSource extends DataGridSource {
           FilteringTextInputFormatter.allow(regExp),
         ],
         decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 5.0)),
+            contentPadding: EdgeInsets.symmetric(horizontal: 5.0,),),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType

@@ -243,22 +243,29 @@ class EnergyManagementDatasource extends DataGridSource {
     } else if (column.columnName == 'pssNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
-              columnName: 'pssNo', value: int.parse(newCellValue));
-      _energyManagement[dataRowIndex].pssNo = int.parse(newCellValue);
+              columnName: 'pssNo', value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].pssNo =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'chargerId') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
-              columnName: 'chargerId', value: int.parse(newCellValue));
-      _energyManagement[dataRowIndex].chargerId = int.parse(newCellValue);
+              columnName: 'chargerId',
+              value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].chargerId =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'startSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'startSoc', value: newCellValue as int);
-      _energyManagement[dataRowIndex].startSoc = newCellValue;
+          DataGridCell<int>(
+              columnName: 'startSoc',
+              value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].startSoc =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'endSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
-              columnName: 'endSoc', value: int.parse(newCellValue));
-      _energyManagement[dataRowIndex].endSoc = int.parse(newCellValue);
+              columnName: 'endSoc', value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].endSoc =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'startDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<DateTime>(columnName: 'startDate', value: newCellValue);
@@ -328,7 +335,9 @@ class EnergyManagementDatasource extends DataGridSource {
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         decoration: const InputDecoration(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
         ),
         autofocus: true,
         controller: editingController..text = displayText,

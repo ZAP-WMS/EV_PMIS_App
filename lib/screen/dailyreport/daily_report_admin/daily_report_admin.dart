@@ -158,7 +158,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 180,
+                        width: 150,
                         height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
@@ -231,7 +231,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                       const SizedBox(width: 20),
                       Container(
                         padding: const EdgeInsets.only(left: 10.0),
-                        width: 160,
+                        width: 150,
                         height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
