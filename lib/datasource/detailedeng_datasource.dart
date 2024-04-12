@@ -115,17 +115,6 @@ class DetailedEngSource extends DataGridSource {
         buildDataGridRows();
         notifyListeners();
       }
-      // Color getcolor() {
-      //   if (dataGridCell.columnName == 'Title' &&
-      //           dataGridCell.value == 'RFC Drawings of Civil Activities' ||
-      //       dataGridCell.value ==
-      //           'EV Layout Drawings of Electrical Activities' ||
-      //       dataGridCell.value == 'Shed Lighting Drawings & Specification') {
-      //     return green;
-      //   }
-
-      //   return Colors.transparent;
-      // }
 
       return Container(
         // color: getcolor(),
@@ -155,14 +144,13 @@ class DetailedEngSource extends DataGridSource {
                 ? IconButton(
                     onPressed: () {
                       removeRowAtIndex(dataRowIndex);
-                      print(dataRowIndex);
                       dataGridRows.remove(row);
                       notifyListeners();
                     },
                     icon: Icon(
                       Icons.delete,
                       color: red,
-                    ))
+                    ),)
                 : dataGridCell.columnName == 'button'
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
@@ -1006,6 +994,11 @@ class DetailedEngSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
+         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
+        ),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType

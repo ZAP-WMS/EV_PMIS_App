@@ -217,6 +217,11 @@ class QualityBackFillingDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
+         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
+        ),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType

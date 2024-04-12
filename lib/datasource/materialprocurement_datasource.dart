@@ -71,7 +71,7 @@ class MaterialDatasource extends DataGridSource {
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: (dataGridCell.columnName == 'Add')
             ? ElevatedButton(
                 onPressed: () {
@@ -317,6 +317,11 @@ class MaterialDatasource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
+        ),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType

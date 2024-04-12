@@ -143,7 +143,7 @@ class _SafetyFieldState extends State<SafetyField> {
               context,
               MaterialPageRoute(
                 builder: (context) => ViewSummary(
-                  cityName: cityName,
+                  cityName: widget.cityName,
                   depoName: widget.depoName.toString(),
                   id: 'Safety Checklist Report',
                   userId: widget.userId,

@@ -70,7 +70,7 @@ class DailyDataSource extends DataGridSource {
 
         return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: (dataGridCell.columnName == 'view')
               ? ElevatedButton(
                   onPressed: () {
@@ -257,6 +257,11 @@ class DailyDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
+        ),
         keyboardType: isNumericType
             ? const TextInputType.numberWithOptions()
             : isDateTimeType

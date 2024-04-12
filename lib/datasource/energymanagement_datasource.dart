@@ -149,11 +149,12 @@ class EnergyManagementDatasource extends DataGridSource {
                     ? Text(
                         '${difference.inHours}:${difference.inMinutes % 60}:${difference.inSeconds % 60}')
                     : (dataGridCell.columnName == 'Add')
-                        ? SizedBox(width: 50,
-                          child: ElevatedButton(
+                        ? SizedBox(
+                            width: 50,
+                            child: ElevatedButton(
                               style: const ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                          ),
+                                  padding: MaterialStatePropertyAll(
+                                      EdgeInsets.zero)),
                               onPressed: () {
                                 addRowAtIndex(
                                     rowIndex + 1,
@@ -165,20 +166,24 @@ class EnergyManagementDatasource extends DataGridSource {
                                         chargerId: 1,
                                         startSoc: 1,
                                         endSoc: 1,
-                                        startDate: DateFormat('dd-MM-yyyy HH:mm')
-                                            .format(DateTime.now()),
+                                        startDate:
+                                            DateFormat('dd-MM-yyyy HH:mm')
+                                                .format(DateTime.now()),
                                         endDate: DateFormat('dd-MM-yyyy HH:mm')
                                             .format(DateTime.now()),
-                                        totalTime: DateFormat('dd-MM-yyyy HH:mm')
-                                            .format(DateTime.now()),
+                                        totalTime:
+                                            DateFormat('dd-MM-yyyy HH:mm')
+                                                .format(DateTime.now()),
                                         energyConsumed: 0.0,
                                         timeInterval:
                                             '${DateTime.now().hour}:${DateTime.now().minute} - ${DateTime.now().add(const Duration(hours: 6)).hour}:${DateTime.now().add(const Duration(hours: 6)).minute}'));
                               },
-                              child: Text('Add',
-                              style: uploadViewStyle,),
+                              child: Text(
+                                'Add',
+                                style: uploadViewStyle,
+                              ),
                             ),
-                        )
+                          )
                         : (dataGridCell.columnName == 'Delete')
                             ? IconButton(
                                 onPressed: () {
@@ -236,22 +241,29 @@ class EnergyManagementDatasource extends DataGridSource {
     } else if (column.columnName == 'pssNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
-              columnName: 'pssNo', value: int.parse(newCellValue));
-      _energyManagement[dataRowIndex].pssNo = int.parse(newCellValue);
+              columnName: 'pssNo', value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].pssNo =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'chargerId') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
-              columnName: 'chargerId', value: int.parse(newCellValue));
-      _energyManagement[dataRowIndex].chargerId = int.parse(newCellValue);
+              columnName: 'chargerId',
+              value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].chargerId =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'startSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'startSoc', value: newCellValue as int);
-      _energyManagement[dataRowIndex].startSoc = newCellValue;
+          DataGridCell<int>(
+              columnName: 'startSoc',
+              value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].startSoc =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'endSoc') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
-              columnName: 'endSoc', value: int.parse(newCellValue));
-      _energyManagement[dataRowIndex].endSoc = int.parse(newCellValue);
+              columnName: 'endSoc', value: int.parse(newCellValue.toString()));
+      _energyManagement[dataRowIndex].endSoc =
+          int.parse(newCellValue.toString());
     } else if (column.columnName == 'startDate') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<DateTime>(columnName: 'startDate', value: newCellValue);
@@ -321,7 +333,9 @@ class EnergyManagementDatasource extends DataGridSource {
       alignment: isNumericType ? Alignment.centerRight : Alignment.centerLeft,
       child: TextField(
         decoration: const InputDecoration(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: EdgeInsets.all(
+            5.0,
+          ),
         ),
         autofocus: true,
         controller: editingController..text = displayText,
@@ -343,8 +357,7 @@ class EnergyManagementDatasource extends DataGridSource {
             if (column.columnName == 'energyConsumed') {
               newCellValue = double.parse(value);
             } else if (isNumericType) {
-              newCellValue = int.
-              parse(value);
+              newCellValue = int.parse(value);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {
