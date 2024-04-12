@@ -80,9 +80,11 @@ class QualityMassonaryDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
+                            padding: const MaterialStatePropertyAll(
+                                EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -97,36 +99,39 @@ class QualityMassonaryDataSource extends DataGridSource {
                             ),
                           ));
                         },
-                        child: Text(
-                          'Upload',
-                          style: uploadViewStyle
-                        )),
+                        child: Text('Upload', style: uploadViewStyle)),
                   );
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                       return ElevatedButton(
-                          style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
+                            padding: const MaterialStatePropertyAll(
+                                EdgeInsets.zero)),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ViewAllPdf(
+                                title: 'QualityChecklist',
+                                subtitle: 'civil_Engineer',
+                                cityName: cityName,
+                                depoName: depoName,
+                                userId: userId,
+                                fldrName: 'Massonary Table',
+                                date: currentDate,
+                                srNo: row.getCells()[0].value,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'View',
+                          style: uploadViewStyle,
                         ),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewAllPdf(
-                                      title: 'QualityChecklist',
-                                      subtitle: 'civil_Engineer',
-                                      cityName: cityName,
-                                      depoName: depoName,
-                                      userId: userId,
-                                      fldrName: 'Massonary Table',
-                                      date: currentDate,
-                                      srNo: row.getCells()[0].value,
-                                    ),),);
-                          },
-                          child: Text(
-                            'View',
-                            style:uploadViewStyle,
-                          ),);
+                      );
                     })
 
                   // dataGridCell.columnName == 'button'

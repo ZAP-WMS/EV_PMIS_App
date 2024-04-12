@@ -80,25 +80,27 @@ class QualityProofingDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              title: 'QualityChecklist',
-                              subtitle: 'civil_Engineer',
-                              cityName: cityName,
-                              depoName: depoName,
-                              userId: userId,
-                              fldrName: 'Proofing Table',
-                              date: currentDate,
-                              srNo: row.getCells()[0].value,
-                            ),
-                          ));
-                        },
-                        child: Text('Upload',
-                            style:uploadViewStyle),),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(blue),
+                          padding:
+                              const MaterialStatePropertyAll(EdgeInsets.zero)),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UploadDocument(
+                            title: 'QualityChecklist',
+                            subtitle: 'civil_Engineer',
+                            cityName: cityName,
+                            depoName: depoName,
+                            userId: userId,
+                            fldrName: 'Proofing Table',
+                            date: currentDate,
+                            srNo: row.getCells()[0].value,
+                          ),
+                        ));
+                      },
+                      child: Text('Upload', style: uploadViewStyle),
+                    ),
                   );
                 })
               : dataGridCell.columnName == 'View'
@@ -107,9 +109,11 @@ class QualityProofingDataSource extends DataGridSource {
                       return SizedBox(
                         width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(blue),
+                                padding: const MaterialStatePropertyAll(
+                                    EdgeInsets.zero)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
@@ -123,10 +127,7 @@ class QualityProofingDataSource extends DataGridSource {
                                         srNo: row.getCells()[0].value,
                                       )));
                             },
-                            child: Text(
-                              'View',
-                              style: uploadViewStyle
-                            )),
+                            child: Text('View', style: uploadViewStyle)),
                       );
                     })
 

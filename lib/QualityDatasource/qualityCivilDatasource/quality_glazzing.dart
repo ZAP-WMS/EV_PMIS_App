@@ -55,9 +55,7 @@ class QualityGlazzingDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-
-              Alignment.center,
+          alignment: Alignment.center,
           // : Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
@@ -66,37 +64,42 @@ class QualityGlazzingDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              title: 'QualityChecklist',
-                              subtitle: 'civil_Engineer',
-                              cityName: cityName,
-                              depoName: depoName,
-                              userId: userId,
-                              fldrName: 'Glazzing Table',
-                              date: currentDate,
-                              srNo: row.getCells()[0].value,
-                            ),
-                          ));
-                        },
-                        child: Text(
-                          'Upload',
-                          style: uploadViewStyle,
-                        ),),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll<Color>(blue),
+                          padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UploadDocument(
+                            title: 'QualityChecklist',
+                            subtitle: 'civil_Engineer',
+                            cityName: cityName,
+                            depoName: depoName,
+                            userId: userId,
+                            fldrName: 'Glazzing Table',
+                            date: currentDate,
+                            srNo: row.getCells()[0].value,
+                          ),
+                        ));
+                      },
+                      child: Text(
+                        'Upload',
+                        style: uploadViewStyle,
+                      ),
+                    ),
                   );
                 })
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
-                      return SizedBox(width: 50,
+                      return SizedBox(
+                        width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(blue),
+                                padding: const MaterialStatePropertyAll(
+                                    EdgeInsets.zero)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAllPdf(
@@ -111,10 +114,7 @@ class QualityGlazzingDataSource extends DataGridSource {
                                 ),
                               ));
                             },
-                            child: Text(
-                              'View',
-                              style:uploadViewStyle
-                            )),
+                            child: Text('View', style: uploadViewStyle)),
                       );
                     })
                   : Text(

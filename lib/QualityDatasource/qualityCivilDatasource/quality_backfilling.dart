@@ -54,8 +54,7 @@ class QualityBackFillingDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-              Alignment.center,
+          alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
               ? LayoutBuilder(
@@ -64,8 +63,7 @@ class QualityBackFillingDataSource extends DataGridSource {
                     width: 50,
                     child: ElevatedButton(
                         style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -80,10 +78,7 @@ class QualityBackFillingDataSource extends DataGridSource {
                             ),
                           ));
                         },
-                        child: Text(
-                          'Upload',
-                          style: uploadViewStyle
-                        )),
+                        child: Text('Upload', style: uploadViewStyle)),
                   );
                 })
               : dataGridCell.columnName == 'View'
@@ -92,9 +87,11 @@ class QualityBackFillingDataSource extends DataGridSource {
                       return SizedBox(
                         width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                            style:  ButtonStyle(
+                                backgroundColor:
+                                      MaterialStatePropertyAll<Color>(blue),
+                                padding:
+                                    MaterialStatePropertyAll(EdgeInsets.zero)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
@@ -108,10 +105,7 @@ class QualityBackFillingDataSource extends DataGridSource {
                                         srNo: row.getCells()[0].value,
                                       )));
                             },
-                            child:  Text(
-                              'View',
-                              style: uploadViewStyle
-                            )),
+                            child: Text('View', style: uploadViewStyle)),
                       );
                     })
                   : Text(

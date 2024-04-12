@@ -63,7 +63,9 @@ class QualityExcavationDataSource extends DataGridSource {
                   builder: (BuildContext context, BoxConstraints constraints) {
                   return SizedBox(width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
+                        style:  ButtonStyle(
+                            backgroundColor:
+                                      MaterialStatePropertyAll<Color>(blue),
                           padding: MaterialStatePropertyAll(EdgeInsets.zero)
                         ),
                         onPressed: () {
@@ -88,7 +90,9 @@ class QualityExcavationDataSource extends DataGridSource {
                       (BuildContext context, BoxConstraints constraints) {
                       return SizedBox(width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
+                            style:  ButtonStyle(
+                                backgroundColor:
+                                      MaterialStatePropertyAll<Color>(blue),
                           padding: MaterialStatePropertyAll(EdgeInsets.zero)
                         ),
                             onPressed: () {

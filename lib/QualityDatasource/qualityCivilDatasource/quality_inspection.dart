@@ -79,9 +79,11 @@ class QualityInspectionDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
+                            padding: const MaterialStatePropertyAll(
+                                EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -96,10 +98,7 @@ class QualityInspectionDataSource extends DataGridSource {
                             ),
                           ));
                         },
-                        child: Text(
-                          'Upload',
-                          style: uploadViewStyle
-                        )),
+                        child: Text('Upload', style: uploadViewStyle)),
                   );
                 })
               : dataGridCell.columnName == 'View'
@@ -108,9 +107,11 @@ class QualityInspectionDataSource extends DataGridSource {
                       return SizedBox(
                         width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(blue),
+                                padding:
+                                    MaterialStatePropertyAll(EdgeInsets.zero)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
@@ -124,10 +125,7 @@ class QualityInspectionDataSource extends DataGridSource {
                                         srNo: row.getCells()[0].value,
                                       )));
                             },
-                            child: Text(
-                              'View',
-                              style: uploadViewStyle
-                            )),
+                            child: Text('View', style: uploadViewStyle)),
                       );
                     })
 
@@ -585,7 +583,6 @@ class QualityInspectionDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
-
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

@@ -78,9 +78,10 @@ class QualityRoofingDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -95,10 +96,7 @@ class QualityRoofingDataSource extends DataGridSource {
                             ),
                           ));
                         },
-                        child: Text(
-                          'Upload',
-                          style: uploadViewStyle
-                        )),
+                        child: Text('Upload', style: uploadViewStyle)),
                   );
                 })
               : dataGridCell.columnName == 'View'
@@ -107,9 +105,11 @@ class QualityRoofingDataSource extends DataGridSource {
                       return SizedBox(
                         width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(blue),
+                                padding:
+                                    MaterialStatePropertyAll(EdgeInsets.zero)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
@@ -123,10 +123,7 @@ class QualityRoofingDataSource extends DataGridSource {
                                         srNo: row.getCells()[0].value,
                                       )));
                             },
-                            child: Text(
-                              'View',
-                              style: uploadViewStyle
-                            )),
+                            child: Text('View', style: uploadViewStyle)),
                       );
                     })
                   : Text(

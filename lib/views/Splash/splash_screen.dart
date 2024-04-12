@@ -222,7 +222,11 @@ class SplashScreenState extends State<SplashScreen>
         );
       } else {
         // ignore: use_build_context_synchronously
-        Navigator.pushNamed(context, '/user-list');
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/user-list',
+          (route) => false,
+        );
       }
     } catch (e) {
       print("Error Occured on Spash Screen - $e");

@@ -43,14 +43,11 @@ class QualityPaintingDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-
     String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-
-              Alignment.center,
+          alignment: Alignment.center,
           // : Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
@@ -59,28 +56,27 @@ class QualityPaintingDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              title: 'QualityChecklist',
-                              subtitle: 'civil_Engineer',
-                              cityName: cityName,
-                              depoName: depoName,
-                              userId: userId,
-                              fldrName: 'Painting Table',
-                              date: currentDate,
-                              srNo: row.getCells()[0].value,
+                              builder: (context) => UploadDocument(
+                                title: 'QualityChecklist',
+                                subtitle: 'civil_Engineer',
+                                cityName: cityName,
+                                depoName: depoName,
+                                userId: userId,
+                                fldrName: 'Painting Table',
+                                date: currentDate,
+                                srNo: row.getCells()[0].value,
+                              ),
                             ),
-                          ),);
+                          );
                         },
-                        child: Text(
-                          'Upload',
-                          style: uploadViewStyle
-                        )),
+                        child: Text('Upload', style: uploadViewStyle)),
                   );
                 })
               : dataGridCell.columnName == 'View'
@@ -89,26 +85,28 @@ class QualityPaintingDataSource extends DataGridSource {
                       return SizedBox(
                         width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)
-                        ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(blue),
+                                padding:
+                                    MaterialStatePropertyAll(EdgeInsets.zero)),
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
-                                        title: 'QualityChecklist',
-                                        subtitle: 'civil_Engineer',
-                                        cityName: cityName,
-                                        depoName: depoName,
-                                        userId: userId,
-                                        fldrName: 'Painting Table',
-                                        date: currentDate,
-                                        srNo: row.getCells()[0].value,
-                                      ),),);
+                                    title: 'QualityChecklist',
+                                    subtitle: 'civil_Engineer',
+                                    cityName: cityName,
+                                    depoName: depoName,
+                                    userId: userId,
+                                    fldrName: 'Painting Table',
+                                    date: currentDate,
+                                    srNo: row.getCells()[0].value,
+                                  ),
+                                ),
+                              );
                             },
-                            child: Text(
-                              'View',
-                              style:uploadViewStyle
-                            )),
+                            child: Text('View', style: uploadViewStyle)),
                       );
                     })
                   //     : dataGridCell.columnName == 'ActualStart' ||

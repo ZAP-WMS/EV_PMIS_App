@@ -65,8 +65,11 @@ class SafetyChecklistDataSource extends DataGridSource {
                     return SizedBox(
                       width: 50,
                       child: ElevatedButton(
-                        style: const ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
+                            padding: const MaterialStatePropertyAll(
+                                EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -94,8 +97,10 @@ class SafetyChecklistDataSource extends DataGridSource {
                         return SizedBox(
                           width: 50,
                           child: ElevatedButton(
-                              style: const ButtonStyle(
-                                  padding: MaterialStatePropertyAll(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(blue),
+                                  padding: const MaterialStatePropertyAll(
                                       EdgeInsets.zero)),
                               onPressed: () {
                                 Navigator.of(context).push(

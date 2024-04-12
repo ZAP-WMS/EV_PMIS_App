@@ -105,6 +105,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
         // Perform password update action
         // For example, use FirebaseAuth.instance.currentUser.updatePassword(newPassword);
         FirebaseFirestore.instance
+            .collection('AssignedRole')
+            .doc(widget.docName)
+            .update({'password': newPassword});
+
+        FirebaseFirestore.instance
             .collection('User')
             .doc(widget.docName)
             .update({

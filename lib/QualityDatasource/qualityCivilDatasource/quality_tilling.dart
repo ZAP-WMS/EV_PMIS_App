@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -80,8 +79,11 @@ class QualityTeilingDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
+                            padding: const MaterialStatePropertyAll(
+                                EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -108,7 +110,9 @@ class QualityTeilingDataSource extends DataGridSource {
                       return SizedBox(
                         width: 50,
                         child: ElevatedButton(
-                            style: const ButtonStyle(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(blue),
                                 padding:
                                     MaterialStatePropertyAll(EdgeInsets.zero)),
                             onPressed: () {
