@@ -93,19 +93,22 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
           : widget.title == 'ClosureReport'
               ? FirebaseApi.listAll(
                   '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
-              : widget.title == 'Key Events' || widget.title == 'Overview Page'
+              : widget.title == 'Overview Page'
                   ? FirebaseApi.listAll(
                       '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}')
-                  : widget.title == '/BOQSurvey' ||
-                          widget.title == '/BOQElectrical' ||
-                          widget.title == '/BOQCivil'
+                  : widget.title == 'Key Events'
                       ? FirebaseApi.listAll(
-                          '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
-                      : widget.title == 'Depot Insights'
+                          '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.docId}')
+                      : widget.title == '/BOQSurvey' ||
+                              widget.title == '/BOQElectrical' ||
+                              widget.title == '/BOQCivil'
                           ? FirebaseApi.listAll(
                               '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
-                          : FirebaseApi.listAll(
-                              '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
+                          : widget.title == 'Depot Insights'
+                              ? FirebaseApi.listAll(
+                                  '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.docId}')
+                              : FirebaseApi.listAll(
+                                  '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.docId}');
       _isload = false;
       setState(() {});
     }
@@ -242,10 +245,10 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
 
   Widget buildHeader(int length) => ListTile(
         tileColor: Colors.blue,
-        leading:const SizedBox(
+        leading: const SizedBox(
           width: 52,
           height: 52,
-          child:  Icon(
+          child: Icon(
             Icons.file_copy,
             color: Colors.white,
           ),

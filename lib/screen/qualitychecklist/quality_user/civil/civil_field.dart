@@ -10,7 +10,6 @@ import 'package:ev_pmis_app/widgets/appbar_back_date.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:ev_pmis_app/widgets/progress_loading.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -145,89 +144,24 @@ class _CivilFieldState extends State<CivilField> {
 
   @override
   void initState() {
-    _stream = FirebaseFirestore.instance
-        .collection('CivilQualityChecklist')
-        .doc('${widget.depoName}')
-        .collection('userId')
-        .doc(userId)
-        .collection(widget.fieldclnName)
-        .doc(selectedDate)
-        .snapshots();
+    // _stream = FirebaseFirestore.instance
+    //     .collection('CivilQualityChecklist')
+    //     .doc('${widget.depoName}')
+    //     .collection('userId')
+    //     .doc(userId)
+    //     .collection(widget.fieldclnName)
+    //     .doc(selectedDate)
+    //     .snapshots();
     getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
     pr = ProgressDialog(context,
         customBody:
-            Container(height: 200, width: 100, child: const LoadingPdf()));
+            const SizedBox(height: 200, width: 100, child: const LoadingPdf()));
 
     initializeController();
     _fetchUserData();
 
-    getTableData().whenComplete(() {
-      qualitylisttable1 = checkTable ? excavation_getData() : data;
-      _qualityExcavationDataSource = QualityExcavationDataSource(
-          qualitylisttable1, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable2 = checkTable ? backfilling_getData() : data;
-      _qualityBackFillingDataSource = QualityBackFillingDataSource(
-          qualitylisttable2, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable3 = checkTable ? massonary_getData() : data;
-      _qualityMassonaryDataSource = QualityMassonaryDataSource(
-          qualitylisttable3, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable4 = checkTable ? glazzing_getData() : data;
-      _qualityGlazzingDataSource = QualityGlazzingDataSource(
-          qualitylisttable4, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable5 = checkTable ? ceilling_getData() : data;
-      _qualityCeillingDataSource = QualityCeillingDataSource(
-          qualitylisttable5, cityName!, widget.depoName!);
-      qualitylisttable6 = checkTable ? florring_getData() : data;
-      _dataGridController = DataGridController();
-
-      _qualityflooringDataSource = QualityflooringDataSource(
-          qualitylisttable6, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable7 = checkTable ? inspection_getData() : data;
-      _qualityInspectionDataSource = QualityInspectionDataSource(
-          qualitylisttable7, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
-      _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
-          qualitylisttable8, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable9 = checkTable ? painting_getData() : data;
-      _qualityPaintingDataSource = QualityPaintingDataSource(
-          qualitylisttable9, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable10 = checkTable ? paving_getData() : data;
-      _qualityPavingDataSource = QualityPavingDataSource(
-          qualitylisttable10, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable11 = checkTable ? roofing_getData() : data;
-      _qualityRoofingDataSource = QualityRoofingDataSource(
-          qualitylisttable11, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      qualitylisttable12 = checkTable ? proofing_getData() : data;
-      _qualityProofingDataSource = QualityProofingDataSource(
-          qualitylisttable12, cityName!, widget.depoName!);
-      _dataGridController = DataGridController();
-
-      setState(() {
-        isLoading = false;
-      });
-      
-    });
+    getTableData().whenComplete(() {});
 
     super.initState();
   }
@@ -314,7 +248,6 @@ class _CivilFieldState extends State<CivilField> {
               choosedate: () {
                 chooseDate(context);
               }),
-
           preferredSize: const Size.fromHeight(60),
         ),
         body: isLoading
@@ -498,6 +431,7 @@ class _CivilFieldState extends State<CivilField> {
                               ),
                             );
                           } else if (snapshot.hasData) {
+                            getTableData();
                             return SfDataGridTheme(
                               data: SfDataGridThemeData(
                                   headerColor: white, gridLineColor: blue),
@@ -542,10 +476,6 @@ class _CivilFieldState extends State<CivilField> {
                                 columnWidthMode: ColumnWidthMode.auto,
                                 editingGestureType: EditingGestureType.tap,
                                 controller: _dataGridController,
-
-                                // onQueryRowHeight: (details) {
-                                //   return details.rowIndex == 0 ? 60.0 : 49.0;
-                                // },
                                 columns: [
                                   GridColumn(
                                     columnName: 'srNo',
@@ -778,6 +708,70 @@ class _CivilFieldState extends State<CivilField> {
       data = mapData.map((map) => QualitychecklistModel.fromJson(map)).toList();
       checkTable = false;
     }
+
+    qualitylisttable1 = checkTable ? excavation_getData() : data;
+    _qualityExcavationDataSource = QualityExcavationDataSource(
+        qualitylisttable1, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable2 = checkTable ? backfilling_getData() : data;
+    _qualityBackFillingDataSource = QualityBackFillingDataSource(
+        qualitylisttable2, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable3 = checkTable ? massonary_getData() : data;
+    _qualityMassonaryDataSource = QualityMassonaryDataSource(
+        qualitylisttable3, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable4 = checkTable ? glazzing_getData() : data;
+    _qualityGlazzingDataSource = QualityGlazzingDataSource(
+        qualitylisttable4, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable5 = checkTable ? ceilling_getData() : data;
+    _qualityCeillingDataSource = QualityCeillingDataSource(
+        qualitylisttable5, cityName!, widget.depoName!, selectedDate!);
+    qualitylisttable6 = checkTable ? florring_getData() : data;
+    _dataGridController = DataGridController();
+
+    _qualityflooringDataSource = QualityflooringDataSource(
+        qualitylisttable6, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable7 = checkTable ? inspection_getData() : data;
+    _qualityInspectionDataSource = QualityInspectionDataSource(
+        qualitylisttable7, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable8 = checkTable ? ironite_florring_getData() : data;
+    _qualityIroniteflooringDataSource = QualityIroniteflooringDataSource(
+        qualitylisttable8, cityName!, widget.depoName!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable9 = checkTable ? painting_getData() : data;
+    _qualityPaintingDataSource = QualityPaintingDataSource(
+        qualitylisttable9, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable10 = checkTable ? paving_getData() : data;
+    _qualityPavingDataSource = QualityPavingDataSource(
+        qualitylisttable10, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable11 = checkTable ? roofing_getData() : data;
+    _qualityRoofingDataSource = QualityRoofingDataSource(
+        qualitylisttable11, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    qualitylisttable12 = checkTable ? proofing_getData() : data;
+    _qualityProofingDataSource = QualityProofingDataSource(
+        qualitylisttable12, cityName!, widget.depoName!, selectedDate!);
+    _dataGridController = DataGridController();
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void chooseDate(BuildContext dialogcontext) {
@@ -1145,7 +1139,7 @@ class _CivilFieldState extends State<CivilField> {
                         style:
                             pw.TextStyle(color: PdfColors.black, fontSize: 17)),
                     pw.TextSpan(
-                        text: date,
+                        text: selectedDate,
                         style: const pw.TextStyle(
                             color: PdfColors.blue700, fontSize: 15))
                   ])),
@@ -1234,7 +1228,7 @@ class _CivilFieldState extends State<CivilField> {
                     textScaleFactor: 1.6,
                   ),
                   pw.Text(
-                    'Date:  $date ',
+                    'Date:  $selectedDate ',
                     textScaleFactor: 1.6,
                   )
                 ]),

@@ -69,277 +69,274 @@ class _UploadDocumentState extends State<UploadDocument> {
   Widget build(BuildContext context) {
     final isImage = ['.jpeg', '.jpg', '.png'];
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: CustomAppBar(
-              depoName: widget.depoName ?? '',
-              title: 'Upload Checklist',
-              isSync: false,
-              isCentered: true,
-              height: 50,
-            ),),
-        body: isLoading
-            ? const LoadingPage()
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 400,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Obx(() {
-                          if (imagePickerController
-                              .pickedImagePath.value.isNotEmpty) {
-                     
-                            return GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        childAspectRatio: 1.0),
-                                shrinkWrap: true,
-                                itemCount: imagePickerController
-                                    .pickedImagePath.length,
-                                itemBuilder: (context, index) {
-                                  final filePath = imagePickerController
-                                      .pickedImagePath[index];
-                                  bool isImageFile = isImage.any((extension) =>
-                                      filePath.contains(extension));
-                                  return Center(
-                                      child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(color: blue),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: isImageFile
-                                              ? Image.file(
-                                                  File(imagePickerController
-                                                      .pickedImagePath[index]),
-                                                  height: 50,
-                                                  width: 50
-                                                  //  fit: BoxFit.fill,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: CustomAppBar(
+          depoName: widget.depoName ?? '',
+          title: 'Upload Checklist',
+          isSync: false,
+          isCentered: true,
+          height: 50,
+        ),
+      ),
+      body: isLoading
+          ? const LoadingPage()
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 400,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Obx(() {
+                        if (imagePickerController
+                            .pickedImagePath.value.isNotEmpty) {
+                          return GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3, childAspectRatio: 1.0),
+                              shrinkWrap: true,
+                              itemCount:
+                                  imagePickerController.pickedImagePath.length,
+                              itemBuilder: (context, index) {
+                                final filePath = imagePickerController
+                                    .pickedImagePath[index];
+                                bool isImageFile = isImage.any((extension) =>
+                                    filePath.contains(extension));
+                                return Center(
+                                    child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(color: blue),
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        child: isImageFile
+                                            ? Image.file(
+                                                File(imagePickerController
+                                                    .pickedImagePath[index]),
+                                                height: 50,
+                                                width: 50
+                                                //  fit: BoxFit.fill,
+                                                )
+                                            : imagePickerController
+                                                    .pickedImagePath[index]
+                                                    .contains('.pdf')
+                                                ? Image.asset(
+                                                    'assets/pdf_logo.jpeg',
+                                                    height: 50,
                                                   )
-                                              : imagePickerController
-                                                      .pickedImagePath[index]
-                                                      .contains('.pdf')
-                                                  ? Image.asset(
-                                                      'assets/pdf_logo.jpeg',
-                                                      height: 50,
-                                                    )
-                                                  : imagePickerController.pickedImagePath[index]
-                                                          .contains('.mp4')
-                                                      ? Image.asset(
-                                                          'assets/video_image.jpg')
-                                                      : imagePickerController.pickedImagePath[index]
-                                                              .contains('.xlsx')
-                                                          ? Image.asset(
-                                                              'assets/excel.png',
-                                                              height: 50)
-                                                          : Image.asset(
-                                                              'assets/other_file.png',
-                                                              height: 50)));
-                                });
-                          } else {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.2),
-                              child: Text(
-                                'Selected Files Displayed Here',
-                                textAlign: TextAlign.center,
-                                style: headlineBold,
-                              ),
-                            );
-                          }
-                        }),
-                      ),
-                    ),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            height: 70,
-                            child: ElevatedButton(
-                                onPressed: isFieldEditable == false
-                                    ? null
-                                    : () async {
-                                        showPickerOptions(widget.title!);
-                                        // result =
-                                        //     await FilePicker.platform.pickFiles(
-                                        //   withData: true,
-                                        //   type: FileType.any,
-                                        //   allowMultiple: false,
-
-                                        //   // allowedExtensions: ['pdf']
-                                        // );
-                                        // if (result == null) {
-                                        // } else {
-                                        //   setState(() {});
-                                        //   result?.files.forEach((element) {
-                                        //     print(element.name);
-                                        //   });
-                                        // }
-                                      },
-                                child: Text(
-                                  'Pick file',
-                                  style: uploadViewStyle,
-                                )),
-                          ),
-                          const SizedBox(width: 15),
-                          SizedBox(
-                            width: 100,
-                            height: 70,
-                            child: ElevatedButton(
-                                onPressed: isFieldEditable == false
-                                    ? null
-                                    : () async {
-                                        if (imagePickerController
-                                            .pickedImagePath.isNotEmpty) {
-                                          final pr = ProgressDialog(context);
-                                          pr.style(
-                                            progressWidgetAlignment:
-                                                Alignment.center,
-                                            message: 'Uploading...',
-                                            borderRadius: 10.0,
-                                            backgroundColor: Colors.white,
-                                            progressWidget: const LoadingPdf(),
-                                            elevation: 10.0,
-                                            insetAnimCurve: Curves.easeInOut,
-                                            maxProgress: 100.0,
-                                            progressTextStyle: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 10.0,
-                                                fontWeight: FontWeight.w400),
-                                            messageTextStyle: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          );
-                                          pr.show();
-                                          Uint8List? fileBytes;
-                                          // Uint8List? fileBytes =
-                                          //     result!.files.first.bytes;
-
-                                          for (String imagePath
-                                              in imagePickerController
-                                                  .pickedImagePath) {
-                                            // Read the file as bytes
-                                            File imageFile = File(imagePath);
-                                            Uint8List fileBytes =
-                                                await imageFile.readAsBytes();
-
-                                            String imageName =
-                                                imagePath.split('/').last;
-
-                                            String refname = (widget.title ==
-                                                    'QualityChecklist'
-                                                ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/$imageName'
-                                                : widget.title ==
-                                                        'ClosureReport'
-                                                    ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName'
-                                                    : widget.title ==
-                                                            'KeyEvents'
-                                                        ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/$imageName'
-                                                        : widget.title ==
-                                                                'Depot Insights'
-                                                            ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.fldrName}/${imageName}'
-                                                            : '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/$imageName');
-
-                                            // String? fileName = result!.files.first.name;
-
-                                            await FirebaseStorage.instance
-                                                .ref(refname)
-                                                .putData(
-                                                  fileBytes,
-                                                );
-                                          }
-
-                                          pr.hide();
-
-                                          // ignore: use_build_context_synchronously
-                                          Navigator.pop(context);
-                                          // ignore: use_build_context_synchronously
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: blue,
-                                              content: Text(
-                                                'Files are Uploaded',
-                                                style: TextStyle(color: white),
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    'No file selected'),
-                                                content: const Text(
-                                                    'Please select a file to upload'),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: const Text(
-                                                      'OK',
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        }
-                                      },
-                                child: Text(
-                                  'Upload file',
-                                  style: uploadViewStyle,
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SizedBox(
-                        width: 250,
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
+                                                : imagePickerController
+                                                        .pickedImagePath[index]
+                                                        .contains('.mp4')
+                                                    ? Image.asset(
+                                                        'assets/video_image.jpg')
+                                                    : imagePickerController.pickedImagePath[index]
+                                                            .contains('.xlsx')
+                                                        ? Image.asset('assets/excel.png',
+                                                            height: 50)
+                                                        : Image.asset(
+                                                            'assets/other_file.png',
+                                                            height: 50)));
+                              });
+                        } else {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0.2),
                             child: Text(
-                              'Back to ${widget.title == 'QualityChecklist' ? 'Quality Checklist' : widget.title}',
-                              style: uploadViewStyle,
-                            )),
-                      ),
+                              'Selected Files Displayed Here',
+                              textAlign: TextAlign.center,
+                              style: headlineBold,
+                            ),
+                          );
+                        }
+                      }),
                     ),
-                    widget.title == 'Depot Insights'
-                        ? ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return ViewAllPdf(
-                                    title: 'Depot Insights',
-                                    cityName: widget.cityName,
-                                    depoName: widget.depoName,
-                                    userId: widget.userId,
-                                    docId: 'DepotImages',
-                                  );
-                                },
-                              ));
-                            },
-                            child: Text('View File', style: uploadViewStyle))
-                        : Container()
-                  ],
-                ),
-              ),);
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 70,
+                          child: ElevatedButton(
+                              onPressed: isFieldEditable == false
+                                  ? null
+                                  : () async {
+                                      showPickerOptions(widget.title!);
+                                      // result =
+                                      //     await FilePicker.platform.pickFiles(
+                                      //   withData: true,
+                                      //   type: FileType.any,
+                                      //   allowMultiple: false,
+
+                                      //   // allowedExtensions: ['pdf']
+                                      // );
+                                      // if (result == null) {
+                                      // } else {
+                                      //   setState(() {});
+                                      //   result?.files.forEach((element) {
+                                      //     print(element.name);
+                                      //   });
+                                      // }
+                                    },
+                              child: Text(
+                                'Pick file',
+                                style: uploadViewStyle,
+                              )),
+                        ),
+                        const SizedBox(width: 15),
+                        SizedBox(
+                          width: 100,
+                          height: 70,
+                          child: ElevatedButton(
+                              onPressed: isFieldEditable == false
+                                  ? null
+                                  : () async {
+                                      if (imagePickerController
+                                          .pickedImagePath.isNotEmpty) {
+                                        final pr = ProgressDialog(context);
+                                        pr.style(
+                                          progressWidgetAlignment:
+                                              Alignment.center,
+                                          message: 'Uploading...',
+                                          borderRadius: 10.0,
+                                          backgroundColor: Colors.white,
+                                          progressWidget: const LoadingPdf(),
+                                          elevation: 10.0,
+                                          insetAnimCurve: Curves.easeInOut,
+                                          maxProgress: 100.0,
+                                          progressTextStyle: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.w400),
+                                          messageTextStyle: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        );
+                                        pr.show();
+                                        Uint8List? fileBytes;
+                                        // Uint8List? fileBytes =
+                                        //     result!.files.first.bytes;
+
+                                        for (String imagePath
+                                            in imagePickerController
+                                                .pickedImagePath) {
+                                          // Read the file as bytes
+                                          File imageFile = File(imagePath);
+                                          Uint8List fileBytes =
+                                              await imageFile.readAsBytes();
+
+                                          String imageName =
+                                              imagePath.split('/').last;
+
+                                          String refname = (widget.title ==
+                                                  'QualityChecklist'
+                                              ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/$imageName'
+                                              : widget.title == 'ClosureReport'
+                                                  ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName'
+                                                  : widget.title == 'KeyEvents'
+                                                      ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/$imageName'
+                                                      : widget.title ==
+                                                              'Depot Insights'
+                                                          ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.fldrName}/${imageName}'
+                                                          : '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/$imageName');
+
+                                          // String? fileName = result!.files.first.name;
+
+                                          await FirebaseStorage.instance
+                                              .ref(refname)
+                                              .putData(
+                                                fileBytes,
+                                              );
+                                        }
+
+                                        pr.hide();
+
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.pop(context);
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: blue,
+                                            content: Text(
+                                              'Files are Uploaded',
+                                              style: TextStyle(color: white),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'No file selected'),
+                                              content: const Text(
+                                                  'Please select a file to upload'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text(
+                                                    'OK',
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                              child: Text(
+                                'Upload file',
+                                style: uploadViewStyle,
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      width: 250,
+                      height: 50,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Back to ${widget.title == 'QualityChecklist' ? 'Quality Checklist' : widget.title}',
+                            style: uploadViewStyle,
+                          )),
+                    ),
+                  ),
+                  widget.title == 'Depot Insights'
+                      ? ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return ViewAllPdf(
+                                  title: 'Depot Insights',
+                                  cityName: widget.cityName,
+                                  depoName: widget.depoName,
+                                  userId: widget.userId,
+                                  docId: 'DepotImages',
+                                );
+                              },
+                            ));
+                          },
+                          child: Text('View File', style: uploadViewStyle))
+                      : Container()
+                ],
+              ),
+            ),
+    );
   }
 
   Future getAssignedDepots() async {

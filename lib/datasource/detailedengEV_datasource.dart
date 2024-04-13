@@ -178,7 +178,7 @@ class DetailedEngSourceEV extends DataGridSource {
                               onPressed: () {
                                 String activitydata =
                                     row.getCells()[4].value.toString().trim();
-                                if (activitydata == "" ||
+                                if (activitydata == '' ||
                                     activitydata.isEmpty) {
                                   showDialog(
                                     context: mainContext,
@@ -972,7 +972,7 @@ class DetailedEngSourceEV extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
@@ -997,6 +997,8 @@ class DetailedEngSourceEV extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

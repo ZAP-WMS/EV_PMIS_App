@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/views/safetyreport/safetyfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +16,8 @@ class QualityTeilingDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityTeilingDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityTeilingDataSource(this._checklistModel, this.cityName, this.depoName ,this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -42,15 +44,15 @@ class QualityTeilingDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    DateTime? rangeStartDate = DateTime.now();
-    DateTime? rangeEndDate = DateTime.now();
-    DateTime? date;
-    DateTime? endDate;
-    DateTime? rangeStartDate1 = DateTime.now();
-    DateTime? rangeEndDate1 = DateTime.now();
-    DateTime? date1;
-    DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    // DateTime? rangeStartDate = DateTime.now();
+    // DateTime? rangeEndDate = DateTime.now();
+    // DateTime? date;
+    // DateTime? endDate;
+    // DateTime? rangeStartDate1 = DateTime.now();
+    // DateTime? rangeEndDate1 = DateTime.now();
+    // DateTime? date1;
+    // DateTime? endDate1;
+    // String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -93,7 +95,7 @@ class QualityTeilingDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'teiling',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -124,7 +126,7 @@ class QualityTeilingDataSource extends DataGridSource {
                                   depoName: depoName,
                                   userId: userId,
                                   fldrName: 'teiling',
-                                  date: currentDate,
+                                  date: selectedDate,
                                   srNo: row.getCells()[0].value,
                                 ),
                               ));
@@ -565,7 +567,7 @@ class QualityTeilingDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

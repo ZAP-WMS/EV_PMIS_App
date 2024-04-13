@@ -14,8 +14,9 @@ class QualityInspectionDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
+  String selectedDate;
   QualityInspectionDataSource(
-      this._checklistModel, this.cityName, this.depoName) {
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -42,15 +43,15 @@ class QualityInspectionDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    DateTime? rangeStartDate = DateTime.now();
-    DateTime? rangeEndDate = DateTime.now();
-    DateTime? date;
-    DateTime? endDate;
-    DateTime? rangeStartDate1 = DateTime.now();
-    DateTime? rangeEndDate1 = DateTime.now();
-    DateTime? date1;
-    DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    // DateTime? rangeStartDate = DateTime.now();
+    // DateTime? rangeEndDate = DateTime.now();
+    // DateTime? date;
+    // DateTime? endDate;
+    // DateTime? rangeStartDate1 = DateTime.now();
+    // DateTime? rangeEndDate1 = DateTime.now();
+    // DateTime? date1;
+    // DateTime? endDate1;
+    // String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -93,7 +94,7 @@ class QualityInspectionDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'Inspection Table',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -121,7 +122,7 @@ class QualityInspectionDataSource extends DataGridSource {
                                         depoName: depoName,
                                         userId: userId,
                                         fldrName: 'Inspection Table',
-                                        date: currentDate,
+                                        date: selectedDate,
                                         srNo: row.getCells()[0].value,
                                       )));
                             },
@@ -563,7 +564,7 @@ class QualityInspectionDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
@@ -588,6 +589,8 @@ class QualityInspectionDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

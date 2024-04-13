@@ -15,7 +15,9 @@ class QualityPSSDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityPSSDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityPSSDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -42,20 +44,19 @@ class QualityPSSDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    DateTime? rangeStartDate = DateTime.now();
-    DateTime? rangeEndDate = DateTime.now();
-    DateTime? date;
-    DateTime? endDate;
-    DateTime? rangeStartDate1 = DateTime.now();
-    DateTime? rangeEndDate1 = DateTime.now();
-    DateTime? date1;
-    DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    // DateTime? rangeStartDate = DateTime.now();
+    // DateTime? rangeEndDate = DateTime.now();
+    // DateTime? date;
+    // DateTime? endDate;
+    // DateTime? rangeStartDate1 = DateTime.now();
+    // DateTime? rangeEndDate1 = DateTime.now();
+    // DateTime? date1;
+    // DateTime? endDate1;
+    // String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-              Alignment.center,
+          alignment: Alignment.center,
           // : Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: dataGridCell.columnName == 'Upload'
@@ -64,25 +65,27 @@ class QualityPSSDataSource extends DataGridSource {
                   return Container(
                     width: 60,
                     child: ElevatedButton(
-                           style: ElevatedButton.styleFrom(
-                                  backgroundColor: blue,
-                                  padding: EdgeInsets.all(0)),
-                        onPressed: () {
-                          
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => UploadDocument(
-                              title: 'QualityChecklist',
-                              subtitle: 'Electrical_Engineer',
-                              cityName: cityName,
-                              depoName: depoName,
-                              userId: userId,
-                              fldrName: 'PSS Table',
-                              date: currentDate,
-                              srNo: row.getCells()[0].value,
-                            ),
-                          ));
-                        },
-                        child: Text('Upload', style: uploadViewStyle,),),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: blue, padding: EdgeInsets.all(0)),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UploadDocument(
+                            title: 'QualityChecklist',
+                            subtitle: 'Electrical_Engineer',
+                            cityName: cityName,
+                            depoName: depoName,
+                            userId: userId,
+                            fldrName: 'PSS Table',
+                            date: selectedDate,
+                            srNo: row.getCells()[0].value,
+                          ),
+                        ));
+                      },
+                      child: Text(
+                        'Upload',
+                        style: uploadViewStyle,
+                      ),
+                    ),
                   );
                 })
               : dataGridCell.columnName == 'View'
@@ -91,9 +94,9 @@ class QualityPSSDataSource extends DataGridSource {
                       return Container(
                         width: 50,
                         child: ElevatedButton(
-                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: blue,
-                                  padding: EdgeInsets.all(0)),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: blue,
+                                padding: EdgeInsets.all(0)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAllPdf(
@@ -103,7 +106,7 @@ class QualityPSSDataSource extends DataGridSource {
                                   depoName: depoName,
                                   userId: userId,
                                   fldrName: 'PSS Table',
-                                  date: currentDate,
+                                  date: selectedDate,
                                   srNo: row.getCells()[0].value,
                                 ),
                               ));
@@ -114,7 +117,6 @@ class QualityPSSDataSource extends DataGridSource {
                             )),
                       );
                     })
-                 
                   : Text(
                       dataGridCell.value.toString(),
                       style: tablefontsize,
@@ -216,7 +218,7 @@ class QualityPSSDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

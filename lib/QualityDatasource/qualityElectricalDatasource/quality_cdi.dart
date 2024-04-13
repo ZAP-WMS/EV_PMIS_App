@@ -15,7 +15,8 @@ class QualityCDIDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityCDIDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityCDIDataSource(this._checklistModel, this.cityName, this.depoName , this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -90,7 +91,7 @@ class QualityCDIDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'CDI Table',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -116,7 +117,7 @@ class QualityCDIDataSource extends DataGridSource {
                                   depoName: depoName,
                                   userId: userId,
                                   fldrName: 'CDI Table',
-                                  date: currentDate,
+                                  date: selectedDate,
                                   srNo: row.getCells()[0].value,
                                 ),
                               ));

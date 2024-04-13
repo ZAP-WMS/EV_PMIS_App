@@ -14,7 +14,9 @@ class QualityPavingDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityPavingDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityPavingDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
 
@@ -42,7 +44,7 @@ class QualityPavingDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    // String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -69,7 +71,7 @@ class QualityPavingDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'Paving Table',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ),
@@ -99,7 +101,7 @@ class QualityPavingDataSource extends DataGridSource {
                                   depoName: depoName,
                                   userId: userId,
                                   fldrName: 'Paving Table',
-                                  date: currentDate,
+                                  date: selectedDate,
                                   srNo: row.getCells()[0].value,
                                 ),
                               ));
@@ -213,7 +215,7 @@ class QualityPavingDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

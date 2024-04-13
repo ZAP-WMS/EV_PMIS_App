@@ -163,7 +163,7 @@ class DetailedEngSource extends DataGridSource {
                               onPressed: () {
                                 String activitydata =
                                     row.getCells()[4].value.toString().trim();
-                                if (activitydata == "null" ||
+                                if (activitydata == '' ||
                                     activitydata.isEmpty) {
                                   showDialog(
                                     context: mainContext,
@@ -1027,6 +1027,7 @@ class DetailedEngSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

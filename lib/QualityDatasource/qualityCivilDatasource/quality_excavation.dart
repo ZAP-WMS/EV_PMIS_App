@@ -15,8 +15,9 @@ class QualityExcavationDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
+  String selectedDate;
   QualityExcavationDataSource(
-      this._checklistModel, this.cityName, this.depoName) {
+      this._checklistModel, this.cityName, this.depoName , this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -51,7 +52,7 @@ class QualityExcavationDataSource extends DataGridSource {
     // DateTime? rangeEndDate1 = DateTime.now();
     // DateTime? date1;
     // DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now(),);
+  //  String currentDate = DateFormat.yMMMMd().format(DateTime.now(),);
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -77,7 +78,7 @@ class QualityExcavationDataSource extends DataGridSource {
                                     depoName: depoName,
                                     userId: userId,
                                     fldrName: 'Exc Table',
-                                    date: currentDate,
+                                    date: selectedDate,
                                     srNo: row.getCells()[0].value,
                                   )));
                         },
@@ -104,7 +105,7 @@ class QualityExcavationDataSource extends DataGridSource {
                                   depoName: depoName,
                                   userId: userId,
                                   fldrName: 'Exc Table',
-                                  date: currentDate,
+                                  date: selectedDate,
                                   srNo: row.getCells()[0].value,
                                 ),
                               ));
@@ -575,6 +576,7 @@ class QualityExcavationDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+           newCellValue = value;
           submitCell();
         },
       ),

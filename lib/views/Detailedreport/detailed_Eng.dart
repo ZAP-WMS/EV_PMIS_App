@@ -254,7 +254,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectev.add(DetailedEngModel(
                 siNo: _detailedEngSourceev.dataGridRows.length + 1,
                 title: '',
-                number: 'null',
+                number: '',
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,
@@ -266,7 +266,7 @@ class _DetailedEngtState extends State<DetailedEng>
               DetailedProjectshed.add(DetailedEngModel(
                 siNo: _detailedEngSourceShed.dataGridRows.length + 1,
                 title: '',
-                number: 'null',
+                number: '',
                 preparationDate: dmy,
                 submissionDate: dmy,
                 approveDate: dmy,

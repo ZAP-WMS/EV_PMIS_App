@@ -66,13 +66,6 @@ class _DailyProjectState extends State<DailyProject> {
         _dataGridController = DataGridController();
       },
     );
-    _stream = FirebaseFirestore.instance
-        .collection('DailyProject3')
-        .doc('${widget.depoName}')
-        .collection(selectedDate!)
-        .doc(userId)
-        .snapshots();
-
     super.initState();
   }
 
@@ -117,9 +110,14 @@ class _DailyProjectState extends State<DailyProject> {
       body: isLoading
           ? const LoadingPage()
           : StreamBuilder(
-              stream: _stream,
+              stream: FirebaseFirestore.instance
+                  .collection('DailyProject3')
+                  .doc('${widget.depoName}')
+                  .collection(selectedDate!)
+                  .doc(userId)
+                  .snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data.exists == false) {
+                if (!snapshot.hasData || snapshot.data!.exists == false) {
                   dailyproject.clear();
                   _dailyDataSource.buildDataGridRows();
                   _dailyDataSource.updateDatagridSource();
@@ -252,7 +250,7 @@ class _DailyProjectState extends State<DailyProject> {
                           GridColumn(
                             columnName: 'view',
                             allowEditing: false,
-                            width: 50,
+                            width: 100,
                             label: Container(
                               //Padding: tablepadding,
                               alignment: Alignment.center,
@@ -296,7 +294,7 @@ class _DailyProjectState extends State<DailyProject> {
                   );
                 } else {
                   alldata = '';
-                  alldata = snapshot.data['data'] as List<dynamic>;
+                  alldata = snapshot.data!['data'] as List<dynamic>;
                   dailyproject.clear();
                   alldata.forEach((element) {
                     dailyproject.add(DailyProjectModel.fromjson(element));
@@ -499,9 +497,6 @@ class _DailyProjectState extends State<DailyProject> {
               onPressed: (() {
                 dailyproject.add(DailyProjectModel(
                     siNo: _dailyDataSource.rows.length + 1,
-                    // date: DateFormat().add_yMd(storeData()).format(DateTime.now()),
-                    // state: "Maharashtra",
-                    // depotName: 'depotName',
                     typeOfActivity: '',
                     activityDetails: "",
                     progress: '',

@@ -14,8 +14,9 @@ class QualityBackFillingDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
+  String seletedDate;
   QualityBackFillingDataSource(
-      this._checklistModel, this.cityName, this.depoName) {
+      this._checklistModel, this.cityName, this.depoName, this.seletedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -50,7 +51,7 @@ class QualityBackFillingDataSource extends DataGridSource {
     DateTime? rangeEndDate1 = DateTime.now();
     DateTime? date1;
     DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    //   String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -62,7 +63,9 @@ class QualityBackFillingDataSource extends DataGridSource {
                   return SizedBox(
                     width: 50,
                     child: ElevatedButton(
-                        style: const ButtonStyle(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll<Color>(blue),
                             padding: MaterialStatePropertyAll(EdgeInsets.zero)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -73,7 +76,7 @@ class QualityBackFillingDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'BackFilling Table',
-                              date: currentDate,
+                              date: seletedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -87,11 +90,11 @@ class QualityBackFillingDataSource extends DataGridSource {
                       return SizedBox(
                         width: 50,
                         child: ElevatedButton(
-                            style:  ButtonStyle(
+                            style: ButtonStyle(
                                 backgroundColor:
-                                      MaterialStatePropertyAll<Color>(blue),
-                                padding:
-                                    MaterialStatePropertyAll(EdgeInsets.zero)),
+                                    MaterialStatePropertyAll<Color>(blue),
+                                padding: const MaterialStatePropertyAll(
+                                    EdgeInsets.zero)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewAllPdf(
@@ -101,7 +104,7 @@ class QualityBackFillingDataSource extends DataGridSource {
                                         depoName: depoName,
                                         userId: userId,
                                         fldrName: 'BackFilling Table',
-                                        date: currentDate,
+                                        date: seletedDate,
                                         srNo: row.getCells()[0].value,
                                       )));
                             },
@@ -211,7 +214,7 @@ class QualityBackFillingDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

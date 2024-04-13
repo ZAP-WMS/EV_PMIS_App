@@ -9,12 +9,11 @@ import 'package:ev_pmis_app/style.dart';
 import '../models/jmr.dart';
 
 class JmrDataSource extends DataGridSource {
-
   Function deleteRow;
   JmrDataSource(this._JMRModels, this.deleteRow) {
     buildDataGridRows();
   }
-  
+
   void buildDataGridRows() {
     dataGridRows =
         _JMRModels.map<DataGridRow>((dataGridRow) => dataGridRow.dataGridRow())
@@ -163,7 +162,7 @@ class JmrDataSource extends DataGridSource {
             ?.toString() ??
         '';
 
-    newCellValue = '';
+    newCellValue = null;
 
     final bool isNumericType = column.columnName == 'srNo' ||
         column.columnName == 'Rate' ||
@@ -190,7 +189,10 @@ class JmrDataSource extends DataGridSource {
           FilteringTextInputFormatter.allow(regExp),
         ],
         decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 5.0,),),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 5.0,
+          ),
+        ),
         keyboardType: isNumericType
             ? TextInputType.number
             : isDateTimeType

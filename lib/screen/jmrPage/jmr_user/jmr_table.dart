@@ -706,14 +706,14 @@ class _JmrTablePageState extends State<JmrTablePage> {
     );
 
     List<List<dynamic>> fieldData = [
-      ['Project :', projectName.text],
-      ['Ref Number :', refNo.text],
-      ['LOI Ref Number :', loiRefNum.text],
-      ['Date :', date.text],
-      ['Site Location :', siteLocation.text],
-      ['Note :', note.text],
-      ['Start Date :', startDate.text],
-      ['End Date :', endDate.text],
+      ['Project :', widget.projectName],
+      ['Ref Number :', widget.refNo],
+      ['LOI Ref Number :', widget.loiRefNum],
+      ['Date :', widget.date],
+      ['Site Location :', widget.siteLocation],
+      ['Note :', widget.note],
+      ['Start Date :', widget.startDate],
+      ['End Date :', widget.endDate],
     ];
 
     List<pw.TableRow> rows = [];

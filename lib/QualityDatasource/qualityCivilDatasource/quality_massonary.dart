@@ -105,31 +105,34 @@ class QualityMassonaryDataSource extends DataGridSource {
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
-                      return ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll<Color>(blue),
-                            padding: const MaterialStatePropertyAll(
-                                EdgeInsets.zero)),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ViewAllPdf(
-                                title: 'QualityChecklist',
-                                subtitle: 'civil_Engineer',
-                                cityName: cityName,
-                                depoName: depoName,
-                                userId: userId,
-                                fldrName: 'Massonary Table',
-                                date: currentDate,
-                                srNo: row.getCells()[0].value,
+                      return SizedBox(
+                        width: 50,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll<Color>(blue),
+                              padding: const MaterialStatePropertyAll(
+                                  EdgeInsets.zero)),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ViewAllPdf(
+                                  title: 'QualityChecklist',
+                                  subtitle: 'civil_Engineer',
+                                  cityName: cityName,
+                                  depoName: depoName,
+                                  userId: userId,
+                                  fldrName: 'Massonary Table',
+                                  date: currentDate,
+                                  srNo: row.getCells()[0].value,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'View',
-                          style: uploadViewStyle,
+                            );
+                          },
+                          child: Text(
+                            'View',
+                            style: uploadViewStyle,
+                          ),
                         ),
                       );
                     })
@@ -568,7 +571,7 @@ class QualityMassonaryDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
@@ -593,6 +596,8 @@ class QualityMassonaryDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

@@ -130,67 +130,67 @@ class _ElectricalFieldState extends State<ElectricalField> {
   void initState() {
     getAssignedDepots();
     cityName = Provider.of<CitiesProvider>(context, listen: false).getName;
-    _stream = FirebaseFirestore.instance
-        .collection('ElectricalQualityChecklist')
-        .doc('${widget.depoName}')
-        .collection('userId')
-        .doc(userId)
-        .collection(widget.fielClnName!)
-        .doc(selectedDate)
-        .snapshots();
+    // _stream = FirebaseFirestore.instance
+    //     .collection('ElectricalQualityChecklist')
+    //     .doc('${widget.depoName}')
+    //     .collection('userId')
+    //     .doc(userId)
+    //     .collection(widget.fielClnName!)
+    //     .doc(selectedDate)
+    //     .snapshots();
 
     initializeController();
     _fetchUserData();
 
     getTableData().whenComplete(() {
       qualitylisttable1 = checkTable ? getData() : data;
-      _qualityPSSDataSource =
-          QualityPSSDataSource(qualitylisttable1, cityName!, widget.depoName!);
+      _qualityPSSDataSource = QualityPSSDataSource(
+          qualitylisttable1, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable2 = checkTable ? rmu_getData() : data;
-      _qualityrmuDataSource =
-          QualityrmuDataSource(qualitylisttable2, cityName!, widget.depoName!);
+      _qualityrmuDataSource = QualityrmuDataSource(
+          qualitylisttable2, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable3 = checkTable ? ct_getData() : data;
-      _qualityctDataSource =
-          QualityctDataSource(qualitylisttable3, cityName!, widget.depoName!);
+      _qualityctDataSource = QualityctDataSource(
+          qualitylisttable3, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable4 = checkTable ? cmu_getData() : data;
-      _qualitycmuDataSource =
-          QualitycmuDataSource(qualitylisttable4, cityName!, widget.depoName!);
+      _qualitycmuDataSource = QualitycmuDataSource(
+          qualitylisttable4, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable5 = checkTable ? acdb_getData() : data;
-      _qualityacdDataSource =
-          QualityacdDataSource(qualitylisttable5, cityName!, widget.depoName!);
+      _qualityacdDataSource = QualityacdDataSource(
+          qualitylisttable5, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable6 = checkTable ? ci_getData() : data;
-      _qualityCIDataSource =
-          QualityCIDataSource(qualitylisttable6, cityName!, widget.depoName!);
+      _qualityCIDataSource = QualityCIDataSource(
+          qualitylisttable6, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable7 = checkTable ? cdi_getData() : data;
-      _qualityCDIDataSource =
-          QualityCDIDataSource(qualitylisttable7, cityName!, widget.depoName!);
+      _qualityCDIDataSource = QualityCDIDataSource(
+          qualitylisttable7, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable8 = checkTable ? msp_getData() : data;
-      _qualityMSPDataSource =
-          QualityMSPDataSource(qualitylisttable8, cityName!, widget.depoName!);
+      _qualityMSPDataSource = QualityMSPDataSource(
+          qualitylisttable8, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable9 = checkTable ? charger_getData() : data;
       _qualityChargerDataSource = QualityChargerDataSource(
-          qualitylisttable9, cityName!, widget.depoName!);
+          qualitylisttable9, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable10 = checkTable ? earth_pit_getData() : data;
-      _qualityEPDataSource =
-          QualityEPDataSource(qualitylisttable10, cityName!, widget.depoName!);
+      _qualityEPDataSource = QualityEPDataSource(
+          qualitylisttable10, cityName!, widget.depoName!, selectedDate!);
       _dataGridController = DataGridController();
 
       isLoading = false;
@@ -277,10 +277,17 @@ class _ElectricalFieldState extends State<ElectricalField> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.8,
                       child: StreamBuilder(
-                        stream: _stream,
+                        stream: FirebaseFirestore.instance
+                            .collection('ElectricalQualityChecklist')
+                            .doc('${widget.depoName}')
+                            .collection('userId')
+                            .doc(userId)
+                            .collection(widget.fielClnName!)
+                            .doc(selectedDate)
+                            .snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData ||
-                              snapshot.data.exists == false) {
+                              snapshot.data!.exists == false) {
                             return
                                 //  widget.isHeader!
                                 //     ?
@@ -787,52 +794,82 @@ class _ElectricalFieldState extends State<ElectricalField> {
                         getTableData().whenComplete(() {
                           qualitylisttable1 = checkTable ? getData() : data;
                           _qualityPSSDataSource = QualityPSSDataSource(
-                              qualitylisttable1, widget.depoName!, cityName!);
+                              qualitylisttable1,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable2 = rmu_getData();
                           _qualityrmuDataSource = QualityrmuDataSource(
-                              qualitylisttable2, widget.depoName!, cityName!);
+                              qualitylisttable2,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable3 = ct_getData();
                           _qualityctDataSource = QualityctDataSource(
-                              qualitylisttable3, widget.depoName!, cityName!);
+                              qualitylisttable3,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable4 = cmu_getData();
                           _qualitycmuDataSource = QualitycmuDataSource(
-                              qualitylisttable4, widget.depoName!, cityName!);
+                              qualitylisttable4,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable5 = acdb_getData();
                           _qualityacdDataSource = QualityacdDataSource(
-                              qualitylisttable5, widget.depoName!, cityName!);
+                              qualitylisttable5,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable6 = ci_getData();
                           _qualityCIDataSource = QualityCIDataSource(
-                              qualitylisttable6, widget.depoName!, cityName!);
+                              qualitylisttable6,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable7 = cdi_getData();
                           _qualityCDIDataSource = QualityCDIDataSource(
-                              qualitylisttable7, widget.depoName!, cityName!);
+                              qualitylisttable7,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable8 = msp_getData();
                           _qualityMSPDataSource = QualityMSPDataSource(
-                              qualitylisttable8, widget.depoName!, cityName!);
+                              qualitylisttable8,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable9 = charger_getData();
                           _qualityChargerDataSource = QualityChargerDataSource(
-                              qualitylisttable9, widget.depoName!, cityName!);
+                              qualitylisttable9,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable10 = earth_pit_getData();
                           _qualityEPDataSource = QualityEPDataSource(
-                              qualitylisttable10, widget.depoName!, cityName!);
+                              qualitylisttable10,
+                              cityName!,
+                              widget.depoName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
                         });
                       });

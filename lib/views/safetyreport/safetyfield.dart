@@ -106,9 +106,11 @@ class _SafetyFieldState extends State<SafetyField> {
   @override
   void initState() {
     initializeController();
-    getAssignedDepots();
+
     selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+    getAssignedDepots();
     getTableData().whenComplete(() async {
+      await getAssignedDepots();
       _fetchUserData();
       safetylisttable = checkTable ? getData() : safetylisttable;
       _safetyChecklistDataSource = SafetyChecklistDataSource(safetylisttable,

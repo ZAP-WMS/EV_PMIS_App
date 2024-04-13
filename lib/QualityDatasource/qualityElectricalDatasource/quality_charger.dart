@@ -15,7 +15,9 @@ class QualityChargerDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityChargerDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityChargerDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -88,7 +90,7 @@ class QualityChargerDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'CHARGER Table',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -114,7 +116,7 @@ class QualityChargerDataSource extends DataGridSource {
                                   depoName: depoName,
                                   userId: userId,
                                   fldrName: 'CHARGER Table',
-                                  date: currentDate,
+                                  date: selectedDate,
                                   srNo: row.getCells()[0].value,
                                 ),
                               ));
@@ -552,7 +554,7 @@ class QualityChargerDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

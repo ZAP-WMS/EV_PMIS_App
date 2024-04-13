@@ -14,7 +14,8 @@ class QualityEPDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityEPDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityEPDataSource(this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -41,15 +42,15 @@ class QualityEPDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    DateTime? rangeStartDate = DateTime.now();
-    DateTime? rangeEndDate = DateTime.now();
-    DateTime? date;
-    DateTime? endDate;
-    DateTime? rangeStartDate1 = DateTime.now();
-    DateTime? rangeEndDate1 = DateTime.now();
-    DateTime? date1;
-    DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    // DateTime? rangeStartDate = DateTime.now();
+    // DateTime? rangeEndDate = DateTime.now();
+    // DateTime? date;
+    // DateTime? endDate;
+    // DateTime? rangeStartDate1 = DateTime.now();
+    // DateTime? rangeEndDate1 = DateTime.now();
+    // DateTime? date1;
+    // DateTime? endDate1;
+    // String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -72,7 +73,7 @@ class QualityEPDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'EARTH PIT Table',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -95,7 +96,7 @@ class QualityEPDataSource extends DataGridSource {
                                   depoName: depoName,
                                   userId: userId,
                                   fldrName: 'EARTH PIT Table',
-                                  date: currentDate,
+                                  date: selectedDate,
                                   srNo: row.getCells()[0].value,
                                 ),
                               ));

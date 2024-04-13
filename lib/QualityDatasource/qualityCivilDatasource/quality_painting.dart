@@ -15,8 +15,9 @@ class QualityPaintingDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
+  String selectedDate;
   QualityPaintingDataSource(
-      this._checklistModel, this.cityName, this.depoName) {
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -70,7 +71,7 @@ class QualityPaintingDataSource extends DataGridSource {
                                 depoName: depoName,
                                 userId: userId,
                                 fldrName: 'Painting Table',
-                                date: currentDate,
+                                date: selectedDate,
                                 srNo: row.getCells()[0].value,
                               ),
                             ),
@@ -88,8 +89,8 @@ class QualityPaintingDataSource extends DataGridSource {
                             style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStatePropertyAll<Color>(blue),
-                                padding:
-                                    MaterialStatePropertyAll(EdgeInsets.zero)),
+                                padding: const MaterialStatePropertyAll(
+                                    EdgeInsets.zero)),
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -100,7 +101,7 @@ class QualityPaintingDataSource extends DataGridSource {
                                     depoName: depoName,
                                     userId: userId,
                                     fldrName: 'Painting Table',
-                                    date: currentDate,
+                                    date: selectedDate,
                                     srNo: row.getCells()[0].value,
                                   ),
                                 ),
@@ -513,7 +514,7 @@ class QualityPaintingDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
@@ -538,6 +539,8 @@ class QualityPaintingDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

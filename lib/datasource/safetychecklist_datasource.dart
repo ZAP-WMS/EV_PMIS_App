@@ -259,7 +259,7 @@ class SafetyChecklistDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
@@ -284,6 +284,7 @@ class SafetyChecklistDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
           submitCell();
         },
       ),

@@ -15,7 +15,9 @@ class QualityacdDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityacdDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityacdDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -90,7 +92,7 @@ class QualityacdDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'ACDB Table',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -116,7 +118,7 @@ class QualityacdDataSource extends DataGridSource {
                                         depoName: depoName,
                                         userId: userId,
                                         fldrName: 'ACDB Table',
-                                        date: currentDate,
+                                        date: selectedDate,
                                         srNo: row.getCells()[0].value,
                                       )));
                             },
@@ -552,7 +554,7 @@ class QualityacdDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

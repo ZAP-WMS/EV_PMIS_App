@@ -16,7 +16,9 @@ class QualityMSPDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
-  QualityMSPDataSource(this._checklistModel, this.cityName, this.depoName) {
+  String selectedDate;
+  QualityMSPDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -93,7 +95,7 @@ class QualityMSPDataSource extends DataGridSource {
                               depoName: depoName,
                               userId: userId,
                               fldrName: 'MSP Table',
-                              date: currentDate,
+                              date: selectedDate,
                               srNo: row.getCells()[0].value,
                             ),
                           ));
@@ -114,7 +116,7 @@ class QualityMSPDataSource extends DataGridSource {
                                 depoName: depoName,
                                 userId: userId,
                                 fldrName: 'MSP Table',
-                                date: currentDate,
+                                date: selectedDate,
                                 srNo: row.getCells()[0].value,
                               ),
                             ));
@@ -221,7 +223,7 @@ class QualityMSPDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

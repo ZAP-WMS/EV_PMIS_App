@@ -15,8 +15,9 @@ class QualityCeillingDataSource extends DataGridSource {
   // BuildContext mainContext;
   String cityName;
   String depoName;
+  String selectedDate;
   QualityCeillingDataSource(
-      this._checklistModel, this.cityName, this.depoName) {
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -51,7 +52,7 @@ class QualityCeillingDataSource extends DataGridSource {
     DateTime? rangeEndDate1 = DateTime.now();
     DateTime? date1;
     DateTime? endDate1;
-    String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+    //  String currentDate = DateFormat.yMMMMd().format(DateTime.now());
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -83,7 +84,8 @@ class QualityCeillingDataSource extends DataGridSource {
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStatePropertyAll<Color>(blue),
-                          padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                          padding:
+                              const MaterialStatePropertyAll(EdgeInsets.zero)),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UploadDocument(
@@ -93,7 +95,7 @@ class QualityCeillingDataSource extends DataGridSource {
                             depoName: depoName,
                             userId: userId,
                             fldrName: 'Ceilling Table',
-                            date: currentDate,
+                            date: selectedDate,
                             srNo: row.getCells()[0].value,
                           ),
                         ));
@@ -122,7 +124,7 @@ class QualityCeillingDataSource extends DataGridSource {
                                 depoName: depoName,
                                 userId: userId,
                                 fldrName: 'Ceilling Table',
-                                date: currentDate,
+                                date: selectedDate,
                                 srNo: row.getCells()[0].value,
                               ),
                             ));
@@ -237,7 +239,7 @@ class QualityCeillingDataSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
@@ -262,6 +264,8 @@ class QualityCeillingDataSource extends DataGridSource {
           }
         },
         onSubmitted: (String value) {
+          newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();
