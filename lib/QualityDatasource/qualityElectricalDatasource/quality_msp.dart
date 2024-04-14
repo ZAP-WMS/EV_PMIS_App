@@ -82,11 +82,10 @@ class QualityMSPDataSource extends DataGridSource {
                   return Container(
                     width: 60,
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: blue,
+                            padding: const EdgeInsets.all(0)),
                         onPressed: () {
-                          style:
-                          ElevatedButton.styleFrom(
-                              backgroundColor: blue,
-                              padding: EdgeInsets.all(0));
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
                               title: 'QualityChecklist',
@@ -106,22 +105,28 @@ class QualityMSPDataSource extends DataGridSource {
               : dataGridCell.columnName == 'View'
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
-                      return ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ViewAllPdf(
-                                title: 'QualityChecklist',
-                                subtitle: 'Electrical_Engineer',
-                                cityName: cityName,
-                                depoName: depoName,
-                                userId: userId,
-                                fldrName: 'MSP Table',
-                                date: selectedDate,
-                                srNo: row.getCells()[0].value,
-                              ),
-                            ));
-                          },
-                          child: Text('View', style: uploadViewStyle));
+                      return SizedBox(
+                        width: 60,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: blue,
+                                padding: const EdgeInsets.all(0)),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAllPdf(
+                                  title: 'QualityChecklist',
+                                  subtitle: 'Electrical_Engineer',
+                                  cityName: cityName,
+                                  depoName: depoName,
+                                  userId: userId,
+                                  fldrName: 'MSP Table',
+                                  date: selectedDate,
+                                  srNo: row.getCells()[0].value,
+                                ),
+                              ));
+                            },
+                            child: Text('View', style: uploadViewStyle)),
+                      );
                     })
                   : Text(dataGridCell.value.toString(), style: tablefontsize));
     }).toList());

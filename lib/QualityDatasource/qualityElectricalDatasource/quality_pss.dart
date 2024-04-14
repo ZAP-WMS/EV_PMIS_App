@@ -66,7 +66,8 @@ class QualityPSSDataSource extends DataGridSource {
                     width: 60,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: blue, padding: EdgeInsets.all(0)),
+                          backgroundColor: blue,
+                          padding: const EdgeInsets.all(0)),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => UploadDocument(
@@ -92,11 +93,14 @@ class QualityPSSDataSource extends DataGridSource {
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                       return Container(
-                        width: 50,
+                        width: 60,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: blue,
-                                padding: EdgeInsets.all(0)),
+                              backgroundColor: blue,
+                              padding: const EdgeInsets.all(
+                                0,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAllPdf(
