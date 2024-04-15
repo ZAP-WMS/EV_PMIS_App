@@ -275,7 +275,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                                   frozenPaneLineWidth: 2),
                               child: SfDataGrid(
                                   source: _dailyDataSource,
-                                  allowEditing: true,
+                                  allowEditing: false,
                                   frozenColumnsCount: 1,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:

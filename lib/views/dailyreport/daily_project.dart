@@ -548,7 +548,7 @@ class _DailyProjectState extends State<DailyProject> {
     showDialog(
         context: dialogueContext,
         builder: (dialogueContext) => AlertDialog(
-              title: const Text('All Date'),
+              // title: const Text('All Date'),
               content: SizedBox(
                   height: MediaQuery.of(dialogueContext).size.height * 0.8,
                   width: MediaQuery.of(dialogueContext).size.width * 0.8,

@@ -281,23 +281,26 @@ class _KeyEvents2State extends State<KeyEvents2> {
           .doc(userId)
           .collection('KeyAllEvents')
           .doc('keyEvents')
-          // .doc('${widget.depoName}')
           .snapshots();
 
       FirebaseFirestore.instance
           .collection('KeyEventsTable')
           .doc(widget.depoName!)
           .collection('KeyDataTable')
-          .doc(widget.userId)
+          .doc(userId)
           .collection('ClosureDates')
           .doc('keyEvents')
           .get()
           .then((value) {
-        String? date = value.data()!['ClosureDate'];
-        closureDate = DateFormat('dd-MM-yyyy').parse(date!);
-        print(closureDate);
-        _isLoading = false;
-        setState(() {});
+        if (value.exists) {
+          String? date = value.data()!['ClosureDate'];
+          closureDate = DateFormat('dd-MM-yyyy').parse(date!);
+          _isLoading = false;
+          setState(() {});
+        } else {
+          _isLoading = false;
+          setState(() {});
+        }
       });
 
       _verticalGridController.addListener(() {
@@ -340,60 +343,6 @@ class _KeyEvents2State extends State<KeyEvents2> {
   }
 
   Widget build(BuildContext context) {
-    // menuwidget = [
-    //   StatutoryAprovalA2(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //     keyEvents: '',
-    //   ),
-    //   StatutoryAprovalA3(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //   ),
-    //   StatutoryAprovalA4(
-    //     userid: userId,
-    //     depoName: widget.depoName,
-    //     cityName: widget.cityName,
-    //   ),
-    //   StatutoryAproval(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   // StatutoryAprovalA5(
-    //   //   userid: userId,
-    //   //   cityName: widget.cityName,
-    //   //   depoName: widget.depoName,
-    //   // ),
-    //   StatutoryAprovalA6(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA7(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA8(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA9(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    //   StatutoryAprovalA10(
-    //     userid: userId,
-    //     cityName: widget.cityName,
-    //     depoName: widget.depoName,
-    //   ),
-    // ];
-
     return _isLoading
         ? const LoadingPage()
         : keyBoardArrow(
@@ -2349,8 +2298,9 @@ class _KeyEvents2State extends State<KeyEvents2> {
                       ),
                     ),
                     Container(
-                      width: 480,
-                      height: 40,
+                      width: 300,
+                      height: 30,
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       alignment: Alignment.bottomCenter,
                       decoration: BoxDecoration(
                           border: Border(
@@ -2366,7 +2316,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                           const Text(
                             'Select Project Closure Date :',
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 11, fontWeight: FontWeight.bold),
                           ),
                           IconButton(
                               onPressed: () {
@@ -2411,13 +2361,12 @@ class _KeyEvents2State extends State<KeyEvents2> {
                                   ),
                                 );
                               },
-                              icon: const Icon(Icons.today)),
+                              icon: const Icon(Icons.today, size: 15)),
                           Expanded(
                             child: Text(
                               DateFormat('dd-MM-yyyy').format(closureDate!),
-                              //  DateFormat.yMMMMd().format(closureDate!),
                               style: const TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
+                                  fontSize: 11, fontWeight: FontWeight.bold),
                             ),
                           )
                         ],
