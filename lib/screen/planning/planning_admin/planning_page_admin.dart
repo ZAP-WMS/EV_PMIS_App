@@ -2292,7 +2292,7 @@ class _PlanningPageAdminState extends State<PlanningPageAdmin> {
                       ),
                     ),
                     Container(
-                      width: 350,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       height: 30,
                       alignment: Alignment.bottomCenter,
                       decoration: BoxDecoration(

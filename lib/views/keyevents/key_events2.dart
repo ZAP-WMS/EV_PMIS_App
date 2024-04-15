@@ -2298,7 +2298,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
                       ),
                     ),
                     Container(
-                      width: 300,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       height: 30,
                       padding: EdgeInsets.symmetric(horizontal: 5),
                       alignment: Alignment.bottomCenter,
