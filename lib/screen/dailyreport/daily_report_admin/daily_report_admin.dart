@@ -158,7 +158,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 150,
+                        width: MediaQuery.of(context).size.width * 0.5,
                         height: 40,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
@@ -172,7 +172,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                                     showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                        title: const Text('choose Date'),
+                                        // title: const Text('choose Date'),
                                         content: SizedBox(
                                           width: 400,
                                           height: 500,
@@ -228,7 +228,7 @@ class _DailyProjectAdminState extends State<DailyProjectAdmin> {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 20),
+                      const SizedBox(width: 10),
                       Container(
                         padding: const EdgeInsets.only(left: 10.0),
                         width: 150,

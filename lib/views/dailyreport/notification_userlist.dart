@@ -391,7 +391,6 @@ class _userListState extends State<userList> {
 
       // Iterate through each document
       querySnapshot.docs.forEach((doc) {
-        print(doc['allUserId'][0]['name']);
         String? userName = doc['allUserId'][0]['name'];
         // Extract the 'alluserId' array from each document data
         List<dynamic> allUserId = doc['allUserId'] ?? [];
