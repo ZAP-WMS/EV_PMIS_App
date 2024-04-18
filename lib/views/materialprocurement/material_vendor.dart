@@ -52,7 +52,6 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
         _materialprocurement, context, cityName, widget.depoName);
     _dataGridController = DataGridController();
 
-    // _materialprocurement = getmonthlyReport();
     getUserId().whenComplete(() {
       // getTableData().whenComplete(() {
       _stream = FirebaseFirestore.instance
@@ -89,7 +88,8 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
       ),
       body: isLoading
           ? const LoadingPage()
-          : Column(children: [
+          : Column(
+            children: [
               SfDataGridTheme(
                   data: SfDataGridThemeData(
                     headerColor: white,
