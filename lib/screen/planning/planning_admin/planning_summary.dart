@@ -3,10 +3,8 @@ import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/screen/planning/planning_admin/planning_page_admin.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/keyevents/key_events2.dart';
-import 'package:ev_pmis_app/views/planning/project_planning.dart';
 import 'package:ev_pmis_app/widgets/admin_custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/nodata_available.dart';
-
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
