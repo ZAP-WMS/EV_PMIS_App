@@ -208,19 +208,24 @@ class _ViewAllPdfState extends State<ViewAllPdf> {
       children: [
         InkWell(
           child: Container(
-              padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.all(10),
-              alignment: Alignment.center,
-              height: 120,
-              width: 120,
-              child: isImage
-                  ? Image.network(
-                      file.url,
-                      fit: BoxFit.fill,
-                    )
-                  : isVideo
-                      ? Image.asset('assets/video_image.jpg')
-                      : Image.asset('assets/pdf_logo.png')),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
+            alignment: Alignment.center,
+            height: 120,
+            width: 120,
+            child: isImage
+                ? Image.network(
+                    file.url,
+                    fit: BoxFit.fill,
+                  )
+                : isVideo
+                    ? Image.asset(
+                        'assets/video_image.jpg',
+                      )
+                    : Image.asset(
+                        'assets/pdf_logo.png',
+                      ),
+          ),
           //PdfThumbnail.fromFile(file.ref.fullPath, currentPage: 2)),
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(

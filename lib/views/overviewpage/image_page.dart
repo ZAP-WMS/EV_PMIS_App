@@ -101,14 +101,13 @@ class ImagePage extends StatelessWidget {
                 });
               },
             ),
-            (role == "projectManager" && isFieldEditable && isOverview)
+            (role == "projectManager" && isFieldEditable)
                 ? IconButton(
                     onPressed: () async {
                       await FirebaseStorage.instance
                           .refFromURL(file.url)
                           .delete()
                           .then((value) {
-                        print('Delete Successfull');
                         Navigator.pop(context);
                       });
                     },

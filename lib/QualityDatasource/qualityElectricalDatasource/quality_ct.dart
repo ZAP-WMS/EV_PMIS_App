@@ -16,7 +16,8 @@ class QualityctDataSource extends DataGridSource {
   String cityName;
   String depoName;
   String selectedDate;
-  QualityctDataSource(this._checklistModel, this.cityName, this.depoName , this.selectedDate) {
+  QualityctDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -65,7 +66,11 @@ class QualityctDataSource extends DataGridSource {
                     width: 60,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: blue, padding: EdgeInsets.all(0)),
+                          backgroundColor: blue,
+                          padding: const EdgeInsets.all(
+                            0,
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -90,8 +95,14 @@ class QualityctDataSource extends DataGridSource {
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                       return Container(
-                        width: 50,
+                        width: 60,
                         child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: blue,
+                              padding: const EdgeInsets.all(
+                                0,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAllPdf(
@@ -545,7 +556,7 @@ class QualityctDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

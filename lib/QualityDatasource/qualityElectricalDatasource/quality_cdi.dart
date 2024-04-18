@@ -16,7 +16,8 @@ class QualityCDIDataSource extends DataGridSource {
   String cityName;
   String depoName;
   String selectedDate;
-  QualityCDIDataSource(this._checklistModel, this.cityName, this.depoName , this.selectedDate) {
+  QualityCDIDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -81,7 +82,8 @@ class QualityCDIDataSource extends DataGridSource {
                     width: 60,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: blue, padding: EdgeInsets.all(0)),
+                            backgroundColor: blue,
+                            padding: const EdgeInsets.all(0)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -103,11 +105,11 @@ class QualityCDIDataSource extends DataGridSource {
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                       return Container(
-                        width: 50,
+                        width: 60,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: blue,
-                                padding: EdgeInsets.all(0)),
+                                padding: const EdgeInsets.all(0)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAllPdf(
@@ -555,7 +557,7 @@ class QualityCDIDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),

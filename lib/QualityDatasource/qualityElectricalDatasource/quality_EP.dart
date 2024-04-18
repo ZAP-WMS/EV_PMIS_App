@@ -15,7 +15,8 @@ class QualityEPDataSource extends DataGridSource {
   String cityName;
   String depoName;
   String selectedDate;
-  QualityEPDataSource(this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
+  QualityEPDataSource(
+      this._checklistModel, this.cityName, this.depoName, this.selectedDate) {
     buildDataGridRows();
   }
   void buildDataGridRows() {
@@ -54,8 +55,7 @@ class QualityEPDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment:
-             Alignment.center,
+          alignment: Alignment.center,
           // : Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: dataGridCell.columnName == 'Upload'
@@ -64,6 +64,9 @@ class QualityEPDataSource extends DataGridSource {
                   return Container(
                     width: 60,
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: blue,
+                            padding: const EdgeInsets.all(0)),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UploadDocument(
@@ -85,8 +88,11 @@ class QualityEPDataSource extends DataGridSource {
                   ? LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                       return Container(
-                        width: 50,
+                        width: 60,
                         child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: blue,
+                                padding: const EdgeInsets.all(0)),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAllPdf(
@@ -534,7 +540,7 @@ class QualityEPDataSource extends DataGridSource {
         controller: editingController..text = displayText,
         textAlign: isNumericType ? TextAlign.right : TextAlign.left,
         autocorrect: false,
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
