@@ -35,6 +35,7 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
       case 'user':
         selectedUi = DetailedEng(
           depoName: widget.depoName,
+          cityName: widget.cityName,
           userId: widget.userId,
         role: 'user',
         );

@@ -37,6 +37,7 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
     switch (widget.role) {
       case 'user':
         selectedUi = ClosureField(
+          cityName: widget.cityName,
           depoName: widget.depoName,
           userId: widget.userId,role: widget.role,
         );

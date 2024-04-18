@@ -28,6 +28,7 @@ class DepotOverview extends StatefulWidget {
     required this.depoName,
     this.role,
     this.userId,
+    this.cityName
   });
 
   @override
@@ -36,7 +37,7 @@ class DepotOverview extends StatefulWidget {
 
 class _DepotOverviewState extends State<DepotOverview> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   String? cityName;
   bool isProjectManager = false;
@@ -1271,9 +1272,10 @@ class _DepotOverviewState extends State<DepotOverview> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
-    print("isFieldEditable: $isFieldEditable");
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
 }

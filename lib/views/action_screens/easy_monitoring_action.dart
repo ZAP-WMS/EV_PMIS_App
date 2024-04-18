@@ -33,7 +33,7 @@ class _EasyMonitoringActionState extends State<EasyMonitoringAction> {
     switch (widget.role) {
       case 'user':
         selectedUi = KeyEvents2(
-          role: widget.role!,
+          role: widget.role!,cityName: widget.cityName,
           depoName: widget.depoName,
           userId: widget.userId,
         );

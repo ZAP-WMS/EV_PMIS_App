@@ -8,7 +8,8 @@ class QualityHome extends StatefulWidget {
   String? depoName;
   String? userId;
   String? role;
-  QualityHome({super.key,this.userId,this.role, this.depoName});
+  String? cityName;
+  QualityHome({super.key, this.userId, this.role, this.depoName,this.cityName});
 
   @override
   State<QualityHome> createState() => _QualityHomeState();
@@ -59,7 +60,7 @@ class _QualityHomeState extends State<QualityHome> {
     'CHARGER',
     'EARTH PIT',
   ];
-  
+
   List<String> electricallist = [
     'CHECKLIST FOR INSTALLATION OF PSS',
     'CHECKLIST FOR INSTALLATION OF RMU',
@@ -135,24 +136,31 @@ class _QualityHomeState extends State<QualityHome> {
                 ),
               ),
             ),
-            drawer:  NavbarDrawer(role: widget.role,),
+            drawer: NavbarDrawer(
+              role: widget.role,
+            ),
             body: TabBarView(children: [
               ListView.builder(
                 itemCount: civillist.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CivilField(
-                              depoName: widget.depoName,
-                              role: widget.role,
-                              title: civillist[index],
-                              fieldclnName: civilClnName[index],
-                              index: index,
-                            ),
-                          )),
-                      child: tabbarlist(civillist, index,),);
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CivilField(
+                            depoName: widget.depoName,
+                            role: widget.role,
+                            title: civillist[index],
+                            fieldclnName: civilClnName[index],
+                            index: index,
+                            cityName: widget.cityName!,
+                          ),
+                        )),
+                    child: tabbarlist(
+                      civillist,
+                      index,
+                    ),
+                  );
                 },
               ),
               ListView.builder(
@@ -163,6 +171,7 @@ class _QualityHomeState extends State<QualityHome> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ElectricalField(
+                                cityName: widget.cityName!,
                                 depoName: widget.depoName,
                                 role: widget.role,
                                 title: electricallist[index],
@@ -195,6 +204,4 @@ class _QualityHomeState extends State<QualityHome> {
       ),
     );
   }
-
-  
 }

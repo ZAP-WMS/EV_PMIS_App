@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/authentication/reset_password.dart';
 import 'package:ev_pmis_app/widgets/custom_alert_box.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -190,12 +187,17 @@ class _LoginPageState extends State<LoginPage> {
             if (passwordcontroller.text == userData[0]['password'] &&
                 empIdController.text == userData[0]['userId']) {
               List<dynamic> assignedDepots = pmData.docs[0]["depots"];
-
+              List<dynamic> assignedCities = pmData.docs[0]["cities"];
+              List<String> cities =
+                  assignedCities.map((e) => e.toString()).toList();
+                  authService.storeCityList(cities);
               List<String> depots =
                   assignedDepots.map((e) => e.toString()).toList();
+              
               // print('ProjectManager here ${passWord}');
               authService.storeUserRole("projectManager");
-              await authService.storeDepoList(depots);
+              authService.storeDepoList(depots);
+              
               authService.storeEmployeeId(empIdController.text.trim());
               authService.storeCompanyName(companyName).then((_) {
                 Navigator.pushReplacementNamed(context, '/splitDashboard',
@@ -231,6 +233,10 @@ class _LoginPageState extends State<LoginPage> {
                 empIdController.text == userQuery.docs[0]['userId'] &&
                 userQuery.docs.isNotEmpty) {
               List<dynamic> assignedDepots = userQuery.docs[0]["depots"];
+              List<dynamic> assignedCities = userQuery.docs[0]["cities"];
+              List<String> cities =
+                  assignedCities.map((e) => e.toString()).toList();
+                  authService.storeCityList(cities);
               List<String> depots =
                   assignedDepots.map((e) => e.toString()).toList();
               await authService.storeUserRole("user");
@@ -295,6 +301,10 @@ class _LoginPageState extends State<LoginPage> {
             empIdController.text.trim() == dataList[0]['userId'] &&
             dataList[0]['companyName'] == 'TATA POWER') {
           List<dynamic> assignedDepots = querySnapshot.docs[0]["depots"];
+          List<dynamic> assignedCities = querySnapshot.docs[0]["cities"];
+              List<String> cities =
+                  assignedCities.map((e) => e.toString()).toList();
+                  authService.storeCityList(cities);
           List<String> depots =
               assignedDepots.map((e) => e.toString()).toList();
           authService.storeUserRole("admin");
@@ -311,6 +321,10 @@ class _LoginPageState extends State<LoginPage> {
             empIdController.text.trim() == dataList[0]['userId'] &&
             dataList[0]['companyName'] == 'TATA MOTOR') {
           List<dynamic> assignedDepots = querySnapshot.docs[0]["depots"];
+          List<dynamic> assignedCities = querySnapshot.docs[0]["cities"];
+              List<String> cities =
+                  assignedCities.map((e) => e.toString()).toList();
+                  authService.storeCityList(cities);
           List<String> depots =
               assignedDepots.map((e) => e.toString()).toList();
           authService.storeUserRole("admin");

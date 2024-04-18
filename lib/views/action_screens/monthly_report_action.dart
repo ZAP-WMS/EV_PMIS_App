@@ -33,7 +33,7 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
       
       case 'user':
         selectedUi = MonthlyProject(depoName: widget.depoName,
-        role: widget.role,
+        role: widget.role,cityName: widget.cityName,
         userId: widget.userId,);
         break;
 
@@ -41,7 +41,7 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
         selectedUi = MonthlySummary(
           cityName: widget.cityName,
           depoName: widget.depoName,
-          
+
           role: widget.role!,
           userId: widget.userId,
         );

@@ -38,7 +38,7 @@ class MonthlyProject extends StatefulWidget {
 
 class _MonthlyProjectState extends State<MonthlyProject> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   List<MonthlyProjectModel> monthlyProject = <MonthlyProjectModel>[];
   late MonthlyDataSource monthlyDataSource;
@@ -494,8 +494,11 @@ class _MonthlyProjectState extends State<MonthlyProject> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
+  
 }

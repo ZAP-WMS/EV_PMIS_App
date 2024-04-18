@@ -37,7 +37,7 @@ class DailyProject extends StatefulWidget {
 
 class _DailyProjectState extends State<DailyProject> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   bool isLoading = true;
   bool checkTable = true;
@@ -629,8 +629,10 @@ class _DailyProjectState extends State<DailyProject> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
 }

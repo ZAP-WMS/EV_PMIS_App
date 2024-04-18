@@ -40,6 +40,7 @@ class _MaterialProcurementActionState extends State<MaterialProcurementAction> {
         selectedUi = mv.MaterialProcurement(
           depoName: widget.depoName,
           userId: widget.userId,
+          cityName: widget.cityName,
           role: widget.role,
         );
         break;
