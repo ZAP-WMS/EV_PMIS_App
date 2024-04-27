@@ -42,7 +42,6 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<CustomAppBar> createState() => _CustomAppBarState();
 
   @override
-  @override
   Size get preferredSize => Size.fromHeight(height);
 }
 
@@ -133,10 +132,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   child: TextButton(
                                     onPressed: () {},
                                     child: Text(
-                                        'Project Delay ${durationParse(value.actualDate, value.endDate,)} Days ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 10, color: white,),),
+                                      'Project Delay ${durationParse(
+                                        value.actualDate,
+                                        value.endDate,
+                                      )} Days ',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: white,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

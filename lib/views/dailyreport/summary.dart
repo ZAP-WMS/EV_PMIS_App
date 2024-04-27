@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/loading_pdf.dart';
+import 'package:ev_pmis_app/datasource/o&m_datasource/daily_transformerdatasource.dart';
 import 'package:ev_pmis_app/date_format.dart';
 import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -23,6 +24,21 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../datasource/energymanagement_datasource.dart';
+import '../../datasource/o&m_datasource/daily_acdbdatasource.dart';
+import '../../datasource/o&m_datasource/daily_chargerManagement.dart';
+import '../../datasource/o&m_datasource/daily_pssManagement.dart';
+import '../../datasource/o&m_datasource/daily_rmudatasource.dart';
+import '../../datasource/o&m_datasource/daily_sfudatasource.dart';
+import '../../datasource/o&m_datasource/monthly_chargerdatasource.dart';
+import '../../datasource/o&m_datasource/monthly_filter.dart';
+import '../../models/o&m_model/daily_acdb.dart';
+import '../../models/o&m_model/daily_charger.dart';
+import '../../models/o&m_model/daily_pss.dart';
+import '../../models/o&m_model/daily_rmu.dart';
+import '../../models/o&m_model/daily_sfu.dart';
+import '../../models/o&m_model/daily_transformer.dart';
+import '../../models/o&m_model/monthly_charger.dart';
+import '../../models/o&m_model/monthly_filter.dart';
 import '../../provider/checkbox_provider.dart';
 import '../../models/energy_management.dart';
 import '../../components/Loading_page.dart';
@@ -34,6 +50,7 @@ import '../../models/monthly_projectModel.dart';
 import '../../models/safety_checklistModel.dart';
 import '../../provider/summary_provider.dart';
 import '../../style.dart';
+import '../../utils/daily_managementlist.dart';
 import '../../widgets/nodata_available.dart';
 import '../qualitychecklist/quality_checklist.dart';
 import 'package:printing/printing.dart';
@@ -48,16 +65,21 @@ class ViewSummary extends StatefulWidget {
   bool isHeader;
   String? currentDate;
   dynamic userId;
-  ViewSummary(
-      {super.key,
-      required this.depoName,
-      required this.cityName,
-      required this.id,
-      this.role,
-      this.userId,
-      this.selectedtab,
-      this.currentDate,
-      this.isHeader = false});
+  int? tabIndex;
+  String? titleName;
+  ViewSummary({
+    super.key,
+    required this.depoName,
+    required this.cityName,
+    required this.id,
+    this.role,
+    this.userId,
+    this.selectedtab,
+    this.currentDate,
+    this.isHeader = false,
+    this.tabIndex,
+    this.titleName,
+  });
 
   @override
   State<ViewSummary> createState() => _ViewSummaryState();
@@ -69,6 +91,15 @@ class _ViewSummaryState extends State<ViewSummary> {
   SummaryProvider? _summaryProvider;
   Future<List<DailyProjectModel>>? _dailydata;
   Future<List<EnergyManagementModel>>? _energydata;
+
+  //daily O&M management model
+  Future<List<DailyChargerModel>>? _dailyCharger;
+  Future<List<DailySfuModel>>? _dailySfu;
+  Future<List<DailyPssModel>>? _dailyPss;
+  Future<List<DailyTransformerModel>>? _dailyTransfer;
+  Future<List<DailyrmuModel>>? _dailyRmu;
+  Future<List<DailyAcdbModel>>? _dailyAcdb;
+
   DateTime? startdate = DateTime.now();
   DateTime? enddate = DateTime.now();
   DateTime? rangestartDate;
@@ -81,15 +112,72 @@ class _ViewSummaryState extends State<ViewSummary> {
   late MonthlyDataSource monthlyDataSource;
   late SafetyChecklistDataSource _safetyChecklistDataSource;
   late DataGridController _dataGridController;
+  // PMIS daily
   List<DailyProjectModel> dailyproject = <DailyProjectModel>[];
+  // O&M datasource Intance
+  late MonthlyChargerManagementDataSource _monthlyChargerManagementDataSource;
+  late MonthlyFilterManagementDataSource _monthlyFilterManagementDataSource;
+
+  // O&M Instance of  monthly management Model
+  List<MonthlyChargerModel> monthlyChargerManagementData =
+      <MonthlyChargerModel>[];
+  List<MonthlyFilterModel> monthlyFilterManagementData = <MonthlyFilterModel>[];
+
+  // O&M daily Management Model
+  List<DailyChargerModel> dailyChargerData = <DailyChargerModel>[];
+  List<DailySfuModel> dailySfuData = <DailySfuModel>[];
+  List<DailyPssModel> dailyPssData = <DailyPssModel>[];
+  List<DailyTransformerModel> dailyTransferData = <DailyTransformerModel>[];
+  List<DailyrmuModel> dailyRmuData = <DailyrmuModel>[];
+  List<DailyAcdbModel> dailyAcdbData = <DailyAcdbModel>[];
+
   List<EnergyManagementModel> energymanagement = <EnergyManagementModel>[];
   late EnergyManagementDatasource _energyManagementDatasource;
   late DailyDataSource _dailyDataSource;
+
+  // O&M daily Management
+  late DailyChargerManagementDataSource _chargerDataSource;
+  late DailySFUManagementDataSource _dailySfuManagementDataSource;
+  late DailyPssManagementDataSource _dailyPssManagementDataSource;
+  late DailyTranformerDataSource _dailyTranformerDataSource;
+  late DailyRmuDataSource _dailyRmuDataSource;
+  late DailyAcdbManagementDataSource _dailyAcdbManagementDataSource;
+
   List<dynamic> tabledata2 = [];
   var alldata;
   final ScrollController _scrollController = ScrollController();
   bool sendReport = true;
   CheckboxProvider? _checkboxProvider;
+  List<GridColumn> columns = [];
+// Define column names and labels for all tabs for monthly management
+  List<List<String>> monthlyColumnNames = [
+    monthlyChargerColumnName,
+    monthlyFilterColumnName,
+  ];
+
+  List<List<String>> monthlyColumnLabels = [
+    monthlyLabelColumnName,
+    monthlyFilterLabelColumnName,
+  ];
+
+  // Define column names and labels for all tabs for daily management
+  List<List<String>> tabColumnNames = [
+    chargercolumnNames,
+    sfucolumnNames,
+    psscolumnNames,
+    transformercolumnNames,
+    rmucolumnNames,
+    acdbcolumnNames
+  ];
+
+  List<List<String>> tabColumnLabels = [
+    chargercolumnLabelNames,
+    sfucolumnLabelNames,
+    psscolumnLabelNames,
+    transformerLabelNames,
+    rmuLabelNames,
+    acdbLabelNames
+  ];
 
   @override
   void initState() {
@@ -105,10 +193,43 @@ class _ViewSummaryState extends State<ViewSummary> {
 
   @override
   Widget build(BuildContext context) {
-    _summaryProvider!
-        .fetchdailydata(widget.depoName!, widget.userId, startdate!, enddate!);
-    _summaryProvider!.fetchEnergyData(widget.cityName!, widget.depoName!,
-        widget.userId, startdate!, enddate!);
+    List<String> currentColumnNames = widget.id == 'Monthly Management'
+        ? monthlyColumnNames[widget.tabIndex!]
+        : tabColumnNames[widget.tabIndex!];
+    List<String> currentColumnLabels = widget.id == 'Monthly Management'
+        ? monthlyColumnLabels[widget.tabIndex!]
+        : tabColumnLabels[widget.tabIndex!];
+    columns.clear();
+    for (String columnName in currentColumnNames) {
+      columns.add(
+        GridColumn(
+          columnName: columnName,
+          visible: true,
+          allowEditing: columnName == 'Add' ||
+                  columnName == 'Delete' ||
+                  columnName == columnName[0]
+              ? false
+              : true,
+          width: columnName == 'CN'
+              ? MediaQuery.of(context).size.width * 0.2
+              : MediaQuery.of(context).size.width *
+                  0.3, // You can adjust this width as needed
+          label: createColumnLabel(
+            currentColumnLabels[currentColumnNames.indexOf(columnName)],
+          ),
+        ),
+      );
+    }
+    widget.id == 'Daily Management'
+        ? _summaryProvider!.fetchManagementDailyData(widget.depoName!,
+            widget.titleName!, widget.userId, startdate!, enddate!)
+        : widget.id == 'Daily Report'
+            ? _summaryProvider!.fetchdailydata(
+                widget.depoName!, widget.userId, startdate!, enddate!)
+            : widget.id == 'Energy Management'
+                ? _summaryProvider!.fetchEnergyData(widget.cityName!,
+                    widget.depoName!, widget.userId, startdate!, enddate!)
+                : '';
 
     return Scaffold(
         appBar: CustomAppBar(
@@ -132,7 +253,8 @@ class _ViewSummaryState extends State<ViewSummary> {
             Padding(
               padding: const EdgeInsets.all(2.0),
               child: widget.id == 'Daily Report' ||
-                      widget.id == 'Energy Management'
+                      widget.id == 'Energy Management' ||
+                      widget.id == 'Daily Management'
                   ? SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Row(
@@ -203,7 +325,9 @@ class _ViewSummaryState extends State<ViewSummary> {
                                               );
                                             },
                                             icon: const Icon(Icons.today)),
-                                        Text(widget.id == 'Monthly Report'
+                                        Text(widget.id == 'Monthly Report' ||
+                                                widget.id ==
+                                                    'Monthly Management'
                                             ? DateFormat.yMMMM()
                                                 .format(startdate!)
                                             : DateFormat.yMMMMd()
@@ -249,7 +373,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                          width: 250,
+                          width: 150,
                           height: 40,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
@@ -296,7 +420,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                     );
                                   },
                                   icon: const Icon(Icons.today)),
-                              Text(widget.id == 'Monthly Report'
+                              Text(widget.id == 'Monthly Report' ||
+                                      widget.id == 'Monthly Management'
                                   ? DateFormat.yMMMM().format(startdate!)
                                   : DateFormat.yMMMMd().format(startdate!))
                             ],
@@ -460,7 +585,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                             return FutureBuilder(
                                 future: _dailydata,
                                 builder: (context, snapshot) {
-                                  if (value.dailydata.length != 0) {
+                                  if (value.dailydata.isNotEmpty) {
                                     dailyproject = value.dailydata;
                                     _dailyDataSource = DailyDataSource(
                                         dailyproject,
@@ -704,713 +829,1029 @@ class _ViewSummaryState extends State<ViewSummary> {
                                 cityName: widget.cityName,
                                 depoName: widget.depoName),
                           )
-                        : widget.id == 'Energy Management'
+                        : widget.id == 'Daily Management'
                             ? Expanded(
                                 child: Consumer<SummaryProvider>(
                                   builder: (context, value, child) {
                                     return FutureBuilder(
-                                      future: _energydata,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          if (snapshot.data == null ||
-                                              snapshot.data!.length == 0) {
+                                        future: widget.tabIndex == 0
+                                            ? _dailyCharger
+                                            : widget.tabIndex == 1
+                                                ? _dailySfu
+                                                : widget.tabIndex == 2
+                                                    ? _dailyPss
+                                                    : widget.tabIndex == 3
+                                                        ? _dailyTransfer
+                                                        : widget.tabIndex == 4
+                                                            ? _dailyRmu
+                                                            : _dailyAcdb,
+                                        builder: (context, snapshot) {
+                                          if (value.dailyCharger.isNotEmpty ||
+                                              value.sfuCharger.isNotEmpty ||
+                                              value.pssCharger.isNotEmpty ||
+                                              value.transformerCharger
+                                                  .isNotEmpty ||
+                                              value.rmuCharger.isNotEmpty ||
+                                              value.acdbCharger.isNotEmpty) {
+                                            dailyChargerData =
+                                                value.dailyCharger;
+
+                                            dailySfuData = value.sfuCharger;
+                                            dailyPssData = value.pssCharger;
+                                            dailyTransferData =
+                                                value.transformerCharger;
+                                            dailyRmuData = value.rmuCharger;
+                                            dailyAcdbData = value.acdbCharger;
+
+                                            _chargerDataSource =
+                                                DailyChargerManagementDataSource(
+                                                    dailyChargerData,
+                                                    context,
+                                                    widget.cityName!,
+                                                    widget.depoName!,
+                                                    selecteddate!.toString(),
+                                                    widget.userId);
+
+                                            _dailySfuManagementDataSource =
+                                                DailySFUManagementDataSource(
+                                                    dailySfuData,
+                                                    context,
+                                                    widget.cityName!,
+                                                    widget.depoName!,
+                                                    selecteddate!.toString(),
+                                                    widget.userId);
+
+                                            _dailyPssManagementDataSource =
+                                                DailyPssManagementDataSource(
+                                                    dailyPssData,
+                                                    context,
+                                                    widget.cityName!,
+                                                    widget.depoName!,
+                                                    selecteddate!.toString(),
+                                                    widget.userId);
+
+                                            _dailyTranformerDataSource =
+                                                DailyTranformerDataSource(
+                                                    dailyTransferData,
+                                                    context,
+                                                    widget.cityName!,
+                                                    widget.depoName!,
+                                                    selecteddate!.toString(),
+                                                    widget.userId);
+
+                                            _dailyRmuDataSource =
+                                                DailyRmuDataSource(
+                                                    dailyRmuData,
+                                                    context,
+                                                    widget.cityName!,
+                                                    widget.depoName!,
+                                                    selecteddate!.toString(),
+                                                    widget.userId);
+
+                                            _dailyAcdbManagementDataSource =
+                                                DailyAcdbManagementDataSource(
+                                                    dailyAcdbData,
+                                                    context,
+                                                    widget.cityName!,
+                                                    widget.depoName!,
+                                                    selecteddate!.toString(),
+                                                    widget.userId);
+
+                                            _dataGridController =
+                                                DataGridController();
+
+                                            return SfDataGridTheme(
+                                                data: SfDataGridThemeData(
+                                                    headerColor: white,
+                                                    gridLineColor: blue),
+                                                child: SfDataGrid(
+                                                    source: widget.tabIndex == 0
+                                                        ? _chargerDataSource
+                                                        : widget.tabIndex == 1
+                                                            ? _dailySfuManagementDataSource
+                                                            : widget.tabIndex ==
+                                                                    2
+                                                                ? _dailyPssManagementDataSource
+                                                                : widget.tabIndex ==
+                                                                        3
+                                                                    ? _dailyTranformerDataSource
+                                                                    : widget.tabIndex ==
+                                                                            4
+                                                                        ? _dailyRmuDataSource
+                                                                        : _dailyAcdbManagementDataSource,
+                                                    allowEditing: false,
+                                                    frozenColumnsCount: 2,
+                                                    gridLinesVisibility:
+                                                        GridLinesVisibility
+                                                            .both,
+                                                    headerGridLinesVisibility:
+                                                        GridLinesVisibility
+                                                            .both,
+                                                    selectionMode:
+                                                        SelectionMode.single,
+                                                    navigationMode:
+                                                        GridNavigationMode.cell,
+                                                    columnWidthMode:
+                                                        ColumnWidthMode.auto,
+                                                    editingGestureType:
+                                                        EditingGestureType.tap,
+                                                    controller:
+                                                        _dataGridController,
+                                                    onQueryRowHeight:
+                                                        (details) {
+                                                      return details
+                                                          .getIntrinsicRowHeight(
+                                                              details.rowIndex);
+                                                    },
+                                                    columns: columns));
+                                          } else {
                                             return const Center(
                                               child: Text(
-                                                "No Data Found!!",
-                                                style:
-                                                    TextStyle(fontSize: 25.0),
-                                              ),
+                                                  'No Data Available For Selected Date'),
                                             );
-                                          } else {
-                                            return const LoadingPage();
                                           }
-                                        } else {
-                                          energymanagement = value.energyData;
+                                        }
 
-                                          _energyManagementDatasource =
-                                              EnergyManagementDatasource(
-                                                  energymanagement,
-                                                  context,
-                                                  widget.userId,
-                                                  widget.cityName,
-                                                  widget.depoName);
+                                        //1              },
+                                        );
+                                  },
+                                ),
+                              )
+                            : widget.id == 'Monthly Management'
+                                ? Expanded(
+                                    child: StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('MonthlyManagementPage')
+                                            .doc(widget.depoName)
+                                            .collection('Checklist Name')
+                                            .doc(widget.titleName)
+                                            .collection(DateFormat.yMMM()
+                                                .format(startdate!))
+                                            .doc(widget.userId)
+                                            .snapshots(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const LoadingPage();
+                                          } else if (!snapshot.hasData ||
+                                              snapshot.data!.exists == false) {
+                                            return const NodataAvailable();
+                                          } else {
+                                            alldata = snapshot.data!['data']
+                                                as List<dynamic>;
+                                            monthlyChargerManagementData
+                                                .clear();
+                                            monthlyFilterManagementData.clear();
 
-                                          _dataGridController =
-                                              DataGridController();
+                                            if (widget.tabIndex == 0) {
+                                              alldata.forEach((element) {
+                                                monthlyChargerManagementData
+                                                    .add(MonthlyChargerModel
+                                                        .fromjson(element));
 
-                                          return Column(
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.all(5.0),
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.48,
-                                                child: SfDataGridTheme(
-                                                    data: SfDataGridThemeData(
-                                                        gridLineColor: blue,
-                                                        gridLineStrokeWidth: 2,
-                                                        frozenPaneLineColor:
-                                                            blue,
-                                                        frozenPaneLineWidth: 3),
-                                                    child: SfDataGrid(
-                                                      source:
-                                                          _energyManagementDatasource,
-                                                      allowEditing: false,
-                                                      frozenColumnsCount: 1,
-                                                      gridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      headerGridLinesVisibility:
-                                                          GridLinesVisibility
-                                                              .both,
-                                                      headerRowHeight: 40,
+                                                _monthlyChargerManagementDataSource =
+                                                    MonthlyChargerManagementDataSource(
+                                                        monthlyChargerManagementData,
+                                                        context,
+                                                        widget.cityName!,
+                                                        widget.depoName!,
+                                                        DateFormat.yMMM()
+                                                            .format(startdate!),
+                                                        widget.userId);
+                                                _dataGridController =
+                                                    DataGridController();
+                                              });
+                                            } else {
+                                              alldata.forEach((element) {
+                                                monthlyFilterManagementData.add(
+                                                    MonthlyFilterModel.fromjson(
+                                                        element));
 
-                                                      selectionMode:
-                                                          SelectionMode.single,
-                                                      navigationMode:
-                                                          GridNavigationMode
-                                                              .cell,
-                                                      columnWidthMode:
-                                                          ColumnWidthMode.auto,
-                                                      editingGestureType:
-                                                          EditingGestureType
-                                                              .tap,
-                                                      controller:
-                                                          _dataGridController,
-                                                      // onQueryRowHeight:
-                                                      //     (details) {
-                                                      //   return details
-                                                      //       .getIntrinsicRowHeight(
-                                                      //           details
-                                                      //               .rowIndex);
-                                                      // },
-                                                      columns: [
-                                                        GridColumn(
-                                                          visible: true,
-                                                          columnName: 'srNo',
+                                                _monthlyFilterManagementDataSource =
+                                                    MonthlyFilterManagementDataSource(
+                                                        monthlyFilterManagementData,
+                                                        context,
+                                                        widget.cityName!,
+                                                        widget.depoName!,
+                                                        DateFormat.yMMM()
+                                                            .format(startdate!),
+                                                        widget.userId);
+                                                _dataGridController =
+                                                    DataGridController();
+                                              });
+                                            }
+                                            return Column(children: [
+                                              Expanded(
+                                                  child: SfDataGridTheme(
+                                                      data: SfDataGridThemeData(
+                                                          headerColor: white,
+                                                          gridLineColor: blue),
+                                                      child: SfDataGrid(
+                                                          source: widget.tabIndex ==
+                                                                  0
+                                                              ? _monthlyChargerManagementDataSource
+                                                              : _monthlyFilterManagementDataSource,
                                                           allowEditing: false,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text('Sr No',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor
-                                                                //    textAlign: TextAlign.center,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'DepotName',
-                                                          width: 180,
-                                                          allowEditing: false,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Depot Name',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'VehicleNo',
-                                                          width: 180,
-                                                          allowEditing: true,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Vehicle No',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'pssNo',
-                                                          width: 80,
-                                                          allowEditing: true,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'PSS No',
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'chargerId',
-                                                          width: 80,
-                                                          allowEditing: true,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Charger ID',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'startSoc',
-                                                          allowEditing: true,
-                                                          width: 80,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Start SOC',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'endSoc',
-                                                          allowEditing: true,
+                                                          frozenColumnsCount: 1,
+                                                          gridLinesVisibility:
+                                                              GridLinesVisibility
+                                                                  .both,
+                                                          headerGridLinesVisibility:
+                                                              GridLinesVisibility
+                                                                  .both,
+                                                          selectionMode:
+                                                              SelectionMode
+                                                                  .single,
+                                                          navigationMode:
+                                                              GridNavigationMode
+                                                                  .cell,
                                                           columnWidthMode:
                                                               ColumnWidthMode
-                                                                  .fitByCellValue,
-                                                          width: 80,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'End SOC',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'startDate',
-                                                          allowEditing: false,
-                                                          width: 230,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Start Date & Time',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'endDate',
-                                                          allowEditing: false,
-                                                          width: 230,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              child: Text(
-                                                                  'End Date & Time',
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .values
-                                                                          .first,
-                                                                  style:
-                                                                      tableheaderwhitecolor),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'totalTime',
-                                                          allowEditing: false,
-                                                          width: 180,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Total time of Charging',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'energyConsumed',
-                                                          allowEditing: true,
-                                                          width: 160,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Engery Consumed (inkW)',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName:
-                                                              'timeInterval',
-                                                          allowEditing: false,
-                                                          width: 150,
-                                                          label: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Interval',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'Add',
-                                                          visible: false,
-                                                          autoFitPadding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          allowEditing: false,
-                                                          width: 120,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Add Row',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor
-                                                                //    textAlign: TextAlign.center,
+                                                                  .auto,
+                                                          editingGestureType:
+                                                              EditingGestureType
+                                                                  .tap,
+                                                          controller:
+                                                              _dataGridController,
+                                                          onQueryRowHeight:
+                                                              (details) {
+                                                            return details
+                                                                .getIntrinsicRowHeight(
+                                                                    details
+                                                                        .rowIndex);
+                                                          },
+                                                          columns: columns)))
+                                            ]);
+                                          }
+                                        }),
+                                  )
+                                : widget.id == 'Energy Management'
+                                    ? Expanded(
+                                        child: Consumer<SummaryProvider>(
+                                          builder: (context, value, child) {
+                                            return FutureBuilder(
+                                              future: _energydata,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  if (snapshot.data == null ||
+                                                      snapshot.data!.length ==
+                                                          0) {
+                                                    return const Center(
+                                                      child: Text(
+                                                        "No Data Found!!",
+                                                        style: TextStyle(
+                                                            fontSize: 25.0),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    return const LoadingPage();
+                                                  }
+                                                } else {
+                                                  energymanagement =
+                                                      value.energyData;
+
+                                                  _energyManagementDatasource =
+                                                      EnergyManagementDatasource(
+                                                          energymanagement,
+                                                          context,
+                                                          widget.userId,
+                                                          widget.cityName,
+                                                          widget.depoName);
+
+                                                  _dataGridController =
+                                                      DataGridController();
+
+                                                  return Column(
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .all(5.0),
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.48,
+                                                        child: SfDataGridTheme(
+                                                            data: SfDataGridThemeData(
+                                                                gridLineColor:
+                                                                    blue,
+                                                                gridLineStrokeWidth:
+                                                                    2,
+                                                                frozenPaneLineColor:
+                                                                    blue,
+                                                                frozenPaneLineWidth:
+                                                                    3),
+                                                            child: SfDataGrid(
+                                                              source:
+                                                                  _energyManagementDatasource,
+                                                              allowEditing:
+                                                                  false,
+                                                              frozenColumnsCount:
+                                                                  1,
+                                                              gridLinesVisibility:
+                                                                  GridLinesVisibility
+                                                                      .both,
+                                                              headerGridLinesVisibility:
+                                                                  GridLinesVisibility
+                                                                      .both,
+                                                              headerRowHeight:
+                                                                  40,
+
+                                                              selectionMode:
+                                                                  SelectionMode
+                                                                      .single,
+                                                              navigationMode:
+                                                                  GridNavigationMode
+                                                                      .cell,
+                                                              columnWidthMode:
+                                                                  ColumnWidthMode
+                                                                      .auto,
+                                                              editingGestureType:
+                                                                  EditingGestureType
+                                                                      .tap,
+                                                              controller:
+                                                                  _dataGridController,
+                                                              // onQueryRowHeight:
+                                                              //     (details) {
+                                                              //   return details
+                                                              //       .getIntrinsicRowHeight(
+                                                              //           details
+                                                              //               .rowIndex);
+                                                              // },
+                                                              columns: [
+                                                                GridColumn(
+                                                                  visible: true,
+                                                                  columnName:
+                                                                      'srNo',
+                                                                  allowEditing:
+                                                                      false,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Sr No',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor
+                                                                        //    textAlign: TextAlign.center,
+                                                                        ),
+                                                                  ),
                                                                 ),
-                                                          ),
-                                                        ),
-                                                        GridColumn(
-                                                          columnName: 'Delete',
-                                                          visible: false,
-                                                          autoFitPadding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          allowEditing: false,
-                                                          width: 120,
-                                                          label: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                                'Delete Row',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .values
-                                                                        .first,
-                                                                style:
-                                                                    tableheaderwhitecolor),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )),
-                                              ),
-                                              Consumer<SummaryProvider>(builder:
-                                                  (context, value, child) {
-                                                return Container(
-                                                  margin: const EdgeInsets.only(
-                                                      bottom: 5.0),
-                                                  height: 300,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  child: Scrollbar(
-                                                    thickness: 3,
-                                                    radius:
-                                                        const Radius.circular(
-                                                      1,
-                                                    ),
-                                                    thumbVisibility: true,
-                                                    trackVisibility: true,
-                                                    interactive: true,
-                                                    scrollbarOrientation:
-                                                        ScrollbarOrientation
-                                                            .bottom,
-                                                    controller:
-                                                        _scrollController,
-                                                    child: ListView.builder(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        controller:
-                                                            _scrollController,
-                                                        itemCount: 1,
-                                                        shrinkWrap: true,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return Container(
-                                                            height: 250,
-                                                            margin:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 10.0),
-                                                            width: _energyManagementDatasource
-                                                                    .dataGridRows
-                                                                    .length *
-                                                                110,
-                                                            child: BarChart(
-                                                              swapAnimationCurve:
-                                                                  Curves.linear,
-                                                              swapAnimationDuration:
-                                                                  const Duration(
-                                                                      milliseconds:
-                                                                          1000),
-                                                              BarChartData(
-                                                                backgroundColor:
-                                                                    white,
-                                                                barTouchData:
-                                                                    BarTouchData(
-                                                                  enabled: true,
-                                                                  allowTouchBarBackDraw:
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'DepotName',
+                                                                  width: 180,
+                                                                  allowEditing:
+                                                                      false,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Depot Name',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
+                                                                  ),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'VehicleNo',
+                                                                  width: 180,
+                                                                  allowEditing:
                                                                       true,
-                                                                  touchTooltipData:
-                                                                      BarTouchTooltipData(
-                                                                    tooltipRoundedRadius:
-                                                                        5,
-                                                                    tooltipBgColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    tooltipMargin:
-                                                                        5,
+                                                                  label:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Vehicle No',
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
                                                                   ),
                                                                 ),
-                                                                minY: 0,
-                                                                titlesData:
-                                                                    FlTitlesData(
-                                                                  bottomTitles:
-                                                                      AxisTitles(
-                                                                    sideTitles:
-                                                                        SideTitles(
-                                                                      showTitles:
-                                                                          true,
-                                                                      getTitlesWidget:
-                                                                          (data1,
-                                                                              meta) {
-                                                                        return Text(
-                                                                          value
-                                                                              .intervalData[data1.toInt()]
-                                                                              .toString(),
-                                                                          style: const TextStyle(
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: 12),
-                                                                        );
-                                                                      },
-                                                                    ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'pssNo',
+                                                                  width: 80,
+                                                                  allowEditing:
+                                                                      true,
+                                                                  label:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'PSS No',
+                                                                        style:
+                                                                            tableheaderwhitecolor),
                                                                   ),
-                                                                  rightTitles:
-                                                                      AxisTitles(
-                                                                    sideTitles: SideTitles(
-                                                                        showTitles:
-                                                                            false),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'chargerId',
+                                                                  width: 80,
+                                                                  allowEditing:
+                                                                      true,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Charger ID',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
                                                                   ),
-                                                                  topTitles:
-                                                                      AxisTitles(
-                                                                    sideTitles:
-                                                                        SideTitles(
-                                                                      showTitles:
-                                                                          false,
-                                                                      getTitlesWidget:
-                                                                          (data2,
-                                                                              meta) {
-                                                                        return Text(
-                                                                          value.energyConsumedData[
-                                                                              data2.toInt()],
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'startSoc',
+                                                                  allowEditing:
+                                                                      true,
+                                                                  width: 80,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Start SOC',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
+                                                                  ),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'endSoc',
+                                                                  allowEditing:
+                                                                      true,
+                                                                  columnWidthMode:
+                                                                      ColumnWidthMode
+                                                                          .fitByCellValue,
+                                                                  width: 80,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'End SOC',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
+                                                                  ),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'startDate',
+                                                                  allowEditing:
+                                                                      false,
+                                                                  width: 230,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Start Date & Time',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
+                                                                  ),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'endDate',
+                                                                  allowEditing:
+                                                                      false,
+                                                                  width: 230,
+                                                                  label:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child:
+                                                                        Container(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      child: Text(
+                                                                          'End Date & Time',
+                                                                          overflow: TextOverflow
+                                                                              .values
+                                                                              .first,
                                                                           style:
-                                                                              const TextStyle(fontWeight: FontWeight.bold),
-                                                                        );
-                                                                      },
+                                                                              tableheaderwhitecolor),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                gridData:
-                                                                    FlGridData(
-                                                                  drawHorizontalLine:
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'totalTime',
+                                                                  allowEditing:
                                                                       false,
-                                                                  drawVerticalLine:
-                                                                      false,
-                                                                ),
-                                                                borderData:
-                                                                    FlBorderData(
-                                                                  border:
-                                                                      const Border(
-                                                                    left:
-                                                                        BorderSide(),
-                                                                    bottom:
-                                                                        BorderSide(),
+                                                                  width: 180,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Total time of Charging',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
                                                                   ),
                                                                 ),
-                                                                maxY: (value.intervalData
-                                                                            .isEmpty &&
-                                                                        value
-                                                                            .energyConsumedData
-                                                                            .isEmpty)
-                                                                    ? 50000.0
-                                                                    : value.energyConsumedData.reduce((max,
-                                                                            current) =>
-                                                                        max > current
-                                                                            ? max
-                                                                            : current +
-                                                                                5000.0),
-                                                                barGroups:
-                                                                    barChartGroupData(
-                                                                        value
-                                                                            .energyConsumedData),
-                                                              ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'energyConsumed',
+                                                                  allowEditing:
+                                                                      true,
+                                                                  width: 160,
+                                                                  label:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Engery Consumed (inkW)',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
+                                                                  ),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'timeInterval',
+                                                                  allowEditing:
+                                                                      false,
+                                                                  width: 150,
+                                                                  label:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Interval',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
+                                                                  ),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'Add',
+                                                                  visible:
+                                                                      false,
+                                                                  autoFitPadding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  allowEditing:
+                                                                      false,
+                                                                  width: 120,
+                                                                  label:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Add Row',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor
+                                                                        //    textAlign: TextAlign.center,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                GridColumn(
+                                                                  columnName:
+                                                                      'Delete',
+                                                                  visible:
+                                                                      false,
+                                                                  autoFitPadding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  allowEditing:
+                                                                      false,
+                                                                  width: 120,
+                                                                  label:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                        'Delete Row',
+                                                                        overflow: TextOverflow
+                                                                            .values
+                                                                            .first,
+                                                                        style:
+                                                                            tableheaderwhitecolor),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )),
+                                                      ),
+                                                      Consumer<SummaryProvider>(
+                                                          builder: (context,
+                                                              value, child) {
+                                                        return Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  bottom: 5.0),
+                                                          height: 300,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          child: Scrollbar(
+                                                            thickness: 3,
+                                                            radius: const Radius
+                                                                .circular(
+                                                              1,
                                                             ),
-                                                          );
-                                                        }),
-                                                  ),
-                                                );
-                                              })
-                                            ],
-                                          );
-                                        }
-                                      },
-                                    );
-                                  },
-                                ),
-                              )
-                            : Expanded(
-                                child: StreamBuilder(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('SafetyChecklistTable2')
-                                      .doc(widget.depoName!)
-                                      .collection('userId')
-                                      .doc(widget.userId)
-                                      .collection('date')
-                                      .doc(DateFormat.yMMMMd()
-                                          .format(startdate!))
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const LoadingPage();
-                                    }
-                                    if (!snapshot.hasData ||
-                                        snapshot.data!.exists == false) {
-                                      return const NodataAvailable();
-                                    } else {
-                                      alldata = '';
-                                      alldata = snapshot.data!['data']
-                                          as List<dynamic>;
-                                      safetylisttable.clear();
-                                      alldata.forEach((element) {
-                                        safetylisttable.add(
-                                            SafetyChecklistModel.fromJson(
-                                                element));
-                                        _safetyChecklistDataSource =
-                                            SafetyChecklistDataSource(
-                                                safetylisttable,
-                                                widget.cityName!,
-                                                widget.depoName!,
-                                                widget.userId,
-                                                DateFormat.yMMMMd()
-                                                    .format(startdate!));
-                                        _dataGridController =
-                                            DataGridController();
-                                      });
-                                      return SfDataGridTheme(
-                                        data: SfDataGridThemeData(
-                                            gridLineColor: blue,
-                                            gridLineStrokeWidth: 2,
-                                            frozenPaneLineColor: blue,
-                                            frozenPaneLineWidth: 3),
-                                        child: SfDataGrid(
-                                          source: _safetyChecklistDataSource,
-                                          //key: key,
-                                          allowEditing: false,
-                                          frozenColumnsCount: 1,
-                                          gridLinesVisibility:
-                                              GridLinesVisibility.both,
-                                          headerGridLinesVisibility:
-                                              GridLinesVisibility.both,
-                                          selectionMode: SelectionMode.single,
-                                          navigationMode:
-                                              GridNavigationMode.cell,
-                                          columnWidthMode: ColumnWidthMode.auto,
-                                          editingGestureType:
-                                              EditingGestureType.tap,
-                                          controller: _dataGridController,
-                                          onQueryRowHeight: (details) {
-                                            return details
-                                                .getIntrinsicRowHeight(
-                                                    details.rowIndex);
+                                                            thumbVisibility:
+                                                                true,
+                                                            trackVisibility:
+                                                                true,
+                                                            interactive: true,
+                                                            scrollbarOrientation:
+                                                                ScrollbarOrientation
+                                                                    .bottom,
+                                                            controller:
+                                                                _scrollController,
+                                                            child: ListView
+                                                                .builder(
+                                                                    scrollDirection:
+                                                                        Axis
+                                                                            .horizontal,
+                                                                    controller:
+                                                                        _scrollController,
+                                                                    itemCount:
+                                                                        1,
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return Container(
+                                                                        height:
+                                                                            250,
+                                                                        margin: const EdgeInsets.only(
+                                                                            top:
+                                                                                10.0),
+                                                                        width: _energyManagementDatasource.dataGridRows.length *
+                                                                            110,
+                                                                        child:
+                                                                            BarChart(
+                                                                          swapAnimationCurve:
+                                                                              Curves.linear,
+                                                                          swapAnimationDuration:
+                                                                              const Duration(milliseconds: 1000),
+                                                                          BarChartData(
+                                                                            backgroundColor:
+                                                                                white,
+                                                                            barTouchData:
+                                                                                BarTouchData(
+                                                                              enabled: true,
+                                                                              allowTouchBarBackDraw: true,
+                                                                              touchTooltipData: BarTouchTooltipData(
+                                                                                tooltipRoundedRadius: 5,
+                                                                                tooltipBgColor: Colors.transparent,
+                                                                                tooltipMargin: 5,
+                                                                              ),
+                                                                            ),
+                                                                            minY:
+                                                                                0,
+                                                                            titlesData:
+                                                                                FlTitlesData(
+                                                                              bottomTitles: AxisTitles(
+                                                                                sideTitles: SideTitles(
+                                                                                  showTitles: true,
+                                                                                  getTitlesWidget: (data1, meta) {
+                                                                                    return Text(
+                                                                                      value.intervalData[data1.toInt()].toString(),
+                                                                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                              rightTitles: AxisTitles(
+                                                                                sideTitles: SideTitles(showTitles: false),
+                                                                              ),
+                                                                              topTitles: AxisTitles(
+                                                                                sideTitles: SideTitles(
+                                                                                  showTitles: false,
+                                                                                  getTitlesWidget: (data2, meta) {
+                                                                                    return Text(
+                                                                                      value.energyConsumedData[data2.toInt()],
+                                                                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            gridData:
+                                                                                FlGridData(
+                                                                              drawHorizontalLine: false,
+                                                                              drawVerticalLine: false,
+                                                                            ),
+                                                                            borderData:
+                                                                                FlBorderData(
+                                                                              border: const Border(
+                                                                                left: BorderSide(),
+                                                                                bottom: BorderSide(),
+                                                                              ),
+                                                                            ),
+                                                                            maxY: (value.intervalData.isEmpty && value.energyConsumedData.isEmpty)
+                                                                                ? 50000.0
+                                                                                : value.energyConsumedData.reduce((max, current) => max > current ? max : current + 5000.0),
+                                                                            barGroups:
+                                                                                barChartGroupData(value.energyConsumedData),
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    }),
+                                                          ),
+                                                        );
+                                                      })
+                                                    ],
+                                                  );
+                                                }
+                                              },
+                                            );
                                           },
-                                          columns: [
-                                            GridColumn(
-                                              columnName: 'srNo',
-                                              autoFitPadding: tablepadding,
-                                              allowEditing: true,
-                                              width: 80,
-                                              label: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                alignment: Alignment.center,
-                                                child: Text('Sr No',
-                                                    overflow: TextOverflow
-                                                        .values.first,
-                                                    style:
-                                                        tableheaderwhitecolor),
-                                              ),
-                                            ),
-                                            GridColumn(
-                                              width: 550,
-                                              columnName: 'Details',
-                                              allowEditing: true,
-                                              label: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                    'Details of Enclosure ',
-                                                    overflow: TextOverflow
-                                                        .values.first,
-                                                    style:
-                                                        tableheaderwhitecolor),
-                                              ),
-                                            ),
-                                            GridColumn(
-                                              columnName: 'Status',
-                                              allowEditing: true,
-                                              width: 230,
-                                              label: Container(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                    'Status of Submission of information/ documents ',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                      color: white,
-                                                    )),
-                                              ),
-                                            ),
-                                            GridColumn(
-                                              columnName: 'Remark',
-                                              allowEditing: true,
-                                              width: 230,
-                                              label: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                alignment: Alignment.center,
-                                                child: Text('Remarks',
-                                                    overflow: TextOverflow
-                                                        .values.first,
-                                                    style:
-                                                        tableheaderwhitecolor),
-                                              ),
-                                            ),
-                                            GridColumn(
-                                              columnName: 'Photo',
-                                              allowEditing: false,
-                                              visible: false,
-                                              width: 160,
-                                              label: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                alignment: Alignment.center,
-                                                child: Text('Upload Photo',
-                                                    overflow: TextOverflow
-                                                        .values.first,
-                                                    style:
-                                                        tableheaderwhitecolor),
-                                              ),
-                                            ),
-                                            GridColumn(
-                                              columnName: 'ViewPhoto',
-                                              allowEditing: false,
-                                              width: 180,
-                                              label: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                alignment: Alignment.center,
-                                                child: Text('View Photo',
-                                                    overflow: TextOverflow
-                                                        .values.first,
-                                                    style:
-                                                        tableheaderwhitecolor),
-                                              ),
-                                            ),
-                                          ],
                                         ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              )
+                                      )
+                                    : Expanded(
+                                        child: StreamBuilder(
+                                          stream: FirebaseFirestore.instance
+                                              .collection(
+                                                  'SafetyChecklistTable2')
+                                              .doc(widget.depoName!)
+                                              .collection('userId')
+                                              .doc(widget.userId)
+                                              .collection('date')
+                                              .doc(DateFormat.yMMMMd()
+                                                  .format(startdate!))
+                                              .snapshots(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const LoadingPage();
+                                            }
+                                            if (!snapshot.hasData ||
+                                                snapshot.data!.exists ==
+                                                    false) {
+                                              return const NodataAvailable();
+                                            } else {
+                                              alldata = '';
+                                              alldata = snapshot.data!['data']
+                                                  as List<dynamic>;
+                                              safetylisttable.clear();
+                                              alldata.forEach((element) {
+                                                safetylisttable.add(
+                                                    SafetyChecklistModel
+                                                        .fromJson(element));
+                                                _safetyChecklistDataSource =
+                                                    SafetyChecklistDataSource(
+                                                        safetylisttable,
+                                                        widget.cityName!,
+                                                        widget.depoName!,
+                                                        widget.userId,
+                                                        DateFormat.yMMMMd()
+                                                            .format(
+                                                                startdate!));
+                                                _dataGridController =
+                                                    DataGridController();
+                                              });
+                                              return SfDataGridTheme(
+                                                data: SfDataGridThemeData(
+                                                    gridLineColor: blue,
+                                                    gridLineStrokeWidth: 2,
+                                                    frozenPaneLineColor: blue,
+                                                    frozenPaneLineWidth: 3),
+                                                child: SfDataGrid(
+                                                  source:
+                                                      _safetyChecklistDataSource,
+                                                  //key: key,
+                                                  allowEditing: false,
+                                                  frozenColumnsCount: 1,
+                                                  gridLinesVisibility:
+                                                      GridLinesVisibility.both,
+                                                  headerGridLinesVisibility:
+                                                      GridLinesVisibility.both,
+                                                  selectionMode:
+                                                      SelectionMode.single,
+                                                  navigationMode:
+                                                      GridNavigationMode.cell,
+                                                  columnWidthMode:
+                                                      ColumnWidthMode.auto,
+                                                  editingGestureType:
+                                                      EditingGestureType.tap,
+                                                  controller:
+                                                      _dataGridController,
+                                                  onQueryRowHeight: (details) {
+                                                    return details
+                                                        .getIntrinsicRowHeight(
+                                                            details.rowIndex);
+                                                  },
+                                                  columns: [
+                                                    GridColumn(
+                                                      columnName: 'srNo',
+                                                      autoFitPadding:
+                                                          tablepadding,
+                                                      allowEditing: true,
+                                                      width: 80,
+                                                      label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    8.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text('Sr No',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .values
+                                                                    .first,
+                                                            style:
+                                                                tableheaderwhitecolor),
+                                                      ),
+                                                    ),
+                                                    GridColumn(
+                                                      width: 550,
+                                                      columnName: 'Details',
+                                                      allowEditing: true,
+                                                      label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    8.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                            'Details of Enclosure ',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .values
+                                                                    .first,
+                                                            style:
+                                                                tableheaderwhitecolor),
+                                                      ),
+                                                    ),
+                                                    GridColumn(
+                                                      columnName: 'Status',
+                                                      allowEditing: true,
+                                                      width: 230,
+                                                      label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                            'Status of Submission of information/ documents ',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 16,
+                                                              color: white,
+                                                            )),
+                                                      ),
+                                                    ),
+                                                    GridColumn(
+                                                      columnName: 'Remark',
+                                                      allowEditing: true,
+                                                      width: 230,
+                                                      label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    8.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text('Remarks',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .values
+                                                                    .first,
+                                                            style:
+                                                                tableheaderwhitecolor),
+                                                      ),
+                                                    ),
+                                                    GridColumn(
+                                                      columnName: 'Photo',
+                                                      allowEditing: false,
+                                                      visible: false,
+                                                      width: 160,
+                                                      label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    8.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                            'Upload Photo',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .values
+                                                                    .first,
+                                                            style:
+                                                                tableheaderwhitecolor),
+                                                      ),
+                                                    ),
+                                                    GridColumn(
+                                                      columnName: 'ViewPhoto',
+                                                      allowEditing: false,
+                                                      width: 180,
+                                                      label: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    8.0),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                            'View Photo',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .values
+                                                                    .first,
+                                                            style:
+                                                                tableheaderwhitecolor),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      )
           ],
         ));
   }
@@ -3148,5 +3589,15 @@ List<BarChartGroupData> barChartGroupData(List<dynamic> data) {
         ],
       );
     }),
+  );
+}
+
+Widget createColumnLabel(String labelText) {
+  return Container(
+    alignment: Alignment.center,
+    child: Text(labelText,
+        overflow: TextOverflow.values.first,
+        textAlign: TextAlign.center,
+        style: tableheader),
   );
 }

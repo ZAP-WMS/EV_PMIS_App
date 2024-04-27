@@ -512,6 +512,7 @@ class _DailyProjectState extends State<DailyProject> {
           : Container(),
     );
   }
+  
 
   Future storeData() async {
     Map<String, dynamic> tableData = Map();

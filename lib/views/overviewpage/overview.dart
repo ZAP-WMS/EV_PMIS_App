@@ -18,7 +18,6 @@ class OverviewPage extends StatefulWidget {
 }
 
 class _OverviewPageState extends State<OverviewPage> {
-
   String? cityName;
 
   String roles = '';
@@ -27,8 +26,10 @@ class _OverviewPageState extends State<OverviewPage> {
     '/depotOverview',
     '/planning-page',
     '/material-page',
-    '/daily-report',
-    '/monthly-report',
+    '/daiy_management',
+    //  '/daily-report',
+    '/monthly_management',
+    //'/monthly-report',
     '/detailed-page',
     '/jmrPage',
     '/safety-page',

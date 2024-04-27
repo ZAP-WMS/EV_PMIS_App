@@ -1,18 +1,23 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Color blue = Color(0xFF0953A1);
+Color blue = const Color(0xFF0953A1);
 Color lightblue = Colors.blue;
 Color white = Colors.white;
 Color black = Colors.black;
-Color grey = Color(0xFFEDEDED);
+Color grey = const Color(0xFFEDEDED);
 Color red = Colors.red;
-Color green = Color.fromARGB(255, 88, 221, 128);
+Color green = const Color.fromARGB(255, 88, 221, 128);
 Color yellow = Colors.yellow;
 Color tabbarColor = Colors.grey;
+Color splitscreenColor = Color(0xffeddacf);
 
 TextStyle appTextStyle = const TextStyle(fontSize: 12, color: Colors.black);
+
+TextStyle tableTitleStyle =
+    TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: blue);
+
+TextStyle formtext = const TextStyle(fontSize: 13, fontWeight: FontWeight.bold);
 
 TextStyle headline = GoogleFonts.ibmPlexSans(
     fontSize: 12, fontWeight: FontWeight.w400, color: black);
@@ -28,6 +33,9 @@ TextStyle headlineBold = GoogleFonts.ibmPlexSans(
 
 TextStyle bodytext = GoogleFonts.ibmPlexSans(
     fontSize: 12, fontWeight: FontWeight.w300, color: black);
+
+TextStyle splitscreenStyle = GoogleFonts.ibmPlexSans(
+    fontSize: 30, fontWeight: FontWeight.w600, color: black);
 
 TextStyle logoheadline = GoogleFonts.ibmPlexSans(
     fontSize: 35, fontWeight: FontWeight.w600, color: black);
@@ -50,16 +58,17 @@ TextStyle subtitleWhite = GoogleFonts.ibmPlexSans(
     letterSpacing: 0.15,
     color: blue);
 
-TextStyle tableheader = const TextStyle(
-  fontWeight: FontWeight.bold,
-  fontSize: 12,
-);
+TextStyle tableheader =
+    const TextStyle(fontWeight: FontWeight.bold, fontSize: 12);
 
 TextStyle normaltextbold =
     const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
 
 TextStyle tableheadersubtitle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: red);
+
+TextStyle tablefonttext = const TextStyle(fontSize: 13);
+Color folderColor = const Color.fromARGB(255, 243, 219, 81);
 
 TextStyle tableheaderwhitecolor =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: blue);
