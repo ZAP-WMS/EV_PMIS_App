@@ -121,7 +121,7 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
             widget.depoName!,
             selectedDate!,
             widget.userId!);
-        _dataGridController = DataGridController();
+
         // ignore: use_build_context_synchronously
         _dailySfuDataSource = DailySFUManagementDataSource(_dailySfu, context,
             widget.cityName!, widget.depoName!, selectedDate!, widget.userId!);
@@ -358,120 +358,6 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
                                       },
                                       columns: columns);
                                 } else {
-                                  // retrieveData(snapshot.data);
-
-                                  // _dataGridController = DataGridController();
-                                  // _dailyChargerDataSource.buildDataGridRows();
-                                  // _dailyChargerDataSource.updateDatagridSource();
-
-                                  //  _dataGridController = DataGridController();
-                                  //  _dailyChargerDataSource.buildDataGridRows();
-                                  //  _dailyChargerDataSource.updateDatagridSource();
-
-                                  // } else if (widget.tabIndex == 1) {
-                                  //   _dailySfu.clear();
-                                  //   _dailySfuDataSource.buildDataGridRows();
-                                  //   _dailySfuDataSource.updateDatagridSource();
-                                  //   alldata.forEach((element) {
-                                  //     _dailySfu
-                                  //         .add(DailySfuModel.fromjson(element));
-                                  //     _dailySfuDataSource =
-                                  //         DailySFUManagementDataSource(
-                                  //             _dailySfu,
-                                  //             context,
-                                  //             widget.cityName!,
-                                  //             widget.depoName!,
-                                  //             selectedDate!,
-                                  //             widget.userId!);
-                                  //     _dataGridController = DataGridController();
-                                  //     _dailySfuDataSource.buildDataGridRows();
-                                  //     _dailySfuDataSource.updateDatagridSource();
-                                  //   });
-                                  // } else if (widget.tabIndex == 2) {
-                                  //   _dailyPss.clear();
-                                  //   _dailyPssDataSource.buildDataGridRows();
-                                  //   _dailyPssDataSource.updateDatagridSource();
-                                  //   alldata.forEach((element) {
-                                  //     _dailyPss
-                                  //         .add(DailyPssModel.fromjson(element));
-                                  //     _dailyPssDataSource =
-                                  //         DailyPssManagementDataSource(
-                                  //       _dailyPss,
-                                  //       context,
-                                  //       widget.cityName!,
-                                  //       widget.depoName!,
-                                  //       selectedDate!,
-                                  //       widget.userId!,
-                                  //     );
-                                  //     _dataGridController = DataGridController();
-                                  //     _dailyPssDataSource.buildDataGridRows();
-                                  //     _dailyPssDataSource.updateDatagridSource();
-                                  //   });
-                                  // } else if (widget.tabIndex == 3) {
-                                  //   _dailyTransfer.clear();
-                                  //   _dailyTranformerDataSource
-                                  //       .buildDataGridRows();
-                                  //   _dailyTranformerDataSource
-                                  //       .updateDatagridSource();
-                                  //   alldata.forEach((element) {
-                                  //     _dailyTransfer.add(
-                                  //         DailyTransformerModel.fromjson(
-                                  //             element));
-                                  //     _dailyTranformerDataSource =
-                                  //         DailyTranformerDataSource(
-                                  //       _dailyTransfer,
-                                  //       context,
-                                  //       widget.cityName!,
-                                  //       widget.depoName!,
-                                  //       selectedDate!,
-                                  //       widget.userId!,
-                                  //     );
-
-                                  //     _dataGridController = DataGridController();
-                                  //     _dailyPssDataSource.buildDataGridRows();
-                                  //     _dailyPssDataSource.updateDatagridSource();
-                                  //   });
-                                  // } else if (widget.tabIndex == 4) {
-                                  //   _dailyrmu.clear();
-                                  //   _dailyRmuDataSource.buildDataGridRows();
-                                  //   _dailyRmuDataSource.updateDatagridSource();
-                                  //   alldata.forEach((element) {
-                                  //     _dailyrmu
-                                  //         .add(DailyrmuModel.fromjson(element));
-                                  //     _dailyRmuDataSource = DailyRmuDataSource(
-                                  //         _dailyrmu,
-                                  //         context,
-                                  //         widget.cityName!,
-                                  //         widget.depoName!,
-                                  //         selectedDate!,
-                                  //         widget.userId!);
-
-                                  //     _dataGridController = DataGridController();
-                                  //     _dailyRmuDataSource.buildDataGridRows();
-                                  //     _dailyRmuDataSource.updateDatagridSource();
-                                  //   });
-                                  // } else {
-                                  //   _dailyacdb.clear();
-                                  //   _dailyAcdbdatasource.buildDataGridRows();
-                                  //   _dailyAcdbdatasource.updateDatagridSource();
-                                  //   alldata.forEach((element) {
-                                  //     _dailyacdb
-                                  //         .add(DailyAcdbModel.fromjson(element));
-                                  //     _dailyAcdbdatasource =
-                                  //         DailyAcdbManagementDataSource(
-                                  //             _dailyacdb,
-                                  //             context,
-                                  //             widget.cityName!,
-                                  //             widget.depoName!,
-                                  //             selectedDate!,
-                                  //             widget.userId!);
-
-                                  //     _dataGridController = DataGridController();
-                                  //     _dailyAcdbdatasource.buildDataGridRows();
-                                  //     _dailyAcdbdatasource.updateDatagridSource();
-                                  //   });
-                                  // }
-
                                   return SfDataGrid(
                                       source: widget.tabIndex == 0
                                           ? _dailyChargerDataSource

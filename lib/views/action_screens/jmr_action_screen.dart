@@ -7,8 +7,11 @@ class JmrActionScreen extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
+  String roleCentre;
+
   JmrActionScreen(
-      {super.key, this.userId, this.cityName, this.role, this.depoName});
+      {super.key,
+      required this.roleCentre, this.userId, this.cityName, this.role, this.depoName});
 
   @override
   State<JmrActionScreen> createState() => _JmrActionScreenState();
@@ -29,6 +32,7 @@ class _JmrActionScreenState extends State<JmrActionScreen> {
   }
 
   Widget selectWidget() {
+    if(widget.roleCentre == "PMIS"){
     switch (widget.role) {
       case 'user':
         selectedUi = JmrUserPage(
@@ -57,6 +61,37 @@ class _JmrActionScreenState extends State<JmrActionScreen> {
         );
         break;
     }
+    } else if(widget.roleCentre == "O&M"){
+          switch (widget.role) {
+      case 'user':
+        selectedUi = JmrUserPage(
+          userId: widget.userId,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          role: widget.role,
+        );
+        break;
+
+      case 'admin':
+        selectedUi = Jmr(
+          userId: widget.userId,
+          role: widget.role!,
+          depoName: widget.depoName,
+          cityName: widget.cityName,
+        );
+        break;
+
+      case 'projectManager':
+        selectedUi = Jmr(
+          userId: widget.userId,
+          role: widget.role!,
+          depoName: widget.depoName,
+          cityName: widget.cityName,
+        );
+        break;
+    }
+    }
+
 
     return selectedUi;
   }

@@ -8,8 +8,11 @@ class MaterialProcurementAction extends StatefulWidget {
   String? cityName;
   String? depoName;
   String userId;
+  String roleCentre;
+
   MaterialProcurementAction(
       {super.key,
+      required this.roleCentre,
       required this.userId,
       this.cityName,
       this.role,
@@ -35,7 +38,8 @@ class _MaterialProcurementActionState extends State<MaterialProcurementAction> {
   }
 
   Widget selectWidget() {
-    switch (widget.role) {
+     if(widget.roleCentre == "PMIS"){
+          switch (widget.role) {
       case 'user':
         selectedUi = mv.MaterialProcurement(
           depoName: widget.depoName,
@@ -63,6 +67,37 @@ class _MaterialProcurementActionState extends State<MaterialProcurementAction> {
         );
         break;
     }
+    } else if(widget.roleCentre == "O&M"){
+          switch (widget.role) {
+      case 'user':
+        selectedUi = mv.MaterialProcurement(
+          depoName: widget.depoName,
+          userId: widget.userId,
+          cityName: widget.cityName,
+          role: widget.role,
+        );
+        break;
+
+      case 'admin':
+        selectedUi = MaterialProcurementAdmin(
+          cityName: widget.cityName,
+          userId: widget.userId,
+          depoName: widget.depoName,
+          role: widget.role!,
+        );
+        break;
+
+      case 'projectManager':
+        selectedUi = MaterialProcurementAdmin(
+          role: widget.role!,
+          userId: widget.userId,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+        );
+        break;
+    }
+    }
+
 
     return selectedUi;
   }

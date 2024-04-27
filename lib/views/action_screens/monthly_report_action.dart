@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/views/management_screen/monthly_page/monthly_home.dart';
 import 'package:flutter/material.dart';
 
 import '../monthlyreport/monthly_admin/monthly_report_admin.dart';
@@ -8,7 +9,10 @@ class MonthlyReportAction extends StatefulWidget {
   String? cityName;
   String? depoName;
   String userId;
-  MonthlyReportAction({super.key, this.cityName, this.role, this.depoName, required this.userId});
+  String roleCentre;
+
+  MonthlyReportAction({super.key,
+  required this.roleCentre, this.cityName, this.role, this.depoName, required this.userId});
 
   @override
   State<MonthlyReportAction> createState() => _MonthlyReportActionState();
@@ -29,7 +33,8 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
   }
 
   Widget selectWidget() {
-    switch (widget.role) {
+     if(widget.roleCentre == "PMIS"){
+          switch (widget.role) {
       
       case 'user':
         selectedUi = MonthlyProject(depoName: widget.depoName,
@@ -56,6 +61,38 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
         );
         break;
     }
+    }
+    else if(widget.roleCentre == "O&M"){
+          switch (widget.role) {
+      
+      case 'user':
+        selectedUi = MonthlyManagementHomePage(
+          depoName: widget.depoName,
+        role: widget.role,cityName: widget.cityName,
+        userId: widget.userId,);
+        break;
+
+      case 'admin':
+        selectedUi = MonthlySummary(
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+
+          role: widget.role!,
+          userId: widget.userId,
+        );
+        break;
+
+      case 'projectManager':
+        selectedUi = MonthlySummary(
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          role: widget.role!,
+          userId: widget.userId,
+        );
+        break;
+    }
+    }
+
 
     return selectedUi;
   }

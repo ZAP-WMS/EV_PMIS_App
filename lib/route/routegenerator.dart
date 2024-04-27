@@ -85,6 +85,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DepotOverviewAction(
+            roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             depoName: argument['depoName'],
             role: argument['role'],
@@ -93,6 +94,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return ProjectPlanningAction(
+             roleCentre: argument["roleCentre"],
             role: argument['role'], userId: argument["userId"],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
@@ -103,6 +105,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MaterialProcurementAction(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
@@ -113,6 +116,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DailyProjectAction(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
@@ -123,6 +127,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MonthlyReportAction(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
@@ -133,6 +138,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DetailEngineeringAction(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
@@ -143,6 +149,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return JmrActionScreen(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             depoName: argument['depoName'],
             role: argument['role'],
@@ -153,6 +160,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return SafetyChecklistAction(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             depoName: argument['depoName'],
             cityName: argument['cityName'],
@@ -163,6 +171,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return QualityChecklistAction(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             depoName: argument['depoName'],
             role: argument['role'],
@@ -173,6 +182,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return ClosureReportAction(
+             roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
@@ -199,7 +209,7 @@ class RouteGenerator {
           final args = settings.arguments as Map<String, dynamic>;
           final userId = args["userId"];
           final role = args["role"];
-          return EVDashboardAction(
+          return EVDashboardAction(roleCentre: args["roleCentre"],
             role: role,
           );
 
@@ -217,6 +227,7 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return DemandActionScreen(
+            roleCentre: argument["roleCentre"],
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
@@ -243,9 +254,12 @@ class RouteGenerator {
         //   role: argument['role'],
         // );
         case '/main_screen':
-          // List<String> argument = [];
-          // settings.arguments as Map<String, dynamic>;
-          return MainScreen();
+        Map<String,dynamic> mapData = settings.arguments as Map<String,dynamic>;
+          return PmisAndOAndMScreen(
+            roleCentre: mapData["roleCentre"],
+            userId : mapData["userId"],
+            role : mapData["role"],
+          );
 
         case '/daiy_management':
           // List<String> argument = [];

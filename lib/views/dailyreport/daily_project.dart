@@ -636,4 +636,5 @@ class _DailyProjectState extends State<DailyProject> {
           widget.cityName!, assignedCities,
         );
   }
+  
 }

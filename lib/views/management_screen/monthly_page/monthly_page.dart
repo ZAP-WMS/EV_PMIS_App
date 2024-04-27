@@ -58,7 +58,6 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
   void initState() {
     // Example date
     DateTime date = DateTime.now();
-
     _stream = FirebaseFirestore.instance
         .collection('DailyManagementPage')
         .doc('${widget.depoName}')
@@ -67,7 +66,7 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
         .snapshots();
 
     _dataGridController = DataGridController();
-     getUserId().whenComplete(() {
+    getUserId().whenComplete(() {
       _fetchUserData();
       _monthlyChargerManagementDataSource = MonthlyChargerManagementDataSource(
           _monthlyChargerModel,
@@ -102,7 +101,8 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
             widget.cityName!,
             widget.depoName!,
             selectedDate!,
-            userId);
+            userId
+            );
 
         _dataGridController = DataGridController();
       });
