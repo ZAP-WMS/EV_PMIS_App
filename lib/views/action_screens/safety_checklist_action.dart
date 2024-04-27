@@ -37,8 +37,10 @@ class _SafetyChecklistActionState extends State<SafetyChecklistAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = SafetyField(depoName: widget.depoName,
-        role: widget.role,userId: widget.userId,
+        selectedUi = SafetyField(
+          depoName: widget.depoName,
+        role: widget.role,
+        userId: widget.userId,
         cityName: widget.cityName,
         );
         break;

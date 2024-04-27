@@ -1936,9 +1936,8 @@ class _ViewSummaryState extends State<ViewSummary> {
           imageUrls[9],
           imageUrls[10],
           imageUrls[11],
-        ]));
+        ],),);
       }
-
       imageUrls.clear();
     }
 
