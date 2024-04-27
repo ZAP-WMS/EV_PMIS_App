@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/authentication/reset_password.dart';
 import 'package:ev_pmis_app/widgets/custom_alert_box.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
 import 'package:ev_pmis_app/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';

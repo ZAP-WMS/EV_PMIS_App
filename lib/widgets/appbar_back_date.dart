@@ -207,6 +207,7 @@ class _CustomAppBarState extends State<CustomAppBarBackDate> {
                   )
                 : widget.tabBar);
   }
+
   Future<void> getUserId() async {
     await AuthService().getCurrentUserId().then((value) {
       userId = value;

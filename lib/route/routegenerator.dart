@@ -26,8 +26,11 @@ import 'package:provider/provider.dart';
 import '../views/authentication/change_password.dart';
 import '../views/chatPage/feedback.dart';
 import '../views/citiespage/cities_home.dart';
+import '../views/dailyreport/daily_management_home.dart';
 import '../views/dailyreport/notification_userlist.dart';
+import '../views/management_screen/monthly_page/monthly_home.dart';
 import '../views/overviewpage/overview.dart';
+import '../views/split_screen/o&m_pmis_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -239,6 +242,34 @@ class RouteGenerator {
         //   depoName: argument['depoName'],
         //   role: argument['role'],
         // );
+        case '/main_screen':
+          // List<String> argument = [];
+          // settings.arguments as Map<String, dynamic>;
+          return MainScreen();
+
+        case '/daiy_management':
+          // List<String> argument = [];
+          // settings.arguments as Map<String, dynamic>;
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return DailyManagementHomePage(
+            userId: argument['userId'],
+            cityName: argument['cityName'],
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+
+        case '/monthly_management':
+          // List<String> argument = [];
+          // settings.arguments as Map<String, dynamic>;
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+          return MonthlyManagementHomePage(
+            userId: argument['userId'],
+            cityName: argument['cityName'],
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
       }
       return const NodataAvailable();
     });

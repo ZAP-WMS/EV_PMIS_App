@@ -792,7 +792,7 @@ class _CivilFieldState extends State<CivilField> {
       'data': excavationtabledatalist,
     }).whenComplete(() {
       FirebaseApi().nestedKeyEventsField(
-          'CivilQualityChecklist', widget.depoName!, 'userId', userId!);
+          'CivilQualityChecklist', widget.depoName!, 'userId', userId);
       excavationtabledatalist.clear();
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

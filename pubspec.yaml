@@ -30,10 +30,12 @@ environment:
 dependencies:
   apptive_grid_theme: ^1.2.0
   cached_network_image: null
+  chewie: ^1.7.5
   cloud_firestore: null
   connectivity_plus: ^5.0.0
   cupertino_icons: ^1.0.2
   data_table_2: ^2.4.2
+  dropdown_button2: ^2.1.4
   excel: ^2.1.0
   file_picker: null
   firebase_auth: ^4.8.0
@@ -46,6 +48,7 @@ dependencies:
   flutter_full_pdf_viewer_null_safe: null
   flutter_launcher_icons: ^0.13.1
   flutter_local_notifications: null
+  flutter_svg:
   flutter_typeahead: null
   flutter_windowmanager: ^0.2.0
   gantt_chart: ^0.3.0
@@ -58,6 +61,7 @@ dependencies:
   intl: ^0.18.1
   lecle_downloads_path_provider: null
   lottie: ^2.3.2
+  mailto: ^2.0.0
   open_file: null
   open_file_plus: null
   overlay_support: ^2.1.0
@@ -78,11 +82,8 @@ dependencies:
   syncfusion_flutter_datepicker: ^20.3.38
   syncfusion_flutter_pdfviewer: ^20.4.54
   tab_indicator_styler: ^2.0.0
-  dropdown_button2: ^2.1.4
   url_launcher: null
-  mailto: ^2.0.0
   video_player: ^2.7.2
-  chewie: ^1.7.5
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -111,6 +112,7 @@ flutter:
     - assets/overview_image/
     - animations/loading_animation.gif
     - assets/appbar/
+    - assets/split_screen/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

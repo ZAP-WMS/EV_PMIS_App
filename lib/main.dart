@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
 import 'package:ev_pmis_app/provider/checkbox_provider.dart';
@@ -25,7 +24,6 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'notiification/notification_service.dart';
@@ -177,10 +175,12 @@ class _MyAppState extends State<MyApp> {
           initialRoute:
               //'/user-list',
               // "/login-page",
-              '/splash-screen',
+              '/main_screen',
+          // '/daiy_management',
+          //  '/demand',
+          // '/splash-screen',
           // all the pages of routes are declared here
           onGenerateRoute: RouteGenerator.generateRoute,
-
           debugShowCheckedModeBanner: false,
           title: 'TP-EV-PMIS',
           theme: ThemeData(
@@ -188,12 +188,7 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Montserrat',
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: Colors.white,
-            dividerColor: const Color.fromARGB(
-              255,
-              2,
-              42,
-              75,
-            ),
+            dividerColor: const Color.fromARGB(255, 2, 42, 75),
             inputDecorationTheme: InputDecorationTheme(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
@@ -212,8 +207,6 @@ class _MyAppState extends State<MyApp> {
               // labelStyle: Colors.b
             ),
           ),
-
-          //home: LoginRegister()
         ),
       ),
     );
