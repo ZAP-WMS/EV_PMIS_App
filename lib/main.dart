@@ -26,6 +26,7 @@ import 'package:open_file_plus/open_file_plus.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 import 'notiification/notification_service.dart';
 
 @pragma('vm:entry-point')
@@ -36,6 +37,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   RemoteMessage? initializeMessage =
       await FirebaseMessaging.instance.getInitialMessage();
+
   if (initializeMessage != null) {
     PushNotification notification = PushNotification(
       title: initializeMessage.notification!.title ?? '',
@@ -174,11 +176,11 @@ class _MyAppState extends State<MyApp> {
           // initialRoute: '/splash',
           initialRoute:
               //'/user-list',
-               "/login-page",
+              // "/login-page",
               //'/main_screen',
-          // '/daiy_management',
-          //  '/demand',
-          // '/splash-screen',
+              // '/daiy_management',
+              //  '/demand',
+              '/splash-screen',
           // all the pages of routes are declared here
           onGenerateRoute: RouteGenerator.generateRoute,
           debugShowCheckedModeBanner: false,

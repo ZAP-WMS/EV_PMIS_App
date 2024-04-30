@@ -111,6 +111,7 @@ class AuthService {
   Future storeEmployeeId(String employeeId) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('employeeId', employeeId);
+    print("Employee ID stored - $employeeId");
   }
 
   Future storeUserRole(String role) async {
@@ -145,11 +146,10 @@ class AuthService {
   }
 
   Future storeRoleCentre(String roleCentre) async {
-    try{
+    try {
       final shared = await SharedPreferences.getInstance();
-    shared.setString("roleCentre", roleCentre);
-    }
-    catch (e){
+      shared.setString("roleCentre", roleCentre);
+    } catch (e) {
       print("Error While Storing RoleCentre - $e");
     }
   }

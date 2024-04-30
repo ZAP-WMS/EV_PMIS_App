@@ -3,15 +3,15 @@ import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../widgets/custom_appbar.dart';
 import 'cities.dart';
 import 'depot.dart';
 
 class CitiesHome extends StatefulWidget {
-  String? userId;
-  String? role;
-  CitiesHome({super.key, this.role, this.userId});
+  final String? userId;
+  final String? role;
+  final String? roleCentre;
+  const CitiesHome({super.key, this.role, this.userId, this.roleCentre});
 
   @override
   State<CitiesHome> createState() => _CitiesHomeState();
@@ -49,9 +49,13 @@ class _CitiesHomeState extends State<CitiesHome> {
           ? const LoadingPage()
           : Row(
               children: [
-                CitiesPage(role: role),
+                CitiesPage(
+                  role: role,
+                ),
                 DepotPage(
                   role: role,
+                  userId: widget.userId,
+                  roleCentre: widget.roleCentre,
                 ),
               ],
             ),

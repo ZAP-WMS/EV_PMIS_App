@@ -65,7 +65,7 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
         break;
     }
     }
-    else if(widget.roleCentre == "O&M"){
+    else if(widget.roleCentre == "O&M" ){
           switch (widget.role) {
       case 'user':
         selectedUi = ClosureField(

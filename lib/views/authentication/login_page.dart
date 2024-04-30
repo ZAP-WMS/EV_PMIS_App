@@ -184,8 +184,7 @@ class _LoginPageState extends State<LoginPage> {
 
         if (isProjectManager == false) {
           isAdmin = await verifyAndLoginAdmin(empIdController.text);
-        }
-        if (isAdmin == false) {
+        } else if (isAdmin == false && isProjectManager == false) {
           verifyAndLoginUser();
         }
       } catch (e) {
@@ -285,12 +284,11 @@ class _LoginPageState extends State<LoginPage> {
           authService.storeCompanyName(companyName);
           authService.storeRoleCentre(roleCentre);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
-            Navigator.pushReplacementNamed(context, '/splitDashboard',
-                arguments: {
-                  "roleCentre": roleCentre,
-                  'userId': empIdController.text.trim(),
-                  "role": "admin"
-                });
+            Navigator.pushReplacementNamed(context, '/main_screen', arguments: {
+              "roleCentre": roleCentre,
+              'userId': empIdController.text.trim(),
+              "role": "admin"
+            });
           });
         } else if (passwordcontroller.text == dataList[0]['password'] &&
             empIdController.text.trim() == dataList[0]['userId'] &&
@@ -309,13 +307,11 @@ class _LoginPageState extends State<LoginPage> {
           await authService.storeDepoList(depots);
           authService.storeCompanyName(companyName);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
-            Navigator.pushReplacementNamed(
-              context, '/splitDashboard',
-                arguments: {
-                  "roleCentre": roleCentre,
-                  'userId': empIdController.text.trim(),
-                  "role": "admin"
-                });
+            Navigator.pushReplacementNamed(context, '/main_screen', arguments: {
+              "roleCentre": roleCentre,
+              'userId': empIdController.text.trim(),
+              "role": "admin"
+            });
           });
         }
       }
@@ -375,12 +371,13 @@ class _LoginPageState extends State<LoginPage> {
           authService.storeEmployeeId(empIdController.text.trim());
           authService.storeRoleCentre(roleCentre);
           authService.storeCompanyName(companyName).then((_) {
-            Navigator.pushReplacementNamed(context, '/splitDashboard',
-                arguments: {
-                  "roleCentre": roleCentre,
-                  'userId': empIdController.text,
-                  "role": "projectManager"
-                });
+            Navigator.pushReplacementNamed(
+              context, '/main_screen', arguments: {
+              "roleCentre": roleCentre,
+              'userId': empIdController.text,
+              "role": "projectManager"
+            }
+            );
           });
         } else {
           Navigator.pop(context);

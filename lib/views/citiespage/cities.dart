@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CitiesPage extends StatefulWidget {
-  String role;
-  CitiesPage({super.key, required this.role});
+  final String role;
+  const CitiesPage({super.key, required this.role});
 
   @override
   State<CitiesPage> createState() => _CitiesPageState();
@@ -20,6 +20,7 @@ class _CitiesPageState extends State<CitiesPage> {
   List<bool> isActive = [true];
   @override
   void initState() {
+    
     getCityBoolLen().whenComplete(() {
       _stream = FirebaseFirestore.instance
           .collection('CityName')
@@ -36,7 +37,7 @@ class _CitiesPageState extends State<CitiesPage> {
   @override
   Widget build(BuildContext context) {
     return isloading
-        ? LoadingPage()
+        ? const LoadingPage()
         : Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Container(

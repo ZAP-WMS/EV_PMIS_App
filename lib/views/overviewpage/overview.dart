@@ -8,10 +8,16 @@ import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
 
 class OverviewPage extends StatefulWidget {
-  String? depoName;
-  String? role;
-  String? userId;
-  OverviewPage({super.key, required this.depoName, this.role, this.userId});
+  final String? depoName;
+  final String? role;
+  final String? userId;
+  final String? roleCentre;
+  const OverviewPage(
+      {super.key,
+      required this.depoName,
+      this.role,
+      this.userId,
+      this.roleCentre});
 
   @override
   State<OverviewPage> createState() => _OverviewPageState();
@@ -80,57 +86,86 @@ class _OverviewPageState extends State<OverviewPage> {
     ];
 
     return Scaffold(
-        drawer: NavbarDrawer(role: widget.role),
-        appBar: CustomAppBar(
-          isCentered: true,
-          title: 'Overview Page',
-          height: 55,
-          depoName: widget.depoName ?? '',
-          isSync: false,
+      drawer: NavbarDrawer(
+        role: widget.role,
+      ),
+      appBar: CustomAppBar(
+        isCentered: true,
+        title: 'Overview Page',
+        height: 55,
+        depoName: widget.depoName ?? '',
+        isSync: false,
+      ),
+      body: Container(
+        margin: const EdgeInsets.all(
+          10.0,
         ),
-        body: Container(
-          margin: const EdgeInsets.all(10.0),
-          child: GridView.builder(
-              shrinkWrap: true,
-              itemCount: description.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1.2),
-              itemBuilder: (context, index) {
-                return Card(
-                  color: grey,
-                  elevation: 20,
+        child: GridView.builder(
+            shrinkWrap: true,
+            itemCount: description.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.2),
+            itemBuilder: (context, index) {
+              return Card(
+                color: grey,
+                elevation: 20,
 
-                  // shadowColor: blue,
-                  // borderOnForeground: true,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: blue, width: 2),
-                    borderRadius: BorderRadius.circular(20),
+                // shadowColor: blue,
+                // borderOnForeground: true,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: blue, width: 2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: InkWell(
+                  onTap: () =>
+                      Navigator.pushNamed(context, screens[index], arguments: {
+                    'depoName': widget.depoName,
+                    'role': roles,
+                    'cityName': cityName,
+                    'userId': widget.userId,
+                    'roleCentre': widget.roleCentre
+                  }),
+                  child: cards(
+                    description[index],
+                    imagedata[index],
+                    index,
                   ),
-                  child: InkWell(
-                      onTap: () => Navigator.pushNamed(context, screens[index],
-                              arguments: {
-                                'depoName': widget.depoName,
-                                'role': roles,
-                                'cityName': cityName,
-                                'userId': widget.userId
-                              }),
-                      child:
-                          cards(description[index], imagedata[index], index)),
-                );
-              }),
-        )
-
-        //  GridView.count(
-        //   crossAxisCount: 2,
-        //   mainAxisSpacing: 2,
-        //   children: List.generate(description.length, (index) {
-        //     return
-        //   }),
-        // ),
-        );
+                ),
+              );
+            }),
+      ),
+      //  GridView.count(
+      //   crossAxisCount: 2,
+      //   mainAxisSpacing: 2,
+      //   children: List.generate(description.length, (index) {
+      //     return
+      //   }),
+      // ),
+      floatingActionButton:
+          (widget.role == "projectManager" || widget.role == "admin")
+              ? FloatingActionButton(
+                  backgroundColor: blue,
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/main_screen',
+                        arguments: {
+                          "roleCentre": widget.roleCentre,
+                          'userId': widget.userId,
+                          "role": widget.role
+                        },
+                        (route) => false,
+                        );
+                  },
+                  child: const Icon(
+                    Icons.splitscreen,
+                  ),
+                )
+              : Container(),
+    );
   }
 
   Widget cards(String desc, String image, int index) {

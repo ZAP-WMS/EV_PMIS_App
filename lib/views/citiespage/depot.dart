@@ -10,10 +10,11 @@ import '../../style.dart';
 String userId = '';
 
 class DepotPage extends StatefulWidget {
-  String? role;
-  String? cityName;
-  String? userId;
-  DepotPage({super.key, this.cityName, this.role, this.userId});
+  final String? role;
+  final String? cityName;
+  final String? userId;
+  final String? roleCentre;
+  const DepotPage({super.key, this.cityName, this.role, this.userId,this.roleCentre});
 
   @override
   State<DepotPage> createState() => _DepotPageState();
@@ -64,7 +65,8 @@ class _DepotPageState extends State<DepotPage> {
                                         'depoName': snapshot.data!.docs[index]
                                             ['DepoName'],
                                         'role': widget.role,
-                                        'userId': userId
+                                        'userId': userId,
+                                        "roleCentre": widget.roleCentre
                                       }),
                               child: cards(
                                 snapshot.data!.docs[index]['DepoName'],
