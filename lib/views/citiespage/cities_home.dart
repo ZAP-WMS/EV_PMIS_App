@@ -66,4 +66,5 @@ class _CitiesHomeState extends State<CitiesHome> {
     final AuthService authService = AuthService();
     role = await authService.getUserRole();
   }
+  
 }

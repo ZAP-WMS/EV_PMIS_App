@@ -41,7 +41,7 @@ class _PmisAndOAndMScreenState extends State<PmisAndOAndMScreen> {
             children: [
               Container(
                 height: 210,
-              alignment: Alignment.center,
+                alignment: Alignment.center,
                 //  decoration: BoxDecoration(color: splitscreenColor),
                 child: Column(
                   children: [

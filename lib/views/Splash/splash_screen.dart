@@ -210,21 +210,24 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   void _getCurrentUser() async {
+    String? role;
+    String? roleCentre;
     bool user = false;
 
     sharedPreferences = await SharedPreferences.getInstance();
     try {
       if (sharedPreferences.getString('employeeId') != null) {
         userId = sharedPreferences.getString('employeeId');
+        role = await AuthService().getUserRole();
+        roleCentre = await AuthService().getRoleCentre();
         user = true;
       }
 
       if (!_isNotificationPage) {
-        String role = await AuthService().getUserRole();
-        String roleCentre = await AuthService().getRoleCentre();
         // Add a delay before navigating to the main page
         await Future.delayed(
-          const Duration(milliseconds: 1500),
+          const Duration(milliseconds: 1500,
+          ),
           () {
             Navigator.pushNamedAndRemoveUntil(
               context,

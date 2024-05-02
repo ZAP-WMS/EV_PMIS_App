@@ -222,6 +222,7 @@ class RouteGenerator {
         case '/splitDashboard':
           final args = settings.arguments as Map<String, dynamic>;
           return SplitScreen(
+            roleCentre: args["roleCentre"],
             role: args["role"],
             userId: args["userId"],
           );

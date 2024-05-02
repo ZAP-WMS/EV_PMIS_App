@@ -32,9 +32,9 @@ class _OverviewPageState extends State<OverviewPage> {
     '/depotOverview',
     '/planning-page',
     '/material-page',
-    '/daiy_management',
+    '/daily-report',
     //  '/daily-report',
-    '/monthly_management',
+    '/monthly-report',
     //'/monthly-report',
     '/detailed-page',
     '/jmrPage',
@@ -150,15 +150,15 @@ class _OverviewPageState extends State<OverviewPage> {
                   backgroundColor: blue,
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/main_screen',
-                        arguments: {
-                          "roleCentre": widget.roleCentre,
-                          'userId': widget.userId,
-                          "role": widget.role
-                        },
-                        (route) => false,
-                        );
+                      context,
+                      '/main_screen',
+                      arguments: {
+                        "roleCentre": widget.roleCentre,
+                        'userId': widget.userId,
+                        "role": widget.role
+                      },
+                      (route) => false,
+                    );
                   },
                   child: const Icon(
                     Icons.splitscreen,

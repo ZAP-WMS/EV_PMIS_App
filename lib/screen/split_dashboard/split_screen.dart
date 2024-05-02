@@ -8,7 +8,8 @@ import 'package:get/get.dart';
 class SplitScreen extends StatelessWidget {
   final String? role;
   final String? userId;
-  const SplitScreen({super.key, required this.role, this.userId});
+  final String? roleCentre;
+  const SplitScreen({super.key,required this.roleCentre, required this.role, this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -84,18 +85,18 @@ class SplitScreen extends StatelessWidget {
                       width: context.width * 0.9,
                       height: 40,
                       child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(blue)),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/evDashboard',
-                                arguments: {"role": role, "userId": userId});
-                          },
-                          child: const Text(
-                            'EV Bus Project Analysis Dashboard',
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
-                          ),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(blue)),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/evDashboard',
+                              arguments: {"role": role, "userId": userId});
+                        },
+                        child: const Text(
+                          'EV Bus Project Analysis Dashboard',
+                          style: TextStyle(
+                              fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -150,15 +151,22 @@ class SplitScreen extends StatelessWidget {
           ),
         ),
         floatingActionButton: ElevatedButton(
-            style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(blue)),
-            onPressed: () {
-              Navigator.pushNamed(context, '/cities-page',
-                  arguments: {"userId": userId, "role": role});
-            },
-            child: const Text(
-              'Proceed to cities',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,),
-            ),),
+          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(blue)),
+          onPressed: () {
+            Navigator.pushNamed(context, '/cities-page', arguments: {
+              "userId": userId,
+              "role": role,
+              "roleCentre": roleCentre
+            });
+          },
+          child: const Text(
+            'Proceed to cities',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }
