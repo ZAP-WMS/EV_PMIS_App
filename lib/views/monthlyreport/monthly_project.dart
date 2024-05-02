@@ -3,7 +3,6 @@ import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
 import 'package:ev_pmis_app/widgets/navbar.dart';
 import 'package:ev_pmis_app/widgets/progress_loading.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +37,7 @@ class MonthlyProject extends StatefulWidget {
 
 class _MonthlyProjectState extends State<MonthlyProject> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   List<MonthlyProjectModel> monthlyProject = <MonthlyProjectModel>[];
   late MonthlyDataSource monthlyDataSource;
@@ -494,8 +493,11 @@ class _MonthlyProjectState extends State<MonthlyProject> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
+  
 }

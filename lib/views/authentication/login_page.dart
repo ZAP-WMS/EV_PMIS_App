@@ -104,13 +104,17 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       _space(16),
                       SizedBox(
-                          width: 200,
-                          height: 50,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                login();
-                              },
-                              child: const Text('Sign In'))),
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            login();
+                          },
+                          child: const Text(
+                            'Sign In',
+                          ),
+                        ),
+                      ),
 
                       // Text("Project Management Information System",
                       //     style: headlineBold),
@@ -120,8 +124,11 @@ class _LoginPageState extends State<LoginPage> {
                         height: 150,
                         width: 200,
                       ),
-                      Text("Project Management Information System",
-                          textAlign: TextAlign.center, style: headlineBold),
+                      Text(
+                        "Project Management Information System",
+                        textAlign: TextAlign.center,
+                        style: headlineBold,
+                      ),
                     ],
                   )),
             ),
@@ -172,85 +179,13 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       try {
-        isProjectManager = await verifyProjectManager(empIdController.text);
-        if (isProjectManager == true) {
-          QuerySnapshot pmData = await FirebaseFirestore.instance
-              .collection('AssignedRole')
-              .where("userId", isEqualTo: empIdController.text)
-              .get();
+        isProjectManager =
+            await verifyAndLoginProjectManager(empIdController.text);
 
-          //Search project Manager On User Collection
-
-          if (pmData.docs.isNotEmpty) {
-            List<dynamic> userData = pmData.docs.map((e) => e.data()).toList();
-            companyName = 'TATA POWER';
-            if (passwordcontroller.text == userData[0]['password'] &&
-                empIdController.text == userData[0]['userId']) {
-              List<dynamic> assignedDepots = pmData.docs[0]["depots"];
-
-              List<String> depots =
-                  assignedDepots.map((e) => e.toString()).toList();
-              // print('ProjectManager here ${passWord}');
-              authService.storeUserRole("projectManager");
-              await authService.storeDepoList(depots);
-              authService.storeEmployeeId(empIdController.text.trim());
-              authService.storeCompanyName(companyName).then((_) {
-                Navigator.pushReplacementNamed(context, '/splitDashboard',
-                    arguments: {
-                      'userId': empIdController.text,
-                      "role": "projectManager"
-                    });
-              });
-            } else {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: blue,
-                  content: const Text(
-                      'Password is not Correct or no role is assigned to the user'),
-                ),
-              );
-            }
-          }
-        } else {
-          isAdmin = await verifyAdmin(empIdController.text);
-          //Login as an admin
-
-          if (!isAdmin) {
-            //Login as a user
-
-            QuerySnapshot userQuery = await FirebaseFirestore.instance
-                .collection('AssignedRole')
-                .where('userId', isEqualTo: empIdController.text)
-                .get();
-
-            if (passwordcontroller.text == userQuery.docs[0]['password'] &&
-                empIdController.text == userQuery.docs[0]['userId'] &&
-                userQuery.docs.isNotEmpty) {
-              List<dynamic> assignedDepots = userQuery.docs[0]["depots"];
-              List<String> depots =
-                  assignedDepots.map((e) => e.toString()).toList();
-              await authService.storeUserRole("user");
-              await authService.storeCompanyName(companyName);
-              await authService.storeDepoList(depots);
-              authService.storeEmployeeId(empIdController.text).then((_) {
-                Navigator.pushReplacementNamed(
-                  context,
-                  '/splitDashboard',
-                  arguments: {'userId': empIdController.text, "role": "user"},
-                );
-              });
-            } else {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: blue,
-                  content: const Text(
-                      'Password is not Correct or no role is assigned to the user'),
-                ),
-              );
-            }
-          }
+        if (isProjectManager == false) {
+          isAdmin = await verifyAndLoginAdmin(empIdController.text);
+        } else if (isAdmin == false && isProjectManager == false) {
+          verifyAndLoginUser();
         }
       } catch (e) {
         String error = '';
@@ -269,7 +204,52 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<bool> verifyAdmin(String userId) async {
+  Future verifyAndLoginUser() async {
+    QuerySnapshot userQuery = await FirebaseFirestore.instance
+        .collection('AssignedRole')
+        .where('userId', isEqualTo: empIdController.text)
+        .get();
+
+    if (passwordcontroller.text == userQuery.docs[0]['password'] &&
+        empIdController.text == userQuery.docs[0]['userId'] &&
+        userQuery.docs.isNotEmpty) {
+      String roleCentre = userQuery.docs[0]['roleCentre'];
+      String companyName = userQuery.docs[0]['companyName'];
+      List<dynamic> assignedDepots = userQuery.docs[0]["depots"];
+      List<dynamic> assignedCities = userQuery.docs[0]["cities"];
+
+      List<String> cities = assignedCities.map((e) => e.toString()).toList();
+      authService.storeCityList(cities);
+      List<String> depots = assignedDepots.map((e) => e.toString()).toList();
+      authService.storeUserRole("user");
+      authService.storeCompanyName(companyName);
+      authService.storeDepoList(depots);
+      authService.storeRoleCentre(roleCentre);
+      authService.storeEmployeeId(empIdController.text).then((_) {
+        Navigator.pushReplacementNamed(
+          context,
+          // '/splitDashboard',
+          '/main_screen',
+          arguments: {
+            "roleCentre": roleCentre,
+            'userId': empIdController.text,
+            "role": "user"
+          },
+        );
+      });
+    } else {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: blue,
+          content: const Text(
+              'Password is not Correct or no role is assigned to the user'),
+        ),
+      );
+    }
+  }
+
+  Future<bool> verifyAndLoginAdmin(String userId) async {
     bool userIsAdmin = false;
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('AssignedRole')
@@ -291,34 +271,47 @@ class _LoginPageState extends State<LoginPage> {
         if (passwordcontroller.text.trim() == dataList[0]['password'] &&
             empIdController.text.trim() == dataList[0]['userId'] &&
             dataList[0]['companyName'] == 'TATA POWER') {
+          String roleCentre = dataList[0]['roleCentre'];
           List<dynamic> assignedDepots = querySnapshot.docs[0]["depots"];
+          List<dynamic> assignedCities = querySnapshot.docs[0]["cities"];
+          List<String> cities =
+              assignedCities.map((e) => e.toString()).toList();
+          authService.storeCityList(cities);
           List<String> depots =
               assignedDepots.map((e) => e.toString()).toList();
           authService.storeUserRole("admin");
-          await authService.storeDepoList(depots);
+          authService.storeDepoList(depots);
           authService.storeCompanyName(companyName);
+          authService.storeRoleCentre(roleCentre);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
-            Navigator.pushReplacementNamed(context, '/splitDashboard',
-                arguments: {
-                  'userId': empIdController.text.trim(),
-                  "role": "admin"
-                });
+            Navigator.pushReplacementNamed(context, '/main_screen', arguments: {
+              "roleCentre": roleCentre,
+              'userId': empIdController.text.trim(),
+              "role": "admin"
+            });
           });
         } else if (passwordcontroller.text == dataList[0]['password'] &&
             empIdController.text.trim() == dataList[0]['userId'] &&
             dataList[0]['companyName'] == 'TATA MOTOR') {
+          String roleCentre = dataList[0]['roleCentre'];
           List<dynamic> assignedDepots = querySnapshot.docs[0]["depots"];
+          List<dynamic> assignedCities = querySnapshot.docs[0]["cities"];
+          List<String> cities =
+              assignedCities.map((e) => e.toString()).toList();
+          authService.storeCityList(cities);
           List<String> depots =
               assignedDepots.map((e) => e.toString()).toList();
+
           authService.storeUserRole("admin");
+          authService.storeRoleCentre(roleCentre);
           await authService.storeDepoList(depots);
           authService.storeCompanyName(companyName);
           authService.storeEmployeeId(empIdController.text.trim()).then((_) {
-            Navigator.pushReplacementNamed(context, '/splitDashboard',
-                arguments: {
-                  'userId': empIdController.text.trim(),
-                  "role": "admin"
-                });
+            Navigator.pushReplacementNamed(context, '/main_screen', arguments: {
+              "roleCentre": roleCentre,
+              'userId': empIdController.text.trim(),
+              "role": "admin"
+            });
           });
         }
       }
@@ -326,8 +319,9 @@ class _LoginPageState extends State<LoginPage> {
     return userIsAdmin;
   }
 
-  Future<bool> verifyProjectManager(String userId) async {
+  Future<bool> verifyAndLoginProjectManager(String userId) async {
     bool userIsProjectManager = false;
+    String companyName = '';
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('AssignedRole')
         .where('userId', isEqualTo: userId)
@@ -347,6 +341,55 @@ class _LoginPageState extends State<LoginPage> {
           return false;
         },
       );
+    }
+
+    if (userIsProjectManager) {
+      QuerySnapshot pmData = await FirebaseFirestore.instance
+          .collection('AssignedRole')
+          .where("userId", isEqualTo: empIdController.text)
+          .get();
+
+      //Search project Manager On User Collection
+
+      if (pmData.docs.isNotEmpty) {
+        List<dynamic> userData = pmData.docs.map((e) => e.data()).toList();
+        companyName = userData[0]["companyName"];
+        if (passwordcontroller.text == userData[0]['password'] &&
+            empIdController.text == userData[0]['userId']) {
+          String roleCentre = userData[0]["roleCentre"];
+          List<dynamic> assignedDepots = pmData.docs[0]["depots"];
+          List<dynamic> assignedCities = pmData.docs[0]["cities"];
+          List<String> cities =
+              assignedCities.map((e) => e.toString()).toList();
+          authService.storeCityList(cities);
+          List<String> depots =
+              assignedDepots.map((e) => e.toString()).toList();
+
+          // print('ProjectManager here ${passWord}');
+          authService.storeUserRole("projectManager");
+          authService.storeDepoList(depots);
+          authService.storeEmployeeId(empIdController.text.trim());
+          authService.storeRoleCentre(roleCentre);
+          authService.storeCompanyName(companyName).then((_) {
+            Navigator.pushReplacementNamed(
+              context, '/main_screen', arguments: {
+              "roleCentre": roleCentre,
+              'userId': empIdController.text,
+              "role": "projectManager"
+            }
+            );
+          });
+        } else {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: blue,
+              content: const Text(
+                  'Password is not Correct or no role is assigned to the user'),
+            ),
+          );
+        }
+      }
     }
 
     return userIsProjectManager;

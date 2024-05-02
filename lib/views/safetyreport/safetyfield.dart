@@ -75,7 +75,7 @@ late TextEditingController tpController,
 
 class _SafetyFieldState extends State<SafetyField> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   void initializeController() {
     tpController = TextEditingController();
@@ -1307,8 +1307,11 @@ class _SafetyFieldState extends State<SafetyField> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
+  
 }

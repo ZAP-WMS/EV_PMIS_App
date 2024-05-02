@@ -21,8 +21,9 @@ class DetailedEng extends StatefulWidget {
   String? depoName;
   String? role;
   String? userId;
+  String? cityName;
   DetailedEng(
-      {super.key, this.userId, required this.depoName, required this.role});
+      {super.key, this.userId, required this.depoName, required this.role, this.cityName});
 
   @override
   State<DetailedEng> createState() => _DetailedEngtState();
@@ -31,7 +32,7 @@ class DetailedEng extends StatefulWidget {
 class _DetailedEngtState extends State<DetailedEng>
     with TickerProviderStateMixin {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   List<DetailedEngModel> DetailedProject = <DetailedEngModel>[];
   List<DetailedEngModel> DetailedProjectev = <DetailedEngModel>[];
@@ -1783,8 +1784,10 @@ class _DetailedEngtState extends State<DetailedEng>
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
-    isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+    assignedCities = await authService.getCityList();
+    isFieldEditable = authService.verifyAssignedDepot(
+      widget.cityName!,
+      assignedCities,
+    );
   }
 }

@@ -44,13 +44,16 @@ class ElectricalField extends StatefulWidget {
   String? fielClnName;
   int? titleIndex;
   String? role;
+  String cityName;
   ElectricalField(
       {super.key,
       required this.depoName,
       required this.title,
       this.role,
       required this.fielClnName,
-      required this.titleIndex});
+      required this.titleIndex,
+      required this.cityName,
+      });
 
   @override
   State<ElectricalField> createState() => _ElectricalFieldState();
@@ -58,7 +61,7 @@ class ElectricalField extends StatefulWidget {
 
 class _ElectricalFieldState extends State<ElectricalField> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   String pathToOpenFile = '';
   List<QualitychecklistModel> data = [];
@@ -1370,8 +1373,11 @@ class _ElectricalFieldState extends State<ElectricalField> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
+  
 }

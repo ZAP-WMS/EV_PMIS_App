@@ -158,11 +158,24 @@ class SplashScreenState extends State<SplashScreen>
     });
 
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    _fadeAnimation = Tween<double>(begin: 1.0, end: 0.1)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-    _controller.repeat(reverse: true);
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        seconds: 1,
+      ),
+    );
+    _fadeAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.1,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+    _controller.repeat(
+      reverse: true,
+    );
     // user = FirebaseAuth.instance.currentUser == null;
   }
 
@@ -197,31 +210,40 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   void _getCurrentUser() async {
+    String? role;
+    String? roleCentre;
     bool user = false;
 
     sharedPreferences = await SharedPreferences.getInstance();
     try {
+      
       if (sharedPreferences.getString('employeeId') != null) {
         userId = sharedPreferences.getString('employeeId');
         user = true;
+        role = await AuthService().getUserRole();
+        roleCentre = await AuthService().getRoleCentre();
       }
 
       if (!_isNotificationPage) {
-        String role = await AuthService().getUserRole();
         // Add a delay before navigating to the main page
         await Future.delayed(
-          const Duration(milliseconds: 1500),
+          const Duration(
+            milliseconds: 1500,
+          ),
           () {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              user ? '/splitDashboard' : '/login-page',
-              arguments: {"role": role, "userId": userId},
+              user ? '/main_screen' : '/login-page',
+              arguments: {
+                "role": role,
+                "userId": userId,
+                "roleCentre": roleCentre
+              },
               (route) => false,
             );
           },
         );
       } else {
-        // ignore: use_build_context_synchronously
         Navigator.pushNamedAndRemoveUntil(
           context,
           '/user-list',

@@ -1,147 +1,270 @@
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/authentication/login_register.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'package:toast/toast.dart';
 
-import 'package:flutter_svg/svg.dart';
+class PmisAndOAndMScreen extends StatefulWidget {
+  final String roleCentre;
+  final String role;
+  final String userId;
 
-class MainScreen extends StatelessWidget {
+  const PmisAndOAndMScreen(
+      {required this.role,
+      required this.userId,
+      required this.roleCentre,
+      super.key});
+
+  @override
+  State<PmisAndOAndMScreen> createState() => _PmisAndOAndMScreenState();
+}
+
+class _PmisAndOAndMScreenState extends State<PmisAndOAndMScreen> {
+  @override
+  void initState() {
+    ToastContext().init(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/split_screen/background_logo.jpeg'),
-            fit: BoxFit.fill,
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/split_screen/background_logo.jpeg',
+              ),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 210,
+              alignment: Alignment.center,
+                //  decoration: BoxDecoration(color: splitscreenColor),
+                child: Column(
+                  children: [
+                    TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0.0, end: 1.0),
+                      duration: const Duration(seconds: 3),
+                      builder: (context, value, child) {
+                        return Opacity(
+                          opacity: value,
+                          child: Container(
+                            height: 170,
+                            width: 170,
+                            child: Image.asset(
+                              'assets/app_logo.png',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Text(
+                      'EV Monitoring',
+                      style: splitscreenStyle,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              (widget.roleCentre == "PMIS" ||
+                      widget.role == "admin" ||
+                      widget.role == "projectManager")
+                  ? InkWell(
+                      onTap: () {
+                        if (widget.role == "projectManager" &&
+                            widget.roleCentre != "PMIS") {
+                          Toast.show(
+                            "PMIS is availabe in view mode only for this user",
+                            duration: Toast.lengthLong,
+                            backgroundColor: blue,
+                            gravity: Toast.bottom,
+                            textStyle: TextStyle(
+                              color: white,
+                            ),
+                          );
+                          Future.delayed(
+                            const Duration(
+                              seconds: 2,
+                            ),
+                            () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/splitDashboard',
+                                arguments: {
+                                  "roleCentre": "PMIS",
+                                  'userId': widget.userId,
+                                  "role": widget.role
+                                },
+                                (route) => false,
+                              );
+                            },
+                          );
+                        } else {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/splitDashboard',
+                            arguments: {
+                              "roleCentre": "PMIS",
+                              'userId': widget.userId,
+                              "role": widget.role
+                            },
+                            (route) => false,
+                          );
+                        }
+                      },
+                      child: TweenAnimationBuilder(
+                        tween: Tween<double>(begin: 0.0, end: 1.0),
+                        duration: const Duration(seconds: 2),
+                        builder: (context, value, child) {
+                          return Opacity(
+                            opacity: value,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset(
+                                'assets/split_screen/pmis_new.png',
+                                height: 160,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : InkWell(
+                      onTap: () async {
+                        Toast.show(
+                          "Please Select O&M and Proceed",
+                          duration: Toast.lengthLong,
+                          backgroundColor: blue,
+                          gravity: Toast.bottom,
+                          textStyle: TextStyle(
+                            color: white,
+                          ),
+                        );
+                      },
+                      child: TweenAnimationBuilder(
+                        tween: Tween<double>(begin: 0.0, end: 1.0),
+                        duration: const Duration(seconds: 1),
+                        builder: (context, value, child) {
+                          return Opacity(
+                            opacity: value,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset(
+                                'assets/split_screen/pmis_new.png',
+                                height: 160,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              (widget.roleCentre == "O&M" ||
+                      widget.role == "admin" ||
+                      widget.role == "projectManager")
+                  ? InkWell(
+                      onTap: () {
+                        if (widget.role == "projectManager" &&
+                            widget.roleCentre != "O&M") {
+                          Toast.show(
+                            "O&M is availabe in view mode only for this user",
+                            duration: Toast.lengthLong,
+                            backgroundColor: blue,
+                            gravity: Toast.bottom,
+                            textStyle: TextStyle(
+                              color: white,
+                            ),
+                          );
+                          Future.delayed(
+                            const Duration(
+                              seconds: 2,
+                            ),
+                            () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/cities-page',
+                                arguments: {
+                                  // "roleCentre": roleCentre,
+                                  'userId': widget.userId,
+                                  "role": widget.role,
+                                  "roleCentre": "O&M"
+                                },
+                                (route) => false,
+                              );
+                            },
+                          );
+                        } else {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/cities-page',
+                            arguments: {
+                              // "roleCentre": roleCentre,
+                              'userId': widget.userId,
+                              "role": widget.role,
+                              "roleCentre": "O&M"
+                            },
+                            (route) => false,
+                          );
+                        }
+                      },
+                      child: TweenAnimationBuilder(
+                        tween: Tween<double>(begin: 0.0, end: 1.0),
+                        duration: const Duration(seconds: 1),
+                        builder: (context, value, child) {
+                          return Opacity(
+                            opacity: value,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                'assets/split_screen/o&m_new.png',
+                                height: 130,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        Toast.show(
+                          "Please Select PMIS and Proceed",
+                          duration: Toast.lengthLong,
+                          backgroundColor: blue,
+                          gravity: Toast.bottom,
+                          textStyle: TextStyle(
+                            color: white,
+                          ),
+                        );
+                      },
+                      child: TweenAnimationBuilder(
+                        tween: Tween<double>(begin: 0.0, end: 1.0),
+                        duration: const Duration(seconds: 3),
+                        builder: (context, value, child) {
+                          return Opacity(
+                            opacity: value,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                'assets/split_screen/o&m_new.png',
+                                height: 130,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+            ],
           ),
         ),
-        child: Column(
-          children: [
-            Container(
-              height: 200,
-              alignment: Alignment.center,
-              //  decoration: BoxDecoration(color: splitscreenColor),
-              child: Column(
-                children: [
-                  Container(
-                      height: 150,
-                      width: 150,
-                      child: Image.asset(
-                        'assets/app_logo.png',
-                      )),
-                  Text('EV Monitoring', style: splitscreenStyle),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            Image.asset('assets/pmis.png'),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginRegister(),
-                    )),
-                child: Image.asset('assets/o&m.png')),
-          ],
-        ),
       ),
-    ));
+    );
   }
-}
-
-class HexagonWidget extends StatelessWidget {
-  final double size;
-  final Color color;
-  final Color borderColor;
-  final double borderWidth;
-  final String imagePath;
-
-  HexagonWidget(
-      {required this.size,
-      required this.color,
-      required this.borderColor,
-      required this.borderWidth,
-      required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-        size: Size(size, size),
-        painter: HexagonPainter(
-          color: color,
-          borderColor: borderColor,
-          borderWidth: borderWidth,
-        ),
-        child: Image.asset(
-          imagePath,
-          scale: 4.0,
-        ));
-  }
-}
-
-class HexagonPainter extends CustomPainter {
-  final Color color;
-  final Color borderColor;
-  final double borderWidth;
-
-  HexagonPainter({
-    required this.color,
-    required this.borderColor,
-    required this.borderWidth,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double sideLength = size.width / 2;
-    final double centerX = size.width / 2;
-    final double centerY = size.height / 2;
-    const double angle = math.pi / 3;
-
-    final path = Path();
-    path.moveTo(centerX + sideLength * math.cos(0.0),
-        centerY + sideLength * math.sin(0.0));
-
-    for (int i = 1; i <= 6; i++) {
-      path.lineTo(
-        centerX + sideLength * math.cos(angle * i),
-        centerY + sideLength * math.sin(angle * i),
-      );
-    }
-    path.close();
-
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    canvas.drawPath(path, paint);
-
-    final borderPaint = Paint()
-      ..color = borderColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth;
-
-    canvas.drawPath(path, borderPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF$hexColor";
-    }
-    return int.parse(hexColor, radix: 16);
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }

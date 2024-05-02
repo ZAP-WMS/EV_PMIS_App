@@ -150,7 +150,8 @@ class DetailedEngSource extends DataGridSource {
                     icon: Icon(
                       Icons.delete,
                       color: red,
-                    ),)
+                    ),
+                  )
                 : dataGridCell.columnName == 'button'
                     ? LayoutBuilder(builder:
                         (BuildContext context, BoxConstraints constraints) {
@@ -189,9 +190,11 @@ class DetailedEngSource extends DataGridSource {
                                         actions: [
                                           TextButton(
                                             style: const ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStatePropertyAll(
-                                                        Colors.blue)),
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                Colors.blue,
+                                              ),
+                                            ),
                                             child: const Text(
                                               'OK',
                                               style: TextStyle(
@@ -219,24 +222,6 @@ class DetailedEngSource extends DataGridSource {
                                     ),
                                   ));
                                 }
-
-                                // showDialog(
-                                //     context: context,
-                                //     builder: (context) => AlertDialog(
-                                //         content: SizedBox(
-                                //             height: 100,
-                                //             child: Column(
-                                //               mainAxisAlignment:
-                                //                   MainAxisAlignment.spaceBetween,
-                                //               children: [
-                                //                 Text(
-                                //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                                //                 Text(
-                                //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                                //                 Text(
-                                //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                                //               ],
-                                //             ))));
                               },
                               child: const Text(
                                 'Upload',
@@ -254,48 +239,31 @@ class DetailedEngSource extends DataGridSource {
                                       padding: EdgeInsets.all(0),
                                       backgroundColor: blue),
                                   onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => ViewAllPdf(
-                                              role: role,
-                                              title: 'DetailedEngRFC',
-                                              cityName: cityName,
-                                              depoName: depoName,
-                                              userId: userId,
-                                              date: row
-                                                  .getCells()[4]
-                                                  .value
-                                                  .toString(),
-                                              docId:
-                                                  '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
-                                            )
-                                        // ViewFile()
-                                        // UploadDocument(
-                                        //     title: 'DetailedEngRFC',
-                                        //     cityName: cityName,
-                                        //     depoName: depoName,
-                                        //     activity: '${row.getCells()[1].value.toString()}'),
-                                        ));
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (context) => AlertDialog(
-                                    //         content: SizedBox(
-                                    //             height: 100,
-                                    //             child: Column(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment.spaceBetween,
-                                    //               children: [
-                                    //                 Text(
-                                    //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                                    //                 Text(
-                                    //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                                    //                 Text(
-                                    //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                                    //               ],
-                                    //             ))));
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => ViewAllPdf(
+                                                role: role,
+                                                title: 'DetailedEngRFC',
+                                                cityName: cityName,
+                                                depoName: depoName,
+                                                userId: userId,
+                                                date: row
+                                                    .getCells()[4]
+                                                    .value
+                                                    .toString(),
+                                                docId: row
+                                                    .getCells()[4]
+                                                    .value
+                                                    .toString()
+                                                    .trim(),
+                                              )),
+                                    );
                                   },
                                   child: const Text(
                                     'View',
-                                    style: TextStyle(fontSize: 10),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ),
                                   )),
                             );
                           })
@@ -1002,7 +970,7 @@ class DetailedEngSource extends DataGridSource {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.allow(regExp),
         ],
-         decoration: const InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(
             5.0,
           ),
@@ -1028,6 +996,7 @@ class DetailedEngSource extends DataGridSource {
         },
         onSubmitted: (String value) {
           newCellValue = value;
+
           /// Call [CellSubmit] callback to fire the canSubmitCell and
           /// onCellSubmit to commit the new value in single place.
           submitCell();

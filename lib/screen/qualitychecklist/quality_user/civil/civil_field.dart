@@ -51,6 +51,7 @@ class CivilField extends StatefulWidget {
   bool isloading = true;
   String? currentDate;
   String? role;
+  String cityName;
 
   CivilField(
       {super.key,
@@ -58,7 +59,8 @@ class CivilField extends StatefulWidget {
       required this.title,
       required this.fieldclnName,
       required this.index,
-      this.role});
+      this.role,
+      required this.cityName});
 
   @override
   State<CivilField> createState() => _CivilFieldState();
@@ -66,7 +68,7 @@ class CivilField extends StatefulWidget {
 
 class _CivilFieldState extends State<CivilField> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   String pathToOpenFile = '';
   ProgressDialog? pr;
@@ -1324,8 +1326,10 @@ class _CivilFieldState extends State<CivilField> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
-    isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+    assignedCities = await authService.getCityList();
+    isFieldEditable = authService.verifyAssignedDepot(
+      widget.cityName!,
+      assignedCities,
+    );
   }
 }

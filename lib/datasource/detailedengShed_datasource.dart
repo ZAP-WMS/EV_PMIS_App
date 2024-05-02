@@ -126,7 +126,11 @@ class DetailedEngSourceShed extends DataGridSource {
                 width: 50,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: blue, padding: EdgeInsets.all(0)),
+                      backgroundColor: blue,
+                      padding: const EdgeInsets.all(
+                        0,
+                      ),
+                    ),
                     onPressed: () {
                       addRowAtIndex(
                           dataRowIndex + 1,
@@ -165,7 +169,7 @@ class DetailedEngSourceShed extends DataGridSource {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: blue,
-                                  padding: EdgeInsets.all(0)),
+                                  padding: const EdgeInsets.all(0)),
                               onPressed: () {
                                 String activitydata =
                                     row.getCells()[4].value.toString().trim();
@@ -226,24 +230,6 @@ class DetailedEngSourceShed extends DataGridSource {
                                                 .toString(),
                                           )));
                                 }
-
-                                // showDialog(
-                                //     context: context,
-                                //     builder: (context) => AlertDialog(
-                                //         content: SizedBox(
-                                //             height: 100,
-                                //             child: Column(
-                                //               mainAxisAlignment:
-                                //                   MainAxisAlignment.spaceBetween,
-                                //               children: [
-                                //                 Text(
-                                //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                                //                 Text(
-                                //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                                //                 Text(
-                                //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                                //               ],
-                                //             ))));
                               },
                               child: Text(
                                 'Upload',
@@ -259,44 +245,26 @@ class DetailedEngSourceShed extends DataGridSource {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: blue,
-                                      padding: EdgeInsets.all(0)),
+                                      padding: const EdgeInsets.all(0)),
                                   onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => ViewAllPdf(
-                                              role: role,
-                                              title: 'DetailedEngShed',
-                                              cityName: cityName,
-                                              depoName: depoName,
-                                              userId: userId,
-                                              date: row
-                                                  .getCells()[4]
-                                                  .value
-                                                  .toString(),
-                                              docId:
-                                                  '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}',
-                                            ) // UploadDocument(
-                                        //     title: 'DetailedEngRFC',
-                                        //     cityName: cityName,
-                                        //     depoName: depoName,
-                                        //     activity: '${row.getCells()[1].value.toString()}'),
-                                        ));
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (context) => AlertDialog(
-                                    //         content: SizedBox(
-                                    //             height: 100,
-                                    //             child: Column(
-                                    //               mainAxisAlignment:
-                                    //                   MainAxisAlignment.spaceBetween,
-                                    //               children: [
-                                    //                 Text(
-                                    //                     'Employee ID: ${row.getCells()[0].value.toString()}'),
-                                    //                 Text(
-                                    //                     'Employee Name: ${row.getCells()[1].value.toString()}'),
-                                    //                 Text(
-                                    //                     'Employee Designation: ${row.getCells()[2].value.toString()}'),
-                                    //               ],
-                                    //             ))));
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => ViewAllPdf(
+                                                  role: role,
+                                                  title: 'DetailedEngShed',
+                                                  cityName: cityName,
+                                                  depoName: depoName,
+                                                  userId: userId,
+                                                  date: row
+                                                      .getCells()[4]
+                                                      .value
+                                                      .toString(),
+                                                  docId: row
+                                                      .getCells()[4]
+                                                      .value
+                                                      .toString()
+                                                      .trim(),
+                                                )));
                                   },
                                   child: Text(
                                     'View',

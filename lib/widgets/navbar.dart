@@ -8,8 +8,8 @@ import '../views/authentication/login_register.dart';
 import '../views/citiespage/cities_home.dart';
 
 class NavbarDrawer extends StatefulWidget {
-  String? role;
-  NavbarDrawer({
+  final String? role;
+  const NavbarDrawer({
     required this.role,
     super.key,
   });
@@ -130,7 +130,7 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
   Future<void> getUserId() async {
     await AuthService().getCurrentUserId().then((value) {
       userId = value;
-      print('UserId - $value');
+      print("UserId - $userId");
       setState(() {});
     });
   }
@@ -160,8 +160,8 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                     children: [
                       Expanded(
                           child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
+                        onTap: () async {
+                          Navigator.pop(context);
                         },
                         child: Container(
                           height: 40,
@@ -184,19 +184,15 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
                           child: InkWell(
                         onTap: () async {
                           a = true;
-                          SharedPreferences preferences =
-                              await SharedPreferences.getInstance();
-                          await preferences.remove('cities');
-                          await preferences.remove('role');
-                          await preferences.remove('employeeId');
-
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginRegister(),
-                              ),
-                              (Route<dynamic> route) => false);
+                          removeStoreData().whenComplete(() {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginRegister(),
+                                ),
+                                (Route<dynamic> route) => false,
+                                );
+                          });
                         },
                         child: Container(
                           height: 40,
@@ -218,6 +214,17 @@ class _NavbarDrawerState extends State<NavbarDrawer> {
               ),
             ));
     return a;
+  }
+
+  Future<void> removeStoreData() async {
+    final shared = await SharedPreferences.getInstance();
+    shared.remove("role");
+    shared.remove("employeeId");
+    shared.remove("roleCentre");
+    shared.remove("cities");
+    shared.remove("depotList");
+    shared.remove("roleCentre");
+    shared.remove("cityList");
   }
 
   Future<void> verifyProjectManager() async {

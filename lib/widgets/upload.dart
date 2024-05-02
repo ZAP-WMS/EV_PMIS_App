@@ -46,7 +46,7 @@ class UploadDocument extends StatefulWidget {
 class _UploadDocumentState extends State<UploadDocument> {
   FilePickerResult? result;
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   bool isLoading = true;
 
@@ -233,17 +233,26 @@ class _UploadDocumentState extends State<UploadDocument> {
                                           String imageName =
                                               imagePath.split('/').last;
 
-                                          String refname = (widget.title ==
-                                                  'QualityChecklist'
-                                              ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/$imageName'
-                                              : widget.title == 'ClosureReport'
-                                                  ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName'
-                                                  : widget.title == 'KeyEvents'
-                                                      ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/$imageName'
+                                          String refname = ((widget.title ==
+                                                      "DetailedEngRFC" ||
+                                                  widget.title ==
+                                                      "DetailedEngShed" ||
+                                                  widget.title ==
+                                                      "DetailedEngEV")
+                                              ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/$imageName'
+                                              : widget.title ==
+                                                      'QualityChecklist'
+                                                  ? '${widget.title}/${widget.subtitle}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/${widget.date}/${widget.srNo}/$imageName'
+                                                  : widget.title ==
+                                                          'ClosureReport'
+                                                      ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName'
                                                       : widget.title ==
-                                                              'Depot Insights'
-                                                          ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.fldrName}/${imageName}'
-                                                          : '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/$imageName');
+                                                              'KeyEvents'
+                                                          ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.fldrName!}/$imageName'
+                                                          : widget.title ==
+                                                                  'Depot Insights'
+                                                              ? '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.fldrName}/$imageName'
+                                                              : '${widget.title}/${widget.cityName}/${widget.depoName}/${widget.userId}/${widget.date}/${widget.fldrName}/$imageName');
 
                                           // String? fileName = result!.files.first.name;
 
@@ -340,10 +349,10 @@ class _UploadDocumentState extends State<UploadDocument> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
-    print("assignedDepots : $assignedDepots");
-    isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
-    print("isFieldEditable : $isFieldEditable");
+    assignedCities = await authService.getCityList();
+    isFieldEditable = authService.verifyAssignedDepot(
+      widget.cityName!,
+      assignedCities,
+    );
   }
 }

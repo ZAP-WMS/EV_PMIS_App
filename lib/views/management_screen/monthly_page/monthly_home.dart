@@ -33,6 +33,7 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
   int _selectedIndex = 0;
   dynamic userId;
   bool _isloading = true;
+
   @override
   void initState() {
     getUserId().whenComplete(() {
@@ -165,31 +166,36 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
                       bottomLeftRadius: 8,
                       bottomRightRadius: 8,
                       color: white,
-                      paintingStyle: PaintingStyle.fill),
+                      paintingStyle: PaintingStyle.fill,
+                      ),
                   tabs: const [
-                    Tab(text: 'Charger Reading Format'),
-                    Tab(text: 'Charger Filter/DC Connector Cleaning Format'),
+                        Tab(
+                          text: 'Charger Reading Format',
+                        ),
+                      Tab(
+                        text: 'Charger Filter/DC Connector Cleaning Format',
+                    ),
                   ],
                   onTap: (value) {
-                    print('indexxx$value');
-                    setState(() {
-                      _selectedIndex = value;
-                    });
+                    _selectedIndex = value;
                   },
                 ),
-              )),
+              ),
+            ),
           body: TabBarView(
             children: [
               MonthlyManagementPage(
                   cityName: widget.cityName,
                   depoName: widget.depoName,
                   tabIndex: _selectedIndex,
-                  tabletitle: 'Charger Reading Format'),
+                  tabletitle: 'Charger Reading Format',
+                  ),
               MonthlyManagementPage(
                   cityName: widget.cityName,
                   depoName: widget.depoName,
                   tabIndex: _selectedIndex,
-                  tabletitle: 'Charger Filter'),
+                  tabletitle: 'Charger Filter',
+                  ),
             ],
           ),
         ));

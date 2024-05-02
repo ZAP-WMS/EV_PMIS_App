@@ -21,8 +21,9 @@ class ClosureField extends StatefulWidget {
   String? depoName;
   String userId;
   String? role;
+  String? cityName;
   ClosureField(
-      {super.key, this.role, required this.depoName, required this.userId});
+      {super.key, this.role, required this.depoName, required this.userId,this.cityName});
 
   @override
   State<ClosureField> createState() => _ClosureFieldState();
@@ -30,7 +31,7 @@ class ClosureField extends StatefulWidget {
 
 class _ClosureFieldState extends State<ClosureField> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
 
   Stream? _stream;
@@ -75,7 +76,9 @@ class _ClosureFieldState extends State<ClosureField> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavbarDrawer(role: widget.role,),
+        drawer: NavbarDrawer(
+          role: widget.role,
+        ),
         appBar: CustomAppBar(
           depoName: '${widget.depoName}',
           title: 'Closure Report',
@@ -413,9 +416,8 @@ class _ClosureFieldState extends State<ClosureField> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(widget.cityName!, assignedCities);
   }
 }
-

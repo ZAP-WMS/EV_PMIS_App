@@ -22,8 +22,9 @@ class MaterialProcurement extends StatefulWidget {
   String? depoName;
   String? userId;
   String? role;
+  String? cityName;
   MaterialProcurement(
-      {super.key, required this.depoName, this.userId, this.role});
+      {super.key, required this.depoName, this.userId, this.role,this.cityName});
 
   @override
   State<MaterialProcurement> createState() => _MaterialProcurementState();
@@ -31,7 +32,7 @@ class MaterialProcurement extends StatefulWidget {
 
 class _MaterialProcurementState extends State<MaterialProcurement> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   List<MaterialProcurementModel> _materialprocurement = [];
   List<MaterialProcurementModel> data = [];
@@ -52,7 +53,6 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
         _materialprocurement, context, cityName, widget.depoName);
     _dataGridController = DataGridController();
 
-    // _materialprocurement = getmonthlyReport();
     getUserId().whenComplete(() {
       // getTableData().whenComplete(() {
       _stream = FirebaseFirestore.instance
@@ -767,8 +767,11 @@ class _MaterialProcurementState extends State<MaterialProcurement> {
   // }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
+  
 }

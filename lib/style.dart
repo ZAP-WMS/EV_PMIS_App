@@ -10,7 +10,7 @@ Color red = Colors.red;
 Color green = const Color.fromARGB(255, 88, 221, 128);
 Color yellow = Colors.yellow;
 Color tabbarColor = Colors.grey;
-Color splitscreenColor = Color(0xffeddacf);
+Color splitscreenColor = const Color(0xffeddacf);
 
 TextStyle appTextStyle = const TextStyle(fontSize: 12, color: Colors.black);
 
@@ -35,7 +35,7 @@ TextStyle bodytext = GoogleFonts.ibmPlexSans(
     fontSize: 12, fontWeight: FontWeight.w300, color: black);
 
 TextStyle splitscreenStyle = GoogleFonts.ibmPlexSans(
-    fontSize: 30, fontWeight: FontWeight.w600, color: black);
+    fontSize: 30, fontWeight: FontWeight.w600, color: black, letterSpacing: 1);
 
 TextStyle logoheadline = GoogleFonts.ibmPlexSans(
     fontSize: 35, fontWeight: FontWeight.w600, color: black);
@@ -50,13 +50,15 @@ TextStyle button = GoogleFonts.ibmPlexSans(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     letterSpacing: 1.25,
-    color: white);
+    color: white,
+    );
 
 TextStyle subtitleWhite = GoogleFonts.ibmPlexSans(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.15,
-    color: blue);
+    color: blue,
+    );
 
 TextStyle tableheader =
     const TextStyle(fontWeight: FontWeight.bold, fontSize: 12);

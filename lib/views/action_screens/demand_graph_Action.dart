@@ -1,4 +1,3 @@
-
 import 'package:ev_pmis_app/views/energy_management/energy_management.dart';
 import 'package:ev_pmis_app/views/energy_management/energy_management_admin.dart.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +7,14 @@ class DemandActionScreen extends StatefulWidget {
   String? cityName;
   String? depoName;
   String userId;
+  String roleCentre;
 
   DemandActionScreen(
-      {super.key, this.cityName, required this.role, this.depoName,
+      {super.key,
+      required this.roleCentre,
+      this.cityName,
+      required this.role,
+      this.depoName,
       required this.userId});
 
   @override
@@ -32,7 +36,8 @@ class _DemandActionScreenState extends State<DemandActionScreen> {
   }
 
   Widget selectWidget() {
-    switch (widget.role) {
+    if (widget.roleCentre == "PMIS") {
+          switch (widget.role) {
       case 'user':
         selectedUi = EnergyManagement(
           role: widget.role,
@@ -54,10 +59,41 @@ class _DemandActionScreenState extends State<DemandActionScreen> {
         selectedUi = EnergyManagementAdmin(
           role: widget.role,
           cityName: widget.cityName,
-          depoName: widget.depoName,userId: widget.userId,
+          depoName: widget.depoName,
+          userId: widget.userId,
         );
         break;
     }
+    } else if(widget.roleCentre == "O&M"){
+          switch (widget.role) {
+      case 'user':
+        selectedUi = EnergyManagement(
+          role: widget.role,
+          depoName: widget.depoName,
+          cityName: widget.cityName,
+          userId: widget.userId,
+        );
+        break;
+      case 'admin':
+        selectedUi = EnergyManagementAdmin(
+          userId: widget.userId,
+          role: widget.role,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+        );
+        break;
+
+      case 'projectManager':
+        selectedUi = EnergyManagementAdmin(
+          role: widget.role,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          userId: widget.userId,
+        );
+        break;
+    }
+    }
+
 
     return selectedUi;
   }

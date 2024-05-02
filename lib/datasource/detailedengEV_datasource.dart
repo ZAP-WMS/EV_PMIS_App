@@ -279,8 +279,11 @@ class DetailedEngSourceEV extends DataGridSource {
                                                 .getCells()[4]
                                                 .value
                                                 .toString(),
-                                            docId:
-                                                '${row.getCells()[4].value.toString().trim()}/${row.getCells()[0].value.toString().trim()}') // UploadDocument(
+                                            docId: row
+                                                .getCells()[4]
+                                                .value
+                                                .toString()
+                                                .trim()) // UploadDocument(
                                         //     title: 'DetailedEngRFC',
                                         //     cityName: cityName,
                                         //     depoName: depoName,

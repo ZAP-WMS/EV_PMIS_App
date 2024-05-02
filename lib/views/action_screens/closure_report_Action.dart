@@ -7,13 +7,15 @@ class ClosureReportAction extends StatefulWidget {
   String? cityName;
   String? depoName;
   String userId;
+  String roleCentre;
 
   ClosureReportAction(
       {super.key,
       this.cityName,
       this.role,
       this.depoName,
-      required this.userId});
+      required this.userId,
+      required this.roleCentre});
 
   @override
   State<ClosureReportAction> createState() => _ClosureReportActionState();
@@ -34,11 +36,14 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
   }
 
   Widget selectWidget() {
-    switch (widget.role) {
+    if(widget.roleCentre == "PMIS"){
+          switch (widget.role) {
       case 'user':
         selectedUi = ClosureField(
+          cityName: widget.cityName,
           depoName: widget.depoName,
-          userId: widget.userId,role: widget.role,
+          userId: widget.userId,
+          role: widget.role,
         );
         break;
 
@@ -59,6 +64,37 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
             role: widget.role!);
         break;
     }
+    }
+    else if(widget.roleCentre == "O&M" ){
+          switch (widget.role) {
+      case 'user':
+        selectedUi = ClosureField(
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          userId: widget.userId,
+          role: widget.role,
+        );
+        break;
+
+      case 'admin':
+        selectedUi = ClosureSummaryTable(
+          userId: widget.userId,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          role: widget.role!,
+        );
+        break;
+
+      case "projectManager":
+        selectedUi = ClosureSummaryTable(
+            userId: widget.userId,
+            cityName: widget.cityName,
+            depoName: widget.depoName,
+            role: widget.role!);
+        break;
+    }
+    }
+
 
     return selectedUi;
   }

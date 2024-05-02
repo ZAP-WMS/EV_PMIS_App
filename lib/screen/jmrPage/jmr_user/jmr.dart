@@ -24,7 +24,7 @@ class JmrUserPage extends StatefulWidget {
 
 class _JmrUserPageState extends State<JmrUserPage> {
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
   String fileName = '';
   List currentTabList = [];
@@ -606,8 +606,10 @@ class _JmrUserPageState extends State<JmrUserPage> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
 }

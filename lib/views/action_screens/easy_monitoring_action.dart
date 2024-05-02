@@ -1,15 +1,16 @@
 import 'package:ev_pmis_app/screen/planning/planning_admin/planning_summary.dart';
 import 'package:ev_pmis_app/views/keyevents/key_events2.dart';
 import 'package:flutter/material.dart';
-import '../planning/project_planning.dart';
 
 class EasyMonitoringAction extends StatefulWidget {
   String? role;
   String? cityName;
   String? depoName;
   String? userId;
+  String roleCentre;
 
-  EasyMonitoringAction({super.key, this.cityName, this.role, this.depoName});
+  EasyMonitoringAction({super.key,
+  required this.roleCentre, this.cityName, this.role, this.depoName});
 
   @override
   State<EasyMonitoringAction> createState() => _EasyMonitoringActionState();
@@ -30,10 +31,12 @@ class _EasyMonitoringActionState extends State<EasyMonitoringAction> {
   }
 
   Widget selectWidget() {
+    if(widget.roleCentre == "PMIS"){
     switch (widget.role) {
       case 'user':
         selectedUi = KeyEvents2(
           role: widget.role!,
+          cityName: widget.cityName,
           depoName: widget.depoName,
           userId: widget.userId,
         );
@@ -51,6 +54,32 @@ class _EasyMonitoringActionState extends State<EasyMonitoringAction> {
         );
         break;
     }
+    }
+    else if(widget.roleCentre =="O&M"){
+          switch (widget.role) {
+      case 'user':
+        selectedUi = KeyEvents2(
+          role: widget.role!,
+          cityName: widget.cityName,
+          depoName: widget.depoName,
+          userId: widget.userId,
+        );
+        break;
+      case 'admin':
+        selectedUi = PlanningTable(
+          role: widget.role!,
+          depoName: widget.depoName,
+        );
+        break;
+      case 'projectManager':
+        selectedUi = PlanningTable(
+          role: widget.role!,
+          depoName: widget.depoName,
+        );
+        break;
+    }
+    }
+
 
     return selectedUi;
   }

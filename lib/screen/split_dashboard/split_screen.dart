@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SplitScreen extends StatelessWidget {
-  String? role;
-  String? userId;
-  SplitScreen({super.key, required this.role, this.userId});
+  final String? role;
+  final String? userId;
+  const SplitScreen({super.key, required this.role, this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +94,8 @@ class SplitScreen extends StatelessWidget {
                             'EV Bus Project Analysis Dashboard',
                             style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.bold),
-                          )),
+                          ),
+                          ),
                     )
                   ],
                 ),

@@ -7,9 +7,11 @@ class EVDashboardAction extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
+  String roleCentre;
 
   EVDashboardAction(
-      {super.key, this.cityName, this.role, this.userId, this.depoName});
+      {super.key,
+      required this.roleCentre, this.cityName, this.role, this.userId, this.depoName});
 
   @override
   State<EVDashboardAction> createState() => _EVDashboardActionState();
@@ -31,7 +33,8 @@ class _EVDashboardActionState extends State<EVDashboardAction> {
   }
 
   Widget selectWidget() {
-    switch (widget.role) {
+    if(widget.roleCentre == "PMIS"){
+          switch (widget.role) {
       case 'user':
         selectedUi = EVDashboardUser(
           userId: widget.userId,
@@ -48,6 +51,26 @@ class _EVDashboardActionState extends State<EVDashboardAction> {
         );
         break;
     }
+    } else if(widget.roleCentre == "O&M"){
+          switch (widget.role) {
+      case 'user':
+        selectedUi = EVDashboardUser(
+          userId: widget.userId,
+        );
+        break;
+      case 'admin':
+        selectedUi = EVDashboardAdmin(
+          role: widget.role!,
+        );
+        break;
+      case 'projectManager':
+        selectedUi = EVDashboardAdmin(
+          role: widget.role!,
+        );
+        break;
+    }
+    }
+
     return selectedUi;
   }
 }

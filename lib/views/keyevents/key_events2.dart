@@ -263,7 +263,7 @@ class _KeyEvents2State extends State<KeyEvents2> {
   double totalperc = 0.0;
   KeyProvider? _keyProvider;
   final AuthService authService = AuthService();
-  List<String> assignedDepots = [];
+  List<String> assignedCities = [];
   bool isFieldEditable = false;
 
   @override
@@ -2953,9 +2953,11 @@ class _KeyEvents2State extends State<KeyEvents2> {
   }
 
   Future getAssignedDepots() async {
-    assignedDepots = await authService.getDepotList();
+    assignedCities = await authService.getCityList();
     isFieldEditable =
-        authService.verifyAssignedDepot(widget.depoName!, assignedDepots);
+        authService.verifyAssignedDepot(
+          widget.cityName!, assignedCities,
+        );
   }
 }
 
