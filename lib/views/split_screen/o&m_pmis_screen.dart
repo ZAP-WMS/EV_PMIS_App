@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/authentication/login_register.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -38,138 +39,14 @@ class MainScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.05,
             ),
             Image.asset('assets/pmis.png'),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            Image.asset('assets/o&m.png'),
-
-            // Container(
-            //   margin: const EdgeInsets.only(
-            //     top: 50,
-            //     bottom: 20,
-            //   ),
-            //   height: MediaQuery.of(context).size.height * 0.2,
-            //   width: MediaQuery.of(context).size.width,
-            //   child: Row(
-            //     children: [
-            //       SizedBox(
-            //         height: 200,
-            //         width: MediaQuery.of(context).size.width,
-            //         child: InkWell(
-            //           overlayColor:
-            //               const MaterialStatePropertyAll(Colors.transparent),
-            //           onTap: () {
-            //             Navigator.push(
-            //                 context,
-            //                 MaterialPageRoute(
-            //                   builder: (context) => LoginRegister(),
-            //                 ));
-            //           },
-            //           child: Stack(
-            //             children: [
-            //               Positioned(
-            //                 top: 10,
-            //                 child: Container(
-            //                     margin: const EdgeInsets.only(top: 50),
-            //                     decoration: BoxDecoration(
-            //                         color: HexColor("#2651A1"),
-            //                         borderRadius: BorderRadius.circular(10)),
-            //                     alignment: Alignment.center,
-            //                     height: 100,
-            //                     width: MediaQuery.of(context).size.width * 0.55,
-            //                     child: const Align(
-            //                       alignment: Alignment.centerLeft,
-            //                       child: Padding(
-            //                         padding: EdgeInsets.only(left: 20),
-            //                         child: Text(
-            //                           'P M I S',
-            //                           textAlign: TextAlign.start,
-            //                           style: TextStyle(
-            //                               color: Colors.white,
-            //                               fontSize: 25,
-            //                               letterSpacing: 0.0,
-            //                               fontWeight: FontWeight.bold),
-            //                         ),
-            //                       ),
-            //                     )),
-            //               ),
-            //               Positioned(
-            //                 right: MediaQuery.of(context).size.width * 0.37,
-            //                 child: HexagonWidget(
-            //                   size: 20.0,
-            //                   color: Colors.white,
-            //                   borderColor: HexColor("#1C5177"),
-            //                   borderWidth: 10.0,
-            //                   imagePath: 'assets/image1.png',
-            //                 ),
-            //               )
-            //             ],
-            //           ),
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // ),
-
-            // //Second Lable with Icon
-
-            // Container(
-            //   height: MediaQuery.of(context).size.height * 0.25,
-            //   width: MediaQuery.of(context).size.width,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.end,
-            //     children: [
-            //       InkWell(
-            //         overlayColor:
-            //             const MaterialStatePropertyAll(Colors.transparent),
-            //         onTap: () {},
-            //         child: SizedBox(
-            //           height: 200,
-            //           width: MediaQuery.of(context).size.width,
-            //           child: Stack(
-            //             alignment: Alignment.centerRight,
-            //             children: [
-            //               Positioned(
-            //                 top: 100,
-            //                 child: Container(
-            //                   decoration: BoxDecoration(
-            //                       color: HexColor("#5DAF17"),
-            //                       borderRadius: BorderRadius.circular(10)),
-            //                   margin: const EdgeInsets.only(right: 0),
-            //                   alignment: Alignment.center,
-            //                   height: 100,
-            //                   width: MediaQuery.of(context).size.width * 0.55,
-            //                   child: const Padding(
-            //                     padding: EdgeInsets.only(left: 50, top: 10),
-            //                     child: Text(
-            //                       'O & M',
-            //                       textAlign: TextAlign.start,
-            //                       style: TextStyle(
-            //                           color: Colors.white,
-            //                           fontSize: 25,
-            //                           letterSpacing: 0.0,
-            //                           fontWeight: FontWeight.bold),
-            //                     ),
-            //                   ),
-            //                 ),
-            //               ),
-            //               Positioned(
-            //                 left: MediaQuery.of(context).size.width * 0.37,
-            //                 child: HexagonWidget(
-            //                   size: 100.0,
-            //                   color: Colors.white,
-            //                   borderColor: HexColor("#448F1C"),
-            //                   borderWidth: 1.0,
-            //                   imagePath: 'assets/image2.png',
-            //                 ),
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginRegister(),
+                    )),
+                child: Image.asset('assets/o&m.png')),
           ],
         ),
       ),
