@@ -31,7 +31,6 @@ class _EasyMonitoringActionState extends State<EasyMonitoringAction> {
   }
 
   Widget selectWidget() {
-    if(widget.roleCentre == "PMIS"){
     switch (widget.role) {
       case 'user':
         selectedUi = KeyEvents2(
@@ -54,31 +53,7 @@ class _EasyMonitoringActionState extends State<EasyMonitoringAction> {
         );
         break;
     }
-    }
-    else if(widget.roleCentre =="O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = KeyEvents2(
-          role: widget.role!,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          userId: widget.userId,
-        );
-        break;
-      case 'admin':
-        selectedUi = PlanningTable(
-          role: widget.role!,
-          depoName: widget.depoName,
-        );
-        break;
-      case 'projectManager':
-        selectedUi = PlanningTable(
-          role: widget.role!,
-          depoName: widget.depoName,
-        );
-        break;
-    }
-    }
+    
 
 
     return selectedUi;

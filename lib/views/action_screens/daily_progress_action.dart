@@ -7,11 +7,6 @@ import '../dailyreport/daily_project.dart';
 class DailyProjectAction extends StatefulWidget {
   final String role;
   final String? cityName;
-
-
-
-
-  
   final String? depoName;
   final String userId;
   final String roleCentre;
@@ -43,7 +38,6 @@ class _DailyProjectActionState extends State<DailyProjectAction> {
   }
 
   Widget selectWidget() {
-    if (widget.roleCentre == "PMIS") {
       switch (widget.role) {
         
         case 'user':
@@ -73,36 +67,6 @@ class _DailyProjectActionState extends State<DailyProjectAction> {
           );
           break;
       }
-    } else if (widget.roleCentre == "O&M") {
-      switch (widget.role) {
-        case 'user':
-          selectedUi = DailyManagementHomePage(
-            cityName: widget.cityName,
-            userId: widget.userId,
-            role: widget.role,
-            depoName: widget.depoName,
-          );
-          break;
-
-        case 'admin':
-          selectedUi = DailyProjectAdmin(
-            role: widget.role,
-            userId: widget.userId,
-            cityName: widget.cityName,
-            depoName: widget.depoName,
-          );
-          break;
-
-        case 'projectManager':
-          selectedUi = DailyProjectAdmin(
-            role: widget.role,
-            userId: widget.userId,
-            cityName: widget.cityName,
-            depoName: widget.depoName,
-          );
-          break;
-      }
-    }
 
     return selectedUi;
   }

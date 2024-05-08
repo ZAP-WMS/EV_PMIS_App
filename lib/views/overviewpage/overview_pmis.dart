@@ -7,23 +7,25 @@ import '../../provider/cities_provider.dart';
 import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
 
-class OverviewPage extends StatefulWidget {
+class OverviewPmis extends StatefulWidget {
   final String? depoName;
   final String? role;
   final String? userId;
   final String? roleCentre;
-  const OverviewPage(
+  final String? cityName;
+  const OverviewPmis(
       {super.key,
       required this.depoName,
       this.role,
       this.userId,
-      this.roleCentre});
+      this.roleCentre,
+      this.cityName});
 
   @override
-  State<OverviewPage> createState() => _OverviewPageState();
+  State<OverviewPmis> createState() => _OverviewPmisState();
 }
 
-class _OverviewPageState extends State<OverviewPage> {
+class _OverviewPmisState extends State<OverviewPmis> {
   String? cityName;
 
   String roles = '';

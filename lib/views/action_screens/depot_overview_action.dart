@@ -35,7 +35,6 @@ class _DepotOverviewActionState extends State<DepotOverviewAction> {
   }
 
   Widget selectWidget() {
-    if(widget.roleCentre == "PMIS"){
           switch (widget.role) {
       case 'user':
         selectedUi = DepotOverview(
@@ -61,35 +60,6 @@ class _DepotOverviewActionState extends State<DepotOverviewAction> {
           cityName: widget.cityName,
         );
         break;
-    }
-    }
-    else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = DepotOverview(
-          depoName: widget.depoName,
-          userId: widget.userId,
-          role: widget.role,
-          cityName: widget.cityName,
-        );
-        break;
-      case 'admin':
-        selectedUi = DepotOverview(
-          role: widget.role,
-          userId: widget.userId,
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-        );
-        break;
-      case 'projectManager':
-        selectedUi = DepotOverview(
-          role: widget.role,
-          userId: widget.userId,
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-        );
-        break;
-    }
     }
 
 

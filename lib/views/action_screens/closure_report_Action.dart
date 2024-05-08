@@ -36,7 +36,6 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
   }
 
   Widget selectWidget() {
-    if(widget.roleCentre == "PMIS"){
           switch (widget.role) {
       case 'user':
         selectedUi = ClosureField(
@@ -64,36 +63,7 @@ class _ClosureReportActionState extends State<ClosureReportAction> {
             role: widget.role!);
         break;
     }
-    }
-    else if(widget.roleCentre == "O&M" ){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = ClosureField(
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          userId: widget.userId,
-          role: widget.role,
-        );
-        break;
-
-      case 'admin':
-        selectedUi = ClosureSummaryTable(
-          userId: widget.userId,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          role: widget.role!,
-        );
-        break;
-
-      case "projectManager":
-        selectedUi = ClosureSummaryTable(
-            userId: widget.userId,
-            cityName: widget.cityName,
-            depoName: widget.depoName,
-            role: widget.role!);
-        break;
-    }
-    }
+    
 
 
     return selectedUi;

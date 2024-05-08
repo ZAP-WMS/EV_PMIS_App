@@ -33,7 +33,6 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
   }
 
   Widget selectWidget() {
-     if(widget.roleCentre == "PMIS"){
           switch (widget.role) {
       
       case 'user':
@@ -61,37 +60,7 @@ class _MonthlyReportActionState extends State<MonthlyReportAction> {
         );
         break;
     }
-    }
-    else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      
-      case 'user':
-        selectedUi = MonthlyManagementHomePage(
-          depoName: widget.depoName,
-        role: widget.role,cityName: widget.cityName,
-        userId: widget.userId,);
-        break;
-
-      case 'admin':
-        selectedUi = MonthlySummary(
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-
-          role: widget.role!,
-          userId: widget.userId,
-        );
-        break;
-
-      case 'projectManager':
-        selectedUi = MonthlySummary(
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          role: widget.role!,
-          userId: widget.userId,
-        );
-        break;
-    }
-    }
+    
 
 
     return selectedUi;

@@ -33,7 +33,6 @@ class _EVDashboardActionState extends State<EVDashboardAction> {
   }
 
   Widget selectWidget() {
-    if(widget.roleCentre == "PMIS"){
           switch (widget.role) {
       case 'user':
         selectedUi = EVDashboardUser(
@@ -50,25 +49,6 @@ class _EVDashboardActionState extends State<EVDashboardAction> {
           role: widget.role!,
         );
         break;
-    }
-    } else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = EVDashboardUser(
-          userId: widget.userId,
-        );
-        break;
-      case 'admin':
-        selectedUi = EVDashboardAdmin(
-          role: widget.role!,
-        );
-        break;
-      case 'projectManager':
-        selectedUi = EVDashboardAdmin(
-          role: widget.role!,
-        );
-        break;
-    }
     }
 
     return selectedUi;

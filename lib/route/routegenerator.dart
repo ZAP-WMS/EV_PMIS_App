@@ -7,6 +7,7 @@ import 'package:ev_pmis_app/views/action_screens/detail_eng_action.dart';
 import 'package:ev_pmis_app/views/action_screens/ev_dashboard_action.dart';
 import 'package:ev_pmis_app/views/action_screens/material_procurement_action.dart';
 import 'package:ev_pmis_app/views/action_screens/monthly_report_action.dart';
+import 'package:ev_pmis_app/views/action_screens/overview_action.dart';
 import 'package:ev_pmis_app/views/action_screens/project_planning_action.dart';
 import 'package:ev_pmis_app/views/action_screens/quality_checklist_action.dart';
 import 'package:ev_pmis_app/views/action_screens/safety_checklist_action.dart';
@@ -29,7 +30,6 @@ import '../views/citiespage/cities_home.dart';
 import '../views/dailyreport/daily_management_home.dart';
 import '../views/dailyreport/notification_userlist.dart';
 import '../views/management_screen/monthly_page/monthly_home.dart';
-import '../views/overviewpage/overview.dart';
 import '../views/split_screen/o&m_pmis_screen.dart';
 
 class RouteGenerator {
@@ -76,7 +76,7 @@ class RouteGenerator {
         case '/overview page':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
-          return OverviewPage(
+          return OverviewAction(
             depoName: argument['depoName'],
             role: argument['role'],
             userId: argument['userId'],

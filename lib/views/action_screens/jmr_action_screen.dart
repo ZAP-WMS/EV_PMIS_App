@@ -32,7 +32,6 @@ class _JmrActionScreenState extends State<JmrActionScreen> {
   }
 
   Widget selectWidget() {
-    if(widget.roleCentre == "PMIS"){
     switch (widget.role) {
       case 'user':
         selectedUi = JmrUserPage(
@@ -60,36 +59,6 @@ class _JmrActionScreenState extends State<JmrActionScreen> {
           cityName: widget.cityName,
         );
         break;
-    }
-    } else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = JmrUserPage(
-          userId: widget.userId,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          role: widget.role,
-        );
-        break;
-
-      case 'admin':
-        selectedUi = Jmr(
-          userId: widget.userId,
-          role: widget.role!,
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-        );
-        break;
-
-      case 'projectManager':
-        selectedUi = Jmr(
-          userId: widget.userId,
-          role: widget.role!,
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-        );
-        break;
-    }
     }
 
 

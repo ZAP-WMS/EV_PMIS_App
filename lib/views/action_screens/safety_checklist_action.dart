@@ -37,7 +37,6 @@ class _SafetyChecklistActionState extends State<SafetyChecklistAction> {
   }
 
   Widget selectWidget() {
-     if(widget.roleCentre == "PMIS"){
           switch (widget.role) {
       case 'user':
         selectedUi = SafetyField(
@@ -63,34 +62,6 @@ class _SafetyChecklistActionState extends State<SafetyChecklistAction> {
           depoName: widget.depoName,
         );
         break; 
-    }
-    } else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = SafetyField(
-          depoName: widget.depoName,
-        role: widget.role,
-        userId: widget.userId,
-        cityName: widget.cityName,
-        );
-        break;
-      case 'admin':
-        selectedUi = SafetySummary(
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          role: widget.role!,
-          userId: widget.userId,
-        );
-        break;
-      case 'projectManager':
-        selectedUi = SafetySummary(
-          role: widget.role!,
-          userId: widget.userId,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-        );
-        break; 
-    }
     }
 
 

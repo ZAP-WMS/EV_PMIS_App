@@ -37,7 +37,6 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
   }
 
   Widget selectWidget() {
-    if(widget.roleCentre == "PMIS"){
           switch (widget.role) {
       case 'user':
         selectedUi = DetailedEng(
@@ -65,36 +64,6 @@ class _DetailEngineeringActionState extends State<DetailEngineeringAction> {
           role: widget.role,
         );
         break;
-    }
-    } else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = DetailedEng(
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-          userId: widget.userId,
-          role: 'user',
-        );
-
-        break;
-      case 'admin':
-        selectedUi = DetailedEngAdmin(
-          userId: widget.userId,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          role: 'admin',
-        );
-
-        break;
-      case 'projectManager':
-        selectedUi = DetailedEngAdmin(
-          cityName: widget.cityName,
-          userId: widget.userId,
-          depoName: widget.depoName,
-          role: widget.role,
-        );
-        break;
-    }
     }
 
     return selectedUi;

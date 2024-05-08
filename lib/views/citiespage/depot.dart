@@ -14,7 +14,8 @@ class DepotPage extends StatefulWidget {
   final String? cityName;
   final String? userId;
   final String? roleCentre;
-  const DepotPage({super.key, this.cityName, this.role, this.userId,this.roleCentre});
+  const DepotPage(
+      {super.key, this.cityName, this.role, this.userId, this.roleCentre});
 
   @override
   State<DepotPage> createState() => _DepotPageState();

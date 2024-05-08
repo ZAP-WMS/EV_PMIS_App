@@ -36,7 +36,6 @@ class _DemandActionScreenState extends State<DemandActionScreen> {
   }
 
   Widget selectWidget() {
-    if (widget.roleCentre == "PMIS") {
           switch (widget.role) {
       case 'user':
         selectedUi = EnergyManagement(
@@ -63,35 +62,6 @@ class _DemandActionScreenState extends State<DemandActionScreen> {
           userId: widget.userId,
         );
         break;
-    }
-    } else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = EnergyManagement(
-          role: widget.role,
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-          userId: widget.userId,
-        );
-        break;
-      case 'admin':
-        selectedUi = EnergyManagementAdmin(
-          userId: widget.userId,
-          role: widget.role,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-        );
-        break;
-
-      case 'projectManager':
-        selectedUi = EnergyManagementAdmin(
-          role: widget.role,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          userId: widget.userId,
-        );
-        break;
-    }
     }
 
 

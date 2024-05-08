@@ -36,7 +36,6 @@ class _ProjectPlanningActionState extends State<ProjectPlanningAction> {
   }
 
   Widget selectWidget() {
-     if(widget.roleCentre == "PMIS"){
           switch (widget.role) {
       case 'user':
         selectedUi = KeyEvents2(
@@ -63,35 +62,6 @@ class _ProjectPlanningActionState extends State<ProjectPlanningAction> {
         );
         break;
     }
-    }else if(widget.roleCentre == "O&M"){
-          switch (widget.role) {
-      case 'user':
-        selectedUi = KeyEvents2(
-          role: widget.role!,
-          cityName: widget.cityName,
-          depoName: widget.depoName,
-          userId: widget.userId,
-        );
-        break;
-      case 'admin':
-        selectedUi = PlanningTable(
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-          role: widget.role!,
-          userId: widget.userId,
-        );
-        break;
-      case 'projectManager':
-        selectedUi = PlanningTable(
-          userId: widget.userId,
-          depoName: widget.depoName,
-          cityName: widget.cityName,
-          role: widget.role!,
-        );
-        break;
-    }
-    }
-
 
     return selectedUi;
   }
