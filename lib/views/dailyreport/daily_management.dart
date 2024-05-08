@@ -113,7 +113,6 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
 
     getTableData().whenComplete(
       () {
-        // ignore: use_build_context_synchronously
         _dailyChargerDataSource = DailyChargerManagementDataSource(
             _dailycharger,
             context,
@@ -122,14 +121,12 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
             selectedDate!,
             widget.userId!);
 
-        // ignore: use_build_context_synchronously
         _dailySfuDataSource = DailySFUManagementDataSource(_dailySfu, context,
             widget.cityName!, widget.depoName!, selectedDate!, widget.userId!);
-        // ignore: use_build_context_synchronously
+
         _dailyPssDataSource = DailyPssManagementDataSource(_dailyPss, context,
             widget.cityName!, widget.depoName!, selectedDate!, widget.userId!);
 
-        // ignore: use_build_context_synchronously
         _dailyTranformerDataSource = DailyTranformerDataSource(
             _dailyTransfer,
             context,
@@ -150,8 +147,12 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
             selectedDate!,
             widget.userId!);
         _dataGridController = DataGridController();
+        setState(() {
+          _isloading = false;
+        });
       },
     );
+
     // Initialize other data sources and controllers here
   }
 
@@ -177,6 +178,7 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    // getTableData()
     List<String> currentColumnNames = tabColumnNames[widget.tabIndex];
     List<String> currentColumnLabels = tabColumnLabels[widget.tabIndex];
     widget.isHeader!
@@ -312,20 +314,6 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData ||
                                     snapshot.data.exists == false) {
-                                  if (widget.tabIndex == 0) {
-                                    _dailycharger.clear();
-                                  } else if (widget.tabIndex == 1) {
-                                    _dailySfu.clear();
-                                  } else if (widget.tabIndex == 2) {
-                                    _dailyPss.clear();
-                                  } else if (widget.tabIndex == 3) {
-                                    _dailyTransfer.clear();
-                                  } else if (widget.tabIndex == 4) {
-                                    _dailyrmu.clear();
-                                  } else {
-                                    _dailyacdb.clear();
-                                  }
-
                                   return SfDataGrid(
                                       source: widget.tabIndex == 0
                                           ? _dailyChargerDataSource
@@ -414,6 +402,7 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
       floatingActionButton: widget.isHeader!
           ? FloatingActionButton(
               onPressed: (() {
+                print('charger - ${_dailycharger.length}');
                 if (widget.tabIndex == 0) {
                   _dailycharger.add(DailyChargerModel(
                       cn: _dailyChargerDataSource.dataGridRows.length + 1,
@@ -426,7 +415,7 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
                       arm: '',
                       ec: '',
                       cc: ''));
-                  _dataGridController = DataGridController();
+
                   _dailyChargerDataSource.buildDataGridRows();
                   _dailyChargerDataSource.updateDatagridSource();
                 } else if (widget.tabIndex == 1) {
@@ -525,14 +514,6 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
       List<dynamic> mapData = tempData['data'];
       print(mapData);
 
-      List<String> titleName = [
-        'Charger Checklist',
-        'SFU Checklist',
-        'PSS Checklist',
-        'Transformer Checklist',
-        'RMU Checklist',
-        'ACDB Checklist',
-      ];
       if (widget.tabIndex == 0) {
         _dailycharger =
             mapData.map((map) => DailyChargerModel.fromjson(map)).toList();
@@ -550,7 +531,6 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
             mapData.map((map) => DailyAcdbModel.fromjson(map)).toList();
       }
       checkTable = false;
-      setState(() {});
     } else {
       if (widget.tabIndex == 0) {
         _dailycharger.clear();
@@ -597,7 +577,67 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
                           .format(DateTime.parse(value.toString()));
                       Navigator.pop(context);
 
-                      setState(() {});
+                      setState(() {
+                        getTableData().whenComplete(
+                          () {
+                            _dailyChargerDataSource =
+                                DailyChargerManagementDataSource(
+                                    _dailycharger,
+                                    context,
+                                    widget.cityName!,
+                                    widget.depoName!,
+                                    selectedDate!,
+                                    widget.userId!);
+
+                            _dailySfuDataSource = DailySFUManagementDataSource(
+                                _dailySfu,
+                                context,
+                                widget.cityName!,
+                                widget.depoName!,
+                                selectedDate!,
+                                widget.userId!);
+
+                            _dailyPssDataSource = DailyPssManagementDataSource(
+                                _dailyPss,
+                                context,
+                                widget.cityName!,
+                                widget.depoName!,
+                                selectedDate!,
+                                widget.userId!);
+
+                            _dailyTranformerDataSource =
+                                DailyTranformerDataSource(
+                                    _dailyTransfer,
+                                    context,
+                                    widget.cityName!,
+                                    widget.depoName!,
+                                    selectedDate!,
+                                    widget.userId!);
+                            // ignore: use_build_context_synchronously
+                            _dailyRmuDataSource = DailyRmuDataSource(
+                                _dailyrmu,
+                                context,
+                                widget.cityName!,
+                                widget.depoName!,
+                                selectedDate!,
+                                widget.userId!);
+                            _dataGridController = DataGridController();
+                            // ignore: use_build_context_synchronously
+                            _dailyAcdbdatasource =
+                                DailyAcdbManagementDataSource(
+                                    _dailyacdb,
+                                    context,
+                                    widget.cityName!,
+                                    widget.depoName!,
+                                    selectedDate!,
+                                    widget.userId!);
+                            _dataGridController = DataGridController();
+                            setState(() {
+                              _isloading = false;
+                            });
+                          },
+                        );
+                      });
                     }),
                     onCancel: () {
                       Navigator.pop(context);

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../provider/cities_provider.dart';
 import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
+import '../../widgets/management_screen.dart';
 
 class OverviewPmis extends StatefulWidget {
   final String? depoName;
@@ -104,7 +105,9 @@ class _OverviewPmisState extends State<OverviewPmis> {
         ),
         child: GridView.builder(
             shrinkWrap: true,
-            itemCount: description.length,
+            itemCount: widget.roleCentre == managementRole
+                ? managementDescription.length
+                : description.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
@@ -114,28 +117,34 @@ class _OverviewPmisState extends State<OverviewPmis> {
               return Card(
                 color: grey,
                 elevation: 20,
-
-                // shadowColor: blue,
-                // borderOnForeground: true,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: blue, width: 2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: InkWell(
-                  onTap: () =>
-                      Navigator.pushNamed(context, screens[index], arguments: {
-                    'depoName': widget.depoName,
-                    'role': roles,
-                    'cityName': cityName,
-                    'userId': widget.userId,
-                    'roleCentre': widget.roleCentre
-                  }),
-                  child: cards(
-                    description[index],
-                    imagedata[index],
-                    index,
-                  ),
-                ),
+                    onTap: () => Navigator.pushNamed(
+                            context,
+                            widget.roleCentre == managementRole
+                                ? managementScreen[index]
+                                : screens[index],
+                            arguments: {
+                              'depoName': widget.depoName,
+                              'role': roles,
+                              'cityName': cityName,
+                              'userId': widget.userId,
+                              'roleCentre': widget.roleCentre
+                            }),
+                    child: widget.roleCentre == managementRole
+                        ? cards(
+                            managementDescription[index],
+                            managementImagedata[index],
+                            index,
+                          )
+                        : cards(
+                            description[index],
+                            imagedata[index],
+                            index,
+                          )),
               );
             }),
       ),

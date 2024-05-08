@@ -155,6 +155,12 @@ class SummaryProvider extends ChangeNotifier {
     final List<DailyTransformerModel> loadedtransfer = [];
     final List<DailyrmuModel> loadedrmu = [];
     final List<DailyAcdbModel> loadedacdb = [];
+    _dailyChargerdata.clear();
+    _sfuChargerdata.clear();
+    _pssChargerdata.clear();
+    _transferChargerdata.clear();
+    _rmuChargerdata.clear();
+    _acdbChargerdata.clear();
     for (DateTime initialdate = date;
         initialdate.isBefore(endDate.add(const Duration(days: 1)));
         initialdate = initialdate.add(const Duration(days: 1))) {

@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/style.dart';
+import 'package:ev_pmis_app/views/authentication/login_register.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 

@@ -95,15 +95,6 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
             selectedDate!,
             userId);
 
-        _monthlyFilterManagementDataSource = MonthlyFilterManagementDataSource(
-            _monthlyFilterModel,
-            context,
-            widget.cityName!,
-            widget.depoName!,
-            selectedDate!,
-            userId
-            );
-
         _dataGridController = DataGridController();
       });
       _isloading = false;

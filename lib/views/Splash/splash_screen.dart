@@ -216,11 +216,14 @@ class SplashScreenState extends State<SplashScreen>
 
     sharedPreferences = await SharedPreferences.getInstance();
     try {
+      
       if (sharedPreferences.getString('employeeId') != null) {
         userId = sharedPreferences.getString('employeeId');
         role = await AuthService().getUserRole();
         roleCentre = await AuthService().getRoleCentre();
         user = true;
+        role = await AuthService().getUserRole();
+        roleCentre = await AuthService().getRoleCentre();
       }
 
       if (!_isNotificationPage) {

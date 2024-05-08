@@ -24,7 +24,7 @@ class QualitychecklistModel {
       srNo: json['srNo'],
       checklist: json['checklist'],
       responsibility: json['responsibility'],
-      reference: json['Reference'] ?? "",
+      reference: json['Reference'],
       observation: json['observation'],
       // photoNo: json['photoNo']
     );

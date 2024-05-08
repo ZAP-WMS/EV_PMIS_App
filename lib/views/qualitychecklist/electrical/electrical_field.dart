@@ -130,53 +130,53 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
     getTableData().whenComplete(() {
       qualitylisttable1 = checkTable ? getData() : data;
-      _qualityPSSDataSource =
-          QualityPSSDataSource(qualitylisttable1, widget.depoName!, cityName!,selectedDate!);
+      _qualityPSSDataSource = QualityPSSDataSource(
+          qualitylisttable1, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable2 = rmu_getData();
-      _qualityrmuDataSource =
-          QualityrmuDataSource(qualitylisttable2, widget.depoName!, cityName!,selectedDate!);
+      _qualityrmuDataSource = QualityrmuDataSource(
+          qualitylisttable2, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable3 = ct_getData();
-      _qualityctDataSource =
-          QualityctDataSource(qualitylisttable3, widget.depoName!, cityName!,selectedDate!);
+      _qualityctDataSource = QualityctDataSource(
+          qualitylisttable3, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable4 = cmu_getData();
-      _qualitycmuDataSource =
-          QualitycmuDataSource(qualitylisttable4, widget.depoName!, cityName!,selectedDate!);
+      _qualitycmuDataSource = QualitycmuDataSource(
+          qualitylisttable4, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable5 = acdb_getData();
-      _qualityacdDataSource =
-          QualityacdDataSource(qualitylisttable5, widget.depoName!, cityName!,selectedDate!);
+      _qualityacdDataSource = QualityacdDataSource(
+          qualitylisttable5, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable6 = ci_getData();
-      _qualityCIDataSource =
-          QualityCIDataSource(qualitylisttable6, widget.depoName!, cityName!,selectedDate!);
+      _qualityCIDataSource = QualityCIDataSource(
+          qualitylisttable6, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable7 = cdi_getData();
-      _qualityCDIDataSource =
-          QualityCDIDataSource(qualitylisttable7, widget.depoName!, cityName!,selectedDate!);
+      _qualityCDIDataSource = QualityCDIDataSource(
+          qualitylisttable7, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable8 = msp_getData();
-      _qualityMSPDataSource =
-          QualityMSPDataSource(qualitylisttable8, widget.depoName!, cityName!,selectedDate!);
+      _qualityMSPDataSource = QualityMSPDataSource(
+          qualitylisttable8, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable9 = charger_getData();
       _qualityChargerDataSource = QualityChargerDataSource(
-          qualitylisttable9, widget.depoName!, cityName!,selectedDate!);
+          qualitylisttable9, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
 
       qualitylisttable10 = earth_pit_getData();
-      _qualityEPDataSource =
-          QualityEPDataSource(qualitylisttable10, widget.depoName!, cityName!,selectedDate!);
+      _qualityEPDataSource = QualityEPDataSource(
+          qualitylisttable10, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     });
 
@@ -190,7 +190,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
         appBar: PreferredSize(
             // ignore: sort_child_properties_last
             child: CustomAppBarBackDate(
-                depoName: '${widget.depoName!}',
+                depoName: widget.depoName!,
                 text: '${widget.title}',
                 haveSummary: false,
                 haveSynced: true,
@@ -210,7 +210,7 @@ class _ElectricalFieldState extends State<ElectricalField> {
                                       : widget.fielClnName == 'ACDB'
                                           ? _qualityacdDataSource
                                           : widget.fielClnName == 'CI'
-                                              ? _qualitycmuDataSource
+                                              ? _qualityCIDataSource
                                               : widget.fielClnName == 'CDI'
                                                   ? _qualityCDIDataSource
                                                   : widget.fielClnName == 'MSP'
@@ -889,49 +889,49 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
     if (widget.fielClnName == 'RMU') {
       qualitylisttable2 = checkTable ? rmu_getData() : data;
-      _qualityrmuDataSource =
-          QualityrmuDataSource(qualitylisttable2, widget.depoName!, cityName!,selectedDate!);
+      _qualityrmuDataSource = QualityrmuDataSource(
+          qualitylisttable2, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CT') {
       qualitylisttable3 = checkTable ? ct_getData() : data;
-      _qualityctDataSource =
-          QualityctDataSource(qualitylisttable3, widget.depoName!, cityName!,selectedDate!);
+      _qualityctDataSource = QualityctDataSource(
+          qualitylisttable3, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CMU') {
       qualitylisttable4 = checkTable ? cmu_getData() : data;
-      _qualitycmuDataSource =
-          QualitycmuDataSource(qualitylisttable4, widget.depoName!, cityName!,selectedDate!);
+      _qualitycmuDataSource = QualitycmuDataSource(
+          qualitylisttable4, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'ACDB') {
       qualitylisttable5 = checkTable ? acdb_getData() : data;
-      _qualityacdDataSource =
-          QualityacdDataSource(qualitylisttable5, widget.depoName!, cityName!,selectedDate!);
+      _qualityacdDataSource = QualityacdDataSource(
+          qualitylisttable5, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CI') {
       qualitylisttable6 = checkTable ? ci_getData() : data;
-      _qualityCIDataSource =
-          QualityCIDataSource(qualitylisttable6, widget.depoName!, cityName!,selectedDate!);
+      _qualityCIDataSource = QualityCIDataSource(
+          qualitylisttable6, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CDI') {
       qualitylisttable7 = checkTable ? cdi_getData() : data;
-      _qualityCDIDataSource =
-          QualityCDIDataSource(qualitylisttable7, widget.depoName!, cityName!,selectedDate!);
+      _qualityCDIDataSource = QualityCDIDataSource(
+          qualitylisttable7, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'MSP') {
       qualitylisttable8 = checkTable ? msp_getData() : data;
-      _qualityMSPDataSource =
-          QualityMSPDataSource(qualitylisttable8, widget.depoName!, cityName!,selectedDate!);
+      _qualityMSPDataSource = QualityMSPDataSource(
+          qualitylisttable8, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'CHARGER') {
       qualitylisttable9 = checkTable ? charger_getData() : data;
       _qualityChargerDataSource = QualityChargerDataSource(
-          qualitylisttable9, widget.depoName!, cityName!,selectedDate!);
+          qualitylisttable9, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     } else if (widget.fielClnName == 'EARTH PIT') {
       qualitylisttable10 = checkTable ? earth_pit_getData() : data;
-      _qualityEPDataSource =
-          QualityEPDataSource(qualitylisttable10, widget.depoName!, cityName!,selectedDate!);
+      _qualityEPDataSource = QualityEPDataSource(
+          qualitylisttable10, widget.depoName!, cityName!, selectedDate!);
       _dataGridController = DataGridController();
     }
   }
@@ -973,52 +973,82 @@ class _ElectricalFieldState extends State<ElectricalField> {
                         getTableData().whenComplete(() {
                           qualitylisttable1 = checkTable ? getData() : data;
                           _qualityPSSDataSource = QualityPSSDataSource(
-                              qualitylisttable1, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable1,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable2 = rmu_getData();
                           _qualityrmuDataSource = QualityrmuDataSource(
-                              qualitylisttable2, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable2,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable3 = ct_getData();
                           _qualityctDataSource = QualityctDataSource(
-                              qualitylisttable3, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable3,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable4 = cmu_getData();
                           _qualitycmuDataSource = QualitycmuDataSource(
-                              qualitylisttable4, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable4,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable5 = acdb_getData();
                           _qualityacdDataSource = QualityacdDataSource(
-                              qualitylisttable5, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable5,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable6 = ci_getData();
                           _qualityCIDataSource = QualityCIDataSource(
-                              qualitylisttable6, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable6,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable7 = cdi_getData();
                           _qualityCDIDataSource = QualityCDIDataSource(
-                              qualitylisttable7, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable7,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable8 = msp_getData();
                           _qualityMSPDataSource = QualityMSPDataSource(
-                              qualitylisttable8, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable8,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable9 = charger_getData();
                           _qualityChargerDataSource = QualityChargerDataSource(
-                              qualitylisttable9, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable9,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
 
                           qualitylisttable10 = earth_pit_getData();
                           _qualityEPDataSource = QualityEPDataSource(
-                              qualitylisttable10, widget.depoName!, cityName!,selectedDate!);
+                              qualitylisttable10,
+                              widget.depoName!,
+                              cityName!,
+                              selectedDate!);
                           _dataGridController = DataGridController();
                         });
                       });

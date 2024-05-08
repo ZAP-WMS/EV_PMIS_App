@@ -29,6 +29,8 @@ import '../views/chatPage/feedback.dart';
 import '../views/citiespage/cities_home.dart';
 import '../views/dailyreport/daily_management_home.dart';
 import '../views/dailyreport/notification_userlist.dart';
+import '../views/management_screen/breakdown_screen.dart';
+import '../views/management_screen/charger_availabity_screen.dart';
 import '../views/management_screen/monthly_page/monthly_home.dart';
 import '../views/split_screen/o&m_pmis_screen.dart';
 
@@ -284,6 +286,29 @@ class RouteGenerator {
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
           return MonthlyManagementHomePage(
+            userId: argument['userId'],
+            cityName: argument['cityName'],
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+
+        //management screen
+        case '/breakdown_screen':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+
+          return BreakdownScreen(
+            userId: argument['userId'],
+            cityName: argument['cityName'],
+            depoName: argument['depoName'],
+            role: argument['role'],
+          );
+
+        case '/charger_availability_screen':
+          Map<String, dynamic> argument =
+              settings.arguments as Map<String, dynamic>;
+
+          return ChargerAvailabilityScreen(
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],

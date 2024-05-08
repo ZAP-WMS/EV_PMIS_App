@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
 import '../style.dart';
 import '../models/energy_management.dart';
 
@@ -281,10 +280,8 @@ class EnergyManagementDatasource extends DataGridSource {
     } else if (column.columnName == 'energyConsumed') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<double>(
-              columnName: 'energyConsumed',
-              value: double.parse(newCellValue.toString()));
-      _energyManagement[dataRowIndex].energyConsumed =
-          double.parse(newCellValue.toString());
+              columnName: 'energyConsumed', value: newCellValue);
+      _energyManagement[dataRowIndex].energyConsumed = newCellValue as double;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
           DataGridCell<dynamic>(
@@ -356,10 +353,11 @@ class EnergyManagementDatasource extends DataGridSource {
         },
         onChanged: (String value) {
           if (value.isNotEmpty) {
-            if (column.columnName == 'energyConsumed') {
+            // if (column.columnName == 'energyConsumed') {
+            //   newCellValue = double.parse(value);
+            // }
+            if (isNumericType) {
               newCellValue = double.parse(value);
-            } else if (isNumericType) {
-              newCellValue = int.parse(value);
             } else if (isDateTimeType) {
               newCellValue = value;
             } else {
