@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../provider/cities_provider.dart';
 import '../../shared_preferences/shared_preferences.dart';
 import '../../style.dart';
+import '../../widgets/management_screen.dart';
 
 class OverviewPage extends StatefulWidget {
   final String? depoName;
@@ -32,9 +33,9 @@ class _OverviewPageState extends State<OverviewPage> {
     '/depotOverview',
     '/planning-page',
     '/material-page',
-    '/daiy_management',
+    '/daily-report',
     //  '/daily-report',
-    '/monthly_management',
+    '/monthly-report',
     //'/monthly-report',
     '/detailed-page',
     '/jmrPage',
@@ -102,7 +103,9 @@ class _OverviewPageState extends State<OverviewPage> {
         ),
         child: GridView.builder(
             shrinkWrap: true,
-            itemCount: description.length,
+            itemCount: widget.roleCentre == managementRole
+                ? managementDescription.length
+                : description.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
@@ -112,28 +115,34 @@ class _OverviewPageState extends State<OverviewPage> {
               return Card(
                 color: grey,
                 elevation: 20,
-
-                // shadowColor: blue,
-                // borderOnForeground: true,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: blue, width: 2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: InkWell(
-                  onTap: () =>
-                      Navigator.pushNamed(context, screens[index], arguments: {
-                    'depoName': widget.depoName,
-                    'role': roles,
-                    'cityName': cityName,
-                    'userId': widget.userId,
-                    'roleCentre': widget.roleCentre
-                  }),
-                  child: cards(
-                    description[index],
-                    imagedata[index],
-                    index,
-                  ),
-                ),
+                    onTap: () => Navigator.pushNamed(
+                            context,
+                            widget.roleCentre == managementRole
+                                ? managementScreen[index]
+                                : screens[index],
+                            arguments: {
+                              'depoName': widget.depoName,
+                              'role': roles,
+                              'cityName': cityName,
+                              'userId': widget.userId,
+                              'roleCentre': widget.roleCentre
+                            }),
+                    child: widget.roleCentre == managementRole
+                        ? cards(
+                            managementDescription[index],
+                            managementImagedata[index],
+                            index,
+                          )
+                        : cards(
+                            description[index],
+                            imagedata[index],
+                            index,
+                          )),
               );
             }),
       ),
@@ -150,15 +159,15 @@ class _OverviewPageState extends State<OverviewPage> {
                   backgroundColor: blue,
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/main_screen',
-                        arguments: {
-                          "roleCentre": widget.roleCentre,
-                          'userId': widget.userId,
-                          "role": widget.role
-                        },
-                        (route) => false,
-                        );
+                      context,
+                      '/main_screen',
+                      arguments: {
+                        "roleCentre": widget.roleCentre,
+                        'userId': widget.userId,
+                        "role": widget.role
+                      },
+                      (route) => false,
+                    );
                   },
                   child: const Icon(
                     Icons.splitscreen,

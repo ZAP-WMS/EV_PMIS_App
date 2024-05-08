@@ -184,7 +184,8 @@ class _LoginPageState extends State<LoginPage> {
 
         if (isProjectManager == false) {
           isAdmin = await verifyAndLoginAdmin(empIdController.text);
-        } else if (isAdmin == false && isProjectManager == false) {
+        }
+        if (isAdmin == false && isProjectManager == false) {
           verifyAndLoginUser();
         }
       } catch (e) {
@@ -210,42 +211,44 @@ class _LoginPageState extends State<LoginPage> {
         .where('userId', isEqualTo: empIdController.text)
         .get();
 
-    if (passwordcontroller.text == userQuery.docs[0]['password'] &&
-        empIdController.text == userQuery.docs[0]['userId'] &&
-        userQuery.docs.isNotEmpty) {
-      String roleCentre = userQuery.docs[0]['roleCentre'];
-      String companyName = userQuery.docs[0]['companyName'];
-      List<dynamic> assignedDepots = userQuery.docs[0]["depots"];
-      List<dynamic> assignedCities = userQuery.docs[0]["cities"];
+    if (userQuery.docs.isNotEmpty) {
+      if (passwordcontroller.text == userQuery.docs[0]['password'] &&
+          empIdController.text == userQuery.docs[0]['userId'] &&
+          userQuery.docs.isNotEmpty) {
+        String roleCentre = userQuery.docs[0]['roleCentre'];
+        String companyName = userQuery.docs[0]['companyName'];
+        List<dynamic> assignedDepots = userQuery.docs[0]["depots"];
+        List<dynamic> assignedCities = userQuery.docs[0]["cities"];
 
-      List<String> cities = assignedCities.map((e) => e.toString()).toList();
-      authService.storeCityList(cities);
-      List<String> depots = assignedDepots.map((e) => e.toString()).toList();
-      authService.storeUserRole("user");
-      authService.storeCompanyName(companyName);
-      authService.storeDepoList(depots);
-      authService.storeRoleCentre(roleCentre);
-      authService.storeEmployeeId(empIdController.text).then((_) {
-        Navigator.pushReplacementNamed(
-          context,
-          // '/splitDashboard',
-          '/main_screen',
-          arguments: {
-            "roleCentre": roleCentre,
-            'userId': empIdController.text,
-            "role": "user"
-          },
+        List<String> cities = assignedCities.map((e) => e.toString()).toList();
+        authService.storeCityList(cities);
+        List<String> depots = assignedDepots.map((e) => e.toString()).toList();
+        authService.storeUserRole("user");
+        authService.storeCompanyName(companyName);
+        authService.storeDepoList(depots);
+        authService.storeRoleCentre(roleCentre);
+        authService.storeEmployeeId(empIdController.text).then((_) {
+          Navigator.pushReplacementNamed(
+            context,
+            // '/splitDashboard',
+            '/main_screen',
+            arguments: {
+              "roleCentre": roleCentre,
+              'userId': empIdController.text,
+              "role": "user"
+            },
+          );
+        });
+      } else {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: blue,
+            content: const Text(
+                'Password is not Correct or no role is assigned to the user'),
+          ),
         );
-      });
-    } else {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: blue,
-          content: const Text(
-              'Password is not Correct or no role is assigned to the user'),
-        ),
-      );
+      }
     }
   }
 
@@ -371,13 +374,11 @@ class _LoginPageState extends State<LoginPage> {
           authService.storeEmployeeId(empIdController.text.trim());
           authService.storeRoleCentre(roleCentre);
           authService.storeCompanyName(companyName).then((_) {
-            Navigator.pushReplacementNamed(
-              context, '/main_screen', arguments: {
+            Navigator.pushReplacementNamed(context, '/main_screen', arguments: {
               "roleCentre": roleCentre,
               'userId': empIdController.text,
               "role": "projectManager"
-            }
-            );
+            });
           });
         } else {
           Navigator.pop(context);
@@ -390,6 +391,8 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       }
+    } else {
+      Navigator.pop(context);
     }
 
     return userIsProjectManager;
