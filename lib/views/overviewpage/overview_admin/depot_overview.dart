@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/datasource/depot_overviewdatasource.dart';
-import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/PMIS/datasource/depot_overviewdatasource.dart';
+import 'package:ev_pmis_app/PMIS/provider/cities_provider.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/custom_textfield.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_textfield.dart';
+import 'package:ev_pmis_app/PMIS/widgets/navbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
-import 'package:ev_pmis_app/screen/jmrPage/jmr_user/jmr.dart';
+import 'package:ev_pmis_app/PMIS/user/screen/jmr.dart';
 import 'package:flutter/material.dart';
-import '../jmrPage/jmr_admin/jmr.dart';
+import '../../PMIS/admin/screen/jmr.dart';
 
 class JmrActionScreen extends StatefulWidget {
   String? role;

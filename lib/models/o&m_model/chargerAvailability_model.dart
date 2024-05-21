@@ -45,20 +45,13 @@ class ChargerAvailabilityModel {
       DataGridCell(columnName: 'Sr.No.', value: srNo),
       DataGridCell(columnName: 'Location', value: location),
       DataGridCell(columnName: 'Depot name', value: depotName),
-
-      DataGridCell(columnName: 'Chargers affected', value: chargerMake),
-      // DataGridCell(columnName: 'Fault Type', value: faultType),
-      // DataGridCell(columnName: 'Fault', value: fault),
-      // DataGridCell(columnName: 'Attribute to', value: attributeTo),
-      // DataGridCell(columnName: 'Fault Occurrance', value: faultOccurance),
-      // DataGridCell(columnName: 'Fault Resolving', value: faultResolving),
-      // DataGridCell(columnName: 'Year', value: year),
-      // DataGridCell(columnName: 'Month', value: month),
-      // DataGridCell(columnName: 'Fault Resolve by', value: faultResolvedBy),
-      // DataGridCell(columnName: 'Status', value: status),
-      // DataGridCell(columnName: 'Pending', value: pending),
-      // DataGridCell(columnName: 'MTTR', value: mttr),
-      // DataGridCell(columnName: 'Remarks', value: remark)
+      DataGridCell(columnName: 'ChargerNo', value: chargerMake),
+      DataGridCell(columnName: 'ChargerSrNo', value: chargerMake),
+      DataGridCell(columnName: 'ChargerMake', value: chargerMake),
+      DataGridCell(columnName: 'TargetTime', value: chargerMake),
+      DataGridCell(columnName: 'TimeLoss', value: chargerMake),
+      DataGridCell(columnName: 'Availability', value: chargerMake),
+      DataGridCell(columnName: 'Remarks', value: chargerMake),
     ]);
   }
 }

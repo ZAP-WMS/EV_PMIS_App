@@ -1,5 +1,5 @@
-import 'package:ev_pmis_app/screen/planning/planning_admin/planning_summary.dart';
-import 'package:ev_pmis_app/views/keyevents/key_events2.dart';
+import 'package:ev_pmis_app/PMIS/admin/planning_summary.dart';
+import 'package:ev_pmis_app/PMIS/user/keyevents/key_events2.dart';
 import 'package:flutter/material.dart';
 
 class TestingAction extends StatefulWidget {

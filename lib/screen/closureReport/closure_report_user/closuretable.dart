@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/models/closer_report.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../components/Loading_page.dart';
-import '../../../datasource/closereport_datasource.dart';
-import '../../../provider/cities_provider.dart';
+import '../../../PMIS/user/datasource/closereport_datasource.dart';
+import '../../../PMIS/provider/cities_provider.dart';
 import '../../../style.dart';
 
 //This is a comment

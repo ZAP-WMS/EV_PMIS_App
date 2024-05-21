@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../safetyreport/safety_report_admin.dart/safety_report_admin.dart';
-import '../safetyreport/safetyfield.dart';
+import '../../PMIS/admin/screen/safety_report_admin.dart';
+import '../../PMIS/user/screen/safetyfield.dart';
 
 class SafetyChecklistAction extends StatefulWidget {
   String? role;

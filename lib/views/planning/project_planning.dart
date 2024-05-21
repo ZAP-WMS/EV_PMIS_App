@@ -8,14 +8,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../components/Loading_page.dart';
-import '../../datasource/key_datasource.dart';
-import '../../provider/cities_provider.dart';
+import '../../PMIS/datasource/key_datasource.dart';
+import '../../PMIS/provider/cities_provider.dart';
 import '../../style.dart';
 import '../../models/employee.dart';
-import '../../widgets/custom_appbar.dart';
-import '../../widgets/navbar.dart';
-import '../keyevents/Grid_DataTableA2.dart';
-import '../overviewpage/view_AllFiles.dart';
+import '../../PMIS/widgets/custom_appbar.dart';
+import '../../PMIS/widgets/navbar.dart';
+import '../../PMIS/user/keyevents/Grid_DataTableA2.dart';
+import '../../PMIS/view_AllFiles.dart';
 
 /// The application that contains datagrid on it.
 

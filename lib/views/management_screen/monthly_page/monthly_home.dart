@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/date_format.dart';
-import 'package:ev_pmis_app/views/dailyreport/summary.dart';
+import 'package:ev_pmis_app/PMIS/summary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../style.dart';
-import '../../../widgets/progress_loading.dart';
+import '../../../PMIS/widgets/progress_loading.dart';
 import '../../authentication/authservice.dart';
 import 'monthly_page.dart';
 

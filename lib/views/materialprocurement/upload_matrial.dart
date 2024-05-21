@@ -2,20 +2,20 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../../datasource/materialprocurement_datasource.dart';
-import '../../provider/cities_provider.dart';
+import '../../PMIS/user/datasource/materialprocurement_datasource.dart';
+import '../../PMIS/provider/cities_provider.dart';
 import '../../style.dart';
 import '../../models/material_procurement.dart';
-import '../../widgets/navbar.dart';
+import '../../PMIS/widgets/navbar.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
-import '../safetyreport/safetyfield.dart';
+import '../../PMIS/user/screen/safetyfield.dart';
 
 class UploadMaterial extends StatefulWidget {
   String? depoName;

@@ -1,9 +1,9 @@
 import 'package:ev_pmis_app/components/Loading_page.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../widgets/custom_appbar.dart';
+import '../../PMIS/widgets/custom_appbar.dart';
 import 'cities.dart';
 import 'depot.dart';
 

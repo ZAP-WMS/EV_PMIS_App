@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../style.dart';
-import '../../widgets/custom_textfield.dart';
+import '../../PMIS/widgets/custom_textfield.dart';
 import 'login_register.dart';
 
 class RegisterPge extends StatefulWidget {

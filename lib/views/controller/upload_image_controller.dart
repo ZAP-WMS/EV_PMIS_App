@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../widgets/image_picker.dart';
+import '../../PMIS/widgets/image_picker.dart';
 
 void showPickerOptions(String pageTitle) {
   Get.defaultDialog(

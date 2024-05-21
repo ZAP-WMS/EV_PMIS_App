@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/widgets/custom_alert_box.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_alert_box.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

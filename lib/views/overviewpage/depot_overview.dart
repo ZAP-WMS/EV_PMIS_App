@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
-import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/PMIS/provider/cities_provider.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-import 'package:ev_pmis_app/views/overviewpage/view_AllFiles.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/view_AllFiles.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +12,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import '../../datasource/depot_overviewdatasource.dart';
+import '../../PMIS/datasource/depot_overviewdatasource.dart';
 import '../../models/depot_overview.dart';
 import '../../style.dart';
-import '../../widgets/custom_textfield.dart';
-import '../../widgets/navbar.dart';
+import '../../PMIS/widgets/custom_textfield.dart';
+import '../../PMIS/widgets/navbar.dart';
 
 class DepotOverview extends StatefulWidget {
   // String? cityName;

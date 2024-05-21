@@ -3,7 +3,7 @@ import 'package:ev_pmis_app/views/authentication/register_page.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../widgets/custom_textfield.dart';
+import '../../PMIS/widgets/custom_textfield.dart';
 
 class ChangePassword extends StatefulWidget {
   String name;

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/provider/All_Depo_Select_Provider.dart';
-import 'package:ev_pmis_app/provider/demandEnergyProvider.dart';
+import 'package:ev_pmis_app/PMIS/provider/All_Depo_Select_Provider.dart';
+import 'package:ev_pmis_app/PMIS/provider/demandEnergyProvider.dart';
 import 'package:ev_pmis_app/screen/demand_energy/bar_graph.dart';
 import 'package:ev_pmis_app/screen/demand_energy/demand_table.dart';
 import 'package:ev_pmis_app/style.dart';

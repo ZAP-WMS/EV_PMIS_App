@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 import '../../style.dart';
-import '../dailyreport/summary.dart';
+import '../../PMIS/summary.dart';
 
 class QualityChecklist extends StatefulWidget {
   String? userId;

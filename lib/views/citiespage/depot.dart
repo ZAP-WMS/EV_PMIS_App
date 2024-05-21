@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/components/Loading_page.dart';
-import 'package:ev_pmis_app/provider/cities_provider.dart';
+import 'package:ev_pmis_app/PMIS/provider/cities_provider.dart';
 import 'package:ev_pmis_app/views/authentication/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,10 +11,10 @@ String userId = '';
 
 class DepotPage extends StatefulWidget {
   final String? role;
-  final String? cityName;
+  String? cityName;
   final String? userId;
   final String? roleCentre;
-  const DepotPage(
+  DepotPage(
       {super.key, this.cityName, this.role, this.userId, this.roleCentre});
 
   @override
@@ -26,9 +26,10 @@ class _DepotPageState extends State<DepotPage> {
 
   @override
   void initState() {
+    widget.cityName =
+        Provider.of<CitiesProvider>(context, listen: false).getName;
     getUserId();
     super.initState();
-    print('depotPage - UserId- $userId');
   }
 
   @override
@@ -67,7 +68,8 @@ class _DepotPageState extends State<DepotPage> {
                                             ['DepoName'],
                                         'role': widget.role,
                                         'userId': userId,
-                                        "roleCentre": widget.roleCentre
+                                        "roleCentre": widget.roleCentre,
+                                        "cityName": widget.cityName
                                       }),
                               child: cards(
                                 snapshot.data!.docs[index]['DepoName'],

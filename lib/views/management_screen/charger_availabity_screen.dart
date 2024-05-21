@@ -1,24 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/models/o&m_model/breakdown_model.dart';
+import 'package:ev_pmis_app/PMIS/user/datasource/o&m_datasource/charger_availablity_datasource.dart';
+import 'package:ev_pmis_app/models/o&m_model/chargerAvailability_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../FirebaseApi/firebase_api.dart';
 import '../../components/Loading_page.dart';
-import '../../datasource/o&m_datasource/breakdown_datasource.dart';
 import '../../style.dart';
-import '../../widgets/appbar_back_date.dart';
-import '../../widgets/management_screen.dart';
-import '../../widgets/progress_loading.dart';
-import '../dailyreport/summary.dart';
+import '../../PMIS/widgets/appbar_back_date.dart';
+import '../../PMIS/widgets/management_screen.dart';
+import '../../PMIS/widgets/progress_loading.dart';
+import '../../PMIS/summary.dart';
 
 class ChargerAvailabilityScreen extends StatefulWidget {
-  String? cityName;
-  String? depoName;
-  String? userId;
-  String? role;
-  ChargerAvailabilityScreen(
+  final String? cityName;
+  final String? depoName;
+  final String? userId;
+  final String? role;
+  const ChargerAvailabilityScreen(
       {super.key,
       required this.cityName,
       this.depoName,
@@ -35,9 +35,9 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
   String? visDate = DateFormat.yMMMd().format(DateTime.now());
   String? selectedDate = DateFormat.yMMM().format(DateTime.now());
   List<GridColumn> columns = [];
-  late BreakdownDataManagementDataSource breakdownDataManagementDataSource;
+  late ChargerAvailabilityDataSource chargerAvailabilityDataSource;
   late DataGridController _dataGridController;
-  List<BreakdownModel> breakdowmModel = [];
+  List<ChargerAvailabilityModel> chargerModel = [];
   Stream? _stream;
   List<dynamic> tabledata2 = [];
   bool isLoading = true;
@@ -46,27 +46,14 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
   @override
   void initState() {
     // getUserId().whenComplete(() {
-    breakdownDataManagementDataSource = BreakdownDataManagementDataSource(
-        breakdowmModel,
+    chargerAvailabilityDataSource = ChargerAvailabilityDataSource(
+        chargerModel,
         context,
         widget.cityName!,
         widget.depoName!,
         selectedDate!,
         widget.userId!);
     _dataGridController = DataGridController();
-
-    // getTableData().whenComplete(
-    //   () {
-    //     breakdownDataManagementDataSource = BreakdownDataManagementDataSource(
-    //         breakdowmModel,
-    //         context,
-    //         widget.cityName!,
-    //         widget.depoName!,
-    //         selectedDate!,
-    //         widget.userId!);
-    //     _dataGridController = DataGridController();
-    //   },
-    // );
 
     super.initState();
   }
@@ -86,10 +73,7 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
                   columnName == columnName[0]
               ? false
               : true,
-          width: columnName == 'cn'
-              ? MediaQuery.of(context).size.width * 0.2
-              : MediaQuery.of(context).size.width *
-                  0.3, // You can adjust this width as needed
+          width: columnName == 'Sr.No.' ? 60 : 100,
           label: createColumnLabel(
             currentColumnLabels[currentColumnLabels.indexOf(columnName)],
           ),
@@ -98,36 +82,37 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
     }
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(70),
-          child: CustomAppBarBackDate(
-            depoName: widget.depoName ?? '',
-            text: 'Daily Report',
-            haveSynced: isFieldEditable ? true : false,
-            haveSummary: true,
-            haveCalender: true,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewSummary(
-                    cityName: widget.cityName.toString(),
-                    depoName: widget.depoName.toString(),
-                    role: widget.role,
-                    id: 'Daily Report',
-                    currentDate: selectedDate,
-                    userId: widget.userId,
-                  ),
-                )),
-            store: () async {
-              showProgressDilogue(context);
-              FirebaseApi().nestedKeyEventsField(
-                  'DailyProject3', widget.depoName!, 'userId', widget.userId!);
-              storeData();
-            },
-            showDate: visDate,
-            choosedate: () {
-              //chooseDate(context);
-            },
-          )),
+        preferredSize: const Size.fromHeight(70),
+        child: CustomAppBarBackDate(
+          depoName: widget.depoName ?? '',
+          text: 'Charger Availability',
+          haveSynced: false,
+          haveSummary: false,
+          haveCalender: true,
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewSummary(
+                  cityName: widget.cityName.toString(),
+                  depoName: widget.depoName.toString(),
+                  role: widget.role,
+                  id: 'Daily Report',
+                  currentDate: selectedDate,
+                  userId: widget.userId,
+                ),
+              )),
+          store: () async {
+            showProgressDilogue(context);
+            FirebaseApi().nestedKeyEventsField(
+                'DailyProject3', widget.depoName!, 'userId', widget.userId!);
+            storeData();
+          },
+          showDate: visDate,
+          choosedate: () {
+            //chooseDate(context);
+          },
+        ),
+      ),
       body: SfDataGridTheme(
         data: SfDataGridThemeData(headerColor: white, gridLineColor: blue),
         child: StreamBuilder(
@@ -137,7 +122,7 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
               return const LoadingPage();
             } else if (!snapshot.hasData || snapshot.data.exists == false) {
               return SfDataGrid(
-                  source: breakdownDataManagementDataSource,
+                  source: chargerAvailabilityDataSource,
                   allowEditing: true,
                   frozenColumnsCount: 1,
                   gridLinesVisibility: GridLinesVisibility.both,
@@ -154,7 +139,7 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
                   columns: columns);
             } else {
               return SfDataGrid(
-                  source: breakdownDataManagementDataSource,
+                  source: chargerAvailabilityDataSource,
                   allowEditing: true,
                   frozenColumnsCount: 2,
                   gridLinesVisibility: GridLinesVisibility.both,
@@ -175,28 +160,21 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
       floatingActionButton: isFieldEditable
           ? FloatingActionButton(
               onPressed: (() {
-                breakdowmModel.add(BreakdownModel(
-                    srNo: breakdownDataManagementDataSource.rows.length + 1,
-                    location: widget.cityName,
-                    depotName: widget.depoName,
-                    equipmentName: '',
-                    chargersAffected: '',
-                    faultType: '',
-                    fault: '',
-                    attributeTo: '',
-                    faultOccurance: '',
-                    faultResolving: '',
-                    year: '',
-                    month: '',
-                    agencyName: '',
-                    faultResolvedBy: '',
-                    status: '',
-                    pending: '',
-                    mttr: '',
-                    remark: ''));
+                chargerModel.add(ChargerAvailabilityModel(
+                  srNo: chargerAvailabilityDataSource.dataGridRows.length + 1,
+                  location: '',
+                  depotName: '',
+                  chargerNo: '',
+                  chargerSrNo: '',
+                  chargerMake: '',
+                  targetTime: 0,
+                  timeLoss: 0,
+                  availability: 0.0,
+                  remarks: '',
+                ));
                 _dataGridController = DataGridController();
-                breakdownDataManagementDataSource.buildDataGridRows();
-                breakdownDataManagementDataSource.updateDatagridSource();
+                chargerAvailabilityDataSource.buildDataGridRows();
+                chargerAvailabilityDataSource.updateDatagridSource();
               }),
               child: const Icon(
                 Icons.add,
@@ -218,7 +196,7 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
 
   Future storeData() async {
     Map<String, dynamic> tableData = Map();
-    for (var i in breakdownDataManagementDataSource.dataGridRows) {
+    for (var i in chargerAvailabilityDataSource.dataGridRows) {
       for (var data in i.getCells()) {
         if (data.columnName != 'button' && data.columnName != 'Delete') {
           tableData[data.columnName] = data.value;
@@ -249,7 +227,7 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
 
   Future<void> getTableData() async {
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('BreakDownData')
+        .collection('ChargerAvailabilityData')
         .doc('${widget.depoName}')
         .collection(selectedDate!)
         .doc(widget.userId)
@@ -261,8 +239,8 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
 
       List<dynamic> mapData = tempData['data'];
 
-      breakdowmModel =
-          mapData.map((map) => BreakdownModel.fromjson(map)).toList();
+      chargerModel =
+          mapData.map((map) => ChargerAvailabilityModel.fromjson(map)).toList();
       checkTable = false;
     }
 

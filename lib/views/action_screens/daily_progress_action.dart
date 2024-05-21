@@ -1,8 +1,8 @@
-import 'package:ev_pmis_app/screen/dailyreport/daily_report_admin/daily_report_admin.dart';
+import 'package:ev_pmis_app/PMIS/admin/screen/daily_report_admin.dart';
 import 'package:ev_pmis_app/views/dailyreport/daily_management_home.dart';
 import 'package:flutter/material.dart';
 
-import '../dailyreport/daily_project.dart';
+import '../../PMIS/user/screen/daily_project.dart';
 
 class DailyProjectAction extends StatefulWidget {
   final String role;

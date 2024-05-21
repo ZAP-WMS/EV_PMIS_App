@@ -1,7 +1,7 @@
 import 'package:ev_pmis_app/views/dailyreport/daily_management.dart';
 import 'package:flutter/material.dart';
 import '../../style.dart';
-import '../../widgets/navbar.dart';
+import '../../PMIS/widgets/navbar.dart';
 
 class DailyManagementHomePage extends StatefulWidget {
   String? cityName;

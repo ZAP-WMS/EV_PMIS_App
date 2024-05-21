@@ -1,5 +1,5 @@
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 class TestingPage extends StatefulWidget {

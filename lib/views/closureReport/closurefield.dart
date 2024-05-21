@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/views/citiespage/depot.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
-import 'package:ev_pmis_app/widgets/progress_loading.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/navbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/progress_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,13 +10,13 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../components/Loading_page.dart';
-import '../../datasource/closereport_datasource.dart';
+import '../../PMIS/user/datasource/closereport_datasource.dart';
 import '../../models/closer_report.dart';
-import '../../provider/cities_provider.dart';
+import '../../PMIS/provider/cities_provider.dart';
 import '../../style.dart';
-import '../../widgets/activity_headings.dart';
-import '../../widgets/custom_textfield.dart';
-import '../safetyreport/safetyfield.dart';
+import '../../PMIS/widgets/activity_headings.dart';
+import '../../PMIS/widgets/custom_textfield.dart';
+import '../../PMIS/user/screen/safetyfield.dart';
 
 class ClosureField extends StatefulWidget {
   String? depoName;

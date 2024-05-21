@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/custom_appbar.dart';
-import '../widgets/navbar.dart';
+import '../PMIS/widgets/custom_appbar.dart';
+import '../PMIS/widgets/navbar.dart';
 
 class ChatPage extends StatefulWidget {
   String depoName;

@@ -1,6 +1,6 @@
-import 'package:ev_pmis_app/screen/Detailedreport/detail_report_admin/detail_admin.dart';
+import 'package:ev_pmis_app/PMIS/admin/screen/detail_admin.dart';
 import 'package:flutter/material.dart';
-import '../Detailedreport/detailed_Eng.dart';
+import '../../PMIS/user/screen/detailed_Eng.dart';
 
 class DetailEngineeringAction extends StatefulWidget {
   String? role;

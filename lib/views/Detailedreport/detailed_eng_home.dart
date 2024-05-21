@@ -1,8 +1,8 @@
 import 'package:ev_pmis_app/style.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 
-import 'detailed_Eng.dart';
+import '../../PMIS/user/screen/detailed_Eng.dart';
 
 class DetailedEngHome extends StatefulWidget {
   String? depoName;
