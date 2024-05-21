@@ -1,18 +1,25 @@
 import 'dart:io';
+import 'package:ev_pmis_app/components/loading_pdf.dart';
+import 'package:ev_pmis_app/models/jmr.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import '../../../components/Loading_page.dart';
-import 'package:ev_pmis_app/model/jmr.dart';
 import 'package:ev_pmis_app/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:ev_pmis_app/authentication/authservice.dart';
-import 'package:ev_pmis_app/datasource/jmr_datasource.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/nodata_available.dart';
+import 'package:ev_pmis_app/PMIS/user/datasource/jmr_datasource.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/nodata_available.dart';
 import 'package:intl/intl.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class JmrTablePage extends StatefulWidget {
   String? cityName;
@@ -31,6 +38,7 @@ class JmrTablePage extends StatefulWidget {
   String? startDate;
   String? endDate;
   String? projectName;
+  String userId;
 
   JmrTablePage(
       {super.key,
@@ -50,7 +58,8 @@ class JmrTablePage extends StatefulWidget {
       this.projectName,
       this.refNo,
       this.siteLocation,
-      this.startDate});
+      this.startDate,
+      required this.userId});
 
   @override
   State<JmrTablePage> createState() => _JmrTablePageState();
@@ -66,72 +75,27 @@ class _JmrTablePageState extends State<JmrTablePage> {
   final startDate = TextEditingController();
   final endDate = TextEditingController();
 
+  String? pathToOpenFile;
+
   List nextJmrIndex = [];
   List<List<dynamic>> data = [
-    [
-      '1',
-      'Supply and Laying',
-      'onboarding one no. of EV charger of 200kw',
-      '8.31 (Additional)',
-      'abstract of JMR sheet No 1 & Item Sr No 1',
-      'Mtr',
-      500.00,
-      110,
-      55000.00
-    ],
+    ['', '', '', '', '', '', 0, 0, 0],
   ];
 
   List<JMRModel> jmrtable = <JMRModel>[];
-  int _excelRowNextIndex = 0;
   late JmrDataSource _jmrDataSource;
-  late List<dynamic> jmrSyncList;
+  List<dynamic> jmrSyncList = [];
   late DataGridController _dataGridController;
   bool _isLoading = true;
   List<dynamic> tabledata2 = [];
-  Stream? _stream;
   var alldata;
-  dynamic userId;
 
   @override
   void initState() {
-    getUserId().whenComplete(() {
-      _stream = FirebaseFirestore.instance
-          .collection('JMRCollection')
-          .doc(widget.depoName)
-          .collection('userId')
-          .doc(userId)
-          .snapshots();
-      if (widget.showTable == true) {
-        _fetchDataFromFirestore().then((value) => {
-              setState(() {
-                for (dynamic item in jmrSyncList) {
-                  List<dynamic> tempData = [];
-                  if (item is List<dynamic>) {
-                    for (dynamic innerItem in item) {
-                      if (innerItem is Map<String, dynamic>) {
-                        tempData = [
-                          innerItem['srNo'],
-                          innerItem['Description'],
-                          innerItem['Activity'],
-                          innerItem['RefNo'],
-                          innerItem['Abstract'],
-                          innerItem['Uom'],
-                          innerItem['Rate'],
-                          innerItem['TotalQty'],
-                          innerItem['TotalAmount']
-                        ];
-                      }
-                      data.add(tempData);
-                    }
-                  }
-                }
-                _isLoading = false;
-              })
-            });
-      } else {
-        _isLoading = false;
-        setState(() {});
-      }
+    super.initState();
+    _fetchDataFromFirestore().whenComplete(() {
+      _isLoading = false;
+      setState(() {});
     });
   }
 
@@ -146,18 +110,19 @@ class _JmrTablePageState extends State<JmrTablePage> {
           ? const LoadingPage()
           : Scaffold(
               appBar: PreferredSize(
-                // ignore: sort_child_properties_last
+                preferredSize: const Size.fromHeight(50),
                 child: CustomAppBar(
+                  isDownload: widget.showTable,
+                  downloadFun: downloadPDF,
+                  depoName: widget.depoName ?? '',
                   store: () {
                     nextIndex().then((value) => StoreData());
                   },
-                  height: 30,
+                  height: 50,
                   isCentered: true,
                   isSync: widget.showTable ? false : true,
-                  title:
-                      'JMR / ${widget.depoName} / ${widget.title.toString()}',
+                  title: 'JMR',
                 ),
-                preferredSize: const Size.fromHeight(50),
               ),
               body: _isLoading
                   ? const LoadingPage()
@@ -165,507 +130,234 @@ class _JmrTablePageState extends State<JmrTablePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          StreamBuilder(
-                            stream: _stream,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return LoadingPage();
-                              }
-                              if (!snapshot.hasData) {
-                                jmrtable = getData();
-                                _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow);
-                                _dataGridController = DataGridController();
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.8,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: SingleChildScrollView(
-                                    child: SfDataGridTheme(
-                                      data: SfDataGridThemeData(
-                                          headerColor: blue),
-                                      child: SfDataGrid(
-                                        source: _jmrDataSource,
-                                        //key: key,
-                                        allowEditing:
-                                            widget.showTable ? false : true,
-                                        frozenColumnsCount: 1,
-                                        gridLinesVisibility:
-                                            GridLinesVisibility.both,
-                                        headerGridLinesVisibility:
-                                            GridLinesVisibility.both,
-                                        selectionMode: SelectionMode.single,
-                                        navigationMode: GridNavigationMode.cell,
-                                        columnWidthMode: ColumnWidthMode.none,
-                                        editingGestureType:
-                                            EditingGestureType.tap,
-                                        controller: _dataGridController,
-                                        columns: [
-                                          GridColumn(
-                                            columnName: 'srNo',
-                                            autoFitPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 8),
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Sr No',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Description',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                  'Description of items',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Activity',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Activity Details',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white,
-                                                  )),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'RefNo',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('BOQ RefNo',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Abstract',
-                                            allowEditing: true,
-                                            width: 180,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Abstract of JMR',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'UOM',
-                                            allowEditing: true,
-                                            width: 80,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('UOM',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Rate',
-                                            allowEditing: true,
-                                            width: 80,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Rate',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'TotalQty',
-                                            allowEditing: true,
-                                            width: 120,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Total Qty',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'TotalAmount',
-                                            allowEditing: true,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Amount',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)),
-                                            ),
-                                          ),
-                                          GridColumn(
-                                            columnName: 'Delete',
-                                            autoFitPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 16),
-                                            allowEditing: false,
-                                            width: 120,
-                                            label: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8.0),
-                                              alignment: Alignment.center,
-                                              child: Text('Delete Row',
-                                                  overflow:
-                                                      TextOverflow.values.first,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      color: white)
-                                                  //    textAlign: TextAlign.center,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.85,
+                            child: SfDataGridTheme(
+                              data: SfDataGridThemeData(
+                                  headerColor: white, gridLineColor: blue),
+                              child: SfDataGrid(
+                                source: _jmrDataSource,
+                                allowEditing: widget.showTable ? false : true,
+                                frozenColumnsCount: 1,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                selectionMode: SelectionMode.single,
+                                navigationMode: GridNavigationMode.cell,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                editingGestureType: EditingGestureType.tap,
+                                controller: _dataGridController,
+                                allowColumnsResizing: true,
+                                headerRowHeight: 50,
+                                columns: [
+                                  GridColumn(
+                                    columnName: 'srNo',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('SrNo',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    width: 150,
+                                    columnName: 'Description',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Description of items',
+                                          overflow: TextOverflow.values.first,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Activity',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Activity Details',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: blue,
+                                          )),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'RefNo',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('BOQ RefNo',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Abstract',
+                                    allowEditing: true,
+                                    width: 180,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Abstract of JMR',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'UOM',
+                                    allowEditing: true,
+                                    width: 80,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('UOM',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              color: blue)),
+                                    ),
+                                  ),
+                                  GridColumn(
+                                    columnName: 'Rate',
+                                    allowEditing: true,
+                                    width: 80,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Rate',
+                                        overflow: TextOverflow.values.first,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: blue,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                );
-                              } else if (snapshot.hasData) {
-                                jmrtable = convertListToJmrModel(data);
-                                _jmrDataSource =
-                                    JmrDataSource(jmrtable, deleteRow);
-
-                                _dataGridController = DataGridController();
-
-                                return SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.8,
-                                  child: SfDataGridTheme(
-                                    data: SfDataGridThemeData(
-                                      headerColor: blue,
-                                    ),
-                                    child: SfDataGrid(
-                                      source: _jmrDataSource,
-                                      //key: key,
-                                      allowEditing:
-                                          widget.showTable ? false : true,
-                                      frozenColumnsCount: 1,
-                                      gridLinesVisibility:
-                                          GridLinesVisibility.both,
-                                      headerGridLinesVisibility:
-                                          GridLinesVisibility.both,
-                                      selectionMode: SelectionMode.single,
-                                      navigationMode: GridNavigationMode.cell,
-                                      columnWidthMode: ColumnWidthMode.auto,
-                                      editingGestureType:
-                                          EditingGestureType.tap,
-                                      controller: _dataGridController,
-                                      allowColumnsResizing: true,
-
-                                      headerRowHeight: 40,
-                                      columns: [
-                                        GridColumn(
-                                          columnName: 'srNo',
-                                          autoFitPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 9),
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('SrNo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
+                                  GridColumn(
+                                    columnName: 'TotalQty',
+                                    allowEditing: true,
+                                    width: 120,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Total Qty',
+                                        overflow: TextOverflow.values.first,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: blue,
                                         ),
-                                        GridColumn(
-                                          width: 150,
-                                          columnName: 'Description',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Description of items',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Activity',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Activity Details',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  color: white,
-                                                )),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'RefNo',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('BOQ RefNo',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Abstract',
-                                          allowEditing: true,
-                                          width: 180,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Abstract of JMR',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'UOM',
-                                          allowEditing: true,
-                                          width: 80,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('UOM',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Rate',
-                                          allowEditing: true,
-                                          width: 80,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Rate',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'TotalQty',
-                                          allowEditing: true,
-                                          width: 120,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Total Qty',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'TotalAmount',
-                                          allowEditing: true,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Amount',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)),
-                                          ),
-                                        ),
-                                        GridColumn(
-                                          columnName: 'Delete',
-                                          autoFitPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 16),
-                                          allowEditing: false,
-                                          width: 120,
-                                          label: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            alignment: Alignment.center,
-                                            child: Text('Delete Row',
-                                                overflow:
-                                                    TextOverflow.values.first,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: white)
-                                                //    textAlign: TextAlign.center,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                );
-                              } else {
-                                return const NodataAvailable();
-                              }
-                            },
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5, bottom: 10),
-                                child: Visibility(
-                                  visible: widget.showTable ? false : true,
-                                  child: FloatingActionButton(
-                                    hoverColor: Colors.blue[900],
-                                    heroTag: "btn1",
-                                    onPressed: () {
-                                      data.add([
-                                        data.length + 1,
-                                        'Supply and Laying',
-                                        'onboarding one no. of EV charger of 200kw',
-                                        '8.31 (Additional)',
-                                        'abstract of JMR sheet No 1 & Item Sr No 1',
-                                        'Mtr',
-                                        500.00,
-                                        110,
-                                        55000.00
-                                      ]);
-                                      setState(() {});
-                                    },
-                                    child: const Icon(Icons.add),
+                                  GridColumn(
+                                    columnName: 'TotalAmount',
+                                    allowEditing: true,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Amount',
+                                        overflow: TextOverflow.values.first,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: blue,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  GridColumn(
+                                    columnName: 'Delete',
+                                    allowEditing: false,
+                                    width: 120,
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Delete Row',
+                                          overflow: TextOverflow.values.first,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: blue,
+                                          )
+                                          //    textAlign: TextAlign.center,
+                                          ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 5, bottom: 10),
-                                child: Visibility(
-                                  visible: widget.showTable ? false : true,
-                                  child: FloatingActionButton.extended(
-                                    hoverColor: Colors.blue[900],
-                                    heroTag: "btn2",
-                                    isExtended: true,
-                                    onPressed: () {
-                                      selectExcelFile().then((value) {
-                                        setState(() {});
-                                      });
-                                    },
-                                    label: const Text('Upload Excel'),
-                                  ),
-                                ),
-                              )
-                            ],
+                            ),
                           )
                         ],
                       ),
                     ),
+              floatingActionButton: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5, bottom: 10),
+                    child: Visibility(
+                      visible: widget.showTable ? false : true,
+                      child: FloatingActionButton(
+                        hoverColor: Colors.blue[900],
+                        heroTag: "btn1",
+                        onPressed: () {
+                          jmrtable.add(
+                            JMRModel(
+                              srNo: jmrtable.length + 1,
+                              Description: '',
+                              Activity: '',
+                              RefNo: '',
+                              JmrAbstract: '',
+                              Uom: '',
+                              rate: 0,
+                              TotalQty: 0,
+                              TotalAmount: 0,
+                            ),
+                          );
+                          _dataGridController = DataGridController();
+                          _jmrDataSource.buildDataGridRows();
+                          _jmrDataSource.updateDatagridSource();
+                          // setState(() {});a
+                        },
+                        child: const Icon(Icons.add),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5, bottom: 10),
+                    child: Visibility(
+                      visible: widget.showTable ? false : true,
+                      child: FloatingActionButton.extended(
+                        hoverColor: Colors.blue[900],
+                        heroTag: "btn2",
+                        isExtended: true,
+                        onPressed: () {
+                          selectExcelFile().then((value) {
+                            setState(() {});
+                          });
+                        },
+                        label: const Text('Upload Excel'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }
@@ -692,22 +384,12 @@ class _JmrTablePageState extends State<JmrTablePage> {
           data.add(rowData);
         }
       }
+      jmrtable = convertListToJmrModel(data);
+      _jmrDataSource = JmrDataSource(jmrtable, deleteRow);
+      _dataGridController = DataGridController();
     } else {
       print('File is Empty');
     }
-    // final input = FileUploadInputElement()..accept = '.xlsx';
-    // input.click();
-
-    // await input.onChange.first;
-    // final files = input.files;
-
-    // if (files?.length == 1) {
-    //   final file = files?[0];
-    //   final reader = FileReader();
-
-    // reader.readAsArrayBuffer(file!);
-
-    // await reader.onLoadEnd.first;
 
     return data;
   }
@@ -725,12 +407,6 @@ class _JmrTablePageState extends State<JmrTablePage> {
           TotalQty: list[7],
           TotalAmount: list[8]);
     }).toList();
-  }
-
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-    });
   }
 
   Future<void> StoreData() async {
@@ -751,7 +427,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -775,7 +451,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .set({'deponame': widget.depoName});
 
     FirebaseFirestore.instance
@@ -784,7 +460,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .set({'deponame': widget.depoName});
@@ -795,7 +471,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -812,7 +488,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -829,7 +505,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -853,7 +529,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .set({'deponame': widget.depoName});
 
     FirebaseFirestore.instance
@@ -862,7 +538,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .set({'deponame': widget.depoName});
@@ -873,7 +549,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
         .collection('Table')
         .doc('${widget.tabName}JmrField')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -885,14 +561,14 @@ class _JmrTablePageState extends State<JmrTablePage> {
 
   Future<List<dynamic>> _fetchDataFromFirestore() async {
     data.clear();
-    getFieldData();
+    // getFieldData();
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('JMRCollection')
         .doc(widget.depoName)
         .collection('Table')
         .doc('${widget.tabName}JmrTable')
         .collection('userId')
-        .doc(userId)
+        .doc(widget.userId)
         .collection('jmrTabName')
         .doc(widget.jmrTab)
         .collection('jmrTabIndex')
@@ -909,7 +585,7 @@ class _JmrTablePageState extends State<JmrTablePage> {
           .collection('Table')
           .doc('${widget.tabName}JmrTable')
           .collection('userId')
-          .doc(userId)
+          .doc(widget.userId)
           .collection('jmrTabName')
           .doc(widget.jmrTab)
           .collection('jmrTabIndex')
@@ -921,68 +597,444 @@ class _JmrTablePageState extends State<JmrTablePage> {
       if (documentSnapshot.exists) {
         Map<String, dynamic>? data1 =
             documentSnapshot.data() as Map<String, dynamic>?;
-
         jmrSyncList = data1!.entries.map((entry) => entry.value).toList();
-
-        return jmrSyncList;
+        if (widget.showTable) {
+          for (dynamic item in jmrSyncList) {
+            List<dynamic> tempData = [];
+            if (item is List<dynamic>) {
+              for (dynamic innerItem in item) {
+                if (innerItem is Map<String, dynamic>) {
+                  tempData = [
+                    innerItem['srNo'],
+                    innerItem['Description'],
+                    innerItem['Activity'],
+                    innerItem['RefNo'],
+                    innerItem['Abstract'],
+                    innerItem['Uom'],
+                    innerItem['Rate'],
+                    innerItem['TotalQty'],
+                    innerItem['TotalAmount']
+                  ];
+                }
+                data.add(tempData);
+              }
+            }
+          }
+        }
       }
     }
-
+    jmrtable = convertListToJmrModel(data);
+    _jmrDataSource = JmrDataSource(jmrtable, deleteRow);
+    _dataGridController = DataGridController();
     return jmrSyncList;
   }
 
-  Future<void> getFieldData() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('JMRCollection')
-        .doc(widget.depoName)
-        .collection('Table')
-        .doc('${widget.tabName}JmrField')
-        .collection('userId')
-        .doc(userId)
-        .collection('jmrTabName')
-        .doc(widget.jmrTab)
-        .collection('jmrTabIndex')
-        .doc('jmr${widget.dataFetchingIndex}')
-        .collection('date')
-        .get();
+  Future<void> downloadPDF() async {
+    if (await Permission.storage.request().isGranted) {
+      final pr = ProgressDialog(context);
+      pr.style(
+        progressWidgetAlignment: Alignment.center,
+        message: 'Downloading file...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
+      );
 
-    List<dynamic> tempList = querySnapshot.docs.map((date) => date.id).toList();
+      await pr.show();
 
-    for (int i = 0; i < tempList.length; i++) {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('JMRCollection')
-          .doc(widget.depoName)
-          .collection('Table')
-          .doc('${widget.tabName}JmrField')
-          .collection('userId')
-          .doc(userId)
-          .collection('jmrTabName')
-          .doc(widget.jmrTab)
-          .collection('jmrTabIndex')
-          .doc('jmr${widget.dataFetchingIndex}')
-          .collection('date')
-          .doc(tempList[i])
-          .get();
+      final pdfData = await _generatePDF();
 
-      Map<String, dynamic> fieldData =
-          documentSnapshot.data() as Map<String, dynamic>;
+      String fileName = 'Jmr Report.pdf';
 
-      projectName.text = fieldData['project'];
-      loiRefNum.text = fieldData['loiRefNum'];
-      siteLocation.text = fieldData['siteLocation'];
-      refNo.text = fieldData['refNo'];
-      date.text = fieldData['date'];
-      note.text = fieldData['note'];
-      startDate.text = fieldData['startDate'];
-      endDate.text = fieldData['endDate'];
+      final savedPDFFile = await savePDFToFile(pdfData, fileName);
 
-      print(
-          'FieldData - ${projectName.text},${loiRefNum.text},${siteLocation.text},${refNo.text},${endDate.text}');
+      await pr.hide();
     }
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+            'repeating channel id', 'repeating channel name',
+            channelDescription: 'repeating description');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
+    await FlutterLocalNotificationsPlugin().show(
+        0, 'JMR Pdf Downloaded', 'Tap to open', notificationDetails,
+        payload: pathToOpenFile);
+  }
+
+  Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+    final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
+    File file = File('$documentDirectory/$fileName');
+
+    int counter = 1;
+    String newFilePath = file.path;
+    pathToOpenFile = newFilePath;
+
+    while (await file.exists()) {
+      String newName =
+          '${fileName.substring(0, fileName.lastIndexOf('.'))}-$counter${fileName.substring(fileName.lastIndexOf('.'))}';
+      file = File('$documentDirectory/$newName');
+      pathToOpenFile = file.path;
+      counter++;
+    }
+    await file.writeAsBytes(pdfData);
+    return file;
+  }
+
+  Future<Uint8List> _generatePDF() async {
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    const cellStyle = pw.TextStyle(
+      color: PdfColors.black,
+      fontSize: 14,
+    );
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<List<dynamic>> fieldData = [
+      ['Project :', widget.projectName],
+      ['Ref Number :', widget.refNo],
+      ['LOI Ref Number :', widget.loiRefNum],
+      ['Date :', widget.date],
+      ['Site Location :', widget.siteLocation],
+      ['Note :', widget.note],
+      ['Start Date :', widget.startDate],
+      ['End Date :', widget.endDate],
+    ];
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(pw.TableRow(children: [
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Sr No',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding:
+              const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+          child: pw.Center(
+              child: pw.Text('Description',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('Activity Details',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text('BOQ RefNo',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text(
+            'Abstract',
+          ))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text(
+            'UOM',
+          ))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text(
+            'Rate',
+          ))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text(
+            'Total Qty',
+          ))),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+              child: pw.Text(
+            'Amount',
+          ))),
+    ]));
+
+    List<dynamic> userData = [];
+
+    if (jmrSyncList.isNotEmpty) {
+      userData = jmrSyncList[0];
+      List<pw.Widget> imageUrls = [];
+
+      for (Map<String, dynamic> mapData in userData) {
+        //Text Rows of PDF Table
+        rows.add(pw.TableRow(children: [
+          pw.Container(
+              padding: const pw.EdgeInsets.all(3.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['srNo'].toString(),
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(5.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['Description'],
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(
+                        fontSize: 13,
+                      )))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['Activity'],
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['RefNo'].toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['Abstract'].toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['Uom'].toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['Rate'].toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['TotalQty'].toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 13)))),
+          pw.Container(
+              padding: const pw.EdgeInsets.all(2.0),
+              child: pw.Center(
+                  child: pw.Text(mapData['TotalAmount'].toString(),
+                      textAlign: pw.TextAlign.center,
+                      style: const pw.TextStyle(fontSize: 13)))),
+        ]));
+      }
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Jmr Report',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('UserID - ${widget.userId}',
+                  textScaleFactor: 1.5,
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'UserID : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 15)),
+                    pw.TextSpan(
+                        text: widget.userId,
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                ]),
+            pw.SizedBox(
+              height: 20,
+            )
+          ]),
+          pw.SizedBox(
+            height: 10,
+          ),
+          pw.Table.fromTextArray(
+            columnWidths: {
+              0: const pw.FixedColumnWidth(
+                100,
+              ),
+              1: const pw.FixedColumnWidth(
+                100,
+              ),
+            },
+            headers: ['Details', 'Values'],
+            headerStyle: headerStyle,
+            headerPadding: const pw.EdgeInsets.all(
+              10.0,
+            ),
+            data: fieldData,
+            cellHeight: 35,
+            cellStyle: cellStyle,
+          )
+        ],
+      ),
+    );
+
+    pdf.addPage(
+      pw.MultiPage(
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('JMR Report',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - ${widget.userId}',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+              columnWidths: {
+                0: const pw.FixedColumnWidth(30),
+                1: const pw.FixedColumnWidth(120),
+                2: const pw.FixedColumnWidth(120),
+                3: const pw.FixedColumnWidth(120),
+                4: const pw.FixedColumnWidth(120),
+                5: const pw.FixedColumnWidth(120),
+                6: const pw.FixedColumnWidth(70),
+                7: const pw.FixedColumnWidth(50),
+                8: const pw.FixedColumnWidth(50),
+              },
+              defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+              tableWidth: pw.TableWidth.max,
+              border: pw.TableBorder.all(),
+              children: rows)
+        ],
+      ),
+    );
+
+    final Uint8List pdfData = await pdf.save();
+
+    // Save the PDF file to device storage
+
+    return pdfData;
   }
 
   void deleteRow(dynamic removeIndex) async {
-    data.removeAt(removeIndex);
+    jmrtable.removeAt(removeIndex);
     print('Row Removed $removeIndex');
   }
 }
@@ -991,14 +1043,14 @@ List<JMRModel> getData() {
   return [
     JMRModel(
         srNo: 1,
-        Description: 'Supply and Laying',
-        Activity: 'Software',
-        RefNo: '8.31 (Additional)',
-        JmrAbstract: 'Dumble Door',
-        Uom: 'Mtr',
-        rate: 500.00,
-        TotalQty: 110,
-        TotalAmount: 55000.00),
+        Description: '',
+        Activity: '',
+        RefNo: '',
+        JmrAbstract: '',
+        Uom: '',
+        rate: 0.0,
+        TotalQty: 0.0,
+        TotalAmount: 0.0),
   ];
 }
 

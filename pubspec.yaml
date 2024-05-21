@@ -28,51 +28,64 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  url_launcher:
-  photo_view:
-  path_provider:
   apptive_grid_theme: ^1.2.0
-  cloud_firestore:
+  cached_network_image: null
+  chewie: ^1.7.5
+  cloud_firestore: null
   connectivity_plus: ^5.0.0
   cupertino_icons: ^1.0.2
+  data_table_2: ^2.4.2
+  dropdown_button2: ^2.1.4
   excel: ^2.1.0
   file_picker: null
   firebase_auth: ^4.8.0
   firebase_core: ^2.15.1
+  firebase_messaging: ^14.7.10
   firebase_storage: ^11.2.6
-  cached_network_image:
+  fl_chart: ^0.62.0
   flutter:
     sdk: flutter
+  flutter_full_pdf_viewer_null_safe: null
   flutter_launcher_icons: ^0.13.1
+  flutter_local_notifications: null
+  flutter_svg:
+  flutter_typeahead: null
+  flutter_windowmanager: ^0.2.0
   gantt_chart: ^0.3.0
   get: ^4.6.5
   google_fonts: null
   google_nav_bar: ^5.0.6
+  http: ^0.13.6
   image_picker: ^1.0.4
   internet_connection_checker: ^1.0.0+1
   intl: ^0.18.1
+  lecle_downloads_path_provider: null
   lottie: ^2.3.2
-  open_file:
-  open_file_plus:
+  mailto: ^2.0.0
+  open_file: null
+  open_file_plus: null
+  overlay_support: ^2.1.0
+  path_provider: null
+  pdf: null
+  percent_indicator: null
+  permission_handler: null
   persistent_bottom_nav_bar: null
+  photo_view: null
+  pie_chart: ^5.4.0
+  pin_input_text_field: null
+  printing: null
+  progress_dialog_null_safe: null
   provider: ^6.0.5
   shared_preferences: ^2.2.0
+  syncfusion_flutter_core: ^20.4.54
   syncfusion_flutter_datagrid: ^20.4.49
   syncfusion_flutter_datepicker: ^20.3.38
   syncfusion_flutter_pdfviewer: ^20.4.54
   tab_indicator_styler: ^2.0.0
-  flutter_typeahead:
-  pdf:
-  printing:
-  permission_handler:
-  pin_input_text_field:
-  lecle_downloads_path_provider:
-  flutter_local_notifications:
-  progress_dialog_null_safe:
-  syncfusion_flutter_core: ^20.4.54
-  flutter_windowmanager:
-  percent_indicator:
-  flutter_full_pdf_viewer_null_safe:
+  url_launcher: null
+  video_player: ^2.7.2
+  toast:
+  flutter_bloc: ^8.1.5
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -101,6 +114,7 @@ flutter:
     - assets/overview_image/
     - animations/loading_animation.gif
     - assets/appbar/
+    - assets/split_screen/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
@@ -111,10 +125,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: IBMPlexSans
+    - family: Montserrat
       fonts:
-        - asset: fonts/IBMPlexSans-Medium.ttf
-        - asset: fonts/IBMPlexSans-Bold.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

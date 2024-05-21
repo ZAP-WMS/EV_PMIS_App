@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/custom_appbar.dart';
-import '../widgets/navbar.dart';
+import '../PMIS/widgets/custom_appbar.dart';
+import '../PMIS/widgets/navbar.dart';
 
 class ChatPage extends StatefulWidget {
   String depoName;
@@ -15,9 +15,13 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavbarDrawer(),
+      // drawer: NavbarDrawer(role: widget.role!),
       appBar: CustomAppBar(
-          title: 'Feedback Page', height: 50, isSync: false, isCentered: false),
+          depoName: widget.depoName,
+          title: 'Feedback Page',
+          height: 50,
+          isSync: false,
+          isCentered: false),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

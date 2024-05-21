@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/widgets/custom_appbar.dart';
-import 'package:ev_pmis_app/widgets/navbar.dart';
+import 'package:ev_pmis_app/models/closer_report.dart';
+import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
+import 'package:ev_pmis_app/PMIS/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../components/Loading_page.dart';
-import '../../../datasource/closereport_datasource.dart';
-import '../../../model/closer_report.dart';
-import '../../../provider/cities_provider.dart';
+import '../../../PMIS/user/datasource/closereport_datasource.dart';
+import '../../../PMIS/provider/cities_provider.dart';
 import '../../../style.dart';
-import '../../homepage/gallery.dart';
 
 //This is a comment
 class ClosureTable extends StatefulWidget {
@@ -49,9 +49,10 @@ class _ClosureTableState extends State<ClosureTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavbarDrawer(),
+      // drawer:  NavbarDrawer(role: widget.role!),
       appBar: CustomAppBar(
-        title: 'Closure Checklist/${widget.depoName}',
+        depoName: '${widget.depoName}',
+        title: 'Closure Checklist',
         height: 50,
         isSync: true,
         isCentered: false,
