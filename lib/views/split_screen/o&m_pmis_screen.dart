@@ -54,17 +54,12 @@ class _PmisAndOAndMScreenState extends State<PmisAndOAndMScreen> {
                           child: Container(
                             height: 170,
                             width: 170,
-                            child: Image.asset(
-                              'assets/app_logo.png',
-                            ),
+                            child: Image.asset('assets/app_logo.png'),
                           ),
                         );
                       },
                     ),
-                    Text(
-                      'EV Monitoring',
-                      style: splitscreenStyle,
-                    ),
+                    Text('EV Monitoring', style: splitscreenStyle)
                   ],
                 ),
               ),
@@ -88,9 +83,7 @@ class _PmisAndOAndMScreenState extends State<PmisAndOAndMScreen> {
                             ),
                           );
                           Future.delayed(
-                            const Duration(
-                              seconds: 2,
-                            ),
+                            const Duration(seconds: 2),
                             () {
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
