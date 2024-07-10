@@ -129,7 +129,8 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
             },
           )),
       body: SfDataGridTheme(
-        data: SfDataGridThemeData(headerColor: white, gridLineColor: blue),
+        data: SfDataGridThemeData(
+          headerColor: white, gridLineColor: blue),
         child: StreamBuilder(
           stream: _stream,
           builder: (context, snapshot) {
