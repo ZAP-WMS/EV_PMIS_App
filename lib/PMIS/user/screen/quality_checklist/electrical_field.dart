@@ -1,12 +1,26 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/components/loading_pdf.dart';
-import 'package:ev_pmis_app/models/quality_checklistModel.dart';
-import 'package:ev_pmis_app/views/authentication/authservice.dart';
-import 'package:ev_pmis_app/views/citiespage/depot.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_EP.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_acdb.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_cdi.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_charger.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_ci.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_cmu.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_ct.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_msp.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
+import 'package:ev_pmis_app/PMIS/QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
+import 'package:ev_pmis_app/PMIS/authentication/authservice.dart';
+import 'package:ev_pmis_app/PMIS/common_screen/citiespage/depot.dart';
+import 'package:ev_pmis_app/PMIS/models/quality_checklistModel.dart';
+import 'package:ev_pmis_app/PMIS/provider/cities_provider.dart';
 import 'package:ev_pmis_app/PMIS/widgets/appbar_back_date.dart';
+import 'package:ev_pmis_app/PMIS/widgets/custom_textfield.dart';
 import 'package:ev_pmis_app/PMIS/widgets/navbar.dart';
 import 'package:ev_pmis_app/PMIS/widgets/progress_loading.dart';
+import 'package:ev_pmis_app/components/Loading_page.dart';
+import 'package:ev_pmis_app/components/loading_pdf.dart';
+import 'package:ev_pmis_app/style.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,24 +33,11 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_EP.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_acdb.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_cdi.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_charger.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_ci.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_cmu.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_ct.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_msp.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_pss.dart';
-import '../../../QualityDatasource/qualityElectricalDatasource/quality_rmu.dart';
-import '../../../../components/Loading_page.dart';
-import '../../../provider/cities_provider.dart';
-import '../../../../style.dart';
-import '../../../widgets/custom_textfield.dart';
-import '../../../widgets/quality_list.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+import '../../../widgets/quality_list.dart';
 
 class ElectricalField extends StatefulWidget {
   String? depoName;
@@ -45,15 +46,15 @@ class ElectricalField extends StatefulWidget {
   int? titleIndex;
   String? role;
   String cityName;
-  ElectricalField(
-      {super.key,
-      required this.depoName,
-      required this.title,
-      this.role,
-      required this.fielClnName,
-      required this.titleIndex,
-      required this.cityName,
-      });
+  ElectricalField({
+    super.key,
+    required this.depoName,
+    required this.title,
+    this.role,
+    required this.fielClnName,
+    required this.titleIndex,
+    required this.cityName,
+  });
 
   @override
   State<ElectricalField> createState() => _ElectricalFieldState();
@@ -1374,10 +1375,9 @@ class _ElectricalFieldState extends State<ElectricalField> {
 
   Future getAssignedDepots() async {
     assignedCities = await authService.getCityList();
-    isFieldEditable =
-        authService.verifyAssignedDepot(
-          widget.cityName!, assignedCities,
-        );
+    isFieldEditable = authService.verifyAssignedDepot(
+      widget.cityName!,
+      assignedCities,
+    );
   }
-  
 }
