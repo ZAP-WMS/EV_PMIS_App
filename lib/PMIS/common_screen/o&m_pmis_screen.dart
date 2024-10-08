@@ -177,7 +177,7 @@ class _PmisAndOAndMScreenState extends State<PmisAndOAndMScreen> {
                             ),
                           );
                           Future.delayed(
-                            const Duration(
+                            const Duration(  
                               seconds: 2,
                             ),
                             () {

@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/date_format.dart';
 import 'package:ev_pmis_app/PMIS/summary.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
@@ -56,146 +54,146 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
         initialIndex: _selectedIndex,
         child: Scaffold(
           appBar: AppBar(
-              backgroundColor: blue,
-              title: Text(
-                'Monthly Page ',
-                style: TextStyle(color: white, fontWeight: FontWeight.bold),
+            backgroundColor: blue,
+            title: Text(
+              'Monthly Page ',
+              style: TextStyle(color: white, fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      chooseDate(context);
+                    },
+                    child: Image.asset(
+                      'assets/appbar/calender.jpeg',
+                      height: 35,
+                      width: 35,
+                    ),
+                  ),
+                  Text(
+                    _selectedDate!,
+                    style: TextStyle(color: white, fontSize: 10),
+                  ),
+                ],
               ),
-              actions: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+
+              Container(
+                padding: const EdgeInsets.only(bottom: 0, right: 5),
+                width: 80,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
                       onTap: () {
-                        chooseDate(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewSummary(
+                                  depoName: widget.depoName,
+                                  cityName: widget.cityName,
+                                  titleName: titleName[_selectedIndex],
+                                  tabIndex: _selectedIndex,
+                                  userId: widget.userId,
+                                  id: 'Monthly Management'),
+                            ));
                       },
                       child: Image.asset(
-                        'assets/appbar/calender.jpeg',
+                        'assets/appbar/summary.jpeg',
                         height: 35,
                         width: 35,
                       ),
                     ),
-                    Text(
-                      _selectedDate!,
-                      style: TextStyle(color: white, fontSize: 10),
-                    ),
-                  ],
-                ),
-
-                Container(
-                  padding: const EdgeInsets.only(bottom: 0, right: 5),
-                  width: 80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ViewSummary(
-                                    depoName: widget.depoName,
-                                    cityName: widget.cityName,
-                                    titleName: titleName[_selectedIndex],
-                                    tabIndex: _selectedIndex,
-                                    userId: widget.userId,
-                                    id: 'Monthly Management'),
-                              ));
-                        },
-                        child: Image.asset(
-                          'assets/appbar/summary.jpeg',
-                          height: 35,
-                          width: 35,
-                        ),
+                    InkWell(
+                      onTap: () {
+                        showProgressDilogue(context);
+                        monthlyManagementStoreData(
+                          context,
+                          userId,
+                          widget.depoName!,
+                          titleName[_selectedIndex],
+                          _selectedIndex,
+                          _selectedDate!,
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/appbar/sync.jpeg',
+                        height: 35,
+                        width: 35,
                       ),
-                      InkWell(
-                        onTap: () {
-                          showProgressDilogue(context);
-                          monthlyManagementStoreData(
-                            context,
-                            userId,
-                            widget.depoName!,
-                            titleName[_selectedIndex],
-                            _selectedIndex,
-                            _selectedDate!,
-                          );
-                        },
-                        child: Image.asset(
-                          'assets/appbar/sync.jpeg',
-                          height: 35,
-                          width: 35,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-
-                // Padding(
-                //   padding:
-                //       const EdgeInsets.only(right: 20, top: 10, bottom: 10),
-                //   child: Container(
-                //     height: 30,
-                //     decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(10),
-                //         color: lightblue),
-                //     child: TextButton(
-                //         onPressed: () {
-                //           monthlyManagementStoreData(
-                //               context,
-                //               userId,
-                //               widget.depoName!,
-                //               titleName[_selectedIndex],
-                //               _selectedIndex,
-                //               _selectedDate!);
-                //         },
-                //         child: Text(
-                //           'Sync Data',
-                //           style: TextStyle(color: white, fontSize: 20),
-                //         )),
-                //   ),
-                // )
-              ],
-              bottom: PreferredSize(
-                preferredSize: const Size(double.infinity, 50),
-                child: TabBar(
-                  labelColor: yellow,
-                  labelStyle: buttonWhite,
-                  unselectedLabelColor: white,
-                  indicator: MaterialIndicator(
-                      horizontalPadding: 24,
-                      bottomLeftRadius: 8,
-                      bottomRightRadius: 8,
-                      color: white,
-                      paintingStyle: PaintingStyle.fill,
-                      ),
-                  tabs: const [
-                        Tab(
-                          text: 'Charger Reading Format',
-                        ),
-                      Tab(
-                        text: 'Charger Filter/DC Connector Cleaning Format',
-                    ),
+                    )
                   ],
-                  onTap: (value) {
-                    _selectedIndex = value;
-                  },
                 ),
               ),
+
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.only(right: 20, top: 10, bottom: 10),
+              //   child: Container(
+              //     height: 30,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(10),
+              //         color: lightblue),
+              //     child: TextButton(
+              //         onPressed: () {
+              //           monthlyManagementStoreData(
+              //               context,
+              //               userId,
+              //               widget.depoName!,
+              //               titleName[_selectedIndex],
+              //               _selectedIndex,
+              //               _selectedDate!);
+              //         },
+              //         child: Text(
+              //           'Sync Data',
+              //           style: TextStyle(color: white, fontSize: 20),
+              //         )),
+              //   ),
+              // )
+            ],
+            bottom: PreferredSize(
+              preferredSize: const Size(double.infinity, 50),
+              child: TabBar(
+                labelColor: yellow,
+                labelStyle: buttonWhite,
+                unselectedLabelColor: white,
+                indicator: MaterialIndicator(
+                  horizontalPadding: 24,
+                  bottomLeftRadius: 8,
+                  bottomRightRadius: 8,
+                  color: white,
+                  paintingStyle: PaintingStyle.fill,
+                ),
+                tabs: const [
+                  Tab(
+                    text: 'Charger Reading Format',
+                  ),
+                  Tab(
+                    text: 'Charger Filter/DC Connector Cleaning Format',
+                  ),
+                ],
+                onTap: (value) {
+                  _selectedIndex = value;
+                },
+              ),
             ),
+          ),
           body: TabBarView(
             children: [
               MonthlyManagementPage(
-                  cityName: widget.cityName,
-                  depoName: widget.depoName,
-                  tabIndex: _selectedIndex,
-                  tabletitle: 'Charger Reading Format',
-                  ),
+                cityName: widget.cityName,
+                depoName: widget.depoName,
+                tabIndex: _selectedIndex,
+                tabletitle: 'Charger Reading Format',
+              ),
               MonthlyManagementPage(
-                  cityName: widget.cityName,
-                  depoName: widget.depoName,
-                  tabIndex: _selectedIndex,
-                  tabletitle: 'Charger Filter',
-                  ),
+                cityName: widget.cityName,
+                depoName: widget.depoName,
+                tabIndex: _selectedIndex,
+                tabletitle: 'Charger Filter',
+              ),
             ],
           ),
         ));

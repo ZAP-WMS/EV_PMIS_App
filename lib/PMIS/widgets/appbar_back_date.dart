@@ -1,12 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../provider/checkbox_provider.dart';
 import '../../style.dart';
 import '../authentication/authservice.dart';
-import '../authentication/login_register.dart';
 
 class CustomAppBarBackDate extends StatefulWidget {
   String? text;

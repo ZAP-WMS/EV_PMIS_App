@@ -2354,30 +2354,34 @@ class _ViewSummaryState extends State<ViewSummary> {
 
       if (imageUrls.length > 4) {
         //Image Rows of PDF Table
-        rows.add(pw.TableRow(children: [
-          pw.Container(
-            padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-            child: pw.Text(
-              '',
-            ),
+        rows.add(
+          pw.TableRow(
+            children: [
+              pw.Container(
+                padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: pw.Text(
+                  '',
+                ),
+              ),
+              pw.Container(
+                  padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  width: 60,
+                  height: 100,
+                  child: pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                      children: [
+                        imageUrls[4],
+                        imageUrls[5],
+                      ])),
+              imageUrls[6],
+              imageUrls[7],
+              imageUrls[8],
+              imageUrls[9],
+              imageUrls[10],
+              imageUrls[11],
+            ],
           ),
-          pw.Container(
-              padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-              width: 60,
-              height: 100,
-              child: pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                  children: [
-                    imageUrls[4],
-                    imageUrls[5],
-                  ])),
-          imageUrls[6],
-          imageUrls[7],
-          imageUrls[8],
-          imageUrls[9],
-          imageUrls[10],
-          imageUrls[11],
-        ],),);
+        );
       }
       imageUrls.clear();
     }
@@ -2703,9 +2707,7 @@ class _ViewSummaryState extends State<ViewSummary> {
           child: pw.Center(
             child: pw.Text(
               'Image1',
-              style: pw.TextStyle(
-                fontWeight: pw.FontWeight.bold,
-              ),
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
             ),
           )),
       pw.Container(
@@ -2873,6 +2875,344 @@ class _ViewSummaryState extends State<ViewSummary> {
         ]));
       }
       imageUrls.clear();
+    }
+
+    final pdf = pw.Document(
+      pageMode: PdfPageMode.outlines,
+    );
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        maxPages: 100,
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Daily Report Table',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - ${widget.userId}',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: '${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text:
+                            '${startdate!.day}-${startdate!.month}-${startdate!.year} to ${enddate!.day}-${enddate!.month}-${enddate!.year}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : ${widget.userId}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+            columnWidths: {
+              0: const pw.FixedColumnWidth(30),
+              1: const pw.FixedColumnWidth(160),
+              2: const pw.FixedColumnWidth(70),
+              3: const pw.FixedColumnWidth(70),
+              4: const pw.FixedColumnWidth(70),
+              5: const pw.FixedColumnWidth(70),
+              6: const pw.FixedColumnWidth(70),
+              7: const pw.FixedColumnWidth(70),
+            },
+            defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+            tableWidth: pw.TableWidth.max,
+            border: pw.TableBorder.all(),
+            children: rows,
+          )
+        ],
+      ),
+    );
+
+    pdfData = await pdf.save();
+    pdfPath = 'Daily Report.pdf';
+
+    return pdfData!;
+  }
+
+  Future<Uint8List> _generateDailyManagementPDF(List<dynamic> tabledata) async {
+    print('generating daily Management pdf');
+    pr!.style(
+        progressWidgetAlignment: Alignment.center,
+        // message: 'Loading Data....',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: const LoadingPdf(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        maxProgress: 100.0,
+        progressTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 10.0, fontWeight: FontWeight.w400),
+        messageTextStyle: const TextStyle(
+            color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600));
+
+    final summaryProvider =
+        Provider.of<SummaryProvider>(context, listen: false);
+    dailyproject = summaryProvider.dailydata;
+
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    final profileImage = pw.MemoryImage(
+      (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
+    );
+
+    List<pw.TableRow> rows = [];
+
+    //Text header for table
+    rows.add(pw.TableRow(children: [
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Charger No',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+        child: pw.Center(
+          child: pw.Text(
+            'Display Condition',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'CGCA',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'CGCB',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'CGCCA',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'CGCAB',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+            child: pw.Text(
+              'Door lock',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          )),
+
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+            child: pw.Text(
+              'Availability of Rubber mat',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          )),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+            child: pw.Text(
+              'Earth Condition',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          )),
+
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+            child: pw.Text(
+              'Charger Cleaness',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          )),
+
+      // pw.Container(
+      //   padding: const pw.EdgeInsets.all(2.0),
+      //   child: pw.Center(
+      //     child: pw.Text(
+      //       'Image2',
+      //       style: pw.TextStyle(
+      //         fontWeight: pw.FontWeight.bold,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+    ]));
+
+    List<pw.Widget> imageUrls = [];
+
+    for (int i = 0; i < dailyproject.length; i++) {
+      String imagesPath =
+          '/Daily Report/${widget.cityName}/${widget.depoName}/${widget.userId}/${dailyproject[i].date}/${globalRowIndex[i]}';
+      print(imagesPath);
+
+      ListResult result =
+          await FirebaseStorage.instance.ref().child(imagesPath).listAll();
+
+      result.items.clear();
+
+      //Text Rows of PDF Table
+      rows.add(pw.TableRow(children: [
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((i + 1).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(tabledata[i].cn.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(tabledata[i].dc.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(tabledata[i].cgca.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(tabledata[i].progress.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+                child: pw.Text(tabledata[i].status.toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        imageUrls[0],
+        imageUrls[1]
+      ]));
+
+      // if (imageUrls.length - 2 > 0) {
+      //   //Image Rows of PDF Table
+      //   rows.add(pw.TableRow(children: [
+      //     pw.Container(
+      //         padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+      //         child: pw.Text('')),
+      //     pw.Container(
+      //         padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
+      //         width: 60,
+      //         height: 100,
+      //         child: pw.Row(
+      //             mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+      //             children: [
+      //               imageUrls[2],
+      //               imageUrls[3],
+      //             ])),
+      //     imageUrls[4],
+      //     imageUrls[5],
+      //     imageUrls[6],
+      //     imageUrls[7],
+      //     imageUrls[8],
+      //     imageUrls[9]
+      //   ]));
+      // }
+      // imageUrls.clear();
     }
 
     final pdf = pw.Document(
@@ -3217,7 +3557,7 @@ class _ViewSummaryState extends State<ViewSummary> {
             color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
       );
 
-      await pr.show();
+      await pr.show();  
 
       final pdfData = widget.id == 'Daily Report'
           ? await _generateDailyPDF()
@@ -3225,7 +3565,12 @@ class _ViewSummaryState extends State<ViewSummary> {
               ? await _generateMonthlyPdf()
               : widget.id == 'Safety Checklist Report'
                   ? await _generateSafetyPDF()
-                  : await _generateEnergyPDF();
+                  : widget.id == 'Energy Management'
+                      ? await _generateEnergyPDF()
+                      // : widget.id == 'Daily Management'
+                      //     ? _generateDailyManagementPDF()
+                      : _generateEnergyPDF();
+      //    _generateDailyManagementPDF();
 
       String fileName = widget.id == 'Daily Report'
           ? 'DailyReport.pdf'
@@ -3237,7 +3582,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                       ? 'EnergyManagement.pdf'
                       : '';
 
-      final savedPDFFile = await savePDFToFile(pdfData, fileName);
+      // final savedPDFFile = await savePDFToFile(pdfData, fileName);
 
       await pr.hide();
 

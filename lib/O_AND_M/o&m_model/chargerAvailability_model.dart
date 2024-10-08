@@ -52,7 +52,36 @@ class ChargerAvailabilityModel {
       DataGridCell(columnName: 'TimeLoss', value: timeLoss),
       DataGridCell(columnName: 'Availability', value: availability),
       DataGridCell(columnName: 'Remarks', value: remarks),
-            const DataGridCell(columnName: 'Delete', value: null),
+      const DataGridCell(columnName: 'Delete', value: null),
     ]);
+  }
+
+  factory ChargerAvailabilityModel.fromExcelRow(List<dynamic> row) {
+    return ChargerAvailabilityModel(
+        srNo: row[0],
+        location: row[1],
+        depotName: row[2],
+        chargerNo: row[3],
+        chargerSrNo: row[4],
+        chargerMake: row[5],
+        targetTime: row[6] ?? '',
+        timeLoss: row[7] ?? '',
+        availability: row[8] ?? '',
+        remarks: row[9] ?? '');
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'srNo': srNo,
+      'location': location,
+      'depotName': depotName,
+      'chargerNo': chargerNo,
+      'chargerSerialNo': chargerNo,
+      'chargerMake': chargerMake,
+      'targetTimeInHrs': targetTime,
+      'totalTimeLoss': timeLoss,
+      'availability': availability,
+      'remarks': remarks,
+    };
   }
 }

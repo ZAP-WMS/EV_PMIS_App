@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/O_AND_M/o&m_datasource/charger_availablity_datasource.dart';
 import 'package:ev_pmis_app/O_AND_M/o&m_model/chargerAvailability_model.dart';
+import 'package:excel/excel.dart'   as Excel;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -45,9 +47,11 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
   List<dynamic> tabledata2 = [];
   bool isLoading = true;
   bool dateRangeSelected = false;
+  List<List<dynamic>> excelData = [];
 
   @override
   void initState() {
+    // loadExcelData();
     getTableData(0).whenComplete(() {
       chargerAvailabilityDataSource = ChargerAvailabilityDataSource(
           chargerModel,
@@ -65,6 +69,35 @@ class _ChargerAvailabilityScreenState extends State<ChargerAvailabilityScreen> {
       setState(() {});
     });
     super.initState();
+  }
+
+  Future<List<void>> loadExcelData() async {
+    List<List<dynamic>> excelData = [];
+    // Load the Excel file from assets
+    ByteData data = await rootBundle.load('assets/dashboard_data.xlsx');
+    var bytes = data.buffer.asUint8List();
+
+    // Decode the Excel file
+    var excel = Excel.Excel.decodeBytes(bytes);
+
+    // Read the data from the first sheet
+    for (var table in excel.tables.keys) {
+      if (table == 'For Charger Availability') {
+        print(table); //sheet Name
+        print(excel.tables[table]?.maxCols);
+        print(excel.tables[table]?.maxRows);
+        for (var table in excel.tables.keys) {
+          var sheet = excel.tables[table];
+          for (var row in sheet!.rows.skip(1)) {
+            // skip header row
+            print(row);
+            excelData.add(row);
+            print(excelData);
+          }
+        }
+      }
+    }
+    return excelData;
   }
 
   @override

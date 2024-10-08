@@ -184,5 +184,19 @@ class AuthService {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final String data = sharedPreferences.getString('employeeId').toString();
     return data;
+  }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+  Future<List<String>> getFirestoreAssignedRoleIds() async {
+    List<String> firestoreIds = [];
+
+    // Assuming your Firestore collection is named 'assignedRoles'                                                         
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('AssignedRole').get();
+
+    // Extract the IDs from Firestore documents
+    snapshot.docs.forEach((doc) {
+      firestoreIds.add(doc.id);
+    }); 
+    return firestoreIds;
   }
 }

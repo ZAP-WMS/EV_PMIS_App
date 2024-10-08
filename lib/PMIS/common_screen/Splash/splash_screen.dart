@@ -109,7 +109,6 @@ class SplashScreenState extends State<SplashScreen>
     RemoteMessage? message =
         await FirebaseMessaging.instance.getInitialMessage();
     if (message != null) {
-
       // ignore: use_build_context_synchronously
       // Navigator.pushNamed(context, '/user-list');
       PushNotification notification = PushNotification(
@@ -216,8 +215,8 @@ class SplashScreenState extends State<SplashScreen>
     bool user = false;
 
     sharedPreferences = await SharedPreferences.getInstance();
+    List<String> firestoreIds = [];
     try {
-      
       if (sharedPreferences.getString('employeeId') != null) {
         userId = sharedPreferences.getString('employeeId');
         role = await AuthService().getUserRole();
@@ -225,12 +224,14 @@ class SplashScreenState extends State<SplashScreen>
         user = true;
         role = await AuthService().getUserRole();
         roleCentre = await AuthService().getRoleCentre();
+        firestoreIds = await AuthService().getFirestoreAssignedRoleIds();
       }
 
       if (!_isNotificationPage) {
         // Add a delay before navigating to the main page
         await Future.delayed(
-          const Duration(milliseconds: 1500,
+          const Duration(
+            milliseconds: 1500,
           ),
           () {
             Navigator.pushNamedAndRemoveUntil(
@@ -246,6 +247,7 @@ class SplashScreenState extends State<SplashScreen>
           },
         );
       } else {
+        // ignore: use_build_context_synchronously
         Navigator.pushNamedAndRemoveUntil(
           context,
           '/user-list',
