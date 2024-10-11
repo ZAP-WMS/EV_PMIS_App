@@ -56,8 +56,8 @@ class DailyTranformerDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, DailyTranformerDataSource rowData) {
-        //   _dailyproject.insert(index, rowData);
+      void addRowAtIndex(int index, DailyTransformerModel rowData) {
+        _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
@@ -153,19 +153,18 @@ class DailyTranformerDataSource extends DataGridSource {
                   ? ElevatedButton(
                       onPressed: () {
                         // isShowPinIcon.add(false);
-                        // addRowAtIndex(
-                        //     dataRowIndex + 1,
-                        //     DailyManagementProjectModel(
-                        //         sfuNo: sfuNo,
-                        //         icc: icc,
-                        //         ictc: ictc,
-                        //         occ: occ,
-                        //         octc: octc,
-                        //         ec: ec,
-                        //         cg: cg,
-                        //         dl: dl,
-                        //         vi: vi)
-                        //         );
+                        addRowAtIndex(
+                            dataRowIndex + 1,
+                            DailyTransformerModel(
+                                trNo: dataRowIndex + 2,
+                                pc: '',
+                                ec: '',
+                                ol: '',
+                                oc: '',
+                                wtiTemp: '',
+                                otiTemp: '',
+                                brk: '',
+                                cta: ''));
                       },
                       child: Text(
                         'Add',

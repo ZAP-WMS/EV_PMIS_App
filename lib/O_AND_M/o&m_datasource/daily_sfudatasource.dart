@@ -56,8 +56,8 @@ class DailySFUManagementDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, DailySFUManagementDataSource rowData) {
-        //   _dailyproject.insert(index, rowData);
+      void addRowAtIndex(int index, DailySfuModel rowData) {
+        _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
@@ -152,6 +152,19 @@ class DailySFUManagementDataSource extends DataGridSource {
               (dataGridCell.columnName == 'Add')
                   ? ElevatedButton(
                       onPressed: () {
+                        addRowAtIndex(
+                            dataRowIndex + 1,
+                            DailySfuModel(
+                                sfuNo: dataRowIndex + 2,
+                                fuc: '',
+                                icc: 'icc',
+                                ictc: 'ictc',
+                                occ: 'occ',
+                                octc: 'octc',
+                                ec: 'ec',
+                                cg: 'cg',
+                                dl: 'dl',
+                                vi: 'vi'));
                         // isShowPinIcon.add(false);
                         // addRowAtIndex(
                         //     dataRowIndex + 1,

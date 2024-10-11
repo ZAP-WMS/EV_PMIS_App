@@ -1,4 +1,5 @@
 import 'package:ev_pmis_app/O_AND_M/user/dailyreport/daily_management.dart';
+import 'package:ev_pmis_app/O_AND_M/user/dailyreport/daily_management_home.dart';
 import 'package:flutter/material.dart';
 
 class DailyManagementAction extends StatefulWidget {
@@ -17,8 +18,7 @@ class DailyManagementAction extends StatefulWidget {
       required this.roleCentre});
 
   @override
-  State<DailyManagementAction> createState() =>
-      _DailyManagementActionState();
+  State<DailyManagementAction> createState() => _DailyManagementActionState();
 }
 
 class _DailyManagementActionState extends State<DailyManagementAction> {
@@ -36,12 +36,11 @@ class _DailyManagementActionState extends State<DailyManagementAction> {
   }
 
   Widget selectWidget() {
-
     switch (widget.role) {
       case 'user':
-        selectedUi = DailyManagementPage(
-          tabIndex: 0,
-          tabletitle: 'Daily Progress Report',
+        selectedUi = DailyManagementHomePage(
+          // tabIndex: 0,
+          // tabletitle: 'Daily Progress Report',
           cityName: widget.cityName,
           depoName: widget.depoName,
           userId: widget.userId,
@@ -50,9 +49,9 @@ class _DailyManagementActionState extends State<DailyManagementAction> {
         break;
 
       case 'admin':
-        selectedUi = DailyManagementPage(
-          tabIndex: 0,
-          tabletitle: 'Daily Progress Report',
+        selectedUi = DailyManagementHomePage(
+          // tabIndex: 0,
+          // tabletitle: 'Daily Progress Report',
           userId: widget.userId,
           cityName: widget.cityName,
           depoName: widget.depoName,
@@ -62,17 +61,15 @@ class _DailyManagementActionState extends State<DailyManagementAction> {
 
       case "projectManager":
         selectedUi = DailyManagementPage(
-          tabIndex: 0,
-          tabletitle: 'Daily Progress Report',
+            tabIndex: 0,
+            tabletitle: 'Daily Progress Report',
             userId: widget.userId,
             cityName: widget.cityName,
             depoName: widget.depoName,
-            role: widget.role!
-            );
+            role: widget.role!);
         break;
     }
 
     return selectedUi;
   }
-
 }

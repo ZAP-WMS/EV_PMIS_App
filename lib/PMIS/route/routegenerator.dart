@@ -1,3 +1,4 @@
+import 'package:ev_pmis_app/O_AND_M/action__screen/breakdown_action.dart';
 import 'package:ev_pmis_app/O_AND_M/action__screen/charger_availability_action.dart';
 import 'package:ev_pmis_app/O_AND_M/action__screen/daily_management_action.dart';
 import 'package:ev_pmis_app/O_AND_M/user/management_screen/oAndM_dashboard.dart';
@@ -333,7 +334,7 @@ class RouteGenerator {
           final cityName = args["cityName"];
           final depoName = args["depoName"];
 
-          return BreakdownScreen(
+          return BreakdownAction(
             roleCentre: roleCentre,
             userId: userId,
             cityName: cityName,

@@ -56,8 +56,8 @@ class DailyRmuDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, DailyRmuDataSource rowData) {
-        //   _dailyproject.insert(index, rowData);
+      void addRowAtIndex(int index, DailyrmuModel rowData) {
+        _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
@@ -153,19 +153,17 @@ class DailyRmuDataSource extends DataGridSource {
                   ? ElevatedButton(
                       onPressed: () {
                         // isShowPinIcon.add(false);
-                        // addRowAtIndex(
-                        //     dataRowIndex + 1,
-                        //     DailyManagementProjectModel(
-                        //         sfuNo: sfuNo,
-                        //         icc: icc,
-                        //         ictc: ictc,
-                        //         occ: occ,
-                        //         octc: octc,
-                        //         ec: ec,
-                        //         cg: cg,
-                        //         dl: dl,
-                        //         vi: vi)
-                        //         );
+                        addRowAtIndex(
+                            dataRowIndex + 1,
+                            DailyrmuModel(
+                                rmuNo: dataRowIndex + 2,
+                                sgp: '',
+                                vpi: '',
+                                crd: '',
+                                rec: '',
+                                arm: '',
+                                cbts: '',
+                                cra: ''));
                       },
                       child: Text(
                         'Add',

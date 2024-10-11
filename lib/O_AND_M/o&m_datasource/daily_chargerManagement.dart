@@ -56,8 +56,8 @@ class DailyChargerManagementDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, DailyChargerManagementDataSource rowData) {
-        //   _dailyproject.insert(index, rowData);
+      void addRowAtIndex(int index, DailyChargerModel rowData) {
+        _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
@@ -152,6 +152,19 @@ class DailyChargerManagementDataSource extends DataGridSource {
               (dataGridCell.columnName == 'Add')
                   ? ElevatedButton(
                       onPressed: () {
+                        addRowAtIndex(
+                            dataRowIndex + 1,
+                            DailyChargerModel(
+                                cn: dataRowIndex + 2,
+                                dc: '',
+                                cgca: '',
+                                cgcb: '',
+                                cgcca: '',
+                                cgccb: '',
+                                dl: '',
+                                arm: '',
+                                ec: '',
+                                cc: ''));
                         // isShowPinIcon.add(false);
                         // addRowAtIndex(
                         //     dataRowIndex + 1,

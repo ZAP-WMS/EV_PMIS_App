@@ -56,8 +56,8 @@ class DailyPssManagementDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, DailyPssManagementDataSource rowData) {
-        //   _dailyproject.insert(index, rowData);
+      void addRowAtIndex(int index, DailyPssModel rowData) {
+        _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
@@ -153,19 +153,21 @@ class DailyPssManagementDataSource extends DataGridSource {
                   ? ElevatedButton(
                       onPressed: () {
                         // isShowPinIcon.add(false);
-                        // addRowAtIndex(
-                        //     dataRowIndex + 1,
-                        //     DailyManagementProjectModel(
-                        //         sfuNo: sfuNo,
-                        //         icc: icc,
-                        //         ictc: ictc,
-                        //         occ: occ,
-                        //         octc: octc,
-                        //         ec: ec,
-                        //         cg: cg,
-                        //         dl: dl,
-                        //         vi: vi)
-                        //         );
+                        addRowAtIndex(
+                            dataRowIndex + 1,
+                            DailyPssModel(
+                                pssNo: dataRowIndex + 2,
+                                pbc: '',
+                                ec: '',
+                                sgp: '',
+                                pdl: '',
+                                wtiTemp: '',
+                                otiTemp: '',
+                                vpiPresence: '',
+                                viMCCb: '',
+                                vr: '',
+                                ar: '',
+                                mccbHandle: ''));
                       },
                       child: Text(
                         'Add',

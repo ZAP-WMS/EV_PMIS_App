@@ -56,8 +56,8 @@ class DailyAcdbManagementDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, DailyAcdbManagementDataSource rowData) {
-        //   _dailyproject.insert(index, rowData);
+      void addRowAtIndex(int index, DailyAcdbModel rowData) {
+        _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
         // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
@@ -153,19 +153,17 @@ class DailyAcdbManagementDataSource extends DataGridSource {
                   ? ElevatedButton(
                       onPressed: () {
                         // isShowPinIcon.add(false);
-                        // addRowAtIndex(
-                        //     dataRowIndex + 1,
-                        //     DailyManagementProjectModel(
-                        //         sfuNo: sfuNo,
-                        //         icc: icc,
-                        //         ictc: ictc,
-                        //         occ: occ,
-                        //         octc: octc,
-                        //         ec: ec,
-                        //         cg: cg,
-                        //         dl: dl,
-                        //         vi: vi)
-                        //         );
+                        addRowAtIndex(
+                            dataRowIndex + 1,
+                            DailyAcdbModel(
+                                incomerNo: dataRowIndex + 2,
+                                vi: '',
+                                vr: '',
+                                ar: '',
+                                acdbSwitch: '',
+                                mccbHandle: '',
+                                ccb: '',
+                                arm: ''));
                       },
                       child: Text(
                         'Add',
