@@ -62,8 +62,7 @@ class _DepotPageState extends State<DepotPage> {
                               onTap: () {
                                 widget.cityName = Provider.of<CitiesProvider>(
                                         context,
-                                        listen: false,
-                                        )
+                                        listen: false)
                                     .getName;
                                 Navigator.pushNamed(context, '/overview page',
                                     arguments: {
@@ -78,8 +77,7 @@ class _DepotPageState extends State<DepotPage> {
                               child: cards(
                                 snapshot.data!.docs[index]['DepoName'],
                                 snapshot.data!.docs[index]['DepoUrl'],
-                              )
-                              );
+                              ));
                         },
                       ),
                     ),

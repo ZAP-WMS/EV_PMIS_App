@@ -26,6 +26,7 @@ import 'package:ev_pmis_app/PMIS/user/screen/upload.dart';
 import 'package:ev_pmis_app/PMIS/widgets/no_internet.dart';
 import 'package:ev_pmis_app/PMIS/widgets/nodata_available.dart';
 import 'package:flutter/material.dart';
+import '../../O_AND_M/action__screen/monthlyManagement_action.dart';
 import '../action_screens/jmr_action_screen.dart';
 import 'package:provider/provider.dart';
 import '../authentication/change_password.dart';
@@ -278,11 +279,12 @@ class RouteGenerator {
         case '/monthly_management':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
-          return MonthlyManagementHomePage(
+          return MonthlyManagementAction(
             userId: argument['userId'],
             cityName: argument['cityName'],
             depoName: argument['depoName'],
             role: argument['role'],
+            roleCentre: argument['roleCentre'],
           );
 
         //management screen

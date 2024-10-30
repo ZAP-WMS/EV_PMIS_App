@@ -56,12 +56,10 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(
-          int index, MonthlyChargerManagementDataSource rowData) {
-        //   _dailyproject.insert(index, rowData);
+      void addRowAtIndex(int index, MonthlyChargerModel rowData) {
+        _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
-        // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
       }
 
       void removeRowAtIndex(int index) {
@@ -154,24 +152,15 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
                   ? ElevatedButton(
                       onPressed: () {
                         // isShowPinIcon.add(false);
-                        // addRowAtIndex(
-                        //     dataRowIndex + 1,
-                        //     DailyManagementProjectModel(
-                        //         sfuNo: sfuNo,
-                        //         icc: icc,
-                        //         ictc: ictc,
-                        //         occ: occ,
-                        //         octc: octc,
-                        //         ec: ec,
-                        //         cg: cg,
-                        //         dl: dl,
-                        //         vi: vi)
-                        //         );
+                        addRowAtIndex(
+                            dataRowIndex + 1,
+                            MonthlyChargerModel(
+                              cn: dataRowIndex + 2,
+                              gun1: '',
+                              gun2: '',
+                            ));
                       },
-                      child: Text(
-                        'Add',
-                        style: tablefonttext,
-                      ))
+                      child: Text('Add', style: tablefonttext))
                   : (dataGridCell.columnName == 'Delete')
                       ? IconButton(
                           onPressed: () async {

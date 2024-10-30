@@ -1,4 +1,6 @@
+import 'package:ev_pmis_app/O_AND_M/admin/daily_management_admin.dart';
 import 'package:ev_pmis_app/O_AND_M/user/dailyreport/daily_management.dart';
+import 'package:ev_pmis_app/PMIS/user/screen/quality_checklist/quality_checklist.dart';
 import 'package:flutter/material.dart';
 import '../../../style.dart';
 import '../../../PMIS/widgets/navbar.dart';
@@ -99,15 +101,24 @@ class _DailyManagementHomePageState extends State<DailyManagementHomePage> {
           itemCount: titleName.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DailyManagementPage(
-                          cityName: widget.cityName,role: widget.role!,
-                          depoName: widget.depoName,
-                          tabIndex: index,
-                          tabletitle: titleName[index],
-                          userId: widget.userId))),
+              onTap: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return widget.role == 'user'
+                    ? DailyManagementPage(
+                        cityName: widget.cityName,
+                        role: widget.role!,
+                        depoName: widget.depoName,
+                        tabIndex: index,
+                        tabletitle: titleName[index],
+                        userId: widget.userId)
+                    : DailyManagementAdminPage(
+                        tabIndex: index,
+                        tabletitle: titleName[index],
+                        userId: widget.userId,
+                        cityName: widget.cityName,
+                        depoName: widget.depoName,
+                        role: widget.role!);
+              })),
               child: tabbarlist(
                 titleName,
                 index,

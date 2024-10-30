@@ -62,18 +62,17 @@ class DailyManagementPage extends StatefulWidget {
   DateTime? endDate;
   String role;
 
-  DailyManagementPage({
-    super.key,
-    required this.cityName,
-    required this.depoName,
-    required this.tabIndex,
-    required this.tabletitle,
-    required this.userId,
-    this.isHeader = true,
-    this.startDate,
-    this.endDate,
-    required this.role
-  });
+  DailyManagementPage(
+      {super.key,
+      required this.cityName,
+      required this.depoName,
+      required this.tabIndex,
+      required this.tabletitle,
+      required this.userId,
+      this.isHeader = true,
+      this.startDate,
+      this.endDate,
+      required this.role});
 
   @override
   State<DailyManagementPage> createState() => _DailyManagementPageState();

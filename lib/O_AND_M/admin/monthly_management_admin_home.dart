@@ -5,19 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import '../../../../PMIS/widgets/admin_custom_appbar.dart';
-import '../../../../PMIS/widgets/appbar_back_date.dart';
 import '../../../../style.dart';
 import '../../../../PMIS/widgets/progress_loading.dart';
 import '../../../../PMIS/authentication/authservice.dart';
-import 'monthly_page.dart';
+import '../user/management_screen/monthly_page/monthly_home.dart';
 
-class MonthlyManagementHomePage extends StatefulWidget {
+class MonthlyManagementAdminHomePage extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
   String? role;
-  MonthlyManagementHomePage(
+  MonthlyManagementAdminHomePage(
       {super.key,
       required this.cityName,
       this.depoName,
@@ -25,11 +23,12 @@ class MonthlyManagementHomePage extends StatefulWidget {
       this.role});
 
   @override
-  State<MonthlyManagementHomePage> createState() =>
-      _MonthlyManagementHomePageState();
+  State<MonthlyManagementAdminHomePage> createState() =>
+      _MonthlyManagementAdminHomePageState();
 }
 
-class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
+class _MonthlyManagementAdminHomePageState
+    extends State<MonthlyManagementAdminHomePage> {
   String? _selectedDate = DateFormat.yMMM().format(DateTime.now());
   int _selectedIndex = 0;
   dynamic userId;
@@ -63,97 +62,34 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
               style: TextStyle(color: white, fontWeight: FontWeight.bold),
             ),
             actions: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      chooseDate(context);
-                    },
-                    child: Image.asset(
-                      'assets/appbar/calender.jpeg',
-                      height: 35,
-                      width: 35,
-                    ),
-                  ),
-                  Text(
-                    _selectedDate!,
-                    style: TextStyle(color: white, fontSize: 10),
-                  ),
-                ],
-              ),
               Container(
-                padding: const EdgeInsets.only(bottom: 0, right: 5),
-                width: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ViewSummary(
-                                  depoName: widget.depoName,
-                                  cityName: widget.cityName,
-                                  titleName: titleName[_selectedIndex],
-                                  tabIndex: _selectedIndex,
-                                  userId: widget.userId,
-                                  id: 'Monthly Management'),
-                            ));
-                      },
-                      child: Image.asset(
-                        'assets/appbar/summary.jpeg',
-                        height: 35,
-                        width: 35,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        showProgressDilogue(context);
-                        monthlyManagementStoreData(
-                          context,
-                          userId,
-                          widget.depoName!,
-                          titleName[_selectedIndex],
-                          _selectedIndex,
-                          _selectedDate!,
-                        );
-                      },
-                      child: Image.asset(
-                        'assets/appbar/sync.jpeg',
-                        height: 35,
-                        width: 35,
-                      ),
-                    )
-                  ],
+                decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ),
-
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.only(right: 20, top: 10, bottom: 10),
-              //   child: Container(
-              //     height: 30,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: lightblue),
-              //     child: TextButton(
-              //         onPressed: () {
-              //           monthlyManagementStoreData(
-              //               context,
-              //               userId,
-              //               widget.depoName!,
-              //               titleName[_selectedIndex],
-              //               _selectedIndex,
-              //               _selectedDate!);
-              //         },
-              //         child: Text(
-              //           'Sync Data',
-              //           style: TextStyle(color: white, fontSize: 20),
-              //         )),
-              //   ),
-              // )
+                alignment: Alignment.center,
+                margin: const EdgeInsets.all(6.0),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MonthlyManagementHomePage(
+                                // tabIndex: 0,
+                                // tabletitle: 'Daily Progress Report',
+                                cityName: widget.cityName,
+                                depoName: widget.depoName,
+                                userId: widget.userId,
+                                role: widget.role!,
+                              )),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: blue,
+                  ),
+                ),
+              )
             ],
             bottom: PreferredSize(
               preferredSize: const Size(double.infinity, 50),
@@ -184,17 +120,21 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
           ),
           body: TabBarView(
             children: [
-              MonthlyManagementPage(
-                cityName: widget.cityName,
-                depoName: widget.depoName,
-                tabIndex: _selectedIndex,
+              MonthlyAdminManagementPage(
+                tabIndex: 0,
                 tabletitle: 'Charger Reading Format',
-              ),
-              MonthlyManagementPage(
                 cityName: widget.cityName,
                 depoName: widget.depoName,
-                tabIndex: _selectedIndex,
+                userId: widget.userId!,
+                role: widget.role!,
+              ),
+              MonthlyAdminManagementPage(
+                tabIndex: 0,
                 tabletitle: 'Charger Filter',
+                cityName: widget.cityName,
+                depoName: widget.depoName,
+                userId: widget.userId!,
+                role: widget.role!,
               )
             ],
           ),

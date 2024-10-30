@@ -1,17 +1,20 @@
 import 'package:ev_pmis_app/O_AND_M/user/dailyreport/daily_management.dart';
 import 'package:ev_pmis_app/O_AND_M/user/dailyreport/daily_management_home.dart';
+import 'package:ev_pmis_app/O_AND_M/user/management_screen/monthly_page/monthly_home.dart';
 import 'package:flutter/material.dart';
 
 import '../admin/daily_management_admin.dart';
+import '../admin/monthly_management_admin.dart';
+import '../admin/monthly_management_admin_home.dart';
 
-class DailyManagementAction extends StatefulWidget {
+class MonthlyManagementAction extends StatefulWidget {
   final String? role;
   final String? cityName;
   final String? depoName;
   final String userId;
   final String roleCentre;
 
-  const DailyManagementAction(
+  const MonthlyManagementAction(
       {super.key,
       this.cityName,
       this.role,
@@ -20,10 +23,11 @@ class DailyManagementAction extends StatefulWidget {
       required this.roleCentre});
 
   @override
-  State<DailyManagementAction> createState() => _DailyManagementActionState();
+  State<MonthlyManagementAction> createState() =>
+      _MonthlyManagementActionState();
 }
 
-class _DailyManagementActionState extends State<DailyManagementAction> {
+class _MonthlyManagementActionState extends State<MonthlyManagementAction> {
   Widget selectedUi = Container();
 
   @override
@@ -40,7 +44,7 @@ class _DailyManagementActionState extends State<DailyManagementAction> {
   Widget selectWidget() {
     switch (widget.role) {
       case 'user':
-        selectedUi = DailyManagementHomePage(
+        selectedUi = MonthlyManagementHomePage(
           // tabIndex: 0,
           // tabletitle: 'Daily Progress Report',
           cityName: widget.cityName,
@@ -51,9 +55,9 @@ class _DailyManagementActionState extends State<DailyManagementAction> {
         break;
 
       case 'admin':
-        selectedUi = DailyManagementHomePage(
+        selectedUi = MonthlyManagementAdminHomePage(
           // tabIndex: 0,
-          // tabletitle: 'Daily Progress Report',
+          // tabletitle: 'Monthly Report',
           cityName: widget.cityName,
           depoName: widget.depoName,
           userId: widget.userId,
@@ -62,9 +66,9 @@ class _DailyManagementActionState extends State<DailyManagementAction> {
         break;
 
       case "projectManager":
-        selectedUi = DailyManagementHomePage(
+        selectedUi = MonthlyManagementAdminHomePage(
           // tabIndex: 0,
-          // tabletitle: 'Daily Progress Report',
+          // tabletitle: 'Monthly Report',
           cityName: widget.cityName,
           depoName: widget.depoName,
           userId: widget.userId,
