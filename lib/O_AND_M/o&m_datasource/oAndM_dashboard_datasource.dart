@@ -1,5 +1,4 @@
 import 'package:ev_pmis_app/O_AND_M/o&m_model/oAndM_dashboard_model.dart';
-import 'package:ev_pmis_app/PMIS/user/screen/safetyfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,8 +8,6 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../style.dart';
 
 class OAndMDashboardDatasource extends DataGridSource {
-  String cityName;
-  String depoName;
   String userId;
   String selectedDate;
   BuildContext mainContext;
@@ -33,8 +30,6 @@ class OAndMDashboardDatasource extends DataGridSource {
   OAndMDashboardDatasource(
       this._dailyproject,
       this.mainContext,
-      this.cityName,
-      this.depoName,
       this.selectedDate,
       this.userId,
       this.selectedCity,
@@ -346,7 +341,6 @@ class OAndMDashboardDatasource extends DataGridSource {
                                                         style: tablefonttext,
                                                       ),
                                                     );
-    
     }).toList());
   }
 

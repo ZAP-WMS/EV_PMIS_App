@@ -5,11 +5,11 @@ import 'package:ev_pmis_app/PMIS/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SplitScreen extends StatelessWidget {
+class ManagementsplitScreen extends StatelessWidget {
   final String? role;
   final String? userId;
   final String? roleCentre;
-  const SplitScreen(
+  const ManagementsplitScreen(
       {super.key, required this.roleCentre, required this.role, this.userId});
 
   @override
@@ -63,23 +63,23 @@ class SplitScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.pushNamed(
                           context,
-                          '/evDashboard',
+                          '/oAndMDashboard',
                           arguments: {
                             "role": role,
                             "userId": userId,
                             "roleCentre": roleCentre
                           },
-                        );
+                        );  
                       },
                       child: Card(
                         elevation: 5.0,
                         child: Container(
-                          width: context.width * 0.8,
-                          height: 200,
+                          width: context.width * 0.9,
+                          height: 500,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               repeat: ImageRepeat.noRepeat,
-                              image: AssetImage('assets/ev_dashboard.jpeg'),
+                              image: AssetImage('assets/o&m_dashboard.png'),
                             ),
                           ),
                         ),
@@ -95,7 +95,7 @@ class SplitScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/evDashboard',
+                          Navigator.pushNamed(context, '/oAndMDashboard',
                               arguments: {
                                 "role": role,
                                 "userId": userId,
@@ -103,67 +103,11 @@ class SplitScreen extends StatelessWidget {
                               });
                         },
                         child: const Text(
-                          'EV Bus Project Analysis Dashboard',
+                          'EV O & M Dashboard',
                           style: TextStyle(
                               fontSize: 10, fontWeight: FontWeight.bold),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              )),
-              Divider(
-                color: blue,
-                thickness: 2,
-              ),
-              Expanded(
-                  child: Container(
-                margin: const EdgeInsets.all(5),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/demand', arguments: {
-                          "role": role,
-                          "userId": userId,
-                          "roleCentre": roleCentre
-                        });
-                      },
-                      child: Card(
-                        elevation: 10.0,
-                        child: Container(
-                          height: 200,
-                          width: context.width * 0.8,
-                          alignment: Alignment.bottomCenter,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/demand_energy.jpeg'),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: context.width * 0.9,
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              blue,
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/demand', arguments: {
-                              "role": role,
-                              "userId": userId,
-                              "roleCentre": roleCentre
-                            });
-                          },
-                          child: const Text(
-                            'EV Bus Depot Management System',
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold),
-                          )),
                     )
                   ],
                 ),

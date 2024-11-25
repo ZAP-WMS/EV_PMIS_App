@@ -3,17 +3,20 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 class MonthlyFilterModel {
   MonthlyFilterModel({
     required this.cn,
+    required this.date,
     required this.fcd,
     required this.dgcd,
   });
 
   int? cn;
+  String date;
   String? fcd;
   dynamic dgcd;
 
   factory MonthlyFilterModel.fromjson(Map<String, dynamic> json) {
     return MonthlyFilterModel(
       cn: json['cn'],
+      date: json['date'],
       fcd: json['fcd'],
       dgcd: json['dgcd'],
     );
@@ -22,6 +25,7 @@ class MonthlyFilterModel {
   DataGridRow dataGridRow() {
     return DataGridRow(cells: <DataGridCell>[
       DataGridCell(columnName: 'cn', value: cn),
+      DataGridCell(columnName: 'date', value: date),
       DataGridCell(columnName: 'fcd', value: fcd),
       DataGridCell(columnName: 'dgcd', value: dgcd),
       const DataGridCell(columnName: 'Add', value: null),

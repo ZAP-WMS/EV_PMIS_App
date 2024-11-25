@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:ev_pmis_app/O_AND_M/controller/OAndM_Controller.dart';
 import 'package:ev_pmis_app/O_AND_M/o&m_datasource/oAndM_dashboard_datasource.dart';
 import 'package:ev_pmis_app/O_AND_M/o&m_model/oAndM_dashboard_model.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -77,8 +75,6 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
     _oAndMDashboardDatasource = OAndMDashboardDatasource(
         oAndMController.oAndMModel,
         context,
-        widget.cityName!,
-        widget.depoName!,
         selectedDate!,
         widget.userId!,
         selectedCity ?? '',
@@ -107,8 +103,8 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
     oAndMController.oAndMDashboardDatasource = OAndMDashboardDatasource(
         oAndMController.oAndMModel,
         context,
-        widget.cityName!,
-        widget.depoName!,
+        // widget.cityName!,
+        // widget.depoName!,
         selectedDate!,
         widget.userId!,
         selectedCity ?? '',
@@ -870,8 +866,8 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
         oAndMController.oAndMDashboardDatasource = OAndMDashboardDatasource(
           oAndMController.oAndMModel,
           context,
-          widget.cityName!,
-          widget.depoName!,
+          // widget.cityName!,
+          // widget.depoName!,
           selectedDate.toString(),
           widget.userId!,
           selectedCity,
@@ -963,8 +959,8 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
     oAndMController.oAndMDashboardDatasource = OAndMDashboardDatasource(
       oAndMController.oAndMModel,
       context,
-      widget.cityName!,
-      widget.depoName!,
+      // widget.cityName!,
+      // widget.depoName!,
       selectedDate!,
       widget.userId!,
       selectedCity ?? '',

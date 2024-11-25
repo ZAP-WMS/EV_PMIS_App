@@ -1,10 +1,10 @@
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class DailyChargerModel {
-  DailyChargerModel(
+class DailyChargerAdminModel {
+  DailyChargerAdminModel(
       {required this.cn,
       required this.dc,
-      // required this.depotName,
+      this.date,
       required this.cgca,
       required this.cgcb,
       required this.cgcca,
@@ -16,6 +16,7 @@ class DailyChargerModel {
 
   int? cn;
   String? dc;
+  String? date;
   dynamic cgca;
   String? cgcb;
   String? cgcca;
@@ -25,8 +26,9 @@ class DailyChargerModel {
   String? ec;
   String? cc;
 
-  factory DailyChargerModel.fromjson(Map<String, dynamic> json) {
-    return DailyChargerModel(
+  factory DailyChargerAdminModel.fromjson(Map<String, dynamic> json) {
+    return DailyChargerAdminModel(
+      date: json['Date'],
       cn: json['CN'],
       dc: json['DC'],
       cgca: json['CGCA'],
@@ -42,6 +44,7 @@ class DailyChargerModel {
 
   DataGridRow dataGridRow() {
     return DataGridRow(cells: <DataGridCell>[
+      DataGridCell(columnName: 'Date', value: date),
       DataGridCell(columnName: 'CN', value: cn),
       DataGridCell(columnName: 'DC', value: dc),
       DataGridCell(columnName: 'CGCA', value: cgca),
@@ -52,8 +55,6 @@ class DailyChargerModel {
       DataGridCell(columnName: 'ARM', value: arm),
       DataGridCell(columnName: 'EC', value: ec),
       DataGridCell(columnName: 'CC', value: cc),
-      const DataGridCell(columnName: 'Add', value: null),
-      const DataGridCell(columnName: 'Delete', value: null)
     ]);
   }
 

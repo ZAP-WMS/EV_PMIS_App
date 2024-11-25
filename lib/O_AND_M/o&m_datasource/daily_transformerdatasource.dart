@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../../model_admin/daily_transfer_admin.dart';
 import '../o&m_model/daily_transformer.dart';
 import '../../style.dart';
 
@@ -156,6 +157,7 @@ class DailyTranformerDataSource extends DataGridSource {
                         addRowAtIndex(
                             dataRowIndex + 1,
                             DailyTransformerModel(
+                              
                                 trNo: dataRowIndex + 2,
                                 pc: '',
                                 ec: '',

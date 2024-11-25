@@ -4,11 +4,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
-import '../o&m_model/monthly_charger.dart';
+import '../../model_admin/daily_pss_admin.dart';
 import '../../style.dart';
 
-class MonthlyChargerManagementDataSource extends DataGridSource {
+class DailyPssManagementAdminDataSource extends DataGridSource {
   String cityName;
   String depoName;
   String userId;
@@ -16,7 +15,7 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
   BuildContext mainContext;
 
   List data = [];
-  MonthlyChargerManagementDataSource(this._dailyproject, this.mainContext,
+  DailyPssManagementAdminDataSource(this._dailyproject, this.mainContext,
       this.cityName, this.depoName, this.selectedDate, this.userId) {
     buildDataGridRows();
   }
@@ -28,9 +27,10 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
   }
 
   @override
-  List<MonthlyChargerModel> _dailyproject = [];
+  List<DailyPssAdminModel> _dailyproject = [];
 
   List<DataGridRow> dataGridRows = [];
+  final _dateFormatter = DateFormat.yMd();
 
   /// [DataGridCell] on [onSubmitCell] method.
   dynamic newCellValue;
@@ -38,9 +38,6 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
   /// Help to control the editable text in [TextField] widget.
   TextEditingController editingController = TextEditingController();
   final DateRangePickerController _controller = DateRangePickerController();
-  DateTime? date;
-  DateTime? rangeStartDate = DateTime.now();
-  DateTime? rangeEndDate = DateTime.now();
 
   @override
   List<DataGridRow> get rows => dataGridRows;
@@ -58,10 +55,11 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      void addRowAtIndex(int index, MonthlyChargerModel rowData) {
+      void addRowAtIndex(int index, DailyPssAdminModel rowData) {
         _dailyproject.insert(index, rowData);
         buildDataGridRows();
         notifyListeners();
+        // notifyListeners(DataGridSourceChangeKind.rowAdd, rowIndexes: [index]);
       }
 
       void removeRowAtIndex(int index) {
@@ -75,73 +73,8 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
       return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: (dataGridCell.columnName == 'date')
-              ? Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        showDialog(
-                            context: mainContext,
-                            builder: (context) => AlertDialog(
-                                  title: const Text('All Date'),
-                                  content: Container(
-                                      height: 400,
-                                      width: 500,
-                                      child: SfDateRangePicker(
-                                        view: DateRangePickerView.month,
-                                        showTodayButton: true,
-                                        onCancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        onSelectionChanged:
-                                            (DateRangePickerSelectionChangedArgs
-                                                args) {
-                                          if (args.value is PickerDateRange) {
-                                            rangeStartDate =
-                                                args.value.startDate;
-                                            rangeEndDate = args.value.endDate;
-                                          } else {
-                                            final List<PickerDateRange>
-                                                selectedRanges = args.value;
-                                          }
-                                        },
-                                        selectionMode:
-                                            DateRangePickerSelectionMode.single,
-                                        showActionButtons: true,
-                                        onSubmit: ((value) {
-                                          date =
-                                              DateTime.parse(value.toString());
-
-                                          final int dataRowIndex =
-                                              dataGridRows.indexOf(row);
-                                          if (dataRowIndex != null) {
-                                            final int dataRowIndex =
-                                                dataGridRows.indexOf(row);
-                                            dataGridRows[dataRowIndex]
-                                                    .getCells()[1] =
-                                                DataGridCell<String>(
-                                                    columnName: 'date',
-                                                    value:
-                                                        DateFormat('dd-MM-yyyy')
-                                                            .format(date!));
-                                            _dailyproject[dataRowIndex].date =
-                                                DateFormat('dd-MM-yyyy')
-                                                    .format(date!);
-                                            notifyListeners();
-
-                                            Navigator.pop(context);
-                                          }
-                                        }),
-                                      )),
-                                ));
-                      },
-                      icon: const Icon(Icons.calendar_today),
-                    ),
-                    Text(dataGridCell.value.toString()),
-                  ],
-                )
-              :
-              // (dataGridCell.columnName == 'view')
+          child:
+              //  (dataGridCell.columnName == 'view')
               //     ? Row(
               //         mainAxisAlignment: MainAxisAlignment.start,
               //         children: [
@@ -221,14 +154,25 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
                         // isShowPinIcon.add(false);
                         addRowAtIndex(
                             dataRowIndex + 1,
-                            MonthlyChargerModel(
-                              date: DateFormat.yMMMMd().format(DateTime.now()),
-                              cn: dataRowIndex + 2,
-                              gun1: '',
-                              gun2: '',
-                            ));
+                            DailyPssAdminModel(
+                                date: '',
+                                pssNo: dataRowIndex + 2,
+                                pbc: '',
+                                ec: '',
+                                sgp: '',
+                                pdl: '',
+                                wtiTemp: '',
+                                otiTemp: '',
+                                vpiPresence: '',
+                                viMCCb: '',
+                                vr: '',
+                                ar: '',
+                                mccbHandle: ''));
                       },
-                      child: Text('Add', style: tablefonttext))
+                      child: Text(
+                        'Add',
+                        style: tablefonttext,
+                      ))
                   : (dataGridCell.columnName == 'Delete')
                       ? IconButton(
                           onPressed: () async {
@@ -278,23 +222,59 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
     if (newCellValue == null || oldValue == newCellValue) {
       return;
     }
-
-    if (column.columnName == 'cn') {
+    if (column.columnName == 'Date') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'cn', value: newCellValue);
-      _dailyproject[dataRowIndex].cn = newCellValue;
-    } else if (column.columnName == 'date') {
-      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<int>(columnName: 'date', value: newCellValue);
+          DataGridCell<String>(columnName: 'Date', value: newCellValue);
       _dailyproject[dataRowIndex].date = newCellValue;
-    } else if (column.columnName == 'gun1') {
+    }
+    if (column.columnName == 'pssNo') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<String>(columnName: 'gun1', value: newCellValue);
-      _dailyproject[dataRowIndex].gun1 = newCellValue;
+          DataGridCell<String>(columnName: 'pssNo', value: newCellValue);
+      _dailyproject[dataRowIndex].pssNo = newCellValue;
+    } else if (column.columnName == 'pbc') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'pbc', value: newCellValue);
+      _dailyproject[dataRowIndex].pbc = newCellValue;
+    } else if (column.columnName == 'ec') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'ec', value: newCellValue);
+      _dailyproject[dataRowIndex].ec = newCellValue;
+    } else if (column.columnName == 'pdl') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'pdl', value: newCellValue);
+      _dailyproject[dataRowIndex].pdl = newCellValue;
+    } else if (column.columnName == 'sgp') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'sgp', value: newCellValue);
+      _dailyproject[dataRowIndex].sgp = newCellValue;
+    } else if (column.columnName == 'wtiTemp') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'wtiTemp', value: newCellValue);
+      _dailyproject[dataRowIndex].wtiTemp = newCellValue;
+    } else if (column.columnName == 'otiTemp') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'otiTemp', value: newCellValue);
+      _dailyproject[dataRowIndex].otiTemp = newCellValue;
+    } else if (column.columnName == 'vpiPresence') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'vpiPresence', value: newCellValue);
+      _dailyproject[dataRowIndex].vpiPresence = newCellValue;
+    } else if (column.columnName == 'viMCCb') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'viMCCb', value: newCellValue);
+      _dailyproject[dataRowIndex].viMCCb = newCellValue;
+    } else if (column.columnName == 'vr') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'vr', value: newCellValue);
+      _dailyproject[dataRowIndex].vr = newCellValue;
+    } else if (column.columnName == 'ar') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<String>(columnName: 'ar', value: newCellValue);
+      _dailyproject[dataRowIndex].ar = newCellValue;
     } else {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<String>(columnName: 'gun2', value: newCellValue);
-      _dailyproject[dataRowIndex].gun2 = newCellValue;
+          DataGridCell<String>(columnName: 'mccbHandle', value: newCellValue);
+      _dailyproject[dataRowIndex].mccbHandle = newCellValue;
     }
   }
 
@@ -322,7 +302,7 @@ class MonthlyChargerManagementDataSource extends DataGridSource {
     // into the current non-modified [DataGridCell].
     newCellValue = null;
 
-    final bool isNumericType = column.columnName == 'cn';
+    final bool isNumericType = column.columnName == 'sfuNo';
 
     final bool isDateTimeType = column.columnName == 'StartDate' ||
         column.columnName == 'EndDate' ||

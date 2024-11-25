@@ -60,12 +60,10 @@ tableFooter(TextEditingController controller) {
           style: tableheader,
           textAlign: TextAlign.start,
         ),
-        Container(
-          height: 35,
-          child: TextFormField(
-            controller: controller,
-            maxLines: 1,
-          ),
+        TextFormField(
+          controller: controller,
+          maxLines: null,
+          minLines: 1,
         )
       ],
     ),

@@ -1,15 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/O_AND_M/admin/monthly_management_admin.dart';
 import 'package:ev_pmis_app/PMIS/summary.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import '../../../../PMIS/widgets/admin_custom_appbar.dart';
-import '../../../../PMIS/widgets/appbar_back_date.dart';
 import '../../../../style.dart';
 import '../../../../PMIS/widgets/progress_loading.dart';
-import '../../../../PMIS/authentication/authservice.dart';
 import 'monthly_page.dart';
 
 class MonthlyManagementHomePage extends StatefulWidget {
@@ -29,20 +25,29 @@ class MonthlyManagementHomePage extends StatefulWidget {
       _MonthlyManagementHomePageState();
 }
 
-class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
+class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage>
+    with SingleTickerProviderStateMixin {
   String? _selectedDate = DateFormat.yMMM().format(DateTime.now());
+  TabController? _tabController;
   int _selectedIndex = 0;
   dynamic userId;
-  bool _isloading = true;
 
   @override
   void initState() {
-    getUserId().whenComplete(() {
-      setState(() {
-        _isloading = false;
-      });
-    });
+    _tabController =
+        TabController(length: 2, vsync: this, initialIndex: _selectedIndex);
+    // getUserId().whenComplete(() {
+    //   setState(() {
+    //     _isloading = false;
+    //   });
+    // });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
   }
 
   List<String> titleName = [
@@ -52,153 +57,133 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        initialIndex: _selectedIndex,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: blue,
-            title: Text(
-              'Monthly Page ',
-              style: TextStyle(color: white, fontWeight: FontWeight.bold),
-            ),
-            actions: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      chooseDate(context);
-                    },
-                    child: Image.asset(
-                      'assets/appbar/calender.jpeg',
-                      height: 35,
-                      width: 35,
-                    ),
-                  ),
-                  Text(
-                    _selectedDate!,
-                    style: TextStyle(color: white, fontSize: 10),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.only(bottom: 0, right: 5),
-                width: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ViewSummary(
-                                  depoName: widget.depoName,
-                                  cityName: widget.cityName,
-                                  titleName: titleName[_selectedIndex],
-                                  tabIndex: _selectedIndex,
-                                  userId: widget.userId,
-                                  id: 'Monthly Management'),
-                            ));
-                      },
-                      child: Image.asset(
-                        'assets/appbar/summary.jpeg',
-                        height: 35,
-                        width: 35,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        showProgressDilogue(context);
-                        monthlyManagementStoreData(
-                          context,
-                          userId,
-                          widget.depoName!,
-                          titleName[_selectedIndex],
-                          _selectedIndex,
-                          _selectedDate!,
-                        );
-                      },
-                      child: Image.asset(
-                        'assets/appbar/sync.jpeg',
-                        height: 35,
-                        width: 35,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.only(right: 20, top: 10, bottom: 10),
-              //   child: Container(
-              //     height: 30,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: lightblue),
-              //     child: TextButton(
-              //         onPressed: () {
-              //           monthlyManagementStoreData(
-              //               context,
-              //               userId,
-              //               widget.depoName!,
-              //               titleName[_selectedIndex],
-              //               _selectedIndex,
-              //               _selectedDate!);
-              //         },
-              //         child: Text(
-              //           'Sync Data',
-              //           style: TextStyle(color: white, fontSize: 20),
-              //         )),
-              //   ),
-              // )
-            ],
-            bottom: PreferredSize(
-              preferredSize: const Size(double.infinity, 50),
-              child: TabBar(
-                labelColor: yellow,
-                labelStyle: buttonWhite,
-                unselectedLabelColor: white,
-                indicator: MaterialIndicator(
-                  horizontalPadding: 24,
-                  bottomLeftRadius: 8,
-                  bottomRightRadius: 8,
-                  color: white,
-                  paintingStyle: PaintingStyle.fill,
-                ),
-                tabs: const [
-                  Tab(
-                    text: 'Charger Reading Format',
-                  ),
-                  Tab(
-                    text: 'Charger Filter/DC Connector Cleaning Format',
-                  ),
-                ],
-                onTap: (value) {
-                  _selectedIndex = value;
-                },
-              ),
-            ),
-          ),
-          body: TabBarView(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: blue,
+        title: Text(
+          'Monthly Page ',
+          style: TextStyle(color: white, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              MonthlyManagementPage(
-                cityName: widget.cityName,
-                depoName: widget.depoName,
-                tabIndex: _selectedIndex,
-                tabletitle: 'Charger Reading Format',
+              InkWell(
+                onTap: () {
+                  chooseDate(context);
+                },
+                child: Image.asset(
+                  'assets/appbar/calender.jpeg',
+                  height: 35,
+                  width: 35,
+                ),
               ),
-              MonthlyManagementPage(
-                cityName: widget.cityName,
-                depoName: widget.depoName,
-                tabIndex: _selectedIndex,
-                tabletitle: 'Charger Filter',
-              )
+              Text(
+                _selectedDate!,
+                style: TextStyle(color: white, fontSize: 10),
+              ),
             ],
           ),
-        ));
+          Container(
+            padding: const EdgeInsets.only(bottom: 0, right: 5),
+            width: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewSummary(
+                              depoName: widget.depoName,
+                              cityName: widget.cityName,
+                              titleName: titleName[_selectedIndex],
+                              tabIndex: _selectedIndex,
+                              userId: widget.userId,
+                              id: 'Monthly Management'),
+                        ));
+                  },
+                  child: Image.asset(
+                    'assets/appbar/summary.jpeg',
+                    height: 35,
+                    width: 35,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    showProgressDilogue(context);
+                    monthlyManagementStoreData(
+                      context,
+                      widget.userId!,
+                      widget.depoName!,
+                      titleName[_selectedIndex],
+                      _selectedIndex,
+                      _selectedDate!,
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/appbar/sync.jpeg',
+                    height: 35,
+                    width: 35,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size(double.infinity, 50),
+          child: TabBar(
+            labelColor: yellow,
+            labelStyle: buttonWhite,
+            controller: _tabController,
+            onTap: (value) {
+              setState(() {
+                _selectedIndex = value;
+              });
+            },
+            unselectedLabelColor: white,
+            indicator: MaterialIndicator(
+              horizontalPadding: 24,
+              bottomLeftRadius: 8,
+              bottomRightRadius: 8,
+              color: white,
+              paintingStyle: PaintingStyle.fill,
+            ),
+            tabs: const [
+              Tab(
+                text: 'Charger Reading Format',
+              ),
+              Tab(
+                text: 'Charger Filter/DC Connector Cleaning Format',
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          MonthlyManagementPage(
+            cityName: widget.cityName,
+            depoName: widget.depoName,
+            titleIndex: _selectedIndex,
+            tabletitle: 'Charger Reading Format',
+            userId: widget.userId!,
+            date: _selectedDate,
+          ),
+          MonthlyManagementPage(
+            cityName: widget.cityName,
+            depoName: widget.depoName,
+            titleIndex: _selectedIndex,
+            tabletitle: 'Charger Filter',
+            userId: widget.userId!,
+            date: _selectedDate,
+          )
+        ],
+      ),
+    );
   }
 
   void chooseDate(BuildContext context) {
@@ -227,6 +212,15 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
                       _selectedDate = DateFormat.yMMM()
                           .format(DateTime.parse(value.toString()));
                       Navigator.pop(context);
+                      // Force rebuild even if the tab is the same
+                      _tabController!.index = (_tabController!.index + 1) %
+                          2; // Cycle to a different tab
+                      Future.delayed(Duration(milliseconds: 50), () {
+                        // Cycle back to the original tab after a short delay
+                        _tabController!.index = (_tabController!.index + 1) % 2;
+                        print(_tabController!
+                            .index); // Output the current tab index after switching
+                      });
                       setState(() {});
                     }),
                     onCancel: () {
@@ -256,12 +250,5 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage> {
     }
 
     return depoList;
-  }
-
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-      setState(() {});
-    });
   }
 }

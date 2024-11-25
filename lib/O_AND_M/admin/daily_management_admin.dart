@@ -1,8 +1,15 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ev_pmis_app/O_AND_M/o&m_datasource/daily_acdb_ManagementAdmin.dart';
+import 'package:ev_pmis_app/O_AND_M/o&m_datasource/daily_pssManagementAdmin.dart';
+import 'package:ev_pmis_app/PMIS/widgets/nodata_available.dart';
+import 'package:ev_pmis_app/model_admin/daily_transfer_admin.dart';
 import 'package:ev_pmis_app/PMIS/summary.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:ev_pmis_app/model_admin/daily_acdb_admin_model.dart';
+import 'package:ev_pmis_app/model_admin/daily_charger_admin_model.dart';
+import 'package:ev_pmis_app/model_admin/daily_pss_admin.dart';
+import 'package:ev_pmis_app/model_admin/daily_rmu_admin_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -10,7 +17,6 @@ import 'package:intl/intl.dart';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:printing/printing.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -20,40 +26,33 @@ import '../../../components/Loading_page.dart';
 import '../../PMIS/widgets/admin_custom_appbar.dart';
 import '../../PMIS/widgets/navbar.dart';
 import '../../components/loading_pdf.dart';
-import '../o&m_datasource/daily_acdbdatasource.dart';
-import '../o&m_datasource/daily_chargerManagement.dart';
-import '../o&m_datasource/daily_pssManagement.dart';
-import '../o&m_datasource/daily_rmudatasource.dart';
-import '../o&m_datasource/daily_sfudatasource.dart';
-import '../o&m_datasource/daily_transformerdatasource.dart';
-import '../o&m_model/daily_acdb.dart';
-import '../o&m_model/daily_charger.dart';
-import '../o&m_model/daily_pss.dart';
-import '../o&m_model/daily_rmu.dart';
-import '../o&m_model/daily_sfu.dart';
-import '../o&m_model/daily_transformer.dart';
+import '../../model_admin/daily_sfu_admin_model.dart';
+import '../o&m_datasource/daily_chargerManagentAdmin.dart';
+import '../o&m_datasource/daily_rmuManagementAdmin.dart';
+import '../o&m_datasource/daily_sfuManagementAdmin.dart';
+import '../o&m_datasource/daily_transformeradmindatasource.dart';
 import '../../../PMIS/provider/summary_provider.dart';
 import '../../../style.dart';
 import '../../../utils/daily_managementlist.dart';
 import '../../../utils/date_formart.dart';
 import '../../../PMIS/widgets/progress_loading.dart';
-import '../user/dailyreport/daily_management.dart';
-import '../user/dailyreport/daily_management_home.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-List<DailySfuModel> _dailySfu = [];
-List<DailyChargerModel> _dailycharger = [];
-List<DailyPssModel> _dailyPss = [];
-List<DailyTransformerModel> _dailyTransfer = [];
-List<DailyrmuModel> _dailyrmu = [];
-List<DailyAcdbModel> _dailyacdb = [];
+import '../user/management_screen/assigned_userlist.dart';
 
-late DailySFUManagementDataSource _dailySfuDataSource;
-late DailyChargerManagementDataSource _dailyChargerDataSource;
-late DailyPssManagementDataSource _dailyPssDataSource;
-late DailyTranformerDataSource _dailyTranformerDataSource;
-late DailyRmuDataSource _dailyRmuDataSource;
-late DailyAcdbManagementDataSource _dailyAcdbdatasource;
+List<DailySfuAdminModel> _dailySfu = [];
+List<DailyChargerAdminModel> _dailycharger = [];
+List<DailyPssAdminModel> _dailyPss = [];
+List<DailyTransformerAdminModel> _dailyTransfer = [];
+List<DailyRmuAdminModel> _dailyrmu = [];
+List<DailyAcdbAdminModel> _dailyacdb = [];
+
+late DailySFUManagementAdminDataSource _dailySfuDataSource;
+late DailyChargerManagementAdminDataSource _dailyChargerDataSource;
+late DailyPssManagementAdminDataSource _dailyPssDataSource;
+late DailyTranformerAdminDataSource _dailyTranformerDataSource;
+late DailyRmuAdminDataSource _dailyRmuDataSource;
+late DailyAcdbManagementAdminDataSource _dailyAcdbdatasource;
 late DataGridController _dataGridController;
 List<dynamic> tabledata2 = [];
 final TextEditingController _remarkController = TextEditingController();
@@ -128,6 +127,13 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
   }
 
   void _initializeData() async {
+    _dailycharger.clear();
+    _dailySfu.clear();
+    _dailyPss.clear();
+    _dailyTransfer.clear();
+    _dailyrmu.clear();
+    _dailyacdb.clear();
+
     await _fetchUserData();
 
     _stream = FirebaseFirestore.instance
@@ -141,7 +147,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
 
     getTableData().whenComplete(
       () {
-        _dailyChargerDataSource = DailyChargerManagementDataSource(
+        _dailyChargerDataSource = DailyChargerManagementAdminDataSource(
             _dailycharger,
             context,
             widget.cityName!,
@@ -149,13 +155,23 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
             selectedDate!,
             widget.userId!);
 
-        _dailySfuDataSource = DailySFUManagementDataSource(_dailySfu, context,
-            widget.cityName!, widget.depoName!, selectedDate!, widget.userId!);
+        _dailySfuDataSource = DailySFUManagementAdminDataSource(
+            _dailySfu,
+            context,
+            widget.cityName!,
+            widget.depoName!,
+            selectedDate!,
+            widget.userId!);
 
-        _dailyPssDataSource = DailyPssManagementDataSource(_dailyPss, context,
-            widget.cityName!, widget.depoName!, selectedDate!, widget.userId!);
+        _dailyPssDataSource = DailyPssManagementAdminDataSource(
+            _dailyPss,
+            context,
+            widget.cityName!,
+            widget.depoName!,
+            selectedDate!,
+            widget.userId!);
 
-        _dailyTranformerDataSource = DailyTranformerDataSource(
+        _dailyTranformerDataSource = DailyTranformerAdminDataSource(
             _dailyTransfer,
             context,
             widget.cityName!,
@@ -163,11 +179,11 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
             selectedDate!,
             widget.userId!);
         // ignore: use_build_context_synchronously
-        _dailyRmuDataSource = DailyRmuDataSource(_dailyrmu, context,
+        _dailyRmuDataSource = DailyRmuAdminDataSource(_dailyrmu, context,
             widget.cityName!, widget.depoName!, selectedDate!, widget.userId!);
         _dataGridController = DataGridController();
         // ignore: use_build_context_synchronously
-        _dailyAcdbdatasource = DailyAcdbManagementDataSource(
+        _dailyAcdbdatasource = DailyAcdbManagementAdminDataSource(
             _dailyacdb,
             context,
             widget.cityName!,
@@ -175,6 +191,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
             selectedDate!,
             widget.userId!);
         _dataGridController = DataGridController();
+        getAllData();
         setState(() {
           _isloading = false;
         });
@@ -186,21 +203,21 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
 
   // Define column names and labels for all tabs
   List<List<String>> tabColumnNames = [
-    chargercolumnNames,
-    sfucolumnNames,
-    psscolumnNames,
-    transformercolumnNames,
-    rmucolumnNames,
-    acdbcolumnNames
+    adminchargercolumnNames,
+    adminsfucolumnNames,
+    adminpsscolumnNames,
+    admintransformercolumnNames,
+    adminrmucolumnNames,
+    adminacdbcolumnNames
   ];
 
   List<List<String>> tabColumnLabels = [
-    chargercolumnLabelNames,
-    sfucolumnLabelNames,
-    psscolumnLabelNames,
-    transformerLabelNames,
-    rmuLabelNames,
-    acdbLabelNames
+    adminchargercolumnLabelNames,
+    adminsfucolumnLabelNames,
+    adminpsscolumnLabelNames,
+    admiintransformerLabelNames,
+    adminrmuLabelNames,
+    adminacdbLabelNames
     // Labels for tab 1
     // Labels for tab 2
   ];
@@ -212,7 +229,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
       () {
         nestedTableData(context).whenComplete(
           () {
-            _dailyChargerDataSource = DailyChargerManagementDataSource(
+            _dailyChargerDataSource = DailyChargerManagementAdminDataSource(
                 _dailycharger,
                 context,
                 widget.cityName!,
@@ -220,7 +237,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                 selectedDate!,
                 widget.userId!);
 
-            _dailySfuDataSource = DailySFUManagementDataSource(
+            _dailySfuDataSource = DailySFUManagementAdminDataSource(
                 _dailySfu,
                 context,
                 widget.cityName!,
@@ -228,7 +245,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                 selectedDate!,
                 widget.userId!);
 
-            _dailyPssDataSource = DailyPssManagementDataSource(
+            _dailyPssDataSource = DailyPssManagementAdminDataSource(
                 _dailyPss,
                 context,
                 widget.cityName!,
@@ -236,7 +253,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                 selectedDate!,
                 widget.userId!);
 
-            _dailyTranformerDataSource = DailyTranformerDataSource(
+            _dailyTranformerDataSource = DailyTranformerAdminDataSource(
                 _dailyTransfer,
                 context,
                 widget.cityName!,
@@ -244,7 +261,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                 selectedDate!,
                 widget.userId!);
             // ignore: use_build_context_synchronously
-            _dailyRmuDataSource = DailyRmuDataSource(
+            _dailyRmuDataSource = DailyRmuAdminDataSource(
                 _dailyrmu,
                 context,
                 widget.cityName!,
@@ -253,7 +270,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                 widget.userId!);
             _dataGridController = DataGridController();
             // ignore: use_build_context_synchronously
-            _dailyAcdbdatasource = DailyAcdbManagementDataSource(
+            _dailyAcdbdatasource = DailyAcdbManagementAdminDataSource(
                 _dailyacdb,
                 context,
                 widget.cityName!,
@@ -285,11 +302,13 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
             widget.endDate!);
 
     columns.clear();
+
     for (String columnName in currentColumnNames) {
       columns.add(
         GridColumn(
           columnName: columnName,
-          visible: !(columnName == currentColumnNames   [0]),
+          visible: true,
+          // !(columnName == currentColumnNames[1]),
           allowEditing: columnName == 'Add' ||
                   columnName == 'Delete' ||
                   columnName == columnName[0]
@@ -312,22 +331,30 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
           preferredSize: const Size.fromHeight(50),
           child: CustomAppBar(
             isProjectManager: widget.role == "projectManager" ? true : false,
-            makeAnEntryPage: DailyManagementPage(
+            makeAnEntryPage: UserList(
                 cityName: widget.cityName,
                 role: widget.role,
                 depoName: widget.depoName,
                 tabIndex: widget.tabIndex,
                 tabletitle: widget.tabletitle,
                 userId: widget.userId),
+            //  DailyManagementPage(
+            //     cityName: widget.cityName,
+            //     role: widget.role,
+            //     depoName: widget.depoName,
+            //     tabIndex: widget.tabIndex,
+            //     tabletitle: widget.tabletitle,
+            //     userId: widget.userId
+            // ),
             showDepoBar: true,
             toDaily: true,
             depoName: widget.depoName,
             cityName: widget.cityName,
-            text: 'Daily Report',
+            text: '${widget.tabletitle}',
             userId: widget.userId,
             haveSynced: false,
             //specificUser ? true : false,
-            isdownload: false,
+            isdownload: true,
             downloadFun: downloadPDF,
             haveSummary: false,
             onTap: () => Navigator.push(
@@ -351,9 +378,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                   widget.tabIndex,
                   selectedDate!);
             },
-            
           ),
-          
         ),
         body: _isloading
             ? const LoadingPage()
@@ -428,7 +453,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                                     ),
                                   ),
                                   Text(
-                                    DateFormat.yMMMMd().format(
+                                    DateFormat.yMMMd().format(
                                       startdate!,
                                     ),
                                     textAlign: TextAlign.center,
@@ -451,7 +476,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                               Row(
                                 children: [
                                   Text(
-                                    DateFormat.yMMMMd().format(enddate!),
+                                    DateFormat.yMMMd().format(enddate!),
                                     textAlign: TextAlign.center,
                                   )
                                 ],
@@ -472,97 +497,93 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const LoadingPage();
-                      } else if (!snapshot.hasData ||
-                          snapshot.data.exists == false) {
+                      } else if (snapshot.hasData) {
                         return Padding(
                             padding: const EdgeInsets.only(left: 5, right: 5),
-                            child: Expanded(
-                              child: SfDataGridTheme(
-                                  data: SfDataGridThemeData(
-                                      headerColor: white, gridLineColor: blue),
-                                  child: StreamBuilder(
-                                      stream: _stream,
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData ||
-                                            snapshot.data.exists == false) {
-                                          return SfDataGrid(
-                                              source: widget.tabIndex == 0
-                                                  ? _dailyChargerDataSource
-                                                  : widget.tabIndex == 1
-                                                      ? _dailySfuDataSource
-                                                      : widget.tabIndex == 2
-                                                          ? _dailyPssDataSource
-                                                          : widget.tabIndex == 3
-                                                              ? _dailyTranformerDataSource
-                                                              : widget.tabIndex ==
-                                                                      4
-                                                                  ? _dailyRmuDataSource
-                                                                  : _dailyAcdbdatasource,
-                                              allowEditing: false,
-                                              frozenColumnsCount: 1,
-                                              gridLinesVisibility:
-                                                  GridLinesVisibility.both,
-                                              headerGridLinesVisibility:
-                                                  GridLinesVisibility.both,
-                                              selectionMode:
-                                                  SelectionMode.single,
-                                              navigationMode:
-                                                  GridNavigationMode.cell,
-                                              columnWidthMode: ColumnWidthMode
-                                                  .fitByCellValue,
-                                              editingGestureType:
-                                                  EditingGestureType.tap,
-                                              rowHeight: 50,
-                                              controller: _dataGridController,
-                                              onQueryRowHeight: (details) {
-                                                return details
-                                                    .getIntrinsicRowHeight(
-                                                        details.rowIndex);
-                                              },
-                                              columns: columns);
-                                        } else {
-                                          return SfDataGrid(
-                                              source: widget.tabIndex == 0
-                                                  ? _dailyChargerDataSource
-                                                  : widget.tabIndex == 1
-                                                      ? _dailySfuDataSource
-                                                      : widget.tabIndex == 2
-                                                          ? _dailyPssDataSource
-                                                          : widget.tabIndex == 3
-                                                              ? _dailyTranformerDataSource
-                                                              : widget.tabIndex ==
-                                                                      4
-                                                                  ? _dailyRmuDataSource
-                                                                  : _dailyAcdbdatasource,
-                                              allowEditing: false,
-                                              frozenColumnsCount: 2,
-                                              gridLinesVisibility:
-                                                  GridLinesVisibility.both,
-                                              headerGridLinesVisibility:
-                                                  GridLinesVisibility.both,
-                                              selectionMode:
-                                                  SelectionMode.single,
-                                              navigationMode:
-                                                  GridNavigationMode.cell,
-                                              editingGestureType:
-                                                  EditingGestureType.tap,
-                                              rowHeight: 50,
-                                              controller: _dataGridController,
-                                              onQueryRowHeight: (details) {
-                                                return details
-                                                    .getIntrinsicRowHeight(
-                                                        details.rowIndex);
-                                              },
-                                              columns: columns);
-                                        }
-                                      })),
-                            ));
+                            child: SfDataGridTheme(
+                                data: SfDataGridThemeData(
+                                    headerColor: white, gridLineColor: blue),
+                                child: StreamBuilder(
+                                    stream: _stream,
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData ||
+                                          snapshot.data.exists == false) {
+                                        return SfDataGrid(
+                                            source: widget.tabIndex == 0
+                                                ? _dailyChargerDataSource
+                                                : widget.tabIndex == 1
+                                                    ? _dailySfuDataSource
+                                                    : widget.tabIndex == 2
+                                                        ? _dailyPssDataSource
+                                                        : widget.tabIndex == 3
+                                                            ? _dailyTranformerDataSource
+                                                            : widget.tabIndex ==
+                                                                    4
+                                                                ? _dailyRmuDataSource
+                                                                : _dailyAcdbdatasource,
+                                            allowEditing: false,
+                                            frozenColumnsCount: 1,
+                                            gridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            headerGridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            selectionMode: SelectionMode.single,
+                                            navigationMode:
+                                                GridNavigationMode.cell,
+                                            columnWidthMode:
+                                                ColumnWidthMode.fitByCellValue,
+                                            editingGestureType:
+                                                EditingGestureType.tap,
+                                            rowHeight: 50,
+                                            controller: _dataGridController,
+                                            onQueryRowHeight: (details) {
+                                              return details
+                                                  .getIntrinsicRowHeight(
+                                                      details.rowIndex);
+                                            },
+                                            columns: columns);
+                                      } else {
+                                        return SfDataGrid(
+                                            source: widget.tabIndex == 0
+                                                ? _dailyChargerDataSource
+                                                : widget.tabIndex == 1
+                                                    ? _dailySfuDataSource
+                                                    : widget.tabIndex == 2
+                                                        ? _dailyPssDataSource
+                                                        : widget.tabIndex == 3
+                                                            ? _dailyTranformerDataSource
+                                                            : widget.tabIndex ==
+                                                                    4
+                                                                ? _dailyRmuDataSource
+                                                                : _dailyAcdbdatasource,
+                                            allowEditing: false,
+                                            frozenColumnsCount: 2,
+                                            gridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            headerGridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            selectionMode: SelectionMode.single,
+                                            navigationMode:
+                                                GridNavigationMode.cell,
+                                            editingGestureType:
+                                                EditingGestureType.tap,
+                                            rowHeight: 50,
+                                            controller: _dataGridController,
+                                            onQueryRowHeight: (details) {
+                                              return details
+                                                  .getIntrinsicRowHeight(
+                                                      details.rowIndex);
+                                            },
+                                            columns: columns);
+                                      }
+                                    })));
                       } else {
                         // print(_dailyDataSource.rows[0]
                         //     .getCells()
                         //     .length);
-                        return const Text('data 1');
-                        //   const NodataAvailable();
+                        return
+                            // const Text('data 1');
+                            const NodataAvailable();
                       }
                     },
                   ),
@@ -630,40 +651,46 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
               documentSnapshot.data() as Map<String, dynamic>;
 
           List<dynamic> mapData = tempData['data'];
+          // Add the date to each map in the list
+          for (var map in mapData) {
+            map['Date'] = nextDate; // Add 'date' to the map
+          }
+          print(mapData);
 
           if (widget.tabIndex == 0) {
-            _dailycharger.addAll(
-                mapData.map((map) => DailyChargerModel.fromjson(map)).toList());
-            print('date data $nextDate');
-            print(mapData);
-            // _dailycharger =
-            //     mapData.map((map) => DailyChargerModel.fromjson(map)).toList();
+            _dailycharger.addAll(mapData
+                .map((map) => DailyChargerAdminModel.fromjson(map))
+                .toList());
           } else if (widget.tabIndex == 1) {
-            _dailySfu.addAll(
-                mapData.map((map) => DailySfuModel.fromjson(map)).toList());
+            _dailySfu.addAll(mapData
+                .map((map) => DailySfuAdminModel.fromjson(map))
+                .toList());
 
             // _dailySfu =
-            //     mapData.map((map) => DailySfuModel.fromjson(map)).toList();
+            //     mapData.map((map) => DailySfuAdminModel.fromjson(map)).toList();
           } else if (widget.tabIndex == 2) {
-            _dailyPss.addAll(
-                mapData.map((map) => DailyPssModel.fromjson(map)).toList());
+            _dailyPss.addAll(mapData
+                .map((map) => DailyPssAdminModel.fromjson(map))
+                .toList());
             // _dailyPss =
             //     mapData.map((map) => DailyPssModel.fromjson(map)).toList();
           } else if (widget.tabIndex == 3) {
             _dailyTransfer.addAll(mapData
-                .map((map) => DailyTransformerModel.fromjson(map))
+                .map((map) => DailyTransformerAdminModel.fromjson(map))
                 .toList());
             // _dailyTransfer = mapData
             //     .map((map) => DailyTransformerModel.fromjson(map))
             //     .toList();
           } else if (widget.tabIndex == 4) {
-            _dailyrmu.addAll(
-                mapData.map((map) => DailyrmuModel.fromjson(map)).toList());
+            _dailyrmu.addAll(mapData
+                .map((map) => DailyRmuAdminModel.fromjson(map))
+                .toList());
             // _dailyrmu =
             //     mapData.map((map) => DailyrmuModel.fromjson(map)).toList();
           } else {
-            _dailyacdb.addAll(
-                mapData.map((map) => DailyAcdbModel.fromjson(map)).toList());
+            _dailyacdb.addAll(mapData
+                .map((map) => DailyAcdbAdminModel.fromjson(map))
+                .toList());
             // _dailyacdb =
             //     mapData.map((map) => DailyAcdbModel.fromjson(map)).toList();
           }
@@ -688,6 +715,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
         pr.hide();
       }
 
+      pr.hide();
       print('global indexes are - $globalIndexList');
     }
   }
@@ -725,19 +753,23 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
 
       if (widget.tabIndex == 0) {
         _dailycharger =
-            mapData.map((map) => DailyChargerModel.fromjson(map)).toList();
+            mapData.map((map) => DailyChargerAdminModel.fromjson(map)).toList();
       } else if (widget.tabIndex == 1) {
-        _dailySfu = mapData.map((map) => DailySfuModel.fromjson(map)).toList();
+        _dailySfu =
+            mapData.map((map) => DailySfuAdminModel.fromjson(map)).toList();
       } else if (widget.tabIndex == 2) {
-        _dailyPss = mapData.map((map) => DailyPssModel.fromjson(map)).toList();
+        _dailyPss =
+            mapData.map((map) => DailyPssAdminModel.fromjson(map)).toList();
       } else if (widget.tabIndex == 3) {
-        _dailyTransfer =
-            mapData.map((map) => DailyTransformerModel.fromjson(map)).toList();
+        _dailyTransfer = mapData
+            .map((map) => DailyTransformerAdminModel.fromjson(map))
+            .toList();
       } else if (widget.tabIndex == 4) {
-        _dailyrmu = mapData.map((map) => DailyrmuModel.fromjson(map)).toList();
+        _dailyrmu =
+            mapData.map((map) => DailyRmuAdminModel.fromjson(map)).toList();
       } else {
         _dailyacdb =
-            mapData.map((map) => DailyAcdbModel.fromjson(map)).toList();
+            mapData.map((map) => DailyAcdbAdminModel.fromjson(map)).toList();
       }
       checkTable = false;
     } else {
@@ -790,7 +822,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                         nestedTableData(context).whenComplete(
                           () {
                             _dailyChargerDataSource =
-                                DailyChargerManagementDataSource(
+                                DailyChargerManagementAdminDataSource(
                                     _dailycharger,
                                     context,
                                     widget.cityName!,
@@ -798,24 +830,26 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                                     selectedDate!,
                                     widget.userId!);
 
-                            _dailySfuDataSource = DailySFUManagementDataSource(
-                                _dailySfu,
-                                context,
-                                widget.cityName!,
-                                widget.depoName!,
-                                selectedDate!,
-                                widget.userId!);
+                            _dailySfuDataSource =
+                                DailySFUManagementAdminDataSource(
+                                    _dailySfu,
+                                    context,
+                                    widget.cityName!,
+                                    widget.depoName!,
+                                    selectedDate!,
+                                    widget.userId!);
 
-                            _dailyPssDataSource = DailyPssManagementDataSource(
-                                _dailyPss,
-                                context,
-                                widget.cityName!,
-                                widget.depoName!,
-                                selectedDate!,
-                                widget.userId!);
+                            _dailyPssDataSource =
+                                DailyPssManagementAdminDataSource(
+                                    _dailyPss,
+                                    context,
+                                    widget.cityName!,
+                                    widget.depoName!,
+                                    selectedDate!,
+                                    widget.userId!);
 
                             _dailyTranformerDataSource =
-                                DailyTranformerDataSource(
+                                DailyTranformerAdminDataSource(
                                     _dailyTransfer,
                                     context,
                                     widget.cityName!,
@@ -823,7 +857,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                                     selectedDate!,
                                     widget.userId!);
                             // ignore: use_build_context_synchronously
-                            _dailyRmuDataSource = DailyRmuDataSource(
+                            _dailyRmuDataSource = DailyRmuAdminDataSource(
                                 _dailyrmu,
                                 context,
                                 widget.cityName!,
@@ -833,7 +867,7 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                             _dataGridController = DataGridController();
                             // ignore: use_build_context_synchronously
                             _dailyAcdbdatasource =
-                                DailyAcdbManagementDataSource(
+                                DailyAcdbManagementAdminDataSource(
                                     _dailyacdb,
                                     context,
                                     widget.cityName!,
@@ -909,13 +943,29 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
         messageTextStyle: const TextStyle(
             color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
       );
-
       await pr.show();
-
       final pdfData = await _generateDailyPDF();
-      String fileName = 'Daily Report';
+      String? fileName;
+      if (widget.tabIndex == 0) {
+        fileName = 'Charger_Checklist.pdf';
+      }
+      if (widget.tabIndex == 1) {
+        fileName = 'Sfu_Checklist.pdf';
+      }
+      if (widget.tabIndex == 2) {
+        fileName = 'Pss_Checklist.pdf';
+      }
+      if (widget.tabIndex == 3) {
+        fileName = 'Transformer_Checklist.pdf';
+      }
+      if (widget.tabIndex == 4) {
+        fileName = 'Rmu_Checklist.pdf';
+      }
+      if (widget.tabIndex == 5) {
+        fileName = 'Acdb_Checklist.pdf';
+      }
 
-      final savedPDFFile = await savePDFToFile(pdfData, fileName);
+      final savedPDFFile = await savePDFToFile(pdfData, fileName!);
 
       await pr.hide();
 
@@ -926,14 +976,13 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
       const NotificationDetails notificationDetails =
           NotificationDetails(android: androidNotificationDetails);
       await FlutterLocalNotificationsPlugin().show(
-          0, 'Pdf Downloaded', 'Tap to open', notificationDetails,
-          payload: pathToOpenFile);
+          0, fileName, 'Tap to open', notificationDetails,
+          payload: savedPDFFile.path);
     }
   }
 
   Future<Uint8List> _generateDailyPDF() async {
-    print('generating daily pdf');
-    pr!.style(
+    pr?.style(
       progressWidgetAlignment: Alignment.center,
       // message: 'Loading Data....',
       borderRadius: 10.0,
@@ -948,9 +997,6 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
           color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
     );
 
-    final summaryProvider =
-        Provider.of<SummaryProvider>(context, listen: false);
-
     final headerStyle =
         pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
 
@@ -962,171 +1008,251 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
       (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List(),
     );
 
+    Map<String, dynamic> tableData = Map();
+    dynamic datasource;
+    if (widget.tabIndex == 0) {
+      datasource = _dailyChargerDataSource;
+    } else if (widget.tabIndex == 1) {
+      datasource = _dailySfuDataSource;
+    } else if (widget.tabIndex == 2) {
+      datasource = _dailyPssDataSource;
+    } else if (widget.tabIndex == 3) {
+      datasource = _dailyTranformerDataSource;
+    } else if (widget.tabIndex == 4) {
+      datasource = _dailyRmuDataSource;
+    } else if (widget.tabIndex == 5) {
+      datasource = _dailyAcdbdatasource;
+    }
+
+    List<String> headers = [];
+    headers.clear();
+    tabledata2.clear();
+
+    for (var i in datasource.dataGridRows) {
+      tableData = {};
+      for (var data in i.getCells()) {
+        if (data.columnName != 'button' && data.columnName != 'Delete') {
+          tableData[data.columnName] = data.value;
+        }
+      }
+      tabledata2.add(tableData);
+    }
+
+    headers = tabColumnLabels[widget.tabIndex];
+
     List<pw.TableRow> rows = [];
 
-    final headers = [
-      'Sr No',
-      'Date',
-      'Type of Activity',
-      'Activity Details',
-      'Progress',
-      'Remark / Status',
-      'Image1',
-      'Image2',
-    ];
+    // rows.add(pw.TableRow(
+    //   children: headers.map((header) {
+    //     return pw.Container(
+    //       padding: const pw.EdgeInsets.all(2.0),
+    //       child: pw.Center(
+    //         child: pw.Text(
+    //           header,
+    //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+    //         ),
+    //       ),
+    //     );
+    //   }).toList(),
+    // ));
 
-    rows.add(pw.TableRow(
-      children: headers.map((header) {
-        return pw.Container(
-          padding: const pw.EdgeInsets.all(2.0),
+    pw.Widget buildTableCell(String text) {
+      return pw.Container(
+          padding: const pw.EdgeInsets.all(3.0),
           child: pw.Center(
-            child: pw.Text(
-              header,
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              child: pw.Text(text, style: const pw.TextStyle(fontSize: 14))));
+    }
+
+    if (widget.tabIndex == 0) {
+      rows.add(pw.TableRow(
+        children: headers.map((header) {
+          return pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+              child: pw.Text(
+                header,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
             ),
-          ),
-        );
-      }).toList(),
-    ));
-    List<pw.Widget> imageUrls = [];
+          );
+        }).toList(),
+      ));
+      for (int i = 0; i < tabledata2.length; i++) {
+        rows.add(pw.TableRow(children: [
+          // buildTableCell((i + 1).toString()),
+          buildTableCell(tabledata2[i]['Date'].toString()),
+          buildTableCell(tabledata2[i]['CN'].toString()),
+          buildTableCell(tabledata2[i]['DC'].toString()),
+          buildTableCell(tabledata2[i]['CGCA'].toString()),
+          buildTableCell(tabledata2[i]['CGCB'].toString()),
+          buildTableCell(tabledata2[i]['CGCCA'].toString()),
+          buildTableCell(tabledata2[i]['CGCCB'].toString()),
+          buildTableCell(tabledata2[i]['dl'].toString()),
+          buildTableCell(tabledata2[i]['ARM'].toString()),
+          buildTableCell(tabledata2[i]['EC'].toString()),
+          buildTableCell(tabledata2[i]['CC'].toString()),
+        ]));
+      }
+    }
+    if (widget.tabIndex == 1) {
+      rows.clear();
+      rows.add(pw.TableRow(
+        children: headers.map((header) {
+          return pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+              child: pw.Text(
+                header,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
+            ),
+          );
+        }).toList(),
+      ));
+      for (int i = 0; i < tabledata2.length; i++) {
+        rows.add(pw.TableRow(children: [
+          // buildTableCell((i + 1).toString()),
+          buildTableCell(tabledata2[i]['Date'].toString()),
+          buildTableCell(tabledata2[i]['sfuNo'].toString()),
+          buildTableCell(tabledata2[i]['fuc'].toString()),
+          buildTableCell(tabledata2[i]['icc'].toString()),
+          buildTableCell(tabledata2[i]['ictc'].toString()),
+          buildTableCell(tabledata2[i]['occ'].toString()),
+          buildTableCell(tabledata2[i]['octc'].toString()),
+          buildTableCell(tabledata2[i]['ec'].toString()),
+          buildTableCell(tabledata2[i]['cg'].toString()),
+          buildTableCell(tabledata2[i]['dl'].toString()),
+          buildTableCell(tabledata2[i]['vi'].toString()),
+        ]));
+      }
+    }
+    if (widget.tabIndex == 2) {
+      rows.clear();
+      rows.add(pw.TableRow(
+        children: headers.map((header) {
+          return pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+              child: pw.Text(
+                header,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
+            ),
+          );
+        }).toList(),
+      ));
+      for (int i = 0; i < tabledata2.length; i++) {
+        rows.add(pw.TableRow(children: [
+          // buildTableCell((i + 1).toString()),
+          buildTableCell(tabledata2[i]['Date'].toString()),
+          buildTableCell(tabledata2[i]['pssNo'].toString()),
+          buildTableCell(tabledata2[i]['pbc'].toString()),
+          buildTableCell(tabledata2[i]['ec'].toString()),
+          buildTableCell(tabledata2[i]['pdl'].toString()),
+          buildTableCell(tabledata2[i]['sgp'].toString()),
+          buildTableCell(tabledata2[i]['wtiTemp'].toString()),
+          buildTableCell(tabledata2[i]['otiTemp'].toString()),
+          buildTableCell(tabledata2[i]['vpiPresence'].toString()),
+          buildTableCell(tabledata2[i]['viMCCb'].toString()),
+          buildTableCell(tabledata2[i]['vr'].toString()),
+          buildTableCell(tabledata2[i]['ar'].toString()),
+          buildTableCell(tabledata2[i]['mccbHandle'].toString()),
+        ]));
+      }
+    }
+    if (widget.tabIndex == 3) {
+      rows.clear();
+      rows.add(pw.TableRow(
+        children: headers.map((header) {
+          return pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+              child: pw.Text(
+                header,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
+            ),
+          );
+        }).toList(),
+      ));
+      for (int i = 0; i < tabledata2.length; i++) {
+        rows.add(pw.TableRow(children: [
+          // buildTableCell((i + 1).toString()),
+          buildTableCell(tabledata2[i]['Date'].toString()),
+          buildTableCell(tabledata2[i]['trNo'].toString()),
+          buildTableCell(tabledata2[i]['pc'].toString()),
+          buildTableCell(tabledata2[i]['ec'].toString()),
+          buildTableCell(tabledata2[i]['ol'].toString()),
+          buildTableCell(tabledata2[i]['oc'].toString()),
+          buildTableCell(tabledata2[i]['wtiTemp'].toString()),
+          buildTableCell(tabledata2[i]['otiTemp'].toString()),
+          buildTableCell(tabledata2[i]['brk'].toString()),
+          buildTableCell(tabledata2[i]['cta'].toString()),
+        ]));
+      }
+    }
+    if (widget.tabIndex == 4) {
+      rows.clear();
+      rows.add(pw.TableRow(
+        children: headers.map((header) {
+          return pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+              child: pw.Text(
+                header,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
+            ),
+          );
+        }).toList(),
+      ));
+      for (int i = 0; i < tabledata2.length; i++) {
+        rows.add(pw.TableRow(children: [
+          // buildTableCell((i + 1).toString()),
+          buildTableCell(tabledata2[i]['Date'].toString()),
+          buildTableCell(tabledata2[i]['rmuNo'].toString()),
+          buildTableCell(tabledata2[i]['sgp'].toString()),
+          buildTableCell(tabledata2[i]['vpi'].toString()),
+          buildTableCell(tabledata2[i]['crd'].toString()),
+          buildTableCell(tabledata2[i]['rec'].toString()),
+          buildTableCell(tabledata2[i]['arm'].toString()),
+          buildTableCell(tabledata2[i]['cbts'].toString()),
+          buildTableCell(tabledata2[i]['cra'].toString()),
+        ]));
+      }
+    }
+    if (widget.tabIndex == 5) {
+      rows.clear();
+      rows.add(pw.TableRow(
+        children: headers.map((header) {
+          return pw.Container(
+            padding: const pw.EdgeInsets.all(2.0),
+            child: pw.Center(
+              child: pw.Text(
+                header,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
+            ),
+          );
+        }).toList(),
+      ));
+      for (int i = 0; i < tabledata2.length; i++) {
+        rows.add(pw.TableRow(children: [
+          // buildTableCell((i + 1).toString()),
+          buildTableCell(tabledata2[i]['Date'].toString()),
+          buildTableCell(tabledata2[i]['incomerNo'].toString()),
+          buildTableCell(tabledata2[i]['vi'].toString()),
+          buildTableCell(tabledata2[i]['vr'].toString()),
+          buildTableCell(tabledata2[i]['ar'].toString()),
+          buildTableCell(tabledata2[i]['acbbSwitch'].toString()),
+          buildTableCell(tabledata2[i]['mccbHandle'].toString()),
+          buildTableCell(tabledata2[i]['ccb'].toString()),
+          buildTableCell(tabledata2[i]['arm'].toString()),
+        ]));
+      }
+    }
 
-    // for (int i = 0; i < dailyProject.length; i++) {
-    //   String imagesPath =
-    //       '/Daily Report/${widget.cityName}/${widget.depoName}/${availableUserId[i]}/${chosenDateList[i]}/${globalIndexList[i]}';
-
-    //   ListResult result =
-    //       await FirebaseStorage.instance.ref().child(imagesPath).listAll();
-
-    //   if (result.items.isNotEmpty) {
-    //     for (var image in result.items) {
-    //       String downloadUrl = await image.getDownloadURL();
-    //       if (image.name.endsWith('.pdf')) {
-    //         imageUrls.add(
-    //           pw.Container(
-    //               width: 60,
-    //               alignment: pw.Alignment.center,
-    //               padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-    //               child: pw.UrlLink(
-    //                   child: pw.Text(image.name,
-    //                       style: const pw.TextStyle(color: PdfColors.blue)),
-    //                   destination: downloadUrl)),
-    //         );
-    //       } else {
-    //         final myImage = await networkImage(downloadUrl);
-    //         imageUrls.add(
-    //           pw.Container(
-    //               padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-    //               width: 60,
-    //               height: 80,
-    //               child: pw.Center(
-    //                 child: pw.Image(myImage),
-    //               )),
-    //         );
-    //       }
-    //     }
-
-    //     if (imageUrls.length < 2) {
-    //       int imageLoop = 2 - imageUrls.length;
-    //       for (int i = 0; i < imageLoop; i++) {
-    //         imageUrls.add(
-    //           pw.Container(
-    //               padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-    //               width: 60,
-    //               height: 80,
-    //               child: pw.Text('')),
-    //         );
-    //       }
-    //     } else if (imageUrls.length > 2) {
-    //       int imageLoop = 10 - imageUrls.length;
-    //       for (int i = 0; i < imageLoop; i++) {
-    //         imageUrls.add(
-    //           pw.Container(
-    //               padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-    //               width: 80,
-    //               height: 100,
-    //               child: pw.Text('')),
-    //         );
-    //       }
-    //     }
-    //   } else {
-    //     for (int i = 0; i < 2; i++) {
-    //       imageUrls.add(
-    //         pw.Container(
-    //             padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-    //             width: 60,
-    //             height: 80,
-    //             child: pw.Text('')),
-    //       );
-    //     }
-    //   }
-    //   result.items.clear();
-
-    //   //Text Rows of PDF Table
-    //   rows.add(pw.TableRow(children: [
-    //     pw.Container(
-    //         padding: const pw.EdgeInsets.all(3.0),
-    //         child: pw.Center(
-    //             child: pw.Text((i + 1).toString(),
-    //                 style: const pw.TextStyle(fontSize: 14)))),
-    //     pw.Container(
-    //         padding: const pw.EdgeInsets.all(2.0),
-    //         child: pw.Center(
-    //             child: pw.Text(dailyProject[i].date.toString(),
-    //                 style: const pw.TextStyle(fontSize: 14)))),
-    //     pw.Container(
-    //         padding: const pw.EdgeInsets.all(2.0),
-    //         child: pw.Center(
-    //             child: pw.Text(dailyProject[i].typeOfActivity.toString(),
-    //                 style: const pw.TextStyle(fontSize: 14)))),
-    //     pw.Container(
-    //         padding: const pw.EdgeInsets.all(2.0),
-    //         child: pw.Center(
-    //             child: pw.Text(dailyProject[i].activityDetails.toString(),
-    //                 style: const pw.TextStyle(fontSize: 14)))),
-    //     pw.Container(
-    //         padding: const pw.EdgeInsets.all(2.0),
-    //         child: pw.Center(
-    //             child: pw.Text(dailyProject[i].progress.toString(),
-    //                 style: const pw.TextStyle(fontSize: 14)))),
-    //     pw.Container(
-    //         padding: const pw.EdgeInsets.all(2.0),
-    //         child: pw.Center(
-    //             child: pw.Text(dailyProject[i].status.toString(),
-    //                 style: const pw.TextStyle(fontSize: 14)))),
-    //     imageUrls[0],
-    //     imageUrls[1]
-    //   ]));
-
-    //   if (imageUrls.length - 2 > 0) {
-    //     //Image Rows of PDF Table
-    //     rows.add(pw.TableRow(children: [
-    //       pw.Container(
-    //           padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-    //           child: pw.Text('')),
-    //       pw.Container(
-    //           padding: const pw.EdgeInsets.only(top: 8.0, bottom: 8.0),
-    //           width: 60,
-    //           height: 100,
-    //           child: pw.Row(
-    //               mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-    //               children: [
-    //                 imageUrls[2],
-    //                 imageUrls[3],
-    //               ])),
-    //       imageUrls[4],
-    //       imageUrls[5],
-    //       imageUrls[6],
-    //       imageUrls[7],
-    //       imageUrls[8],
-    //       imageUrls[9]
-    //     ]));
-    //   }
-    //   imageUrls.clear();
-    // }
-
-    final pdf = pw.Document(
-      pageMode: PdfPageMode.outlines,
-    );
+    final pdf = pw.Document(pageMode: PdfPageMode.outlines);
 
     //First Half Page
 
@@ -1155,11 +1281,11 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
                       pw.Text('Daily Report Table',
                           textScaleFactor: 2,
                           style: const pw.TextStyle(color: PdfColors.blue700)),
-                      pw.Container(
-                        width: 120,
-                        height: 120,
-                        child: pw.Image(profileImage),
-                      ),
+                      // pw.Container(
+                      //   width: 120,
+                      //   height: 120,
+                      //   child: pw.Image(profileImage),
+                      // ),
                     ]),
               ]));
         },
@@ -1213,16 +1339,24 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
           ]),
           pw.SizedBox(height: 10),
           pw.Table(
-            columnWidths: {
-              0: const pw.FixedColumnWidth(30),
-              1: const pw.FixedColumnWidth(160),
-              2: const pw.FixedColumnWidth(70),
-              3: const pw.FixedColumnWidth(70),
-              4: const pw.FixedColumnWidth(70),
-              5: const pw.FixedColumnWidth(70),
-              6: const pw.FixedColumnWidth(70),
-              7: const pw.FixedColumnWidth(70),
-            },
+            columnWidths: Map.fromIterable(
+              List.generate(headers.length, (index) => index),
+              value: (index) => const pw.FixedColumnWidth(100),
+            ),
+            // {
+            //   0: const pw.FixedColumnWidth(30),
+            //   1: const pw.FixedColumnWidth(160),
+            //   2: const pw.FixedColumnWidth(70),
+            //   3: const pw.FixedColumnWidth(70),
+            //   4: const pw.FixedColumnWidth(70),
+            //   5: const pw.FixedColumnWidth(70),
+            //   6: const pw.FixedColumnWidth(70),
+            //   7: const pw.FixedColumnWidth(70),
+            //   8: const pw.FixedColumnWidth(70),
+            //   9: const pw.FixedColumnWidth(70),
+            //   10: const pw.FixedColumnWidth(70),
+            //   // 11: const pw.FixedColumnWidth(70),
+            // },
             defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
             tableWidth: pw.TableWidth.max,
             border: pw.TableBorder.all(),
@@ -1233,33 +1367,62 @@ class _DailyManagementAdminPageState extends State<DailyManagementAdminPage> {
     );
 
     pdfData = await pdf.save();
-    pdfPath = 'Daily Report.pdf';
+    pdfPath = 'Daily_Report.pdf';
 
     return pdfData!;
   }
 
   Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+    // Get the path to the downloads directory
     final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
-    final file = File('$documentDirectory/$fileName');
 
+    if (documentDirectory == null) {
+      // Return an empty file if the directory is null
+      return File('');
+    }
+
+    final file = File('$documentDirectory/$fileName');
     int counter = 1;
     String newFilePath = file.path;
-    pathToOpenFile = newFilePath.toString();
-    if (await File(newFilePath).exists()) {
+
+    // Check if the file already exists and find a unique name
+    while (await File(newFilePath).exists()) {
       final baseName = fileName.split('.').first;
       final extension = fileName.split('.').last;
       newFilePath =
           '$documentDirectory/$baseName-${counter.toString()}.$extension';
       counter++;
-      pathToOpenFile = newFilePath.toString();
-      await file.copy(newFilePath);
-      counter++;
-    } else {
-      await file.writeAsBytes(pdfData);
-      return file;
     }
-    return File('');
+
+    // Write the PDF data to the new file
+    await File(newFilePath).writeAsBytes(pdfData);
+
+    // Return the File object for the newly created file
+    return File(newFilePath);
   }
+
+  // Future<File> savePDFToFile(Uint8List pdfData, String fileName) async {
+  //   final documentDirectory = (await DownloadsPath.downloadsDirectory())?.path;
+  //   final file = File('$documentDirectory/$fileName');
+
+  //   int counter = 1;
+  //   String newFilePath = file.path;
+  //   pathToOpenFile = newFilePath.toString();
+  //   if (await File(newFilePath).exists()) {
+  //     final baseName = fileName.split('.').first;
+  //     final extension = fileName.split('.').last;
+  //     newFilePath =
+  //         '$documentDirectory/$baseName-${counter.toString()}.$extension';
+  //     counter++;
+  //     pathToOpenFile = newFilePath.toString();
+  //     await file.copy(newFilePath);
+  //     counter++;
+  //   } else {
+  //     await file.writeAsBytes(pdfData);
+  //     return file;
+  //   }
+  //   return File('');
+  // }
 }
 
 void dailyManagementStoreData(BuildContext context, String userId,

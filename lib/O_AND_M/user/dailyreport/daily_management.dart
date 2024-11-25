@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ev_pmis_app/PMIS/common_screen/citiespage/depot.dart';
 import 'package:ev_pmis_app/PMIS/summary.dart';
 import 'package:ev_pmis_app/PMIS/widgets/appbar_back_date.dart';
 import 'package:flutter/material.dart';
@@ -180,6 +179,7 @@ class _DailyManagementPageState extends State<DailyManagementPage> {
   @override
   Widget build(BuildContext context) {
     // getTableData()
+    _fetchUserData();
     List<String> currentColumnNames = tabColumnNames[widget.tabIndex];
     List<String> currentColumnLabels = tabColumnLabels[widget.tabIndex];
     widget.isHeader!

@@ -204,7 +204,8 @@ class _ViewSummaryState extends State<ViewSummary> {
       columns.add(
         GridColumn(
           columnName: columnName,
-          visible: true,
+          visible:
+              (columnName == 'Add' || columnName == 'Delete') ? false : true,
           allowEditing: columnName == 'Add' ||
                   columnName == 'Delete' ||
                   columnName == columnName[0]
@@ -373,7 +374,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                          width: 150,
+                          width: 200,
                           height: 40,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
@@ -1230,7 +1231,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                   label:
                                                                       Container(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     alignment:
                                                                         Alignment
@@ -1253,7 +1255,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                   label:
                                                                       Container(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     alignment:
                                                                         Alignment
@@ -1356,7 +1359,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                   label:
                                                                       Container(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     alignment:
                                                                         Alignment
@@ -1405,7 +1409,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                   label:
                                                                       Container(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     alignment:
                                                                         Alignment
@@ -1449,7 +1454,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                       false,
                                                                   autoFitPadding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   allowEditing:
                                                                       false,
@@ -1457,7 +1462,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                   label:
                                                                       Container(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     alignment:
                                                                         Alignment
@@ -1480,7 +1486,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                       false,
                                                                   autoFitPadding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   allowEditing:
                                                                       false,
@@ -1488,7 +1494,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                   label:
                                                                       Container(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     alignment:
                                                                         Alignment
@@ -1511,7 +1518,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                         return Container(
                                                           margin:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   bottom: 5.0),
                                                           height: 300,
                                                           width: MediaQuery.of(
@@ -1551,7 +1558,8 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                                       return Container(
                                                                         height:
                                                                             250,
-                                                                        margin: const EdgeInsets.only(
+                                                                        margin: const EdgeInsets
+                                                                            .only(
                                                                             top:
                                                                                 10.0),
                                                                         width: _energyManagementDatasource.dataGridRows.length *
@@ -1720,7 +1728,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                       label: Container(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal:
                                                                     8.0),
                                                         alignment:
@@ -1741,7 +1749,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                       label: Container(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal:
                                                                     8.0),
                                                         alignment:
@@ -1786,7 +1794,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                       label: Container(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal:
                                                                     8.0),
                                                         alignment:
@@ -1808,7 +1816,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                       label: Container(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal:
                                                                     8.0),
                                                         alignment:
@@ -1830,7 +1838,7 @@ class _ViewSummaryState extends State<ViewSummary> {
                                                       label: Container(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal:
                                                                     8.0),
                                                         alignment:
@@ -3557,7 +3565,7 @@ class _ViewSummaryState extends State<ViewSummary> {
             color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600),
       );
 
-      await pr.show();  
+      await pr.show();
 
       final pdfData = widget.id == 'Daily Report'
           ? await _generateDailyPDF()

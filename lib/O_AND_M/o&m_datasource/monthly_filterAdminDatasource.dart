@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../o&m_model/monthly_filter.dart';
 import '../../style.dart';
 
-class MonthlyFilterManagementDataSource extends DataGridSource {
+class MonthlyAdminFilterManagentDatasource extends DataGridSource {
   String cityName;
   String depoName;
   String userId;
@@ -15,7 +15,7 @@ class MonthlyFilterManagementDataSource extends DataGridSource {
   BuildContext mainContext;
 
   List data = [];
-  MonthlyFilterManagementDataSource(this._dailyproject, this.mainContext,
+  MonthlyAdminFilterManagentDatasource(this._dailyproject, this.mainContext,
       this.cityName, this.depoName, this.selectedDate, this.userId) {
     buildDataGridRows();
   }
@@ -66,103 +66,105 @@ class MonthlyFilterManagementDataSource extends DataGridSource {
       return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: (dataGridCell.columnName == 'date')
-              ? Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        showDialog(
-                            context: mainContext,
-                            builder: (context) => AlertDialog(
-                                  title: const Text('All Date'),
-                                  content: Container(
-                                      height: 400,
-                                      width: 500,
-                                      child: SfDateRangePicker(
-                                        view: DateRangePickerView.month,
-                                        showTodayButton: true,
-                                        onCancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        onSelectionChanged:
-                                            (DateRangePickerSelectionChangedArgs
-                                                args) {
-                                          if (args.value is PickerDateRange) {
-                                            rangeStartDate =
-                                                args.value.startDate;
-                                          } else {
-                                            final List<PickerDateRange>
-                                                selectedRanges = args.value;
-                                          }
-                                        },
-                                        selectionMode:
-                                            DateRangePickerSelectionMode.single,
-                                        showActionButtons: true,
-                                        onSubmit: ((value) {
-                                          date =
-                                              DateTime.parse(value.toString());
+          child:
+          //  (dataGridCell.columnName == 'date')
+          //     ? Row(
+          //         children: [
+          //           IconButton(
+          //             onPressed: () {
+          //               showDialog(
+          //                   context: mainContext,
+          //                   builder: (context) => AlertDialog(
+          //                         title: const Text('All Date'),
+          //                         content: Container(
+          //                             height: 400,
+          //                             width: 500,
+          //                             child: SfDateRangePicker(
+          //                               view: DateRangePickerView.month,
+          //                               showTodayButton: true,
+          //                               onCancel: () {
+          //                                 Navigator.pop(context);
+          //                               },
+          //                               onSelectionChanged:
+          //                                   (DateRangePickerSelectionChangedArgs
+          //                                       args) {
+          //                                 if (args.value is PickerDateRange) {
+          //                                   rangeStartDate =
+          //                                       args.value.startDate;
+          //                                 } else {
+          //                                   final List<PickerDateRange>
+          //                                       selectedRanges = args.value;
+          //                                 }
+          //                               },
+          //                               selectionMode:
+          //                                   DateRangePickerSelectionMode.single,
+          //                               showActionButtons: true,
+          //                               onSubmit: ((value) {
+          //                                 date =
+          //                                     DateTime.parse(value.toString());
 
-                                          final int dataRowIndex =
-                                              dataGridRows.indexOf(row);
-                                          if (dataRowIndex != null) {
-                                            final int dataRowIndex =
-                                                dataGridRows.indexOf(row);
-                                            dataGridRows[dataRowIndex]
-                                                    .getCells()[1] =
-                                                DataGridCell<String>(
-                                                    columnName: 'date',
-                                                    value:
-                                                        DateFormat('dd-MM-yyyy')
-                                                            .format(date!));
-                                            _dailyproject[dataRowIndex].date =
-                                                DateFormat('dd-MM-yyyy')
-                                                    .format(date!);
-                                            notifyListeners();
+          //                                 final int dataRowIndex =
+          //                                     dataGridRows.indexOf(row);
+          //                                 if (dataRowIndex != null) {
+          //                                   final int dataRowIndex =
+          //                                       dataGridRows.indexOf(row);
+          //                                   dataGridRows[dataRowIndex]
+          //                                           .getCells()[1] =
+          //                                       DataGridCell<String>(
+          //                                           columnName: 'date',
+          //                                           value:
+          //                                               DateFormat('dd-MM-yyyy')
+          //                                                   .format(date!));
+          //                                   _dailyproject[dataRowIndex].date =
+          //                                       DateFormat('dd-MM-yyyy')
+          //                                           .format(date!);
+          //                                   notifyListeners();
 
-                                            Navigator.pop(context);
-                                          }
-                                        }),
-                                      )),
-                                ));
-                      },
-                      icon: const Icon(Icons.calendar_today),
-                    ),
-                    Text(dataGridCell.value.toString()),
-                  ],
-                )
-              : (dataGridCell.columnName == 'Add')
-                  ? ElevatedButton(
-                      onPressed: () {
-                        // isShowPinIcon.add(false);
-                        addRowAtIndex(
-                            dataRowIndex + 1,
-                            MonthlyFilterModel(
-                                cn: dataRowIndex + 2,
-                                date:
-                                    DateFormat.yMMMMd().format(DateTime.now()),
-                                fcd: '',
-                                dgcd: ''));
-                      },
-                      child: Text('Add', style: tablefonttext))
-                  : (dataGridCell.columnName == 'Delete')
-                      ? IconButton(
-                          onPressed: () async {
-                            // FirebaseFirestore.instance
-                            //     .collection('DailyProjectReport')
-                            //     .doc(depoName)
-                            //     .collection('Daily Data')
-                            //     .doc(DateFormat.yMMMMd().format(DateTime.now()))
-                            //     .update({
-                            //   'data': FieldValue.arrayRemove([0])
-                            // });
-                            removeRowAtIndex(dataRowIndex);
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: red,
-                            size: 15,
-                          ))
-                      : Text(
+          //                                   Navigator.pop(context);
+          //                                 }
+          //                               }),
+          //                             )),
+          //                       ));
+          //             },
+          //             icon: const Icon(Icons.calendar_today),
+          //           ),
+          //           Text(dataGridCell.value.toString()),
+          //         ],
+          //       )
+          //     : (dataGridCell.columnName == 'Add')
+          //         ? ElevatedButton(
+          //             onPressed: () {
+          //               // isShowPinIcon.add(false);
+          //               addRowAtIndex(
+          //                   dataRowIndex + 1,
+          //                   MonthlyFilterModel(
+          //                       cn: dataRowIndex + 2,
+          //                       date:
+          //                           DateFormat.yMMMMd().format(DateTime.now()),
+          //                       fcd: '',
+          //                       dgcd: ''));
+          //             },
+          //             child: Text('Add', style: tablefonttext))
+          //         : (dataGridCell.columnName == 'Delete')
+          //             ? IconButton(
+          //                 onPressed: () async {
+          //                   // FirebaseFirestore.instance
+          //                   //     .collection('DailyProjectReport')
+          //                   //     .doc(depoName)
+          //                   //     .collection('Daily Data')
+          //                   //     .doc(DateFormat.yMMMMd().format(DateTime.now()))
+          //                   //     .update({
+          //                   //   'data': FieldValue.arrayRemove([0])
+          //                   // });
+          //                   removeRowAtIndex(dataRowIndex);
+          //                 },
+          //                 icon: Icon(
+          //                   Icons.delete,
+          //                   color: red,
+          //                   size: 15,
+          //                 ))
+          //             : 
+                      Text(
                           dataGridCell.value.toString(),
                           textAlign: TextAlign.center,
                           style: tablefonttext,

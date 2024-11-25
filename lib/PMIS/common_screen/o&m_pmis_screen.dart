@@ -177,7 +177,7 @@ class _PmisAndOAndMScreenState extends State<PmisAndOAndMScreen> {
                             ),
                           );
                           Future.delayed(
-                            const Duration(  
+                            const Duration(
                               seconds: 2,
                             ),
                             () {
@@ -197,7 +197,9 @@ class _PmisAndOAndMScreenState extends State<PmisAndOAndMScreen> {
                         } else {
                           Navigator.pushNamedAndRemoveUntil(
                             context,
-                            '/cities-page',
+                            '/oAndMsplitScreen',
+                            // '/oAndMDashboard',
+                            //  '/cities-page',
                             arguments: {
                               // "roleCentre": roleCentre,
                               'userId': widget.userId,

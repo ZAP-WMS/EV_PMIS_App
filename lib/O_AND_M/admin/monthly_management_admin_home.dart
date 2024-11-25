@@ -1,26 +1,39 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ev_pmis_app/O_AND_M/admin/monthly_management_admin.dart';
-import 'package:ev_pmis_app/PMIS/summary.dart';
+import 'package:ev_pmis_app/O_AND_M/user/management_screen/assigned_userlist.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../../../../style.dart';
-import '../../../../PMIS/widgets/progress_loading.dart';
 import '../../../../PMIS/authentication/authservice.dart';
-import '../user/management_screen/monthly_page/monthly_home.dart';
+import 'package:pdf/widgets.dart' as pw;
+
+import '../../components/loading_pdf.dart';
 
 class MonthlyManagementAdminHomePage extends StatefulWidget {
   String? cityName;
   String? depoName;
   String? userId;
   String? role;
-  MonthlyManagementAdminHomePage(
-      {super.key,
-      required this.cityName,
-      this.depoName,
-      this.userId,
-      this.role});
+  String? tabIndex;
+
+  MonthlyManagementAdminHomePage({
+    super.key,
+    required this.cityName,
+    this.depoName,
+    this.userId,
+    this.role,
+    this.tabIndex,
+  });
 
   @override
   State<MonthlyManagementAdminHomePage> createState() =>
@@ -32,15 +45,23 @@ class _MonthlyManagementAdminHomePageState
   String? _selectedDate = DateFormat.yMMM().format(DateTime.now());
   int _selectedIndex = 0;
   dynamic userId;
-  bool _isloading = true;
+  // bool _isloading = true;
+  ProgressDialog? pr;
+  String pathToOpenFile = '';
+  Uint8List? pdfData;
+  String? pdfPath;
+  String? selectedDate = DateFormat.yMMMMd().format(DateTime.now());
+  bool checkTable = true;
+  DateTime? startdate = DateTime.now();
+  DateTime? enddate = DateTime.now();
 
   @override
   void initState() {
-    getUserId().whenComplete(() {
-      setState(() {
-        _isloading = false;
-      });
-    });
+    // getUserId().whenComplete(() {
+    //   // setState(() {
+    //   //   _isloading = false;
+    //   // });
+    // });
     super.initState();
   }
 
@@ -62,6 +83,39 @@ class _MonthlyManagementAdminHomePageState
               style: TextStyle(color: white, fontWeight: FontWeight.bold),
             ),
             actions: [
+              InkWell(
+                onTap: () {
+                  //                BuildContext context,
+                  // String cityName,
+                  // String depoName,
+                  // ProgressDialog? pr,
+                  // String pathToOpenFile,
+                  // Uint8List? pdfData,
+                  // String? pdfPath,
+                  // int tabIndex
+                  downloadPDF(
+                      context,
+                      widget.cityName.toString(),
+                      widget.depoName.toString(),
+                      // pathToOpenFile,
+                      // pdfData,
+                      // pdfPath,
+                      _selectedIndex);
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 10, right: 5),
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(
+                    Icons.download,
+                    color: blue,
+                  ),
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: white,
@@ -74,9 +128,9 @@ class _MonthlyManagementAdminHomePageState
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MonthlyManagementHomePage(
-                                // tabIndex: 0,
-                                // tabletitle: 'Daily Progress Report',
+                          builder: (context) => UserList(
+                                tabIndex: 0,
+                                tabletitle: 'Monthly Progress Report',
                                 cityName: widget.cityName,
                                 depoName: widget.depoName,
                                 userId: widget.userId,
@@ -129,7 +183,7 @@ class _MonthlyManagementAdminHomePageState
                 role: widget.role!,
               ),
               MonthlyAdminManagementPage(
-                tabIndex: 0,
+                tabIndex: 1,
                 tabletitle: 'Charger Filter',
                 cityName: widget.cityName,
                 depoName: widget.depoName,
@@ -146,7 +200,7 @@ class _MonthlyManagementAdminHomePageState
         context: context,
         builder: (context) => AlertDialog(
               title: const Text('All Date'),
-              content: Container(
+              content: SizedBox(
                   height: 400,
                   width: 500,
                   child: SfDateRangePicker(

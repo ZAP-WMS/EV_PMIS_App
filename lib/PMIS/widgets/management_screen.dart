@@ -5,7 +5,7 @@ List<String> managementScreen = [
   '/monthly_management',
   "/breakdown",
   '/charger',
-  "/oAndMDashboard"
+  // "/oAndMDashboard"
 ];
 
 List managementImagedata = [
@@ -13,7 +13,7 @@ List managementImagedata = [
   'assets/overview_image/monthly.png',
   'assets/overview_image/safety.png',
   'assets/overview_image/closure_report.png',
-  'assets/overview_image/daily_progress.png',
+  // 'assets/overview_image/daily_progress.png',
 ];
 
 List<String> managementDescription = [
@@ -21,7 +21,7 @@ List<String> managementDescription = [
   'Monthly Project Monitoring',
   'Breakdown Data',
   'Charger Availability Status',
-  "O & M Dashboard",
+  // "O & M Dashboard",
 ];
 
 List<String> breakdownClnName = [

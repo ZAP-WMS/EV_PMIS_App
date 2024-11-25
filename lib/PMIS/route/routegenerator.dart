@@ -32,12 +32,11 @@ import 'package:provider/provider.dart';
 import '../authentication/change_password.dart';
 import '../common_screen/chatPage/feedback.dart';
 import '../common_screen/citiespage/cities_home.dart';
-import '../../O_AND_M/user/dailyreport/daily_management_home.dart';
 import '../../O_AND_M/user/dailyreport/notification_userlist.dart';
 import '../../O_AND_M/user/management_screen/breakdown_screen.dart';
 import '../../O_AND_M/user/management_screen/charger_availabity_screen.dart';
-import '../../O_AND_M/user/management_screen/monthly_page/monthly_home.dart';
 import '../common_screen/o&m_pmis_screen.dart';
+import '../common_screen/o&m_split_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -357,6 +356,20 @@ class RouteGenerator {
             userId: userId,
             cityName: cityName,
             depoName: depoName,
+            role: role,
+          );
+
+        case "/oAndMsplitScreen":
+          final args = settings.arguments as Map<String, dynamic>;
+          final role = args["role"];
+          final roleCentre = args["roleCentre"];
+          final userId = args["userId"];
+          // final cityName = args["cityName"];
+          // final depoName = args["depoName"];
+
+          return ManagementsplitScreen(
+            roleCentre: roleCentre,
+            userId: userId,
             role: role,
           );
       }

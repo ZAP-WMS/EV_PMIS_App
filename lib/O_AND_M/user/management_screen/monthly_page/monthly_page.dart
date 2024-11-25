@@ -14,7 +14,6 @@ import '../../../../utils/daily_managementlist.dart';
 import '../../../../utils/date_formart.dart';
 import '../../../../utils/date_inputFormatter.dart';
 import '../../../../utils/upper_tableHeader.dart';
-import '../../../../PMIS/authentication/authservice.dart';
 
 late MonthlyChargerManagementDataSource _monthlyChargerManagementDataSource;
 late MonthlyFilterManagementDataSource _monthlyFilterManagementDataSource;
@@ -31,81 +30,89 @@ List<MonthlyFilterModel> _monthlyFilterModel = [];
 class MonthlyManagementPage extends StatefulWidget {
   String? cityName;
   String? depoName;
-  int tabIndex = 0;
+  int titleIndex;
   String? tabletitle;
-  MonthlyManagementPage(
-      {super.key,
-      required this.cityName,
-      required this.depoName,
-      required this.tabIndex,
-      required this.tabletitle});
+  String userId;
+  String? date;
+  MonthlyManagementPage({
+    super.key,
+    required this.cityName,
+    required this.depoName,
+    required this.titleIndex,
+    required this.tabletitle,
+    required this.userId,
+    required this.date,
+  });
 
   @override
   State<MonthlyManagementPage> createState() => _MonthlyManagementPageState();
 }
 
 class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
-  String? selectedDate = DateFormat.yMMM().format(DateTime.now());
+  // String? widget.date = DateFormat.yMMM().format(DateTime.now());
   List<GridColumn> columns = [];
   bool _isloading = true;
   Stream? _stream;
-  dynamic userId;
 
   late DataGridController _dataGridController;
 
   @override
   void initState() {
-    // Example date
-    DateTime date = DateTime.now();
+    print('initial Index ${widget.titleIndex}');
+    _monthlyChargerModel = [];
+    _monthlyFilterModel = [];
     _stream = FirebaseFirestore.instance
-        .collection('DailyManagementPage')
+        .collection('MonthlyManagementPage')
         .doc('${widget.depoName}')
-        .collection(selectedDate.toString())
-        .doc(userId)
+        .collection(widget.date.toString())
+        .doc(widget.userId)
         .snapshots();
 
     _dataGridController = DataGridController();
-    getUserId().whenComplete(() {
-      _fetchUserData();
+    // getUserId().whenComplete(() {
+    _fetchUserData();
+    _monthlyChargerManagementDataSource = MonthlyChargerManagementDataSource(
+        _monthlyChargerModel,
+        context,
+        widget.cityName!,
+        widget.depoName!,
+        widget.date!,
+        widget.userId);
+    _monthlyFilterManagementDataSource = MonthlyFilterManagementDataSource(
+        _monthlyFilterModel,
+        context,
+        widget.cityName!,
+        widget.depoName!,
+        widget.date!,
+        widget.userId);
+    _dataGridController = DataGridController();
+    getTableData().whenComplete(() {
       _monthlyChargerManagementDataSource = MonthlyChargerManagementDataSource(
           _monthlyChargerModel,
           context,
           widget.cityName!,
           widget.depoName!,
-          selectedDate!,
-          userId);
+          widget.date!,
+          widget.userId);
       _monthlyFilterManagementDataSource = MonthlyFilterManagementDataSource(
           _monthlyFilterModel,
           context,
           widget.cityName!,
           widget.depoName!,
-          selectedDate!,
-          userId);
-      _dataGridController = DataGridController();
-      getTableData().whenComplete(() {
-        _monthlyChargerManagementDataSource =
-            MonthlyChargerManagementDataSource(_monthlyChargerModel, context,
-                widget.cityName!, widget.depoName!, selectedDate!, userId);
-        _monthlyFilterManagementDataSource = MonthlyFilterManagementDataSource(
-            _monthlyFilterModel,
-            context,
-            widget.cityName!,
-            widget.depoName!,
-            selectedDate!,
-            userId);
+          widget.date!,
+          widget.userId);
 
-        _dataGridController = DataGridController();
-      });
-      _isloading = false;
-      setState(() {});
+      _dataGridController = DataGridController();
     });
+    _isloading = false;
+    setState(() {});
 
     super.initState();
   }
 
   List<List<String>> tabColumnNames = [
     monthlyChargerColumnName,
-    monthlyFilterColumnName,
+    monthlyFilterColumnName
   ];
 
   List<List<String>> tabColumnLabels = [
@@ -114,10 +121,8 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    _depotController.text = widget.depoName.toString();
-
-    List<String> currentColumnNames = tabColumnNames[widget.tabIndex];
-    List<String> currentColumnLabels = tabColumnLabels[widget.tabIndex];
+    List<String> currentColumnNames = tabColumnNames[widget.titleIndex];
+    List<String> currentColumnLabels = tabColumnLabels[widget.titleIndex];
 
     columns.clear();
     for (String columnName in currentColumnNames) {
@@ -127,13 +132,14 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
           visible: true,
           allowEditing: columnName == 'Add' ||
                   columnName == 'Delete' ||
-                  columnName == columnName[0]
+                  columnName == columnName[0] ||
+                  columnName == 'date'
               ? false
               : true,
           width: columnName == 'cn'
               ? MediaQuery.of(context).size.width * 0.2
               : MediaQuery.of(context).size.width *
-                  0.3, // You can adjust this width as needed
+                  0.38, // You can adjust this width as needed
           label: createColumnLabel(
             currentColumnLabels[currentColumnNames.indexOf(columnName)],
           ),
@@ -197,7 +203,7 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
                                           context),
                                       customText(
                                           'Bus Depot Name:',
-                                          'BBM',
+                                          'Depo Name',
                                           _depotController,
                                           TextInputType.name,
                                           [],
@@ -234,7 +240,7 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
                         } else if (!snapshot.hasData ||
                             snapshot.data.exists == false) {
                           return SfDataGrid(
-                              source: widget.tabIndex == 0
+                              source: widget.titleIndex == 0
                                   ? _monthlyChargerManagementDataSource
                                   : _monthlyFilterManagementDataSource,
                               allowEditing: true,
@@ -255,7 +261,7 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
                               columns: columns);
                         } else {
                           return SfDataGrid(
-                              source: widget.tabIndex == 0
+                              source: widget.titleIndex == 0
                                   ? _monthlyChargerManagementDataSource
                                   : _monthlyFilterManagementDataSource,
                               allowEditing: true,
@@ -293,25 +299,28 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            if (widget.tabIndex == 0) {
-              _monthlyChargerModel.add(MonthlyChargerModel(
-                cn: _monthlyChargerManagementDataSource.dataGridRows.length + 1,
-                gun1: '',
-                gun2: '',
-              ));
-              _monthlyChargerManagementDataSource.buildDataGridRows();
-              _monthlyChargerManagementDataSource.updateDatagridSource();
-            } else {
-              _monthlyFilterModel.add(MonthlyFilterModel(
-                  cn: _monthlyFilterManagementDataSource.dataGridRows.length +
-                      1,
-                  fcd: '',
-                  dgcd: ''));
-              _monthlyFilterManagementDataSource.buildDataGridRows();
-              _monthlyFilterManagementDataSource.updateDatagridSource();
-            }
-          });
+          if (widget.titleIndex == 0) {
+            _monthlyChargerModel.add(MonthlyChargerModel(
+              date: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+              cn: _monthlyChargerManagementDataSource.dataGridRows.length + 1,
+              gun1: '',
+              gun2: '',
+            ));
+
+            _dataGridController = DataGridController();
+            _monthlyChargerManagementDataSource.buildDataGridRows();
+            _monthlyChargerManagementDataSource.updateDatagridSource();
+          } else {
+            _monthlyFilterModel.add(MonthlyFilterModel(
+                cn: _monthlyFilterManagementDataSource.dataGridRows.length + 1,
+                date: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+                fcd: '',
+                dgcd: ''));
+
+            _dataGridController = DataGridController();
+            _monthlyFilterManagementDataSource.buildDataGridRows();
+            _monthlyFilterManagementDataSource.updateDatagridSource();
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -319,13 +328,22 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
   }
 
   _fetchUserData() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Avoid calling setState if the widget is already disposed
+      if (mounted) {
+        setState(() {
+          // Set the initial value of the controller after fetching user data
+          _depotController.text = widget.depoName.toString();
+        });
+      }
+    });
     final snapshot = await FirebaseFirestore.instance
         .collection('MonthlyManagementPage')
         .doc(widget.depoName)
         .collection('Checklist Name')
         .doc(widget.tabletitle)
-        .collection(selectedDate.toString())
-        .doc(userId)
+        .collection(widget.date.toString())
+        .doc(widget.userId)
         .get();
 
     if (snapshot.exists) {
@@ -355,48 +373,87 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
     );
   }
 
-  Future<void> getUserId() async {
-    await AuthService().getCurrentUserId().then((value) {
-      userId = value;
-    });
-  }
-
   Future<void> getTableData() async {
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('MonthlyManagementPage')
-        .doc(widget.depoName)
-        .collection('Checklist Name')
-        .doc(widget.tabletitle)
-        .collection(selectedDate.toString())
-        .doc(userId)
-        .get();
+    print('Fetching data for date: ${widget.date.toString()}');
 
-    if (documentSnapshot.exists) {
-      Map<String, dynamic> tempData =
-          documentSnapshot.data() as Map<String, dynamic>;
+    // Show loading indicator or something else if necessary
+    setState(() {
+      checkTable = true; // show loading state
+    });
 
-      List<dynamic> mapData = tempData['data'];
-      print(mapData);
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('MonthlyManagementPage')
+          .doc(widget.depoName)
+          .collection('Checklist Name')
+          .doc(widget.tabletitle)
+          .collection(widget.date.toString())
+          .doc(widget.userId)
+          .get();
 
-      // List<String> titleName = [
-      //   'Charger Checklist',
-      //   'SFU Checklist',
-      //   'PSS Checklist',
-      //   'Transformer Checklist',
-      //   'RMU Checklist',
-      //   'ACDB Checklist',
-      // ];
-      if (widget.tabIndex == 0) {
-        _monthlyChargerModel =
-            mapData.map((map) => MonthlyChargerModel.fromjson(map)).toList();
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> tempData =
+            documentSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> mapData = tempData['data'];
+
+        // Clear old data before adding new data
+        _monthlyChargerModel.clear();
+        _monthlyFilterModel.clear();
+
+        if (widget.tabletitle == 'Charger Reading Format') {
+          _monthlyChargerModel.addAll(
+              mapData.map((map) => MonthlyChargerModel.fromjson(map)).toList());
+        } else {
+          _monthlyFilterModel.addAll(
+              mapData.map((map) => MonthlyFilterModel.fromjson(map)).toList());
+        }
+
+        setState(() {
+          checkTable = false; // hide loading state
+        });
       } else {
-        _monthlyFilterModel =
-            mapData.map((map) => MonthlyFilterModel.fromjson(map)).toList();
+        // Handle case where data doesn't exist for the selected date
+        print("No data found for date: ${widget.date.toString()}");
+        setState(() {
+          checkTable = false;
+        });
       }
-      checkTable = false;
-      setState(() {});
+    } catch (e) {
+      print("Error fetching data: $e");
+      setState(() {
+        checkTable = false; // hide loading state on error
+      });
     }
   }
+
+  // Future<void> getTableData() async {
+  //   print('date${widget.date.toString()}');
+  //   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+  //       .collection('MonthlyManagementPage')
+  //       .doc(widget.depoName)
+  //       .collection('Checklist Name')
+  //       .doc(widget.tabletitle)
+  //       .collection(widget.date.toString())
+  //       .doc(widget.userId)
+  //       .get();
+
+  //   if (documentSnapshot.exists) {
+  //     Map<String, dynamic> tempData =
+  //         documentSnapshot.data() as Map<String, dynamic>;
+
+  //     List<dynamic> mapData = tempData['data'];
+
+  //     if (widget.tabletitle == 'Charger Reading Format') {
+  //       _monthlyChargerModel.addAll(
+  //           mapData.map((map) => MonthlyChargerModel.fromjson(map)).toList());
+  //     } else {
+  //       _monthlyFilterModel.addAll(
+  //           mapData.map((map) => MonthlyFilterModel.fromjson(map)).toList());
+  //     }
+  //     checkTable = false;
+  //     setState(() {});
+  //   }
+  // }
 }
 
 void monthlyManagementStoreData(
@@ -405,7 +462,7 @@ void monthlyManagementStoreData(
   String depoName,
   String docName,
   int tabIndex,
-  String selectedDate,
+  String date,
   // String time,
   // String refNum,
   // String remark,
@@ -437,10 +494,10 @@ void monthlyManagementStoreData(
       .doc(depoName)
       .collection('Checklist Name')
       .doc(docName)
-      .collection(selectedDate)
+      .collection(date)
       .doc(userId)
       .set({
-    'date': selectedDate,
+    'date': date,
     'time': _timecontroller.text,
     'refNo': _docRefcontroller.text,
     'depotName': depoName,
