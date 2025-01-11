@@ -55,11 +55,9 @@ class OAndMDashboardDatasource extends DataGridSource {
         .toList();
   }
 
-  @override
   List<OAndMDashboardModel> _dailyproject = [];
   double totalMttrForConclusion = 0.0;
   List<DataGridRow> dataGridRows = [];
-  final _dateFormatter = DateFormat.yMd();
   bool isTotalMttrConcluded = true;
 
   /// [DataGridCell] on [onSubmitCell] method.
@@ -67,7 +65,6 @@ class OAndMDashboardDatasource extends DataGridSource {
 
   /// Help to control the editable text in [TextField] widget.
   TextEditingController editingController = TextEditingController();
-  final DateRangePickerController _controller = DateRangePickerController();
 
   @override
   List<DataGridRow> get rows => dataGridRows;
@@ -79,31 +76,8 @@ class OAndMDashboardDatasource extends DataGridSource {
 
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      return dataGridCell.columnName == 'Location'
-          ? dataGridRows.length - 1 == dataRowIndex
-              ? Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5.0,
-                  ),
-                  child: Text(
-                    "Total",
-                    textAlign: TextAlign.center,
-                    style: tablefonttext,
-                  ),
-                )
-              : Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5.0,
-                  ),
-                  child: Text(
-                    isCitySelected ? selectedCity : "",
-                    textAlign: TextAlign.center,
-                    style: tablefonttext,
-                  ),
-                )
-          : dataGridCell.columnName == 'chargers'
+      return isCitySelected
+          ? dataGridCell.columnName == 'Location'
               ? dataGridRows.length - 1 == dataRowIndex
                   ? Container(
                       alignment: Alignment.center,
@@ -111,7 +85,7 @@ class OAndMDashboardDatasource extends DataGridSource {
                         horizontal: 5.0,
                       ),
                       child: Text(
-                        totalChargers.toString(),
+                        "Total",
                         textAlign: TextAlign.center,
                         style: tablefonttext,
                       ),
@@ -122,63 +96,62 @@ class OAndMDashboardDatasource extends DataGridSource {
                         horizontal: 5.0,
                       ),
                       child: Text(
-                        isCitySelected ? '${numOfChargers[dataRowIndex]}' : "",
+                        isCitySelected ? selectedCity : "",
                         textAlign: TextAlign.center,
                         style: tablefonttext,
                       ),
                     )
-              : dataGridCell.columnName == 'buses'
-                  ? Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5.0,
-                      ),
-                      child: Text(
-                        "10",
-                        textAlign: TextAlign.center,
-                        style: tablefonttext,
-                      ),
-                    )
-                  : dataGridCell.columnName == 'Depotname'
+              : dataGridCell.columnName == 'chargers'
+                  ? dataGridRows.length - 1 == dataRowIndex
                       ? Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 5.0,
                           ),
                           child: Text(
-                            isCitySelected ? depotList[dataRowIndex] : "",
+                            totalChargers.toString(),
                             textAlign: TextAlign.center,
                             style: tablefonttext,
                           ),
                         )
-                      : dataGridCell.columnName == 'faultOccured'
-                          ? dataGridRows.length - 1 == dataRowIndex
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 5.0,
-                                  ),
-                                  child: Text(
-                                    totalFaultOccured.toString(),
-                                    textAlign: TextAlign.center,
-                                    style: tablefonttext,
-                                  ),
-                                )
-                              : Container(
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 5.0,
-                                  ),
-                                  child: Text(
-                                    isCitySelected
-                                        ? faultsOccuredList[dataRowIndex]
-                                            .toString()
-                                        : "",
-                                    textAlign: TextAlign.center,
-                                    style: tablefonttext,
-                                  ),
-                                )
-                          : dataGridCell.columnName == 'totalFaultsResolved'
+                      : Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5.0,
+                          ),
+                          child: Text(
+                            isCitySelected
+                                ? '${numOfChargers[dataRowIndex]}'
+                                : "",
+                            textAlign: TextAlign.center,
+                            style: tablefonttext,
+                          ),
+                        )
+                  : dataGridCell.columnName == 'buses'
+                      ? Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5.0,
+                          ),
+                          child: Text(
+                            "10",
+                            textAlign: TextAlign.center,
+                            style: tablefonttext,
+                          ),
+                        )
+                      : dataGridCell.columnName == 'Depotname'
+                          ? Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
+                              ),
+                              child: Text(
+                                isCitySelected ? depotList[dataRowIndex] : "",
+                                textAlign: TextAlign.center,
+                                style: tablefonttext,
+                              ),
+                            )
+                          : dataGridCell.columnName == 'faultOccured'
                               ? dataGridRows.length - 1 == dataRowIndex
                                   ? Container(
                                       alignment: Alignment.center,
@@ -186,7 +159,7 @@ class OAndMDashboardDatasource extends DataGridSource {
                                         horizontal: 5.0,
                                       ),
                                       child: Text(
-                                        totalFaultsResolved.toString(),
+                                        totalFaultOccured.toString(),
                                         textAlign: TextAlign.center,
                                         style: tablefonttext,
                                       ),
@@ -198,15 +171,14 @@ class OAndMDashboardDatasource extends DataGridSource {
                                       ),
                                       child: Text(
                                         isCitySelected
-                                            ? totalFaultsResolvedList[
-                                                    dataRowIndex]
+                                            ? faultsOccuredList[dataRowIndex]
                                                 .toString()
                                             : "",
                                         textAlign: TextAlign.center,
                                         style: tablefonttext,
                                       ),
                                     )
-                              : dataGridCell.columnName == 'totalFaultsPending'
+                              : dataGridCell.columnName == 'totalFaultsResolved'
                                   ? dataGridRows.length - 1 == dataRowIndex
                                       ? Container(
                                           alignment: Alignment.center,
@@ -214,7 +186,7 @@ class OAndMDashboardDatasource extends DataGridSource {
                                             horizontal: 5.0,
                                           ),
                                           child: Text(
-                                            totalFaultPending.toString(),
+                                            totalFaultsResolved.toString(),
                                             textAlign: TextAlign.center,
                                             style: tablefonttext,
                                           ),
@@ -226,7 +198,7 @@ class OAndMDashboardDatasource extends DataGridSource {
                                           ),
                                           child: Text(
                                             isCitySelected
-                                                ? totalFaultPendingList[
+                                                ? totalFaultsResolvedList[
                                                         dataRowIndex]
                                                     .toString()
                                                 : "",
@@ -235,62 +207,351 @@ class OAndMDashboardDatasource extends DataGridSource {
                                           ),
                                         )
                                   : dataGridCell.columnName ==
-                                          'chargerAvailability'
+                                          'totalFaultsPending'
+                                      ? dataGridRows.length - 1 == dataRowIndex
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 5.0,
+                                              ),
+                                              child: Text(
+                                                totalFaultPending.toString(),
+                                                textAlign: TextAlign.center,
+                                                style: tablefonttext,
+                                              ),
+                                            )
+                                          : Container(
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 5.0,
+                                              ),
+                                              child: Text(
+                                                isCitySelected
+                                                    ? totalFaultPendingList[
+                                                            dataRowIndex]
+                                                        .toString()
+                                                    : "",
+                                                textAlign: TextAlign.center,
+                                                style: tablefonttext,
+                                              ),
+                                            )
+                                      : dataGridCell.columnName ==
+                                              'chargerAvailability'
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 5.0,
+                                              ),
+                                              child: Text(
+                                                isDateRangeSelected
+                                                    ? '${chargerAvailabilityList[dataRowIndex]}%'
+                                                    : "",
+                                                textAlign: TextAlign.center,
+                                                style: tablefonttext,
+                                              ),
+                                            )
+                                          : dataGridCell.columnName ==
+                                                  'chargerMttr'
+                                              ? dataGridRows.length - 1 ==
+                                                      dataRowIndex
+                                                  ? Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 5.0,
+                                                      ),
+                                                      child: Text(
+                                                        getTotalMttr(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: tablefonttext,
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 5.0,
+                                                      ),
+                                                      child: Text(
+                                                        isDateRangeSelected
+                                                            ? getAverageMttr(
+                                                                dataRowIndex)
+                                                            : "",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: tablefonttext,
+                                                      ),
+                                                    )
+                                              : dataGridCell.columnName ==
+                                                      'Sr.No.'
+                                                  ? dataGridRows.length - 1 ==
+                                                          dataRowIndex
+                                                      ? Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            " ",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            dataGridCell.value
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ))
+                                                  : dataGridCell.columnName ==
+                                                          "electricalMttr"
+                                                      ? Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            "25.0",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            dataGridCell.value
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ),
+                                                        )
+          : dataGridCell.columnName == 'Location'
+              ? dataGridRows.length - 1 == dataRowIndex
+                  ? Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                      ),
+                      child: Text(
+                        "Total",
+                        textAlign: TextAlign.center,
+                        style: tablefonttext,
+                      ),
+                    )
+                  : Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                      ),
+                      child: Text(
+                        dataGridCell.value,
+                        textAlign: TextAlign.center,
+                        style: tablefonttext,
+                      ),
+                    )
+              : dataGridCell.columnName == 'chargers'
+                  ? dataGridRows.length - 1 == dataRowIndex
+                      ? Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5.0,
+                          ),
+                          child: Text(
+                            totalChargers.toString(),
+                            textAlign: TextAlign.center,
+                            style: tablefonttext,
+                          ),
+                        )
+                      : Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5.0,
+                          ),
+                          child: Text(
+                            '${numOfChargers[dataRowIndex]}',
+                            textAlign: TextAlign.center,
+                            style: tablefonttext,
+                          ),
+                        )
+                  : dataGridCell.columnName == 'buses'
+                      ? Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5.0,
+                          ),
+                          child: Text(
+                            "10",
+                            textAlign: TextAlign.center,
+                            style: tablefonttext,
+                          ),
+                        )
+                      : dataGridCell.columnName == 'Depotname'
+                          ? dataGridRows.length - 1 == dataRowIndex
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0,
+                                  ),
+                                  child: Text(
+                                    (dataGridRows.length - 1).toString(),
+                                    textAlign: TextAlign.center,
+                                    style: tablefonttext,
+                                  ),
+                                )
+                              : Container(
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0,
+                                  ),
+                                  child: Text(
+                                    dataGridCell.value,
+                                    textAlign: TextAlign.center,
+                                    style: tablefonttext,
+                                  ),
+                                )
+                          : dataGridCell.columnName == 'faultOccured'
+                              ? dataGridRows.length - 1 == dataRowIndex
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 5.0,
+                                      ),
+                                      child: Text(
+                                        totalFaultOccured.toString(),
+                                        textAlign: TextAlign.center,
+                                        style: tablefonttext,
+                                      ),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 5.0,
+                                      ),
+                                      child: Text(
+                                        faultsOccuredList[dataRowIndex]
+                                            .toString(),
+                                        textAlign: TextAlign.center,
+                                        style: tablefonttext,
+                                      ),
+                                    )
+                              : dataGridCell.columnName == 'totalFaultsResolved'
+                                  ? dataGridRows.length - 1 == dataRowIndex
                                       ? Container(
                                           alignment: Alignment.center,
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 5.0,
                                           ),
                                           child: Text(
-                                            isDateRangeSelected
-                                                ? '${chargerAvailabilityList[dataRowIndex]}%'
-                                                : "",
+                                            totalFaultsResolved.toString(),
                                             textAlign: TextAlign.center,
                                             style: tablefonttext,
                                           ),
                                         )
-                                      : dataGridCell.columnName == 'chargerMttr'
-                                          ? dataGridRows.length - 1 ==
-                                                  dataRowIndex
-                                              ? Container(
-                                                  alignment: Alignment.center,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 5.0,
-                                                  ),
-                                                  child: Text(
-                                                    getTotalMttr(),
-                                                    textAlign: TextAlign.center,
-                                                    style: tablefonttext,
-                                                  ),
-                                                )
-                                              : Container(
-                                                  alignment: Alignment.center,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 5.0,
-                                                  ),
-                                                  child: Text(
-                                                    isDateRangeSelected
-                                                        ? getAverageMttr(
-                                                            dataRowIndex)
-                                                        : "",
-                                                    textAlign: TextAlign.center,
-                                                    style: tablefonttext,
-                                                  ),
-                                                )
-                                          : dataGridCell.columnName == 'Sr.No.'
+                                      : Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 5.0,
+                                          ),
+                                          child: Text(
+                                            totalFaultsResolvedList[
+                                                    dataRowIndex]
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            style: tablefonttext,
+                                          ),
+                                        )
+                                  : dataGridCell.columnName ==
+                                          'totalFaultsPending'
+                                      ? dataGridRows.length - 1 == dataRowIndex
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 5.0,
+                                              ),
+                                              child: Text(
+                                                totalFaultPending.toString(),
+                                                textAlign: TextAlign.center,
+                                                style: tablefonttext,
+                                              ),
+                                            )
+                                          : Container(
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 5.0,
+                                              ),
+                                              child: Text(
+                                                totalFaultPendingList[
+                                                        dataRowIndex]
+                                                    .toString(),
+                                                textAlign: TextAlign.center,
+                                                style: tablefonttext,
+                                              ),
+                                            )
+                                      : dataGridCell.columnName ==
+                                              'chargerAvailability'
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 5.0,
+                                              ),
+                                              child: Text(
+                                                isDateRangeSelected
+                                                    ? '${chargerAvailabilityList[dataRowIndex]}%'
+                                                    : "",
+                                                textAlign: TextAlign.center,
+                                                style: tablefonttext,
+                                              ),
+                                            )
+                                          : dataGridCell.columnName ==
+                                                  'chargerMttr'
                                               ? dataGridRows.length - 1 ==
                                                       dataRowIndex
                                                   ? Container(
                                                       alignment:
                                                           Alignment.center,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                        2.0,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 5.0,
                                                       ),
                                                       child: Text(
-                                                        " ",
+                                                        getTotalMttr(),
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: tablefonttext,
@@ -299,48 +560,91 @@ class OAndMDashboardDatasource extends DataGridSource {
                                                   : Container(
                                                       alignment:
                                                           Alignment.center,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                        2.0,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 5.0,
                                                       ),
                                                       child: Text(
-                                                        dataGridCell.value
-                                                            .toString(),
+                                                        isDateRangeSelected
+                                                            ? getAverageMttr(
+                                                                dataRowIndex)
+                                                            : "",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: tablefonttext,
-                                                      ))
+                                                      ),
+                                                    )
                                               : dataGridCell.columnName ==
-                                                      "electricalMttr"
-                                                  ? Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                        2.0,
-                                                      ),
-                                                      child: Text(
-                                                        "25.0",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: tablefonttext,
-                                                      ),
-                                                    )
-                                                  : Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                        2.0,
-                                                      ),
-                                                      child: Text(
-                                                        dataGridCell.value
-                                                            .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: tablefonttext,
-                                                      ),
-                                                    );
+                                                      'Sr.No.'
+                                                  ? dataGridRows.length - 1 ==
+                                                          dataRowIndex
+                                                      ? Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            " ",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            dataGridCell.value
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ))
+                                                  : dataGridCell.columnName ==
+                                                          "electricalMttr"
+                                                      ? Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            "25.0",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(
+                                                            2.0,
+                                                          ),
+                                                          child: Text(
+                                                            dataGridCell.value
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                tablefonttext,
+                                                          ),
+                                                        );
     }).toList());
   }
 

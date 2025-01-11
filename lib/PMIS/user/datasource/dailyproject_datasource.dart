@@ -124,7 +124,7 @@ class DailyDataSource extends DataGridSource {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: blue,
-                                  padding: EdgeInsets.all(0)),
+                                  padding: const EdgeInsets.all(0)),
                               onPressed: () {
                                 addRowAtIndex(
                                   dataRowIndex + 1,

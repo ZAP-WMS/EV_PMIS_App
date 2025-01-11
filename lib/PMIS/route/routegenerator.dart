@@ -27,6 +27,9 @@ import 'package:ev_pmis_app/PMIS/widgets/no_internet.dart';
 import 'package:ev_pmis_app/PMIS/widgets/nodata_available.dart';
 import 'package:flutter/material.dart';
 import '../../O_AND_M/action__screen/monthlyManagement_action.dart';
+import '../../O_AND_M/user/management_screen/preventive_maintenance.dart';
+import '../../O_AND_M/user/management_screen/preventive_maintenance_list.dart';
+import '../../O_AND_M/user/management_screen/sop.dart';
 import '../action_screens/jmr_action_screen.dart';
 import 'package:provider/provider.dart';
 import '../authentication/change_password.dart';
@@ -208,6 +211,7 @@ class RouteGenerator {
             cityName: argument['cityName'],
             depoName: argument['depoName'],
           );
+
         case '/change-password':
           Map<String, dynamic> argument =
               settings.arguments as Map<String, dynamic>;
@@ -371,6 +375,57 @@ class RouteGenerator {
             roleCentre: roleCentre,
             userId: userId,
             role: role,
+          );
+
+        case "/sopScreen":
+          final args = settings.arguments as Map<String, dynamic>;
+          final role = args["role"];
+          final roleCentre = args["roleCentre"];
+          final userId = args["userId"];
+          // final cityName = args["cityName"];
+          final depoName = args["depoName"];
+
+          return SopScreen(
+            depoName: depoName,
+            roleCentre: roleCentre,
+            userId: userId,
+            role: role,
+          );
+
+        case "/preventiveListScreen":
+          final args = settings.arguments as Map<String, dynamic>;
+          // final role = args["role"];
+          // final roleCentre = args["roleCentre"];
+          // final userId = args["userId"];
+          // // final cityName = args["cityName"];
+          final depoName = args["depoName"];
+          final indexValue = args["indexValue"];
+
+          return PreventiveMaintenanceList(
+            depoName: depoName,
+
+            // roleCentre: roleCentre,
+            // userId: userId,
+            // role: role,
+          );
+
+        case "/preventiveScreen":
+          final args = settings.arguments as Map<String, dynamic>;
+          // final role = args["role"];
+          // final roleCentre = args["roleCentre"];
+          // final userId = args["userId"];
+          final cityName = args["cityName"];
+          final depoName = args["depoName"];
+          final indexValue = args["indexValue"];
+
+          return PreventiveScreen(
+            cityName: cityName ?? '',
+            depoName: depoName,
+            userId: userId,
+            indexValue: indexValue,
+            // roleCentre: roleCentre,
+            // userId: userId,
+            // role: role,
           );
       }
 

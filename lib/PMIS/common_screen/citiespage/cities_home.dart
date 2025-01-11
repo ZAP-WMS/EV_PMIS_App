@@ -49,9 +49,7 @@ class _CitiesHomeState extends State<CitiesHome> {
           ? const LoadingPage()
           : Row(
               children: [
-                CitiesPage(
-                  role: role,
-                ),
+                CitiesPage(role: role),
                 DepotPage(
                   role: role,
                   userId: widget.userId,
@@ -66,5 +64,4 @@ class _CitiesHomeState extends State<CitiesHome> {
     final AuthService authService = AuthService();
     role = await authService.getUserRole();
   }
-  
 }

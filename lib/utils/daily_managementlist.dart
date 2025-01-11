@@ -368,3 +368,10 @@ List<String> monthlyFilterLabelColumnName = [
   'Add',
   'Delete'
 ];
+
+List<String> yearlyColumnName = [
+  'srNo',
+  'Equipment',
+  'Maintenance Frequency',
+  'Installment Date'
+];

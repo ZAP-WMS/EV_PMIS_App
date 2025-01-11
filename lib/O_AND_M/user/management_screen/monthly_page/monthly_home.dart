@@ -60,10 +60,8 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: blue,
-        title: Text(
-          'Monthly Page ',
-          style: TextStyle(color: white, fontWeight: FontWeight.bold),
-        ),
+        title: Text('Monthly Page ',
+            style: TextStyle(color: white, fontWeight: FontWeight.bold)),
         actions: [
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -145,12 +143,11 @@ class _MonthlyManagementHomePageState extends State<MonthlyManagementHomePage>
             },
             unselectedLabelColor: white,
             indicator: MaterialIndicator(
-              horizontalPadding: 24,
-              bottomLeftRadius: 8,
-              bottomRightRadius: 8,
-              color: white,
-              paintingStyle: PaintingStyle.fill,
-            ),
+                horizontalPadding: 24,
+                bottomLeftRadius: 8,
+                bottomRightRadius: 8,
+                color: white,
+                paintingStyle: PaintingStyle.fill),
             tabs: const [
               Tab(
                 text: 'Charger Reading Format',

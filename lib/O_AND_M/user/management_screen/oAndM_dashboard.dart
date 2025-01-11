@@ -70,6 +70,11 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
   String pathToOpenFile = '';
   List<DataGridRow> tabledata = [];
 
+  // Track selection of individual cities
+  Map<String, bool> selectedCities = {}; 
+
+  // Flag to handle "Select All" checkbox state
+  bool selectAll = false;
   @override
   void initState() {
     _oAndMDashboardDatasource = OAndMDashboardDatasource(
@@ -131,7 +136,7 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
   Widget build(BuildContext context) {
     _oAndMDashboardDatasource.buildDataGridRows();
     tabledata = _oAndMDashboardDatasource.dataGridRows.toList();
-    print(tabledata);
+
     List<String> currentColumnLabels = oAndMDashboardClnName;
 
     columns.clear();
@@ -159,6 +164,23 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
         ),
       );
     }
+
+    void toggleSelectAll(bool? value) {
+      setState(() {
+        selectAll = value ?? false; // Handle nullable value
+        cityNames.forEach((city) {
+          selectedCities[city] =
+              selectAll; // Set each city to the value of selectAll
+        });
+
+        if (selectAll) {
+          getCitiesAndDepots();
+        } else {
+          clearTableData();
+        }
+      });
+    }
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -185,9 +207,7 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
                 Row(
                   children: [
                     Container(
-                      margin: const EdgeInsets.all(
-                        5.0,
-                      ),
+                      margin: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: blue,
@@ -227,6 +247,8 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
                                 )).toList(),
                       )),
                     ),
+                    Checkbox(value: selectAll, onChanged: toggleSelectAll),
+                    const Text('Select All Cities'),
                   ],
                 ),
                 Expanded(
@@ -282,105 +304,106 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          if (selectedCity != null) {
-                            dateRange(
-                                context,
-                                widget.cityName!,
-                                widget.depoName!,
-                                widget.userId!,
-                                oAndMController.depotList,
-                                selectedCity!,
-                                numOfChargersList,
-                                faultsOccuredList,
-                                totalPendingFaults,
-                                totalFaultsResolved);
-                          } else {
-                            showCustomAlert();
-                          }
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 140,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3.0),
-                            border: Border.all(
-                              color: blue,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.calendar_today,
-                                color: blue,
-                              ),
-                              const SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(startDate)
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          if (selectedCity != null) {
-                            dateRange(
-                                context,
-                                widget.cityName!,
-                                widget.depoName!,
-                                widget.userId!,
-                                oAndMController.depotList,
-                                selectedCity!,
-                                numOfChargersList,
-                                faultsOccuredList,
-                                totalPendingFaults,
-                                totalFaultsResolved);
-                          } else {
-                            showCustomAlert();
-                          }
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 40,
-                          width: 140,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              3.0,
-                            ),
-                            border: Border.all(
-                              color: blue,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.calendar_today,
-                                color: blue,
-                              ),
-                              const SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(endDate)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+
+                // Container(
+                //   margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       InkWell(
+                //         onTap: () async {
+                //           if (selectedCity != null) {
+                //             dateRange(
+                //                 context,
+                //                 widget.cityName!,
+                //                 widget.depoName!,
+                //                 widget.userId!,
+                //                 oAndMController.depotList,
+                //                 selectedCity!,
+                //                 numOfChargersList,
+                //                 faultsOccuredList,
+                //                 totalPendingFaults,
+                //                 totalFaultsResolved);
+                //           } else {
+                //             showCustomAlert();
+                //           }
+                //         },
+                //         child: Container(
+                //           height: 40,
+                //           width: 140,
+                //           decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(3.0),
+                //             border: Border.all(
+                //               color: blue,
+                //             ),
+                //           ),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               Icon(
+                //                 Icons.calendar_today,
+                //                 color: blue,
+                //               ),
+                //               const SizedBox(
+                //                 width: 5.0,
+                //               ),
+                //               Text(startDate)
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //       const SizedBox(
+                //         width: 10,
+                //       ),
+                //       InkWell(
+                //         onTap: () async {
+                //           if (selectedCity != null) {
+                //             dateRange(
+                //                 context,
+                //                 widget.cityName!,
+                //                 widget.depoName!,
+                //                 widget.userId!,
+                //                 oAndMController.depotList,
+                //                 selectedCity!,
+                //                 numOfChargersList,
+                //                 faultsOccuredList,
+                //                 totalPendingFaults,
+                //                 totalFaultsResolved);
+                //           } else {
+                //             showCustomAlert();
+                //           }
+                //         },
+                //         child: Container(
+                //           alignment: Alignment.center,
+                //           height: 40,
+                //           width: 140,
+                //           decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(
+                //               3.0,
+                //             ),
+                //             border: Border.all(
+                //               color: blue,
+                //             ),
+                //           ),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               Icon(
+                //                 Icons.calendar_today,
+                //                 color: blue,
+                //               ),
+                //               const SizedBox(
+                //                 width: 5.0,
+                //               ),
+                //               Text(endDate)
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
     );
@@ -407,7 +430,9 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
 
       await pr.show();
 
-      final pdfData = await _generateDailyPDF();
+      final pdfData = oAndMController.isCitySelected
+          ? await _generateDailyPDF()
+          : await _generateAllDepotPDF();
 
       String fileName = 'O&M Dashboard.pdf';
 
@@ -626,7 +651,7 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
         } else if (data.columnName == 'chargerAvailability') {
           _oAndMDashboardDatasource.isDateRangeSelected
               ? '${_oAndMDashboardDatasource.chargerAvailabilityList[dataRowIndex]}%'
-              : "";
+              : " ";
         } else if (data.columnName == 'chargerMttr') {
           _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
               ? tableData[data.columnName] =
@@ -680,6 +705,12 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
         pw.Container(
             padding: const pw.EdgeInsets.all(3.0),
             child: pw.Center(
+                child: pw.Text(
+                    (tabledata2[i]['chargerAvailability']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
                 child: pw.Text((tabledata2[i]['faultOccured']).toString(),
                     style: const pw.TextStyle(fontSize: 14)))),
         pw.Container(
@@ -707,9 +738,7 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
     }
     tabledata2.clear();
 
-    final pdf = pw.Document(
-      pageMode: PdfPageMode.outlines,
-    );
+    final pdf = pw.Document(pageMode: PdfPageMode.outlines);
 
     //First Half Page
 
@@ -807,8 +836,516 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
               6: const pw.FixedColumnWidth(70),
               7: const pw.FixedColumnWidth(70),
               8: const pw.FixedColumnWidth(70),
-              // 9: const pw.FixedColumnWidth(70),
-              // 10: const pw.FixedColumnWidth(70),
+              9: const pw.FixedColumnWidth(70),
+              10: const pw.FixedColumnWidth(70),
+            },
+            defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+            tableWidth: pw.TableWidth.max,
+            border: pw.TableBorder.all(),
+            children: rows,
+          )
+        ],
+      ),
+    );
+
+    pdfData = await pdf.save();
+    pdfPath = 'O&M Dashboard.pdf';
+
+    return pdfData!;
+  }
+
+  Future<Uint8List> _generateAllDepotPDF() async {
+    final headerStyle =
+        pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold);
+
+    final fontData1 =
+        await rootBundle.load('assets/fonts/Montserrat-Medium.ttf');
+    final fontData2 = await rootBundle.load('assets/fonts/Montserrat-Bold.ttf');
+
+    final profileImage = pw.MemoryImage(
+        (await rootBundle.load('assets/Tata-Power.jpeg')).buffer.asUint8List());
+
+    List<pw.TableRow> rows = [];
+
+    rows.add(pw.TableRow(children: [
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Sr No',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.only(top: 4, bottom: 4, left: 2, right: 2),
+        child: pw.Center(
+          child: pw.Text(
+            'Location',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Depot Name',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'chargers',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'No. of Buses ',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Charger Availability',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+          padding: const pw.EdgeInsets.all(2.0),
+          child: pw.Center(
+            child: pw.Text(
+              'No. of Fault Occured',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          )),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Total No. of Faults Resolved ',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Total No. of Faults Pending with OEM',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Mttr in Chargers infra',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      pw.Container(
+        padding: const pw.EdgeInsets.all(2.0),
+        child: pw.Center(
+          child: pw.Text(
+            'Mttr in Electrical infra',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    ]));
+
+    // for (var row in _oAndMDashboardDatasource.dataGridRows) {
+    //   final int dataRowIndex =
+    //       _oAndMDashboardDatasource.dataGridRows.indexOf(row);
+    //   bool isLastRow =
+    //       _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex;
+
+    //   List<pw.Widget> cells = [];
+
+    Map<String, dynamic> tableData = Map();
+
+    for (var i in _oAndMDashboardDatasource.dataGridRows) {
+      final int dataRowIndex =
+          _oAndMDashboardDatasource.dataGridRows.indexOf(i);
+
+      // Initialize an empty map for each row
+      Map<String, dynamic> tableData = {};
+
+      for (var data in i.getCells()) {
+        print(data.columnName);
+
+        // Handle the 'chargers' column
+        if (data.columnName == 'chargers') {
+          if (dataRowIndex ==
+              _oAndMDashboardDatasource.dataGridRows.length - 1) {
+            // Last row (summary row)
+            tableData[data.columnName] = oAndMController.totalChargers;
+          } else {
+            // For other rows, update using numOfChargersList
+            tableData[data.columnName] = numOfChargersList[dataRowIndex];
+          }
+        }
+
+        // Handle the 'Depotname' column
+        else if (data.columnName == 'Depotname') {
+          tableData[data.columnName] =
+              data.value; // Update depot name (if needed)
+        }
+
+        // Handle the 'buses' column
+        else if (data.columnName == 'buses') {
+          tableData[data.columnName] = '10'; // Fixed value for buses
+        }
+
+        // Handle the 'faultOccured' column
+        else if (data.columnName == 'faultOccured') {
+          if (dataRowIndex < faultsOccuredList.length) {
+            tableData[data.columnName] =
+                faultsOccuredList[dataRowIndex].toString();
+          } else {
+            tableData[data.columnName] = 0; // Default value if out of bounds
+          }
+        }
+
+        // Handle the 'totalFaultsResolved' column
+        else if (data.columnName == 'totalFaultsResolved') {
+          // Check if the row is the last row (summary row)
+          if (_oAndMDashboardDatasource.dataGridRows.length - 1 ==
+              dataRowIndex) {
+            // If it's the last row, use the totalFaultsResolved from the datasource
+            tableData[data.columnName] =
+                _oAndMDashboardDatasource.totalFaultsResolved.toString();
+          } else {
+            // Otherwise, use the value from totalFaultsResolvedList
+            if (dataRowIndex <
+                _oAndMDashboardDatasource.totalFaultsResolvedList.length) {
+              tableData[data.columnName] = _oAndMDashboardDatasource
+                  .totalFaultsResolvedList[dataRowIndex]
+                  .toString();
+            } else {
+              // Default value (e.g., 0) if dataRowIndex is out of bounds
+              tableData[data.columnName] = '0';
+            }
+          }
+        }
+
+        // Handle the 'totalFaultsPending' column
+        else if (data.columnName == 'totalFaultsPending') {
+          tableData[data.columnName] =
+              _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
+                  ? _oAndMDashboardDatasource.totalFaultPending.toString()
+                  : _oAndMDashboardDatasource
+                      .totalFaultPendingList[dataRowIndex]
+                      .toString();
+        }
+
+        // Handle the 'chargerAvailability' column
+        else if (data.columnName == 'chargerAvailability') {
+          tableData[data.columnName] = _oAndMDashboardDatasource
+                  .isDateRangeSelected
+              ? '${_oAndMDashboardDatasource.chargerAvailabilityList[dataRowIndex]}%'
+              : "";
+        }
+
+        // Handle the 'chargerMttr' column
+        else if (data.columnName == 'chargerMttr') {
+          tableData[data.columnName] =
+              _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
+                  ? _oAndMDashboardDatasource.getTotalMttr()
+                  : _oAndMDashboardDatasource.isDateRangeSelected
+                      ? _oAndMDashboardDatasource.getAverageMttr(dataRowIndex)
+                      : "";
+        }
+
+        // Handle the 'Sr.No.' column
+        else if (data.columnName == 'Sr.No.') {
+          tableData[data.columnName] =
+              _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
+                  ? ''
+                  : data.value;
+        }
+
+        // Handle the 'electricalMttr' column
+        else if (data.columnName == 'electricalMttr') {
+          tableData[data.columnName] =
+              '25.0'; // Fixed value for electrical MTTR
+        }
+
+        // Default case for other columns
+        else {
+          tableData[data.columnName] = data.value;
+        }
+      }
+
+      // Add the constructed tableData to the list
+      tabledata2.add(tableData);
+      tableData = {};
+    }
+
+    // for (var i in _oAndMDashboardDatasource.dataGridRows) {
+    //   final int dataRowIndex =
+    //       _oAndMDashboardDatasource.dataGridRows.indexOf(i);
+    //   for (var data in i.getCells()) {
+    //     print(data.columnName);
+    //     if (data.columnName == 'chargers') {
+    //       if (dataRowIndex ==
+    //           _oAndMDashboardDatasource.dataGridRows.length - 1) {
+    //         // Update the model (e.g., add it to the row data)
+    //         tableData[data.columnName] = oAndMController.totalChargers;
+    //       } else {
+    //         // For other rows, update using the numOfChargersList
+
+    //         tableData[data.columnName] = numOfChargersList[dataRowIndex];
+    //       }
+    //     } else if (data.columnName == 'Depotname') {
+    //       // if (dataRowIndex < oAndMController.depotList.length) {
+    //       tableData[data.columnName] = data.value;
+    //       // tableData[data.columnName] =
+    //       //     oAndMController.depotList[dataRowIndex];
+    //     } else if (data.columnName == 'buses') {
+    //       tableData[data.columnName] = '10';
+    //     } else if (data.columnName == 'faultOccured') {
+    //       if (dataRowIndex < faultsOccuredList.length) {
+    //         tableData[data.columnName] =
+    //             faultsOccuredList[dataRowIndex].toString();
+    //       } else {
+    //         tableData[data.columnName] = 0;
+    //       }
+    //     } else if (data.columnName == 'totalFaultsResolved') {
+    //       tableData[data.columnName] =
+    //           _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
+    //               ? _oAndMDashboardDatasource.totalFaultsResolved.toString()
+    //               : "";
+    //     } else if (data.columnName == 'totalFaultsPending') {
+    //       _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
+    //           ? _oAndMDashboardDatasource.totalFaultPending.toString()
+    //           : _oAndMDashboardDatasource.totalFaultPendingList[dataRowIndex]
+    //               .toString();
+    //     } else if (data.columnName == 'chargerAvailability') {
+    //       tableData[data.columnName] = _oAndMDashboardDatasource
+    //               .isDateRangeSelected
+    //           ? '${_oAndMDashboardDatasource.chargerAvailabilityList[dataRowIndex]}%'
+    //           : "";
+    //     } else if (data.columnName == 'chargerMttr') {
+    //       _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
+    //           ? tableData[data.columnName] =
+    //               _oAndMDashboardDatasource.getTotalMttr()
+    //           : tableData[data.columnName] =
+    //               _oAndMDashboardDatasource.isDateRangeSelected
+    //                   ? _oAndMDashboardDatasource.getAverageMttr(dataRowIndex)
+    //                   : "";
+    //     } else if (data.columnName == 'Sr.No.') {
+    //       _oAndMDashboardDatasource.dataGridRows.length - 1 == dataRowIndex
+    //           ? tableData[data.columnName] = ''
+    //           : tableData[data.columnName] = data.value;
+    //     } else if (data.columnName == 'electricalMttr') {
+    //       tableData[data.columnName] = '25.0';
+    //     } else {
+    //       tableData[data.columnName] = data.value;
+    //     }
+    //   }
+    //   tabledata2.add(tableData);
+    //   tableData = {};
+    // }
+    //}
+
+    for (int i = 0; i < tabledata2.length; i++) {
+      rows.add(pw.TableRow(children: [
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['Sr.No.']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['Location']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['Depotname']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['chargers']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['buses']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text(
+                    (tabledata2[i]['chargerAvailability']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['faultOccured']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text(
+                    (tabledata2[i]['totalFaultsResolved']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['totalFaultsPending']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['chargerMttr']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+        pw.Container(
+            padding: const pw.EdgeInsets.all(3.0),
+            child: pw.Center(
+                child: pw.Text((tabledata2[i]['electricalMttr']).toString(),
+                    style: const pw.TextStyle(fontSize: 14)))),
+      ]));
+    }
+    tabledata2.clear();
+
+    final pdf = pw.Document(pageMode: PdfPageMode.outlines);
+
+    //First Half Page
+
+    pdf.addPage(
+      pw.MultiPage(
+        maxPages: 100,
+        theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(fontData1), bold: pw.Font.ttf(fontData2)),
+        pageFormat: const PdfPageFormat(1300, 900,
+            marginLeft: 70, marginRight: 70, marginBottom: 80, marginTop: 40),
+        orientation: pw.PageOrientation.natural,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        header: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              padding: const pw.EdgeInsets.only(bottom: 3.0 * PdfPageFormat.mm),
+              decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom:
+                          pw.BorderSide(width: 0.5, color: PdfColors.grey))),
+              child: pw.Column(children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('O & M Dashboard Table',
+                          textScaleFactor: 2,
+                          style: const pw.TextStyle(color: PdfColors.blue700)),
+                      pw.Container(
+                        width: 120,
+                        height: 120,
+                        child: pw.Image(profileImage),
+                      ),
+                    ]),
+              ]));
+        },
+        footer: (pw.Context context) {
+          return pw.Container(
+              alignment: pw.Alignment.centerRight,
+              margin: const pw.EdgeInsets.only(top: 1.0 * PdfPageFormat.cm),
+              child: pw.Text('User ID - ${widget.userId}',
+                  // 'Page ${context.pageNumber} of ${context.pagesCount}',
+                  style: pw.Theme.of(context)
+                      .defaultTextStyle
+                      .copyWith(color: PdfColors.black)));
+        },
+        build: (pw.Context context) => <pw.Widget>[
+          pw.Column(children: [
+            pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Place : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text: selectedCity,
+                        //'${widget.cityName} / ${widget.depoName}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    const pw.TextSpan(
+                        text: 'Date : ',
+                        style:
+                            pw.TextStyle(color: PdfColors.black, fontSize: 17)),
+                    pw.TextSpan(
+                        text:
+                            '${startdate!.day}-${startdate!.month}-${startdate!.year} to ${enddate!.day}-${enddate!.month}-${enddate!.year}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15))
+                  ])),
+                  pw.RichText(
+                      text: pw.TextSpan(children: [
+                    pw.TextSpan(
+                        text: 'UserID : ${widget.userId}',
+                        style: const pw.TextStyle(
+                            color: PdfColors.blue700, fontSize: 15)),
+                  ])),
+                ]),
+            pw.SizedBox(height: 20)
+          ]),
+          pw.SizedBox(height: 10),
+          pw.Table(
+            columnWidths: {
+              0: const pw.FixedColumnWidth(30),
+              1: const pw.FixedColumnWidth(160),
+              2: const pw.FixedColumnWidth(70),
+              3: const pw.FixedColumnWidth(70),
+              4: const pw.FixedColumnWidth(70),
+              5: const pw.FixedColumnWidth(70),
+              6: const pw.FixedColumnWidth(70),
+              7: const pw.FixedColumnWidth(70),
+              8: const pw.FixedColumnWidth(70),
+              9: const pw.FixedColumnWidth(70),
+              10: const pw.FixedColumnWidth(70),
             },
             defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
             tableWidth: pw.TableWidth.max,
@@ -907,6 +1444,7 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
     oAndMController.totalFaultResolved = 0;
     oAndMController.totalFaultPending = 0;
     oAndMController.isCitySelected = true;
+    selectAll = false;
     if (isLoading == false) {
       setState(() {
         isLoading = true;
@@ -956,6 +1494,7 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
     await getTotalChargers();
     await getFaultsOccured();
 
+    // ignore: use_build_context_synchronously
     oAndMController.oAndMDashboardDatasource = OAndMDashboardDatasource(
       oAndMController.oAndMModel,
       context,
@@ -978,8 +1517,6 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
       totalPendingFaults,
       totalFaultsResolved,
     );
-
-    print(oAndMController.oAndMDashboardDatasource);
 
     setState(() {
       isLoading = false;
@@ -1041,11 +1578,14 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
           .collection("ChargerAvailability")
           .doc(oAndMController.depotList[i])
           .get();
+
       if (chargersQuery.exists) {
         Map<String, dynamic> mapData =
             chargersQuery.data() as Map<String, dynamic>;
         List<dynamic> data = mapData['data'];
         numOfChargersList.add(data.length);
+        print(
+            ' number of charger${oAndMController.depotList[i]} - $numOfChargersList');
         oAndMController.totalChargers =
             oAndMController.totalChargers + data.length;
         print('Total Charger - ${oAndMController.totalChargers}');
@@ -1114,5 +1654,170 @@ class _OAndMDashboardScreenState extends State<OAndMDashboardScreen> {
     }
     await file.writeAsBytes(pdfData);
     return file;
+  }
+
+  Future getCitiesAndDepots() async {
+    // Reset the data before fetching
+    oAndMController.oAndMModel.clear();
+    oAndMController.depotList.clear();
+    oAndMController.totalChargers = 0;
+    oAndMController.totalMttrForConclusion = 0;
+    oAndMController.totalFaultOccured = 0;
+    oAndMController.totalFaultResolved = 0;
+    oAndMController.totalFaultPending = 0;
+    oAndMController.isCitySelected =
+        false; // Because we're selecting all cities
+
+    if (isLoading == false) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+
+    try {
+      // Fetching all cities (assuming the cities are stored in a "Cities" collection)
+      QuerySnapshot citiesSnapshot =
+          await FirebaseFirestore.instance.collection("DepoName").get();
+
+      List<String> allCities = citiesSnapshot.docs
+          .map((doc) => doc.id)
+          .toList(); // Get all city names
+
+      // Loop through all cities and fetch their depots
+      for (String city in allCities) {
+        // Fetch depots for each city
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection("DepoName")
+            .doc(city)
+            .collection("AllDepots")
+            .get();
+
+        oAndMController.depotList =
+            querySnapshot.docs.map((e) => e.id).toList();
+
+        // Add the depots to the model
+        for (int i = 0; i < oAndMController.depotList.length; i++) {
+          oAndMController.oAndMModel.add(
+            OAndMDashboardModel(
+              srNo: oAndMController.oAndMModel.length + 1,
+              location: city,
+              depotName: oAndMController.depotList[i],
+              noOfChargers: 0,
+              noOfBuses: 0,
+              chargerAvailability: "",
+              noOfFaultOccured: 0,
+              totalFaultsResolved: 0,
+              totalFaultsPending: 0,
+              chargersMttr: 0.0,
+              electricalMttr: 0.0,
+            ),
+          );
+        }
+        // // Add a row for totals or summary for the city
+        // oAndMController.oAndMModel.add(
+        //   OAndMDashboardModel(
+        //     srNo: oAndMController.oAndMModel.length + 1,
+        //     location: city,
+        //     depotName: '',
+        //     noOfChargers: 0,
+        //     noOfBuses: 0,
+        //     chargerAvailability: "",
+        //     noOfFaultOccured: 0,
+        //     totalFaultsResolved: 0,
+        //     totalFaultsPending: 0,
+        //     chargersMttr: 0.0,
+        //     electricalMttr: 0.0,
+        //   ),
+        // );
+
+        // Add a placeholder depot to the list
+        // oAndMController.depotList
+        //     .add((oAndMController.oAndMModel.length - 1).toString());
+
+        await getTotalChargers(); // Assuming this method calculates total chargers
+        await getFaultsOccured(); // Assuming this method calculates faults
+      }
+      // Add a row for totals or summary for the city
+      oAndMController.oAndMModel.add(
+        OAndMDashboardModel(
+          srNo: oAndMController.oAndMModel.length + 1,
+          location: 'Total',
+          depotName: '',
+          noOfChargers: 0,
+          noOfBuses: 0,
+          chargerAvailability: "",
+          noOfFaultOccured: 0,
+          totalFaultsResolved: 0,
+          totalFaultsPending: 0,
+          chargersMttr: 0.0,
+          electricalMttr: 0.0,
+        ),
+      );
+      // Update  the dashboard data source
+      // ignore: use_build_context_synchronously
+      oAndMController.oAndMDashboardDatasource = OAndMDashboardDatasource(
+        oAndMController.oAndMModel,
+        context,
+        selectedDate!,
+        widget.userId!,
+        'city',
+        oAndMController.depotList,
+        oAndMController.isCitySelected,
+        numOfChargersList,
+        faultsOccuredList,
+        oAndMController.totalFaultPending,
+        oAndMController.totalFaultResolved,
+        oAndMController.mttrData,
+        oAndMController.chargerAvailabilityList,
+        oAndMController.dateRangeSelected,
+        oAndMController.totalChargers,
+        oAndMController.totalFaultOccured,
+        totalPendingFaults,
+        totalFaultsResolved,
+      );
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error fetching cities and depots: $e");
+    }
+  }
+
+  void clearTableData() {
+    // Clear the model and lists
+    oAndMController.oAndMModel.clear();
+    oAndMController.depotList.clear();
+    oAndMController.totalChargers = 0;
+    oAndMController.totalMttrForConclusion = 0;
+    oAndMController.totalFaultOccured = 0;
+    oAndMController.totalFaultResolved = 0;
+    oAndMController.totalFaultPending = 0;
+    oAndMController.isCitySelected = false;
+    numOfChargersList.clear();
+    faultsOccuredList.clear();
+    totalPendingFaults.clear();
+    totalFaultsResolved.clear();
+
+    // Update the dashboard data source (with cleared data)
+    oAndMController.oAndMDashboardDatasource = OAndMDashboardDatasource(
+      oAndMController.oAndMModel,
+      context,
+      selectedDate!,
+      widget.userId!,
+      'city',
+      oAndMController.depotList,
+      oAndMController.isCitySelected,
+      numOfChargersList,
+      faultsOccuredList,
+      oAndMController.totalFaultPending,
+      oAndMController.totalFaultResolved,
+      oAndMController.mttrData,
+      oAndMController.chargerAvailabilityList,
+      oAndMController.dateRangeSelected,
+      oAndMController.totalChargers,
+      oAndMController.totalFaultOccured,
+      totalPendingFaults,
+      totalFaultsResolved,
+    );
   }
 }

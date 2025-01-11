@@ -9,10 +9,11 @@ final ImagePickerController imagePickerController =
     Get.put(ImagePickerController());
 
 Future<void> pickImageFromGallery(String title) async {
-  final pickedFile = await FilePicker.platform.pickFiles(  
+  final pickedFile = await FilePicker.platform.pickFiles(
       withData: true,
-      allowedExtensions:
-          title == 'ClosureReport' ? ['pdf'] : ['jpg', 'jpeg', 'png', 'pdf'],
+      allowedExtensions: title == 'ClosureReport' || title == 'SopScreen'
+          ? ['pdf']
+          : ['jpg', 'jpeg', 'png', 'pdf'],
       type: FileType.custom,
       allowMultiple: true);
 

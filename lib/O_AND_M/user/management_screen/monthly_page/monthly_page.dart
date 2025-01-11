@@ -31,7 +31,7 @@ class MonthlyManagementPage extends StatefulWidget {
   String? cityName;
   String? depoName;
   int titleIndex;
-  String? tabletitle;
+  String? tabletitle;     
   String userId;
   String? date;
   MonthlyManagementPage({
@@ -111,7 +111,7 @@ class _MonthlyManagementPageState extends State<MonthlyManagementPage> {
   }
 
   List<List<String>> tabColumnNames = [
-    monthlyChargerColumnName,
+    monthlyChargerColumnName,      
     monthlyFilterColumnName
   ];
 

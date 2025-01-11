@@ -148,9 +148,7 @@ class SplitScreen extends StatelessWidget {
                       width: context.width * 0.9,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              blue,
-                            ),
+                            backgroundColor: MaterialStatePropertyAll(blue),
                           ),
                           onPressed: () {
                             Navigator.pushNamed(context, '/demand', arguments: {

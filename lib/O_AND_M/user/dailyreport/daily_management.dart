@@ -707,7 +707,7 @@ void dailyManagementStoreData(BuildContext context, String userId,
   for (var i in datasource.dataGridRows) {
     for (var data in i.getCells()) {
       if (data.columnName != 'Add' && data.columnName != 'Delete') {
-        tableData[data.columnName] = data.value;
+        tableData[data.columnName] = data.value; 
       }
     }
 
