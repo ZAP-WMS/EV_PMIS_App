@@ -425,18 +425,31 @@ class PreventiveYearlyDatasource extends DataGridSource {
   void preventiveMaintenanceStore(
       BuildContext context, String userId, String depoName) {
     Map<String, dynamic> tableData = Map();
+    Map<String, dynamic> subData = Map();
     List<dynamic> tabledata = [];
+    List<dynamic> submissionDate = [];
     String dueDate = '';
 
     if (dataGridRows != null && dataGridRows.isNotEmpty) {
       for (int rowIndex = 0; rowIndex < dataGridRows.length; rowIndex++) {
         var i = dataGridRows[rowIndex]; // Current row
+        submissionDate.clear();
         for (var data in i.getCells()) {
           tableData[data.columnName] = data.value;
+          // Only add to subData if the column name contains 'Maintenance'
+          if (data.columnName.contains('Maintenance')) {
+            subData[data.columnName] = data.value;
+          }
+        }
+
+        // After processing all cells, if subData is not empty, add it to submissionDate
+        if (subData.isNotEmpty) {
+          submissionDate.add({
+            subData.keys.last: subData[subData.keys.last]
+          }); // Add the maintenance data to submissionDate
         }
 
         tabledata.add(tableData);
-
         tableData = {};
       }
     }
@@ -452,6 +465,7 @@ class PreventiveYearlyDatasource extends DataGridSource {
         // Document exists, update it
         docSnapshot.reference.update({
           'data': tabledata,
+          'submission Date': FieldValue.arrayUnion(submissionDate)
         }).whenComplete(() {
           tabledata.clear();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -463,6 +477,7 @@ class PreventiveYearlyDatasource extends DataGridSource {
         // Document doesn't exist, create it
         docSnapshot.reference.set({
           'data': tabledata,
+          'submission Date': FieldValue.arrayUnion(submissionDate)
         }).whenComplete(() {
           tabledata.clear();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -543,7 +558,7 @@ class PreventiveYearlyDatasource extends DataGridSource {
     try {
       // Fetch the document snapshot
       DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-          .collection('PrevntiveMaintenance')
+          .collection('PreventiveMaintenance')
           .doc(depoName) // Ensure this is your document ID
           .collection(yearOption[tabIndex]) // Sub-collection based on year
           .doc(userId) // Sub-collection based on user ID
@@ -566,7 +581,7 @@ class PreventiveYearlyDatasource extends DataGridSource {
         }
 
         notifyListeners();
-        return submissionData;
+        return dataList;
       } else {
         return {}; // Return an empty map if the document doesn't exist
       }

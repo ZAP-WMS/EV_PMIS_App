@@ -244,11 +244,11 @@ class _UploadPreventiveListState extends State<UploadPreventiveList> {
                                               .putData(fileBytes);
                                           await FirebaseFirestore.instance
                                               .collection(
-                                                  'PrevntiveMaintenance')
+                                                  'PreventiveMaintenance')
                                               .doc(widget.depoName)
                                               .collection(widget.yearOption!)
                                               .doc(widget.userId)
-                                              .set({
+                                              .update({
                                             'submission Date':
                                                 FieldValue.arrayUnion(
                                                     [tableData])
