@@ -221,11 +221,6 @@ class _UploadPreventiveListState extends State<UploadPreventiveList> {
                                     String refname =
                                         '${widget.title}/${widget.depoName}/${widget.userId}/${widget.fldrName}/$imageName';
 
-                                    await FirebaseStorage.instance
-                                        .ref(refname)
-                                        .putData(
-                                          fileBytes,
-                                        );
                                     Map<String, dynamic> tableData = Map();
                                     List<dynamic> tabledata = [];
                                     tableData[widget.colunmName!] =
@@ -234,7 +229,7 @@ class _UploadPreventiveListState extends State<UploadPreventiveList> {
                                     tabledata.add(tableData);
 
                                     await FirebaseFirestore.instance
-                                        .collection('PrevntiveMaintenance')
+                                        .collection('PreventiveMaintenance')
                                         .doc(widget.depoName)
                                         .collection(widget.yearOption!)
                                         .doc(widget.userId)
@@ -242,45 +237,87 @@ class _UploadPreventiveListState extends State<UploadPreventiveList> {
                                         .then((docSnapshot) async {
                                       if (docSnapshot.exists) {
                                         // Document exists, update the 'submission Date' array
-                                        await FirebaseFirestore.instance
-                                            .collection('PrevntiveMaintenance')
-                                            .doc(widget.depoName)
-                                            .collection(widget.yearOption!)
-                                            .doc(widget.userId)
-                                            .update({
-                                          'submission Date':
-                                              FieldValue.arrayUnion(
-                                                  [tableData]),
-                                        }).whenComplete(() {
-                                          tableData.clear();
+                                        if (docSnapshot.data()?['data'] !=
+                                            null) {
+                                          await FirebaseStorage.instance
+                                              .ref(refname)
+                                              .putData(fileBytes);
+                                          await FirebaseFirestore.instance
+                                              .collection(
+                                                  'PrevntiveMaintenance')
+                                              .doc(widget.depoName)
+                                              .collection(widget.yearOption!)
+                                              .doc(widget.userId)
+                                              .set({
+                                            'submission Date':
+                                                FieldValue.arrayUnion(
+                                                    [tableData])
+                                          }).whenComplete(() {
+                                            tableData.clear();
+
+                                            pr.hide();
+
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.pop(context);
+                                            // ignore: use_build_context_synchronously
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: blue,
+                                                content: Text(
+                                                  'Files are Uploaded',
+                                                  style:
+                                                      TextStyle(color: white),
+                                                ),
+                                              ),
+                                            );
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(SnackBar(
+                                            //   content:
+                                            //       const Text('Data are added'),
+                                            //   backgroundColor: blue,
+                                            // ));
+                                          });
+                                        } else {
+                                          // 'data' field does not exist, do not update 'submission Date'
+                                          Navigator.pop(context);
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content:
-                                                const Text('Data are updated'),
-                                            backgroundColor: blue,
+                                              .showSnackBar(const SnackBar(
+                                            content: Text('No data available'),
+                                            backgroundColor: Colors.red,
                                           ));
-                                        });
+                                        }
                                       } else {
-                                        // Document doesn't exist, create the document and set the 'submission Date' array
-                                        await FirebaseFirestore.instance
-                                            .collection('PrevntiveMaintenance')
-                                            .doc(widget.depoName)
-                                            .collection(widget.yearOption!)
-                                            .doc(widget.userId)
-                                            .set({
-                                          'submission Date':
-                                              FieldValue.arrayUnion(
-                                                  [tableData]),
-                                        }).whenComplete(() {
-                                          tableData.clear();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content:
-                                                const Text('Data are added'),
-                                            backgroundColor: blue,
-                                          ));
-                                        });
+                                        // 'data' field does not exist, do not update 'submission Date'
+                                        Navigator.pop(context);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              'No data available.First Sync Table Data'),
+                                          backgroundColor: Colors.red,
+                                        ));
                                       }
+                                      // else {
+                                      //   // Document doesn't exist, create the document and set the 'submission Date' array
+                                      //   await FirebaseFirestore.instance
+                                      //       .collection('PrevntiveMaintenance')
+                                      //       .doc(widget.depoName)
+                                      //       .collection(widget.yearOption!)
+                                      //       .doc(widget.userId)
+                                      //       .set({
+                                      //     'submission Date':
+                                      //         FieldValue.arrayUnion(
+                                      //             [tableData]),
+                                      //   }).whenComplete(() {
+                                      //     tableData.clear();
+                                      //     ScaffoldMessenger.of(context)
+                                      //         .showSnackBar(SnackBar(
+                                      //       content:
+                                      //           const Text('Data are added'),
+                                      //       backgroundColor: blue,
+                                      //     ));
+                                      //   });
+                                      // }
                                     });
 
                                     // await FirebaseFirestore.instance
@@ -291,20 +328,20 @@ class _UploadPreventiveListState extends State<UploadPreventiveList> {
                                     //     .update({'submission Date':  FieldValue.arrayUnion([tableData]),});
                                   }
 
-                                  pr.hide();
+                                  // pr.hide();
 
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pop(context);
-                                  // ignore: use_build_context_synchronously
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: blue,
-                                      content: Text(
-                                        'Files are Uploaded',
-                                        style: TextStyle(color: white),
-                                      ),
-                                    ),
-                                  );
+                                  // // ignore: use_build_context_synchronously
+                                  // Navigator.pop(context);
+                                  // // ignore: use_build_context_synchronously
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   SnackBar(
+                                  //     backgroundColor: blue,
+                                  //     content: Text(
+                                  //       'Files are Uploaded',
+                                  //       style: TextStyle(color: white),
+                                  //     ),
+                                  //   ),
+                                  // );
                                 } else {
                                   await showDialog(
                                     context: context,

@@ -29,7 +29,7 @@ class _PreventiveScreenState extends State<PreventiveScreen> {
   List<GridColumn> columns = [];
   Stream? _stream;
   var alldata;
-  var subDate;
+  List<String> subDate = [];
 
   late DataGridController _dataGridController;
   late PreventiveYearlyDatasource _preventiveYearlyDatasource;
@@ -149,7 +149,7 @@ class _PreventiveScreenState extends State<PreventiveScreen> {
     _preventiveYearlyDatasource.updateDatagridSource();
 
     _stream = FirebaseFirestore.instance
-        .collection('PrevntiveMaintenance')
+        .collection('PreventiveMaintenance')
         .doc(widget.depoName)
         .collection(yearOption[widget.indexValue!])
         .doc(userId)
@@ -207,7 +207,15 @@ class _PreventiveScreenState extends State<PreventiveScreen> {
               _preventiveYearlyDatasource.fetchDataFromFirebase();
               alldata = '';
               alldata = snapshot.data!['data'] as List<dynamic>;
-              subDate = snapshot.data!['submission Date'] as List<dynamic>;
+              var data = snapshot.data?.data();
+              data.containsKey('submission Date');
+              if (data != null && data.containsKey('submission Date')) {
+                var submissionDateField = data['submission Date'];
+                subDate = submissionDateField;
+              }
+              // // snapshot.data!.containsKey('submission Date');
+              // subDate = snapshot.data!['submission Date'] as List<dynamic>;
+
               _preventiveYearlyModel.clear();
               alldata.forEach((element) {
                 _preventiveYearlyModel

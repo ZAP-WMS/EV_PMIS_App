@@ -442,7 +442,7 @@ class PreventiveYearlyDatasource extends DataGridSource {
     }
 
     FirebaseFirestore.instance
-        .collection('PrevntiveMaintenance')
+        .collection('PreventiveMaintenance')
         .doc(depoName)
         .collection(yearOption[tabIndex])
         .doc(userId)
